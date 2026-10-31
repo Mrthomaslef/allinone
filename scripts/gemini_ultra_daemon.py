@@ -112,6 +112,7 @@ def compute_local_telemetry(
     weekly_start: datetime,
     weekly_used_pct: float,
     five_h_used_pct: float,
+    tier_id: str = "g1-ultra-tier",
 ) -> dict:
     transcripts = (
         glob.glob(os.path.expanduser("~/.gemini/antigravity/brain/*/.system_generated/logs/transcript.jsonl"))
@@ -170,7 +171,6 @@ def compute_local_telemetry(
             "tokens": 0,
         }
 
-    # Deduplicate transcripts by conversation UUID (parts[-4] in .../brain/<uuid>/.system_generated/logs/transcript.jsonl)
     seen_conv_ids = set()
     for path in transcripts:
         parts = path.split(os.sep)
@@ -250,23 +250,28 @@ def compute_local_telemetry(
         except Exception:
             pass
 
-    # Calibrated capacities based on official Google quota % vs recorded steps
+    # Calibrated capacities for Google AI Ultra (g1-ultra-tier has ~2.5x the quota of g1-ultra-lite-tier)
+    is_full_ultra = tier_id == "g1-ultra-tier"
+    default_weekly_cap = 25000 if is_full_ultra else 10000
+    default_5h_cap = 7500 if is_full_ultra else 3500
+
     if weekly_used_pct > 5 and steps_week_window > 100:
         est_weekly_capacity = int(round(steps_week_window / (weekly_used_pct / 100.0)))
     else:
-        est_weekly_capacity = 10000
+        est_weekly_capacity = default_weekly_cap
 
     if five_h_used_pct > 3 and steps_5h_window > 50:
         est_5h_capacity = int(round(steps_5h_window / (five_h_used_pct / 100.0)))
     else:
-        est_5h_capacity = 3500
+        est_5h_capacity = default_5h_cap
 
     # Monthly capacity on Google AI Ultra = 4.29 weekly cycles (30 days / 7 days)
+    # Anchored to the active subscription cycle (weekly_start) so upgrading resets the active monthly quota pool
     weekly_cycles_per_month = 30.0 / 7.0
     est_monthly_capacity = int(round(est_weekly_capacity * weekly_cycles_per_month))
-    monthly_used_pct = min(100.0, round((steps_30d / max(1, est_monthly_capacity)) * 100.0, 2))
+    monthly_used_pct = min(100.0, round((weekly_used_pct / weekly_cycles_per_month), 2))
     monthly_remaining_pct = round(max(0.0, 100.0 - monthly_used_pct), 2)
-    weekly_cycles_used = round(steps_30d / max(1, est_weekly_capacity), 2)
+    weekly_cycles_used = round(weekly_used_pct / 100.0, 2)
 
     daily_list = list(daily_map.values())
     active_days_30d = sum(1 for d in daily_list if d["steps"] > 0)
@@ -297,9 +302,12 @@ def compute_local_telemetry(
         "monthly": {
             "usedPercent": monthly_used_pct,
             "remainingPercent": monthly_remaining_pct,
-            "promptsCount": prompts_30d,
-            "stepsCount": steps_30d,
-            "tokensCount": tokens_30d,
+            "promptsCount": prompts_week_window,
+            "stepsCount": steps_week_window,
+            "tokensCount": tokens_week_window,
+            "promptsRolling30d": prompts_30d,
+            "stepsRolling30d": steps_30d,
+            "tokensRolling30d": tokens_30d,
             "inputTokensCount": input_tokens_30d,
             "outputTokensCount": output_tokens_30d,
             "cachedTokensCount": cached_tokens_30d,
@@ -323,7 +331,8 @@ def build_live_quota_payload() -> dict:
     raw_quota = call_ccpa(access_token, "retrieveUserQuota", {"project": project_id})
 
     tier_name = "Google AI Ultra"
-    tier_id = "g1-ultra-lite-tier"
+    tier_id = "g1-ultra-tier"
+    tier_desc = "You are subscribed to the best Google AI plan."
     try:
         load_res = call_ccpa(
             access_token,
@@ -335,6 +344,8 @@ def build_live_quota_payload() -> dict:
             tier_name = paid["name"]
         if paid.get("id"):
             tier_id = paid["id"]
+        if paid.get("upgradeSubscriptionText"):
+            tier_desc = paid["upgradeSubscriptionText"]
     except Exception:
         pass
 
@@ -383,26 +394,24 @@ def build_live_quota_payload() -> dict:
     tp_5h = extract_window("3p-5h", 300)
     tp_weekly = extract_window("3p-weekly", 10080)
 
+    weekly_start_dt = parse_iso(gem_weekly["startedAt"]) or (now - timedelta(days=7))
     telemetry = compute_local_telemetry(
         now=now,
         five_h_start=parse_iso(gem_5h["startedAt"]) or (now - timedelta(hours=5)),
-        weekly_start=parse_iso(gem_weekly["startedAt"]) or (now - timedelta(days=7)),
+        weekly_start=weekly_start_dt,
         weekly_used_pct=gem_weekly["usedPercent"],
         five_h_used_pct=gem_5h["usedPercent"],
+        tier_id=tier_id,
     )
 
     days_left_week = max(0.1, gem_weekly["remainingSeconds"] / 86400.0)
     gem_weekly["dailyBudgetRemainingPercent"] = round(gem_weekly["remainingPercent"] / days_left_week, 2)
     gem_weekly["burnRatePerDay"] = round(gem_weekly["burnRatePerHour"] * 24.0, 1)
 
-    # Next monthly reset = 1st of next month 00:00 UTC (and rolling 30d info)
-    if now.month == 12:
-        next_month_dt = datetime(now.year + 1, 1, 1, tzinfo=timezone.utc)
-    else:
-        next_month_dt = datetime(now.year, now.month + 1, 1, tzinfo=timezone.utc)
-    month_start_dt = datetime(now.year, now.month, 1, tzinfo=timezone.utc)
+    # Monthly billing cycle anchored to the active subscription start (30-day cycle)
+    monthly_end_dt = weekly_start_dt + timedelta(days=30)
     month_elapsed_pct = round(
-        ((now - month_start_dt).total_seconds() / max(1.0, (next_month_dt - month_start_dt).total_seconds())) * 100.0,
+        min(100.0, max(0.0, ((now - weekly_start_dt).total_seconds() / (30.0 * 86400.0)) * 100.0)),
         2,
     )
 
@@ -412,9 +421,9 @@ def build_live_quota_payload() -> dict:
     monthly_window = {
         "id": "gemini-monthly",
         "durationMins": 43200,
-        "resetsAt": next_month_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "startedAt": (now - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "remainingSeconds": int(max(0.0, (next_month_dt - now).total_seconds())),
+        "resetsAt": monthly_end_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "startedAt": weekly_start_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "remainingSeconds": int(max(0.0, (monthly_end_dt - now).total_seconds())),
         "elapsedPercent": month_elapsed_pct,
         **telemetry["monthly"],
     }
@@ -448,6 +457,8 @@ def build_live_quota_payload() -> dict:
         "subscription": {
             "planName": tier_name,
             "tierId": tier_id,
+            "tierDescription": tier_desc,
+            "upgradedAt": gem_weekly["startedAt"],
             "harness": "Google AI Ultra • Antigravity",
             "projectId": project_id,
             "status": "active",
@@ -464,6 +475,99 @@ def build_live_quota_payload() -> dict:
     return payload
 
 
+def sync_t3_antigravity_cache(payload: dict) -> None:
+    cache_path = os.path.expanduser("~/.t3/caches/antigravity.json")
+    if not os.path.exists(cache_path):
+        return
+    try:
+        with open(cache_path, "r", encoding="utf-8") as f:
+            cache_data = json.load(f)
+
+        w = payload.get("windows", {})
+        gem_5h = w.get("fiveHour", {})
+        gem_wk = w.get("weekly", {})
+        tp_5h = w.get("thirdParty5h", {})
+        tp_wk = w.get("thirdPartyWeekly", {})
+
+        new_windows = []
+        if gem_5h:
+            new_windows.append(
+                {
+                    "id": "gemini-5h",
+                    "label": "Gemini · 5-hour",
+                    "kind": "session",
+                    "usedPercent": gem_5h.get("usedPercent", 0),
+                    "resetsAt": gem_5h.get("resetsAt"),
+                    "windowDurationMins": 300,
+                }
+            )
+        if gem_wk:
+            new_windows.append(
+                {
+                    "id": "gemini-weekly",
+                    "label": "Gemini · Weekly",
+                    "kind": "weekly",
+                    "usedPercent": gem_wk.get("usedPercent", 0),
+                    "resetsAt": gem_wk.get("resetsAt"),
+                    "windowDurationMins": 10080,
+                }
+            )
+        if tp_5h:
+            new_windows.append(
+                {
+                    "id": "3p-5h",
+                    "label": "Claude & GPT (shared) · 5-hour",
+                    "kind": "session",
+                    "usedPercent": tp_5h.get("usedPercent", 0),
+                    "resetsAt": tp_5h.get("resetsAt"),
+                    "windowDurationMins": 300,
+                }
+            )
+        if tp_wk:
+            new_windows.append(
+                {
+                    "id": "3p-weekly",
+                    "label": "Claude & GPT (shared) · Weekly",
+                    "kind": "weekly",
+                    "usedPercent": tp_wk.get("usedPercent", 0),
+                    "resetsAt": tp_wk.get("resetsAt"),
+                    "windowDurationMins": 10080,
+                }
+            )
+
+        if "usageLimits" not in cache_data or not isinstance(cache_data["usageLimits"], dict):
+            cache_data["usageLimits"] = {}
+        cache_data["usageLimits"]["checkedAt"] = payload.get("checkedAt")
+        cache_data["usageLimits"]["windows"] = new_windows
+
+        existing_models = [
+            m for m in cache_data.get("models", [])
+            if not m.get("isCustom") and m.get("slug") not in (
+                "claude-opus-5-5-high",
+                "claude-sonnet-5-5-high",
+                "gemini-3.8-flash-high",
+            )
+        ]
+        for m in existing_models:
+            if m.get("slug") in ("claude-opus-5-5", "claude-sonnet-5-5"):
+                for desc in m.get("capabilities", {}).get("optionDescriptors", []):
+                    if desc.get("id") == "thinking_level" and "currentValue" not in desc:
+                        desc["currentValue"] = "high"
+            elif m.get("slug") == "gpt-oss-120b-medium":
+                for desc in m.get("capabilities", {}).get("optionDescriptors", []):
+                    if desc.get("id") == "thinking_level" and "currentValue" not in desc:
+                        desc["currentValue"] = "medium"
+        cache_data["models"] = existing_models
+
+        tmp_cache = cache_path + ".tmp"
+        with open(tmp_cache, "w", encoding="utf-8") as f:
+            json.dump(cache_data, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        os.replace(tmp_cache, cache_path)
+    except Exception:
+        pass
+
+
 def save_quota_payload(payload: dict) -> None:
     os.makedirs(APP_DIR, exist_ok=True)
     tmp_path = QUOTA_JSON_PATH + ".tmp"
@@ -471,6 +575,7 @@ def save_quota_payload(payload: dict) -> None:
         json.dump(payload, f, ensure_ascii=False, indent=2)
         f.write("\n")
     os.replace(tmp_path, QUOTA_JSON_PATH)
+    sync_t3_antigravity_cache(payload)
 
 
 def refresh_and_save(force: bool = False) -> dict:

@@ -132,8 +132,8 @@
           <div class="min-w-0">
             <div class="flex items-center gap-2">
               <h1 class="text-lg font-extrabold tracking-tight text-white truncate">Gemini Ultra</h1>
-              <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-sky-500/20 to-violet-500/20 text-sky-300 border border-sky-400/30 shrink-0">
-                AI Ultra
+              <span id="plan-tier-badge" class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-emerald-500/20 via-sky-500/20 to-violet-500/20 text-emerald-300 border border-emerald-400/35 shrink-0">
+                Google AI Ultra • Max
               </span>
             </div>
             <div class="flex items-center gap-1.5 mt-0.5">
@@ -179,6 +179,20 @@
 
     <!-- CONTENU PRINCIPAL -->
     <main class="flex-1 space-y-4 pt-1">
+
+      <!-- BANDEAU ABONNEMENT ACTIF (GOOGLE AI ULTRA UPGRADED) -->
+      <section class="rounded-2xl p-3 bg-gradient-to-r from-emerald-500/10 via-sky-500/10 to-violet-500/10 border border-emerald-400/25 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-sm shrink-0">⚡</span>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span id="sub-plan-title" class="text-xs font-extrabold text-white truncate">Google AI Ultra (Plan Max)</span>
+              <span id="sub-tier-code" class="px-1.5 py-0.5 text-[9px] font-mono-num font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0">g1-ultra-tier</span>
+            </div>
+            <p id="sub-plan-desc" class="text-[11px] text-slate-300 truncate mt-0.5">Forfait Google AI maximal actif • Quotas 5h, Semaine & Mois réinitialisés à 100%</p>
+          </div>
+        </div>
+      </section>
 
       <!-- SYNTHÈSE DES 3 JAUGES CIRCULAIRES (5H / SEMAINE / MOIS) -->
       <section id="hero-rings" class="glass-card rounded-3xl p-4">
@@ -673,9 +687,25 @@
       if (!data || !data.windows) return;
       currentData = data;
 
+      const sub = data.subscription || {};
+      const isFullUltra = (sub.tierId || 'g1-ultra-tier') === 'g1-ultra-tier';
+      const planBadgeEl = document.getElementById('plan-tier-badge');
+      const subTitleEl = document.getElementById('sub-plan-title');
+      const subCodeEl = document.getElementById('sub-tier-code');
+      const subDescEl = document.getElementById('sub-plan-desc');
+      if (planBadgeEl) planBadgeEl.textContent = isFullUltra ? 'Google AI Ultra • Max' : (sub.planName || 'AI Ultra');
+      if (subTitleEl) subTitleEl.textContent = isFullUltra ? 'Google AI Ultra (Plan Max)' : (sub.planName || 'Google AI Ultra');
+      if (subCodeEl) subCodeEl.textContent = sub.tierId || 'g1-ultra-tier';
+      if (subDescEl) {
+        const upgStr = sub.upgradedAt ? formatResetClock(sub.upgradedAt, true) : '';
+        subDescEl.textContent = isFullUltra
+          ? `Forfait Google AI maximal actif${upgStr ? ' (cycle démarré ' + upgStr + ')' : ''} • Capacité maximale`
+          : (sub.tierDescription || 'Abonnement Google AI Ultra actif');
+      }
+
       const w5 = effectiveWindow(data.windows.fiveHour);
       const ww = effectiveWindow(data.windows.weekly);
-      const wm = data.windows.monthly || { remainingPercent: 60, usedPercent: 40 };
+      const wm = data.windows.monthly || { remainingPercent: 100, usedPercent: 0 };
       const tp5 = effectiveWindow(data.windows.thirdParty5h);
       const tpw = effectiveWindow(data.windows.thirdPartyWeekly);
 
@@ -719,7 +749,7 @@
       document.getElementById('metric-5h-prompts').textContent = formatNumber(w5.promptsWindow ?? w5.promptsRolling);
       document.getElementById('metric-5h-sessions').textContent = `${w5.sessionsCount || 1} sessions actives`;
       document.getElementById('metric-5h-steps').textContent = formatNumber(w5.stepsWindow ?? w5.stepsRolling);
-      document.getElementById('metric-5h-cap').textContent = `/ ~${formatNumber(w5.estimatedCapacitySteps || 3500)} cap.`;
+      document.getElementById('metric-5h-cap').textContent = `/ ~${formatNumber(w5.estimatedCapacitySteps || 7500)} cap.`;
       document.getElementById('metric-5h-tokens').textContent = formatTokens(w5.tokensWindow || w5.tokensRolling);
       document.getElementById('metric-5h-burn').textContent = `Rythme ${w5.burnRatePerHour || 0}% / h`;
 
@@ -770,7 +800,7 @@
       document.getElementById('metric-weekly-prompts').textContent = formatNumber(ww.promptsWindow ?? ww.promptsRolling);
       document.getElementById('metric-weekly-sessions').textContent = `${ww.sessionsCount || 1} sessions`;
       document.getElementById('metric-weekly-steps').textContent = formatNumber(ww.stepsWindow ?? ww.stepsRolling);
-      document.getElementById('metric-weekly-cap').textContent = `/ ~${formatNumber(ww.estimatedCapacitySteps || 10000)} cap.`;
+      document.getElementById('metric-weekly-cap').textContent = `/ ~${formatNumber(ww.estimatedCapacitySteps || 25000)} cap.`;
       document.getElementById('metric-weekly-tokens').textContent = formatTokens(ww.tokensWindow || ww.tokensRolling);
       document.getElementById('metric-weekly-burn').textContent = `Moy. ${ww.burnRatePerDay || 0}% / jour`;
 
@@ -799,12 +829,12 @@
       document.getElementById('val-monthly-cycles').textContent = `${wm.weeklyCyclesUsed || 0} / ${wm.weeklyCyclesTotal || 4.29}`;
       document.getElementById('val-monthly-active-days').textContent = `${wm.activeDays || 0} jours actifs / 30j`;
 
-      document.getElementById('metric-monthly-prompts').textContent = formatNumber(wm.promptsCount);
-      document.getElementById('metric-monthly-sessions').textContent = `${wm.sessionsCount || 0} conversations`;
-      document.getElementById('metric-monthly-steps').textContent = formatNumber(wm.stepsCount);
-      document.getElementById('metric-monthly-cap').textContent = `/ ~${formatNumber(wm.estimatedCapacitySteps || 43000)} cap.`;
-      document.getElementById('metric-monthly-tokens').textContent = formatTokens(wm.tokensCount);
-      document.getElementById('metric-monthly-io').textContent = `Out: ${formatTokens(wm.outputTokensCount)}`;
+      document.getElementById('metric-monthly-prompts').textContent = formatNumber(wm.promptsCount ?? wm.promptsRolling30d);
+      document.getElementById('metric-monthly-sessions').textContent = `${wm.sessionsCount || 0} conversations (30j)`;
+      document.getElementById('metric-monthly-steps').textContent = formatNumber(wm.stepsCount ?? wm.stepsRolling30d);
+      document.getElementById('metric-monthly-cap').textContent = `/ ~${formatNumber(wm.estimatedCapacitySteps || 107000)} cap.`;
+      document.getElementById('metric-monthly-tokens').textContent = formatTokens(wm.tokensCount || wm.tokensRolling30d);
+      document.getElementById('metric-monthly-io').textContent = `30j: ${formatTokens(wm.tokensRolling30d || wm.tokensCount)}`;
 
       const monthDays = wm.dailyBreakdown || [];
       const maxMonthDay = Math.max(10, ...monthDays.map(d => d.steps || 0));
