@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-31T08:20:52Z",
+  "checkedAt": "2026-10-31T08:23:58Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://scout-transit-literacy-subject.trycloudflare.com",
   "subscription": {
@@ -12,24 +12,24 @@
   "windows": {
     "fiveHour": {
       "id": "gemini-5h",
-      "remainingFraction": 0.98806036,
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingFraction": 0.9859962,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 300,
-      "remainingSeconds": 17569,
-      "elapsedPercent": 2.39,
-      "paceDeltaPercent": -1.2,
-      "burnRatePerHour": 9.96,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 4 hours, 52 minutes.",
-      "promptsWindow": 3,
-      "stepsWindow": 142,
-      "tokensWindow": 527734,
-      "promptsRolling": 83,
-      "stepsRolling": 3125,
-      "tokensRolling": 10482461,
-      "sessionsCount": 11,
+      "remainingSeconds": 17383,
+      "elapsedPercent": 3.43,
+      "paceDeltaPercent": -2.03,
+      "burnRatePerHour": 8.17,
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 4 hours, 49 minutes.",
+      "promptsWindow": 4,
+      "stepsWindow": 178,
+      "tokensWindow": 648837,
+      "promptsRolling": 84,
+      "stepsRolling": 3161,
+      "tokensRolling": 10603564,
+      "sessionsCount": 12,
       "estimatedCapacitySteps": 3500,
       "hourlyBreakdown": [
         {
@@ -64,33 +64,33 @@
         },
         {
           "label": "09h",
-          "steps": 403,
-          "prompts": 6,
-          "tokens": 1205651
+          "steps": 439,
+          "prompts": 7,
+          "tokens": 1326754
         }
       ]
     },
     "weekly": {
       "id": "gemini-weekly",
-      "remainingFraction": 0.99701506,
-      "remainingPercent": 99.7,
-      "usedPercent": 0.3,
+      "remainingFraction": 0.9964991,
+      "remainingPercent": 99.65,
+      "usedPercent": 0.35,
       "resetsAt": "2026-11-07T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 10080,
-      "remainingSeconds": 604369,
-      "elapsedPercent": 0.07,
-      "paceDeltaPercent": 0.23,
-      "burnRatePerHour": 2.51,
+      "remainingSeconds": 604183,
+      "elapsedPercent": 0.1,
+      "paceDeltaPercent": 0.25,
+      "burnRatePerHour": 2.04,
       "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 23 hours.",
       "dailyBudgetRemainingPercent": 14.25,
-      "burnRatePerDay": 60.2,
-      "promptsWindow": 3,
-      "stepsWindow": 142,
-      "tokensWindow": 527734,
-      "promptsRolling": 430,
-      "stepsRolling": 12636,
-      "tokensRolling": 48077261,
+      "burnRatePerDay": 49.0,
+      "promptsWindow": 4,
+      "stepsWindow": 178,
+      "tokensWindow": 648837,
+      "promptsRolling": 431,
+      "stepsRolling": 12672,
+      "tokensRolling": 48198364,
       "sessionsCount": 37,
       "estimatedCapacitySteps": 10000,
       "dailyBreakdown": [
@@ -146,9 +146,9 @@
           "date": "2026-10-31",
           "label": "Sam 31/10",
           "shortLabel": "Sam",
-          "steps": 3963,
-          "prompts": 103,
-          "tokens": 13497942
+          "steps": 3999,
+          "prompts": 104,
+          "tokens": 13619045
         }
       ]
     },
@@ -156,17 +156,17 @@
       "id": "gemini-monthly",
       "durationMins": 43200,
       "resetsAt": "2026-11-01T00:00:00Z",
-      "startedAt": "2026-10-01T08:20:52Z",
-      "remainingSeconds": 56347,
+      "startedAt": "2026-10-01T08:23:58Z",
+      "remainingSeconds": 56161,
       "elapsedPercent": 97.9,
-      "usedPercent": 38.7,
-      "remainingPercent": 61.3,
-      "promptsCount": 614,
-      "stepsCount": 16585,
-      "tokensCount": 66175119,
-      "inputTokensCount": 59592031,
-      "outputTokensCount": 6583088,
-      "cachedTokensCount": 971930647,
+      "usedPercent": 38.78,
+      "remainingPercent": 61.22,
+      "promptsCount": 615,
+      "stepsCount": 16621,
+      "tokensCount": 66296222,
+      "inputTokensCount": 59708861,
+      "outputTokensCount": 6587361,
+      "cachedTokensCount": 973119863,
       "sessionsCount": 41,
       "activeDays": 14,
       "estimatedCapacitySteps": 42857,
@@ -281,9 +281,9 @@
           "date": "2026-10-31",
           "label": "Sam 31/10",
           "shortLabel": "Sam",
-          "steps": 3963,
-          "prompts": 103,
-          "tokens": 13497942
+          "steps": 3999,
+          "prompts": 104,
+          "tokens": 13619045
         }
       ]
     },
@@ -292,10 +292,10 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T13:20:52Z",
-      "startedAt": "2026-10-31T08:20:52Z",
+      "resetsAt": "2026-10-31T13:23:59Z",
+      "startedAt": "2026-10-31T08:23:59Z",
       "durationMins": 300,
-      "remainingSeconds": 17999,
+      "remainingSeconds": 18000,
       "elapsedPercent": 0.0,
       "paceDeltaPercent": 0.0,
       "burnRatePerHour": 0.0,
@@ -306,10 +306,10 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-07T08:20:52Z",
-      "startedAt": "2026-10-31T08:20:52Z",
+      "resetsAt": "2026-11-07T08:23:59Z",
+      "startedAt": "2026-10-31T08:23:59Z",
       "durationMins": 10080,
-      "remainingSeconds": 604799,
+      "remainingSeconds": 604800,
       "elapsedPercent": 0.0,
       "paceDeltaPercent": 0.0,
       "burnRatePerHour": 0.0,
@@ -324,7 +324,7 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T13:20:53Z"
+      "resetsAt": "2026-10-31T13:23:59Z"
     },
     {
       "id": "claude-sonnet-5-5-high",
@@ -333,15 +333,15 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T13:20:53Z"
+      "resetsAt": "2026-10-31T13:23:59Z"
     },
     {
       "id": "gemini-2.5-pro",
       "label": "Gemini 2.5 Pro",
       "family": "gemini",
       "description": "Contexte long 1M tokens",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -349,8 +349,8 @@
       "label": "Gemini 3 Flash",
       "family": "gemini",
       "description": "Génération ultra-rapide",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -358,8 +358,8 @@
       "label": "Gemini 3.1 Flash Image",
       "family": "gemini",
       "description": "Génération & édition d'images",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -367,8 +367,8 @@
       "label": "Gemini 3.8 Flash (High)",
       "family": "gemini",
       "description": "Flash haute précision",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -376,8 +376,8 @@
       "label": "Gemini 3.8 Flash (Medium)",
       "family": "gemini",
       "description": "Flash standard",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -385,8 +385,8 @@
       "label": "Gemini 4 Argon (High)",
       "family": "gemini",
       "description": "Modèle principal Agent & Raisonnement",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -394,8 +394,8 @@
       "label": "Gemini 4 Argon (Low)",
       "family": "gemini",
       "description": "Réponses rapides",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -403,8 +403,8 @@
       "label": "Gemini 4 Argon (Medium)",
       "family": "gemini",
       "description": "Raisonnement équilibré",
-      "remainingPercent": 98.81,
-      "usedPercent": 1.19,
+      "remainingPercent": 98.6,
+      "usedPercent": 1.4,
       "resetsAt": "2026-10-31T13:13:42Z"
     },
     {
@@ -414,7 +414,7 @@
       "description": "OpenAI OSS • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T13:20:53Z"
+      "resetsAt": "2026-10-31T13:23:59Z"
     }
   ]
 }
