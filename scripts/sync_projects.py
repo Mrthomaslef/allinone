@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 Synchronise automatiquement tous les dépôts en production de @Mrthomaslef
-et génère `projects.json` avec leurs titres, descriptions, catégories et URLs live.
+et génère `projects.json` avec leurs titres, descriptions, catégories, vrais logos et URLs live.
 """
 from __future__ import annotations
 import json
 import os
 import re
+import urllib.parse
 import urllib.request
 
 GITHUB_USERNAME = "Mrthomaslef"
@@ -17,12 +18,14 @@ KNOWN_METADATA = {
         "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
         "category": "medical-imaging",
         "emoji": "🦴",
+        "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
     },
     "agenda-cochin": {
         "title": "Cochin RI — Agenda",
         "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
         "category": "medical-imaging",
         "emoji": "📅",
+        "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png",
     },
     "radio-thomas": {
         "title": "QUIZ Cochin",
@@ -30,60 +33,70 @@ KNOWN_METADATA = {
         "category": "medical-imaging",
         "emoji": "🧠",
         "prodUrl": "https://radio-thomas-ten.vercel.app",
+        "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
     },
     "dicomviewer": {
         "title": "TPack PACS",
         "subtitle": "Visionneuse DICOM & imagerie médicale pédagogique",
         "category": "medical-imaging",
         "emoji": "🖥️",
+        "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
     },
     "tpack-cases": {
         "title": "TPack Cases",
         "subtitle": "Banque de cas cliniques d’imagerie (.tpack)",
         "category": "medical-imaging",
         "emoji": "🗂️",
+        "logoUrl": "https://mrthomaslef.github.io/tpack-cases/favicon.svg",
     },
     "tomatocalc": {
         "title": "TomatoCalc.",
         "subtitle": "Calculateurs médicaux, scores cliniques & classifications",
         "category": "clinical-calc",
         "emoji": "🍅",
+        "logoUrl": "https://mrthomaslef.github.io/Tomatocalc/image/logo2.png",
     },
     "medicalc": {
         "title": "MediCalc",
         "subtitle": "Calculateurs médicaux rapides & aide clinique",
         "category": "clinical-calc",
         "emoji": "⚕️",
+        "logoUrl": "https://mrthomaslef.github.io/Medicalc/image/logo2.png",
     },
     "colistrack": {
         "title": "ColisTrack",
         "subtitle": "Suivi de livraisons & colis (PWA privée)",
         "category": "daily-tools",
         "emoji": "📦",
+        "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
     },
     "assistante-maternelle": {
         "title": "AssMat — Paie & Pajemploi",
         "subtitle": "Calculateur de salaire, présence & fiche de paie",
         "category": "daily-tools",
         "emoji": "👶",
+        "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
     },
     "quiz-trentenaires": {
         "title": "QUIZ du 7TER",
         "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
         "category": "games-family",
         "emoji": "🎉",
+        "logoUrl": "https://mrthomaslef.github.io/quiz-trentenaires/apple-touch-icon.png",
     },
     "pocket-tcg-family": {
         "title": "milTCG — Pocket Family",
         "subtitle": "Ouverture de boosters & collection de cartes en famille",
         "category": "games-family",
         "emoji": "🃏",
+        "logoUrl": "https://mrthomaslef.github.io/pocket-tcg-family/apple-touch-icon.png",
     },
     "holidamn": {
         "title": "Holidamn",
         "subtitle": "Portail vidéo & souvenirs de vacances",
         "category": "games-family",
         "emoji": "🌴",
+        "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
     },
 }
 
@@ -106,17 +119,27 @@ def classify_repo(name: str, description: str, topics: list[str]) -> tuple[str, 
     return "daily-tools", "🚀"
 
 
-def fetch_live_page_title(url: str) -> str | None:
+def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
+    title = None
+    logo_url = None
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "allinone-sync/1.0"})
         with urllib.request.urlopen(req, timeout=5) as r:
             html = r.read().decode("utf-8", errors="ignore")
             m = re.search(r"<title>(.*?)</title>", html, re.I | re.S)
             if m and m.group(1).strip():
-                return re.sub(r"\s+", " ", m.group(1).strip())
+                title = re.sub(r"\s+", " ", m.group(1).strip())
+            # Look for apple-touch-icon or icon
+            for link in re.findall(r"<link[^>]+>", html, re.I):
+                if re.search(r'rel=["\']?(?:apple-touch-icon|icon)', link, re.I):
+                    href = re.search(r'href=["\']([^"\'>]+)["\']', link, re.I)
+                    if href:
+                        logo_url = urllib.parse.urljoin(url, href.group(1))
+                        if "apple-touch-icon" in link.lower():
+                            break
     except Exception:
         pass
-    return None
+    return title, logo_url
 
 
 def main():
@@ -157,7 +180,16 @@ def main():
 
         auto_cat, auto_emoji = classify_repo(name, repo.get("description") or "", repo.get("topics") or [])
 
-        title = known["title"] if known else (fetch_live_page_title(prod_url) or name.replace("-", " ").title())
+        live_title, live_logo = (None, None)
+        if not known:
+            live_title, live_logo = fetch_live_page_meta(prod_url)
+
+        title = known["title"] if known else (live_title or name.replace("-", " ").title())
+        logo_url = (
+            known["logoUrl"]
+            if known and known.get("logoUrl")
+            else (live_logo or f"{prod_url.rstrip('/')}/apple-touch-icon.png")
+        )
         subtitle = (
             known["subtitle"]
             if known
@@ -171,6 +203,7 @@ def main():
                 "subtitle": subtitle,
                 "category": known["category"] if known else auto_cat,
                 "emoji": known["emoji"] if known else auto_emoji,
+                "logoUrl": logo_url,
                 "prodUrl": prod_url,
                 "githubUrl": repo.get("html_url") or f"https://github.com/{GITHUB_USERNAME}/{name}",
                 "pushedAt": repo.get("pushed_at") or repo.get("updated_at"),

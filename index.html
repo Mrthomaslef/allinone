@@ -137,7 +137,7 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'allinone_live_repos_cache_v2';
+    const CACHE_KEY = 'allinone_live_repos_cache_v3';
 
     const CATEGORIES = [
       { id: 'medical-imaging', name: 'Imagerie & Radiologie', emoji: '🩻' },
@@ -146,80 +146,95 @@
       { id: 'games-family',    name: 'Jeux & Famille',        emoji: '🎮' }
     ];
 
-    // Métadonnées connues pour enrichir l'affichage des projets existants
+    // Métadonnées & vrais logos officiels des applications en production
     const KNOWN_METADATA = {
       'biblioosteo': {
         title: 'BiblioOstéo Cochin',
         subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
         category: 'medical-imaging',
-        emoji: '🦴'
+        emoji: '🦴',
+        logoUrl: 'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg'
       },
       'agenda-cochin': {
         title: 'Cochin RI — Agenda',
         subtitle: 'Planning de Radiologie Interventionnelle (Cochin Radio B)',
         category: 'medical-imaging',
-        emoji: '📅'
+        emoji: '📅',
+        logoUrl: 'https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png'
       },
       'radio-thomas': {
         title: 'QUIZ Cochin',
         subtitle: 'Quiz d’imagerie musculosquelettique',
         category: 'medical-imaging',
         emoji: '🧠',
-        prodUrl: 'https://radio-thomas-ten.vercel.app'
+        prodUrl: 'https://radio-thomas-ten.vercel.app',
+        logoUrl: 'https://radio-thomas-ten.vercel.app/apple-touch-icon.png'
       },
       'dicomviewer': {
         title: 'TPack PACS',
         subtitle: 'Visionneuse DICOM & imagerie médicale pédagogique',
         category: 'medical-imaging',
-        emoji: '🖥️'
+        emoji: '🖥️',
+        logoUrl: 'https://mrthomaslef.github.io/dicomviewer/favicon.svg'
       },
       'tpack-cases': {
         title: 'TPack Cases',
         subtitle: 'Banque de cas cliniques d’imagerie (.tpack)',
         category: 'medical-imaging',
-        emoji: '🗂️'
+        emoji: '🗂️',
+        logoUrl: 'https://mrthomaslef.github.io/tpack-cases/favicon.svg'
       },
       'tomatocalc': {
         title: 'TomatoCalc.',
         subtitle: 'Calculateurs médicaux, scores cliniques & classifications',
         category: 'clinical-calc',
-        emoji: '🍅'
+        emoji: '🍅',
+        logoUrl: 'https://mrthomaslef.github.io/Tomatocalc/image/logo2.png',
+        logoFit: 'contain'
       },
       'medicalc': {
         title: 'MediCalc',
         subtitle: 'Calculateurs médicaux rapides & aide clinique',
         category: 'clinical-calc',
-        emoji: '⚕️'
+        emoji: '⚕️',
+        logoUrl: 'https://mrthomaslef.github.io/Medicalc/image/logo2.png',
+        logoFit: 'contain'
       },
       'colistrack': {
         title: 'ColisTrack',
         subtitle: 'Suivi de livraisons & colis (PWA privée)',
         category: 'daily-tools',
-        emoji: '📦'
+        emoji: '📦',
+        logoUrl: 'https://mrthomaslef.github.io/colistrack/icon.svg'
       },
       'assistante-maternelle': {
         title: 'AssMat — Paie & Pajemploi',
         subtitle: 'Calculateur de salaire, présence & fiche de paie',
         category: 'daily-tools',
-        emoji: '👶'
+        emoji: '👶',
+        logoUrl: 'https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png'
       },
       'quiz-trentenaires': {
         title: 'QUIZ du 7TER',
         subtitle: 'Grand Quiz Show multijoueur (2 couples / 4 joueurs)',
         category: 'games-family',
-        emoji: '🎉'
+        emoji: '🎉',
+        logoUrl: 'https://mrthomaslef.github.io/quiz-trentenaires/apple-touch-icon.png'
       },
       'pocket-tcg-family': {
         title: 'milTCG — Pocket Family',
         subtitle: 'Ouverture de boosters & collection de cartes en famille',
         category: 'games-family',
-        emoji: '🃏'
+        emoji: '🃏',
+        logoUrl: 'https://mrthomaslef.github.io/pocket-tcg-family/apple-touch-icon.png'
       },
       'holidamn': {
         title: 'Holidamn',
         subtitle: 'Portail vidéo & souvenirs de vacances',
         category: 'games-family',
-        emoji: '🌴'
+        emoji: '🌴',
+        logoUrl: 'https://mrthomaslef.github.io/Holidamn/image/logo7.png',
+        logoFit: 'contain'
       }
     };
 
@@ -240,14 +255,28 @@
       return { category: 'daily-tools', emoji: '🚀' };
     }
 
-    // Formate joliment le nom d'un nouveau dépôt (ex: "mon-nouveau-projet" -> "Mon Nouveau Projet")
     function formatRepoTitle(name) {
       return name
         .replace(/[-_]+/g, ' ')
         .replace(/\b\w/g, l => l.toUpperCase());
     }
 
-    // Construction de la liste initiale à partir de KNOWN_METADATA ou du cache localStorage
+    // Chaîne de repli automatique pour récupérer le vrai logo de n'importe quel nouveau projet déployé
+    function handleLogoError(imgEl) {
+      const fallbacks = (imgEl.dataset.fallbacks || '').split('|').filter(Boolean);
+      const step = parseInt(imgEl.dataset.step || '0', 10);
+      if (step < fallbacks.length) {
+        imgEl.dataset.step = String(step + 1);
+        imgEl.src = fallbacks[step];
+      } else {
+        const emoji = imgEl.dataset.emoji || '🚀';
+        const parent = imgEl.parentElement;
+        if (parent) {
+          parent.innerHTML = `<span class="text-xl select-none">${emoji}</span>`;
+        }
+      }
+    }
+
     function getInitialProjects() {
       try {
         const cached = localStorage.getItem(CACHE_KEY);
@@ -265,13 +294,16 @@
 
       return Object.entries(KNOWN_METADATA).map(([key, meta]) => {
         const repoSlug = canonicalCases[key] || key;
+        const prodUrl = meta.prodUrl || `https://mrthomaslef.github.io/${repoSlug}/`;
         return {
           id: repoSlug,
           title: meta.title,
           subtitle: meta.subtitle,
           category: meta.category,
           emoji: meta.emoji,
-          prodUrl: meta.prodUrl || `https://mrthomaslef.github.io/${repoSlug}/`,
+          logoUrl: meta.logoUrl,
+          logoFit: meta.logoFit || 'cover',
+          prodUrl,
           githubUrl: `https://github.com/${GITHUB_USERNAME}/${repoSlug}`,
           pushedAt: null,
           isNew: false
@@ -314,6 +346,36 @@
       tabsEl.innerHTML = allBtn + catBtns;
     }
 
+    function renderAppLogo(p) {
+      const base = p.prodUrl.replace(/\/$/, '');
+      const fallbacks = [
+        `${base}/apple-touch-icon.png`,
+        `${base}/icon.svg`,
+        `${base}/assets/icon.svg`,
+        `${base}/favicon.svg`,
+        `${base}/icon-192.png`,
+        `${base}/favicon.png`
+      ].filter(u => u !== p.logoUrl).join('|');
+
+      const fitClass = p.logoFit === 'contain'
+        ? 'w-full h-full object-contain p-1.5 bg-slate-900'
+        : 'w-full h-full object-cover';
+
+      return `
+        <div class="w-12 h-12 rounded-2xl bg-slate-900/90 border border-white/10 overflow-hidden flex items-center justify-center shrink-0 shadow-md">
+          <img
+            src="${p.logoUrl}"
+            alt="${p.title}"
+            data-fallbacks="${fallbacks}"
+            data-emoji="${p.emoji || '🚀'}"
+            onerror="handleLogoError(this)"
+            loading="lazy"
+            class="${fitClass}"
+          />
+        </div>
+      `;
+    }
+
     function renderProjects() {
       const container = document.getElementById('projects-container');
       const q = searchQuery.trim().toLowerCase();
@@ -347,9 +409,7 @@
               ${items.map(p => `
                 <div class="app-card rounded-2xl p-3 flex items-center justify-between gap-3">
                   <a href="${p.prodUrl}" target="_blank" rel="noopener" class="flex items-center gap-3.5 min-w-0 flex-1">
-                    <div class="w-11 h-11 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-xl shrink-0">
-                      ${p.emoji}
-                    </div>
+                    ${renderAppLogo(p)}
                     <div class="min-w-0 flex-1">
                       <div class="flex items-center gap-2">
                         <span class="text-sm font-bold text-white truncate">${p.title}</span>
@@ -413,14 +473,13 @@
       renderProjects();
     }
 
-    // Synchronisation temps réel avec l'API GitHub (détecte immédiatement tout nouveau repo en prod)
+    // Synchronisation temps réel avec l'API GitHub (détecte immédiatement tout nouveau repo en prod + son vrai logo)
     async function syncFromGitHub(manual = false) {
       const refreshIcon = document.getElementById('refresh-icon');
       const subtitle = document.getElementById('sync-subtitle');
       if (refreshIcon && manual) refreshIcon.classList.add('animate-spin');
 
       try {
-        // 1. Récupère en parallèle le manifeste généré par GitHub Actions (si présent) + l'API GitHub en direct
         const [apiRes, jsonRes] = await Promise.allSettled([
           fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=pushed`, {
             headers: { 'Accept': 'application/vnd.github+json' },
@@ -446,7 +505,6 @@
           repos.forEach(r => {
             if (!r || !r.name) return;
             const key = r.name.toLowerCase();
-            // Ignorer le dépôt du portail lui-même
             if (key === 'allinone') return;
 
             const known = KNOWN_METADATA[key];
@@ -462,7 +520,10 @@
                 ? known.prodUrl
                 : `https://${GITHUB_USERNAME.toLowerCase()}.github.io/${r.name}/`;
 
-            // Considéré "Nouveau" s'il ne fait pas partie des 12 projets historiques
+            const logoUrl = (known && known.logoUrl)
+              || (fromManifest && fromManifest.logoUrl)
+              || `${prodUrl.replace(/\/$/, '')}/apple-touch-icon.png`;
+
             const isBrandNew = !known;
 
             syncedList.push({
@@ -471,6 +532,8 @@
               subtitle: (known && known.subtitle) || r.description || (fromManifest && fromManifest.subtitle) || 'Application en production sur GitHub',
               category: (known && known.category) || (fromManifest && fromManifest.category) || autoClass.category,
               emoji: (known && known.emoji) || (fromManifest && fromManifest.emoji) || autoClass.emoji,
+              logoUrl,
+              logoFit: (known && known.logoFit) || 'cover',
               prodUrl,
               githubUrl: r.html_url || `https://github.com/${GITHUB_USERNAME}/${r.name}`,
               pushedAt: r.pushed_at || r.updated_at,
@@ -490,13 +553,11 @@
           }
         }
       } catch (_) {
-        // En cas de mode hors-ligne, conserve le cache local
       } finally {
         if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 400);
       }
     }
 
-    // Initialisation immédiate + synchronisation automatique à chaque ouverture ou retour sur l'app
     renderTabs();
     renderProjects();
     syncFromGitHub(false);

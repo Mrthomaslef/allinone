@@ -5,6 +5,7 @@
     "subtitle": "Quiz d’imagerie musculosquelettique",
     "category": "medical-imaging",
     "emoji": "🧠",
+    "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
     "prodUrl": "https://radio-thomas-ten.vercel.app",
     "githubUrl": "https://github.com/Mrthomaslef/radio-thomas",
     "pushedAt": "2026-10-31T07:32:41Z"
@@ -15,6 +16,7 @@
     "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
     "category": "medical-imaging",
     "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
     "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
     "pushedAt": "2026-10-31T07:14:06Z"
@@ -25,6 +27,7 @@
     "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
     "category": "medical-imaging",
     "emoji": "📅",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
     "pushedAt": "2026-10-31T07:09:18Z"
@@ -35,6 +38,7 @@
     "subtitle": "Calculateurs médicaux, scores cliniques & classifications",
     "category": "clinical-calc",
     "emoji": "🍅",
+    "logoUrl": "https://mrthomaslef.github.io/Tomatocalc/image/logo2.png",
     "prodUrl": "https://mrthomaslef.github.io/Tomatocalc/",
     "githubUrl": "https://github.com/Mrthomaslef/Tomatocalc",
     "pushedAt": "2026-10-31T05:09:40Z"
@@ -45,6 +49,7 @@
     "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
     "category": "games-family",
     "emoji": "🎉",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-trentenaires/apple-touch-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/quiz-trentenaires/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-trentenaires",
     "pushedAt": "2026-10-29T22:28:19Z"
@@ -55,6 +60,7 @@
     "subtitle": "Ouverture de boosters & collection de cartes en famille",
     "category": "games-family",
     "emoji": "🃏",
+    "logoUrl": "https://mrthomaslef.github.io/pocket-tcg-family/apple-touch-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/pocket-tcg-family/",
     "githubUrl": "https://github.com/Mrthomaslef/pocket-tcg-family",
     "pushedAt": "2026-10-29T21:32:18Z"
@@ -65,6 +71,7 @@
     "subtitle": "Suivi de livraisons & colis (PWA privée)",
     "category": "daily-tools",
     "emoji": "📦",
+    "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/colistrack/",
     "githubUrl": "https://github.com/Mrthomaslef/colistrack",
     "pushedAt": "2026-10-29T16:37:24Z"
@@ -75,6 +82,7 @@
     "subtitle": "Calculateur de salaire, présence & fiche de paie",
     "category": "daily-tools",
     "emoji": "👶",
+    "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/assistante-maternelle/",
     "githubUrl": "https://github.com/Mrthomaslef/assistante-maternelle",
     "pushedAt": "2026-10-28T13:13:59Z"
@@ -85,6 +93,7 @@
     "subtitle": "Banque de cas cliniques d’imagerie (.tpack)",
     "category": "medical-imaging",
     "emoji": "🗂️",
+    "logoUrl": "https://mrthomaslef.github.io/tpack-cases/favicon.svg",
     "prodUrl": "https://mrthomaslef.github.io/tpack-cases/",
     "githubUrl": "https://github.com/Mrthomaslef/tpack-cases",
     "pushedAt": "2026-10-27T12:35:19Z"
@@ -95,6 +104,7 @@
     "subtitle": "Visionneuse DICOM & imagerie médicale pédagogique",
     "category": "medical-imaging",
     "emoji": "🖥️",
+    "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
     "prodUrl": "https://mrthomaslef.github.io/dicomviewer/",
     "githubUrl": "https://github.com/Mrthomaslef/dicomviewer",
     "pushedAt": "2026-10-27T12:35:17Z"
@@ -105,6 +115,7 @@
     "subtitle": "Calculateurs médicaux rapides & aide clinique",
     "category": "clinical-calc",
     "emoji": "⚕️",
+    "logoUrl": "https://mrthomaslef.github.io/Medicalc/image/logo2.png",
     "prodUrl": "https://mrthomaslef.github.io/Medicalc/",
     "githubUrl": "https://github.com/Mrthomaslef/Medicalc",
     "pushedAt": "2026-10-27T04:04:02Z"
@@ -115,6 +126,7 @@
     "subtitle": "Portail vidéo & souvenirs de vacances",
     "category": "games-family",
     "emoji": "🌴",
+    "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
     "prodUrl": "https://mrthomaslef.github.io/Holidamn/",
     "githubUrl": "https://github.com/Mrthomaslef/Holidamn",
     "pushedAt": "2026-10-27T03:57:00Z"
