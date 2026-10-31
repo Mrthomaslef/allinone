@@ -98,6 +98,14 @@ KNOWN_METADATA = {
         "emoji": "🌴",
         "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
     },
+    "m4-gaming": {
+        "title": "M4 Gaming",
+        "subtitle": "Télécommande Mac mini M4 (Mode TV 1080p/4K, ES-DE, Steam & Audio)",
+        "category": "games-family",
+        "emoji": "🎮",
+        "prodUrl": "http://192.168.1.111:8765",
+        "logoUrl": "https://mrthomaslef.github.io/allinone/assets/m4-gaming-icon.png",
+    },
 }
 
 

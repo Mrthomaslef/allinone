@@ -8,18 +8,18 @@
     "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-10-31T07:57:13Z"
+    "pushedAt": "2026-10-31T07:58:34Z"
   },
   {
     "id": "m4-gaming",
     "title": "M4 Gaming",
-    "subtitle": "M4 Gaming — Télécommande iPhone pour Mac mini M4 (Mode TV 1080p/4K, EmulationStation ES-DE, Steam Big Picture & Audio)",
-    "category": "daily-tools",
-    "emoji": "🚀",
-    "logoUrl": "http://192.168.1.111:8765/apple-touch-icon.png",
+    "subtitle": "Télécommande Mac mini M4 (Mode TV 1080p/4K, ES-DE, Steam & Audio)",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "https://mrthomaslef.github.io/allinone/assets/m4-gaming-icon.png",
     "prodUrl": "http://192.168.1.111:8765",
     "githubUrl": "https://github.com/Mrthomaslef/m4-gaming",
-    "pushedAt": "2026-10-31T07:57:13Z"
+    "pushedAt": "2026-10-31T07:58:34Z"
   },
   {
     "id": "quiz-trentenaires",
