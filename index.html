@@ -152,10 +152,10 @@
             />
             <div class="min-w-0">
               <div class="flex items-center gap-1.5">
-                <span class="text-xs font-extrabold text-white truncate">Gemini Ultra • Limites Live</span>
+                <span class="text-xs font-extrabold text-white truncate">Gemini Ultra & Claude Pro • Live</span>
                 <span id="gu-live-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
               </div>
-              <div id="gu-widget-sub" class="text-[11px] text-slate-400 truncate">Quotas 5h, Semaine & Mois en temps réel</div>
+              <div id="gu-widget-sub" class="text-[11px] text-slate-400 truncate">Quotas 5h, Semaine, Mois & Claude Pro (Apple)</div>
             </div>
           </div>
 
@@ -168,9 +168,9 @@
               <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Sem.</div>
               <div id="gu-pill-week" class="text-[11px] font-extrabold text-amber-300 mt-0.5 leading-none">--%</div>
             </div>
-            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-white/10 text-center">
-              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Mois</div>
-              <div id="gu-pill-month" class="text-[11px] font-extrabold text-sky-300 mt-0.5 leading-none">--%</div>
+            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-amber-400/25 text-center">
+              <div class="text-[9px] uppercase text-amber-300 font-semibold leading-none">Claude</div>
+              <div id="gu-pill-claude" class="text-[11px] font-extrabold text-amber-300 mt-0.5 leading-none">100%</div>
             </div>
             <svg class="w-4 h-4 text-sky-300 ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
@@ -226,8 +226,8 @@
         alwaysInclude: true
       },
       'gemini-ultra': {
-        title: 'Gemini Ultra — Quotas Live',
-        subtitle: 'Limites temps réel 5h, Semaine & Mois (Abonnement Google AI Ultra)',
+        title: 'Gemini Ultra & Claude Pro — Quotas Live',
+        subtitle: 'Limites temps réel 5h, Semaine & Mois (Google AI Ultra + Claude Pro Apple)',
         category: 'daily-tools',
         emoji: '✨',
         prodUrl: 'https://mrthomaslef.github.io/allinone/gemini-ultra/',
@@ -667,9 +667,9 @@
     async function syncGeminiUltraWidget(manual = false) {
       const p5 = document.getElementById('gu-pill-5h');
       const pw = document.getElementById('gu-pill-week');
-      const pm = document.getElementById('gu-pill-month');
+      const pc = document.getElementById('gu-pill-claude');
       const sub = document.getElementById('gu-widget-sub');
-      if (!p5 || !pw || !pm) return;
+      if (!p5 || !pw) return;
 
       let data = null;
       try {
@@ -694,11 +694,14 @@
         const w5 = data.windows.fiveHour;
         const ww = data.windows.weekly;
         const wm = data.windows.monthly;
+        const cw = data.windows.claudeWeekly;
+        const c5 = data.windows.claudeFiveHour;
+        const cRem = (c5 && cw) ? Math.min(c5.remainingPercent, cw.remainingPercent) : 100;
         if (w5) p5.textContent = `${Math.round(w5.remainingPercent)}%`;
         if (ww) pw.textContent = `${ ww.remainingPercent < 10 ? ww.remainingPercent.toFixed(1) : Math.round(ww.remainingPercent) }%`;
-        if (wm) pm.textContent = `${Math.round(wm.remainingPercent)}%`;
+        if (pc) pc.textContent = `${Math.round(cRem)}%`;
         if (sub && w5 && ww) {
-          sub.textContent = `Restant : ${w5.remainingPercent.toFixed(0)}% (5h) • ${ww.remainingPercent.toFixed(1)}% (Sem.) • ${wm ? wm.remainingPercent.toFixed(0) : '--'}% (Mois)`;
+          sub.textContent = `Gemini: ${w5.remainingPercent.toFixed(0)}% (5h) • ${ww.remainingPercent.toFixed(0)}% (Sem.) | Claude Pro: ${cRem.toFixed(0)}%`;
         }
       }
     }

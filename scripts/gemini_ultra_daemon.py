@@ -321,6 +321,189 @@ def compute_local_telemetry(
     }
 
 
+
+def fetch_claude_pro_quota(now: datetime) -> dict:
+    info = {
+        "active": False,
+        "planName": "Claude Pro",
+        "email": "thomaslefevre18@live.fr",
+        "orgId": None,
+        "subscriptionType": "pro",
+        "billingType": "apple / claude.ai",
+        "upgradedAt": None,
+        "fiveHour": {
+            "id": "claude-5h",
+            "durationMins": 300,
+            "usedPercent": 0.0,
+            "remainingPercent": 100.0,
+            "resetsAt": None,
+            "remainingSeconds": 18000,
+            "status": "idle",
+        },
+        "weekly": {
+            "id": "claude-weekly",
+            "durationMins": 10080,
+            "usedPercent": 0.0,
+            "remainingPercent": 100.0,
+            "resetsAt": None,
+            "remainingSeconds": 604800,
+        },
+        "models": [
+            {
+                "id": "claude-opus-5-5",
+                "label": "Claude Opus 5.5",
+                "family": "claude-pro",
+                "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
+                "remainingPercent": 100.0,
+                "usedPercent": 0.0,
+                "resetsAt": None,
+            },
+            {
+                "id": "claude-sonnet-5-5",
+                "label": "Claude Sonnet 5.5",
+                "family": "claude-pro",
+                "description": "Claude Pro Direct • Raisonnement rapide & efficace",
+                "remainingPercent": 100.0,
+                "usedPercent": 0.0,
+                "resetsAt": None,
+            },
+            {
+                "id": "claude-fable-5-1",
+                "label": "Claude Fable 5.1",
+                "family": "claude-pro",
+                "description": "Claude Pro Direct • Défis complexes & Ultracode",
+                "remainingPercent": 100.0,
+                "usedPercent": 0.0,
+                "resetsAt": None,
+            },
+            {
+                "id": "claude-haiku-5-5",
+                "label": "Claude Haiku 5.5",
+                "family": "claude-pro",
+                "description": "Claude Pro Direct • Réponses instantanées",
+                "remainingPercent": 100.0,
+                "usedPercent": 0.0,
+                "resetsAt": None,
+            },
+        ],
+    }
+
+    # 1. Fallback from T3 claudeAgent.json cache
+    cache_path = os.path.expanduser("~/.t3/caches/claudeAgent.json")
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                c_data = json.load(f)
+            auth = c_data.get("auth") or {}
+            if auth.get("status") == "authenticated":
+                info["active"] = True
+                if auth.get("email"):
+                    info["email"] = auth["email"]
+                if auth.get("workspaceId"):
+                    info["orgId"] = auth["workspaceId"]
+                if auth.get("type"):
+                    info["planName"] = auth["type"]
+            ul = c_data.get("usageLimits") or {}
+            for w in ul.get("windows", []):
+                wid = w.get("id")
+                used = round(float(w.get("usedPercent") or 0.0), 2)
+                rem = round(max(0.0, 100.0 - used), 2)
+                r_at = w.get("resetsAt")
+                if wid == "five_hour":
+                    info["fiveHour"]["usedPercent"] = used
+                    info["fiveHour"]["remainingPercent"] = rem
+                    info["fiveHour"]["resetsAt"] = r_at
+                    info["fiveHour"]["status"] = "active" if r_at else "idle"
+                elif wid == "seven_day":
+                    info["weekly"]["usedPercent"] = used
+                    info["weekly"]["remainingPercent"] = rem
+                    info["weekly"]["resetsAt"] = r_at
+        except Exception:
+            pass
+
+    # 2. Direct live OAuth query to Anthropic API via macOS Keychain
+    try:
+        raw_cred = subprocess.check_output(
+            ["security", "find-generic-password", "-s", "Claude Code-credentials", "-w"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+            timeout=3,
+        ).strip()
+        cred_json = json.loads(raw_cred).get("claudeAiOauth", {})
+        token = cred_json.get("accessToken")
+        if token:
+            info["active"] = True
+            sub_type = cred_json.get("subscriptionType") or "pro"
+            info["subscriptionType"] = sub_type
+            info["planName"] = "Claude Max" if "max" in sub_type.lower() else "Claude Pro"
+
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "anthropic-beta": "oauth-2025-04-20",
+                "User-Agent": "claude-code/2.1.316",
+                "Accept": "application/json",
+            }
+            req_u = urllib.request.Request("https://api.anthropic.com/api/oauth/usage", headers=headers)
+            with urllib.request.urlopen(req_u, timeout=6) as resp_u:
+                u_data = json.loads(resp_u.read().decode("utf-8"))
+
+            fh = u_data.get("five_hour") or {}
+            fh_used = round(float(fh.get("utilization") or 0.0), 2)
+            fh_rem = round(max(0.0, 100.0 - fh_used), 2)
+            fh_resets = fh.get("resets_at")
+            fh_dt = parse_iso(fh_resets)
+            info["fiveHour"] = {
+                "id": "claude-5h",
+                "durationMins": 300,
+                "usedPercent": fh_used,
+                "remainingPercent": fh_rem,
+                "resetsAt": fh_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if fh_dt else None,
+                "remainingSeconds": int(max(0.0, (fh_dt - now).total_seconds())) if fh_dt else 18000,
+                "status": "active" if fh_dt else "idle",
+            }
+
+            sd = u_data.get("seven_day") or {}
+            sd_used = round(float(sd.get("utilization") or 0.0), 2)
+            sd_rem = round(max(0.0, 100.0 - sd_used), 2)
+            sd_resets = sd.get("resets_at")
+            sd_dt = parse_iso(sd_resets)
+            info["weekly"] = {
+                "id": "claude-weekly",
+                "durationMins": 10080,
+                "usedPercent": sd_used,
+                "remainingPercent": sd_rem,
+                "resetsAt": sd_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if sd_dt else None,
+                "remainingSeconds": int(max(0.0, (sd_dt - now).total_seconds())) if sd_dt else 604800,
+            }
+
+            try:
+                req_p = urllib.request.Request("https://api.anthropic.com/api/oauth/profile", headers=headers)
+                with urllib.request.urlopen(req_p, timeout=5) as resp_p:
+                    p_data = json.loads(resp_p.read().decode("utf-8"))
+                acc = p_data.get("account") or {}
+                org = p_data.get("organization") or {}
+                if acc.get("email"):
+                    info["email"] = acc["email"]
+                if org.get("uuid"):
+                    info["orgId"] = org["uuid"]
+                if org.get("subscription_created_at"):
+                    info["upgradedAt"] = org["subscription_created_at"]
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+    eff_rem = min(info["fiveHour"]["remainingPercent"], info["weekly"]["remainingPercent"])
+    eff_used = round(100.0 - eff_rem, 2)
+    eff_reset = info["fiveHour"]["resetsAt"] or info["weekly"]["resetsAt"]
+    for m in info["models"]:
+        m["remainingPercent"] = eff_rem
+        m["usedPercent"] = eff_used
+        m["resetsAt"] = eff_reset
+
+    return info
+
+
 def build_live_quota_payload() -> dict:
     now = datetime.now(timezone.utc)
     token_data = load_oauth_token()
@@ -447,6 +630,9 @@ def build_live_quota_payload() -> dict:
             }
         )
 
+    claude_pro = fetch_claude_pro_quota(now)
+    models_list = list(claude_pro.get("models", [])) + models_list
+
     with _state_lock:
         tunnel_url = _current_tunnel_url
 
@@ -463,12 +649,23 @@ def build_live_quota_payload() -> dict:
             "projectId": project_id,
             "status": "active",
         },
+        "claudeSubscription": {
+            "active": claude_pro["active"],
+            "planName": claude_pro["planName"],
+            "email": claude_pro["email"],
+            "orgId": claude_pro["orgId"],
+            "subscriptionType": claude_pro["subscriptionType"],
+            "upgradedAt": claude_pro["upgradedAt"],
+            "harness": "Anthropic Claude Code • Compte Apple",
+        },
         "windows": {
             "fiveHour": gem_5h,
             "weekly": gem_weekly,
             "monthly": monthly_window,
             "thirdParty5h": tp_5h,
             "thirdPartyWeekly": tp_weekly,
+            "claudeFiveHour": claude_pro["fiveHour"],
+            "claudeWeekly": claude_pro["weekly"],
         },
         "models": models_list,
     }
@@ -711,13 +908,15 @@ def background_sync_loop() -> None:
             payload = refresh_and_save(force=True)
             u5 = payload["windows"]["fiveHour"]["usedPercent"]
             uw = payload["windows"]["weekly"]["usedPercent"]
+            c5 = payload["windows"].get("claudeFiveHour", {}).get("usedPercent", 0.0)
+            cw = payload["windows"].get("claudeWeekly", {}).get("usedPercent", 0.0)
             now_ts = time.time()
-            changed = abs(u5 - last_pushed_5h) >= 0.2 or abs(uw - last_pushed_week) >= 0.1
+            changed = abs((u5 + c5) - last_pushed_5h) >= 0.2 or abs((uw + cw) - last_pushed_week) >= 0.1
             if changed and (now_ts - last_git_push) >= 180:
                 if push_snapshot_to_github():
                     last_git_push = now_ts
-                    last_pushed_5h = u5
-                    last_pushed_week = uw
+                    last_pushed_5h = u5 + c5
+                    last_pushed_week = uw + cw
         except Exception:
             pass
 

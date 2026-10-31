@@ -171,6 +171,9 @@
         <button onclick="setFilter('monthly')" data-tab="monthly" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
           🗓️ Mois (30j)
         </button>
+        <button onclick="setFilter('claude')" data-tab="claude" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
+          🟠 Claude Pro
+        </button>
         <button onclick="setFilter('models')" data-tab="models" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
           🤖 Modèles & 3P
         </button>
@@ -192,6 +195,23 @@
             <p id="sub-plan-desc" class="text-[11px] text-slate-300 truncate mt-0.5">Forfait Google AI maximal actif • Quotas 5h, Semaine & Mois réinitialisés à 100%</p>
           </div>
         </div>
+      </section>
+
+      <!-- BANDEAU ABONNEMENT CLAUDE PRO (COMPTE APPLE) -->
+      <section id="claude-sub-banner" class="rounded-2xl p-3 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-rose-500/10 border border-amber-400/25 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-sm shrink-0">🟠</span>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span id="claude-plan-title" class="text-xs font-extrabold text-white truncate">Anthropic Claude Pro (Compte Apple)</span>
+              <span id="claude-status-badge" class="px-1.5 py-0.5 text-[9px] font-mono-num font-bold uppercase rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0">Actif • Pro</span>
+            </div>
+            <p id="claude-plan-desc" class="text-[11px] text-slate-300 truncate mt-0.5">thomaslefevre18@live.fr • Quotas 5h & Semaine 100% disponibles</p>
+          </div>
+        </div>
+        <button onclick="setFilter('claude')" class="px-2.5 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30 text-[11px] font-bold text-amber-300 shrink-0 transition active:scale-95">
+          Détails
+        </button>
       </section>
 
       <!-- SYNTHÈSE DES 3 JAUGES CIRCULAIRES (5H / SEMAINE / MOIS) -->
@@ -253,6 +273,27 @@
             <span class="text-xs font-bold text-white mt-1.5">Mois (30j)</span>
             <span id="ring-monthly-sub" class="text-[10px] font-mono-num text-sky-300 mt-0.5">-- cycles</span>
           </button>
+        </div>
+
+        <!-- SYNTHÈSE RAPIDE CLAUDE PRO (5H & SEMAINE) -->
+        <div onclick="setFilter('claude')" class="mt-3 p-3 rounded-2xl bg-gradient-to-r from-amber-500/[0.08] via-orange-500/[0.07] to-violet-500/[0.08] border border-amber-400/20 hover:border-amber-400/40 transition cursor-pointer flex items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse-soft shrink-0"></span>
+            <div class="min-w-0">
+              <div class="text-xs font-extrabold text-white truncate">Claude Pro Direct (Apple)</div>
+              <div id="hero-claude-sub" class="text-[10px] text-slate-400 truncate">Opus 5.5 • Sonnet 5.5 • Fable 5.1 • Haiku 5.5</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <div class="px-2 py-1 rounded-xl bg-slate-950/70 border border-white/10 text-center">
+              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Session 5h</div>
+              <div id="hero-claude-5h" class="text-xs font-extrabold font-mono-num text-emerald-300 mt-0.5 leading-none">100%</div>
+            </div>
+            <div class="px-2 py-1 rounded-xl bg-slate-950/70 border border-white/10 text-center">
+              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Semaine 7j</div>
+              <div id="hero-claude-wk" class="text-xs font-extrabold font-mono-num text-emerald-300 mt-0.5 leading-none">100%</div>
+            </div>
+          </div>
         </div>
 
         <!-- ALERTE / ASTUCE INTELLIGENTE SI QUOTA HEBDO BAS -->
@@ -509,6 +550,76 @@
             <span class="font-mono-num text-slate-500">Steps / jour</span>
           </div>
           <div id="chart-monthly-daily" class="grid grid-cols-14 gap-1 items-end h-24 pt-2 px-2 rounded-2xl bg-slate-950/40 border border-white/5" style="grid-template-columns: repeat(14, minmax(0, 1fr));"></div>
+        </div>
+      </section>
+
+      <!-- SECTION CLAUDE PRO : ABONNEMENT DIRECT ANTHROPIC (COMPTE APPLE) -->
+      <section id="card-claude" class="glass-card rounded-3xl p-4 space-y-3.5 border border-amber-400/20">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-base">🟠</span>
+              <h2 class="text-sm font-extrabold text-white uppercase tracking-wide">Claude Pro — Quotas Directs</h2>
+            </div>
+            <p id="claude-card-subtitle" class="text-xs text-slate-400 mt-0.5">Abonnement Anthropic via Compte Apple (thomaslefevre18@live.fr)</p>
+          </div>
+          <span id="badge-claude-status" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shrink-0">
+            Actif • 100%
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Fenêtre 5 Heures Claude Pro -->
+          <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300 uppercase tracking-wider">⏱️ Session 5 Heures</span>
+              <span id="claude-5h-status-pill" class="text-[10px] font-mono-num text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">Prêt (0% utilisé)</span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <div>
+                <span id="val-claude-5h-rem" class="text-2xl font-extrabold font-mono-num text-white">100%</span>
+                <span class="text-xs text-slate-400 ml-1">disponible</span>
+              </div>
+              <span id="val-claude-5h-used" class="text-xs font-mono-num text-slate-400">0% utilisé</span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden p-0.5">
+              <div id="bar-claude-5h" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width: 100%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
+              <span>Reset fenêtre 5h :</span>
+              <strong id="countdown-claude-5h" class="font-mono-num text-amber-300">Fenêtre au repos ✓</strong>
+            </div>
+          </div>
+
+          <!-- Fenêtre Semaine (7 Jours) Claude Pro -->
+          <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-orange-300 uppercase tracking-wider">📅 Semaine (7 Jours)</span>
+              <span id="claude-wk-reset-date" class="text-[10px] font-mono-num text-slate-400">Reset jeu. 5 nov.</span>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <div>
+                <span id="val-claude-wk-rem" class="text-2xl font-extrabold font-mono-num text-white">100%</span>
+                <span class="text-xs text-slate-400 ml-1">disponible</span>
+              </div>
+              <span id="val-claude-wk-used" class="text-xs font-mono-num text-slate-400">0% utilisé</span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden p-0.5">
+              <div id="bar-claude-wk" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
+              <span>Reset hebdo dans :</span>
+              <strong id="countdown-claude-wk" class="font-mono-num text-orange-300">--j --h --m</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modèles inclus dans Claude Pro Direct -->
+        <div class="p-3 rounded-2xl bg-amber-500/[0.05] border border-amber-400/15 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-2 text-slate-300">
+            <span>✨ <strong>Modèles Claude Code Direct :</strong> Opus 5.5, Sonnet 5.5, Fable 5.1 & Haiku 5.5</span>
+          </div>
+          <span class="font-mono-num text-[11px] text-amber-300 font-semibold">Ultrathink & Ultracode inclus</span>
         </div>
       </section>
 
@@ -850,6 +961,55 @@
         `;
       }).join('');
 
+      // Section Claude Pro Direct
+      const cSub = data.claudeSubscription || {};
+      const c5 = effectiveWindow(data.windows.claudeFiveHour || { remainingPercent: 100, usedPercent: 0 });
+      const cw = effectiveWindow(data.windows.claudeWeekly || { remainingPercent: 100, usedPercent: 0 });
+      const cMinRem = Math.min(c5.remainingPercent, cw.remainingPercent);
+      const tc = getStatusTheme(cMinRem);
+
+      const claudePlanTitle = document.getElementById('claude-plan-title');
+      const claudeStatusBadge = document.getElementById('claude-status-badge');
+      const claudePlanDesc = document.getElementById('claude-plan-desc');
+      if (claudePlanTitle) claudePlanTitle.textContent = `${cSub.planName || 'Claude Pro'} • Compte Apple`;
+      if (claudeStatusBadge) {
+        claudeStatusBadge.textContent = cSub.active !== false ? `Actif • ${(cSub.subscriptionType || 'Pro').toUpperCase()}` : 'Inactif';
+      }
+      if (claudePlanDesc) {
+        claudePlanDesc.textContent = `${cSub.email || 'thomaslefevre18@live.fr'} • 5h: ${c5.remainingPercent.toFixed(0)}% dispo • Semaine: ${cw.remainingPercent.toFixed(0)}% dispo`;
+      }
+
+      const heroC5 = document.getElementById('hero-claude-5h');
+      const heroCW = document.getElementById('hero-claude-wk');
+      if (heroC5) heroC5.textContent = `${c5.remainingPercent.toFixed(0)}%`;
+      if (heroCW) heroCW.textContent = `${cw.remainingPercent.toFixed(0)}%`;
+
+      const badgeClaude = document.getElementById('badge-claude-status');
+      if (badgeClaude) {
+        badgeClaude.textContent = `${tc.badgeText} • ${cMinRem.toFixed(0)}%`;
+        badgeClaude.className = `px-2.5 py-1 rounded-xl text-[11px] font-bold border shrink-0 ${tc.badgeClass}`;
+      }
+
+      const valC5Rem = document.getElementById('val-claude-5h-rem');
+      const valC5Used = document.getElementById('val-claude-5h-used');
+      const barC5 = document.getElementById('bar-claude-5h');
+      const pillC5 = document.getElementById('claude-5h-status-pill');
+      if (valC5Rem) valC5Rem.textContent = `${c5.remainingPercent.toFixed(1)}%`;
+      if (valC5Used) valC5Used.textContent = `${c5.usedPercent.toFixed(1)}% consommé`;
+      if (barC5) barC5.style.width = `${Math.max(2, c5.remainingPercent)}%`;
+      if (pillC5) {
+        pillC5.textContent = c5.resetsAt ? `Session active (${c5.usedPercent.toFixed(0)}%)` : `Au repos (100% dispo)`;
+      }
+
+      const valCWRem = document.getElementById('val-claude-wk-rem');
+      const valCWUsed = document.getElementById('val-claude-wk-used');
+      const barCW = document.getElementById('bar-claude-wk');
+      const wkResetDate = document.getElementById('claude-wk-reset-date');
+      if (valCWRem) valCWRem.textContent = `${cw.remainingPercent.toFixed(1)}%`;
+      if (valCWUsed) valCWUsed.textContent = `${cw.usedPercent.toFixed(1)}% consommé`;
+      if (barCW) barCW.style.width = `${Math.max(2, cw.remainingPercent)}%`;
+      if (wkResetDate) wkResetDate.textContent = cw.resetsAt ? `Reset ${formatResetClock(cw.resetsAt, true)}` : 'Quota 7j';
+
       // Pool 3P (Claude & GPT)
       document.getElementById('tp-5h-val').textContent = `${tp5.remainingPercent.toFixed(0)}% dispo`;
       document.getElementById('tp-weekly-val').textContent = `${tpw.remainingPercent.toFixed(0)}% dispo`;
@@ -857,6 +1017,7 @@
       // Liste des modèles
       const models = data.models || [];
       document.getElementById('models-list').innerHTML = models.map(m => {
+        const isClaudePro = m.family === 'claude-pro';
         const is3p = m.family === '3p';
         const rem = m.resetsAt && Date.now() >= Date.parse(m.resetsAt) ? 100 : m.remainingPercent;
         const badgeColor = rem >= 50
@@ -870,8 +1031,8 @@
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold text-white truncate">${m.label}</span>
-                <span class="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded ${is3p ? 'bg-violet-500/20 text-violet-300' : 'bg-sky-500/20 text-sky-300'}">
-                  ${is3p ? 'Claude / GPT' : 'Gemini'}
+                <span class="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded ${isClaudePro ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30' : (is3p ? 'bg-violet-500/20 text-violet-300' : 'bg-sky-500/20 text-sky-300')}">
+                  ${isClaudePro ? 'Claude Pro Direct' : (is3p ? 'Vertex 3P' : 'Gemini Ultra')}
                 </span>
               </div>
               <div class="text-[11px] text-slate-400 truncate mt-0.5">${m.description || ''}</div>
@@ -908,6 +1069,16 @@
       }
       if (tpw) {
         document.getElementById('tp-weekly-timer').textContent = formatShortCountdown(tpw.resetsAt);
+      }
+      const c5 = currentData.windows.claudeFiveHour;
+      const cw = currentData.windows.claudeWeekly;
+      const c5El = document.getElementById('countdown-claude-5h');
+      const cwEl = document.getElementById('countdown-claude-wk');
+      if (c5El && c5) {
+        c5El.textContent = c5.resetsAt ? formatCountdown(c5.resetsAt, false) : 'Fenêtre 5h au repos ✓';
+      }
+      if (cwEl && cw) {
+        cwEl.textContent = cw.resetsAt ? formatCountdown(cw.resetsAt, true) : '100% disponible ✓';
       }
 
       if (currentData.checkedAt) {
@@ -1015,6 +1186,7 @@
         '5h': document.getElementById('card-5h'),
         'weekly': document.getElementById('card-weekly'),
         'monthly': document.getElementById('card-monthly'),
+        'claude': document.getElementById('card-claude'),
         'models': document.getElementById('card-models')
       };
 
