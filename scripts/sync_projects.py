@@ -218,16 +218,16 @@ def main():
             }
         )
 
-    # Include built-in Gemini Ultra live quota app
+    # Include built-in Agent Tracking live quota app
     if not any(item["id"].lower() == "gemini-ultra" for item in output):
         output.insert(
             0,
             {
                 "id": "gemini-ultra",
-                "title": "Gemini Ultra & Claude Pro — Quotas Live",
-                "subtitle": "Limites temps réel 5h, Semaine & Mois (Google AI Ultra + Claude Pro Apple)",
+                "title": "Agent Tracking",
+                "subtitle": "Consommation Gemini & Claude (Tokens, Prix API & Quotas)",
                 "category": "daily-tools",
-                "emoji": "✨",
+                "emoji": "🤖",
                 "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/gemini-ultra",

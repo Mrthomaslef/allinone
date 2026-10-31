@@ -1,10 +1,10 @@
 [
   {
     "id": "gemini-ultra",
-    "title": "Gemini Ultra & Claude Pro — Quotas Live",
-    "subtitle": "Limites temps réel 5h, Semaine & Mois (Google AI Ultra + Claude Pro Apple)",
+    "title": "Agent Tracking",
+    "subtitle": "Consommation Gemini & Claude (Tokens, Prix API & Quotas)",
     "category": "daily-tools",
-    "emoji": "✨",
+    "emoji": "🤖",
     "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Consommation Gemini &amp; Claude • All-In-One</title>
-  <meta name="description" content="Suivi en temps réel des tokens utilisés, de l'estimation du coût API et des quotas Gemini Ultra & Claude Pro." />
+  <title>Agent Tracking • Gemini &amp; Claude</title>
+  <meta name="description" content="Agent Tracking : suivi en temps réel des tokens utilisés, du coût API estimé et des quotas Gemini & Claude." />
   <meta name="theme-color" content="#090D16" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Conso IA" />
+  <meta name="apple-mobile-web-app-title" content="Agent Tracking" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
   <link rel="apple-touch-icon" href="assets/icon.svg" />
@@ -44,7 +44,7 @@
     }
 
     .bar-fill {
-      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     #ptr-container {
@@ -70,15 +70,15 @@
     </div>
   </div>
 
-  <div class="max-w-lg mx-auto min-h-dvh flex flex-col px-4" style="padding-top: max(0.75rem, var(--safe-top)); padding-bottom: max(2rem, var(--safe-bottom));">
+  <div class="max-w-lg mx-auto min-h-dvh flex flex-col px-4" style="padding-top: max(0.75rem, var(--safe-top)); padding-bottom: max(1.5rem, var(--safe-bottom));">
 
-    <!-- HEADER SIMPLE -->
-    <header class="pt-2 pb-4 flex items-center justify-between gap-3">
+    <!-- HEADER ÉPURÉ -->
+    <header class="pt-2 pb-3.5 flex items-center justify-between gap-3">
       <div class="flex items-center gap-3 min-w-0">
         <a
           href="../"
           title="Retour à All-In-One"
-          class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition active:scale-95 shrink-0"
+          class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition active:scale-95 shrink-0"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -86,175 +86,139 @@
         </a>
         <div class="min-w-0">
           <div class="flex items-center gap-2">
-            <h1 class="text-lg font-extrabold text-white truncate">Gemini &amp; Claude</h1>
+            <h1 class="text-lg font-extrabold text-white truncate">Agent Tracking</h1>
             <span id="conn-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
           </div>
-          <p id="conn-label" class="text-xs text-slate-400 truncate">Synchronisation temps réel...</p>
+          <p id="conn-label" class="text-[11px] text-slate-400 truncate">Gemini &amp; Claude • Temps réel</p>
         </div>
       </div>
 
       <button
         onclick="fetchLiveQuota(true)"
-        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition active:scale-95 shrink-0"
+        class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition active:scale-95 shrink-0"
+        title="Actualiser"
       >
-        <svg id="refresh-icon" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+        <svg id="refresh-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
-        <span>Actualiser</span>
       </button>
     </header>
 
-    <main class="flex-1 space-y-3.5">
+    <main class="flex-1 space-y-3">
 
-      <!-- 1. RÉSUMÉ GLOBAL : TOKENS UTILISÉS & PRIX ESTIMÉ -->
-      <section class="card rounded-2xl p-4 space-y-3">
+      <!-- 1. TOTAL TOKENS & PRIX API ESTIMÉ -->
+      <section class="card rounded-2xl p-3.5 space-y-2.5">
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="p-3 rounded-xl bg-slate-950/75 border border-white/10">
+            <div class="text-[11px] text-slate-400 font-semibold">Tokens utilisés (30j)</div>
+            <div id="tot-tokens" class="text-xl font-extrabold text-white mt-0.5 tabular-nums">--</div>
+            <div id="tot-tokens-cache" class="text-[10px] text-slate-500 mt-0.5 tabular-nums">Cache : --</div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-950/75 border border-emerald-400/20">
+            <div class="text-[11px] text-slate-400 font-semibold">Prix API estimé</div>
+            <div id="tot-cost-eur" class="text-xl font-extrabold text-emerald-300 mt-0.5 tabular-nums">-- €</div>
+            <div id="tot-cost-usd" class="text-[10px] text-slate-400 mt-0.5 tabular-nums">~-- $ • Abo actif (0 €)</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-1.5 text-center">
+          <div class="py-1.5 px-2 rounded-lg bg-slate-950/50 border border-white/5">
+            <div class="text-[10px] text-slate-400">5 heures</div>
+            <div id="period-5h" class="text-[11px] font-bold text-white tabular-nums">--</div>
+          </div>
+          <div class="py-1.5 px-2 rounded-lg bg-slate-950/50 border border-white/5">
+            <div class="text-[10px] text-slate-400">Aujourd'hui</div>
+            <div id="period-today" class="text-[11px] font-bold text-white tabular-nums">--</div>
+          </div>
+          <div class="py-1.5 px-2 rounded-lg bg-slate-950/50 border border-white/5">
+            <div class="text-[10px] text-slate-400">7 jours</div>
+            <div id="period-7d" class="text-[11px] font-bold text-white tabular-nums">--</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. GEMINI -->
+      <section class="card rounded-2xl p-3.5 border-sky-400/20 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
-          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Consommation Globale (30j)</span>
-          <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
-            Abonnements actifs • 0 € facturé
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sm">✨</span>
+            <div>
+              <h2 class="text-sm font-extrabold text-white leading-tight">Gemini</h2>
+              <p id="gem-tokens-badge" class="text-[11px] font-semibold text-sky-300 tabular-nums">-- tokens</p>
+            </div>
+          </div>
+          <span id="gem-cost-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/25 text-xs font-extrabold text-emerald-300 tabular-nums">
+            -- € (-- $)
           </span>
         </div>
 
-        <div class="grid grid-cols-2 gap-2.5">
-          <div class="p-3 rounded-xl bg-slate-950/70 border border-white/10">
-            <div class="text-[11px] text-slate-400 font-medium">Tokens utilisés</div>
-            <div id="tot-tokens" class="text-2xl font-extrabold text-white mt-0.5 tabular-nums">--</div>
-            <div id="tot-tokens-cache" class="text-[11px] text-slate-500 mt-0.5 tabular-nums">Avec cache : --</div>
+        <div class="grid grid-cols-2 gap-2">
+          <!-- 5h Gemini -->
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-slate-400 font-semibold">Session 5h</span>
+              <span id="gem-5h-rem" class="font-extrabold text-white tabular-nums">--%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+              <div id="gem-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-400 to-sky-400" style="width: 100%"></div>
+            </div>
+            <div id="gem-5h-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
           </div>
 
-          <div class="p-3 rounded-xl bg-slate-950/70 border border-emerald-400/20">
-            <div class="text-[11px] text-slate-400 font-medium">Prix API estimé</div>
-            <div id="tot-cost-eur" class="text-2xl font-extrabold text-emerald-300 mt-0.5 tabular-nums">-- €</div>
-            <div id="tot-cost-usd" class="text-[11px] text-slate-400 mt-0.5 tabular-nums">Équivalent ~-- $</div>
-          </div>
-        </div>
-
-        <!-- Résumé par période sur une seule ligne simple -->
-        <div class="grid grid-cols-3 gap-2 pt-1 text-center">
-          <div class="p-2 rounded-xl bg-slate-950/40 border border-white/5">
-            <div class="text-[10px] text-slate-400 font-semibold uppercase">Session 5h</div>
-            <div id="period-5h" class="text-xs font-bold text-white mt-0.5 tabular-nums">-- tok • -- €</div>
-          </div>
-          <div class="p-2 rounded-xl bg-slate-950/40 border border-white/5">
-            <div class="text-[10px] text-slate-400 font-semibold uppercase">Aujourd'hui</div>
-            <div id="period-today" class="text-xs font-bold text-white mt-0.5 tabular-nums">-- tok • -- €</div>
-          </div>
-          <div class="p-2 rounded-xl bg-slate-950/40 border border-white/5">
-            <div class="text-[10px] text-slate-400 font-semibold uppercase">Semaine 7j</div>
-            <div id="period-7d" class="text-xs font-bold text-white mt-0.5 tabular-nums">-- tok • -- €</div>
+          <!-- 7j Gemini -->
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-slate-400 font-semibold">Semaine 7j</span>
+              <span id="gem-wk-rem" class="font-extrabold text-white tabular-nums">--%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+              <div id="gem-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-sky-400 to-indigo-400" style="width: 100%"></div>
+            </div>
+            <div id="gem-wk-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
           </div>
         </div>
       </section>
 
-      <!-- 2. CARTE GEMINI (GOOGLE AI ULTRA) -->
-      <section class="card rounded-2xl p-4 border-sky-400/20 space-y-3.5">
+      <!-- 3. CLAUDE -->
+      <section class="card rounded-2xl p-3.5 border-amber-400/20 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5">
-            <span class="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-base">✨</span>
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-sm">🟠</span>
             <div>
-              <h2 class="text-sm font-extrabold text-white">Gemini Ultra</h2>
-              <p class="text-[11px] text-slate-400">Google AI Ultra • Argon / Pro</p>
+              <h2 class="text-sm font-extrabold text-white leading-tight">Claude</h2>
+              <p id="claude-tokens-badge" class="text-[11px] font-semibold text-amber-300 tabular-nums">-- tokens</p>
             </div>
           </div>
-          <div class="text-right">
-            <div id="gem-cost-badge" class="text-sm font-extrabold text-emerald-300 tabular-nums">-- € (~-- $)</div>
-            <div id="gem-tokens-badge" class="text-xs font-bold text-slate-300 tabular-nums">-- tokens</div>
-          </div>
+          <span id="claude-cost-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/25 text-xs font-extrabold text-emerald-300 tabular-nums">
+            -- € (-- $)
+          </span>
         </div>
 
-        <!-- 5h Gemini -->
-        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-slate-300">⏱️ Session 5 heures</span>
-            <span id="gem-5h-reset" class="text-[11px] text-sky-300 font-semibold tabular-nums">Reset dans --</span>
-          </div>
-          <div class="flex items-baseline justify-between">
-            <div>
-              <span id="gem-5h-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
-              <span class="text-xs text-slate-400 ml-1">disponible</span>
+        <div class="grid grid-cols-2 gap-2">
+          <!-- 5h Claude -->
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-slate-400 font-semibold">Session 5h</span>
+              <span id="claude-5h-rem" class="font-extrabold text-white tabular-nums">--%</span>
             </div>
-            <span id="gem-5h-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
-          </div>
-          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
-            <div id="gem-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-400 to-sky-400" style="width: 100%"></div>
-          </div>
-        </div>
-
-        <!-- Semaine Gemini -->
-        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-slate-300">📅 Semaine (7 jours)</span>
-            <span id="gem-wk-reset" class="text-[11px] text-sky-300 font-semibold tabular-nums">Reset dans --</span>
-          </div>
-          <div class="flex items-baseline justify-between">
-            <div>
-              <span id="gem-wk-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
-              <span class="text-xs text-slate-400 ml-1">disponible</span>
+            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+              <div id="claude-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width: 100%"></div>
             </div>
-            <span id="gem-wk-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
+            <div id="claude-5h-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
           </div>
-          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
-            <div id="gem-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-sky-400 to-indigo-400" style="width: 100%"></div>
-          </div>
-        </div>
-      </section>
 
-      <!-- 3. CARTE CLAUDE (CLAUDE PRO + POOL 3P) -->
-      <section class="card rounded-2xl p-4 border-amber-400/20 space-y-3.5">
-        <div class="flex items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5">
-            <span class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-base">🟠</span>
-            <div>
-              <h2 class="text-sm font-extrabold text-white">Claude Pro &amp; Opus</h2>
-              <p class="text-[11px] text-slate-400">Anthropic Direct + Pool Antigravity</p>
+          <!-- 7j Claude -->
+          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-slate-400 font-semibold">Semaine 7j</span>
+              <span id="claude-wk-rem" class="font-extrabold text-white tabular-nums">--%</span>
             </div>
-          </div>
-          <div class="text-right">
-            <div id="claude-cost-badge" class="text-sm font-extrabold text-emerald-300 tabular-nums">-- € (~-- $)</div>
-            <div id="claude-tokens-badge" class="text-xs font-bold text-slate-300 tabular-nums">-- tokens</div>
-          </div>
-        </div>
-
-        <!-- 5h Claude Pro -->
-        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-slate-300">⏱️ Session 5 heures (Claude Pro)</span>
-            <span id="claude-5h-reset" class="text-[11px] text-amber-300 font-semibold tabular-nums">Reset dans --</span>
-          </div>
-          <div class="flex items-baseline justify-between">
-            <div>
-              <span id="claude-5h-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
-              <span class="text-xs text-slate-400 ml-1">disponible</span>
+            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+              <div id="claude-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
             </div>
-            <span id="claude-5h-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
+            <div id="claude-wk-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
           </div>
-          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
-            <div id="claude-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width: 100%"></div>
-          </div>
-        </div>
-
-        <!-- Semaine Claude Pro -->
-        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-slate-300">📅 Semaine 7 jours (Claude Pro)</span>
-            <span id="claude-wk-reset" class="text-[11px] text-amber-300 font-semibold tabular-nums">Reset dans --</span>
-          </div>
-          <div class="flex items-baseline justify-between">
-            <div>
-              <span id="claude-wk-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
-              <span class="text-xs text-slate-400 ml-1">disponible</span>
-            </div>
-            <span id="claude-wk-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
-          </div>
-          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
-            <div id="claude-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
-          </div>
-        </div>
-
-        <!-- Pool Claude & GPT partagé (Antigravity 3P) -->
-        <div class="p-3 rounded-xl bg-violet-500/[0.07] border border-violet-400/20 flex items-center justify-between text-xs">
-          <span class="text-slate-300 font-semibold">🟣 Pool Claude / GPT (Antigravity)</span>
-          <span id="tp-summary" class="font-extrabold text-violet-300 tabular-nums">5h --% • 7j --%</span>
         </div>
       </section>
 
@@ -262,7 +226,7 @@
   </div>
 
   <script>
-    const CACHE_KEY = 'gemini_ultra_live_quota_cache_v2';
+    const CACHE_KEY = 'agent_tracking_live_quota_cache_v3';
     const LOCAL_API = 'http://127.0.0.1:8787/api/quota';
     const GITHUB_RAW_JSON = 'https://raw.githubusercontent.com/Mrthomaslef/allinone/main/gemini-ultra/quota-live.json';
 
@@ -299,8 +263,8 @@
       const days = Math.floor(totalSec / 86400);
       const hours = Math.floor((totalSec % 86400) / 3600);
       const mins = Math.floor((totalSec % 3600) / 60);
-      if (days > 0) return `Reset dans ${days}j ${hours}h ${mins}m`;
-      return `Reset dans ${hours}h ${mins}m`;
+      if (days > 0) return `Reset ${days}j ${hours}h`;
+      return `Reset ${hours}h ${mins}m`;
     }
 
     function effectiveWindow(win) {
@@ -321,8 +285,6 @@
       const wm = data.windows.monthly || {};
       const c5 = effectiveWindow(data.windows.claudeFiveHour || { remainingPercent: 100, usedPercent: 0 });
       const cw = effectiveWindow(data.windows.claudeWeekly || { remainingPercent: 100, usedPercent: 0 });
-      const tp5 = effectiveWindow(data.windows.thirdParty5h || { remainingPercent: 100 });
-      const tpw = effectiveWindow(data.windows.thirdPartyWeekly || { remainingPercent: 100 });
 
       const byModel = ts.byModel || [];
       const gemModel = ts.gemini || byModel.find(m => !m.id.includes('claude')) || {};
@@ -336,7 +298,7 @@
       document.getElementById('tot-tokens').textContent = `${formatTokens(totTokens)} tok`;
       document.getElementById('tot-tokens-cache').textContent = `Avec cache : ${formatTokens(totCache)} tok`;
       document.getElementById('tot-cost-eur').textContent = formatEur(totEur);
-      document.getElementById('tot-cost-usd').textContent = `Équivalent ~${formatUsd(totUsd)}`;
+      document.getElementById('tot-cost-usd').textContent = `~${formatUsd(totUsd)} • Abo actif (0 €)`;
 
       // Périodes 5h / Aujourd'hui / 7j
       const b5h = ts.fiveHour || { activeTokens: w5.tokensWindow || 0, apiCostEur: w5.apiCostEurWindow || 0 };
@@ -354,12 +316,10 @@
       document.getElementById('gem-cost-badge').textContent = `${formatEur(gemEur)} (${formatUsd(gemUsd)})`;
       document.getElementById('gem-tokens-badge').textContent = `${formatTokens(gemTok)} tokens`;
 
-      document.getElementById('gem-5h-rem').textContent = `${w5.remainingPercent.toFixed(1)}%`;
-      document.getElementById('gem-5h-used').textContent = `${w5.usedPercent.toFixed(1)}% utilisé`;
+      document.getElementById('gem-5h-rem').textContent = `${Math.round(w5.remainingPercent)}%`;
       document.getElementById('gem-5h-bar').style.width = `${Math.max(2, w5.remainingPercent)}%`;
 
-      document.getElementById('gem-wk-rem').textContent = `${ww.remainingPercent.toFixed(1)}%`;
-      document.getElementById('gem-wk-used').textContent = `${ww.usedPercent.toFixed(1)}% utilisé`;
+      document.getElementById('gem-wk-rem').textContent = `${Math.round(ww.remainingPercent)}%`;
       document.getElementById('gem-wk-bar').style.width = `${Math.max(2, ww.remainingPercent)}%`;
 
       // Claude
@@ -369,15 +329,11 @@
       document.getElementById('claude-cost-badge').textContent = `${formatEur(claudeEur)} (${formatUsd(claudeUsd)})`;
       document.getElementById('claude-tokens-badge').textContent = `${formatTokens(claudeTok)} tokens`;
 
-      document.getElementById('claude-5h-rem').textContent = `${c5.remainingPercent.toFixed(0)}%`;
-      document.getElementById('claude-5h-used').textContent = `${c5.usedPercent.toFixed(0)}% utilisé`;
+      document.getElementById('claude-5h-rem').textContent = `${Math.round(c5.remainingPercent)}%`;
       document.getElementById('claude-5h-bar').style.width = `${Math.max(2, c5.remainingPercent)}%`;
 
-      document.getElementById('claude-wk-rem').textContent = `${cw.remainingPercent.toFixed(0)}%`;
-      document.getElementById('claude-wk-used').textContent = `${cw.usedPercent.toFixed(0)}% utilisé`;
+      document.getElementById('claude-wk-rem').textContent = `${Math.round(cw.remainingPercent)}%`;
       document.getElementById('claude-wk-bar').style.width = `${Math.max(2, cw.remainingPercent)}%`;
-
-      document.getElementById('tp-summary').textContent = `5h ${tp5.remainingPercent.toFixed(0)}% • 7j ${tpw.remainingPercent.toFixed(0)}%`;
 
       updateTimers();
     }
@@ -418,7 +374,7 @@
           if (localData && localData.windows) {
             localStorage.setItem(CACHE_KEY, JSON.stringify(localData));
             renderUI(localData);
-            connLabel.textContent = 'En direct • API locale Mac';
+            connLabel.textContent = 'Gemini & Claude • En direct (Mac)';
             return;
           }
         } catch (_) {}
@@ -443,7 +399,7 @@
             if (tunnelData && tunnelData.windows) {
               localStorage.setItem(CACHE_KEY, JSON.stringify(tunnelData));
               renderUI(tunnelData);
-              connLabel.textContent = 'En direct • Tunnel Mobile 4G/5G';
+              connLabel.textContent = 'Gemini & Claude • En direct (4G/5G)';
               return;
             }
           } catch (_) {}
@@ -452,7 +408,7 @@
         if (snapshot && snapshot.windows) {
           localStorage.setItem(CACHE_KEY, JSON.stringify(snapshot));
           renderUI(snapshot);
-          connLabel.textContent = 'Synchronisé via GitHub Cloud';
+          connLabel.textContent = 'Gemini & Claude • Synchronisé Cloud';
         }
       } finally {
         if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 350);

@@ -1,7 +1,7 @@
 {
-  "name": "Gemini Ultra • Quotas & Limites Live",
-  "short_name": "Gemini Ultra",
-  "description": "Suivi en temps réel des limites et quotas Google AI Ultra (5h, Semaine, Mois) & Antigravity.",
+  "name": "Agent Tracking • Gemini & Claude",
+  "short_name": "Agent Tracking",
+  "description": "Suivi en temps réel des tokens utilisés, du prix API estimé et des quotas Gemini & Claude.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#090D16",
