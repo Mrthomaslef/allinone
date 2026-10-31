@@ -183,6 +183,79 @@
     <!-- CONTENU PRINCIPAL -->
     <main class="flex-1 space-y-4 pt-1">
 
+      <!-- SECTION EN HAUT : TOKENS UTILISÉS & ESTIMATION PRIX API (HORS ABONNEMENT) -->
+      <section id="card-tokens-cost" class="glass-card rounded-3xl p-4 border border-cyan-400/25 bg-gradient-to-br from-sky-500/[0.08] via-indigo-500/[0.06] to-emerald-500/[0.08] space-y-3">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-base">🪙</span>
+            <h2 class="text-xs font-extrabold uppercase tracking-wider text-white truncate">Tokens Utilisés &amp; Prix API Estimé</h2>
+            <span class="px-1.5 py-0.5 text-[9px] font-mono-num font-bold uppercase rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0">
+              Inclus Abo • 0 € facturé
+            </span>
+          </div>
+          <div class="inline-flex items-center rounded-xl bg-slate-950/80 border border-white/10 p-0.5 text-[10px] font-bold shrink-0">
+            <button type="button" onclick="setGuTokenPeriod('5h')" id="gu-tok-btn-5h" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">5h</button>
+            <button type="button" onclick="setGuTokenPeriod('today')" id="gu-tok-btn-today" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">Auj.</button>
+            <button type="button" onclick="setGuTokenPeriod('7d')" id="gu-tok-btn-7d" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">7j</button>
+            <button type="button" onclick="setGuTokenPeriod('30d')" id="gu-tok-btn-30d" class="px-2 py-1 rounded-lg transition bg-cyan-500/25 text-cyan-200 border border-cyan-400/30">30j</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="p-3 rounded-2xl bg-slate-950/70 border border-white/10">
+            <div class="flex items-center justify-between text-[10px] text-slate-400 font-semibold uppercase">
+              <span>Tokens (In + Out)</span>
+              <span id="gu-tok-period-tag" class="text-cyan-300 font-mono-num">30j</span>
+            </div>
+            <div id="gu-tok-main" class="text-2xl font-extrabold font-mono-num text-white mt-0.5">--</div>
+            <div id="gu-tok-io-sub" class="text-[10px] font-mono-num text-slate-400 mt-0.5 truncate">In: -- • Out: --</div>
+            <div class="mt-1.5 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
+              <span class="text-slate-400">Total avec Cache :</span>
+              <strong id="gu-tok-cache-total" class="font-mono-num text-sky-300">--</strong>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-2xl bg-slate-950/70 border border-emerald-400/25">
+            <div class="flex items-center justify-between text-[10px] text-slate-400 font-semibold uppercase">
+              <span>Coût API Équiv.</span>
+              <span class="text-emerald-300 font-mono-num">Pay-as-you-go</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
+              <span id="gu-cost-main-usd" class="text-2xl font-extrabold font-mono-num text-emerald-300">-- $</span>
+              <span id="gu-cost-main-eur" class="text-xs font-bold font-mono-num text-slate-300">(~-- €)</span>
+            </div>
+            <div id="gu-cost-model-split" class="text-[10px] font-mono-num text-slate-400 mt-0.5 truncate">Gemini + Claude</div>
+            <div class="mt-1.5 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
+              <span class="text-slate-400">Valeur sans cache :</span>
+              <strong id="gu-cost-uncached" class="font-mono-num text-amber-300">-- $</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-1.5 text-center">
+          <button type="button" onclick="setGuTokenPeriod('5h')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
+            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">5 Heures</div>
+            <div id="gu-mini-tok-5h" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
+            <div id="gu-mini-cost-5h" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
+          </button>
+          <button type="button" onclick="setGuTokenPeriod('today')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
+            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Aujourd'hui</div>
+            <div id="gu-mini-tok-today" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
+            <div id="gu-mini-cost-today" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
+          </button>
+          <button type="button" onclick="setGuTokenPeriod('7d')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
+            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Semaine 7j</div>
+            <div id="gu-mini-tok-7d" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
+            <div id="gu-mini-cost-7d" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
+          </button>
+          <button type="button" onclick="setGuTokenPeriod('30d')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
+            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Mois 30j</div>
+            <div id="gu-mini-tok-30d" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
+            <div id="gu-mini-cost-30d" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
+          </button>
+        </div>
+      </section>
+
       <!-- BANDEAU ABONNEMENT ACTIF (GOOGLE AI ULTRA UPGRADED) -->
       <section class="rounded-2xl p-3 bg-gradient-to-r from-emerald-500/10 via-sky-500/10 to-violet-500/10 border border-emerald-400/25 flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5 min-w-0">
@@ -687,6 +760,7 @@
     let currentData = null;
     let activeFilter = 'all';
     let lastSourceType = 'snapshot';
+    let guTokenPeriod = '30d';
 
     function formatNumber(n) {
       if (n === null || n === undefined || Number.isNaN(Number(n))) return '--';
@@ -694,10 +768,107 @@
     }
 
     function formatTokens(t) {
-      if (!t || t <= 0) return '0';
-      if (t >= 1e6) return (t / 1e6).toFixed(1).replace('.', ',') + ' M';
-      if (t >= 1e3) return Math.round(t / 1e3) + ' k';
-      return String(t);
+      const val = Number(t) || 0;
+      if (val <= 0) return '0';
+      if (val >= 1e9) return (val / 1e9).toFixed(2).replace('.', ',') + ' Md';
+      if (val >= 1e6) return (val / 1e6).toFixed(1).replace('.', ',') + ' M';
+      if (val >= 1e3) return Math.round(val / 1e3) + ' k';
+      return String(val);
+    }
+
+    function formatUsd(val) {
+      const n = Number(val) || 0;
+      if (n >= 100) return '~' + Math.round(n).toLocaleString('fr-FR') + ' $';
+      if (n >= 10) return '~' + n.toFixed(1).replace('.', ',') + ' $';
+      return '~' + n.toFixed(2).replace('.', ',') + ' $';
+    }
+
+    function formatEur(val) {
+      const n = Number(val) || 0;
+      if (n >= 100) return Math.round(n).toLocaleString('fr-FR') + ' €';
+      if (n >= 10) return n.toFixed(1).replace('.', ',') + ' €';
+      return n.toFixed(2).replace('.', ',') + ' €';
+    }
+
+    function setGuTokenPeriod(period) {
+      guTokenPeriod = period;
+      ['5h', 'today', '7d', '30d'].forEach(p => {
+        const btn = document.getElementById(`gu-tok-btn-${p}`);
+        if (!btn) return;
+        btn.className = p === period
+          ? 'px-2 py-1 rounded-lg transition bg-cyan-500/25 text-cyan-200 border border-cyan-400/30'
+          : 'px-2 py-1 rounded-lg transition text-slate-400 hover:text-white';
+      });
+      if (currentData) renderGuTokensAndCost(currentData);
+    }
+
+    function renderGuTokensAndCost(data) {
+      if (!data || !data.windows) return;
+      const ts = data.tokenSummary || {};
+      const w5 = data.windows.fiveHour || {};
+      const ww = data.windows.weekly || {};
+      const wm = data.windows.monthly || {};
+
+      const fallbackBucket = (act, inp, out, cache, usd, unc) => {
+        const a = Number(act) || 0;
+        const i = Number(inp) || Math.round(a * 0.90);
+        const o = Number(out) || Math.max(0, a - i);
+        const c = Number(cache) || Math.round(a * 15);
+        const u = usd !== undefined ? Number(usd) : ((i * 2.0 + o * 12.0 + c * 0.20) / 1e6);
+        const r = unc !== undefined ? Number(unc) : (((i + c) * 2.0 + o * 12.0) / 1e6);
+        return {
+          activeTokens: a,
+          inputTokens: i,
+          outputTokens: o,
+          cachedTokens: c,
+          totalTokensWithCache: a + c,
+          apiCostUsd: u,
+          apiCostEur: u * 0.92,
+          uncachedValueUsd: r
+        };
+      };
+
+      const todayDay = (ww.dailyBreakdown || wm.dailyBreakdown || []).slice(-1)[0] || {};
+      const buckets = {
+        '5h': { label: 'Session 5h', ...(ts.fiveHour || fallbackBucket(w5.tokensWindow || w5.tokensRolling, w5.inputTokensWindow, w5.outputTokensWindow, w5.cachedTokensWindow, w5.apiCostUsdWindow, w5.uncachedValueUsdWindow)) },
+        'today': { label: "Aujourd'hui", ...(ts.today || fallbackBucket(todayDay.tokens || w5.tokensRolling, null, null, todayDay.cachedTokens, todayDay.apiCostUsd, null)) },
+        '7d': { label: 'Semaine (7j)', ...(ts.sevenDays || fallbackBucket(ww.tokensRolling || ww.tokensWindow, ww.inputTokensRolling, ww.outputTokensRolling, ww.cachedTokensRolling, ww.apiCostUsdRolling, ww.uncachedValueUsdRolling)) },
+        '30d': { label: '30 Jours (Total)', ...(ts.thirtyDays || fallbackBucket(wm.tokensRolling30d || wm.tokensCount, wm.inputTokensCount, wm.outputTokensCount, wm.cachedTokensCount, wm.apiCostUsd30d, wm.uncachedValueUsd30d)) }
+      };
+
+      const cur = buckets[guTokenPeriod] || buckets['30d'];
+      const tagEl = document.getElementById('gu-tok-period-tag');
+      const mainTokEl = document.getElementById('gu-tok-main');
+      const ioSubEl = document.getElementById('gu-tok-io-sub');
+      const cacheTotEl = document.getElementById('gu-tok-cache-total');
+      const mainUsdEl = document.getElementById('gu-cost-main-usd');
+      const mainEurEl = document.getElementById('gu-cost-main-eur');
+      const splitEl = document.getElementById('gu-cost-model-split');
+      const uncEl = document.getElementById('gu-cost-uncached');
+
+      if (tagEl) tagEl.textContent = cur.label;
+      if (mainTokEl) mainTokEl.textContent = formatTokens(cur.activeTokens);
+      if (ioSubEl) ioSubEl.textContent = `In: ${formatTokens(cur.inputTokens)} • Out: ${formatTokens(cur.outputTokens)}`;
+      if (cacheTotEl) cacheTotEl.textContent = `${formatTokens(cur.totalTokensWithCache)} tok`;
+      if (mainUsdEl) mainUsdEl.textContent = formatUsd(cur.apiCostUsd);
+      if (mainEurEl) mainEurEl.textContent = `(~${formatEur(cur.apiCostEur ?? cur.apiCostUsd * 0.92)})`;
+      if (uncEl) uncEl.textContent = formatUsd(cur.uncachedValueUsd);
+
+      if (splitEl) {
+        if (ts.byModel && ts.byModel.length > 0) {
+          splitEl.textContent = '30j : ' + ts.byModel.map(m => `${m.id.includes('claude') ? 'Claude' : 'Gemini'} ${formatUsd(m.apiCostUsd)}`).join(' • ');
+        } else {
+          splitEl.textContent = 'Tarif API Google AI + Anthropic';
+        }
+      }
+
+      ['5h', 'today', '7d', '30d'].forEach(k => {
+        const b = buckets[k];
+        const tEl = document.getElementById(`gu-mini-tok-${k}`);
+        const cEl = document.getElementById(`gu-mini-cost-${k}`);
+        if (tEl && b) tEl.textContent = `${formatTokens(b.activeTokens)} tok`;
+        if (cEl && b) cEl.textContent = `${formatUsd(b.apiCostUsd)} (${formatEur(b.apiCostEur ?? b.apiCostUsd * 0.92)})`;
+      });
     }
 
     function formatCountdown(resetsAtIso, includeDays = false) {
@@ -797,6 +968,7 @@
     function renderUI(data) {
       if (!data || !data.windows) return;
       currentData = data;
+      renderGuTokensAndCost(data);
 
       const sub = data.subscription || {};
       const isFullUltra = (sub.tierId || 'g1-ultra-tier') === 'g1-ultra-tier';
@@ -862,7 +1034,9 @@
       document.getElementById('metric-5h-steps').textContent = formatNumber(w5.stepsWindow ?? w5.stepsRolling);
       document.getElementById('metric-5h-cap').textContent = `/ ~${formatNumber(w5.estimatedCapacitySteps || 7500)} cap.`;
       document.getElementById('metric-5h-tokens').textContent = formatTokens(w5.tokensWindow || w5.tokensRolling);
-      document.getElementById('metric-5h-burn').textContent = `Rythme ${w5.burnRatePerHour || 0}% / h`;
+      document.getElementById('metric-5h-burn').textContent = w5.apiCostUsdWindow !== undefined
+        ? `${formatUsd(w5.apiCostUsdWindow)} (${formatEur(w5.apiCostEurWindow)})`
+        : `Rythme ${w5.burnRatePerHour || 0}% / h`;
 
       // Chart 5h hourly
       const hourly = w5.hourlyBreakdown || [];
@@ -912,8 +1086,10 @@
       document.getElementById('metric-weekly-sessions').textContent = `${ww.sessionsCount || 1} sessions`;
       document.getElementById('metric-weekly-steps').textContent = formatNumber(ww.stepsWindow ?? ww.stepsRolling);
       document.getElementById('metric-weekly-cap').textContent = `/ ~${formatNumber(ww.estimatedCapacitySteps || 25000)} cap.`;
-      document.getElementById('metric-weekly-tokens').textContent = formatTokens(ww.tokensWindow || ww.tokensRolling);
-      document.getElementById('metric-weekly-burn').textContent = `Moy. ${ww.burnRatePerDay || 0}% / jour`;
+      document.getElementById('metric-weekly-tokens').textContent = formatTokens(ww.tokensRolling || ww.tokensWindow);
+      document.getElementById('metric-weekly-burn').textContent = ww.apiCostUsdRolling !== undefined
+        ? `${formatUsd(ww.apiCostUsdRolling)} (${formatEur(ww.apiCostEurRolling)})`
+        : `Moy. ${ww.burnRatePerDay || 0}% / jour`;
 
       const weekDays = ww.dailyBreakdown || [];
       const maxWeekDay = Math.max(10, ...weekDays.map(d => d.steps || 0));
@@ -940,12 +1116,14 @@
       document.getElementById('val-monthly-cycles').textContent = `${wm.weeklyCyclesUsed || 0} / ${wm.weeklyCyclesTotal || 4.29}`;
       document.getElementById('val-monthly-active-days').textContent = `${wm.activeDays || 0} jours actifs / 30j`;
 
-      document.getElementById('metric-monthly-prompts').textContent = formatNumber(wm.promptsCount ?? wm.promptsRolling30d);
+      document.getElementById('metric-monthly-prompts').textContent = formatNumber(wm.promptsRolling30d ?? wm.promptsCount);
       document.getElementById('metric-monthly-sessions').textContent = `${wm.sessionsCount || 0} conversations (30j)`;
-      document.getElementById('metric-monthly-steps').textContent = formatNumber(wm.stepsCount ?? wm.stepsRolling30d);
+      document.getElementById('metric-monthly-steps').textContent = formatNumber(wm.stepsRolling30d ?? wm.stepsCount);
       document.getElementById('metric-monthly-cap').textContent = `/ ~${formatNumber(wm.estimatedCapacitySteps || 107000)} cap.`;
-      document.getElementById('metric-monthly-tokens').textContent = formatTokens(wm.tokensCount || wm.tokensRolling30d);
-      document.getElementById('metric-monthly-io').textContent = `30j: ${formatTokens(wm.tokensRolling30d || wm.tokensCount)}`;
+      document.getElementById('metric-monthly-tokens').textContent = formatTokens(wm.tokensRolling30d || wm.tokensCount);
+      document.getElementById('metric-monthly-io').textContent = wm.apiCostUsd30d !== undefined
+        ? `${formatUsd(wm.apiCostUsd30d)} (${formatEur(wm.apiCostEur30d)})`
+        : `30j: ${formatTokens(wm.tokensRolling30d || wm.tokensCount)}`;
 
       const monthDays = wm.dailyBreakdown || [];
       const maxMonthDay = Math.max(10, ...monthDays.map(d => d.steps || 0));

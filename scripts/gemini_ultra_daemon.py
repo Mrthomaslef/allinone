@@ -106,6 +106,102 @@ def parse_iso(ts: str | None) -> datetime | None:
         return None
 
 
+USD_TO_EUR = 0.92
+
+# Tarifs officiels API Pay-As-You-Go ($ par 1M tokens : input, output, cache_read, cache_write)
+API_PRICING_PER_M = {
+    "gemini-pro": (2.00, 12.00, 0.20, 2.00),
+    "gemini-flash": (0.30, 2.50, 0.03, 0.30),
+    "claude-opus": (5.00, 25.00, 0.50, 6.25),
+    "claude-sonnet": (3.00, 15.00, 0.30, 3.75),
+    "claude-haiku": (1.00, 5.00, 0.10, 1.25),
+}
+
+
+def classify_pricing_tier(model_slug: str) -> tuple[str, str]:
+    s = (model_slug or "").lower().strip().rstrip(".")
+    if "opus" in s or "fable" in s:
+        return "claude-opus", "Claude Opus 5.5"
+    if "sonnet" in s:
+        return "claude-sonnet", "Claude Sonnet 5.5"
+    if "haiku" in s:
+        return "claude-haiku", "Claude Haiku 5.5"
+    if "flash" in s:
+        return "gemini-flash", "Gemini Flash"
+    return "gemini-pro", "Gemini 4 Argon / Pro"
+
+
+def compute_step_cost(
+    pricing_key: str,
+    in_tok: int,
+    out_tok: int,
+    cache_read_tok: int,
+    cache_write_tok: int = 0,
+) -> tuple[float, float]:
+    p_in, p_out, p_cread, p_cwrite = API_PRICING_PER_M.get(pricing_key, API_PRICING_PER_M["gemini-pro"])
+    api_usd = (
+        (in_tok * p_in)
+        + (cache_write_tok * p_cwrite)
+        + (out_tok * p_out)
+        + (cache_read_tok * p_cread)
+    ) / 1_000_000.0
+    uncached_usd = (
+        ((in_tok + cache_write_tok + cache_read_tok) * p_in)
+        + (out_tok * p_out)
+    ) / 1_000_000.0
+    return api_usd, uncached_usd
+
+
+def _new_token_bucket() -> dict:
+    return {
+        "prompts": 0,
+        "steps": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "cachedTokens": 0,
+        "activeTokens": 0,
+        "totalTokensWithCache": 0,
+        "apiCostUsd": 0.0,
+        "uncachedValueUsd": 0.0,
+    }
+
+
+def _add_to_bucket(
+    b: dict,
+    is_prompt: bool,
+    has_step: bool,
+    in_tok: int,
+    out_tok: int,
+    cache_tok: int,
+    api_usd: float,
+    uncached_usd: float,
+) -> None:
+    if is_prompt:
+        b["prompts"] += 1
+    if has_step:
+        b["steps"] += 1
+    active = in_tok + out_tok
+    b["inputTokens"] += in_tok
+    b["outputTokens"] += out_tok
+    b["cachedTokens"] += cache_tok
+    b["activeTokens"] += active
+    b["totalTokensWithCache"] += active + cache_tok
+    b["apiCostUsd"] += api_usd
+    b["uncachedValueUsd"] += uncached_usd
+
+
+def _finalize_bucket(b: dict) -> dict:
+    api_usd = round(b["apiCostUsd"], 2)
+    unc_usd = round(b["uncachedValueUsd"], 2)
+    return {
+        **b,
+        "apiCostUsd": api_usd,
+        "apiCostEur": round(api_usd * USD_TO_EUR, 2),
+        "uncachedValueUsd": unc_usd,
+        "uncachedValueEur": round(unc_usd * USD_TO_EUR, 2),
+    }
+
+
 def compute_local_telemetry(
     now: datetime,
     five_h_start: datetime,
@@ -122,42 +218,46 @@ def compute_local_telemetry(
             )
         )
     )
+    claude_transcripts = (
+        glob.glob(os.path.expanduser("~/.claude/projects/*/*.jsonl"))
+        + glob.glob(os.path.expanduser("~/.t3/userdata/providers/claude*/**/*.jsonl"), recursive=True)
+    )
 
     t_30d = now - timedelta(days=30)
     t_7d = now - timedelta(days=7)
     t_5h = now - timedelta(hours=5)
+    today_str = now.astimezone().strftime("%Y-%m-%d")
 
-    steps_5h_window = 0
-    prompts_5h_window = 0
-    tokens_5h_window = 0
-    steps_5h_rolling = 0
-    prompts_5h_rolling = 0
-    tokens_5h_rolling = 0
+    b_5h_win = _new_token_bucket()
+    b_5h_roll = _new_token_bucket()
+    b_today = _new_token_bucket()
+    b_week_win = _new_token_bucket()
+    b_7d_roll = _new_token_bucket()
+    b_30d = _new_token_bucket()
+    b_all = _new_token_bucket()
 
-    steps_week_window = 0
-    prompts_week_window = 0
-    tokens_week_window = 0
-    steps_7d_rolling = 0
-    prompts_7d_rolling = 0
-    tokens_7d_rolling = 0
+    by_model_30d: dict[str, dict] = {}
 
-    steps_30d = 0
-    prompts_30d = 0
-    tokens_30d = 0
-    input_tokens_30d = 0
-    output_tokens_30d = 0
-    cached_tokens_30d = 0
     sessions_30d = set()
     sessions_7d = set()
     sessions_5h = set()
+    sessions_today = set()
 
-    daily_map: dict[str, dict[str, int]] = {}
-    hourly_map: dict[str, dict[str, int]] = {}
+    daily_map: dict[str, dict] = {}
+    hourly_map: dict[str, dict] = {}
 
     for i in range(6):
         h_dt = (now - timedelta(hours=5 - i)).astimezone()
         h_key = h_dt.strftime("%Y-%m-%d %H:00")
-        hourly_map[h_key] = {"label": h_dt.strftime("%Hh"), "steps": 0, "prompts": 0, "tokens": 0}
+        hourly_map[h_key] = {
+            "label": h_dt.strftime("%Hh"),
+            "steps": 0,
+            "prompts": 0,
+            "tokens": 0,
+            "cachedTokens": 0,
+            "totalTokensWithCache": 0,
+            "apiCostUsd": 0.0,
+        }
 
     for i in range(30):
         d_dt = (now - timedelta(days=29 - i)).astimezone()
@@ -169,7 +269,82 @@ def compute_local_telemetry(
             "steps": 0,
             "prompts": 0,
             "tokens": 0,
+            "cachedTokens": 0,
+            "totalTokensWithCache": 0,
+            "apiCostUsd": 0.0,
         }
+
+    def record_event(
+        conv_id: str,
+        dt: datetime,
+        is_prompt: bool,
+        has_step: bool,
+        in_tok: int,
+        out_tok: int,
+        cache_read_tok: int,
+        cache_write_tok: int,
+        model_slug: str,
+    ) -> None:
+        p_key, p_label = classify_pricing_tier(model_slug)
+        api_usd, unc_usd = compute_step_cost(p_key, in_tok, out_tok, cache_read_tok, cache_write_tok)
+        eff_in = in_tok + cache_write_tok
+        step_tokens = eff_in + out_tok
+
+        local_dt = dt.astimezone()
+        d_key = local_dt.strftime("%Y-%m-%d")
+        h_key = local_dt.strftime("%Y-%m-%d %H:00")
+
+        _add_to_bucket(b_all, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
+
+        if d_key == today_str:
+            _add_to_bucket(b_today, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
+            sessions_today.add(conv_id)
+
+        if dt >= t_30d:
+            _add_to_bucket(b_30d, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
+            sessions_30d.add(conv_id)
+            if step_tokens > 0 or cache_read_tok > 0:
+                m_entry = by_model_30d.setdefault(
+                    p_key,
+                    {
+                        "id": p_key,
+                        "label": p_label,
+                        **_new_token_bucket(),
+                    },
+                )
+                _add_to_bucket(m_entry, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
+            if d_key in daily_map:
+                if has_step:
+                    daily_map[d_key]["steps"] += 1
+                daily_map[d_key]["tokens"] += step_tokens
+                daily_map[d_key]["cachedTokens"] += cache_read_tok
+                daily_map[d_key]["totalTokensWithCache"] += step_tokens + cache_read_tok
+                daily_map[d_key]["apiCostUsd"] = round(daily_map[d_key]["apiCostUsd"] + api_usd, 2)
+                if is_prompt:
+                    daily_map[d_key]["prompts"] += 1
+
+        if dt >= t_7d:
+            _add_to_bucket(b_7d_roll, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
+            sessions_7d.add(conv_id)
+
+        if dt >= weekly_start:
+            _add_to_bucket(b_week_win, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
+
+        if dt >= t_5h:
+            _add_to_bucket(b_5h_roll, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
+            sessions_5h.add(conv_id)
+            if h_key in hourly_map:
+                if has_step:
+                    hourly_map[h_key]["steps"] += 1
+                hourly_map[h_key]["tokens"] += step_tokens
+                hourly_map[h_key]["cachedTokens"] += cache_read_tok
+                hourly_map[h_key]["totalTokensWithCache"] += step_tokens + cache_read_tok
+                hourly_map[h_key]["apiCostUsd"] = round(hourly_map[h_key]["apiCostUsd"] + api_usd, 2)
+                if is_prompt:
+                    hourly_map[h_key]["prompts"] += 1
+
+        if dt >= five_h_start:
+            _add_to_bucket(b_5h_win, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
 
     seen_conv_ids = set()
     for path in transcripts:
@@ -179,6 +354,7 @@ def compute_local_telemetry(
             continue
         seen_conv_ids.add(conv_id)
 
+        cur_model = "gemini-4-argon"
         try:
             with open(path, "r", encoding="utf-8", errors="ignore") as f:
                 for line in f:
@@ -193,60 +369,88 @@ def compute_local_telemetry(
                     if not dt:
                         continue
                     is_prompt = obj.get("type") == "USER_INPUT"
+                    if is_prompt:
+                        m = re.search(
+                            r"running in T3 Code through the [^\n]*?, as ([a-zA-Z0-9._-]+)",
+                            obj.get("content") or "",
+                        )
+                        if m:
+                            cur_model = m.group(1).rstrip(".")
                     in_tok = int(obj.get("input_tokens") or 0)
                     out_tok = int(obj.get("output_tokens") or 0)
                     cache_tok = int(obj.get("cache_read_tokens") or 0)
-                    step_tokens = in_tok + out_tok
 
-                    local_dt = dt.astimezone()
-                    d_key = local_dt.strftime("%Y-%m-%d")
-                    h_key = local_dt.strftime("%Y-%m-%d %H:00")
+                    record_event(
+                        conv_id=conv_id,
+                        dt=dt,
+                        is_prompt=is_prompt,
+                        has_step=True,
+                        in_tok=in_tok,
+                        out_tok=out_tok,
+                        cache_read_tok=cache_tok,
+                        cache_write_tok=0,
+                        model_slug=cur_model,
+                    )
+        except Exception:
+            pass
 
-                    if dt >= t_30d:
-                        steps_30d += 1
-                        tokens_30d += step_tokens
-                        input_tokens_30d += in_tok
-                        output_tokens_30d += out_tok
-                        cached_tokens_30d += cache_tok
-                        sessions_30d.add(conv_id)
-                        if is_prompt:
-                            prompts_30d += 1
-                        if d_key in daily_map:
-                            daily_map[d_key]["steps"] += 1
-                            daily_map[d_key]["tokens"] += step_tokens
-                            if is_prompt:
-                                daily_map[d_key]["prompts"] += 1
-
-                    if dt >= t_7d:
-                        steps_7d_rolling += 1
-                        tokens_7d_rolling += step_tokens
-                        sessions_7d.add(conv_id)
-                        if is_prompt:
-                            prompts_7d_rolling += 1
-
-                    if dt >= weekly_start:
-                        steps_week_window += 1
-                        tokens_week_window += step_tokens
-                        if is_prompt:
-                            prompts_week_window += 1
-
-                    if dt >= t_5h:
-                        steps_5h_rolling += 1
-                        tokens_5h_rolling += step_tokens
-                        sessions_5h.add(conv_id)
-                        if is_prompt:
-                            prompts_5h_rolling += 1
-                        if h_key in hourly_map:
-                            hourly_map[h_key]["steps"] += 1
-                            hourly_map[h_key]["tokens"] += step_tokens
-                            if is_prompt:
-                                hourly_map[h_key]["prompts"] += 1
-
-                    if dt >= five_h_start:
-                        steps_5h_window += 1
-                        tokens_5h_window += step_tokens
-                        if is_prompt:
-                            prompts_5h_window += 1
+    # Include Claude Code direct sessions (deduplicated by message id)
+    seen_claude_files = set()
+    for cpath in claude_transcripts:
+        real_p = os.path.realpath(cpath)
+        if real_p in seen_claude_files:
+            continue
+        seen_claude_files.add(real_p)
+        conv_id = f"claude-{os.path.basename(cpath)}"
+        msg_by_id: dict[str, tuple[datetime, str, dict]] = {}
+        try:
+            with open(cpath, "r", encoding="utf-8", errors="ignore") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    try:
+                        obj = json.loads(line)
+                    except Exception:
+                        continue
+                    dt = parse_iso(obj.get("timestamp"))
+                    if not dt:
+                        continue
+                    if obj.get("type") == "user" and not obj.get("isMeta"):
+                        msg_c = (obj.get("message") or {}).get("content")
+                        if isinstance(msg_c, str) or (
+                            isinstance(msg_c, list)
+                            and any(isinstance(x, dict) and x.get("type") == "text" for x in msg_c)
+                        ):
+                            record_event(
+                                conv_id=conv_id,
+                                dt=dt,
+                                is_prompt=True,
+                                has_step=False,
+                                in_tok=0,
+                                out_tok=0,
+                                cache_read_tok=0,
+                                cache_write_tok=0,
+                                model_slug="claude-opus-5-5",
+                            )
+                    msg = obj.get("message") or {}
+                    if isinstance(msg, dict) and msg.get("usage") and msg.get("id"):
+                        msg_by_id[msg["id"]] = (dt, msg.get("model") or "claude-opus-5-5", msg["usage"])
+            for _, (dt, model_slug, u) in msg_by_id.items():
+                in_t = int(u.get("input_tokens") or 0)
+                cw_t = int(u.get("cache_creation_input_tokens") or 0)
+                cr_t = int(u.get("cache_read_input_tokens") or 0)
+                out_t = int(u.get("output_tokens") or 0)
+                record_event(
+                    conv_id=conv_id,
+                    dt=dt,
+                    is_prompt=False,
+                    has_step=True,
+                    in_tok=in_t,
+                    out_tok=out_t,
+                    cache_read_tok=cr_t,
+                    cache_write_tok=cw_t,
+                    model_slug=model_slug,
+                )
         except Exception:
             pass
 
@@ -254,6 +458,9 @@ def compute_local_telemetry(
     is_full_ultra = tier_id == "g1-ultra-tier"
     default_weekly_cap = 25000 if is_full_ultra else 10000
     default_5h_cap = 7500 if is_full_ultra else 3500
+
+    steps_week_window = b_week_win["steps"]
+    steps_5h_window = b_5h_win["steps"]
 
     if weekly_used_pct > 5 and steps_week_window > 100:
         est_weekly_capacity = int(round(steps_week_window / (weekly_used_pct / 100.0)))
@@ -266,7 +473,6 @@ def compute_local_telemetry(
         est_5h_capacity = default_5h_cap
 
     # Monthly capacity on Google AI Ultra = 4.29 weekly cycles (30 days / 7 days)
-    # Anchored to the active subscription cycle (weekly_start) so upgrading resets the active monthly quota pool
     weekly_cycles_per_month = 30.0 / 7.0
     est_monthly_capacity = int(round(est_weekly_capacity * weekly_cycles_per_month))
     monthly_used_pct = min(100.0, round((weekly_used_pct / weekly_cycles_per_month), 2))
@@ -276,25 +482,65 @@ def compute_local_telemetry(
     daily_list = list(daily_map.values())
     active_days_30d = sum(1 for d in daily_list if d["steps"] > 0)
 
+    f_5h_win = _finalize_bucket(b_5h_win)
+    f_5h_roll = _finalize_bucket(b_5h_roll)
+    f_today = _finalize_bucket(b_today)
+    f_week_win = _finalize_bucket(b_week_win)
+    f_7d_roll = _finalize_bucket(b_7d_roll)
+    f_30d = _finalize_bucket(b_30d)
+    f_all = _finalize_bucket(b_all)
+
+    models_breakdown = sorted(
+        [_finalize_bucket(v) for v in by_model_30d.values()],
+        key=lambda x: x["apiCostUsd"],
+        reverse=True,
+    )
+
     return {
         "fiveHour": {
-            "promptsWindow": prompts_5h_window,
-            "stepsWindow": steps_5h_window,
-            "tokensWindow": tokens_5h_window,
-            "promptsRolling": prompts_5h_rolling,
-            "stepsRolling": steps_5h_rolling,
-            "tokensRolling": tokens_5h_rolling,
+            "promptsWindow": f_5h_win["prompts"],
+            "stepsWindow": f_5h_win["steps"],
+            "tokensWindow": f_5h_win["activeTokens"],
+            "inputTokensWindow": f_5h_win["inputTokens"],
+            "outputTokensWindow": f_5h_win["outputTokens"],
+            "cachedTokensWindow": f_5h_win["cachedTokens"],
+            "totalTokensWithCacheWindow": f_5h_win["totalTokensWithCache"],
+            "apiCostUsdWindow": f_5h_win["apiCostUsd"],
+            "apiCostEurWindow": f_5h_win["apiCostEur"],
+            "uncachedValueUsdWindow": f_5h_win["uncachedValueUsd"],
+            "promptsRolling": f_5h_roll["prompts"],
+            "stepsRolling": f_5h_roll["steps"],
+            "tokensRolling": f_5h_roll["activeTokens"],
+            "cachedTokensRolling": f_5h_roll["cachedTokens"],
+            "totalTokensWithCacheRolling": f_5h_roll["totalTokensWithCache"],
+            "apiCostUsdRolling": f_5h_roll["apiCostUsd"],
+            "apiCostEurRolling": f_5h_roll["apiCostEur"],
+            "uncachedValueUsdRolling": f_5h_roll["uncachedValueUsd"],
             "sessionsCount": len(sessions_5h),
             "estimatedCapacitySteps": est_5h_capacity,
             "hourlyBreakdown": list(hourly_map.values()),
         },
         "weekly": {
-            "promptsWindow": prompts_week_window,
-            "stepsWindow": steps_week_window,
-            "tokensWindow": tokens_week_window,
-            "promptsRolling": prompts_7d_rolling,
-            "stepsRolling": steps_7d_rolling,
-            "tokensRolling": tokens_7d_rolling,
+            "promptsWindow": f_week_win["prompts"],
+            "stepsWindow": f_week_win["steps"],
+            "tokensWindow": f_week_win["activeTokens"],
+            "inputTokensWindow": f_week_win["inputTokens"],
+            "outputTokensWindow": f_week_win["outputTokens"],
+            "cachedTokensWindow": f_week_win["cachedTokens"],
+            "totalTokensWithCacheWindow": f_week_win["totalTokensWithCache"],
+            "apiCostUsdWindow": f_week_win["apiCostUsd"],
+            "apiCostEurWindow": f_week_win["apiCostEur"],
+            "uncachedValueUsdWindow": f_week_win["uncachedValueUsd"],
+            "promptsRolling": f_7d_roll["prompts"],
+            "stepsRolling": f_7d_roll["steps"],
+            "tokensRolling": f_7d_roll["activeTokens"],
+            "inputTokensRolling": f_7d_roll["inputTokens"],
+            "outputTokensRolling": f_7d_roll["outputTokens"],
+            "cachedTokensRolling": f_7d_roll["cachedTokens"],
+            "totalTokensWithCacheRolling": f_7d_roll["totalTokensWithCache"],
+            "apiCostUsdRolling": f_7d_roll["apiCostUsd"],
+            "apiCostEurRolling": f_7d_roll["apiCostEur"],
+            "uncachedValueUsdRolling": f_7d_roll["uncachedValueUsd"],
             "sessionsCount": len(sessions_7d),
             "estimatedCapacitySteps": est_weekly_capacity,
             "dailyBreakdown": daily_list[-7:],
@@ -302,21 +548,36 @@ def compute_local_telemetry(
         "monthly": {
             "usedPercent": monthly_used_pct,
             "remainingPercent": monthly_remaining_pct,
-            "promptsCount": prompts_week_window,
-            "stepsCount": steps_week_window,
-            "tokensCount": tokens_week_window,
-            "promptsRolling30d": prompts_30d,
-            "stepsRolling30d": steps_30d,
-            "tokensRolling30d": tokens_30d,
-            "inputTokensCount": input_tokens_30d,
-            "outputTokensCount": output_tokens_30d,
-            "cachedTokensCount": cached_tokens_30d,
+            "promptsCount": f_week_win["prompts"],
+            "stepsCount": f_week_win["steps"],
+            "tokensCount": f_week_win["activeTokens"],
+            "promptsRolling30d": f_30d["prompts"],
+            "stepsRolling30d": f_30d["steps"],
+            "tokensRolling30d": f_30d["activeTokens"],
+            "inputTokensCount": f_30d["inputTokens"],
+            "outputTokensCount": f_30d["outputTokens"],
+            "cachedTokensCount": f_30d["cachedTokens"],
+            "totalTokensWithCache30d": f_30d["totalTokensWithCache"],
+            "apiCostUsd30d": f_30d["apiCostUsd"],
+            "apiCostEur30d": f_30d["apiCostEur"],
+            "uncachedValueUsd30d": f_30d["uncachedValueUsd"],
+            "uncachedValueEur30d": f_30d["uncachedValueEur"],
             "sessionsCount": len(sessions_30d),
             "activeDays": active_days_30d,
             "estimatedCapacitySteps": est_monthly_capacity,
             "weeklyCyclesUsed": weekly_cycles_used,
             "weeklyCyclesTotal": round(weekly_cycles_per_month, 2),
             "dailyBreakdown": daily_list[-14:],
+        },
+        "tokenSummary": {
+            "currencyRateEurPerUsd": USD_TO_EUR,
+            "pricingNote": "Estimation Pay-As-You-Go API officielle (Gemini 4 Argon/Pro: $2/M in, $12/M out, $0.20/M cache • Claude Opus 5.5: $5/M in, $25/M out, $0.50/M cache)",
+            "fiveHour": {**f_5h_win, "sessionsCount": len(sessions_5h)},
+            "today": {**f_today, "sessionsCount": len(sessions_today)},
+            "sevenDays": {**f_7d_roll, "sessionsCount": len(sessions_7d)},
+            "thirtyDays": {**f_30d, "sessionsCount": len(sessions_30d), "activeDays": active_days_30d},
+            "allTime": f_all,
+            "byModel": models_breakdown,
         },
     }
 
@@ -635,6 +896,14 @@ def build_live_quota_payload() -> dict:
 
     with _state_lock:
         tunnel_url = _current_tunnel_url
+    if not tunnel_url and os.path.exists(QUOTA_JSON_PATH):
+        try:
+            with open(QUOTA_JSON_PATH, "r", encoding="utf-8") as f:
+                prev_q = json.load(f)
+                if prev_q.get("tunnelUrl"):
+                    tunnel_url = prev_q["tunnelUrl"]
+        except Exception:
+            pass
 
     payload = {
         "checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -658,6 +927,7 @@ def build_live_quota_payload() -> dict:
             "upgradedAt": claude_pro["upgradedAt"],
             "harness": "Anthropic Claude Code • Compte Apple",
         },
+        "tokenSummary": telemetry["tokenSummary"],
         "windows": {
             "fiveHour": gem_5h,
             "weekly": gem_weekly,
