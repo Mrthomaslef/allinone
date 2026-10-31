@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-31T14:49:42Z",
+  "checkedAt": "2026-10-31T14:51:05Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://merry-singles-which-ist.trycloudflare.com",
   "subscription": {
@@ -29,11 +29,11 @@
       "resetsAt": "2026-10-31T18:13:42Z",
       "startedAt": "2026-10-31T13:13:42Z",
       "durationMins": 300,
-      "remainingSeconds": 12239,
-      "elapsedPercent": 32.0,
-      "paceDeltaPercent": -22.63,
-      "burnRatePerHour": 5.86,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 3 hours, 23 minutes.",
+      "remainingSeconds": 12156,
+      "elapsedPercent": 32.46,
+      "paceDeltaPercent": -23.09,
+      "burnRatePerHour": 5.77,
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 3 hours, 22 minutes.",
       "promptsWindow": 40,
       "stepsWindow": 1644,
       "tokensWindow": 4238151,
@@ -89,13 +89,13 @@
       "resetsAt": "2026-11-07T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 10080,
-      "remainingSeconds": 581039,
-      "elapsedPercent": 3.93,
-      "paceDeltaPercent": 2.44,
-      "burnRatePerHour": 0.97,
+      "remainingSeconds": 580956,
+      "elapsedPercent": 3.94,
+      "paceDeltaPercent": 2.43,
+      "burnRatePerHour": 0.96,
       "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 17 hours.",
       "dailyBudgetRemainingPercent": 13.92,
-      "burnRatePerDay": 23.3,
+      "burnRatePerDay": 23.0,
       "promptsWindow": 89,
       "stepsWindow": 3756,
       "tokensWindow": 12112082,
@@ -168,7 +168,7 @@
       "durationMins": 43200,
       "resetsAt": "2026-11-30T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
-      "remainingSeconds": 2568239,
+      "remainingSeconds": 2568156,
       "elapsedPercent": 0.92,
       "usedPercent": 1.49,
       "remainingPercent": 98.51,
@@ -306,10 +306,10 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T19:49:43Z",
-      "startedAt": "2026-10-31T14:49:43Z",
+      "resetsAt": "2026-10-31T19:51:05Z",
+      "startedAt": "2026-10-31T14:51:05Z",
       "durationMins": 300,
-      "remainingSeconds": 18000,
+      "remainingSeconds": 17999,
       "elapsedPercent": 0.0,
       "paceDeltaPercent": 0.0,
       "burnRatePerHour": 0.0,
@@ -323,19 +323,19 @@
       "resetsAt": "2026-11-07T09:10:41Z",
       "startedAt": "2026-10-31T09:10:41Z",
       "durationMins": 10080,
-      "remainingSeconds": 584458,
-      "elapsedPercent": 3.36,
-      "paceDeltaPercent": 41.68,
-      "burnRatePerHour": 7.97,
+      "remainingSeconds": 584375,
+      "elapsedPercent": 3.38,
+      "paceDeltaPercent": 41.66,
+      "burnRatePerHour": 7.94,
       "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 18 hours."
     },
     "claudeFiveHour": {
       "id": "claude-5h",
       "durationMins": 300,
-      "usedPercent": 4.0,
-      "remainingPercent": 96.0,
-      "resetsAt": "2026-10-31T19:40:00Z",
-      "remainingSeconds": 17417,
+      "usedPercent": 5.0,
+      "remainingPercent": 95.0,
+      "resetsAt": "2026-10-31T19:39:59Z",
+      "remainingSeconds": 17334,
       "status": "active"
     },
     "claudeWeekly": {
@@ -343,8 +343,8 @@
       "durationMins": 10080,
       "usedPercent": 0.0,
       "remainingPercent": 100.0,
-      "resetsAt": "2026-11-05T01:00:00Z",
-      "remainingSeconds": 382217
+      "resetsAt": "2026-11-05T00:59:59Z",
+      "remainingSeconds": 382134
     }
   },
   "models": [
@@ -353,36 +353,36 @@
       "label": "Claude Opus 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
-      "remainingPercent": 96.0,
-      "usedPercent": 4.0,
-      "resetsAt": "2026-10-31T19:40:00Z"
+      "remainingPercent": 95.0,
+      "usedPercent": 5.0,
+      "resetsAt": "2026-10-31T19:39:59Z"
     },
     {
       "id": "claude-sonnet-5-5",
       "label": "Claude Sonnet 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Raisonnement rapide & efficace",
-      "remainingPercent": 96.0,
-      "usedPercent": 4.0,
-      "resetsAt": "2026-10-31T19:40:00Z"
+      "remainingPercent": 95.0,
+      "usedPercent": 5.0,
+      "resetsAt": "2026-10-31T19:39:59Z"
     },
     {
       "id": "claude-fable-5-1",
       "label": "Claude Fable 5.1",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Défis complexes & Ultracode",
-      "remainingPercent": 96.0,
-      "usedPercent": 4.0,
-      "resetsAt": "2026-10-31T19:40:00Z"
+      "remainingPercent": 95.0,
+      "usedPercent": 5.0,
+      "resetsAt": "2026-10-31T19:39:59Z"
     },
     {
       "id": "claude-haiku-5-5",
       "label": "Claude Haiku 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Réponses instantanées",
-      "remainingPercent": 96.0,
-      "usedPercent": 4.0,
-      "resetsAt": "2026-10-31T19:40:00Z"
+      "remainingPercent": 95.0,
+      "usedPercent": 5.0,
+      "resetsAt": "2026-10-31T19:39:59Z"
     },
     {
       "id": "claude-opus-5-5-high",
@@ -391,7 +391,7 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T19:49:44Z"
+      "resetsAt": "2026-10-31T19:51:06Z"
     },
     {
       "id": "claude-sonnet-5-5-high",
@@ -400,7 +400,7 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T19:49:44Z"
+      "resetsAt": "2026-10-31T19:51:06Z"
     },
     {
       "id": "gemini-2.5-pro",
@@ -481,7 +481,7 @@
       "description": "OpenAI OSS • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-10-31T19:49:44Z"
+      "resetsAt": "2026-10-31T19:51:06Z"
     }
   ]
 }
