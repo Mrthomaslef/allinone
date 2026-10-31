@@ -1,0 +1,647 @@
+#!/usr/bin/env python3
+"""
+Daemon & sonde temps réel pour l'application Gemini Ultra • Quotas & Limites.
+- Interroge en direct l'API officielle Google CloudCode / Antigravity (`retrieveUserQuotaSummary`, `retrieveUserQuota`, `loadCodeAssist`)
+- Analyse l'activité locale (5h, Semaine 7j, Mois 30j) depuis les logs de sessions Antigravity / T3 Code
+- Expose une API HTTP temps réel sur http://127.0.0.1:8787/api/quota (avec CORS + Private Network Access)
+- Ouvre optionnellement un tunnel Cloudflare (`cloudflared`) pour l'accès mobile 4G/5G en direct
+- Met à jour `gemini-ultra/quota-live.json` et synchronise avec GitHub Pages
+"""
+from __future__ import annotations
+
+import argparse
+import glob
+import http.server
+import json
+import math
+import os
+import re
+import subprocess
+import threading
+import time
+import urllib.parse
+import urllib.request
+from datetime import datetime, timedelta, timezone
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+APP_DIR = os.path.join(ROOT_DIR, "gemini-ultra")
+QUOTA_JSON_PATH = os.path.join(APP_DIR, "quota-live.json")
+
+TOKEN_PATHS = (
+    glob.glob(os.path.expanduser("~/.t3/userdata/providers/antigravity/*/antigravity-acp/acp_token.json"))
+    + [os.path.expanduser("~/.gemini/antigravity-acp/acp_token.json")]
+)
+
+USER_AGENT = (
+    "antigravity/acp/0.1.0 (aidev_client; os_type=darwin; arch=arm64; "
+    "auth_method=oauth-personal; host_path=zed/0.0.0; proxy_client=antigravity/sdk)"
+)
+ENDPOINT = "https://daily-cloudcode-pa.googleapis.com"
+PORT = 8787
+
+MODEL_LABELS = {
+    "gemini-4-argon-high": ("Gemini 4 Argon (High)", "gemini", "Modèle principal Agent & Raisonnement"),
+    "gemini-4-argon-medium": ("Gemini 4 Argon (Medium)", "gemini", "Raisonnement équilibré"),
+    "gemini-4-argon-low": ("Gemini 4 Argon (Low)", "gemini", "Réponses rapides"),
+    "gemini-3.8-flash-high": ("Gemini 3.8 Flash (High)", "gemini", "Flash haute précision"),
+    "gemini-3.8-flash-medium": ("Gemini 3.8 Flash (Medium)", "gemini", "Flash standard"),
+    "gemini-2.5-pro": ("Gemini 2.5 Pro", "gemini", "Contexte long 1M tokens"),
+    "gemini-3-flash": ("Gemini 3 Flash", "gemini", "Génération ultra-rapide"),
+    "gemini-3.1-flash-image": ("Gemini 3.1 Flash Image", "gemini", "Génération & édition d'images"),
+    "claude-opus-5-5-high": ("Claude Opus 5.5 (High)", "3p", "Anthropic Vertex • Partagé 3P"),
+    "claude-sonnet-5-5-high": ("Claude Sonnet 5.5 (High)", "3p", "Anthropic Vertex • Partagé 3P"),
+    "gpt-oss-120b-medium": ("GPT-OSS 120B (Medium)", "3p", "OpenAI OSS • Partagé 3P"),
+}
+
+DAY_NAMES_FR = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+
+_state_lock = threading.Lock()
+_current_tunnel_url: str | None = None
+_last_payload: dict | None = None
+_last_fetch_ts: float = 0.0
+
+
+def load_oauth_token() -> dict:
+    for p in TOKEN_PATHS:
+        if os.path.exists(p):
+            with open(p, "r", encoding="utf-8") as f:
+                return json.load(f)
+    raise FileNotFoundError("Aucun fichier acp_token.json trouvé.")
+
+
+def get_access_token(token_data: dict) -> str:
+    form = urllib.parse.urlencode(
+        {
+            "client_id": token_data["client_id"],
+            "client_secret": token_data["client_secret"],
+            "refresh_token": token_data["refresh_token"],
+            "grant_type": "refresh_token",
+        }
+    ).encode("utf-8")
+    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=form)
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        return json.loads(resp.read().decode("utf-8"))["access_token"]
+
+
+def call_ccpa(access_token: str, operation: str, body: dict) -> dict:
+    req = urllib.request.Request(
+        f"{ENDPOINT}/v1internal:{operation}",
+        data=json.dumps(body).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "User-Agent": USER_AGENT,
+            "Content-Type": "application/json",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=12) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def parse_iso(ts: str | None) -> datetime | None:
+    if not ts:
+        return None
+    try:
+        return datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except Exception:
+        return None
+
+
+def compute_local_telemetry(
+    now: datetime,
+    five_h_start: datetime,
+    weekly_start: datetime,
+    weekly_used_pct: float,
+    five_h_used_pct: float,
+) -> dict:
+    transcripts = (
+        glob.glob(os.path.expanduser("~/.gemini/antigravity/brain/*/.system_generated/logs/transcript.jsonl"))
+        + glob.glob(
+            os.path.expanduser(
+                "~/.t3/userdata/providers/antigravity/*/antigravity-acp/brain/*/.system_generated/logs/transcript.jsonl"
+            )
+        )
+    )
+
+    t_30d = now - timedelta(days=30)
+    t_7d = now - timedelta(days=7)
+    t_5h = now - timedelta(hours=5)
+
+    steps_5h_window = 0
+    prompts_5h_window = 0
+    tokens_5h_window = 0
+    steps_5h_rolling = 0
+    prompts_5h_rolling = 0
+    tokens_5h_rolling = 0
+
+    steps_week_window = 0
+    prompts_week_window = 0
+    tokens_week_window = 0
+    steps_7d_rolling = 0
+    prompts_7d_rolling = 0
+    tokens_7d_rolling = 0
+
+    steps_30d = 0
+    prompts_30d = 0
+    tokens_30d = 0
+    input_tokens_30d = 0
+    output_tokens_30d = 0
+    cached_tokens_30d = 0
+    sessions_30d = set()
+    sessions_7d = set()
+    sessions_5h = set()
+
+    daily_map: dict[str, dict[str, int]] = {}
+    hourly_map: dict[str, dict[str, int]] = {}
+
+    for i in range(6):
+        h_dt = (now - timedelta(hours=5 - i)).astimezone()
+        h_key = h_dt.strftime("%Y-%m-%d %H:00")
+        hourly_map[h_key] = {"label": h_dt.strftime("%Hh"), "steps": 0, "prompts": 0, "tokens": 0}
+
+    for i in range(30):
+        d_dt = (now - timedelta(days=29 - i)).astimezone()
+        d_key = d_dt.strftime("%Y-%m-%d")
+        daily_map[d_key] = {
+            "date": d_key,
+            "label": f"{DAY_NAMES_FR[d_dt.weekday()]} {d_dt.strftime('%d/%m')}",
+            "shortLabel": DAY_NAMES_FR[d_dt.weekday()],
+            "steps": 0,
+            "prompts": 0,
+            "tokens": 0,
+        }
+
+    # Deduplicate transcripts by conversation UUID (parts[-4] in .../brain/<uuid>/.system_generated/logs/transcript.jsonl)
+    seen_conv_ids = set()
+    for path in transcripts:
+        parts = path.split(os.sep)
+        conv_id = parts[-4] if len(parts) >= 5 else path
+        if conv_id in seen_conv_ids:
+            continue
+        seen_conv_ids.add(conv_id)
+
+        try:
+            with open(path, "r", encoding="utf-8", errors="ignore") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    try:
+                        obj = json.loads(line)
+                    except Exception:
+                        continue
+                    ca = obj.get("created_at")
+                    dt = parse_iso(ca)
+                    if not dt:
+                        continue
+                    is_prompt = obj.get("type") == "USER_INPUT"
+                    in_tok = int(obj.get("input_tokens") or 0)
+                    out_tok = int(obj.get("output_tokens") or 0)
+                    cache_tok = int(obj.get("cache_read_tokens") or 0)
+                    step_tokens = in_tok + out_tok
+
+                    local_dt = dt.astimezone()
+                    d_key = local_dt.strftime("%Y-%m-%d")
+                    h_key = local_dt.strftime("%Y-%m-%d %H:00")
+
+                    if dt >= t_30d:
+                        steps_30d += 1
+                        tokens_30d += step_tokens
+                        input_tokens_30d += in_tok
+                        output_tokens_30d += out_tok
+                        cached_tokens_30d += cache_tok
+                        sessions_30d.add(conv_id)
+                        if is_prompt:
+                            prompts_30d += 1
+                        if d_key in daily_map:
+                            daily_map[d_key]["steps"] += 1
+                            daily_map[d_key]["tokens"] += step_tokens
+                            if is_prompt:
+                                daily_map[d_key]["prompts"] += 1
+
+                    if dt >= t_7d:
+                        steps_7d_rolling += 1
+                        tokens_7d_rolling += step_tokens
+                        sessions_7d.add(conv_id)
+                        if is_prompt:
+                            prompts_7d_rolling += 1
+
+                    if dt >= weekly_start:
+                        steps_week_window += 1
+                        tokens_week_window += step_tokens
+                        if is_prompt:
+                            prompts_week_window += 1
+
+                    if dt >= t_5h:
+                        steps_5h_rolling += 1
+                        tokens_5h_rolling += step_tokens
+                        sessions_5h.add(conv_id)
+                        if is_prompt:
+                            prompts_5h_rolling += 1
+                        if h_key in hourly_map:
+                            hourly_map[h_key]["steps"] += 1
+                            hourly_map[h_key]["tokens"] += step_tokens
+                            if is_prompt:
+                                hourly_map[h_key]["prompts"] += 1
+
+                    if dt >= five_h_start:
+                        steps_5h_window += 1
+                        tokens_5h_window += step_tokens
+                        if is_prompt:
+                            prompts_5h_window += 1
+        except Exception:
+            pass
+
+    # Calibrated capacities based on official Google quota % vs recorded steps
+    if weekly_used_pct > 5 and steps_week_window > 100:
+        est_weekly_capacity = int(round(steps_week_window / (weekly_used_pct / 100.0)))
+    else:
+        est_weekly_capacity = 10000
+
+    if five_h_used_pct > 3 and steps_5h_window > 50:
+        est_5h_capacity = int(round(steps_5h_window / (five_h_used_pct / 100.0)))
+    else:
+        est_5h_capacity = 3500
+
+    # Monthly capacity on Google AI Ultra = 4.29 weekly cycles (30 days / 7 days)
+    weekly_cycles_per_month = 30.0 / 7.0
+    est_monthly_capacity = int(round(est_weekly_capacity * weekly_cycles_per_month))
+    monthly_used_pct = min(100.0, round((steps_30d / max(1, est_monthly_capacity)) * 100.0, 2))
+    monthly_remaining_pct = round(max(0.0, 100.0 - monthly_used_pct), 2)
+    weekly_cycles_used = round(steps_30d / max(1, est_weekly_capacity), 2)
+
+    daily_list = list(daily_map.values())
+    active_days_30d = sum(1 for d in daily_list if d["steps"] > 0)
+
+    return {
+        "fiveHour": {
+            "promptsWindow": prompts_5h_window,
+            "stepsWindow": steps_5h_window,
+            "tokensWindow": tokens_5h_window,
+            "promptsRolling": prompts_5h_rolling,
+            "stepsRolling": steps_5h_rolling,
+            "tokensRolling": tokens_5h_rolling,
+            "sessionsCount": len(sessions_5h),
+            "estimatedCapacitySteps": est_5h_capacity,
+            "hourlyBreakdown": list(hourly_map.values()),
+        },
+        "weekly": {
+            "promptsWindow": prompts_week_window,
+            "stepsWindow": steps_week_window,
+            "tokensWindow": tokens_week_window,
+            "promptsRolling": prompts_7d_rolling,
+            "stepsRolling": steps_7d_rolling,
+            "tokensRolling": tokens_7d_rolling,
+            "sessionsCount": len(sessions_7d),
+            "estimatedCapacitySteps": est_weekly_capacity,
+            "dailyBreakdown": daily_list[-7:],
+        },
+        "monthly": {
+            "usedPercent": monthly_used_pct,
+            "remainingPercent": monthly_remaining_pct,
+            "promptsCount": prompts_30d,
+            "stepsCount": steps_30d,
+            "tokensCount": tokens_30d,
+            "inputTokensCount": input_tokens_30d,
+            "outputTokensCount": output_tokens_30d,
+            "cachedTokensCount": cached_tokens_30d,
+            "sessionsCount": len(sessions_30d),
+            "activeDays": active_days_30d,
+            "estimatedCapacitySteps": est_monthly_capacity,
+            "weeklyCyclesUsed": weekly_cycles_used,
+            "weeklyCyclesTotal": round(weekly_cycles_per_month, 2),
+            "dailyBreakdown": daily_list[-14:],
+        },
+    }
+
+
+def build_live_quota_payload() -> dict:
+    now = datetime.now(timezone.utc)
+    token_data = load_oauth_token()
+    access_token = get_access_token(token_data)
+    project_id = token_data.get("project_id") or "aicode-consumers"
+
+    summary = call_ccpa(access_token, "retrieveUserQuotaSummary", {"project": project_id})
+    raw_quota = call_ccpa(access_token, "retrieveUserQuota", {"project": project_id})
+
+    tier_name = "Google AI Ultra"
+    tier_id = "g1-ultra-lite-tier"
+    try:
+        load_res = call_ccpa(
+            access_token,
+            "loadCodeAssist",
+            {"cloudaicompanionProject": project_id, "metadata": {"ideType": "ANTIGRAVITY"}},
+        )
+        paid = load_res.get("paidTier") or load_res.get("currentTier") or {}
+        if paid.get("name"):
+            tier_name = paid["name"]
+        if paid.get("id"):
+            tier_id = paid["id"]
+    except Exception:
+        pass
+
+    buckets_by_id: dict[str, dict] = {}
+    for group in summary.get("groups", []):
+        for b in group.get("buckets", []):
+            bid = b.get("bucketId")
+            if bid:
+                buckets_by_id[bid] = {**b, "groupName": group.get("displayName", "")}
+
+    def extract_window(bid: str, duration_mins: int) -> dict:
+        b = buckets_by_id.get(bid, {})
+        rem_frac = float(b.get("remainingFraction", 1.0))
+        rem_frac = max(0.0, min(1.0, rem_frac))
+        rem_pct = round(rem_frac * 100.0, 2)
+        used_pct = round((1.0 - rem_frac) * 100.0, 2)
+        resets_at_str = b.get("resetTime")
+        resets_dt = parse_iso(resets_at_str) or (now + timedelta(minutes=duration_mins))
+        started_dt = resets_dt - timedelta(minutes=duration_mins)
+        elapsed_sec = max(0.0, (now - started_dt).total_seconds())
+        total_sec = duration_mins * 60.0
+        remaining_sec = max(0.0, (resets_dt - now).total_seconds())
+        elapsed_pct = round(min(100.0, (elapsed_sec / total_sec) * 100.0), 2)
+        pace_delta = round(used_pct - elapsed_pct, 2)
+
+        elapsed_hours = max(0.1, elapsed_sec / 3600.0)
+        burn_rate_per_hour = round(used_pct / elapsed_hours, 2)
+
+        return {
+            "id": bid,
+            "remainingFraction": rem_frac,
+            "remainingPercent": rem_pct,
+            "usedPercent": used_pct,
+            "resetsAt": resets_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "startedAt": started_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "durationMins": duration_mins,
+            "remainingSeconds": int(remaining_sec),
+            "elapsedPercent": elapsed_pct,
+            "paceDeltaPercent": pace_delta,
+            "burnRatePerHour": burn_rate_per_hour,
+            "description": b.get("description", ""),
+        }
+
+    gem_5h = extract_window("gemini-5h", 300)
+    gem_weekly = extract_window("gemini-weekly", 10080)
+    tp_5h = extract_window("3p-5h", 300)
+    tp_weekly = extract_window("3p-weekly", 10080)
+
+    telemetry = compute_local_telemetry(
+        now=now,
+        five_h_start=parse_iso(gem_5h["startedAt"]) or (now - timedelta(hours=5)),
+        weekly_start=parse_iso(gem_weekly["startedAt"]) or (now - timedelta(days=7)),
+        weekly_used_pct=gem_weekly["usedPercent"],
+        five_h_used_pct=gem_5h["usedPercent"],
+    )
+
+    days_left_week = max(0.1, gem_weekly["remainingSeconds"] / 86400.0)
+    gem_weekly["dailyBudgetRemainingPercent"] = round(gem_weekly["remainingPercent"] / days_left_week, 2)
+    gem_weekly["burnRatePerDay"] = round(gem_weekly["burnRatePerHour"] * 24.0, 1)
+
+    # Next monthly reset = 1st of next month 00:00 UTC (and rolling 30d info)
+    if now.month == 12:
+        next_month_dt = datetime(now.year + 1, 1, 1, tzinfo=timezone.utc)
+    else:
+        next_month_dt = datetime(now.year, now.month + 1, 1, tzinfo=timezone.utc)
+    month_start_dt = datetime(now.year, now.month, 1, tzinfo=timezone.utc)
+    month_elapsed_pct = round(
+        ((now - month_start_dt).total_seconds() / max(1.0, (next_month_dt - month_start_dt).total_seconds())) * 100.0,
+        2,
+    )
+
+    gem_5h.update(telemetry["fiveHour"])
+    gem_weekly.update(telemetry["weekly"])
+
+    monthly_window = {
+        "id": "gemini-monthly",
+        "durationMins": 43200,
+        "resetsAt": next_month_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "startedAt": (now - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "remainingSeconds": int(max(0.0, (next_month_dt - now).total_seconds())),
+        "elapsedPercent": month_elapsed_pct,
+        **telemetry["monthly"],
+    }
+
+    models_list = []
+    for m_bucket in raw_quota.get("buckets", []):
+        mid = m_bucket.get("modelId", "")
+        if mid not in MODEL_LABELS:
+            continue
+        label, family, desc = MODEL_LABELS[mid]
+        rem_f = max(0.0, min(1.0, float(m_bucket.get("remainingFraction", 1.0))))
+        models_list.append(
+            {
+                "id": mid,
+                "label": label,
+                "family": family,
+                "description": desc,
+                "remainingPercent": round(rem_f * 100.0, 2),
+                "usedPercent": round((1.0 - rem_f) * 100.0, 2),
+                "resetsAt": m_bucket.get("resetTime"),
+            }
+        )
+
+    with _state_lock:
+        tunnel_url = _current_tunnel_url
+
+    payload = {
+        "checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "liveEndpoint": f"http://127.0.0.1:{PORT}/api/quota",
+        "tunnelUrl": tunnel_url,
+        "subscription": {
+            "planName": tier_name,
+            "tierId": tier_id,
+            "harness": "Google AI Ultra • Antigravity",
+            "projectId": project_id,
+            "status": "active",
+        },
+        "windows": {
+            "fiveHour": gem_5h,
+            "weekly": gem_weekly,
+            "monthly": monthly_window,
+            "thirdParty5h": tp_5h,
+            "thirdPartyWeekly": tp_weekly,
+        },
+        "models": models_list,
+    }
+    return payload
+
+
+def save_quota_payload(payload: dict) -> None:
+    os.makedirs(APP_DIR, exist_ok=True)
+    tmp_path = QUOTA_JSON_PATH + ".tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    os.replace(tmp_path, QUOTA_JSON_PATH)
+
+
+def refresh_and_save(force: bool = False) -> dict:
+    global _last_payload, _last_fetch_ts
+    now_ts = time.time()
+    if not force and _last_payload is not None and (now_ts - _last_fetch_ts) < 8.0:
+        with _state_lock:
+            if _current_tunnel_url:
+                _last_payload["tunnelUrl"] = _current_tunnel_url
+            return _last_payload
+
+    payload = build_live_quota_payload()
+    save_quota_payload(payload)
+    with _state_lock:
+        _last_payload = payload
+        _last_fetch_ts = now_ts
+    return payload
+
+
+def push_snapshot_to_github() -> bool:
+    try:
+        subprocess.run(
+            ["git", "add", "gemini-ultra/quota-live.json"],
+            cwd=ROOT_DIR,
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        diff = subprocess.run(
+            ["git", "diff", "--cached", "--quiet", "--", "gemini-ultra/quota-live.json"],
+            cwd=ROOT_DIR,
+        )
+        if diff.returncode == 0:
+            return False
+        subprocess.run(
+            ["git", "commit", "-m", "chore(quota): auto-sync live Gemini Ultra limits snapshot"],
+            cwd=ROOT_DIR,
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        subprocess.run(
+            ["git", "push", "origin", "main"],
+            cwd=ROOT_DIR,
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        return True
+    except Exception:
+        return False
+
+
+def start_cloudflared_tunnel() -> None:
+    global _current_tunnel_url
+    cf_candidates = glob.glob(os.path.expanduser("~/.t3/tools/cloudflared/*/*/cloudflared"))
+    if not cf_candidates:
+        return
+    cf_bin = cf_candidates[0]
+    try:
+        proc = subprocess.Popen(
+            [cf_bin, "tunnel", "--url", f"http://127.0.0.1:{PORT}", "--no-autoupdate"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
+        for line in proc.stdout:
+            m = re.search(r"https://[a-zA-Z0-9-]+\.trycloudflare\.com", line)
+            if m:
+                url = m.group(0)
+                with _state_lock:
+                    _current_tunnel_url = url
+                try:
+                    refresh_and_save(force=True)
+                    push_snapshot_to_github()
+                except Exception:
+                    pass
+    except Exception:
+        pass
+
+
+class QuotaHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
+    def _send_cors(self) -> None:
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept, Cache-Control")
+        self.send_header("Access-Control-Allow-Private-Network", "true")
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+
+    def do_OPTIONS(self) -> None:
+        self.send_response(204)
+        self._send_cors()
+        self.end_headers()
+
+    def do_GET(self) -> None:
+        parsed = urllib.parse.urlparse(self.path)
+        if parsed.path in ("/api/quota", "/quota-live.json", "/"):
+            qs = urllib.parse.parse_qs(parsed.query)
+            force = "refresh" in qs or "force" in qs
+            try:
+                data = refresh_and_save(force=force)
+                raw = json.dumps(data, ensure_ascii=False).encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Content-Length", str(len(raw)))
+                self._send_cors()
+                self.end_headers()
+                self.wfile.write(raw)
+            except Exception as e:
+                err = json.dumps({"error": str(e)}).encode("utf-8")
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self._send_cors()
+                self.end_headers()
+                self.wfile.write(err)
+        else:
+            self.send_response(404)
+            self._send_cors()
+            self.end_headers()
+
+    def log_message(self, format: str, *args) -> None:
+        pass
+
+
+def background_sync_loop() -> None:
+    last_git_push = 0.0
+    last_pushed_5h = -1.0
+    last_pushed_week = -1.0
+
+    while True:
+        time.sleep(60)
+        try:
+            payload = refresh_and_save(force=True)
+            u5 = payload["windows"]["fiveHour"]["usedPercent"]
+            uw = payload["windows"]["weekly"]["usedPercent"]
+            now_ts = time.time()
+            changed = abs(u5 - last_pushed_5h) >= 0.2 or abs(uw - last_pushed_week) >= 0.1
+            if changed and (now_ts - last_git_push) >= 180:
+                if push_snapshot_to_github():
+                    last_git_push = now_ts
+                    last_pushed_5h = u5
+                    last_pushed_week = uw
+        except Exception:
+            pass
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--once", action="store_true", help="Exécute une seule sonde et met à jour quota-live.json")
+    parser.add_argument("--daemon", action="store_true", help="Lance le serveur temps réel 127.0.0.1:8787 + tunnel + sync")
+    args = parser.parse_args()
+
+    payload = refresh_and_save(force=True)
+    if args.once or not args.daemon:
+        w5 = payload["windows"]["fiveHour"]
+        ww = payload["windows"]["weekly"]
+        wm = payload["windows"]["monthly"]
+        print(
+            f"[Gemini Ultra Live] 5h: {w5['remainingPercent']}% restant ({w5['usedPercent']}% utilisé) | "
+            f"Semaine: {ww['remainingPercent']}% restant ({ww['usedPercent']}% utilisé) | "
+            f"Mois: {wm['remainingPercent']}% restant ({wm['usedPercent']}% utilisé)"
+        )
+        return
+
+    threading.Thread(target=start_cloudflared_tunnel, daemon=True).start()
+    threading.Thread(target=background_sync_loop, daemon=True).start()
+
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", PORT), QuotaHTTPRequestHandler)
+    print(f"Gemini Ultra Real-Time API listening on http://127.0.0.1:{PORT}/api/quota")
+    server.serve_forever()
+
+
+if __name__ == "__main__":
+    main()

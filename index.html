@@ -138,8 +138,49 @@
         </div>
       </div>
 
+      <!-- BANDEAU TEMPS RÉEL GEMINI ULTRA (5H • SEMAINE • MOIS) -->
+      <a
+        href="./gemini-ultra/"
+        class="mt-3.5 block rounded-2xl p-3 bg-gradient-to-r from-sky-500/[0.09] via-indigo-500/[0.08] to-violet-500/[0.09] border border-sky-400/25 hover:border-sky-400/45 transition active:scale-[0.99]"
+      >
+        <div class="flex items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img
+              src="gemini-ultra/assets/icon.svg"
+              alt="Gemini Ultra"
+              class="w-9 h-9 rounded-xl object-cover border border-white/15 shrink-0 shadow-md"
+            />
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-extrabold text-white truncate">Gemini Ultra • Limites Live</span>
+                <span id="gu-live-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+              </div>
+              <div id="gu-widget-sub" class="text-[11px] text-slate-400 truncate">Quotas 5h, Semaine & Mois en temps réel</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 shrink-0">
+            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-white/10 text-center">
+              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">5h</div>
+              <div id="gu-pill-5h" class="text-[11px] font-extrabold text-emerald-300 mt-0.5 leading-none">--%</div>
+            </div>
+            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-white/10 text-center">
+              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Sem.</div>
+              <div id="gu-pill-week" class="text-[11px] font-extrabold text-amber-300 mt-0.5 leading-none">--%</div>
+            </div>
+            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-white/10 text-center">
+              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Mois</div>
+              <div id="gu-pill-month" class="text-[11px] font-extrabold text-sky-300 mt-0.5 leading-none">--%</div>
+            </div>
+            <svg class="w-4 h-4 text-sky-300 ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </a>
+
       <!-- RECHERCHE SIMPLE -->
-      <div class="mt-4 relative">
+      <div class="mt-3 relative">
         <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
@@ -163,10 +204,10 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'allinone_live_repos_cache_v3';
+    const CACHE_KEY = 'allinone_live_repos_cache_v4';
 
     const CATEGORIES = [
-      { id: 'medical-imaging', name: 'Imagerie & Radiologie', emoji: '🩻' },
+      { id: 'medical-imaging', name: 'Imagerie & Radiologie', emoji: '🩺' },
       { id: 'clinical-calc',   name: 'Calculateurs Médicaux', emoji: '🧮' },
       { id: 'daily-tools',     name: 'Quotidien & Pratique',  emoji: '📦' },
       { id: 'games-family',    name: 'Jeux & Famille',        emoji: '🎮' }
@@ -174,6 +215,16 @@
 
     // Métadonnées & vrais logos officiels des applications en production
     const KNOWN_METADATA = {
+      'gemini-ultra': {
+        title: 'Gemini Ultra — Quotas Live',
+        subtitle: 'Limites temps réel 5h, Semaine & Mois (Abonnement Google AI Ultra)',
+        category: 'daily-tools',
+        emoji: '✨',
+        prodUrl: 'https://mrthomaslef.github.io/allinone/gemini-ultra/',
+        githubUrl: 'https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra',
+        logoUrl: 'gemini-ultra/assets/icon.svg',
+        alwaysInclude: true
+      },
       'biblioosteo': {
         title: 'BiblioOstéo Cochin',
         subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
@@ -565,6 +616,25 @@
             });
           });
 
+          // Inclure systématiquement les web-apps intégrées marquées alwaysInclude (ex: gemini-ultra)
+          Object.entries(KNOWN_METADATA).forEach(([k, meta]) => {
+            if (meta.alwaysInclude && !syncedList.some(item => item.id.toLowerCase() === k)) {
+              syncedList.unshift({
+                id: k,
+                title: meta.title,
+                subtitle: meta.subtitle,
+                category: meta.category,
+                emoji: meta.emoji,
+                logoUrl: meta.logoUrl,
+                logoFit: meta.logoFit || 'cover',
+                prodUrl: meta.prodUrl,
+                githubUrl: meta.githubUrl || `https://github.com/${GITHUB_USERNAME}/allinone`,
+                pushedAt: new Date().toISOString(),
+                isNew: true
+              });
+            }
+          });
+
           if (syncedList.length > 0) {
             projects = syncedList;
             localStorage.setItem(CACHE_KEY, JSON.stringify(projects));
@@ -579,7 +649,47 @@
         }
       } catch (_) {
       } finally {
+        syncGeminiUltraWidget(manual);
         if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 400);
+      }
+    }
+
+    async function syncGeminiUltraWidget(manual = false) {
+      const p5 = document.getElementById('gu-pill-5h');
+      const pw = document.getElementById('gu-pill-week');
+      const pm = document.getElementById('gu-pill-month');
+      const sub = document.getElementById('gu-widget-sub');
+      if (!p5 || !pw || !pm) return;
+
+      let data = null;
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 1800);
+        const res = await fetch(`http://127.0.0.1:8787/api/quota?refresh=${manual ? 1 : 0}&t=${Date.now()}`, {
+          cache: 'no-store',
+          signal: ctrl.signal
+        });
+        clearTimeout(tid);
+        if (res.ok) data = await res.json();
+      } catch (_) {}
+
+      if (!data) {
+        try {
+          const res = await fetch(`./gemini-ultra/quota-live.json?t=${Date.now()}`, { cache: 'no-store' });
+          if (res.ok) data = await res.json();
+        } catch (_) {}
+      }
+
+      if (data && data.windows) {
+        const w5 = data.windows.fiveHour;
+        const ww = data.windows.weekly;
+        const wm = data.windows.monthly;
+        if (w5) p5.textContent = `${Math.round(w5.remainingPercent)}%`;
+        if (ww) pw.textContent = `${ ww.remainingPercent < 10 ? ww.remainingPercent.toFixed(1) : Math.round(ww.remainingPercent) }%`;
+        if (wm) pm.textContent = `${Math.round(wm.remainingPercent)}%`;
+        if (sub && w5 && ww) {
+          sub.textContent = `Restant : ${w5.remainingPercent.toFixed(0)}% (5h) • ${ww.remainingPercent.toFixed(1)}% (Sem.) • ${wm ? wm.remainingPercent.toFixed(0) : '--'}% (Mois)`;
+        }
       }
     }
 
@@ -704,6 +814,7 @@
     renderTabs();
     renderProjects();
     initPullToRefresh();
+    syncGeminiUltraWidget(false);
     syncFromGitHub(false);
 
     document.addEventListener('visibilitychange', () => {

@@ -30,6 +30,7 @@
 ### 3. 📦 Quotidien & Vie Pratique
 | Application | Description | Production | Code GitHub |
 | :--- | :--- | :--- | :--- |
+| **Gemini Ultra — Quotas Live** | Visualisation en temps réel des limites Google AI Ultra (5h, Semaine & Mois) | [Ouvrir](https://mrthomaslef.github.io/allinone/gemini-ultra/) | [Code](https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra) |
 | **ColisTrack PWA** | Suivi de livraisons & colis en temps réel (verrouillé par PIN) | [Ouvrir](https://mrthomaslef.github.io/colistrack/) | [Repo](https://github.com/Mrthomaslef/colistrack) |
 | **AssMat — Paie & Pajemploi** | Calculateur de rémunération, présence, bulletin de salaire & Pajemploi | [Ouvrir](https://mrthomaslef.github.io/assistante-maternelle/) | [Repo](https://github.com/Mrthomaslef/assistante-maternelle) |
 

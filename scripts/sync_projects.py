@@ -210,6 +210,23 @@ def main():
             }
         )
 
+    # Include built-in Gemini Ultra live quota app
+    if not any(item["id"].lower() == "gemini-ultra" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "gemini-ultra",
+                "title": "Gemini Ultra — Quotas Live",
+                "subtitle": "Limites temps réel 5h, Semaine & Mois (Abonnement Google AI Ultra)",
+                "category": "daily-tools",
+                "emoji": "✨",
+                "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/gemini-ultra",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
     out_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "projects.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
