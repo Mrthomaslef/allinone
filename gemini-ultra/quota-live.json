@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-31T17:11:33Z",
+  "checkedAt": "2026-10-31T17:56:04Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://onion-vernon-lucas-scotia.trycloudflare.com",
   "subscription": {
@@ -17,7 +17,7 @@
     "email": "thomaslefevre18@live.fr",
     "orgId": "8c0eba00-3acb-469e-99cc-91e1b0154158",
     "subscriptionType": "pro",
-    "upgradedAt": null,
+    "upgradedAt": "2026-10-31T13:57:53.092542Z",
     "harness": "Anthropic Claude Code • Compte Apple"
   },
   "tokenSummary": {
@@ -78,17 +78,17 @@
       "sessionsCount": 51
     },
     "sevenDays": {
-      "prompts": 548,
-      "steps": 16908,
-      "inputTokens": 54909818,
-      "outputTokens": 6498102,
-      "cachedTokens": 980301797,
-      "activeTokens": 61407920,
-      "totalTokensWithCache": 1041709717,
-      "apiCostUsd": 424.38,
-      "uncachedValueUsd": 2374.48,
-      "apiCostEur": 390.43,
-      "uncachedValueEur": 2184.52,
+      "prompts": 546,
+      "steps": 16809,
+      "inputTokens": 54354973,
+      "outputTokens": 6484673,
+      "cachedTokens": 970075846,
+      "activeTokens": 60839646,
+      "totalTokensWithCache": 1030915492,
+      "apiCostUsd": 421.07,
+      "uncachedValueUsd": 2352.75,
+      "apiCostEur": 387.38,
+      "uncachedValueEur": 2164.53,
       "sessionsCount": 70
     },
     "thirtyDays": {
@@ -161,11 +161,11 @@
       "resetsAt": "2026-10-31T18:13:42Z",
       "startedAt": "2026-10-31T13:13:42Z",
       "durationMins": 300,
-      "remainingSeconds": 3728,
-      "elapsedPercent": 79.29,
-      "paceDeltaPercent": -65.56,
-      "burnRatePerHour": 3.46,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 1 hour, 2 minutes.",
+      "remainingSeconds": 1057,
+      "elapsedPercent": 94.12,
+      "paceDeltaPercent": -80.39,
+      "burnRatePerHour": 2.92,
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 17 minutes.",
       "promptsWindow": 89,
       "stepsWindow": 2709,
       "tokensWindow": 8304510,
@@ -251,13 +251,13 @@
       "resetsAt": "2026-11-07T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 10080,
-      "remainingSeconds": 572528,
-      "elapsedPercent": 5.34,
-      "paceDeltaPercent": 2.12,
-      "burnRatePerHour": 0.83,
-      "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 15 hours.",
-      "dailyBudgetRemainingPercent": 13.97,
-      "burnRatePerDay": 19.9,
+      "remainingSeconds": 569857,
+      "elapsedPercent": 5.78,
+      "paceDeltaPercent": 1.68,
+      "burnRatePerHour": 0.77,
+      "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 14 hours.",
+      "dailyBudgetRemainingPercent": 14.03,
+      "burnRatePerDay": 18.5,
       "promptsWindow": 138,
       "stepsWindow": 4821,
       "tokensWindow": 16178441,
@@ -268,16 +268,16 @@
       "apiCostUsdWindow": 142.95,
       "apiCostEurWindow": 131.51,
       "uncachedValueUsdWindow": 826.06,
-      "promptsRolling": 548,
-      "stepsRolling": 16908,
-      "tokensRolling": 61407920,
-      "inputTokensRolling": 54909818,
-      "outputTokensRolling": 6498102,
-      "cachedTokensRolling": 980301797,
-      "totalTokensWithCacheRolling": 1041709717,
-      "apiCostUsdRolling": 424.38,
-      "apiCostEurRolling": 390.43,
-      "uncachedValueUsdRolling": 2374.48,
+      "promptsRolling": 546,
+      "stepsRolling": 16809,
+      "tokensRolling": 60839646,
+      "inputTokensRolling": 54354973,
+      "outputTokensRolling": 6484673,
+      "cachedTokensRolling": 970075846,
+      "totalTokensWithCacheRolling": 1030915492,
+      "apiCostUsdRolling": 421.07,
+      "apiCostEurRolling": 387.38,
+      "uncachedValueUsdRolling": 2352.75,
       "sessionsCount": 70,
       "estimatedCapacitySteps": 64625,
       "dailyBreakdown": [
@@ -365,8 +365,8 @@
       "durationMins": 43200,
       "resetsAt": "2026-11-30T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
-      "remainingSeconds": 2559728,
-      "elapsedPercent": 1.25,
+      "remainingSeconds": 2557057,
+      "elapsedPercent": 1.35,
       "usedPercent": 1.74,
       "remainingPercent": 98.26,
       "promptsCount": 138,
@@ -553,11 +553,11 @@
       "resetsAt": "2026-10-31T19:57:07Z",
       "startedAt": "2026-10-31T14:57:07Z",
       "durationMins": 300,
-      "remainingSeconds": 9933,
-      "elapsedPercent": 44.82,
-      "paceDeltaPercent": 36.49,
-      "burnRatePerHour": 36.29,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 2 hours, 45 minutes."
+      "remainingSeconds": 7262,
+      "elapsedPercent": 59.65,
+      "paceDeltaPercent": 21.66,
+      "burnRatePerHour": 27.26,
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 2 hours, 1 minute."
     },
     "thirdPartyWeekly": {
       "id": "3p-weekly",
@@ -567,10 +567,10 @@
       "resetsAt": "2026-11-07T09:10:41Z",
       "startedAt": "2026-10-31T09:10:41Z",
       "durationMins": 10080,
-      "remainingSeconds": 575947,
-      "elapsedPercent": 4.77,
-      "paceDeltaPercent": 80.93,
-      "burnRatePerHour": 10.69,
+      "remainingSeconds": 573276,
+      "elapsedPercent": 5.21,
+      "paceDeltaPercent": 80.49,
+      "burnRatePerHour": 9.79,
       "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 15 hours."
     },
     "claudeFiveHour": {
@@ -578,8 +578,8 @@
       "durationMins": 300,
       "usedPercent": 14.0,
       "remainingPercent": 86.0,
-      "resetsAt": "2026-10-31T19:39:59.944Z",
-      "remainingSeconds": 18000,
+      "resetsAt": "2026-10-31T19:40:00Z",
+      "remainingSeconds": 6236,
       "status": "active"
     },
     "claudeWeekly": {
@@ -587,8 +587,8 @@
       "durationMins": 10080,
       "usedPercent": 2.0,
       "remainingPercent": 98.0,
-      "resetsAt": "2026-11-05T00:59:59.944Z",
-      "remainingSeconds": 604800
+      "resetsAt": "2026-11-05T01:00:00Z",
+      "remainingSeconds": 371036
     }
   },
   "models": [
@@ -599,7 +599,7 @@
       "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
       "remainingPercent": 86.0,
       "usedPercent": 14.0,
-      "resetsAt": "2026-10-31T19:39:59.944Z"
+      "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
       "id": "claude-sonnet-5-5",
@@ -608,7 +608,7 @@
       "description": "Claude Pro Direct • Raisonnement rapide & efficace",
       "remainingPercent": 86.0,
       "usedPercent": 14.0,
-      "resetsAt": "2026-10-31T19:39:59.944Z"
+      "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
       "id": "claude-fable-5-1",
@@ -617,7 +617,7 @@
       "description": "Claude Pro Direct • Défis complexes & Ultracode",
       "remainingPercent": 86.0,
       "usedPercent": 14.0,
-      "resetsAt": "2026-10-31T19:39:59.944Z"
+      "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
       "id": "claude-haiku-5-5",
@@ -626,7 +626,7 @@
       "description": "Claude Pro Direct • Réponses instantanées",
       "remainingPercent": 86.0,
       "usedPercent": 14.0,
-      "resetsAt": "2026-10-31T19:39:59.944Z"
+      "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
       "id": "claude-opus-5-5-high",
