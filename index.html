@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>All-In-One • @Mrthomaslef</title>
-  <meta name="description" content="Tous les projets en production et sur GitHub de Thomas Lefèvre (@Mrthomaslef), rangés par catégories." />
+  <meta name="description" content="Tous les projets en production et sur GitHub de Thomas Lefèvre (@Mrthomaslef), rangés par catégories et synchronisés automatiquement." />
   <meta name="theme-color" content="#090D16" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -79,22 +79,37 @@
             class="w-12 h-12 rounded-2xl object-cover shadow-lg shadow-cyan-500/10 border border-white/15"
           />
           <div>
-            <h1 class="text-xl font-extrabold tracking-tight text-white">All-In-One</h1>
-            <p class="text-xs text-slate-400">Projets en production • @Mrthomaslef</p>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl font-extrabold tracking-tight text-white">All-In-One</h1>
+              <span id="live-dot" class="w-2 h-2 rounded-full bg-emerald-400" title="Synchronisation automatique GitHub active"></span>
+            </div>
+            <p id="sync-subtitle" class="text-xs text-slate-400">Sync auto GitHub • @Mrthomaslef</p>
           </div>
         </div>
 
-        <a
-          href="https://github.com/Mrthomaslef?tab=repositories"
-          target="_blank"
-          rel="noopener"
-          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition"
-        >
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-          </svg>
-          <span>GitHub</span>
-        </a>
+        <div class="flex items-center gap-1.5">
+          <button
+            onclick="syncFromGitHub(true)"
+            title="Actualiser les projets depuis GitHub"
+            class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition active:scale-95"
+          >
+            <svg id="refresh-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
+
+          <a
+            href="https://github.com/Mrthomaslef?tab=repositories"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <span>GitHub</span>
+          </a>
+        </div>
       </div>
 
       <!-- RECHERCHE SIMPLE -->
@@ -122,132 +137,149 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
+    const CACHE_KEY = 'allinone_live_repos_cache_v2';
 
     const CATEGORIES = [
-      { id: 'medical-imaging', name: 'Imagerie & Radiologie', emoji: '🩻', color: 'text-cyan-400' },
-      { id: 'clinical-calc',   name: 'Calculateurs Médicaux', emoji: '🧮', color: 'text-emerald-400' },
-      { id: 'daily-tools',     name: 'Quotidien & Pratique',  emoji: '📦', color: 'text-amber-400' },
-      { id: 'games-family',    name: 'Jeux & Famille',        emoji: '🎮', color: 'text-violet-400' }
+      { id: 'medical-imaging', name: 'Imagerie & Radiologie', emoji: '🩻' },
+      { id: 'clinical-calc',   name: 'Calculateurs Médicaux', emoji: '🧮' },
+      { id: 'daily-tools',     name: 'Quotidien & Pratique',  emoji: '📦' },
+      { id: 'games-family',    name: 'Jeux & Famille',        emoji: '🎮' }
     ];
 
-    const PROJECTS = [
-      // Imagerie & Radiologie
-      {
-        id: 'biblioosteo',
+    // Métadonnées connues pour enrichir l'affichage des projets existants
+    const KNOWN_METADATA = {
+      'biblioosteo': {
         title: 'BiblioOstéo Cochin',
         subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
         category: 'medical-imaging',
-        emoji: '🦴',
-        prodUrl: 'https://mrthomaslef.github.io/biblioosteo/',
-        githubUrl: 'https://github.com/Mrthomaslef/biblioosteo'
+        emoji: '🦴'
       },
-      {
-        id: 'agenda-cochin',
+      'agenda-cochin': {
         title: 'Cochin RI — Agenda',
         subtitle: 'Planning de Radiologie Interventionnelle (Cochin Radio B)',
         category: 'medical-imaging',
-        emoji: '📅',
-        prodUrl: 'https://mrthomaslef.github.io/agenda-cochin/',
-        githubUrl: 'https://github.com/Mrthomaslef/agenda-cochin'
+        emoji: '📅'
       },
-      {
-        id: 'radio-thomas',
+      'radio-thomas': {
         title: 'QUIZ Cochin',
         subtitle: 'Quiz d’imagerie musculosquelettique',
         category: 'medical-imaging',
         emoji: '🧠',
-        prodUrl: 'https://radio-thomas-ten.vercel.app',
-        githubUrl: 'https://github.com/Mrthomaslef/radio-thomas'
+        prodUrl: 'https://radio-thomas-ten.vercel.app'
       },
-      {
-        id: 'dicomviewer',
+      'dicomviewer': {
         title: 'TPack PACS',
         subtitle: 'Visionneuse DICOM & imagerie médicale pédagogique',
         category: 'medical-imaging',
-        emoji: '🖥️',
-        prodUrl: 'https://mrthomaslef.github.io/dicomviewer/',
-        githubUrl: 'https://github.com/Mrthomaslef/dicomviewer'
+        emoji: '🖥️'
       },
-      {
-        id: 'tpack-cases',
+      'tpack-cases': {
         title: 'TPack Cases',
         subtitle: 'Banque de cas cliniques d’imagerie (.tpack)',
         category: 'medical-imaging',
-        emoji: '🗂️',
-        prodUrl: 'https://mrthomaslef.github.io/tpack-cases/',
-        githubUrl: 'https://github.com/Mrthomaslef/tpack-cases'
+        emoji: '🗂️'
       },
-
-      // Calculateurs Médicaux
-      {
-        id: 'Tomatocalc',
+      'tomatocalc': {
         title: 'TomatoCalc.',
         subtitle: 'Calculateurs médicaux, scores cliniques & classifications',
         category: 'clinical-calc',
-        emoji: '🍅',
-        prodUrl: 'https://mrthomaslef.github.io/Tomatocalc/',
-        githubUrl: 'https://github.com/Mrthomaslef/Tomatocalc'
+        emoji: '🍅'
       },
-      {
-        id: 'Medicalc',
+      'medicalc': {
         title: 'MediCalc',
         subtitle: 'Calculateurs médicaux rapides & aide clinique',
         category: 'clinical-calc',
-        emoji: '⚕️',
-        prodUrl: 'https://mrthomaslef.github.io/Medicalc/',
-        githubUrl: 'https://github.com/Mrthomaslef/Medicalc'
+        emoji: '⚕️'
       },
-
-      // Quotidien & Pratique
-      {
-        id: 'colistrack',
+      'colistrack': {
         title: 'ColisTrack',
         subtitle: 'Suivi de livraisons & colis (PWA privée)',
         category: 'daily-tools',
-        emoji: '📦',
-        prodUrl: 'https://mrthomaslef.github.io/colistrack/',
-        githubUrl: 'https://github.com/Mrthomaslef/colistrack'
+        emoji: '📦'
       },
-      {
-        id: 'assistante-maternelle',
+      'assistante-maternelle': {
         title: 'AssMat — Paie & Pajemploi',
         subtitle: 'Calculateur de salaire, présence & fiche de paie',
         category: 'daily-tools',
-        emoji: '👶',
-        prodUrl: 'https://mrthomaslef.github.io/assistante-maternelle/',
-        githubUrl: 'https://github.com/Mrthomaslef/assistante-maternelle'
+        emoji: '👶'
       },
-
-      // Jeux & Famille
-      {
-        id: 'quiz-trentenaires',
+      'quiz-trentenaires': {
         title: 'QUIZ du 7TER',
         subtitle: 'Grand Quiz Show multijoueur (2 couples / 4 joueurs)',
         category: 'games-family',
-        emoji: '🎉',
-        prodUrl: 'https://mrthomaslef.github.io/quiz-trentenaires/',
-        githubUrl: 'https://github.com/Mrthomaslef/quiz-trentenaires'
+        emoji: '🎉'
       },
-      {
-        id: 'pocket-tcg-family',
+      'pocket-tcg-family': {
         title: 'milTCG — Pocket Family',
         subtitle: 'Ouverture de boosters & collection de cartes en famille',
         category: 'games-family',
-        emoji: '🃏',
-        prodUrl: 'https://mrthomaslef.github.io/pocket-tcg-family/',
-        githubUrl: 'https://github.com/Mrthomaslef/pocket-tcg-family'
+        emoji: '🃏'
       },
-      {
-        id: 'Holidamn',
+      'holidamn': {
         title: 'Holidamn',
         subtitle: 'Portail vidéo & souvenirs de vacances',
         category: 'games-family',
-        emoji: '🌴',
-        prodUrl: 'https://mrthomaslef.github.io/Holidamn/',
-        githubUrl: 'https://github.com/Mrthomaslef/Holidamn'
+        emoji: '🌴'
       }
-    ];
+    };
 
+    // Classification automatique intelligente pour tout futur projet mis en prod
+    function classifyNewRepo(repo) {
+      const topics = (repo.topics || []).map(t => t.toLowerCase());
+      const text = `${repo.name} ${repo.description || ''} ${topics.join(' ')}`.toLowerCase();
+
+      if (topics.includes('imagerie') || topics.includes('radiologie') || /(cochin|osteo|dicom|pacs|radio|tpack|imagerie|irm|scanner|rx|echographie|anatomie)/.test(text)) {
+        return { category: 'medical-imaging', emoji: '🩻' };
+      }
+      if (topics.includes('calculateur') || topics.includes('medical') || /(calc|score|medi|clinique|dose|formule|clairance)/.test(text)) {
+        return { category: 'clinical-calc', emoji: '🧮' };
+      }
+      if (topics.includes('jeu') || topics.includes('famille') || /(quiz|tcg|game|jeu|holidamn|family|vacances|carte|soirée|blindtest|poker)/.test(text)) {
+        return { category: 'games-family', emoji: '🎮' };
+      }
+      return { category: 'daily-tools', emoji: '🚀' };
+    }
+
+    // Formate joliment le nom d'un nouveau dépôt (ex: "mon-nouveau-projet" -> "Mon Nouveau Projet")
+    function formatRepoTitle(name) {
+      return name
+        .replace(/[-_]+/g, ' ')
+        .replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    // Construction de la liste initiale à partir de KNOWN_METADATA ou du cache localStorage
+    function getInitialProjects() {
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (_) {}
+
+      const canonicalCases = {
+        'tomatocalc': 'Tomatocalc',
+        'medicalc': 'Medicalc',
+        'holidamn': 'Holidamn'
+      };
+
+      return Object.entries(KNOWN_METADATA).map(([key, meta]) => {
+        const repoSlug = canonicalCases[key] || key;
+        return {
+          id: repoSlug,
+          title: meta.title,
+          subtitle: meta.subtitle,
+          category: meta.category,
+          emoji: meta.emoji,
+          prodUrl: meta.prodUrl || `https://mrthomaslef.github.io/${repoSlug}/`,
+          githubUrl: `https://github.com/${GITHUB_USERNAME}/${repoSlug}`,
+          pushedAt: null,
+          isNew: false
+        };
+      });
+    }
+
+    let projects = getInitialProjects();
     let activeCategory = 'all';
     let searchQuery = '';
 
@@ -259,12 +291,12 @@
             ? 'bg-white text-slate-950'
             : 'bg-white/5 text-slate-400 hover:text-white'
         }">
-          Tout (${PROJECTS.length})
+          Tout (${projects.length})
         </button>
       `;
 
       const catBtns = CATEGORIES.map(cat => {
-        const count = PROJECTS.filter(p => p.category === cat.id).length;
+        const count = projects.filter(p => p.category === cat.id).length;
         const active = activeCategory === cat.id;
         return `
           <button onclick="setCategory('${cat.id}')" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
@@ -293,7 +325,7 @@
       let html = '';
 
       visibleCategories.forEach(cat => {
-        const items = PROJECTS.filter(p => {
+        const items = projects.filter(p => {
           if (p.category !== cat.id) return false;
           if (!q) return true;
           return `${p.title} ${p.subtitle} ${p.id}`.toLowerCase().includes(q);
@@ -314,18 +346,19 @@
             <div class="space-y-2">
               ${items.map(p => `
                 <div class="app-card rounded-2xl p-3 flex items-center justify-between gap-3">
-                  <!-- Lien principal vers la Prod -->
                   <a href="${p.prodUrl}" target="_blank" rel="noopener" class="flex items-center gap-3.5 min-w-0 flex-1">
                     <div class="w-11 h-11 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-xl shrink-0">
                       ${p.emoji}
                     </div>
                     <div class="min-w-0 flex-1">
-                      <div class="text-sm font-bold text-white truncate">${p.title}</div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-white truncate">${p.title}</span>
+                        ${p.isNew ? '<span class="px-1.5 py-0.5 text-[10px] font-bold uppercase rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Nouveau</span>' : ''}
+                      </div>
                       <div class="text-xs text-slate-400 truncate mt-0.5">${p.subtitle}</div>
                     </div>
                   </a>
 
-                  <!-- Boutons directs : GitHub + Ouvrir Prod -->
                   <div class="flex items-center gap-1.5 shrink-0">
                     <a
                       href="${p.githubUrl}"
@@ -380,41 +413,99 @@
       renderProjects();
     }
 
-    // Auto-détection discrète de nouveaux dépôts publiés sur GitHub
-    async function syncNewGitHubRepos() {
+    // Synchronisation temps réel avec l'API GitHub (détecte immédiatement tout nouveau repo en prod)
+    async function syncFromGitHub(manual = false) {
+      const refreshIcon = document.getElementById('refresh-icon');
+      const subtitle = document.getElementById('sync-subtitle');
+      if (refreshIcon && manual) refreshIcon.classList.add('animate-spin');
+
       try {
-        const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`);
-        if (!res.ok) return;
-        const repos = await res.json();
-        let changed = false;
+        // 1. Récupère en parallèle le manifeste généré par GitHub Actions (si présent) + l'API GitHub en direct
+        const [apiRes, jsonRes] = await Promise.allSettled([
+          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=pushed`, {
+            headers: { 'Accept': 'application/vnd.github+json' },
+            cache: 'no-store'
+          }),
+          fetch(`./projects.json?t=${Date.now()}`, { cache: 'no-store' })
+        ]);
 
-        repos.forEach(r => {
-          if (r.name.toLowerCase() === 'allinone') return;
-          const exists = PROJECTS.some(p => p.id.toLowerCase() === r.name.toLowerCase());
-          if (!exists && (r.has_pages || (r.homepage && r.homepage.startsWith('http')))) {
-            PROJECTS.push({
-              id: r.name,
-              title: r.name,
-              subtitle: r.description || 'Application publiée sur GitHub',
-              category: 'daily-tools',
-              emoji: '🚀',
-              prodUrl: (r.homepage && r.homepage.startsWith('http')) ? r.homepage : `https://${GITHUB_USERNAME.toLowerCase()}.github.io/${r.name}/`,
-              githubUrl: r.html_url
+        let jsonTitles = {};
+        if (jsonRes.status === 'fulfilled' && jsonRes.value.ok) {
+          const data = await jsonRes.value.json();
+          if (Array.isArray(data)) {
+            data.forEach(item => {
+              if (item.id) jsonTitles[item.id.toLowerCase()] = item;
             });
-            changed = true;
           }
-        });
-
-        if (changed) {
-          renderTabs();
-          renderProjects();
         }
-      } catch (_) {}
+
+        if (apiRes.status === 'fulfilled' && apiRes.value.ok) {
+          const repos = await apiRes.value.json();
+          const syncedList = [];
+
+          repos.forEach(r => {
+            if (!r || !r.name) return;
+            const key = r.name.toLowerCase();
+            // Ignorer le dépôt du portail lui-même
+            if (key === 'allinone') return;
+
+            const known = KNOWN_METADATA[key];
+            const fromManifest = jsonTitles[key];
+            const hasLiveUrl = Boolean(r.has_pages || (r.homepage && r.homepage.trim().startsWith('http')) || known);
+
+            if (!hasLiveUrl) return;
+
+            const autoClass = classifyNewRepo(r);
+            const prodUrl = (r.homepage && r.homepage.trim().startsWith('http'))
+              ? r.homepage.trim()
+              : (known && known.prodUrl)
+                ? known.prodUrl
+                : `https://${GITHUB_USERNAME.toLowerCase()}.github.io/${r.name}/`;
+
+            // Considéré "Nouveau" s'il ne fait pas partie des 12 projets historiques
+            const isBrandNew = !known;
+
+            syncedList.push({
+              id: r.name,
+              title: (known && known.title) || (fromManifest && fromManifest.title) || formatRepoTitle(r.name),
+              subtitle: (known && known.subtitle) || r.description || (fromManifest && fromManifest.subtitle) || 'Application en production sur GitHub',
+              category: (known && known.category) || (fromManifest && fromManifest.category) || autoClass.category,
+              emoji: (known && known.emoji) || (fromManifest && fromManifest.emoji) || autoClass.emoji,
+              prodUrl,
+              githubUrl: r.html_url || `https://github.com/${GITHUB_USERNAME}/${r.name}`,
+              pushedAt: r.pushed_at || r.updated_at,
+              isNew: isBrandNew
+            });
+          });
+
+          if (syncedList.length > 0) {
+            projects = syncedList;
+            localStorage.setItem(CACHE_KEY, JSON.stringify(projects));
+            renderTabs();
+            renderProjects();
+          }
+
+          if (subtitle) {
+            subtitle.textContent = `${projects.length} projets en prod • Sync GitHub actif`;
+          }
+        }
+      } catch (_) {
+        // En cas de mode hors-ligne, conserve le cache local
+      } finally {
+        if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 400);
+      }
     }
 
+    // Initialisation immédiate + synchronisation automatique à chaque ouverture ou retour sur l'app
     renderTabs();
     renderProjects();
-    syncNewGitHubRepos();
+    syncFromGitHub(false);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        syncFromGitHub(false);
+      }
+    });
   </script>
 </body>
 </html>
