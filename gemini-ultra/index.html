@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Gemini Ultra • Quotas & Limites en Temps Réel</title>
-  <meta name="description" content="Visualisation en temps réel des limites et quotas de l'abonnement Google AI Ultra (5h, Semaine, Mois) & Antigravity." />
+  <title>Consommation Gemini &amp; Claude • All-In-One</title>
+  <meta name="description" content="Suivi en temps réel des tokens utilisés, de l'estimation du coût API et des quotas Gemini Ultra & Claude Pro." />
   <meta name="theme-color" content="#090D16" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Gemini Ultra" />
+  <meta name="apple-mobile-web-app-title" content="Conso IA" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
   <link rel="apple-touch-icon" href="assets/icon.svg" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -30,742 +30,243 @@
     }
 
     html, body {
-      overscroll-behavior-y: contain;
-    }
-
-    body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: #090D16;
-      background-image:
-        radial-gradient(ellipse 80% 50% at 50% -15%, rgba(56, 189, 248, 0.14), transparent),
-        radial-gradient(ellipse 60% 40% at 90% 10%, rgba(139, 92, 246, 0.10), transparent);
       color: #F8FAFC;
       min-height: 100dvh;
       margin: 0;
+      overscroll-behavior-y: contain;
     }
 
-    .font-mono-num {
-      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    .glass-card {
+    .card {
       background: rgba(255, 255, 255, 0.035);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      transition: border-color 0.2s ease, transform 0.15s ease;
     }
 
-    @media (hover: hover) {
-      .glass-card:hover {
-        border-color: rgba(255, 255, 255, 0.14);
-      }
+    .bar-fill {
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* Pull-to-refresh */
     #ptr-container {
       height: 0;
       opacity: 0;
       overflow: hidden;
       transition: height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease;
-      will-change: height, opacity;
     }
     #ptr-container.dragging {
       transition: none;
-    }
-
-    .ring-progress {
-      transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.3s ease;
-    }
-
-    .bar-fill {
-      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    @keyframes pulse-soft {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.45; }
-    }
-    .animate-pulse-soft {
-      animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   </style>
 </head>
 <body class="antialiased selection:bg-cyan-500/30">
 
-  <!-- INDICATEUR PULL-TO-REFRESH (Glisser vers le bas) -->
-  <div id="ptr-container" class="flex items-center justify-center w-full max-w-lg mx-auto">
-    <div class="flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-slate-300 shadow-lg">
-      <svg id="ptr-spinner" class="w-4 h-4 text-cyan-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+  <!-- PULL-TO-REFRESH -->
+  <div id="ptr-container" class="flex items-center justify-center w-full max-w-lg mx-auto" style="margin-top: var(--safe-top);">
+    <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-slate-300 shadow-lg">
+      <svg id="ptr-spinner" class="w-4 h-4 text-cyan-400 transition-transform duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
       </svg>
       <span id="ptr-label">Tirer pour actualiser</span>
     </div>
   </div>
 
-  <div class="max-w-lg mx-auto min-h-dvh flex flex-col px-4" style="padding-top: max(0.75rem, var(--safe-top)); padding-bottom: max(2.5rem, var(--safe-bottom));">
+  <div class="max-w-lg mx-auto min-h-dvh flex flex-col px-4" style="padding-top: max(0.75rem, var(--safe-top)); padding-bottom: max(2rem, var(--safe-bottom));">
 
-    <!-- HEADER -->
-    <header class="pt-2 pb-3">
-      <div class="flex items-center justify-between gap-2">
-        <div class="flex items-center gap-3 min-w-0">
-          <a
-            href="../"
-            title="Retour à All-In-One"
-            class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition active:scale-95 shrink-0"
-          >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </a>
-
-          <img
-            src="assets/icon.svg"
-            alt="Gemini Ultra Icon"
-            class="w-11 h-11 rounded-2xl object-cover shadow-lg shadow-cyan-500/15 border border-white/15 shrink-0"
-          />
-
-          <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <h1 class="text-lg font-extrabold tracking-tight text-white truncate">Gemini Ultra</h1>
-              <span id="plan-tier-badge" class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-emerald-500/20 via-sky-500/20 to-violet-500/20 text-emerald-300 border border-emerald-400/35 shrink-0">
-                Google AI Ultra • Max
-              </span>
-            </div>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span id="conn-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft shrink-0"></span>
-              <p id="conn-label" class="text-[11px] text-slate-400 truncate">Synchronisation temps réel...</p>
-            </div>
+    <!-- HEADER SIMPLE -->
+    <header class="pt-2 pb-4 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <a
+          href="../"
+          title="Retour à All-In-One"
+          class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition active:scale-95 shrink-0"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </a>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-extrabold text-white truncate">Gemini &amp; Claude</h1>
+            <span id="conn-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
           </div>
-        </div>
-
-        <div class="flex items-center gap-1.5 shrink-0">
-          <button
-            onclick="fetchLiveQuota(true)"
-            title="Actualiser les quotas en direct"
-            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/25 text-xs font-semibold text-cyan-300 transition active:scale-95"
-          >
-            <svg id="refresh-icon" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            <span>Live</span>
-          </button>
+          <p id="conn-label" class="text-xs text-slate-400 truncate">Synchronisation temps réel...</p>
         </div>
       </div>
 
-      <!-- NAVIGATION RAPIDE PAR PÉRIODE -->
-      <div id="view-tabs" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar mt-3.5 pt-0.5">
-        <button onclick="setFilter('all')" data-tab="all" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white text-slate-950">
-          Vue Globale
-        </button>
-        <button onclick="setFilter('5h')" data-tab="5h" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
-          ⏱️ 5 Heures
-        </button>
-        <button onclick="setFilter('weekly')" data-tab="weekly" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
-          📅 Semaine (7j)
-        </button>
-        <button onclick="setFilter('monthly')" data-tab="monthly" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
-          🗓️ Mois (30j)
-        </button>
-        <button onclick="setFilter('claude')" data-tab="claude" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
-          🟠 Claude Pro
-        </button>
-        <button onclick="setFilter('models')" data-tab="models" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-white/5 text-slate-400 hover:text-white">
-          🤖 Modèles & 3P
-        </button>
-      </div>
+      <button
+        onclick="fetchLiveQuota(true)"
+        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition active:scale-95 shrink-0"
+      >
+        <svg id="refresh-icon" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>Actualiser</span>
+      </button>
     </header>
 
-    <!-- CONTENU PRINCIPAL -->
-    <main class="flex-1 space-y-4 pt-1">
+    <main class="flex-1 space-y-3.5">
 
-      <!-- SECTION EN HAUT : TOKENS UTILISÉS & ESTIMATION PRIX API (HORS ABONNEMENT) -->
-      <section id="card-tokens-cost" class="glass-card rounded-3xl p-4 border border-cyan-400/25 bg-gradient-to-br from-sky-500/[0.08] via-indigo-500/[0.06] to-emerald-500/[0.08] space-y-3">
-        <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="text-base">🪙</span>
-            <h2 class="text-xs font-extrabold uppercase tracking-wider text-white truncate">Tokens Utilisés &amp; Prix API Estimé</h2>
-            <span class="px-1.5 py-0.5 text-[9px] font-mono-num font-bold uppercase rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0">
-              Inclus Abo • 0 € facturé
-            </span>
-          </div>
-          <div class="inline-flex items-center rounded-xl bg-slate-950/80 border border-white/10 p-0.5 text-[10px] font-bold shrink-0">
-            <button type="button" onclick="setGuTokenPeriod('5h')" id="gu-tok-btn-5h" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">5h</button>
-            <button type="button" onclick="setGuTokenPeriod('today')" id="gu-tok-btn-today" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">Auj.</button>
-            <button type="button" onclick="setGuTokenPeriod('7d')" id="gu-tok-btn-7d" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">7j</button>
-            <button type="button" onclick="setGuTokenPeriod('30d')" id="gu-tok-btn-30d" class="px-2 py-1 rounded-lg transition bg-cyan-500/25 text-cyan-200 border border-cyan-400/30">30j</button>
-          </div>
+      <!-- 1. RÉSUMÉ GLOBAL : TOKENS UTILISÉS & PRIX ESTIMÉ -->
+      <section class="card rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Consommation Globale (30j)</span>
+          <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
+            Abonnements actifs • 0 € facturé
+          </span>
         </div>
 
         <div class="grid grid-cols-2 gap-2.5">
-          <div class="p-3 rounded-2xl bg-slate-950/70 border border-white/10">
-            <div class="flex items-center justify-between text-[10px] text-slate-400 font-semibold uppercase">
-              <span>Tokens (In + Out)</span>
-              <span id="gu-tok-period-tag" class="text-cyan-300 font-mono-num">30j</span>
-            </div>
-            <div id="gu-tok-main" class="text-2xl font-extrabold font-mono-num text-white mt-0.5">--</div>
-            <div id="gu-tok-io-sub" class="text-[10px] font-mono-num text-slate-400 mt-0.5 truncate">In: -- • Out: --</div>
-            <div class="mt-1.5 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-              <span class="text-slate-400">Total avec Cache :</span>
-              <strong id="gu-tok-cache-total" class="font-mono-num text-sky-300">--</strong>
-            </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-white/10">
+            <div class="text-[11px] text-slate-400 font-medium">Tokens utilisés</div>
+            <div id="tot-tokens" class="text-2xl font-extrabold text-white mt-0.5 tabular-nums">--</div>
+            <div id="tot-tokens-cache" class="text-[11px] text-slate-500 mt-0.5 tabular-nums">Avec cache : --</div>
           </div>
 
-          <div class="p-3 rounded-2xl bg-slate-950/70 border border-emerald-400/25">
-            <div class="flex items-center justify-between text-[10px] text-slate-400 font-semibold uppercase">
-              <span>Coût API Équiv.</span>
-              <span class="text-emerald-300 font-mono-num">Pay-as-you-go</span>
-            </div>
-            <div class="flex items-baseline gap-1.5 mt-0.5 flex-wrap">
-              <span id="gu-cost-main-usd" class="text-2xl font-extrabold font-mono-num text-emerald-300">-- $</span>
-              <span id="gu-cost-main-eur" class="text-xs font-bold font-mono-num text-slate-300">(~-- €)</span>
-            </div>
-            <div id="gu-cost-model-split" class="text-[10px] font-mono-num text-slate-400 mt-0.5 truncate">Gemini + Claude</div>
-            <div class="mt-1.5 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-              <span class="text-slate-400">Valeur sans cache :</span>
-              <strong id="gu-cost-uncached" class="font-mono-num text-amber-300">-- $</strong>
-            </div>
+          <div class="p-3 rounded-xl bg-slate-950/70 border border-emerald-400/20">
+            <div class="text-[11px] text-slate-400 font-medium">Prix API estimé</div>
+            <div id="tot-cost-eur" class="text-2xl font-extrabold text-emerald-300 mt-0.5 tabular-nums">-- €</div>
+            <div id="tot-cost-usd" class="text-[11px] text-slate-400 mt-0.5 tabular-nums">Équivalent ~-- $</div>
           </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-1.5 text-center">
-          <button type="button" onclick="setGuTokenPeriod('5h')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">5 Heures</div>
-            <div id="gu-mini-tok-5h" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
-            <div id="gu-mini-cost-5h" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
-          </button>
-          <button type="button" onclick="setGuTokenPeriod('today')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Aujourd'hui</div>
-            <div id="gu-mini-tok-today" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
-            <div id="gu-mini-cost-today" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
-          </button>
-          <button type="button" onclick="setGuTokenPeriod('7d')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Semaine 7j</div>
-            <div id="gu-mini-tok-7d" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
-            <div id="gu-mini-cost-7d" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
-          </button>
-          <button type="button" onclick="setGuTokenPeriod('30d')" class="p-2 rounded-xl bg-slate-950/50 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Mois 30j</div>
-            <div id="gu-mini-tok-30d" class="text-xs font-extrabold font-mono-num text-white mt-1 leading-none">--</div>
-            <div id="gu-mini-cost-30d" class="text-[10px] font-bold font-mono-num text-emerald-300 mt-0.5 leading-none">-- $</div>
-          </button>
-        </div>
-      </section>
-
-      <!-- BANDEAU ABONNEMENT ACTIF (GOOGLE AI ULTRA UPGRADED) -->
-      <section class="rounded-2xl p-3 bg-gradient-to-r from-emerald-500/10 via-sky-500/10 to-violet-500/10 border border-emerald-400/25 flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span class="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-sm shrink-0">⚡</span>
-          <div class="min-w-0">
-            <div class="flex items-center gap-1.5">
-              <span id="sub-plan-title" class="text-xs font-extrabold text-white truncate">Google AI Ultra (Plan Max)</span>
-              <span id="sub-tier-code" class="px-1.5 py-0.5 text-[9px] font-mono-num font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0">g1-ultra-tier</span>
-            </div>
-            <p id="sub-plan-desc" class="text-[11px] text-slate-300 truncate mt-0.5">Forfait Google AI maximal actif • Quotas 5h, Semaine & Mois réinitialisés à 100%</p>
+        <!-- Résumé par période sur une seule ligne simple -->
+        <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+          <div class="p-2 rounded-xl bg-slate-950/40 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold uppercase">Session 5h</div>
+            <div id="period-5h" class="text-xs font-bold text-white mt-0.5 tabular-nums">-- tok • -- €</div>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950/40 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold uppercase">Aujourd'hui</div>
+            <div id="period-today" class="text-xs font-bold text-white mt-0.5 tabular-nums">-- tok • -- €</div>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950/40 border border-white/5">
+            <div class="text-[10px] text-slate-400 font-semibold uppercase">Semaine 7j</div>
+            <div id="period-7d" class="text-xs font-bold text-white mt-0.5 tabular-nums">-- tok • -- €</div>
           </div>
         </div>
       </section>
 
-      <!-- BANDEAU ABONNEMENT CLAUDE PRO (COMPTE APPLE) -->
-      <section id="claude-sub-banner" class="rounded-2xl p-3 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-rose-500/10 border border-amber-400/25 flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-sm shrink-0">🟠</span>
-          <div class="min-w-0">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span id="claude-plan-title" class="text-xs font-extrabold text-white truncate">Anthropic Claude Pro (Compte Apple)</span>
-              <span id="claude-status-badge" class="px-1.5 py-0.5 text-[9px] font-mono-num font-bold uppercase rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0">Actif • Pro</span>
-            </div>
-            <p id="claude-plan-desc" class="text-[11px] text-slate-300 truncate mt-0.5">thomaslefevre18@live.fr • Quotas 5h & Semaine 100% disponibles</p>
-          </div>
-        </div>
-        <button onclick="setFilter('claude')" class="px-2.5 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30 text-[11px] font-bold text-amber-300 shrink-0 transition active:scale-95">
-          Détails
-        </button>
-      </section>
-
-      <!-- SYNTHÈSE DES 3 JAUGES CIRCULAIRES (5H / SEMAINE / MOIS) -->
-      <section id="hero-rings" class="glass-card rounded-3xl p-4">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Quotas Restants • Temps Réel</span>
-          </div>
-          <span id="last-updated-pill" class="text-[11px] font-mono-num text-slate-400 bg-white/[0.04] px-2.5 py-0.5 rounded-full border border-white/5">
-            --:--:--
-          </span>
-        </div>
-
-        <div class="grid grid-cols-3 gap-2.5">
-          <!-- RING 5H -->
-          <button onclick="setFilter('5h')" class="flex flex-col items-center p-2.5 rounded-2xl bg-white/[0.025] hover:bg-white/[0.05] border border-white/[0.05] transition active:scale-95">
-            <div class="relative w-20 h-20 flex items-center justify-center">
-              <svg class="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="7" fill="none" />
-                <circle id="ring-5h" class="ring-progress" cx="40" cy="40" r="32" stroke="#10B981" stroke-width="7" stroke-linecap="round" fill="none" stroke-dasharray="201.06" stroke-dashoffset="0" />
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <span id="ring-5h-val" class="text-sm font-extrabold font-mono-num text-white">--%</span>
-                <span class="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Restant</span>
-              </div>
-            </div>
-            <span class="text-xs font-bold text-white mt-1.5">5 Heures</span>
-            <span id="ring-5h-timer" class="text-[10px] font-mono-num text-cyan-300 mt-0.5">--h --m</span>
-          </button>
-
-          <!-- RING SEMAINE -->
-          <button onclick="setFilter('weekly')" class="flex flex-col items-center p-2.5 rounded-2xl bg-white/[0.025] hover:bg-white/[0.05] border border-white/[0.05] transition active:scale-95">
-            <div class="relative w-20 h-20 flex items-center justify-center">
-              <svg class="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="7" fill="none" />
-                <circle id="ring-weekly" class="ring-progress" cx="40" cy="40" r="32" stroke="#F59E0B" stroke-width="7" stroke-linecap="round" fill="none" stroke-dasharray="201.06" stroke-dashoffset="0" />
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <span id="ring-weekly-val" class="text-sm font-extrabold font-mono-num text-white">--%</span>
-                <span class="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Restant</span>
-              </div>
-            </div>
-            <span class="text-xs font-bold text-white mt-1.5">Semaine</span>
-            <span id="ring-weekly-timer" class="text-[10px] font-mono-num text-amber-300 mt-0.5">--j --h</span>
-          </button>
-
-          <!-- RING MOIS -->
-          <button onclick="setFilter('monthly')" class="flex flex-col items-center p-2.5 rounded-2xl bg-white/[0.025] hover:bg-white/[0.05] border border-white/[0.05] transition active:scale-95">
-            <div class="relative w-20 h-20 flex items-center justify-center">
-              <svg class="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="7" fill="none" />
-                <circle id="ring-monthly" class="ring-progress" cx="40" cy="40" r="32" stroke="#38BDF8" stroke-width="7" stroke-linecap="round" fill="none" stroke-dasharray="201.06" stroke-dashoffset="0" />
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <span id="ring-monthly-val" class="text-sm font-extrabold font-mono-num text-white">--%</span>
-                <span class="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Restant</span>
-              </div>
-            </div>
-            <span class="text-xs font-bold text-white mt-1.5">Mois (30j)</span>
-            <span id="ring-monthly-sub" class="text-[10px] font-mono-num text-sky-300 mt-0.5">-- cycles</span>
-          </button>
-        </div>
-
-        <!-- SYNTHÈSE RAPIDE CLAUDE PRO (5H & SEMAINE) -->
-        <div onclick="setFilter('claude')" class="mt-3 p-3 rounded-2xl bg-gradient-to-r from-amber-500/[0.08] via-orange-500/[0.07] to-violet-500/[0.08] border border-amber-400/20 hover:border-amber-400/40 transition cursor-pointer flex items-center justify-between gap-2.5">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse-soft shrink-0"></span>
-            <div class="min-w-0">
-              <div class="text-xs font-extrabold text-white truncate">Claude Pro Direct (Apple)</div>
-              <div id="hero-claude-sub" class="text-[10px] text-slate-400 truncate">Opus 5.5 • Sonnet 5.5 • Fable 5.1 • Haiku 5.5</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <div class="px-2 py-1 rounded-xl bg-slate-950/70 border border-white/10 text-center">
-              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Session 5h</div>
-              <div id="hero-claude-5h" class="text-xs font-extrabold font-mono-num text-emerald-300 mt-0.5 leading-none">100%</div>
-            </div>
-            <div class="px-2 py-1 rounded-xl bg-slate-950/70 border border-white/10 text-center">
-              <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Semaine 7j</div>
-              <div id="hero-claude-wk" class="text-xs font-extrabold font-mono-num text-emerald-300 mt-0.5 leading-none">100%</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ALERTE / ASTUCE INTELLIGENTE SI QUOTA HEBDO BAS -->
-        <div id="smart-tip" class="hidden mt-3 p-3 rounded-2xl bg-gradient-to-r from-amber-500/10 via-violet-500/10 to-cyan-500/10 border border-amber-400/25 text-xs text-slate-200">
-          <div class="flex items-start gap-2.5">
-            <span class="text-base leading-none mt-0.5">💡</span>
-            <div class="flex-1">
-              <span class="font-bold text-amber-300">Quota Gemini Hebdo bas :</span>
-              <span id="smart-tip-text">Vos modèles Claude Opus 5.5, Sonnet 5.5 & GPT-OSS disposent d'un quota séparé actuellement disponible à 100%.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 1 : LIMITE 5 HEURES (SESSION) -->
-      <section id="card-5h" class="glass-card rounded-3xl p-4 space-y-3.5">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-base">⏱️</span>
-              <h2 class="text-sm font-extrabold text-white uppercase tracking-wide">Limite 5 Heures (Session)</h2>
-            </div>
-            <p class="text-xs text-slate-400 mt-0.5">Lissage de capacité globale Google AI Ultra sur fenêtre glissante de 5h</p>
-          </div>
-          <span id="badge-5h-status" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shrink-0">
-            Optimal
-          </span>
-        </div>
-
-        <!-- Grande barre de progression 5h -->
-        <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2.5">
-          <div class="flex items-baseline justify-between">
+      <!-- 2. CARTE GEMINI (GOOGLE AI ULTRA) -->
+      <section class="card rounded-2xl p-4 border-sky-400/20 space-y-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-base">✨</span>
             <div>
-              <span id="val-5h-rem" class="text-2xl font-extrabold font-mono-num text-white">--%</span>
-              <span class="text-xs text-slate-400 font-medium ml-1">disponible</span>
-            </div>
-            <div class="text-right">
-              <span id="val-5h-used" class="text-sm font-bold font-mono-num text-slate-300">--%</span>
-              <span class="text-xs text-slate-500 ml-1">consommé</span>
+              <h2 class="text-sm font-extrabold text-white">Gemini Ultra</h2>
+              <p class="text-[11px] text-slate-400">Google AI Ultra • Argon / Pro</p>
             </div>
           </div>
-
-          <div class="w-full h-3 rounded-full bg-white/10 overflow-hidden p-0.5">
-            <div id="bar-5h" class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400" style="width: 0%"></div>
-          </div>
-
-          <div class="flex items-center justify-between text-xs pt-0.5">
-            <div class="flex items-center gap-1.5 text-slate-300">
-              <svg class="w-3.5 h-3.5 text-cyan-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Reset dans <strong id="countdown-5h" class="font-mono-num text-cyan-300">--h --m --s</strong></span>
-            </div>
-            <span id="reset-clock-5h" class="text-[11px] text-slate-400 font-mono-num">à --:--</span>
+          <div class="text-right">
+            <div id="gem-cost-badge" class="text-sm font-extrabold text-emerald-300 tabular-nums">-- € (~-- $)</div>
+            <div id="gem-tokens-badge" class="text-xs font-bold text-slate-300 tabular-nums">-- tokens</div>
           </div>
         </div>
 
-        <!-- Métriques 5h -->
-        <div class="grid grid-cols-3 gap-2">
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Prompts (5h)</div>
-            <div id="metric-5h-prompts" class="text-base font-extrabold font-mono-num text-white mt-0.5">--</div>
-            <div id="metric-5h-sessions" class="text-[10px] text-slate-500 mt-0.5">-- sessions</div>
-          </div>
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Steps Agent</div>
-            <div id="metric-5h-steps" class="text-base font-extrabold font-mono-num text-white mt-0.5">--</div>
-            <div id="metric-5h-cap" class="text-[10px] text-slate-500 mt-0.5">/ ~3 500 cap.</div>
-          </div>
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Tokens (5h)</div>
-            <div id="metric-5h-tokens" class="text-base font-extrabold font-mono-num text-cyan-300 mt-0.5">--</div>
-            <div id="metric-5h-burn" class="text-[10px] text-slate-500 mt-0.5">--% / heure</div>
-          </div>
-        </div>
-
-        <!-- Histogramme Horaire (6 dernières heures) -->
-        <div class="pt-1">
-          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2 px-0.5">
-            <span class="font-semibold">Activité horaire (6 dernières heures)</span>
-            <span id="hourly-peak-label" class="font-mono-num text-slate-500">Steps / heure</span>
-          </div>
-          <div id="chart-5h-hourly" class="grid grid-cols-6 gap-2 items-end h-20 pt-2 px-2 rounded-2xl bg-slate-950/40 border border-white/5"></div>
-        </div>
-      </section>
-
-      <!-- SECTION 2 : LIMITE SEMAINE (7 JOURS) -->
-      <section id="card-weekly" class="glass-card rounded-3xl p-4 space-y-3.5">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-base">📅</span>
-              <h2 class="text-sm font-extrabold text-white uppercase tracking-wide">Limite Semaine (7 Jours)</h2>
-            </div>
-            <p class="text-xs text-slate-400 mt-0.5">Quota individuel Google AI Ultra renouvelé tous les 7 jours</p>
-          </div>
-          <span id="badge-weekly-status" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0">
-            Attention
-          </span>
-        </div>
-
-        <!-- Grande barre de progression Semaine -->
-        <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2.5">
-          <div class="flex items-baseline justify-between">
-            <div>
-              <span id="val-weekly-rem" class="text-2xl font-extrabold font-mono-num text-white">--%</span>
-              <span class="text-xs text-slate-400 font-medium ml-1">disponible</span>
-            </div>
-            <div class="text-right">
-              <span id="val-weekly-used" class="text-sm font-bold font-mono-num text-slate-300">--%</span>
-              <span class="text-xs text-slate-500 ml-1">consommé</span>
-            </div>
-          </div>
-
-          <div class="w-full h-3 rounded-full bg-white/10 overflow-hidden p-0.5">
-            <div id="bar-weekly" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-rose-500" style="width: 0%"></div>
-          </div>
-
-          <div class="flex items-center justify-between text-xs pt-0.5">
-            <div class="flex items-center gap-1.5 text-slate-300">
-              <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Reset dans <strong id="countdown-weekly" class="font-mono-num text-amber-300">--j --h --m --s</strong></span>
-            </div>
-            <span id="reset-clock-weekly" class="text-[11px] text-slate-400 font-mono-num">--</span>
-          </div>
-        </div>
-
-        <!-- Comparateur de Cadence (Pace : Temps écoulé vs Quota consommé) -->
-        <div class="p-3 rounded-2xl bg-white/[0.025] border border-white/5 space-y-2">
+        <!-- 5h Gemini -->
+        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-semibold text-slate-300">Indice de Cadence Hebdomadaire</span>
-            <span id="weekly-pace-badge" class="font-mono-num text-[11px] font-bold text-amber-300">--</span>
+            <span class="font-bold text-slate-300">⏱️ Session 5 heures</span>
+            <span id="gem-5h-reset" class="text-[11px] text-sky-300 font-semibold tabular-nums">Reset dans --</span>
           </div>
-          <div class="space-y-1.5 text-[11px]">
-            <div>
-              <div class="flex justify-between text-slate-400 mb-0.5">
-                <span>Temps du cycle écoulé (7j)</span>
-                <span id="weekly-elapsed-val" class="font-mono-num text-slate-300">--%</span>
-              </div>
-              <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                <div id="bar-weekly-elapsed" class="bar-fill h-full rounded-full bg-slate-400" style="width: 0%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex justify-between text-slate-400 mb-0.5">
-                <span>Quota hebdo consommé</span>
-                <span id="weekly-consumed-val" class="font-mono-num text-slate-300">--%</span>
-              </div>
-              <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                <div id="bar-weekly-consumed" class="bar-fill h-full rounded-full bg-amber-400" style="width: 0%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center justify-between pt-1 border-t border-white/5 text-[11px] text-slate-400">
-            <span>Budget conseillé d'ici le reset :</span>
-            <strong id="weekly-daily-allowance" class="font-mono-num text-emerald-300">--% / jour</strong>
-          </div>
-        </div>
-
-        <!-- Métriques Semaine -->
-        <div class="grid grid-cols-3 gap-2">
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Prompts (7j)</div>
-            <div id="metric-weekly-prompts" class="text-base font-extrabold font-mono-num text-white mt-0.5">--</div>
-            <div id="metric-weekly-sessions" class="text-[10px] text-slate-500 mt-0.5">-- sessions</div>
-          </div>
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Steps Cycle</div>
-            <div id="metric-weekly-steps" class="text-base font-extrabold font-mono-num text-white mt-0.5">--</div>
-            <div id="metric-weekly-cap" class="text-[10px] text-slate-500 mt-0.5">/ ~10 000 cap.</div>
-          </div>
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Tokens (7j)</div>
-            <div id="metric-weekly-tokens" class="text-base font-extrabold font-mono-num text-amber-300 mt-0.5">--</div>
-            <div id="metric-weekly-burn" class="text-[10px] text-slate-500 mt-0.5">--% / jour</div>
-          </div>
-        </div>
-
-        <!-- Histogramme 7 derniers jours -->
-        <div class="pt-1">
-          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2 px-0.5">
-            <span class="font-semibold">Activité des 7 derniers jours</span>
-            <span class="font-mono-num text-slate-500">Steps / jour</span>
-          </div>
-          <div id="chart-weekly-daily" class="grid grid-cols-7 gap-1.5 items-end h-24 pt-2 px-2 rounded-2xl bg-slate-950/40 border border-white/5"></div>
-        </div>
-      </section>
-
-      <!-- SECTION 3 : LIMITE & BILAN MOIS (30 JOURS) -->
-      <section id="card-monthly" class="glass-card rounded-3xl p-4 space-y-3.5">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-base">🗓️</span>
-              <h2 class="text-sm font-extrabold text-white uppercase tracking-wide">Limite & Cycle Mois (30 Jours)</h2>
-            </div>
-            <p class="text-xs text-slate-400 mt-0.5">Capacité mensuelle cumulée Google AI Ultra (4,29 cycles hebdomadaires / 30j)</p>
-          </div>
-          <span id="badge-monthly-status" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30 shrink-0">
-            Confortable
-          </span>
-        </div>
-
-        <!-- Grande barre de progression Mois -->
-        <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2.5">
           <div class="flex items-baseline justify-between">
             <div>
-              <span id="val-monthly-rem" class="text-2xl font-extrabold font-mono-num text-white">--%</span>
-              <span class="text-xs text-slate-400 font-medium ml-1">disponible sur 30j</span>
+              <span id="gem-5h-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
+              <span class="text-xs text-slate-400 ml-1">disponible</span>
             </div>
-            <div class="text-right">
-              <span id="val-monthly-used" class="text-sm font-bold font-mono-num text-slate-300">--%</span>
-              <span class="text-xs text-slate-500 ml-1">utilisé</span>
-            </div>
+            <span id="gem-5h-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
           </div>
-
-          <div class="w-full h-3 rounded-full bg-white/10 overflow-hidden p-0.5">
-            <div id="bar-monthly" class="bar-fill h-full rounded-full bg-gradient-to-r from-sky-400 via-indigo-400 to-violet-500" style="width: 0%"></div>
-          </div>
-
-          <div class="flex items-center justify-between text-xs pt-0.5">
-            <div class="flex items-center gap-1.5 text-slate-300">
-              <span>Cycles hebdo utilisés : <strong id="val-monthly-cycles" class="font-mono-num text-sky-300">-- / 4.29</strong></span>
-            </div>
-            <span id="val-monthly-active-days" class="text-[11px] text-slate-400 font-mono-num">-- jours actifs</span>
+          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
+            <div id="gem-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-400 to-sky-400" style="width: 100%"></div>
           </div>
         </div>
 
-        <!-- Métriques Mois -->
-        <div class="grid grid-cols-3 gap-2">
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Prompts (30j)</div>
-            <div id="metric-monthly-prompts" class="text-base font-extrabold font-mono-num text-white mt-0.5">--</div>
-            <div id="metric-monthly-sessions" class="text-[10px] text-slate-500 mt-0.5">-- sessions</div>
+        <!-- Semaine Gemini -->
+        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-300">📅 Semaine (7 jours)</span>
+            <span id="gem-wk-reset" class="text-[11px] text-sky-300 font-semibold tabular-nums">Reset dans --</span>
           </div>
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Steps (30j)</div>
-            <div id="metric-monthly-steps" class="text-base font-extrabold font-mono-num text-white mt-0.5">--</div>
-            <div id="metric-monthly-cap" class="text-[10px] text-slate-500 mt-0.5">/ ~43 000 cap.</div>
+          <div class="flex items-baseline justify-between">
+            <div>
+              <span id="gem-wk-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
+              <span class="text-xs text-slate-400 ml-1">disponible</span>
+            </div>
+            <span id="gem-wk-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
           </div>
-          <div class="p-2.5 rounded-2xl bg-white/[0.025] border border-white/5">
-            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Tokens (30j)</div>
-            <div id="metric-monthly-tokens" class="text-base font-extrabold font-mono-num text-sky-300 mt-0.5">--</div>
-            <div id="metric-monthly-io" class="text-[10px] text-slate-500 mt-0.5">In + Out</div>
+          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
+            <div id="gem-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-sky-400 to-indigo-400" style="width: 100%"></div>
           </div>
-        </div>
-
-        <!-- Histogramme 14 derniers jours -->
-        <div class="pt-1">
-          <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2 px-0.5">
-            <span class="font-semibold">Historique quotidien (14 derniers jours)</span>
-            <span class="font-mono-num text-slate-500">Steps / jour</span>
-          </div>
-          <div id="chart-monthly-daily" class="grid grid-cols-14 gap-1 items-end h-24 pt-2 px-2 rounded-2xl bg-slate-950/40 border border-white/5" style="grid-template-columns: repeat(14, minmax(0, 1fr));"></div>
         </div>
       </section>
 
-      <!-- SECTION CLAUDE PRO : ABONNEMENT DIRECT ANTHROPIC (COMPTE APPLE) -->
-      <section id="card-claude" class="glass-card rounded-3xl p-4 space-y-3.5 border border-amber-400/20">
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-base">🟠</span>
-              <h2 class="text-sm font-extrabold text-white uppercase tracking-wide">Claude Pro — Quotas Directs</h2>
-            </div>
-            <p id="claude-card-subtitle" class="text-xs text-slate-400 mt-0.5">Abonnement Anthropic via Compte Apple (thomaslefevre18@live.fr)</p>
-          </div>
-          <span id="badge-claude-status" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shrink-0">
-            Actif • 100%
-          </span>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <!-- Fenêtre 5 Heures Claude Pro -->
-          <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-amber-300 uppercase tracking-wider">⏱️ Session 5 Heures</span>
-              <span id="claude-5h-status-pill" class="text-[10px] font-mono-num text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">Prêt (0% utilisé)</span>
-            </div>
-            <div class="flex items-baseline justify-between">
-              <div>
-                <span id="val-claude-5h-rem" class="text-2xl font-extrabold font-mono-num text-white">100%</span>
-                <span class="text-xs text-slate-400 ml-1">disponible</span>
-              </div>
-              <span id="val-claude-5h-used" class="text-xs font-mono-num text-slate-400">0% utilisé</span>
-            </div>
-            <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden p-0.5">
-              <div id="bar-claude-5h" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width: 100%"></div>
-            </div>
-            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
-              <span>Reset fenêtre 5h :</span>
-              <strong id="countdown-claude-5h" class="font-mono-num text-amber-300">Fenêtre au repos ✓</strong>
+      <!-- 3. CARTE CLAUDE (CLAUDE PRO + POOL 3P) -->
+      <section class="card rounded-2xl p-4 border-amber-400/20 space-y-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-base">🟠</span>
+            <div>
+              <h2 class="text-sm font-extrabold text-white">Claude Pro &amp; Opus</h2>
+              <p class="text-[11px] text-slate-400">Anthropic Direct + Pool Antigravity</p>
             </div>
           </div>
-
-          <!-- Fenêtre Semaine (7 Jours) Claude Pro -->
-          <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/5 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-orange-300 uppercase tracking-wider">📅 Semaine (7 Jours)</span>
-              <span id="claude-wk-reset-date" class="text-[10px] font-mono-num text-slate-400">Reset jeu. 5 nov.</span>
-            </div>
-            <div class="flex items-baseline justify-between">
-              <div>
-                <span id="val-claude-wk-rem" class="text-2xl font-extrabold font-mono-num text-white">100%</span>
-                <span class="text-xs text-slate-400 ml-1">disponible</span>
-              </div>
-              <span id="val-claude-wk-used" class="text-xs font-mono-num text-slate-400">0% utilisé</span>
-            </div>
-            <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden p-0.5">
-              <div id="bar-claude-wk" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
-            </div>
-            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
-              <span>Reset hebdo dans :</span>
-              <strong id="countdown-claude-wk" class="font-mono-num text-orange-300">--j --h --m</strong>
-            </div>
+          <div class="text-right">
+            <div id="claude-cost-badge" class="text-sm font-extrabold text-emerald-300 tabular-nums">-- € (~-- $)</div>
+            <div id="claude-tokens-badge" class="text-xs font-bold text-slate-300 tabular-nums">-- tokens</div>
           </div>
         </div>
 
-        <!-- Modèles inclus dans Claude Pro Direct -->
-        <div class="p-3 rounded-2xl bg-amber-500/[0.05] border border-amber-400/15 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <div class="flex items-center gap-2 text-slate-300">
-            <span>✨ <strong>Modèles Claude Code Direct :</strong> Opus 5.5, Sonnet 5.5, Fable 5.1 & Haiku 5.5</span>
+        <!-- 5h Claude Pro -->
+        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-300">⏱️ Session 5 heures (Claude Pro)</span>
+            <span id="claude-5h-reset" class="text-[11px] text-amber-300 font-semibold tabular-nums">Reset dans --</span>
           </div>
-          <span class="font-mono-num text-[11px] text-amber-300 font-semibold">Ultrathink & Ultracode inclus</span>
-        </div>
-      </section>
-
-      <!-- SECTION 4 : QUOTAS CLAUDE & GPT (PARTAGÉS 3P) + DÉTAIL PAR MODÈLE -->
-      <section id="card-models" class="glass-card rounded-3xl p-4 space-y-3.5">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-base">🤖</span>
-              <h2 class="text-sm font-extrabold text-white uppercase tracking-wide">Quotas par Famille & Modèles</h2>
+          <div class="flex items-baseline justify-between">
+            <div>
+              <span id="claude-5h-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
+              <span class="text-xs text-slate-400 ml-1">disponible</span>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5">Disponibilité temps réel par modèle dans votre abonnement</p>
+            <span id="claude-5h-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
+          </div>
+          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
+            <div id="claude-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width: 100%"></div>
           </div>
         </div>
 
-        <!-- Pool Claude & GPT (3P) -->
-        <div class="p-3.5 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/5 border border-violet-400/20 space-y-2.5">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-violet-400"></span>
-              <span class="text-xs font-bold text-white">Pool Claude Opus / Sonnet 5.5 & GPT-OSS</span>
-            </div>
-            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-violet-500/20 text-violet-300 border border-violet-400/30">
-              Quota Séparé
-            </span>
+        <!-- Semaine Claude Pro -->
+        <div class="p-3 rounded-xl bg-slate-950/65 border border-white/5 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-300">📅 Semaine 7 jours (Claude Pro)</span>
+            <span id="claude-wk-reset" class="text-[11px] text-amber-300 font-semibold tabular-nums">Reset dans --</span>
           </div>
-
-          <div class="grid grid-cols-2 gap-2.5 pt-1">
-            <div class="p-2.5 rounded-xl bg-slate-950/60 border border-white/5">
-              <div class="flex items-center justify-between text-[11px] text-slate-400">
-                <span>Fenêtre 5h</span>
-                <span id="tp-5h-timer" class="font-mono-num text-violet-300">--h --m</span>
-              </div>
-              <div id="tp-5h-val" class="text-lg font-extrabold font-mono-num text-emerald-400 mt-0.5">100% dispo</div>
+          <div class="flex items-baseline justify-between">
+            <div>
+              <span id="claude-wk-rem" class="text-xl font-extrabold text-white tabular-nums">--%</span>
+              <span class="text-xs text-slate-400 ml-1">disponible</span>
             </div>
-            <div class="p-2.5 rounded-xl bg-slate-950/60 border border-white/5">
-              <div class="flex items-center justify-between text-[11px] text-slate-400">
-                <span>Fenêtre Semaine</span>
-                <span id="tp-weekly-timer" class="font-mono-num text-violet-300">--j --h</span>
-              </div>
-              <div id="tp-weekly-val" class="text-lg font-extrabold font-mono-num text-emerald-400 mt-0.5">100% dispo</div>
-            </div>
+            <span id="claude-wk-used" class="text-xs text-slate-400 tabular-nums">--% utilisé</span>
+          </div>
+          <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
+            <div id="claude-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
           </div>
         </div>
 
-        <!-- Liste des modèles -->
-        <div id="models-list" class="space-y-2"></div>
+        <!-- Pool Claude & GPT partagé (Antigravity 3P) -->
+        <div class="p-3 rounded-xl bg-violet-500/[0.07] border border-violet-400/20 flex items-center justify-between text-xs">
+          <span class="text-slate-300 font-semibold">🟣 Pool Claude / GPT (Antigravity)</span>
+          <span id="tp-summary" class="font-extrabold text-violet-300 tabular-nums">5h --% • 7j --%</span>
+        </div>
       </section>
 
     </main>
-
-    <!-- FOOTER -->
-    <footer class="pt-6 pb-2 text-center text-[11px] text-slate-500 space-y-1">
-      <div>Abonnement <strong class="text-slate-300">Google AI Ultra</strong> • Télémétrie CloudCode & Antigravity</div>
-      <div>Glisser vers le bas pour actualiser en direct</div>
-    </footer>
-
   </div>
 
   <script>
-    const CACHE_KEY = 'gemini_ultra_live_quota_cache_v1';
+    const CACHE_KEY = 'gemini_ultra_live_quota_cache_v2';
     const LOCAL_API = 'http://127.0.0.1:8787/api/quota';
     const GITHUB_RAW_JSON = 'https://raw.githubusercontent.com/Mrthomaslef/allinone/main/gemini-ultra/quota-live.json';
 
     let currentData = null;
-    let activeFilter = 'all';
-    let lastSourceType = 'snapshot';
-    let guTokenPeriod = '30d';
-
-    function formatNumber(n) {
-      if (n === null || n === undefined || Number.isNaN(Number(n))) return '--';
-      return Number(n).toLocaleString('fr-FR');
-    }
 
     function formatTokens(t) {
       const val = Number(t) || 0;
@@ -776,191 +277,36 @@
       return String(val);
     }
 
-    function formatUsd(val) {
-      const n = Number(val) || 0;
-      if (n >= 100) return '~' + Math.round(n).toLocaleString('fr-FR') + ' $';
-      if (n >= 10) return '~' + n.toFixed(1).replace('.', ',') + ' $';
-      return '~' + n.toFixed(2).replace('.', ',') + ' $';
-    }
-
     function formatEur(val) {
       const n = Number(val) || 0;
-      if (n >= 100) return Math.round(n).toLocaleString('fr-FR') + ' €';
-      if (n >= 10) return n.toFixed(1).replace('.', ',') + ' €';
-      return n.toFixed(2).replace('.', ',') + ' €';
+      if (n >= 100) return '~' + Math.round(n).toLocaleString('fr-FR') + ' €';
+      if (n >= 10) return '~' + n.toFixed(1).replace('.', ',') + ' €';
+      return '~' + n.toFixed(2).replace('.', ',') + ' €';
     }
 
-    function setGuTokenPeriod(period) {
-      guTokenPeriod = period;
-      ['5h', 'today', '7d', '30d'].forEach(p => {
-        const btn = document.getElementById(`gu-tok-btn-${p}`);
-        if (!btn) return;
-        btn.className = p === period
-          ? 'px-2 py-1 rounded-lg transition bg-cyan-500/25 text-cyan-200 border border-cyan-400/30'
-          : 'px-2 py-1 rounded-lg transition text-slate-400 hover:text-white';
-      });
-      if (currentData) renderGuTokensAndCost(currentData);
+    function formatUsd(val) {
+      const n = Number(val) || 0;
+      if (n >= 100) return Math.round(n).toLocaleString('fr-FR') + ' $';
+      if (n >= 10) return n.toFixed(1).replace('.', ',') + ' $';
+      return n.toFixed(2).replace('.', ',') + ' $';
     }
 
-    function renderGuTokensAndCost(data) {
-      if (!data || !data.windows) return;
-      const ts = data.tokenSummary || {};
-      const w5 = data.windows.fiveHour || {};
-      const ww = data.windows.weekly || {};
-      const wm = data.windows.monthly || {};
-
-      const fallbackBucket = (act, inp, out, cache, usd, unc) => {
-        const a = Number(act) || 0;
-        const i = Number(inp) || Math.round(a * 0.90);
-        const o = Number(out) || Math.max(0, a - i);
-        const c = Number(cache) || Math.round(a * 15);
-        const u = usd !== undefined ? Number(usd) : ((i * 2.0 + o * 12.0 + c * 0.20) / 1e6);
-        const r = unc !== undefined ? Number(unc) : (((i + c) * 2.0 + o * 12.0) / 1e6);
-        return {
-          activeTokens: a,
-          inputTokens: i,
-          outputTokens: o,
-          cachedTokens: c,
-          totalTokensWithCache: a + c,
-          apiCostUsd: u,
-          apiCostEur: u * 0.92,
-          uncachedValueUsd: r
-        };
-      };
-
-      const todayDay = (ww.dailyBreakdown || wm.dailyBreakdown || []).slice(-1)[0] || {};
-      const buckets = {
-        '5h': { label: 'Session 5h', ...(ts.fiveHour || fallbackBucket(w5.tokensWindow || w5.tokensRolling, w5.inputTokensWindow, w5.outputTokensWindow, w5.cachedTokensWindow, w5.apiCostUsdWindow, w5.uncachedValueUsdWindow)) },
-        'today': { label: "Aujourd'hui", ...(ts.today || fallbackBucket(todayDay.tokens || w5.tokensRolling, null, null, todayDay.cachedTokens, todayDay.apiCostUsd, null)) },
-        '7d': { label: 'Semaine (7j)', ...(ts.sevenDays || fallbackBucket(ww.tokensRolling || ww.tokensWindow, ww.inputTokensRolling, ww.outputTokensRolling, ww.cachedTokensRolling, ww.apiCostUsdRolling, ww.uncachedValueUsdRolling)) },
-        '30d': { label: '30 Jours (Total)', ...(ts.thirtyDays || fallbackBucket(wm.tokensRolling30d || wm.tokensCount, wm.inputTokensCount, wm.outputTokensCount, wm.cachedTokensCount, wm.apiCostUsd30d, wm.uncachedValueUsd30d)) }
-      };
-
-      const cur = buckets[guTokenPeriod] || buckets['30d'];
-      const tagEl = document.getElementById('gu-tok-period-tag');
-      const mainTokEl = document.getElementById('gu-tok-main');
-      const ioSubEl = document.getElementById('gu-tok-io-sub');
-      const cacheTotEl = document.getElementById('gu-tok-cache-total');
-      const mainUsdEl = document.getElementById('gu-cost-main-usd');
-      const mainEurEl = document.getElementById('gu-cost-main-eur');
-      const splitEl = document.getElementById('gu-cost-model-split');
-      const uncEl = document.getElementById('gu-cost-uncached');
-
-      if (tagEl) tagEl.textContent = cur.label;
-      if (mainTokEl) mainTokEl.textContent = formatTokens(cur.activeTokens);
-      if (ioSubEl) ioSubEl.textContent = `In: ${formatTokens(cur.inputTokens)} • Out: ${formatTokens(cur.outputTokens)}`;
-      if (cacheTotEl) cacheTotEl.textContent = `${formatTokens(cur.totalTokensWithCache)} tok`;
-      if (mainUsdEl) mainUsdEl.textContent = formatUsd(cur.apiCostUsd);
-      if (mainEurEl) mainEurEl.textContent = `(~${formatEur(cur.apiCostEur ?? cur.apiCostUsd * 0.92)})`;
-      if (uncEl) uncEl.textContent = formatUsd(cur.uncachedValueUsd);
-
-      if (splitEl) {
-        if (ts.byModel && ts.byModel.length > 0) {
-          splitEl.textContent = '30j : ' + ts.byModel.map(m => `${m.id.includes('claude') ? 'Claude' : 'Gemini'} ${formatUsd(m.apiCostUsd)}`).join(' • ');
-        } else {
-          splitEl.textContent = 'Tarif API Google AI + Anthropic';
-        }
-      }
-
-      ['5h', 'today', '7d', '30d'].forEach(k => {
-        const b = buckets[k];
-        const tEl = document.getElementById(`gu-mini-tok-${k}`);
-        const cEl = document.getElementById(`gu-mini-cost-${k}`);
-        if (tEl && b) tEl.textContent = `${formatTokens(b.activeTokens)} tok`;
-        if (cEl && b) cEl.textContent = `${formatUsd(b.apiCostUsd)} (${formatEur(b.apiCostEur ?? b.apiCostUsd * 0.92)})`;
-      });
-    }
-
-    function formatCountdown(resetsAtIso, includeDays = false) {
-      if (!resetsAtIso) return '--';
+    function formatCountdown(resetsAtIso) {
+      if (!resetsAtIso) return '100% dispo ✓';
       const diffMs = Date.parse(resetsAtIso) - Date.now();
       if (Number.isNaN(diffMs) || diffMs <= 0) return 'Réinitialisé ✓';
       const totalSec = Math.floor(diffMs / 1000);
       const days = Math.floor(totalSec / 86400);
       const hours = Math.floor((totalSec % 86400) / 3600);
       const mins = Math.floor((totalSec % 3600) / 60);
-      const secs = totalSec % 60;
-
-      const pad = (v) => String(v).padStart(2, '0');
-      if (includeDays || days > 0) {
-        return `${days}j ${pad(hours)}h ${pad(mins)}m ${pad(secs)}s`;
-      }
-      return `${pad(hours)}h ${pad(mins)}m ${pad(secs)}s`;
-    }
-
-    function formatShortCountdown(resetsAtIso) {
-      if (!resetsAtIso) return '--';
-      const diffMs = Date.parse(resetsAtIso) - Date.now();
-      if (Number.isNaN(diffMs) || diffMs <= 0) return '100% ✓';
-      const totalSec = Math.floor(diffMs / 1000);
-      const days = Math.floor(totalSec / 86400);
-      const hours = Math.floor((totalSec % 86400) / 3600);
-      const mins = Math.floor((totalSec % 3600) / 60);
-      if (days > 0) return `${days}j ${hours}h ${mins}m`;
-      return `${hours}h ${mins}m`;
-    }
-
-    function formatResetClock(resetsAtIso, showWeekday = false) {
-      if (!resetsAtIso) return '';
-      const d = new Date(resetsAtIso);
-      if (Number.isNaN(d.getTime())) return '';
-      if (showWeekday) {
-        return d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-      }
-      return 'Reset à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-    }
-
-    function getStatusTheme(remainingPct) {
-      if (remainingPct >= 50) {
-        return {
-          stroke: '#10B981',
-          bar: 'from-emerald-400 to-cyan-400',
-          badgeText: 'Optimal',
-          badgeClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-        };
-      }
-      if (remainingPct >= 20) {
-        return {
-          stroke: '#38BDF8',
-          bar: 'from-sky-400 to-indigo-400',
-          badgeText: 'Modéré',
-          badgeClass: 'bg-sky-500/15 text-sky-300 border-sky-500/30'
-        };
-      }
-      if (remainingPct >= 10) {
-        return {
-          stroke: '#F59E0B',
-          bar: 'from-amber-400 to-orange-500',
-          badgeText: 'Attention',
-          badgeClass: 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-        };
-      }
-      return {
-        stroke: '#F43F5E',
-        bar: 'from-rose-500 to-amber-500',
-        badgeText: 'Critique (<10%)',
-        badgeClass: 'bg-rose-500/20 text-rose-300 border-rose-500/40'
-      };
-    }
-
-    function setRingProgress(elId, remainingPct, colorHex) {
-      const circle = document.getElementById(elId);
-      if (!circle) return;
-      const circumference = 201.06; // 2 * pi * 32
-      const clamped = Math.max(0, Math.min(100, remainingPct));
-      const offset = circumference - (clamped / 100) * circumference;
-      circle.style.strokeDashoffset = String(offset);
-      circle.style.stroke = colorHex;
+      if (days > 0) return `Reset dans ${days}j ${hours}h ${mins}m`;
+      return `Reset dans ${hours}h ${mins}m`;
     }
 
     function effectiveWindow(win) {
       if (!win) return { remainingPercent: 100, usedPercent: 0 };
       if (win.resetsAt && Date.now() >= Date.parse(win.resetsAt)) {
-        return {
-          ...win,
-          remainingPercent: 100,
-          usedPercent: 0
-        };
+        return { ...win, remainingPercent: 100, usedPercent: 0 };
       }
       return win;
     }
@@ -968,321 +314,88 @@
     function renderUI(data) {
       if (!data || !data.windows) return;
       currentData = data;
-      renderGuTokensAndCost(data);
 
-      const sub = data.subscription || {};
-      const isFullUltra = (sub.tierId || 'g1-ultra-tier') === 'g1-ultra-tier';
-      const planBadgeEl = document.getElementById('plan-tier-badge');
-      const subTitleEl = document.getElementById('sub-plan-title');
-      const subCodeEl = document.getElementById('sub-tier-code');
-      const subDescEl = document.getElementById('sub-plan-desc');
-      if (planBadgeEl) planBadgeEl.textContent = isFullUltra ? 'Google AI Ultra • Max' : (sub.planName || 'AI Ultra');
-      if (subTitleEl) subTitleEl.textContent = isFullUltra ? 'Google AI Ultra (Plan Max)' : (sub.planName || 'Google AI Ultra');
-      if (subCodeEl) subCodeEl.textContent = sub.tierId || 'g1-ultra-tier';
-      if (subDescEl) {
-        const upgStr = sub.upgradedAt ? formatResetClock(sub.upgradedAt, true) : '';
-        subDescEl.textContent = isFullUltra
-          ? `Forfait Google AI maximal actif${upgStr ? ' (cycle démarré ' + upgStr + ')' : ''} • Capacité maximale`
-          : (sub.tierDescription || 'Abonnement Google AI Ultra actif');
-      }
-
+      const ts = data.tokenSummary || {};
       const w5 = effectiveWindow(data.windows.fiveHour);
       const ww = effectiveWindow(data.windows.weekly);
-      const wm = data.windows.monthly || { remainingPercent: 100, usedPercent: 0 };
-      const tp5 = effectiveWindow(data.windows.thirdParty5h);
-      const tpw = effectiveWindow(data.windows.thirdPartyWeekly);
-
-      const t5 = getStatusTheme(w5.remainingPercent);
-      const tw = getStatusTheme(ww.remainingPercent);
-      const tm = getStatusTheme(wm.remainingPercent);
-
-      // Rings
-      setRingProgress('ring-5h', w5.remainingPercent, t5.stroke);
-      setRingProgress('ring-weekly', ww.remainingPercent, tw.stroke);
-      setRingProgress('ring-monthly', wm.remainingPercent, tm.stroke);
-
-      document.getElementById('ring-5h-val').textContent = `${w5.remainingPercent.toFixed(1)}%`;
-      document.getElementById('ring-weekly-val').textContent = `${ww.remainingPercent.toFixed(1)}%`;
-      document.getElementById('ring-monthly-val').textContent = `${wm.remainingPercent.toFixed(1)}%`;
-
-      document.getElementById('ring-monthly-sub').textContent = `${wm.weeklyCyclesUsed || 0} / ${wm.weeklyCyclesTotal || 4.3} cyc.`;
-
-      // Smart tip when Gemini weekly quota is < 20%
-      const smartTip = document.getElementById('smart-tip');
-      if (ww.remainingPercent < 20 && tpw.remainingPercent > 50) {
-        smartTip.classList.remove('hidden');
-        document.getElementById('smart-tip-text').textContent =
-          `Il vous reste ${ww.remainingPercent.toFixed(1)}% sur votre semaine Gemini (reset ${formatResetClock(ww.resetsAt, true)}), mais vos quotas Claude Opus 5.5, Sonnet 5.5 & GPT-OSS sont à ${tpw.remainingPercent.toFixed(0)}% disponibles !`;
-      } else {
-        smartTip.classList.add('hidden');
-      }
-
-      // Section 5h
-      const badge5h = document.getElementById('badge-5h-status');
-      badge5h.textContent = t5.badgeText;
-      badge5h.className = `px-2.5 py-1 rounded-xl text-[11px] font-bold border shrink-0 ${t5.badgeClass}`;
-
-      document.getElementById('val-5h-rem').textContent = `${w5.remainingPercent.toFixed(2)}%`;
-      document.getElementById('val-5h-used').textContent = `${w5.usedPercent.toFixed(2)}%`;
-      const bar5h = document.getElementById('bar-5h');
-      bar5h.style.width = `${Math.max(2, w5.remainingPercent)}%`;
-      bar5h.className = `bar-fill h-full rounded-full bg-gradient-to-r ${t5.bar}`;
-      document.getElementById('reset-clock-5h').textContent = formatResetClock(w5.resetsAt, false);
-
-      document.getElementById('metric-5h-prompts').textContent = formatNumber(w5.promptsWindow ?? w5.promptsRolling);
-      document.getElementById('metric-5h-sessions').textContent = `${w5.sessionsCount || 1} sessions actives`;
-      document.getElementById('metric-5h-steps').textContent = formatNumber(w5.stepsWindow ?? w5.stepsRolling);
-      document.getElementById('metric-5h-cap').textContent = `/ ~${formatNumber(w5.estimatedCapacitySteps || 7500)} cap.`;
-      document.getElementById('metric-5h-tokens').textContent = formatTokens(w5.tokensWindow || w5.tokensRolling);
-      document.getElementById('metric-5h-burn').textContent = w5.apiCostUsdWindow !== undefined
-        ? `${formatUsd(w5.apiCostUsdWindow)} (${formatEur(w5.apiCostEurWindow)})`
-        : `Rythme ${w5.burnRatePerHour || 0}% / h`;
-
-      // Chart 5h hourly
-      const hourly = w5.hourlyBreakdown || [];
-      const maxHourly = Math.max(10, ...hourly.map(h => h.steps || 0));
-      document.getElementById('chart-5h-hourly').innerHTML = hourly.map((h, idx) => {
-        const pct = Math.max(6, Math.round(((h.steps || 0) / maxHourly) * 100));
-        const isLast = idx === hourly.length - 1;
-        return `
-          <div class="flex flex-col items-center justify-end h-full gap-1">
-            <span class="text-[9px] font-mono-num ${isLast ? 'text-cyan-300 font-bold' : 'text-slate-500'}">${h.steps || 0}</span>
-            <div class="w-full rounded-t-md ${isLast ? 'bg-gradient-to-t from-cyan-500 to-emerald-400' : 'bg-white/15'}" style="height: ${pct}%"></div>
-            <span class="text-[10px] font-mono-num ${isLast ? 'text-white font-bold' : 'text-slate-400'}">${h.label}</span>
-          </div>
-        `;
-      }).join('');
-
-      // Section Semaine
-      const badgeWeekly = document.getElementById('badge-weekly-status');
-      badgeWeekly.textContent = tw.badgeText;
-      badgeWeekly.className = `px-2.5 py-1 rounded-xl text-[11px] font-bold border shrink-0 ${tw.badgeClass}`;
-
-      document.getElementById('val-weekly-rem').textContent = `${ww.remainingPercent.toFixed(2)}%`;
-      document.getElementById('val-weekly-used').textContent = `${ww.usedPercent.toFixed(2)}%`;
-      const barWeekly = document.getElementById('bar-weekly');
-      barWeekly.style.width = `${Math.max(2, ww.remainingPercent)}%`;
-      barWeekly.className = `bar-fill h-full rounded-full bg-gradient-to-r ${tw.bar}`;
-      document.getElementById('reset-clock-weekly').textContent = formatResetClock(ww.resetsAt, true);
-
-      const elapsedW = ww.elapsedPercent || 0;
-      document.getElementById('weekly-elapsed-val').textContent = `${elapsedW.toFixed(1)}%`;
-      document.getElementById('weekly-consumed-val').textContent = `${ww.usedPercent.toFixed(1)}%`;
-      document.getElementById('bar-weekly-elapsed').style.width = `${elapsedW}%`;
-      document.getElementById('bar-weekly-consumed').style.width = `${ww.usedPercent}%`;
-
-      const delta = ww.paceDeltaPercent || (ww.usedPercent - elapsedW);
-      const paceBadge = document.getElementById('weekly-pace-badge');
-      if (delta > 5) {
-        paceBadge.textContent = `+${delta.toFixed(1)}% vs linéaire`;
-        paceBadge.className = 'font-mono-num text-[11px] font-bold text-amber-300';
-      } else {
-        paceBadge.textContent = `${delta > 0 ? '+' : ''}${delta.toFixed(1)}% (Sous le budget)`;
-        paceBadge.className = 'font-mono-num text-[11px] font-bold text-emerald-300';
-      }
-      document.getElementById('weekly-daily-allowance').textContent = `${ww.dailyBudgetRemainingPercent || 0}% / jour`;
-
-      document.getElementById('metric-weekly-prompts').textContent = formatNumber(ww.promptsWindow ?? ww.promptsRolling);
-      document.getElementById('metric-weekly-sessions').textContent = `${ww.sessionsCount || 1} sessions`;
-      document.getElementById('metric-weekly-steps').textContent = formatNumber(ww.stepsWindow ?? ww.stepsRolling);
-      document.getElementById('metric-weekly-cap').textContent = `/ ~${formatNumber(ww.estimatedCapacitySteps || 25000)} cap.`;
-      document.getElementById('metric-weekly-tokens').textContent = formatTokens(ww.tokensRolling || ww.tokensWindow);
-      document.getElementById('metric-weekly-burn').textContent = ww.apiCostUsdRolling !== undefined
-        ? `${formatUsd(ww.apiCostUsdRolling)} (${formatEur(ww.apiCostEurRolling)})`
-        : `Moy. ${ww.burnRatePerDay || 0}% / jour`;
-
-      const weekDays = ww.dailyBreakdown || [];
-      const maxWeekDay = Math.max(10, ...weekDays.map(d => d.steps || 0));
-      document.getElementById('chart-weekly-daily').innerHTML = weekDays.map((d, idx) => {
-        const pct = Math.max(6, Math.round(((d.steps || 0) / maxWeekDay) * 100));
-        const isToday = idx === weekDays.length - 1;
-        return `
-          <div class="flex flex-col items-center justify-end h-full gap-1">
-            <span class="text-[9px] font-mono-num ${isToday ? 'text-amber-300 font-bold' : 'text-slate-500'}">${d.steps || 0}</span>
-            <div class="w-full rounded-t-md ${isToday ? 'bg-gradient-to-t from-amber-500 to-yellow-300' : 'bg-white/15'}" style="height: ${pct}%"></div>
-            <span class="text-[10px] ${isToday ? 'text-white font-bold' : 'text-slate-400'}">${d.shortLabel || ''}</span>
-          </div>
-        `;
-      }).join('');
-
-      // Section Mois (30j)
-      const badgeMonthly = document.getElementById('badge-monthly-status');
-      badgeMonthly.textContent = tm.badgeText;
-      badgeMonthly.className = `px-2.5 py-1 rounded-xl text-[11px] font-bold border shrink-0 ${tm.badgeClass}`;
-
-      document.getElementById('val-monthly-rem').textContent = `${wm.remainingPercent.toFixed(2)}%`;
-      document.getElementById('val-monthly-used').textContent = `${wm.usedPercent.toFixed(2)}%`;
-      document.getElementById('bar-monthly').style.width = `${Math.max(2, wm.remainingPercent)}%`;
-      document.getElementById('val-monthly-cycles').textContent = `${wm.weeklyCyclesUsed || 0} / ${wm.weeklyCyclesTotal || 4.29}`;
-      document.getElementById('val-monthly-active-days').textContent = `${wm.activeDays || 0} jours actifs / 30j`;
-
-      document.getElementById('metric-monthly-prompts').textContent = formatNumber(wm.promptsRolling30d ?? wm.promptsCount);
-      document.getElementById('metric-monthly-sessions').textContent = `${wm.sessionsCount || 0} conversations (30j)`;
-      document.getElementById('metric-monthly-steps').textContent = formatNumber(wm.stepsRolling30d ?? wm.stepsCount);
-      document.getElementById('metric-monthly-cap').textContent = `/ ~${formatNumber(wm.estimatedCapacitySteps || 107000)} cap.`;
-      document.getElementById('metric-monthly-tokens').textContent = formatTokens(wm.tokensRolling30d || wm.tokensCount);
-      document.getElementById('metric-monthly-io').textContent = wm.apiCostUsd30d !== undefined
-        ? `${formatUsd(wm.apiCostUsd30d)} (${formatEur(wm.apiCostEur30d)})`
-        : `30j: ${formatTokens(wm.tokensRolling30d || wm.tokensCount)}`;
-
-      const monthDays = wm.dailyBreakdown || [];
-      const maxMonthDay = Math.max(10, ...monthDays.map(d => d.steps || 0));
-      document.getElementById('chart-monthly-daily').innerHTML = monthDays.map((d, idx) => {
-        const pct = Math.max(5, Math.round(((d.steps || 0) / maxMonthDay) * 100));
-        const isToday = idx === monthDays.length - 1;
-        const dayNum = (d.date || '').split('-')[2] || '';
-        return `
-          <div class="flex flex-col items-center justify-end h-full gap-1" title="${d.label}: ${d.steps} steps (${d.prompts} prompts)">
-            <div class="w-full rounded-t-sm ${isToday ? 'bg-gradient-to-t from-sky-500 to-cyan-300' : (d.steps > 0 ? 'bg-indigo-400/40' : 'bg-white/5')}" style="height: ${pct}%"></div>
-            <span class="text-[8px] font-mono-num ${isToday ? 'text-sky-300 font-bold' : 'text-slate-500'}">${dayNum}</span>
-          </div>
-        `;
-      }).join('');
-
-      // Section Claude Pro Direct
-      const cSub = data.claudeSubscription || {};
+      const wm = data.windows.monthly || {};
       const c5 = effectiveWindow(data.windows.claudeFiveHour || { remainingPercent: 100, usedPercent: 0 });
       const cw = effectiveWindow(data.windows.claudeWeekly || { remainingPercent: 100, usedPercent: 0 });
-      const cMinRem = Math.min(c5.remainingPercent, cw.remainingPercent);
-      const tc = getStatusTheme(cMinRem);
+      const tp5 = effectiveWindow(data.windows.thirdParty5h || { remainingPercent: 100 });
+      const tpw = effectiveWindow(data.windows.thirdPartyWeekly || { remainingPercent: 100 });
 
-      const claudePlanTitle = document.getElementById('claude-plan-title');
-      const claudeStatusBadge = document.getElementById('claude-status-badge');
-      const claudePlanDesc = document.getElementById('claude-plan-desc');
-      if (claudePlanTitle) claudePlanTitle.textContent = `${cSub.planName || 'Claude Pro'} • Compte Apple`;
-      if (claudeStatusBadge) {
-        claudeStatusBadge.textContent = cSub.active !== false ? `Actif • ${(cSub.subscriptionType || 'Pro').toUpperCase()}` : 'Inactif';
-      }
-      if (claudePlanDesc) {
-        claudePlanDesc.textContent = `${cSub.email || 'thomaslefevre18@live.fr'} • 5h: ${c5.remainingPercent.toFixed(0)}% dispo • Semaine: ${cw.remainingPercent.toFixed(0)}% dispo`;
-      }
+      const byModel = ts.byModel || [];
+      const gemModel = ts.gemini || byModel.find(m => !m.id.includes('claude')) || {};
+      const claudeModel = ts.claude || byModel.find(m => m.id.includes('claude')) || {};
 
-      const heroC5 = document.getElementById('hero-claude-5h');
-      const heroCW = document.getElementById('hero-claude-wk');
-      if (heroC5) heroC5.textContent = `${c5.remainingPercent.toFixed(0)}%`;
-      if (heroCW) heroCW.textContent = `${cw.remainingPercent.toFixed(0)}%`;
+      const totTokens = ts.thirtyDays?.activeTokens || wm.tokensRolling30d || wm.tokensCount || 0;
+      const totCache = ts.thirtyDays?.totalTokensWithCache || wm.totalTokensWithCache30d || 0;
+      const totUsd = ts.thirtyDays?.apiCostUsd ?? wm.apiCostUsd30d ?? 0;
+      const totEur = ts.thirtyDays?.apiCostEur ?? wm.apiCostEur30d ?? (totUsd * 0.92);
 
-      const badgeClaude = document.getElementById('badge-claude-status');
-      if (badgeClaude) {
-        badgeClaude.textContent = `${tc.badgeText} • ${cMinRem.toFixed(0)}%`;
-        badgeClaude.className = `px-2.5 py-1 rounded-xl text-[11px] font-bold border shrink-0 ${tc.badgeClass}`;
-      }
+      document.getElementById('tot-tokens').textContent = `${formatTokens(totTokens)} tok`;
+      document.getElementById('tot-tokens-cache').textContent = `Avec cache : ${formatTokens(totCache)} tok`;
+      document.getElementById('tot-cost-eur').textContent = formatEur(totEur);
+      document.getElementById('tot-cost-usd').textContent = `Équivalent ~${formatUsd(totUsd)}`;
 
-      const valC5Rem = document.getElementById('val-claude-5h-rem');
-      const valC5Used = document.getElementById('val-claude-5h-used');
-      const barC5 = document.getElementById('bar-claude-5h');
-      const pillC5 = document.getElementById('claude-5h-status-pill');
-      if (valC5Rem) valC5Rem.textContent = `${c5.remainingPercent.toFixed(1)}%`;
-      if (valC5Used) valC5Used.textContent = `${c5.usedPercent.toFixed(1)}% consommé`;
-      if (barC5) barC5.style.width = `${Math.max(2, c5.remainingPercent)}%`;
-      if (pillC5) {
-        pillC5.textContent = c5.resetsAt ? `Session active (${c5.usedPercent.toFixed(0)}%)` : `Au repos (100% dispo)`;
-      }
+      // Périodes 5h / Aujourd'hui / 7j
+      const b5h = ts.fiveHour || { activeTokens: w5.tokensWindow || 0, apiCostEur: w5.apiCostEurWindow || 0 };
+      const bToday = ts.today || { activeTokens: w5.tokensRolling || 0, apiCostEur: w5.apiCostEurRolling || 0 };
+      const b7d = ts.sevenDays || { activeTokens: ww.tokensRolling || 0, apiCostEur: ww.apiCostEurRolling || 0 };
 
-      const valCWRem = document.getElementById('val-claude-wk-rem');
-      const valCWUsed = document.getElementById('val-claude-wk-used');
-      const barCW = document.getElementById('bar-claude-wk');
-      const wkResetDate = document.getElementById('claude-wk-reset-date');
-      if (valCWRem) valCWRem.textContent = `${cw.remainingPercent.toFixed(1)}%`;
-      if (valCWUsed) valCWUsed.textContent = `${cw.usedPercent.toFixed(1)}% consommé`;
-      if (barCW) barCW.style.width = `${Math.max(2, cw.remainingPercent)}%`;
-      if (wkResetDate) wkResetDate.textContent = cw.resetsAt ? `Reset ${formatResetClock(cw.resetsAt, true)}` : 'Quota 7j';
+      document.getElementById('period-5h').textContent = `${formatTokens(b5h.activeTokens)} • ${formatEur(b5h.apiCostEur)}`;
+      document.getElementById('period-today').textContent = `${formatTokens(bToday.activeTokens)} • ${formatEur(bToday.apiCostEur)}`;
+      document.getElementById('period-7d').textContent = `${formatTokens(b7d.activeTokens)} • ${formatEur(b7d.apiCostEur)}`;
 
-      // Pool 3P (Claude & GPT)
-      document.getElementById('tp-5h-val').textContent = `${tp5.remainingPercent.toFixed(0)}% dispo`;
-      document.getElementById('tp-weekly-val').textContent = `${tpw.remainingPercent.toFixed(0)}% dispo`;
+      // Gemini
+      const gemTok = gemModel.activeTokens ?? Math.round(totTokens * 0.96);
+      const gemUsd = gemModel.apiCostUsd ?? (totUsd * 0.91);
+      const gemEur = gemModel.apiCostEur ?? (gemUsd * 0.92);
+      document.getElementById('gem-cost-badge').textContent = `${formatEur(gemEur)} (${formatUsd(gemUsd)})`;
+      document.getElementById('gem-tokens-badge').textContent = `${formatTokens(gemTok)} tokens`;
 
-      // Liste des modèles
-      const models = data.models || [];
-      document.getElementById('models-list').innerHTML = models.map(m => {
-        const isClaudePro = m.family === 'claude-pro';
-        const is3p = m.family === '3p';
-        const rem = m.resetsAt && Date.now() >= Date.parse(m.resetsAt) ? 100 : m.remainingPercent;
-        const badgeColor = rem >= 50
-          ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30'
-          : rem >= 15
-            ? 'text-amber-300 bg-amber-500/15 border-amber-500/30'
-            : 'text-rose-300 bg-rose-500/15 border-rose-500/30';
+      document.getElementById('gem-5h-rem').textContent = `${w5.remainingPercent.toFixed(1)}%`;
+      document.getElementById('gem-5h-used').textContent = `${w5.usedPercent.toFixed(1)}% utilisé`;
+      document.getElementById('gem-5h-bar').style.width = `${Math.max(2, w5.remainingPercent)}%`;
 
-        return `
-          <div class="p-3 rounded-2xl bg-white/[0.025] border border-white/5 flex items-center justify-between gap-3">
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-white truncate">${m.label}</span>
-                <span class="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded ${isClaudePro ? 'bg-amber-500/20 text-amber-300 border border-amber-400/30' : (is3p ? 'bg-violet-500/20 text-violet-300' : 'bg-sky-500/20 text-sky-300')}">
-                  ${isClaudePro ? 'Claude Pro Direct' : (is3p ? 'Vertex 3P' : 'Gemini Ultra')}
-                </span>
-              </div>
-              <div class="text-[11px] text-slate-400 truncate mt-0.5">${m.description || ''}</div>
-            </div>
-            <div class="text-right shrink-0">
-              <span class="px-2.5 py-1 rounded-xl text-xs font-mono-num font-bold border ${badgeColor}">
-                ${rem.toFixed(1)}%
-              </span>
-            </div>
-          </div>
-        `;
-      }).join('');
+      document.getElementById('gem-wk-rem').textContent = `${ww.remainingPercent.toFixed(1)}%`;
+      document.getElementById('gem-wk-used').textContent = `${ww.usedPercent.toFixed(1)}% utilisé`;
+      document.getElementById('gem-wk-bar').style.width = `${Math.max(2, ww.remainingPercent)}%`;
 
-      updateLiveTimers();
+      // Claude
+      const claudeTok = claudeModel.activeTokens ?? Math.max(0, totTokens - gemTok);
+      const claudeUsd = claudeModel.apiCostUsd ?? Math.max(0, totUsd - gemUsd);
+      const claudeEur = claudeModel.apiCostEur ?? (claudeUsd * 0.92);
+      document.getElementById('claude-cost-badge').textContent = `${formatEur(claudeEur)} (${formatUsd(claudeUsd)})`;
+      document.getElementById('claude-tokens-badge').textContent = `${formatTokens(claudeTok)} tokens`;
+
+      document.getElementById('claude-5h-rem').textContent = `${c5.remainingPercent.toFixed(0)}%`;
+      document.getElementById('claude-5h-used').textContent = `${c5.usedPercent.toFixed(0)}% utilisé`;
+      document.getElementById('claude-5h-bar').style.width = `${Math.max(2, c5.remainingPercent)}%`;
+
+      document.getElementById('claude-wk-rem').textContent = `${cw.remainingPercent.toFixed(0)}%`;
+      document.getElementById('claude-wk-used').textContent = `${cw.usedPercent.toFixed(0)}% utilisé`;
+      document.getElementById('claude-wk-bar').style.width = `${Math.max(2, cw.remainingPercent)}%`;
+
+      document.getElementById('tp-summary').textContent = `5h ${tp5.remainingPercent.toFixed(0)}% • 7j ${tpw.remainingPercent.toFixed(0)}%`;
+
+      updateTimers();
     }
 
-    function updateLiveTimers() {
+    function updateTimers() {
       if (!currentData || !currentData.windows) return;
       const w5 = currentData.windows.fiveHour;
       const ww = currentData.windows.weekly;
-      const tp5 = currentData.windows.thirdParty5h;
-      const tpw = currentData.windows.thirdPartyWeekly;
-
-      if (w5) {
-        document.getElementById('countdown-5h').textContent = formatCountdown(w5.resetsAt, false);
-        document.getElementById('ring-5h-timer').textContent = formatShortCountdown(w5.resetsAt);
-      }
-      if (ww) {
-        document.getElementById('countdown-weekly').textContent = formatCountdown(ww.resetsAt, true);
-        document.getElementById('ring-weekly-timer').textContent = formatShortCountdown(ww.resetsAt);
-      }
-      if (tp5) {
-        document.getElementById('tp-5h-timer').textContent = formatShortCountdown(tp5.resetsAt);
-      }
-      if (tpw) {
-        document.getElementById('tp-weekly-timer').textContent = formatShortCountdown(tpw.resetsAt);
-      }
       const c5 = currentData.windows.claudeFiveHour;
       const cw = currentData.windows.claudeWeekly;
-      const c5El = document.getElementById('countdown-claude-5h');
-      const cwEl = document.getElementById('countdown-claude-wk');
-      if (c5El && c5) {
-        c5El.textContent = c5.resetsAt ? formatCountdown(c5.resetsAt, false) : 'Fenêtre 5h au repos ✓';
-      }
-      if (cwEl && cw) {
-        cwEl.textContent = cw.resetsAt ? formatCountdown(cw.resetsAt, true) : '100% disponible ✓';
-      }
 
-      if (currentData.checkedAt) {
-        const d = new Date(currentData.checkedAt);
-        const timeStr = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        document.getElementById('last-updated-pill').textContent = `Mis à jour ${timeStr}`;
-      }
+      if (w5) document.getElementById('gem-5h-reset').textContent = formatCountdown(w5.resetsAt);
+      if (ww) document.getElementById('gem-wk-reset').textContent = formatCountdown(ww.resetsAt);
+      if (c5) document.getElementById('claude-5h-reset').textContent = formatCountdown(c5.resetsAt);
+      if (cw) document.getElementById('claude-wk-reset').textContent = formatCountdown(cw.resetsAt);
     }
 
-    function setConnectionStatus(mode, detail) {
-      const dot = document.getElementById('conn-dot');
-      const label = document.getElementById('conn-label');
-      lastSourceType = mode;
-      if (mode === 'direct') {
-        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft shrink-0';
-        label.textContent = detail || 'Temps réel direct • API Google AI Ultra';
-      } else if (mode === 'tunnel') {
-        dot.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-pulse-soft shrink-0';
-        label.textContent = detail || 'Temps réel Mobile • Tunnel CloudCode actif';
-      } else {
-        dot.className = 'w-2 h-2 rounded-full bg-sky-400 shrink-0';
-        label.textContent = detail || 'Sync Cloud GitHub • Compte à rebours actif';
-      }
-    }
-
-    async function fetchWithTimeout(url, timeoutMs = 2800) {
+    async function fetchWithTimeout(url, timeoutMs = 2500) {
       const ctrl = new AbortController();
       const id = setTimeout(() => ctrl.abort(), timeoutMs);
       try {
@@ -1296,45 +409,41 @@
 
     async function fetchLiveQuota(manual = false) {
       const refreshIcon = document.getElementById('refresh-icon');
+      const connLabel = document.getElementById('conn-label');
       if (refreshIcon && manual) refreshIcon.classList.add('animate-spin');
 
       try {
-        // 1. Essai API locale directe sur le Mac (127.0.0.1:8787)
         try {
-          const localData = await fetchWithTimeout(`${LOCAL_API}?refresh=${manual ? 1 : 0}&t=${Date.now()}`, 2200);
+          const localData = await fetchWithTimeout(`${LOCAL_API}?refresh=${manual ? 1 : 0}&t=${Date.now()}`, 2000);
           if (localData && localData.windows) {
             localStorage.setItem(CACHE_KEY, JSON.stringify(localData));
             renderUI(localData);
-            setConnectionStatus('direct', 'Temps réel direct • API Google CloudCode');
+            connLabel.textContent = 'En direct • API locale Mac';
             return;
           }
         } catch (_) {}
 
-        // 2. Récupération du snapshot JSON (GitHub Raw + fichier local)
         let snapshot = null;
         const [rawRes, relRes] = await Promise.allSettled([
-          fetchWithTimeout(`${GITHUB_RAW_JSON}?t=${Date.now()}`, 3500),
-          fetchWithTimeout(`./quota-live.json?t=${Date.now()}`, 2500)
+          fetchWithTimeout(`${GITHUB_RAW_JSON}?t=${Date.now()}`, 3000),
+          fetchWithTimeout(`./quota-live.json?t=${Date.now()}`, 2200)
         ]);
 
-        if (rawRes.status === 'fulfilled' && rawRes.value?.windows) {
-          snapshot = rawRes.value;
-        }
+        if (rawRes.status === 'fulfilled' && rawRes.value?.windows) snapshot = rawRes.value;
         if (relRes.status === 'fulfilled' && relRes.value?.windows) {
           if (!snapshot || Date.parse(relRes.value.checkedAt) >= Date.parse(snapshot.checkedAt)) {
             snapshot = relRes.value;
           }
         }
 
-        // 3. Si le snapshot contient un tunnel Cloudflare actif, on interroge le Mac en direct depuis la 4G/5G !
         const tunnelUrl = snapshot?.tunnelUrl || currentData?.tunnelUrl;
         if (tunnelUrl) {
           try {
-            const tunnelData = await fetchWithTimeout(`${tunnelUrl.replace(/\/$/, '')}/api/quota?refresh=${manual ? 1 : 0}&t=${Date.now()}`, 3500);
+            const tunnelData = await fetchWithTimeout(`${tunnelUrl.replace(/\/$/, '')}/api/quota?refresh=${manual ? 1 : 0}&t=${Date.now()}`, 3000);
             if (tunnelData && tunnelData.windows) {
               localStorage.setItem(CACHE_KEY, JSON.stringify(tunnelData));
               renderUI(tunnelData);
-              setConnectionStatus('tunnel', 'Live 4G/5G • Tunnel temps réel actif');
+              connLabel.textContent = 'En direct • Tunnel Mobile 4G/5G';
               return;
             }
           } catch (_) {}
@@ -1343,64 +452,23 @@
         if (snapshot && snapshot.windows) {
           localStorage.setItem(CACHE_KEY, JSON.stringify(snapshot));
           renderUI(snapshot);
-          setConnectionStatus('snapshot', 'Sync Cloud GitHub • Compte à rebours temps réel');
+          connLabel.textContent = 'Synchronisé via GitHub Cloud';
         }
-      } catch (_) {
       } finally {
         if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 350);
       }
     }
 
-    function setFilter(tabId) {
-      activeFilter = tabId;
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        const isActive = btn.dataset.tab === tabId;
-        btn.className = `tab-btn shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
-          isActive ? 'bg-white text-slate-950' : 'bg-white/5 text-slate-400 hover:text-white'
-        }`;
-      });
-
-      const sections = {
-        '5h': document.getElementById('card-5h'),
-        'weekly': document.getElementById('card-weekly'),
-        'monthly': document.getElementById('card-monthly'),
-        'claude': document.getElementById('card-claude'),
-        'models': document.getElementById('card-models')
-      };
-
-      Object.entries(sections).forEach(([key, el]) => {
-        if (!el) return;
-        if (tabId === 'all' || tabId === key) {
-          el.classList.remove('hidden');
-        } else {
-          el.classList.add('hidden');
-        }
-      });
-    }
-
-    // --- PULL-TO-REFRESH (Standard global @Mrthomaslef) ---
     function initPullToRefresh() {
       const ptrContainer = document.getElementById('ptr-container');
       const ptrSpinner = document.getElementById('ptr-spinner');
       const ptrLabel = document.getElementById('ptr-label');
-
       const THRESHOLD = 68;
       const MAX_PULL = 115;
       let startY = 0;
       let currentPull = 0;
       let isPulling = false;
       let isRefreshing = false;
-
-      const setArrowIcon = () => {
-        ptrSpinner.classList.remove('animate-spin');
-        ptrSpinner.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />`;
-      };
-
-      const setSpinIcon = () => {
-        ptrSpinner.style.transform = 'rotate(0deg)';
-        ptrSpinner.classList.add('animate-spin');
-        ptrSpinner.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />`;
-      };
 
       const onStart = (y) => {
         if (isRefreshing || window.scrollY > 2) return;
@@ -1420,50 +488,31 @@
           }
           return;
         }
-
         currentPull = Math.min(MAX_PULL, Math.pow(delta, 0.82) * 1.6);
-        if (currentPull > 6 && event && event.cancelable) {
-          event.preventDefault();
-        }
-
+        if (currentPull > 6 && event && event.cancelable) event.preventDefault();
         ptrContainer.classList.add('dragging');
         ptrContainer.style.height = `${currentPull}px`;
         ptrContainer.style.opacity = String(Math.min(1, currentPull / (THRESHOLD * 0.85)));
-
-        if (currentPull >= THRESHOLD) {
-          ptrSpinner.style.transform = 'rotate(180deg)';
-          ptrLabel.textContent = 'Relâcher pour actualiser';
-        } else {
-          ptrSpinner.style.transform = 'rotate(0deg)';
-          ptrLabel.textContent = 'Tirer pour actualiser';
-        }
+        ptrSpinner.style.transform = currentPull >= THRESHOLD ? 'rotate(180deg)' : 'rotate(0deg)';
+        ptrLabel.textContent = currentPull >= THRESHOLD ? 'Relâcher pour actualiser' : 'Tirer pour actualiser';
       };
 
       const onEnd = async () => {
         if (!isPulling || isRefreshing) return;
         isPulling = false;
         ptrContainer.classList.remove('dragging');
-
         if (currentPull >= THRESHOLD) {
           isRefreshing = true;
-          ptrContainer.style.height = '54px';
+          ptrContainer.style.height = '50px';
           ptrContainer.style.opacity = '1';
-          ptrLabel.textContent = 'Sonde Google AI Ultra...';
-          setSpinIcon();
-          if (navigator.vibrate) navigator.vibrate(12);
-
+          ptrLabel.textContent = 'Actualisation...';
           await fetchLiveQuota(true);
-
-          ptrLabel.textContent = 'Quotas à jour ✓';
-          ptrSpinner.classList.remove('animate-spin');
+          ptrLabel.textContent = 'À jour ✓';
           setTimeout(() => {
             ptrContainer.style.height = '0px';
             ptrContainer.style.opacity = '0';
-            setTimeout(() => {
-              setArrowIcon();
-              isRefreshing = false;
-            }, 250);
-          }, 450);
+            isRefreshing = false;
+          }, 400);
         } else {
           ptrContainer.style.height = '0px';
           ptrContainer.style.opacity = '0';
@@ -1471,52 +520,23 @@
         currentPull = 0;
       };
 
-      window.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) onStart(e.touches[0].clientY);
-      }, { passive: true });
-      window.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 1) onMove(e.touches[0].clientY, e);
-      }, { passive: false });
+      window.addEventListener('touchstart', (e) => { if (e.touches.length === 1) onStart(e.touches[0].clientY); }, { passive: true });
+      window.addEventListener('touchmove', (e) => { if (e.touches.length === 1) onMove(e.touches[0].clientY, e); }, { passive: false });
       window.addEventListener('touchend', onEnd, { passive: true });
       window.addEventListener('touchcancel', onEnd, { passive: true });
-
-      window.addEventListener('mousedown', (e) => {
-        if (e.button === 0 && !['INPUT', 'BUTTON', 'A'].includes(e.target.tagName)) {
-          onStart(e.clientY);
-        }
-      });
-      window.addEventListener('mousemove', (e) => {
-        if (isPulling) onMove(e.clientY, null);
-      });
-      window.addEventListener('mouseup', onEnd);
     }
 
-    // Initialisation rapide depuis le cache puis fetch live
     try {
       const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        renderUI(JSON.parse(cached));
-      }
+      if (cached) renderUI(JSON.parse(cached));
     } catch (_) {}
 
     initPullToRefresh();
     fetchLiveQuota(false);
-
-    // Tick chaque seconde pour les comptes à rebours en direct
-    setInterval(updateLiveTimers, 1000);
-
-    // Polling temps réel toutes les 25 secondes quand l'app est ouverte
+    setInterval(updateTimers, 1000);
     setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        fetchLiveQuota(false);
-      }
+      if (document.visibilityState === 'visible') fetchLiveQuota(false);
     }, 25000);
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        fetchLiveQuota(false);
-      }
-    });
   </script>
 </body>
 </html>

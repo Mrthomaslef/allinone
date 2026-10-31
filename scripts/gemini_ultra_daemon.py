@@ -496,6 +496,26 @@ def compute_local_telemetry(
         reverse=True,
     )
 
+    b_gemini = _new_token_bucket()
+    b_claude = _new_token_bucket()
+    for k_mod, v_mod in by_model_30d.items():
+        target_b = b_claude if "claude" in k_mod else b_gemini
+        for field in (
+            "prompts",
+            "steps",
+            "inputTokens",
+            "outputTokens",
+            "cachedTokens",
+            "activeTokens",
+            "totalTokensWithCache",
+            "apiCostUsd",
+            "uncachedValueUsd",
+        ):
+            target_b[field] += v_mod[field]
+
+    f_gemini = _finalize_bucket(b_gemini)
+    f_claude = _finalize_bucket(b_claude)
+
     return {
         "fiveHour": {
             "promptsWindow": f_5h_win["prompts"],
@@ -572,6 +592,8 @@ def compute_local_telemetry(
         "tokenSummary": {
             "currencyRateEurPerUsd": USD_TO_EUR,
             "pricingNote": "Estimation Pay-As-You-Go API officielle (Gemini 4 Argon/Pro: $2/M in, $12/M out, $0.20/M cache • Claude Opus 5.5: $5/M in, $25/M out, $0.50/M cache)",
+            "gemini": f_gemini,
+            "claude": f_claude,
             "fiveHour": {**f_5h_win, "sessionsCount": len(sessions_5h)},
             "today": {**f_today, "sessionsCount": len(sessions_today)},
             "sevenDays": {**f_7d_roll, "sessionsCount": len(sessions_7d)},

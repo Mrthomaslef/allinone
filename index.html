@@ -138,128 +138,60 @@
         </div>
       </div>
 
-      <!-- COMPTEUR TOKENS UTILISÉS & ESTIMATION PRIX API (HORS ABONNEMENT) + QUOTAS LIVE -->
-      <div class="mt-3.5 rounded-2xl p-3.5 bg-gradient-to-br from-sky-500/[0.10] via-indigo-500/[0.08] to-violet-500/[0.10] border border-sky-400/25 shadow-lg shadow-sky-950/30 space-y-3">
-
-        <!-- En-tête : Titre + Sélecteur de période (5h / Auj. / 7j / 30j) -->
-        <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div class="flex items-center gap-1.5 min-w-0">
-            <span id="gu-live-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
-            <span class="text-xs font-extrabold text-white tracking-tight truncate">Tokens &amp; Prix API Estimé</span>
-            <span class="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 shrink-0" title="Couvert par vos abonnements Google AI Ultra & Claude Pro">
-              Abo Actif • 0 € facturé
-            </span>
-          </div>
-
-          <div class="inline-flex items-center rounded-xl bg-slate-950/80 border border-white/10 p-0.5 text-[10px] font-bold shrink-0">
-            <button type="button" onclick="setTokenPeriod('5h')" id="tok-tab-5h" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">5h</button>
-            <button type="button" onclick="setTokenPeriod('today')" id="tok-tab-today" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">Auj.</button>
-            <button type="button" onclick="setTokenPeriod('7d')" id="tok-tab-7d" class="px-2 py-1 rounded-lg transition text-slate-400 hover:text-white">7j</button>
-            <button type="button" onclick="setTokenPeriod('30d')" id="tok-tab-30d" class="px-2 py-1 rounded-lg transition bg-cyan-500/25 text-cyan-200 border border-cyan-400/30">30j</button>
-          </div>
-        </div>
-
-        <!-- 2 Cartes Principales : Nombre de Tokens Utilisés & Estimation du Prix API -->
-        <div class="grid grid-cols-2 gap-2.5">
-          <!-- Nombre de Tokens Utilisés -->
-          <div class="p-3 rounded-xl bg-slate-950/75 border border-white/10">
-            <div class="flex items-center justify-between gap-1">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">🪙 Tokens utilisés</span>
-              <span id="top-tok-period-label" class="text-[9px] font-bold uppercase text-cyan-300">30 Jours</span>
-            </div>
-            <div class="flex items-baseline gap-1.5 mt-1">
-              <span id="top-tok-active" class="text-xl font-extrabold text-white tracking-tight tabular-nums">--</span>
-              <span class="text-[10px] font-semibold text-cyan-300">In + Out</span>
-            </div>
-            <div id="top-tok-io-detail" class="text-[10px] text-slate-400 truncate mt-0.5 tabular-nums">
-              In: -- • Out: --
-            </div>
-            <div class="mt-1.5 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-              <span class="text-slate-400">Avec Cache :</span>
-              <strong id="top-tok-with-cache" class="text-sky-300 font-bold tabular-nums">--</strong>
-            </div>
-          </div>
-
-          <!-- Estimation du Prix (Équivalent API Pay-As-You-Go) -->
-          <div class="p-3 rounded-xl bg-slate-950/75 border border-emerald-400/20">
-            <div class="flex items-center justify-between gap-1">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">💸 Prix API estimé</span>
-              <span class="text-[9px] font-bold uppercase text-emerald-300">Hors Abo</span>
-            </div>
-            <div class="flex items-baseline gap-1.5 mt-1 flex-wrap">
-              <span id="top-cost-usd" class="text-xl font-extrabold text-emerald-300 tracking-tight tabular-nums">-- $</span>
-              <span id="top-cost-eur" class="text-xs font-bold text-slate-300 tabular-nums">(~-- €)</span>
-            </div>
-            <div id="top-cost-models" class="text-[10px] text-slate-400 truncate mt-0.5 tabular-nums">
-              Gemini Ultra + Claude Opus
-            </div>
-            <div class="mt-1.5 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px]">
-              <span class="text-slate-400" title="Coût API si les tokens lus en cache étaient facturés au tarif Input plein">Brut sans cache :</span>
-              <strong id="top-cost-uncached" class="text-amber-300 font-bold tabular-nums">-- $</strong>
-            </div>
-          </div>
-        </div>
-
-        <!-- Synthèse rapide des 4 périodes en un coup d'œil -->
-        <div class="grid grid-cols-4 gap-1.5 text-center">
-          <button type="button" onclick="setTokenPeriod('5h')" class="p-1.5 rounded-xl bg-slate-950/55 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Session 5h</div>
-            <div id="mini-tok-5h" class="text-[11px] font-extrabold text-white mt-1 leading-none tabular-nums">--</div>
-            <div id="mini-cost-5h" class="text-[10px] font-bold text-emerald-300 mt-0.5 leading-none tabular-nums">-- $</div>
-          </button>
-          <button type="button" onclick="setTokenPeriod('today')" class="p-1.5 rounded-xl bg-slate-950/55 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Aujourd'hui</div>
-            <div id="mini-tok-today" class="text-[11px] font-extrabold text-white mt-1 leading-none tabular-nums">--</div>
-            <div id="mini-cost-today" class="text-[10px] font-bold text-emerald-300 mt-0.5 leading-none tabular-nums">-- $</div>
-          </button>
-          <button type="button" onclick="setTokenPeriod('7d')" class="p-1.5 rounded-xl bg-slate-950/55 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Semaine 7j</div>
-            <div id="mini-tok-7d" class="text-[11px] font-extrabold text-white mt-1 leading-none tabular-nums">--</div>
-            <div id="mini-cost-7d" class="text-[10px] font-bold text-emerald-300 mt-0.5 leading-none tabular-nums">-- $</div>
-          </button>
-          <button type="button" onclick="setTokenPeriod('30d')" class="p-1.5 rounded-xl bg-slate-950/55 hover:bg-slate-950/80 border border-white/5 transition">
-            <div class="text-[9px] uppercase text-slate-400 font-semibold leading-none">Mois 30j</div>
-            <div id="mini-tok-30d" class="text-[11px] font-extrabold text-white mt-1 leading-none tabular-nums">--</div>
-            <div id="mini-cost-30d" class="text-[10px] font-bold text-emerald-300 mt-0.5 leading-none tabular-nums">-- $</div>
-          </button>
-        </div>
-
-        <!-- Lien Quotas Temps Réel Gemini Ultra & Claude Pro -->
-        <a
-          href="./gemini-ultra/"
-          class="flex items-center justify-between gap-2 pt-2 border-t border-white/10 hover:opacity-95 transition active:scale-[0.99]"
-        >
+      <!-- CONSOMMATION GEMINI & CLAUDE (SIMPLE & ÉPURÉ) -->
+      <a
+        href="./gemini-ultra/"
+        class="mt-3.5 block rounded-2xl p-3 bg-white/[0.035] hover:bg-white/[0.055] border border-white/10 transition active:scale-[0.99] space-y-2.5"
+      >
+        <!-- Total Tokens + Estimation Prix (Hors Abonnement) -->
+        <div class="flex items-center justify-between gap-2 px-0.5">
           <div class="flex items-center gap-2 min-w-0">
-            <img
-              src="gemini-ultra/assets/icon.svg"
-              alt="Gemini Ultra"
-              class="w-7 h-7 rounded-lg object-cover border border-white/15 shrink-0"
-            />
-            <div class="min-w-0">
-              <div class="text-[11px] font-extrabold text-white truncate">Quotas Temps Réel • Gemini Ultra &amp; Claude Pro</div>
-              <div id="gu-widget-sub" class="text-[10px] text-slate-400 truncate">Détails complets 5h, Semaine, Mois &amp; tarifs par modèle</div>
-            </div>
+            <span id="gu-live-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+            <span class="text-xs font-semibold text-slate-300 truncate">Total : <strong id="top-total-tokens" class="font-extrabold text-white tabular-nums">-- tokens</strong></span>
           </div>
-
           <div class="flex items-center gap-1.5 shrink-0">
-            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-white/10 text-center">
-              <div class="text-[8px] uppercase text-slate-400 font-semibold leading-none">5h</div>
-              <div id="gu-pill-5h" class="text-[11px] font-extrabold text-emerald-300 mt-0.5 leading-none tabular-nums">--%</div>
-            </div>
-            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-white/10 text-center">
-              <div class="text-[8px] uppercase text-slate-400 font-semibold leading-none">Sem.</div>
-              <div id="gu-pill-week" class="text-[11px] font-extrabold text-amber-300 mt-0.5 leading-none tabular-nums">--%</div>
-            </div>
-            <div class="px-2 py-1 rounded-lg bg-slate-950/70 border border-amber-400/25 text-center">
-              <div class="text-[8px] uppercase text-amber-300 font-semibold leading-none">Claude</div>
-              <div id="gu-pill-claude" class="text-[11px] font-extrabold text-amber-300 mt-0.5 leading-none tabular-nums">100%</div>
-            </div>
-            <svg class="w-4 h-4 text-sky-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <span id="top-total-cost" class="px-2 py-0.5 rounded-lg bg-emerald-500/15 border border-emerald-400/25 text-xs font-extrabold text-emerald-300 tabular-nums">
+              ~-- € (-- $)
+            </span>
+            <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </div>
-        </a>
-      </div>
+        </div>
+
+        <!-- 2 Cartes simples côte à côte : GEMINI vs CLAUDE -->
+        <div class="grid grid-cols-2 gap-2">
+          <!-- Gemini -->
+          <div class="p-2.5 rounded-xl bg-slate-950/75 border border-sky-400/20 space-y-1.5">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-xs font-extrabold text-sky-300">✨ Gemini</span>
+              <span id="gem-cost" class="text-[11px] font-extrabold text-emerald-300 tabular-nums">~-- €</span>
+            </div>
+            <div class="flex items-baseline justify-between gap-1">
+              <span id="gem-tokens" class="text-sm font-extrabold text-white tabular-nums">-- tok</span>
+              <span id="gem-quotas" class="text-[10px] font-semibold text-slate-400 tabular-nums">5h --% • 7j --%</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div id="gem-bar" class="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400 transition-all duration-300" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <!-- Claude -->
+          <div class="p-2.5 rounded-xl bg-slate-950/75 border border-amber-400/20 space-y-1.5">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-xs font-extrabold text-amber-300">🟠 Claude</span>
+              <span id="claude-cost" class="text-[11px] font-extrabold text-emerald-300 tabular-nums">~-- €</span>
+            </div>
+            <div class="flex items-baseline justify-between gap-1">
+              <span id="claude-tokens" class="text-sm font-extrabold text-white tabular-nums">-- tok</span>
+              <span id="claude-quotas" class="text-[10px] font-semibold text-slate-400 tabular-nums">5h --% • 7j --%</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div id="claude-bar" class="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-400 transition-all duration-300" style="width: 100%"></div>
+            </div>
+          </div>
+        </div>
+      </a>
 
       <!-- RECHERCHE SIMPLE -->
       <div class="mt-3 relative">
@@ -746,9 +678,8 @@
       }
     }
 
-    const QUOTA_WIDGET_CACHE_KEY = 'allinone_live_quota_widget_v2';
+    const QUOTA_WIDGET_CACHE_KEY = 'allinone_live_quota_widget_v3';
     let lastQuotaData = null;
-    let activeTokenPeriod = '30d';
 
     function formatCompactTokens(n) {
       const val = Number(n) || 0;
@@ -761,164 +692,72 @@
 
     function formatUsd(val) {
       const n = Number(val) || 0;
-      if (n >= 100) return '~' + Math.round(n).toLocaleString('fr-FR') + ' $';
-      if (n >= 10) return '~' + n.toFixed(1).replace('.', ',') + ' $';
-      return '~' + n.toFixed(2).replace('.', ',') + ' $';
+      if (n >= 100) return Math.round(n).toLocaleString('fr-FR') + ' $';
+      if (n >= 10) return n.toFixed(1).replace('.', ',') + ' $';
+      return n.toFixed(2).replace('.', ',') + ' $';
     }
 
     function formatEur(val) {
       const n = Number(val) || 0;
-      if (n >= 100) return Math.round(n).toLocaleString('fr-FR') + ' €';
-      if (n >= 10) return n.toFixed(1).replace('.', ',') + ' €';
-      return n.toFixed(2).replace('.', ',') + ' €';
-    }
-
-    function extractTokenBuckets(data) {
-      const ts = data?.tokenSummary;
-      const w5 = data?.windows?.fiveHour || {};
-      const ww = data?.windows?.weekly || {};
-      const wm = data?.windows?.monthly || {};
-
-      const estimateBucket = (activeTok, inTok, outTok, cacheTok, apiUsd, uncUsd) => {
-        const act = Number(activeTok) || 0;
-        const inp = Number(inTok) || Math.round(act * 0.90);
-        const out = Number(outTok) || Math.max(0, act - inp);
-        const cache = Number(cacheTok) || Math.round(act * 15);
-        const costUsd = apiUsd !== undefined ? Number(apiUsd) : ((inp * 2.0 + out * 12.0 + cache * 0.20) / 1e6);
-        const rawUsd = uncUsd !== undefined ? Number(uncUsd) : (((inp + cache) * 2.0 + out * 12.0) / 1e6);
-        return {
-          activeTokens: act,
-          inputTokens: inp,
-          outputTokens: out,
-          cachedTokens: cache,
-          totalTokensWithCache: act + cache,
-          apiCostUsd: costUsd,
-          apiCostEur: costUsd * 0.92,
-          uncachedValueUsd: rawUsd
-        };
-      };
-
-      const b5h = ts?.fiveHour || estimateBucket(
-        w5.tokensWindow || w5.tokensRolling,
-        w5.inputTokensWindow,
-        w5.outputTokensWindow,
-        w5.cachedTokensWindow,
-        w5.apiCostUsdWindow,
-        w5.uncachedValueUsdWindow
-      );
-
-      const todayDay = (ww.dailyBreakdown || wm.dailyBreakdown || []).slice(-1)[0] || {};
-      const bToday = ts?.today || estimateBucket(
-        todayDay.tokens || w5.tokensRolling,
-        null,
-        null,
-        todayDay.cachedTokens,
-        todayDay.apiCostUsd,
-        null
-      );
-
-      const b7d = ts?.sevenDays || estimateBucket(
-        ww.tokensRolling || ww.tokensWindow,
-        ww.inputTokensRolling || ww.inputTokensWindow,
-        ww.outputTokensRolling || ww.outputTokensWindow,
-        ww.cachedTokensRolling || ww.cachedTokensWindow,
-        ww.apiCostUsdRolling || ww.apiCostUsdWindow,
-        ww.uncachedValueUsdRolling || ww.uncachedValueUsdWindow
-      );
-
-      const b30d = ts?.thirtyDays || estimateBucket(
-        wm.tokensRolling30d || wm.tokensCount,
-        wm.inputTokensCount,
-        wm.outputTokensCount,
-        wm.cachedTokensCount,
-        wm.apiCostUsd30d,
-        wm.uncachedValueUsd30d
-      );
-
-      return {
-        '5h': { label: 'Session 5h', ...b5h },
-        'today': { label: "Aujourd'hui", ...bToday },
-        '7d': { label: 'Semaine (7j)', ...b7d },
-        '30d': { label: '30 Jours (Total)', ...b30d },
-        byModel: ts?.byModel || []
-      };
-    }
-
-    function setTokenPeriod(period) {
-      activeTokenPeriod = period;
-      ['5h', 'today', '7d', '30d'].forEach(p => {
-        const btn = document.getElementById(`tok-tab-${p}`);
-        if (!btn) return;
-        if (p === period) {
-          btn.className = 'px-2 py-1 rounded-lg transition bg-cyan-500/25 text-cyan-200 border border-cyan-400/30';
-        } else {
-          btn.className = 'px-2 py-1 rounded-lg transition text-slate-400 hover:text-white';
-        }
-      });
-      if (lastQuotaData) renderTopQuotaAndTokens(lastQuotaData);
+      if (n >= 100) return '~' + Math.round(n).toLocaleString('fr-FR') + ' €';
+      if (n >= 10) return '~' + n.toFixed(1).replace('.', ',') + ' €';
+      return '~' + n.toFixed(2).replace('.', ',') + ' €';
     }
 
     function renderTopQuotaAndTokens(data) {
       if (!data || !data.windows) return;
       lastQuotaData = data;
 
-      const p5 = document.getElementById('gu-pill-5h');
-      const pw = document.getElementById('gu-pill-week');
-      const pc = document.getElementById('gu-pill-claude');
-      const sub = document.getElementById('gu-widget-sub');
+      const ts = data.tokenSummary || {};
+      const w5 = data.windows.fiveHour || {};
+      const ww = data.windows.weekly || {};
+      const wm = data.windows.monthly || {};
+      const c5 = data.windows.claudeFiveHour || { remainingPercent: 100 };
+      const cw = data.windows.claudeWeekly || { remainingPercent: 100 };
 
-      const w5 = data.windows.fiveHour;
-      const ww = data.windows.weekly;
-      const cw = data.windows.claudeWeekly;
-      const c5 = data.windows.claudeFiveHour;
-      const cRem = (c5 && cw) ? Math.min(c5.remainingPercent, cw.remainingPercent) : 100;
+      const byModel = ts.byModel || [];
+      const gemModel = ts.gemini || byModel.find(m => !m.id.includes('claude')) || {};
+      const claudeModel = ts.claude || byModel.find(m => m.id.includes('claude')) || {};
 
-      if (w5 && p5) p5.textContent = `${Math.round(w5.remainingPercent)}%`;
-      if (ww && pw) pw.textContent = `${ww.remainingPercent < 10 ? ww.remainingPercent.toFixed(1) : Math.round(ww.remainingPercent)}%`;
-      if (pc) pc.textContent = `${Math.round(cRem)}%`;
-      if (sub && w5 && ww) {
-        sub.textContent = `Gemini: ${w5.remainingPercent.toFixed(0)}% (5h) • ${ww.remainingPercent.toFixed(0)}% (Sem.) | Claude Pro: ${cRem.toFixed(0)}%`;
-      }
+      const totTokens = ts.thirtyDays?.activeTokens || wm.tokensRolling30d || wm.tokensCount || 0;
+      const totUsd = ts.thirtyDays?.apiCostUsd ?? wm.apiCostUsd30d ?? ((totTokens * 6.0) / 1e6);
+      const totEur = ts.thirtyDays?.apiCostEur ?? wm.apiCostEur30d ?? (totUsd * 0.92);
 
-      const buckets = extractTokenBuckets(data);
-      const cur = buckets[activeTokenPeriod] || buckets['30d'];
+      const gemTok = gemModel.activeTokens ?? Math.round(totTokens * 0.96);
+      const gemUsd = gemModel.apiCostUsd ?? (totUsd * 0.91);
+      const gemEur = gemModel.apiCostEur ?? (gemUsd * 0.92);
 
-      const periodLabelEl = document.getElementById('top-tok-period-label');
-      const tokActiveEl = document.getElementById('top-tok-active');
-      const tokIoEl = document.getElementById('top-tok-io-detail');
-      const tokCacheEl = document.getElementById('top-tok-with-cache');
-      const costUsdEl = document.getElementById('top-cost-usd');
-      const costEurEl = document.getElementById('top-cost-eur');
-      const costModelsEl = document.getElementById('top-cost-models');
-      const costUncachedEl = document.getElementById('top-cost-uncached');
+      const claudeTok = claudeModel.activeTokens ?? Math.max(0, totTokens - gemTok);
+      const claudeUsd = claudeModel.apiCostUsd ?? Math.max(0, totUsd - gemUsd);
+      const claudeEur = claudeModel.apiCostEur ?? (claudeUsd * 0.92);
 
-      if (periodLabelEl) periodLabelEl.textContent = cur.label;
-      if (tokActiveEl) tokActiveEl.textContent = formatCompactTokens(cur.activeTokens);
-      if (tokIoEl) tokIoEl.textContent = `In: ${formatCompactTokens(cur.inputTokens)} • Out: ${formatCompactTokens(cur.outputTokens)}`;
-      if (tokCacheEl) tokCacheEl.textContent = `${formatCompactTokens(cur.totalTokensWithCache)} tok`;
-      if (costUsdEl) costUsdEl.textContent = formatUsd(cur.apiCostUsd);
-      if (costEurEl) costEurEl.textContent = `(~${formatEur(cur.apiCostEur ?? cur.apiCostUsd * 0.92)})`;
-      if (costUncachedEl) costUncachedEl.textContent = formatUsd(cur.uncachedValueUsd);
+      const g5Rem = Math.round(w5.remainingPercent ?? 100);
+      const gwRem = Math.round(ww.remainingPercent ?? 100);
+      const c5Rem = Math.round(c5.remainingPercent ?? 100);
+      const cwRem = Math.round(cw.remainingPercent ?? 100);
 
-      if (costModelsEl) {
-        if (buckets.byModel && buckets.byModel.length > 0) {
-          const parts = buckets.byModel.map(m => {
-            const shortName = m.id.includes('claude') ? 'Claude' : 'Gemini';
-            return `${shortName}: ${formatUsd(m.apiCostUsd)}`;
-          });
-          costModelsEl.textContent = `30j : ${parts.join(' • ')}`;
-        } else {
-          costModelsEl.textContent = 'Tarif API Google AI + Anthropic';
-        }
-      }
+      const totTokEl = document.getElementById('top-total-tokens');
+      const totCostEl = document.getElementById('top-total-cost');
+      if (totTokEl) totTokEl.textContent = `${formatCompactTokens(totTokens)} tokens`;
+      if (totCostEl) totCostEl.textContent = `${formatEur(totEur)} (${formatUsd(totUsd)})`;
 
-      ['5h', 'today', '7d', '30d'].forEach(k => {
-        const b = buckets[k];
-        const tEl = document.getElementById(`mini-tok-${k}`);
-        const cEl = document.getElementById(`mini-cost-${k}`);
-        if (tEl && b) tEl.textContent = `${formatCompactTokens(b.activeTokens)} tok`;
-        if (cEl && b) cEl.textContent = `${formatUsd(b.apiCostUsd)} (${formatEur(b.apiCostEur ?? b.apiCostUsd * 0.92)})`;
-      });
+      const gemCostEl = document.getElementById('gem-cost');
+      const gemTokEl = document.getElementById('gem-tokens');
+      const gemQuotasEl = document.getElementById('gem-quotas');
+      const gemBarEl = document.getElementById('gem-bar');
+      if (gemCostEl) gemCostEl.textContent = `${formatEur(gemEur)} (${formatUsd(gemUsd)})`;
+      if (gemTokEl) gemTokEl.textContent = `${formatCompactTokens(gemTok)} tok`;
+      if (gemQuotasEl) gemQuotasEl.textContent = `5h ${g5Rem}% • 7j ${gwRem}%`;
+      if (gemBarEl) gemBarEl.style.width = `${Math.max(4, Math.min(g5Rem, gwRem))}%`;
+
+      const claudeCostEl = document.getElementById('claude-cost');
+      const claudeTokEl = document.getElementById('claude-tokens');
+      const claudeQuotasEl = document.getElementById('claude-quotas');
+      const claudeBarEl = document.getElementById('claude-bar');
+      if (claudeCostEl) claudeCostEl.textContent = `${formatEur(claudeEur)} (${formatUsd(claudeUsd)})`;
+      if (claudeTokEl) claudeTokEl.textContent = `${formatCompactTokens(claudeTok)} tok`;
+      if (claudeQuotasEl) claudeQuotasEl.textContent = `5h ${c5Rem}% • 7j ${cwRem}%`;
+      if (claudeBarEl) claudeBarEl.style.width = `${Math.max(4, Math.min(c5Rem, cwRem))}%`;
     }
 
     async function fetchJsonWithTimeout(url, timeoutMs = 2200) {
