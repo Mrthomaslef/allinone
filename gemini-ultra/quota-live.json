@@ -1,7 +1,7 @@
 {
-  "checkedAt": "2026-10-31T15:15:08Z",
+  "checkedAt": "2026-10-31T15:16:18Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
-  "tunnelUrl": "https://merry-singles-which-ist.trycloudflare.com",
+  "tunnelUrl": "https://contractors-nissan-ran-distributed.trycloudflare.com",
   "subscription": {
     "planName": "Google AI Ultra",
     "tierId": "g1-ultra-tier",
@@ -20,90 +20,240 @@
     "upgradedAt": "2026-10-31T13:57:53.092542Z",
     "harness": "Anthropic Claude Code • Compte Apple"
   },
+  "tokenSummary": {
+    "currencyRateEurPerUsd": 0.92,
+    "pricingNote": "Estimation Pay-As-You-Go API officielle (Gemini 4 Argon/Pro: $2/M in, $12/M out, $0.20/M cache • Claude Opus 5.5: $5/M in, $25/M out, $0.50/M cache)",
+    "fiveHour": {
+      "prompts": 59,
+      "steps": 1944,
+      "inputTokens": 5161137,
+      "outputTokens": 545489,
+      "cachedTokens": 106345016,
+      "activeTokens": 5706626,
+      "totalTokensWithCache": 112051642,
+      "apiCostUsd": 49.86,
+      "uncachedValueUsd": 294.2,
+      "apiCostEur": 45.87,
+      "uncachedValueEur": 270.66,
+      "sessionsCount": 23
+    },
+    "today": {
+      "prompts": 208,
+      "steps": 7877,
+      "inputTokens": 23972147,
+      "outputTokens": 2578618,
+      "cachedTokens": 466152718,
+      "activeTokens": 26550765,
+      "totalTokensWithCache": 492703483,
+      "apiCostUsd": 199.41,
+      "uncachedValueUsd": 1163.32,
+      "apiCostEur": 183.46,
+      "uncachedValueEur": 1070.25,
+      "sessionsCount": 45
+    },
+    "sevenDays": {
+      "prompts": 529,
+      "steps": 16414,
+      "inputTokens": 53762515,
+      "outputTokens": 6265345,
+      "cachedTokens": 957834391,
+      "activeTokens": 60027860,
+      "totalTokensWithCache": 1017862251,
+      "apiCostUsd": 401.57,
+      "uncachedValueUsd": 2250.5,
+      "apiCostEur": 369.44,
+      "uncachedValueEur": 2070.46,
+      "sessionsCount": 64
+    },
+    "thirtyDays": {
+      "prompts": 719,
+      "steps": 20499,
+      "inputTokens": 71497846,
+      "outputTokens": 7730096,
+      "cachedTokens": 1195013709,
+      "activeTokens": 79227942,
+      "totalTokensWithCache": 1274241651,
+      "apiCostUsd": 502.05,
+      "uncachedValueUsd": 2777.91,
+      "apiCostEur": 461.89,
+      "uncachedValueEur": 2555.68,
+      "sessionsCount": 68,
+      "activeDays": 14
+    },
+    "allTime": {
+      "prompts": 719,
+      "steps": 20499,
+      "inputTokens": 71497846,
+      "outputTokens": 7730096,
+      "cachedTokens": 1195013709,
+      "activeTokens": 79227942,
+      "totalTokensWithCache": 1274241651,
+      "apiCostUsd": 502.05,
+      "uncachedValueUsd": 2777.91,
+      "apiCostEur": 461.89,
+      "uncachedValueEur": 2555.68
+    },
+    "byModel": [
+      {
+        "id": "gemini-pro",
+        "label": "Gemini 4 Argon / Pro",
+        "prompts": 0,
+        "steps": 8894,
+        "inputTokens": 69164926,
+        "outputTokens": 7249571,
+        "cachedTokens": 1148721332,
+        "activeTokens": 76414497,
+        "totalTokensWithCache": 1225135829,
+        "apiCostUsd": 455.07,
+        "uncachedValueUsd": 2522.77,
+        "apiCostEur": 418.66,
+        "uncachedValueEur": 2320.95
+      },
+      {
+        "id": "claude-opus",
+        "label": "Claude Opus 5.5",
+        "prompts": 0,
+        "steps": 454,
+        "inputTokens": 2332920,
+        "outputTokens": 480525,
+        "cachedTokens": 46292377,
+        "activeTokens": 2813445,
+        "totalTokensWithCache": 49105822,
+        "apiCostUsd": 46.98,
+        "uncachedValueUsd": 255.14,
+        "apiCostEur": 43.22,
+        "uncachedValueEur": 234.73
+      }
+    ]
+  },
   "windows": {
     "fiveHour": {
       "id": "gemini-5h",
-      "remainingFraction": 0.89287233,
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingFraction": 0.8912881,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z",
       "startedAt": "2026-10-31T13:13:42Z",
       "durationMins": 300,
-      "remainingSeconds": 10713,
-      "elapsedPercent": 40.48,
-      "paceDeltaPercent": -29.77,
-      "burnRatePerHour": 5.29,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 2 hours, 58 minutes.",
-      "promptsWindow": 53,
-      "stepsWindow": 1912,
-      "tokensWindow": 5446610,
-      "promptsRolling": 71,
-      "stepsRolling": 2837,
-      "tokensRolling": 8914261,
-      "sessionsCount": 20,
-      "estimatedCapacitySteps": 17852,
+      "remainingSeconds": 10643,
+      "elapsedPercent": 40.87,
+      "paceDeltaPercent": -30.0,
+      "burnRatePerHour": 5.32,
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 2 hours, 57 minutes.",
+      "promptsWindow": 59,
+      "stepsWindow": 1944,
+      "tokensWindow": 5706626,
+      "inputTokensWindow": 5161137,
+      "outputTokensWindow": 545489,
+      "cachedTokensWindow": 106345016,
+      "totalTokensWithCacheWindow": 112051642,
+      "apiCostUsdWindow": 49.86,
+      "apiCostEurWindow": 45.87,
+      "uncachedValueUsdWindow": 294.2,
+      "promptsRolling": 77,
+      "stepsRolling": 2865,
+      "tokensRolling": 9168396,
+      "cachedTokensRolling": 166141159,
+      "totalTokensWithCacheRolling": 175309555,
+      "apiCostUsdRolling": 74.85,
+      "apiCostEurRolling": 68.86,
+      "uncachedValueUsdRolling": 440.19,
+      "sessionsCount": 23,
+      "estimatedCapacitySteps": 17884,
       "hourlyBreakdown": [
         {
           "label": "11h",
-          "steps": 132,
+          "steps": 128,
           "prompts": 4,
-          "tokens": 610809
+          "tokens": 604928,
+          "cachedTokens": 7174109,
+          "totalTokensWithCache": 7779037,
+          "apiCostUsd": 6.68
         },
         {
           "label": "12h",
           "steps": 754,
           "prompts": 11,
-          "tokens": 2524773
+          "tokens": 2524773,
+          "cachedTokens": 51963462,
+          "totalTokensWithCache": 54488235,
+          "apiCostUsd": 17.3
         },
         {
           "label": "13h",
           "steps": 6,
           "prompts": 1,
-          "tokens": 68925
+          "tokens": 68925,
+          "cachedTokens": 116324,
+          "totalTokensWithCache": 185249,
+          "apiCostUsd": 0.17
         },
         {
           "label": "14h",
           "steps": 835,
           "prompts": 24,
-          "tokens": 2193009
+          "tokens": 2193009,
+          "cachedTokens": 48978696,
+          "totalTokensWithCache": 51171705,
+          "apiCostUsd": 21.21
         },
         {
           "label": "15h",
-          "steps": 902,
-          "prompts": 25,
-          "tokens": 2562468
+          "steps": 918,
+          "prompts": 26,
+          "tokens": 2688623,
+          "cachedTokens": 42748992,
+          "totalTokensWithCache": 45437615,
+          "apiCostUsd": 18.42
         },
         {
           "label": "16h",
-          "steps": 208,
-          "prompts": 6,
-          "tokens": 954277
+          "steps": 224,
+          "prompts": 11,
+          "tokens": 1088138,
+          "cachedTokens": 15159576,
+          "totalTokensWithCache": 16247714,
+          "apiCostUsd": 11.12
         }
       ]
     },
     "weekly": {
       "id": "gemini-weekly",
-      "remainingFraction": 0.9329135,
-      "remainingPercent": 93.29,
-      "usedPercent": 6.71,
+      "remainingFraction": 0.93251747,
+      "remainingPercent": 93.25,
+      "usedPercent": 6.75,
       "resetsAt": "2026-11-07T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 10080,
-      "remainingSeconds": 579513,
-      "elapsedPercent": 4.18,
-      "paceDeltaPercent": 2.53,
+      "remainingSeconds": 579443,
+      "elapsedPercent": 4.19,
+      "paceDeltaPercent": 2.56,
       "burnRatePerHour": 0.96,
       "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 16 hours.",
-      "dailyBudgetRemainingPercent": 13.91,
+      "dailyBudgetRemainingPercent": 13.9,
       "burnRatePerDay": 23.0,
-      "promptsWindow": 102,
-      "stepsWindow": 4024,
-      "tokensWindow": 13320541,
-      "promptsRolling": 523,
-      "stepsRolling": 16382,
-      "tokensRolling": 59767844,
-      "sessionsCount": 61,
-      "estimatedCapacitySteps": 59970,
+      "promptsWindow": 108,
+      "stepsWindow": 4056,
+      "tokensWindow": 13580557,
+      "inputTokensWindow": 12392276,
+      "outputTokensWindow": 1188281,
+      "cachedTokensWindow": 232912661,
+      "totalTokensWithCacheWindow": 246493218,
+      "apiCostUsdWindow": 112.92,
+      "apiCostEurWindow": 103.89,
+      "uncachedValueUsdWindow": 656.99,
+      "promptsRolling": 529,
+      "stepsRolling": 16414,
+      "tokensRolling": 60027860,
+      "inputTokensRolling": 53762515,
+      "outputTokensRolling": 6265345,
+      "cachedTokensRolling": 957834391,
+      "totalTokensWithCacheRolling": 1017862251,
+      "apiCostUsdRolling": 401.57,
+      "apiCostEurRolling": 369.44,
+      "uncachedValueUsdRolling": 2250.5,
+      "sessionsCount": 64,
+      "estimatedCapacitySteps": 60089,
       "dailyBreakdown": [
         {
           "date": "2026-10-25",
@@ -111,7 +261,10 @@
           "shortLabel": "Dim",
           "steps": 1657,
           "prompts": 51,
-          "tokens": 5470419
+          "tokens": 5470419,
+          "cachedTokens": 97823746,
+          "totalTokensWithCache": 103294165,
+          "apiCostUsd": 35.39
         },
         {
           "date": "2026-10-26",
@@ -119,7 +272,10 @@
           "shortLabel": "Lun",
           "steps": 791,
           "prompts": 32,
-          "tokens": 3100095
+          "tokens": 3100095,
+          "cachedTokens": 43263853,
+          "totalTokensWithCache": 46363948,
+          "apiCostUsd": 16.29
         },
         {
           "date": "2026-10-27",
@@ -127,7 +283,10 @@
           "shortLabel": "Mar",
           "steps": 1353,
           "prompts": 58,
-          "tokens": 3864657
+          "tokens": 3864657,
+          "cachedTokens": 75314345,
+          "totalTokensWithCache": 79179002,
+          "apiCostUsd": 29.34
         },
         {
           "date": "2026-10-28",
@@ -135,7 +294,10 @@
           "shortLabel": "Mer",
           "steps": 1191,
           "prompts": 60,
-          "tokens": 5880734
+          "tokens": 5880734,
+          "cachedTokens": 75047990,
+          "totalTokensWithCache": 80928724,
+          "apiCostUsd": 33.46
         },
         {
           "date": "2026-10-29",
@@ -143,7 +305,10 @@
           "shortLabel": "Jeu",
           "steps": 2563,
           "prompts": 83,
-          "tokens": 10823650
+          "tokens": 10823650,
+          "cachedTokens": 148261690,
+          "totalTokensWithCache": 159085340,
+          "apiCostUsd": 65.35
         },
         {
           "date": "2026-10-30",
@@ -151,15 +316,21 @@
           "shortLabel": "Ven",
           "steps": 417,
           "prompts": 20,
-          "tokens": 2017061
+          "tokens": 2017061,
+          "cachedTokens": 12454346,
+          "totalTokensWithCache": 14471407,
+          "apiCostUsd": 7.84
         },
         {
           "date": "2026-10-31",
           "label": "Sam 31/10",
           "shortLabel": "Sam",
-          "steps": 7845,
-          "prompts": 202,
-          "tokens": 26290749
+          "steps": 7877,
+          "prompts": 208,
+          "tokens": 26550765,
+          "cachedTokens": 466152718,
+          "totalTokensWithCache": 492703483,
+          "apiCostUsd": 199.7
         }
       ]
     },
@@ -168,22 +339,27 @@
       "durationMins": 43200,
       "resetsAt": "2026-11-30T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
-      "remainingSeconds": 2566713,
+      "remainingSeconds": 2566643,
       "elapsedPercent": 0.98,
       "usedPercent": 1.57,
       "remainingPercent": 98.43,
-      "promptsCount": 102,
-      "stepsCount": 4024,
-      "tokensCount": 13320541,
-      "promptsRolling30d": 713,
-      "stepsRolling30d": 20467,
-      "tokensRolling30d": 78967926,
-      "inputTokensCount": 71276756,
-      "outputTokensCount": 7691170,
-      "cachedTokensCount": 1193184345,
-      "sessionsCount": 65,
+      "promptsCount": 108,
+      "stepsCount": 4056,
+      "tokensCount": 13580557,
+      "promptsRolling30d": 719,
+      "stepsRolling30d": 20499,
+      "tokensRolling30d": 79227942,
+      "inputTokensCount": 71497846,
+      "outputTokensCount": 7730096,
+      "cachedTokensCount": 1195013709,
+      "totalTokensWithCache30d": 1274241651,
+      "apiCostUsd30d": 502.05,
+      "apiCostEur30d": 461.89,
+      "uncachedValueUsd30d": 2777.91,
+      "uncachedValueEur30d": 2555.68,
+      "sessionsCount": 68,
       "activeDays": 14,
-      "estimatedCapacitySteps": 257014,
+      "estimatedCapacitySteps": 257524,
       "weeklyCyclesUsed": 0.07,
       "weeklyCyclesTotal": 4.29,
       "dailyBreakdown": [
@@ -193,7 +369,10 @@
           "shortLabel": "Dim",
           "steps": 171,
           "prompts": 6,
-          "tokens": 1851251
+          "tokens": 1851251,
+          "cachedTokens": 7526149,
+          "totalTokensWithCache": 9377400,
+          "apiCostUsd": 7.0
         },
         {
           "date": "2026-10-19",
@@ -201,7 +380,10 @@
           "shortLabel": "Lun",
           "steps": 649,
           "prompts": 42,
-          "tokens": 3779484
+          "tokens": 3779484,
+          "cachedTokens": 34384242,
+          "totalTokensWithCache": 38163726,
+          "apiCostUsd": 16.37
         },
         {
           "date": "2026-10-20",
@@ -209,7 +391,10 @@
           "shortLabel": "Mar",
           "steps": 790,
           "prompts": 45,
-          "tokens": 3425336
+          "tokens": 3425336,
+          "cachedTokens": 44860993,
+          "totalTokensWithCache": 48286329,
+          "apiCostUsd": 19.49
         },
         {
           "date": "2026-10-21",
@@ -217,7 +402,10 @@
           "shortLabel": "Mer",
           "steps": 1389,
           "prompts": 48,
-          "tokens": 4011253
+          "tokens": 4011253,
+          "cachedTokens": 85044656,
+          "totalTokensWithCache": 89055909,
+          "apiCostUsd": 29.42
         },
         {
           "date": "2026-10-22",
@@ -225,7 +413,10 @@
           "shortLabel": "Jeu",
           "steps": 253,
           "prompts": 10,
-          "tokens": 2525420
+          "tokens": 2525420,
+          "cachedTokens": 13352493,
+          "totalTokensWithCache": 15877913,
+          "apiCostUsd": 8.65
         },
         {
           "date": "2026-10-23",
@@ -233,7 +424,10 @@
           "shortLabel": "Ven",
           "steps": 571,
           "prompts": 27,
-          "tokens": 1664170
+          "tokens": 1664170,
+          "cachedTokens": 32680468,
+          "totalTokensWithCache": 34344638,
+          "apiCostUsd": 11.21
         },
         {
           "date": "2026-10-24",
@@ -241,7 +435,10 @@
           "shortLabel": "Sam",
           "steps": 827,
           "prompts": 29,
-          "tokens": 4263647
+          "tokens": 4263647,
+          "cachedTokens": 58846020,
+          "totalTokensWithCache": 63109667,
+          "apiCostUsd": 22.6
         },
         {
           "date": "2026-10-25",
@@ -249,7 +446,10 @@
           "shortLabel": "Dim",
           "steps": 1657,
           "prompts": 51,
-          "tokens": 5470419
+          "tokens": 5470419,
+          "cachedTokens": 97823746,
+          "totalTokensWithCache": 103294165,
+          "apiCostUsd": 35.39
         },
         {
           "date": "2026-10-26",
@@ -257,7 +457,10 @@
           "shortLabel": "Lun",
           "steps": 791,
           "prompts": 32,
-          "tokens": 3100095
+          "tokens": 3100095,
+          "cachedTokens": 43263853,
+          "totalTokensWithCache": 46363948,
+          "apiCostUsd": 16.29
         },
         {
           "date": "2026-10-27",
@@ -265,7 +468,10 @@
           "shortLabel": "Mar",
           "steps": 1353,
           "prompts": 58,
-          "tokens": 3864657
+          "tokens": 3864657,
+          "cachedTokens": 75314345,
+          "totalTokensWithCache": 79179002,
+          "apiCostUsd": 29.34
         },
         {
           "date": "2026-10-28",
@@ -273,7 +479,10 @@
           "shortLabel": "Mer",
           "steps": 1191,
           "prompts": 60,
-          "tokens": 5880734
+          "tokens": 5880734,
+          "cachedTokens": 75047990,
+          "totalTokensWithCache": 80928724,
+          "apiCostUsd": 33.46
         },
         {
           "date": "2026-10-29",
@@ -281,7 +490,10 @@
           "shortLabel": "Jeu",
           "steps": 2563,
           "prompts": 83,
-          "tokens": 10823650
+          "tokens": 10823650,
+          "cachedTokens": 148261690,
+          "totalTokensWithCache": 159085340,
+          "apiCostUsd": 65.35
         },
         {
           "date": "2026-10-30",
@@ -289,15 +501,21 @@
           "shortLabel": "Ven",
           "steps": 417,
           "prompts": 20,
-          "tokens": 2017061
+          "tokens": 2017061,
+          "cachedTokens": 12454346,
+          "totalTokensWithCache": 14471407,
+          "apiCostUsd": 7.84
         },
         {
           "date": "2026-10-31",
           "label": "Sam 31/10",
           "shortLabel": "Sam",
-          "steps": 7845,
-          "prompts": 202,
-          "tokens": 26290749
+          "steps": 7877,
+          "prompts": 208,
+          "tokens": 26550765,
+          "cachedTokens": 466152718,
+          "totalTokensWithCache": 492703483,
+          "apiCostUsd": 199.7
         }
       ]
     },
@@ -309,11 +527,11 @@
       "resetsAt": "2026-10-31T19:57:07Z",
       "startedAt": "2026-10-31T14:57:07Z",
       "durationMins": 300,
-      "remainingSeconds": 16918,
-      "elapsedPercent": 6.01,
-      "paceDeltaPercent": 17.97,
-      "burnRatePerHour": 79.86,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 4 hours, 41 minutes."
+      "remainingSeconds": 16848,
+      "elapsedPercent": 6.4,
+      "paceDeltaPercent": 17.58,
+      "burnRatePerHour": 74.99,
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 4 hours, 40 minutes."
     },
     "thirdPartyWeekly": {
       "id": "3p-weekly",
@@ -323,19 +541,19 @@
       "resetsAt": "2026-11-07T09:10:41Z",
       "startedAt": "2026-10-31T09:10:41Z",
       "durationMins": 10080,
-      "remainingSeconds": 582932,
-      "elapsedPercent": 3.62,
-      "paceDeltaPercent": 53.41,
-      "burnRatePerHour": 9.39,
+      "remainingSeconds": 582862,
+      "elapsedPercent": 3.63,
+      "paceDeltaPercent": 53.4,
+      "burnRatePerHour": 9.36,
       "description": "You have used some of your weekly limit, it will fully refresh in 6 days, 17 hours."
     },
     "claudeFiveHour": {
       "id": "claude-5h",
       "durationMins": 300,
-      "usedPercent": 10.0,
-      "remainingPercent": 90.0,
+      "usedPercent": 11.0,
+      "remainingPercent": 89.0,
       "resetsAt": "2026-10-31T19:40:00Z",
-      "remainingSeconds": 15891,
+      "remainingSeconds": 15821,
       "status": "active"
     },
     "claudeWeekly": {
@@ -344,7 +562,7 @@
       "usedPercent": 1.0,
       "remainingPercent": 99.0,
       "resetsAt": "2026-11-05T01:00:00Z",
-      "remainingSeconds": 380691
+      "remainingSeconds": 380621
     }
   },
   "models": [
@@ -353,8 +571,8 @@
       "label": "Claude Opus 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
-      "remainingPercent": 90.0,
-      "usedPercent": 10.0,
+      "remainingPercent": 89.0,
+      "usedPercent": 11.0,
       "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
@@ -362,8 +580,8 @@
       "label": "Claude Sonnet 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Raisonnement rapide & efficace",
-      "remainingPercent": 90.0,
-      "usedPercent": 10.0,
+      "remainingPercent": 89.0,
+      "usedPercent": 11.0,
       "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
@@ -371,8 +589,8 @@
       "label": "Claude Fable 5.1",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Défis complexes & Ultracode",
-      "remainingPercent": 90.0,
-      "usedPercent": 10.0,
+      "remainingPercent": 89.0,
+      "usedPercent": 11.0,
       "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
@@ -380,8 +598,8 @@
       "label": "Claude Haiku 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Réponses instantanées",
-      "remainingPercent": 90.0,
-      "usedPercent": 10.0,
+      "remainingPercent": 89.0,
+      "usedPercent": 11.0,
       "resetsAt": "2026-10-31T19:40:00Z"
     },
     {
@@ -407,8 +625,8 @@
       "label": "Gemini 2.5 Pro",
       "family": "gemini",
       "description": "Contexte long 1M tokens",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
@@ -416,8 +634,8 @@
       "label": "Gemini 3 Flash",
       "family": "gemini",
       "description": "Génération ultra-rapide",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
@@ -425,8 +643,8 @@
       "label": "Gemini 3.1 Flash Image",
       "family": "gemini",
       "description": "Génération & édition d'images",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
@@ -434,8 +652,8 @@
       "label": "Gemini 3.8 Flash (High)",
       "family": "gemini",
       "description": "Flash haute précision",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
@@ -443,8 +661,8 @@
       "label": "Gemini 3.8 Flash (Medium)",
       "family": "gemini",
       "description": "Flash standard",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
@@ -452,8 +670,8 @@
       "label": "Gemini 4 Argon (High)",
       "family": "gemini",
       "description": "Modèle principal Agent & Raisonnement",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
@@ -461,8 +679,8 @@
       "label": "Gemini 4 Argon (Low)",
       "family": "gemini",
       "description": "Réponses rapides",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
@@ -470,8 +688,8 @@
       "label": "Gemini 4 Argon (Medium)",
       "family": "gemini",
       "description": "Raisonnement équilibré",
-      "remainingPercent": 89.29,
-      "usedPercent": 10.71,
+      "remainingPercent": 89.13,
+      "usedPercent": 10.87,
       "resetsAt": "2026-10-31T18:13:42Z"
     },
     {
