@@ -12,11 +12,11 @@
   },
   {
     "id": "quiz-pokemon",
-    "title": "Quiz Pokemon",
+    "title": "PokéQuiz - Apprends le nom des Pokémon !",
     "subtitle": "PokéQuiz — Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
     "category": "games-family",
     "emoji": "🎮",
-    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
     "pushedAt": "2026-11-01T09:27:16Z"
