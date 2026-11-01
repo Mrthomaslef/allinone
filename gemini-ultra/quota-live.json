@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-01T21:12:12Z",
+  "checkedAt": "2026-11-01T21:13:15Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://viewer-sig-suits-comm.trycloudflare.com",
   "subscription": {
@@ -161,12 +161,12 @@
       "resetsAt": "2026-11-02T01:00:10Z",
       "startedAt": "2026-11-01T20:00:10Z",
       "durationMins": 300,
-      "remainingSeconds": 13677,
-      "elapsedPercent": 24.01,
-      "paceDeltaPercent": -19.63,
-      "burnRatePerHour": 3.65,
+      "remainingSeconds": 13614,
+      "elapsedPercent": 24.36,
+      "paceDeltaPercent": -19.98,
+      "burnRatePerHour": 3.6,
       "disabled": false,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 3 hours, 47 minutes.",
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 3 hours, 46 minutes.",
       "promptsWindow": 17,
       "stepsWindow": 601,
       "tokensWindow": 3134298,
@@ -177,25 +177,25 @@
       "apiCostUsdWindow": 24.44,
       "apiCostEurWindow": 22.48,
       "uncachedValueUsdWindow": 101.59,
-      "promptsRolling": 34,
-      "stepsRolling": 979,
-      "tokensRolling": 6168513,
-      "cachedTokensRolling": 52477717,
-      "totalTokensWithCacheRolling": 58646230,
-      "apiCostUsdRolling": 40.43,
-      "apiCostEurRolling": 37.2,
-      "uncachedValueUsdRolling": 172.95,
+      "promptsRolling": 33,
+      "stepsRolling": 971,
+      "tokensRolling": 6153204,
+      "cachedTokensRolling": 51563735,
+      "totalTokensWithCacheRolling": 57716939,
+      "apiCostUsdRolling": 40.19,
+      "apiCostEurRolling": 36.97,
+      "uncachedValueUsdRolling": 171.07,
       "sessionsCount": 16,
       "estimatedCapacitySteps": 13721,
       "hourlyBreakdown": [
         {
           "label": "17h",
-          "steps": 56,
-          "prompts": 2,
-          "tokens": 387662,
-          "cachedTokens": 3627561,
-          "totalTokensWithCache": 4015223,
-          "apiCostUsd": 2.04
+          "steps": 48,
+          "prompts": 1,
+          "tokens": 372353,
+          "cachedTokens": 2713579,
+          "totalTokensWithCache": 3085932,
+          "apiCostUsd": 1.81
         },
         {
           "label": "18h",
@@ -252,9 +252,9 @@
       "resetsAt": "2026-11-07T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 10080,
-      "remainingSeconds": 471689,
-      "elapsedPercent": 22.01,
-      "paceDeltaPercent": 0.19,
+      "remainingSeconds": 471626,
+      "elapsedPercent": 22.02,
+      "paceDeltaPercent": 0.18,
       "burnRatePerHour": 0.6,
       "disabled": false,
       "description": "You have used some of your weekly limit, it will fully refresh in 5 days, 11 hours.",
@@ -367,7 +367,7 @@
       "durationMins": 43200,
       "resetsAt": "2026-11-30T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
-      "remainingSeconds": 2458889,
+      "remainingSeconds": 2458826,
       "elapsedPercent": 5.14,
       "usedPercent": 5.18,
       "remainingPercent": 94.82,
@@ -552,8 +552,8 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-02T02:12:12Z",
-      "startedAt": "2026-11-01T21:12:12Z",
+      "resetsAt": "2026-11-02T02:13:15Z",
+      "startedAt": "2026-11-01T21:13:15Z",
       "durationMins": 300,
       "remainingSeconds": 17999,
       "elapsedPercent": 0.0,
@@ -570,10 +570,10 @@
       "resetsAt": "2026-11-07T09:10:41Z",
       "startedAt": "2026-10-31T09:10:41Z",
       "durationMins": 10080,
-      "remainingSeconds": 475108,
-      "elapsedPercent": 21.44,
-      "paceDeltaPercent": 78.56,
-      "burnRatePerHour": 2.78,
+      "remainingSeconds": 475045,
+      "elapsedPercent": 21.45,
+      "paceDeltaPercent": 78.55,
+      "burnRatePerHour": 2.77,
       "disabled": false,
       "description": "You have hit your weekly limit, it refreshes in 5 days, 11 hours. If on a supported paid plan, you can use AI credits in the interim or upgrade to a higher tier."
     },
@@ -582,17 +582,17 @@
       "durationMins": 300,
       "usedPercent": 72.0,
       "remainingPercent": 28.0,
-      "resetsAt": "2026-11-01T23:29:59Z",
-      "remainingSeconds": 8390,
+      "resetsAt": "2026-11-01T23:30:00Z",
+      "remainingSeconds": 8204,
       "status": "active"
     },
     "claudeWeekly": {
       "id": "claude-weekly",
       "durationMins": 10080,
-      "usedPercent": 7.0,
-      "remainingPercent": 93.0,
-      "resetsAt": "2026-11-05T00:59:59Z",
-      "remainingSeconds": 272990
+      "usedPercent": 8.0,
+      "remainingPercent": 92.0,
+      "resetsAt": "2026-11-05T01:00:00Z",
+      "remainingSeconds": 272804
     }
   },
   "models": [
@@ -603,7 +603,7 @@
       "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
       "remainingPercent": 28.0,
       "usedPercent": 72.0,
-      "resetsAt": "2026-11-01T23:29:59Z"
+      "resetsAt": "2026-11-01T23:30:00Z"
     },
     {
       "id": "claude-sonnet-5-5",
@@ -612,7 +612,7 @@
       "description": "Claude Pro Direct • Raisonnement rapide & efficace",
       "remainingPercent": 28.0,
       "usedPercent": 72.0,
-      "resetsAt": "2026-11-01T23:29:59Z"
+      "resetsAt": "2026-11-01T23:30:00Z"
     },
     {
       "id": "claude-fable-5-1",
@@ -621,7 +621,7 @@
       "description": "Claude Pro Direct • Défis complexes & Ultracode",
       "remainingPercent": 28.0,
       "usedPercent": 72.0,
-      "resetsAt": "2026-11-01T23:29:59Z"
+      "resetsAt": "2026-11-01T23:30:00Z"
     },
     {
       "id": "claude-haiku-5-5",
@@ -630,7 +630,7 @@
       "description": "Claude Pro Direct • Réponses instantanées",
       "remainingPercent": 28.0,
       "usedPercent": 72.0,
-      "resetsAt": "2026-11-01T23:29:59Z"
+      "resetsAt": "2026-11-01T23:30:00Z"
     },
     {
       "id": "claude-opus-5-5-high",
