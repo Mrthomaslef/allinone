@@ -218,7 +218,8 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'allinone_live_repos_cache_v6';
+    const CACHE_KEY = 'allinone_live_repos_cache_v8';
+    let lastManualSyncBust = '';
 
     const CATEGORIES = [
       { id: 'medical-imaging', name: 'Imagerie & Radiologie', emoji: '🩺' },
@@ -249,12 +250,33 @@
         logoUrl: 'gemini-ultra/assets/icon.svg',
         alwaysInclude: true
       },
+      'monopoly': {
+        title: "Pirate's Plunder — Monopoly 3D des Caraïbes",
+        subtitle: 'Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)',
+        category: 'games-family',
+        emoji: '🏴‍☠️',
+        logoUrl: 'assets/pirate-plunder-icon.png',
+        extraFallbacks: ['https://mrthomaslef.github.io/monopoly/assets/compass_emblem.jpg']
+      },
+      'quiz-pokemon': {
+        title: 'PokéQuiz — Apprends le nom des Pokémon !',
+        subtitle: 'Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)',
+        category: 'games-family',
+        emoji: '⚡',
+        logoUrl: 'https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png',
+        extraFallbacks: [
+          'https://mrthomaslef.github.io/quiz-pokemon/icon-192.png',
+          'https://mrthomaslef.github.io/quiz-pokemon/logo.png',
+          'https://mrthomaslef.github.io/quiz-pokemon/icon.svg'
+        ]
+      },
       'biblioosteo': {
         title: 'BiblioOstéo Cochin',
         subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
         category: 'medical-imaging',
         emoji: '🦴',
-        logoUrl: 'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg'
+        logoUrl: 'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/biblioosteo/assets/apple-touch-icon.png']
       },
       'agenda-cochin': {
         title: 'Cochin RI — Agenda',
@@ -344,12 +366,12 @@
       const text = `${repo.name} ${repo.description || ''} ${topics.join(' ')}`.toLowerCase();
 
       if (topics.includes('imagerie') || topics.includes('radiologie') || /(cochin|osteo|dicom|pacs|radio|tpack|imagerie|irm|scanner|rx|echographie|anatomie)/.test(text)) {
-        return { category: 'medical-imaging', emoji: '🩻' };
+        return { category: 'medical-imaging', emoji: '🩺' };
       }
       if (topics.includes('calculateur') || topics.includes('medical') || /(calc|score|medi|clinique|dose|formule|clairance)/.test(text)) {
         return { category: 'clinical-calc', emoji: '🧮' };
       }
-      if (topics.includes('jeu') || topics.includes('famille') || /(quiz|tcg|game|jeu|holidamn|family|vacances|carte|soirée|blindtest|poker)/.test(text)) {
+      if (topics.includes('jeu') || topics.includes('famille') || topics.includes('game') || /(quiz|tcg|game|jeu|holidamn|family|vacances|carte|soirée|soiree|blindtest|poker|monopoly|pirate|plunder|pokemon|poké|plateau|board|arcade|dice|puzzle|play|joueur|multijoueur|aventure|casino|ludo)/.test(text)) {
         return { category: 'games-family', emoji: '🎮' };
       }
       return { category: 'daily-tools', emoji: '🚀' };
@@ -359,6 +381,14 @@
       return name
         .replace(/[-_]+/g, ' ')
         .replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    function withLogoVersion(url, p) {
+      if (!url) return '';
+      const ver = lastManualSyncBust || (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '');
+      if (!ver) return url;
+      const clean = url.split('?')[0];
+      return `${clean}?v=${encodeURIComponent(ver)}`;
     }
 
     function handleLogoError(imgEl) {
@@ -373,6 +403,87 @@
         if (parent) {
           parent.innerHTML = `<span class="text-xl select-none">${emoji}</span>`;
         }
+      }
+    }
+
+    async function discoverLiveAppMeta(prodUrl) {
+      if (!prodUrl || !prodUrl.startsWith('http')) return null;
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 3200);
+      try {
+        const target = `${prodUrl}${prodUrl.includes('?') ? '&' : '?'}t=${Date.now()}`;
+        const res = await fetch(target, { cache: 'no-store', signal: ctrl.signal });
+        if (!res.ok) return null;
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const liveTitle = (doc.querySelector('title')?.textContent || '').replace(/\s+/g, ' ').trim() || null;
+
+        const appleIcons = [];
+        const pngIcons = [];
+        const svgIcons = [];
+        let manifestHref = null;
+
+        doc.querySelectorAll('link[rel]').forEach(link => {
+          const rel = (link.getAttribute('rel') || '').toLowerCase();
+          const href = link.getAttribute('href');
+          if (!href) return;
+          let resolved;
+          try {
+            resolved = new URL(href, prodUrl).href;
+          } catch (_) {
+            return;
+          }
+          if (rel.includes('apple-touch-icon')) {
+            appleIcons.push(resolved);
+          } else if (rel.includes('icon')) {
+            const clean = resolved.split('?')[0].toLowerCase();
+            if (clean.endsWith('.png') || clean.endsWith('.jpg') || clean.endsWith('.jpeg') || clean.endsWith('.webp')) {
+              pngIcons.push(resolved);
+            } else {
+              svgIcons.push(resolved);
+            }
+          } else if (rel === 'manifest') {
+            manifestHref = resolved;
+          }
+        });
+
+        const ogImage = doc.querySelector('meta[property="og:image"], meta[name="og:image"]')?.getAttribute('content');
+        if (ogImage) {
+          try {
+            pngIcons.push(new URL(ogImage, prodUrl).href);
+          } catch (_) {}
+        }
+
+        if (appleIcons.length === 0 && pngIcons.length === 0 && manifestHref) {
+          try {
+            const mRes = await fetch(manifestHref, { cache: 'no-store', signal: ctrl.signal });
+            if (mRes.ok) {
+              const mJson = await mRes.json();
+              if (Array.isArray(mJson.icons)) {
+                mJson.icons.forEach(ic => {
+                  if (ic && ic.src) {
+                    try {
+                      const u = new URL(ic.src, manifestHref).href;
+                      if (u.toLowerCase().endsWith('.png')) pngIcons.unshift(u);
+                      else svgIcons.push(u);
+                    } catch (_) {}
+                  }
+                });
+              }
+            }
+          } catch (_) {}
+        }
+
+        const allIcons = [...new Set([...appleIcons, ...pngIcons, ...svgIcons])];
+        return {
+          title: liveTitle,
+          logoUrl: allIcons[0] || null,
+          fallbacks: allIcons.slice(1)
+        };
+      } catch (_) {
+        return null;
+      } finally {
+        clearTimeout(tid);
       }
     }
 
@@ -401,6 +512,7 @@
           category: meta.category,
           emoji: meta.emoji,
           logoUrl: meta.logoUrl,
+          extraFallbacks: meta.extraFallbacks || [],
           logoFit: meta.logoFit || 'cover',
           prodUrl,
           githubUrl: `https://github.com/${GITHUB_USERNAME}/${repoSlug}`,
@@ -447,15 +559,36 @@
 
     function renderAppLogo(p) {
       const base = p.prodUrl.replace(/\/$/, '');
-      const fallbacks = [
+      const primaryClean = (p.logoUrl || '').split('?')[0];
+      const rawFallbacks = [
+        ...(p.extraFallbacks || []),
         `${base}/apple-touch-icon.png`,
-        `${base}/icon.svg`,
-        `${base}/assets/icon.svg`,
-        `${base}/favicon.svg`,
         `${base}/icon-192.png`,
-        `${base}/favicon.png`
-      ].filter(u => u !== p.logoUrl).join('|');
+        `${base}/icon-512.png`,
+        `${base}/logo.png`,
+        `${base}/icon.png`,
+        `${base}/icon.svg`,
+        `${base}/assets/apple-touch-icon.png`,
+        `${base}/assets/icon.svg`,
+        `${base}/assets/compass_emblem.jpg`,
+        `${base}/favicon.svg`,
+        `${base}/favicon.png`,
+        `${base}/image/logo2.png`,
+        `${base}/image/logo7.png`
+      ];
 
+      const seen = new Set([primaryClean]);
+      const fallbacks = [];
+      rawFallbacks.forEach(u => {
+        if (!u) return;
+        const c = u.split('?')[0];
+        if (!seen.has(c)) {
+          seen.add(c);
+          fallbacks.push(withLogoVersion(u, p));
+        }
+      });
+
+      const primarySrc = withLogoVersion(p.logoUrl, p);
       const fitClass = p.logoFit === 'contain'
         ? 'w-full h-full object-contain p-1.5 bg-slate-900'
         : 'w-full h-full object-cover';
@@ -463,9 +596,9 @@
       return `
         <div class="w-12 h-12 rounded-2xl bg-slate-900/90 border border-white/10 overflow-hidden flex items-center justify-center shrink-0 shadow-md">
           <img
-            src="${p.logoUrl}"
+            src="${primarySrc}"
             alt="${p.title}"
-            data-fallbacks="${fallbacks}"
+            data-fallbacks="${fallbacks.join('|')}"
             data-emoji="${p.emoji || '🚀'}"
             onerror="handleLogoError(this)"
             loading="lazy"
@@ -572,11 +705,14 @@
       renderProjects();
     }
 
-    // Synchronisation temps réel avec l'API GitHub (détecte immédiatement tout nouveau repo en prod + son vrai logo)
+    // Synchronisation temps réel avec l'API GitHub + inspection live des logos des apps
     async function syncFromGitHub(manual = false) {
       const refreshIcon = document.getElementById('refresh-icon');
       const subtitle = document.getElementById('sync-subtitle');
-      if (refreshIcon && manual) refreshIcon.classList.add('animate-spin');
+      if (manual) {
+        lastManualSyncBust = String(Date.now());
+        if (refreshIcon) refreshIcon.classList.add('animate-spin');
+      }
 
       try {
         const [apiRes, jsonRes] = await Promise.allSettled([
@@ -588,18 +724,21 @@
         ]);
 
         let jsonTitles = {};
+        let manifestArray = [];
         if (jsonRes.status === 'fulfilled' && jsonRes.value.ok) {
           const data = await jsonRes.value.json();
           if (Array.isArray(data)) {
+            manifestArray = data;
             data.forEach(item => {
               if (item.id) jsonTitles[item.id.toLowerCase()] = item;
             });
           }
         }
 
+        let syncedList = [];
+
         if (apiRes.status === 'fulfilled' && apiRes.value.ok) {
           const repos = await apiRes.value.json();
-          const syncedList = [];
 
           repos.forEach(r => {
             if (!r || !r.name) return;
@@ -617,7 +756,9 @@
               ? r.homepage.trim()
               : (known && known.prodUrl)
                 ? known.prodUrl
-                : `https://${GITHUB_USERNAME.toLowerCase()}.github.io/${r.name}/`;
+                : (fromManifest && fromManifest.prodUrl)
+                  ? fromManifest.prodUrl
+                  : `https://${GITHUB_USERNAME.toLowerCase()}.github.io/${r.name}/`;
 
             const logoUrl = (known && known.logoUrl)
               || (fromManifest && fromManifest.logoUrl)
@@ -629,9 +770,10 @@
               id: r.name,
               title: (known && known.title) || (fromManifest && fromManifest.title) || formatRepoTitle(r.name),
               subtitle: (known && known.subtitle) || r.description || (fromManifest && fromManifest.subtitle) || 'Application en production sur GitHub',
-              category: (known && known.category) || (fromManifest && fromManifest.category) || autoClass.category,
+              category: (known && known.category) || autoClass.category || (fromManifest && fromManifest.category),
               emoji: (known && known.emoji) || (fromManifest && fromManifest.emoji) || autoClass.emoji,
               logoUrl,
+              extraFallbacks: (known && known.extraFallbacks) || [],
               logoFit: (known && known.logoFit) || 'cover',
               prodUrl,
               githubUrl: r.html_url || `https://github.com/${GITHUB_USERNAME}/${r.name}`,
@@ -639,30 +781,91 @@
               isNew: isBrandNew
             });
           });
+        } else if (manifestArray.length > 0) {
+          // Fallback sur projects.json si l'API GitHub est limitée (rate-limit)
+          syncedList = manifestArray.map(item => {
+            const key = (item.id || '').toLowerCase();
+            const known = KNOWN_METADATA[key];
+            const autoClass = classifyNewRepo({ name: item.id || '', description: item.subtitle || '', topics: [] });
+            return {
+              id: item.id,
+              title: (known && known.title) || item.title || formatRepoTitle(item.id),
+              subtitle: (known && known.subtitle) || item.subtitle || 'Application en production sur GitHub',
+              category: (known && known.category) || item.category || autoClass.category,
+              emoji: (known && known.emoji) || item.emoji || autoClass.emoji,
+              logoUrl: (known && known.logoUrl) || item.logoUrl || `${(item.prodUrl || '').replace(/\/$/, '')}/apple-touch-icon.png`,
+              extraFallbacks: (known && known.extraFallbacks) || [],
+              logoFit: (known && known.logoFit) || 'cover',
+              prodUrl: (known && known.prodUrl) || item.prodUrl,
+              githubUrl: item.githubUrl || `https://github.com/${GITHUB_USERNAME}/${item.id}`,
+              pushedAt: item.pushedAt || null,
+              isNew: !known
+            };
+          });
+        }
 
-          // Inclure systématiquement les web-apps intégrées marquées alwaysInclude (ex: gemini-ultra)
-          Object.entries(KNOWN_METADATA).forEach(([k, meta]) => {
-            if (meta.alwaysInclude && !syncedList.some(item => item.id.toLowerCase() === k)) {
-              syncedList.unshift({
-                id: k,
-                title: meta.title,
-                subtitle: meta.subtitle,
-                category: meta.category,
-                emoji: meta.emoji,
-                logoUrl: meta.logoUrl,
-                logoFit: meta.logoFit || 'cover',
-                prodUrl: meta.prodUrl,
-                githubUrl: meta.githubUrl || `https://github.com/${GITHUB_USERNAME}/allinone`,
-                pushedAt: new Date().toISOString(),
-                isNew: true
-              });
+        // Inclure systématiquement les web-apps intégrées marquées alwaysInclude (ex: gemini-ultra, m4-gaming)
+        Object.entries(KNOWN_METADATA).forEach(([k, meta]) => {
+          if (meta.alwaysInclude && !syncedList.some(item => item.id.toLowerCase() === k)) {
+            syncedList.unshift({
+              id: k,
+              title: meta.title,
+              subtitle: meta.subtitle,
+              category: meta.category,
+              emoji: meta.emoji,
+              logoUrl: meta.logoUrl,
+              extraFallbacks: meta.extraFallbacks || [],
+              logoFit: meta.logoFit || 'cover',
+              prodUrl: meta.prodUrl,
+              githubUrl: meta.githubUrl || `https://github.com/${GITHUB_USERNAME}/allinone`,
+              pushedAt: new Date().toISOString(),
+              isNew: true
+            });
+          }
+        });
+
+        if (syncedList.length > 0) {
+          projects = syncedList;
+          localStorage.setItem(CACHE_KEY, JSON.stringify(projects));
+          renderTabs();
+          renderProjects();
+
+          // Découverte en direct des vrais logos & titres depuis les pages live (pour toute nouvelle app ou mise à jour)
+          const liveChecks = syncedList.map(async (item) => {
+            const key = item.id.toLowerCase();
+            const known = KNOWN_METADATA[key];
+            const hasLocalAssetLogo = known && known.logoUrl && !known.logoUrl.startsWith('http');
+            if (hasLocalAssetLogo) return false;
+            if (known && !manual) return false;
+
+            const liveMeta = await discoverLiveAppMeta(item.prodUrl);
+            if (!liveMeta) return false;
+
+            let updated = false;
+            if (!known && liveMeta.title && item.title === formatRepoTitle(item.id)) {
+              item.title = liveMeta.title;
+              updated = true;
             }
+            if (liveMeta.logoUrl) {
+              const allDiscovered = [liveMeta.logoUrl, ...(liveMeta.fallbacks || [])];
+              if (!known || !known.logoUrl) {
+                if (item.logoUrl !== liveMeta.logoUrl) {
+                  item.logoUrl = liveMeta.logoUrl;
+                  updated = true;
+                }
+              }
+              const merged = [...new Set([...(item.extraFallbacks || []), ...allDiscovered])];
+              if (merged.length !== (item.extraFallbacks || []).length) {
+                item.extraFallbacks = merged;
+                updated = true;
+              }
+            }
+            return updated;
           });
 
-          if (syncedList.length > 0) {
-            projects = syncedList;
+          const results = await Promise.allSettled(liveChecks);
+          if (results.some(r => r.status === 'fulfilled' && r.value)) {
             localStorage.setItem(CACHE_KEY, JSON.stringify(projects));
-            renderTabs();
             renderProjects();
           }
 

@@ -106,6 +106,20 @@ KNOWN_METADATA = {
         "prodUrl": "http://192.168.1.111:8765",
         "logoUrl": "https://mrthomaslef.github.io/allinone/assets/m4-gaming-icon.png",
     },
+    "monopoly": {
+        "title": "Pirate's Plunder — Monopoly 3D des Caraïbes",
+        "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
+        "category": "games-family",
+        "emoji": "🏴‍☠️",
+        "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png",
+    },
+    "quiz-pokemon": {
+        "title": "PokéQuiz — Apprends le nom des Pokémon !",
+        "subtitle": "Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
+        "category": "games-family",
+        "emoji": "⚡",
+        "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
+    },
 }
 
 
@@ -115,16 +129,29 @@ def classify_repo(name: str, description: str, topics: list[str]) -> tuple[str, 
     if "imagerie" in t_list or "radiologie" in t_list or re.search(
         r"(cochin|osteo|dicom|pacs|radio|tpack|imagerie|irm|scanner|rx|echographie|anatomie)", text
     ):
-        return "medical-imaging", "🩻"
+        return "medical-imaging", "🩺"
     if "calculateur" in t_list or "medical" in t_list or re.search(
         r"(calc|score|medi|clinique|dose|formule|clairance)", text
     ):
         return "clinical-calc", "🧮"
-    if "jeu" in t_list or "famille" in t_list or re.search(
-        r"(quiz|tcg|game|jeu|holidamn|family|vacances|carte|soiree|blindtest)", text
+    if "jeu" in t_list or "famille" in t_list or "game" in t_list or re.search(
+        r"(quiz|tcg|game|jeu|holidamn|family|vacances|carte|soiree|soirée|blindtest|monopoly|pirate|plunder|pokemon|poké|plateau|board|arcade|dice|puzzle|play|joueur|multijoueur|aventure|casino|poker|ludo)",
+        text,
     ):
         return "games-family", "🎮"
     return "daily-tools", "🚀"
+
+
+def _is_placeholder_svg(icon_url: str) -> bool:
+    if not icon_url.lower().split("?")[0].endswith(".svg"):
+        return False
+    try:
+        req = urllib.request.Request(icon_url, headers={"User-Agent": "allinone-sync/1.0"})
+        with urllib.request.urlopen(req, timeout=3) as r:
+            body = r.read().decode("utf-8", errors="ignore")
+            return len(body) < 450 and "<text" in body
+    except Exception:
+        return True
 
 
 def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
@@ -137,14 +164,47 @@ def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
             m = re.search(r"<title>(.*?)</title>", html, re.I | re.S)
             if m and m.group(1).strip():
                 title = re.sub(r"\s+", " ", m.group(1).strip())
-            # Look for apple-touch-icon or icon
+
+            apple_icons: list[str] = []
+            other_icons: list[str] = []
+            manifest_url: str | None = None
+
             for link in re.findall(r"<link[^>]+>", html, re.I):
-                if re.search(r'rel=["\']?(?:apple-touch-icon|icon)', link, re.I):
-                    href = re.search(r'href=["\']([^"\'>]+)["\']', link, re.I)
-                    if href:
-                        logo_url = urllib.parse.urljoin(url, href.group(1))
-                        if "apple-touch-icon" in link.lower():
+                href_m = re.search(r'href=["\']([^"\'>]+)["\']', link, re.I)
+                if not href_m:
+                    continue
+                resolved = urllib.parse.urljoin(url, href_m.group(1))
+                if re.search(r'rel=["\']?apple-touch-icon', link, re.I):
+                    apple_icons.append(resolved)
+                elif re.search(r'rel=["\']?(?:shortcut\s+)?icon', link, re.I):
+                    other_icons.append(resolved)
+                elif re.search(r'rel=["\']?manifest', link, re.I):
+                    manifest_url = resolved
+
+            if apple_icons:
+                logo_url = apple_icons[0]
+            else:
+                if manifest_url:
+                    try:
+                        mreq = urllib.request.Request(manifest_url, headers={"User-Agent": "allinone-sync/1.0"})
+                        with urllib.request.urlopen(mreq, timeout=3) as mr:
+                            mdata = json.loads(mr.read().decode("utf-8", errors="ignore"))
+                            for ic in mdata.get("icons") or []:
+                                src = ic.get("src")
+                                if src:
+                                    cand = urllib.parse.urljoin(manifest_url, src)
+                                    if not _is_placeholder_svg(cand):
+                                        logo_url = cand
+                                        break
+                    except Exception:
+                        pass
+                if not logo_url:
+                    for cand in other_icons:
+                        if not _is_placeholder_svg(cand):
+                            logo_url = cand
                             break
+                    if not logo_url and other_icons:
+                        logo_url = other_icons[0]
     except Exception:
         pass
     return title, logo_url
@@ -189,10 +249,10 @@ def main():
         auto_cat, auto_emoji = classify_repo(name, repo.get("description") or "", repo.get("topics") or [])
 
         live_title, live_logo = (None, None)
-        if not known:
+        if not known or not known.get("logoUrl"):
             live_title, live_logo = fetch_live_page_meta(prod_url)
 
-        title = known["title"] if known else (live_title or name.replace("-", " ").title())
+        title = known["title"] if known and known.get("title") else (live_title or name.replace("-", " ").title())
         logo_url = (
             known["logoUrl"]
             if known and known.get("logoUrl")

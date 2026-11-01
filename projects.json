@@ -12,11 +12,11 @@
   },
   {
     "id": "quiz-pokemon",
-    "title": "PokéQuiz - Apprends le nom des Pokémon !",
-    "subtitle": "PokéQuiz — Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
+    "title": "PokéQuiz — Apprends le nom des Pokémon !",
+    "subtitle": "Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
     "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/icon.svg",
+    "emoji": "⚡",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
     "pushedAt": "2026-11-01T09:27:16Z"
@@ -35,10 +35,10 @@
   {
     "id": "monopoly",
     "title": "Pirate's Plunder — Monopoly 3D des Caraïbes",
-    "subtitle": "Pirate's Plunder - Monopoly 3D des Caraïbes",
-    "category": "daily-tools",
-    "emoji": "🚀",
-    "logoUrl": "https://mrthomaslef.github.io/monopoly/assets/icon-heAS2RCA.svg",
+    "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
+    "category": "games-family",
+    "emoji": "🏴‍☠️",
+    "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/monopoly/",
     "githubUrl": "https://github.com/Mrthomaslef/monopoly",
     "pushedAt": "2026-11-01T09:00:06Z"

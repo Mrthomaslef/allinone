@@ -1133,15 +1133,24 @@ def refresh_and_save(force: bool = False) -> dict:
 
 def push_snapshot_to_github() -> bool:
     try:
+        sync_script = os.path.join(ROOT_DIR, "scripts", "sync_projects.py")
+        if os.path.exists(sync_script):
+            subprocess.run(
+                [sys.executable, sync_script],
+                cwd=ROOT_DIR,
+                timeout=25,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
         subprocess.run(
-            ["git", "add", "gemini-ultra/quota-live.json"],
+            ["git", "add", "gemini-ultra/quota-live.json", "projects.json"],
             cwd=ROOT_DIR,
             check=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
         diff = subprocess.run(
-            ["git", "diff", "--cached", "--quiet", "--", "gemini-ultra/quota-live.json"],
+            ["git", "diff", "--cached", "--quiet", "--", "gemini-ultra/quota-live.json", "projects.json"],
             cwd=ROOT_DIR,
         )
         if diff.returncode == 0:
