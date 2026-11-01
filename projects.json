@@ -8,7 +8,73 @@
     "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-10-31T07:58:34Z"
+    "pushedAt": "2026-11-01T09:27:16Z"
+  },
+  {
+    "id": "quiz-pokemon",
+    "title": "Quiz Pokemon",
+    "subtitle": "PokéQuiz — Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
+    "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
+    "pushedAt": "2026-11-01T09:27:16Z"
+  },
+  {
+    "id": "agenda-cochin",
+    "title": "Cochin RI — Agenda",
+    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
+    "category": "medical-imaging",
+    "emoji": "📅",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
+    "pushedAt": "2026-11-01T09:00:09Z"
+  },
+  {
+    "id": "monopoly",
+    "title": "Pirate's Plunder — Monopoly 3D des Caraïbes",
+    "subtitle": "Pirate's Plunder - Monopoly 3D des Caraïbes",
+    "category": "daily-tools",
+    "emoji": "🚀",
+    "logoUrl": "https://mrthomaslef.github.io/monopoly/assets/icon-heAS2RCA.svg",
+    "prodUrl": "https://mrthomaslef.github.io/monopoly/",
+    "githubUrl": "https://github.com/Mrthomaslef/monopoly",
+    "pushedAt": "2026-11-01T09:00:06Z"
+  },
+  {
+    "id": "biblioosteo",
+    "title": "BiblioOstéo Cochin",
+    "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
+    "category": "medical-imaging",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
+    "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
+    "pushedAt": "2026-11-01T06:06:49Z"
+  },
+  {
+    "id": "quiz-trentenaires",
+    "title": "QUIZ du 7TER",
+    "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
+    "category": "games-family",
+    "emoji": "🎉",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-trentenaires/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/quiz-trentenaires/",
+    "githubUrl": "https://github.com/Mrthomaslef/quiz-trentenaires",
+    "pushedAt": "2026-10-31T23:20:55Z"
+  },
+  {
+    "id": "colistrack",
+    "title": "ColisTrack",
+    "subtitle": "Suivi de livraisons & colis (PWA privée)",
+    "category": "daily-tools",
+    "emoji": "📦",
+    "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/colistrack/",
+    "githubUrl": "https://github.com/Mrthomaslef/colistrack",
+    "pushedAt": "2026-10-31T09:58:50Z"
   },
   {
     "id": "m4-gaming",
@@ -20,17 +86,6 @@
     "prodUrl": "http://192.168.1.111:8765",
     "githubUrl": "https://github.com/Mrthomaslef/m4-gaming",
     "pushedAt": "2026-10-31T07:58:34Z"
-  },
-  {
-    "id": "quiz-trentenaires",
-    "title": "QUIZ du 7TER",
-    "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
-    "category": "games-family",
-    "emoji": "🎉",
-    "logoUrl": "https://mrthomaslef.github.io/quiz-trentenaires/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/quiz-trentenaires/",
-    "githubUrl": "https://github.com/Mrthomaslef/quiz-trentenaires",
-    "pushedAt": "2026-10-31T07:49:59Z"
   },
   {
     "id": "Holidamn",
@@ -88,17 +143,6 @@
     "pushedAt": "2026-10-31T07:49:20Z"
   },
   {
-    "id": "colistrack",
-    "title": "ColisTrack",
-    "subtitle": "Suivi de livraisons & colis (PWA privée)",
-    "category": "daily-tools",
-    "emoji": "📦",
-    "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/colistrack/",
-    "githubUrl": "https://github.com/Mrthomaslef/colistrack",
-    "pushedAt": "2026-10-31T07:49:19Z"
-  },
-  {
     "id": "pocket-tcg-family",
     "title": "milTCG — Pocket Family",
     "subtitle": "Ouverture de boosters & collection de cartes en famille",
@@ -130,27 +174,5 @@
     "prodUrl": "https://radio-thomas-ten.vercel.app",
     "githubUrl": "https://github.com/Mrthomaslef/radio-thomas",
     "pushedAt": "2026-10-31T07:49:12Z"
-  },
-  {
-    "id": "biblioosteo",
-    "title": "BiblioOstéo Cochin",
-    "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
-    "category": "medical-imaging",
-    "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
-    "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
-    "pushedAt": "2026-10-31T07:14:06Z"
-  },
-  {
-    "id": "agenda-cochin",
-    "title": "Cochin RI — Agenda",
-    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
-    "category": "medical-imaging",
-    "emoji": "📅",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
-    "pushedAt": "2026-10-31T07:09:18Z"
   }
 ]
