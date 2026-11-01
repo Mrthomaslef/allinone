@@ -107,11 +107,11 @@ KNOWN_METADATA = {
         "logoUrl": "https://mrthomaslef.github.io/allinone/assets/m4-gaming-icon.png",
     },
     "monopoly": {
-        "title": "Pirate's Plunder — Monopoly 3D des Caraïbes",
+        "title": "Jolly Roger's — Monopoly 3D des Caraïbes",
         "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
         "category": "games-family",
         "emoji": "🏴‍☠️",
-        "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png",
+        "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png?v=2",
     },
     "quiz-pokemon": {
         "title": "PokéQuiz — Apprends le nom des Pokémon !",

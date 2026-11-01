@@ -8,7 +8,51 @@
     "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-01T09:27:16Z"
+    "pushedAt": "2026-11-01T22:00:56Z"
+  },
+  {
+    "id": "monopoly",
+    "title": "Jolly Roger's — Monopoly 3D des Caraïbes",
+    "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
+    "category": "games-family",
+    "emoji": "🏴‍☠️",
+    "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png?v=2",
+    "prodUrl": "https://mrthomaslef.github.io/monopoly/",
+    "githubUrl": "https://github.com/Mrthomaslef/monopoly",
+    "pushedAt": "2026-11-01T22:00:56Z"
+  },
+  {
+    "id": "agenda-cochin",
+    "title": "Cochin RI — Agenda",
+    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
+    "category": "medical-imaging",
+    "emoji": "📅",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
+    "pushedAt": "2026-11-01T12:31:48Z"
+  },
+  {
+    "id": "dinociel-app-educative",
+    "title": "DinoCiel — L'App Éducative de Petit Dino (3 ans)",
+    "subtitle": "DinoCiel — Application éducative interactive pour enfants de 3 ans avec Petit Dino animé (Higgsfield 2D)",
+    "category": "daily-tools",
+    "emoji": "🚀",
+    "logoUrl": "https://mrthomaslef.github.io/dinociel-app-educative/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/dinociel-app-educative/",
+    "githubUrl": "https://github.com/Mrthomaslef/dinociel-app-educative",
+    "pushedAt": "2026-11-01T11:51:25Z"
+  },
+  {
+    "id": "biblioosteo",
+    "title": "BiblioOstéo Cochin",
+    "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
+    "category": "medical-imaging",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
+    "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
+    "pushedAt": "2026-11-01T10:06:01Z"
   },
   {
     "id": "quiz-pokemon",
@@ -20,39 +64,6 @@
     "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
     "pushedAt": "2026-11-01T09:27:16Z"
-  },
-  {
-    "id": "agenda-cochin",
-    "title": "Cochin RI — Agenda",
-    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
-    "category": "medical-imaging",
-    "emoji": "📅",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
-    "pushedAt": "2026-11-01T09:00:09Z"
-  },
-  {
-    "id": "monopoly",
-    "title": "Pirate's Plunder — Monopoly 3D des Caraïbes",
-    "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
-    "category": "games-family",
-    "emoji": "🏴‍☠️",
-    "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/monopoly/",
-    "githubUrl": "https://github.com/Mrthomaslef/monopoly",
-    "pushedAt": "2026-11-01T09:00:06Z"
-  },
-  {
-    "id": "biblioosteo",
-    "title": "BiblioOstéo Cochin",
-    "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
-    "category": "medical-imaging",
-    "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
-    "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
-    "pushedAt": "2026-11-01T06:06:49Z"
   },
   {
     "id": "quiz-trentenaires",
