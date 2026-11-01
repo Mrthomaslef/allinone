@@ -556,7 +556,7 @@
       "remainingSeconds": 15335,
       "elapsedPercent": 14.8,
       "paceDeltaPercent": -1.72,
-      "burnRatePerHour": 17.68,
+      "burnRatePerHour": 17.67,
       "description": "You have hit your weekly limit, the 5-hour limit does not currently apply. Your weekly limit will fully refresh in 6 days."
     },
     "thirdPartyWeekly": {
@@ -587,8 +587,8 @@
       "durationMins": 10080,
       "usedPercent": 2.0,
       "remainingPercent": 98.0,
-      "resetsAt": "2026-11-05T01:00:00Z",
-      "remainingSeconds": 318706
+      "resetsAt": "2026-11-05T00:59:59Z",
+      "remainingSeconds": 318704
     }
   },
   "models": [
@@ -599,7 +599,7 @@
       "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
       "remainingPercent": 98.0,
       "usedPercent": 2.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-sonnet-5-5",
@@ -608,7 +608,7 @@
       "description": "Claude Pro Direct • Raisonnement rapide & efficace",
       "remainingPercent": 98.0,
       "usedPercent": 2.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-fable-5-1",
@@ -617,7 +617,7 @@
       "description": "Claude Pro Direct • Défis complexes & Ultracode",
       "remainingPercent": 98.0,
       "usedPercent": 2.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-haiku-5-5",
@@ -626,7 +626,7 @@
       "description": "Claude Pro Direct • Réponses instantanées",
       "remainingPercent": 98.0,
       "usedPercent": 2.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-opus-5-5-high",
