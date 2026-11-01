@@ -19,6 +19,7 @@ import re
 import subprocess
 import threading
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -303,7 +304,7 @@ def compute_local_telemetry(
         if dt >= t_30d:
             _add_to_bucket(b_30d, is_prompt, has_step, eff_in, out_tok, cache_read_tok, api_usd, unc_usd)
             sessions_30d.add(conv_id)
-            if step_tokens > 0 or cache_read_tok > 0:
+            if is_prompt or step_tokens > 0 or cache_read_tok > 0:
                 m_entry = by_model_30d.setdefault(
                     p_key,
                     {
@@ -605,7 +606,13 @@ def compute_local_telemetry(
 
 
 
+_claude_oauth_cache: dict | None = None
+_claude_oauth_last_ts: float = 0.0
+_claude_oauth_backoff_until: float = 0.0
+
+
 def fetch_claude_pro_quota(now: datetime) -> dict:
+    global _claude_oauth_cache, _claude_oauth_last_ts, _claude_oauth_backoff_until
     info = {
         "active": False,
         "planName": "Claude Pro",
@@ -692,89 +699,128 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
                 used = round(float(w.get("usedPercent") or 0.0), 2)
                 rem = round(max(0.0, 100.0 - used), 2)
                 r_at = w.get("resetsAt")
+                r_dt = parse_iso(r_at)
                 if wid == "five_hour":
                     info["fiveHour"]["usedPercent"] = used
                     info["fiveHour"]["remainingPercent"] = rem
-                    info["fiveHour"]["resetsAt"] = r_at
+                    info["fiveHour"]["resetsAt"] = r_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if r_dt else r_at
+                    info["fiveHour"]["remainingSeconds"] = int(max(0.0, (r_dt - now).total_seconds())) if r_dt else 18000
                     info["fiveHour"]["status"] = "active" if r_at else "idle"
                 elif wid == "seven_day":
                     info["weekly"]["usedPercent"] = used
                     info["weekly"]["remainingPercent"] = rem
-                    info["weekly"]["resetsAt"] = r_at
+                    info["weekly"]["resetsAt"] = r_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if r_dt else r_at
+                    info["weekly"]["remainingSeconds"] = int(max(0.0, (r_dt - now).total_seconds())) if r_dt else 604800
         except Exception:
             pass
 
-    # 2. Direct live OAuth query to Anthropic API via macOS Keychain
-    try:
-        raw_cred = subprocess.check_output(
-            ["security", "find-generic-password", "-s", "Claude Code-credentials", "-w"],
-            text=True,
-            stderr=subprocess.DEVNULL,
-            timeout=3,
-        ).strip()
-        cred_json = json.loads(raw_cred).get("claudeAiOauth", {})
-        token = cred_json.get("accessToken")
-        if token:
-            info["active"] = True
-            sub_type = cred_json.get("subscriptionType") or "pro"
-            info["subscriptionType"] = sub_type
-            info["planName"] = "Claude Max" if "max" in sub_type.lower() else "Claude Pro"
+    now_ts = time.time()
+    if _claude_oauth_cache is not None and (
+        now_ts < _claude_oauth_backoff_until or (now_ts - _claude_oauth_last_ts) < 180.0
+    ):
+        info.update(_claude_oauth_cache)
+    elif now_ts >= _claude_oauth_backoff_until:
+        # 2. Direct live OAuth query to Anthropic API via macOS Keychain (throttled to avoid HTTP 429)
+        try:
+            raw_cred = subprocess.check_output(
+                ["security", "find-generic-password", "-s", "Claude Code-credentials", "-w"],
+                text=True,
+                stderr=subprocess.DEVNULL,
+                timeout=3,
+            ).strip()
+            cred_json = json.loads(raw_cred).get("claudeAiOauth", {})
+            token = cred_json.get("accessToken")
+            if token:
+                info["active"] = True
+                sub_type = cred_json.get("subscriptionType") or "pro"
+                info["subscriptionType"] = sub_type
+                info["planName"] = "Claude Max" if "max" in sub_type.lower() else "Claude Pro"
 
-            headers = {
-                "Authorization": f"Bearer {token}",
-                "anthropic-beta": "oauth-2025-04-20",
-                "User-Agent": "claude-code/2.1.316",
-                "Accept": "application/json",
-            }
-            req_u = urllib.request.Request("https://api.anthropic.com/api/oauth/usage", headers=headers)
-            with urllib.request.urlopen(req_u, timeout=6) as resp_u:
-                u_data = json.loads(resp_u.read().decode("utf-8"))
+                headers = {
+                    "Authorization": f"Bearer {token}",
+                    "anthropic-beta": "oauth-2025-04-20",
+                    "User-Agent": "claude-code/2.1.316",
+                    "Accept": "application/json",
+                }
+                req_u = urllib.request.Request("https://api.anthropic.com/api/oauth/usage", headers=headers)
+                with urllib.request.urlopen(req_u, timeout=6) as resp_u:
+                    u_data = json.loads(resp_u.read().decode("utf-8"))
 
-            fh = u_data.get("five_hour") or {}
-            fh_used = round(float(fh.get("utilization") or 0.0), 2)
-            fh_rem = round(max(0.0, 100.0 - fh_used), 2)
-            fh_resets = fh.get("resets_at")
-            fh_dt = parse_iso(fh_resets)
-            info["fiveHour"] = {
-                "id": "claude-5h",
-                "durationMins": 300,
-                "usedPercent": fh_used,
-                "remainingPercent": fh_rem,
-                "resetsAt": fh_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if fh_dt else None,
-                "remainingSeconds": int(max(0.0, (fh_dt - now).total_seconds())) if fh_dt else 18000,
-                "status": "active" if fh_dt else "idle",
-            }
+                fh = u_data.get("five_hour") or {}
+                fh_used = round(float(fh.get("utilization") or 0.0), 2)
+                fh_rem = round(max(0.0, 100.0 - fh_used), 2)
+                fh_resets = fh.get("resets_at")
+                fh_dt = parse_iso(fh_resets)
+                info["fiveHour"] = {
+                    "id": "claude-5h",
+                    "durationMins": 300,
+                    "usedPercent": fh_used,
+                    "remainingPercent": fh_rem,
+                    "resetsAt": fh_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if fh_dt else None,
+                    "remainingSeconds": int(max(0.0, (fh_dt - now).total_seconds())) if fh_dt else 18000,
+                    "status": "active" if fh_dt else "idle",
+                }
 
-            sd = u_data.get("seven_day") or {}
-            sd_used = round(float(sd.get("utilization") or 0.0), 2)
-            sd_rem = round(max(0.0, 100.0 - sd_used), 2)
-            sd_resets = sd.get("resets_at")
-            sd_dt = parse_iso(sd_resets)
-            info["weekly"] = {
-                "id": "claude-weekly",
-                "durationMins": 10080,
-                "usedPercent": sd_used,
-                "remainingPercent": sd_rem,
-                "resetsAt": sd_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if sd_dt else None,
-                "remainingSeconds": int(max(0.0, (sd_dt - now).total_seconds())) if sd_dt else 604800,
-            }
+                sd = u_data.get("seven_day") or {}
+                sd_used = round(float(sd.get("utilization") or 0.0), 2)
+                sd_rem = round(max(0.0, 100.0 - sd_used), 2)
+                sd_resets = sd.get("resets_at")
+                sd_dt = parse_iso(sd_resets)
+                info["weekly"] = {
+                    "id": "claude-weekly",
+                    "durationMins": 10080,
+                    "usedPercent": sd_used,
+                    "remainingPercent": sd_rem,
+                    "resetsAt": sd_dt.strftime("%Y-%m-%dT%H:%M:%SZ") if sd_dt else None,
+                    "remainingSeconds": int(max(0.0, (sd_dt - now).total_seconds())) if sd_dt else 604800,
+                }
 
-            try:
-                req_p = urllib.request.Request("https://api.anthropic.com/api/oauth/profile", headers=headers)
-                with urllib.request.urlopen(req_p, timeout=5) as resp_p:
-                    p_data = json.loads(resp_p.read().decode("utf-8"))
-                acc = p_data.get("account") or {}
-                org = p_data.get("organization") or {}
-                if acc.get("email"):
-                    info["email"] = acc["email"]
-                if org.get("uuid"):
-                    info["orgId"] = org["uuid"]
-                if org.get("subscription_created_at"):
-                    info["upgradedAt"] = org["subscription_created_at"]
-            except Exception:
-                pass
-    except Exception:
-        pass
+                _claude_oauth_last_ts = now_ts
+                _claude_oauth_cache = {
+                    "active": info["active"],
+                    "subscriptionType": info["subscriptionType"],
+                    "planName": info["planName"],
+                    "fiveHour": info["fiveHour"],
+                    "weekly": info["weekly"],
+                }
+
+                if os.path.exists(cache_path):
+                    try:
+                        with open(cache_path, "r", encoding="utf-8") as cf:
+                            c_obj = json.load(cf)
+                        c_obj["usageLimits"] = {
+                            "checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                            "windows": [
+                                {
+                                    "id": "five_hour",
+                                    "kind": "session",
+                                    "label": "Session",
+                                    "windowDurationMins": 300,
+                                    "usedPercent": fh_used,
+                                    **({"resetsAt": info["fiveHour"]["resetsAt"]} if info["fiveHour"]["resetsAt"] else {}),
+                                },
+                                {
+                                    "id": "seven_day",
+                                    "kind": "weekly",
+                                    "label": "Weekly",
+                                    "windowDurationMins": 10080,
+                                    "usedPercent": sd_used,
+                                    **({"resetsAt": info["weekly"]["resetsAt"]} if info["weekly"]["resetsAt"] else {}),
+                                },
+                            ],
+                        }
+                        tmp_c = cache_path + ".tmp"
+                        with open(tmp_c, "w", encoding="utf-8") as cf:
+                            json.dump(c_obj, cf, indent=2, ensure_ascii=False)
+                            cf.write("\n")
+                        os.replace(tmp_c, cache_path)
+                    except Exception:
+                        pass
+        except urllib.error.HTTPError as he:
+            retry_after = int(he.headers.get("Retry-After") or 120) if he.headers else 120
+            _claude_oauth_backoff_until = now_ts + max(60, retry_after)
+        except Exception:
+            _claude_oauth_backoff_until = now_ts + 60.0
 
     eff_rem = min(info["fiveHour"]["remainingPercent"], info["weekly"]["remainingPercent"])
     eff_used = round(100.0 - eff_rem, 2)
@@ -852,6 +898,7 @@ def build_live_quota_payload() -> dict:
             "elapsedPercent": elapsed_pct,
             "paceDeltaPercent": pace_delta,
             "burnRatePerHour": burn_rate_per_hour,
+            "disabled": bool(b.get("disabled", False)),
             "description": b.get("description", ""),
         }
 

@@ -712,6 +712,7 @@
       const w5 = data.windows.fiveHour || {};
       const ww = data.windows.weekly || {};
       const wm = data.windows.monthly || {};
+      const tpw = data.windows.thirdPartyWeekly || { remainingPercent: 100 };
       const c5 = data.windows.claudeFiveHour || { remainingPercent: 100 };
       const cw = data.windows.claudeWeekly || { remainingPercent: 100 };
 
@@ -733,6 +734,7 @@
 
       const g5Rem = Math.round(w5.remainingPercent ?? 100);
       const gwRem = Math.round(ww.remainingPercent ?? 100);
+      const tpwRem = Math.round(tpw.remainingPercent ?? 100);
       const c5Rem = Math.round(c5.remainingPercent ?? 100);
       const cwRem = Math.round(cw.remainingPercent ?? 100);
 
@@ -756,7 +758,11 @@
       const claudeBarEl = document.getElementById('claude-bar');
       if (claudeCostEl) claudeCostEl.textContent = `${formatEur(claudeEur)} (${formatUsd(claudeUsd)})`;
       if (claudeTokEl) claudeTokEl.textContent = `${formatCompactTokens(claudeTok)} tok`;
-      if (claudeQuotasEl) claudeQuotasEl.textContent = `5h ${c5Rem}% • 7j ${cwRem}%`;
+      if (claudeQuotasEl) {
+        claudeQuotasEl.textContent = tpwRem <= 0
+          ? `3P 0% • Pro ${cwRem}%`
+          : `3P ${tpwRem}% • Pro ${cwRem}%`;
+      }
       if (claudeBarEl) claudeBarEl.style.width = `${Math.max(4, Math.min(c5Rem, cwRem))}%`;
     }
 

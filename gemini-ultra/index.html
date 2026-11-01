@@ -195,29 +195,69 @@
           </span>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <!-- 5h Claude -->
-          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
-            <div class="flex items-center justify-between text-[11px]">
-              <span class="text-slate-400 font-semibold">Session 5h</span>
-              <span id="claude-5h-rem" class="font-extrabold text-white tabular-nums">--%</span>
-            </div>
-            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-              <div id="claude-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width: 100%"></div>
-            </div>
-            <div id="claude-5h-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
+        <!-- Quota Claude via Antigravity (Google AI Ultra • Partagé 3P) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] px-0.5">
+            <span class="font-bold uppercase tracking-wider text-slate-400">Via Antigravity (Quota 3P partagé)</span>
+            <span id="tp-status-badge" class="font-bold text-rose-400">--</span>
           </div>
+          <div class="grid grid-cols-2 gap-2">
+            <!-- 5h 3P -->
+            <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-400 font-semibold">Session 5h</span>
+                <span id="tp-5h-rem" class="font-extrabold text-white tabular-nums">--%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                <div id="tp-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-400" style="width: 100%"></div>
+              </div>
+              <div id="tp-5h-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
+            </div>
 
-          <!-- 7j Claude -->
-          <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
-            <div class="flex items-center justify-between text-[11px]">
-              <span class="text-slate-400 font-semibold">Semaine 7j</span>
-              <span id="claude-wk-rem" class="font-extrabold text-white tabular-nums">--%</span>
+            <!-- 7j 3P -->
+            <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-400 font-semibold">Semaine 7j</span>
+                <span id="tp-wk-rem" class="font-extrabold text-white tabular-nums">--%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                <div id="tp-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
+              </div>
+              <div id="tp-wk-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
             </div>
-            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-              <div id="claude-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <!-- Quota Claude Pro Direct (Anthropic / Compte Apple) -->
+        <div class="space-y-1.5 pt-1 border-t border-white/5">
+          <div class="flex items-center justify-between text-[10px] px-0.5">
+            <span class="font-bold uppercase tracking-wider text-slate-400">Claude Pro Direct (Anthropic CLI)</span>
+            <span id="claude-direct-badge" class="font-bold text-emerald-400">Actif ✓</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <!-- 5h Claude Pro -->
+            <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-400 font-semibold">Session 5h</span>
+                <span id="claude-5h-rem" class="font-extrabold text-white tabular-nums">--%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                <div id="claude-5h-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400" style="width: 100%"></div>
+              </div>
+              <div id="claude-5h-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
             </div>
-            <div id="claude-wk-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
+
+            <!-- 7j Claude Pro -->
+            <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-400 font-semibold">Semaine 7j</span>
+                <span id="claude-wk-rem" class="font-extrabold text-white tabular-nums">--%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                <div id="claude-wk-bar" class="bar-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-300" style="width: 100%"></div>
+              </div>
+              <div id="claude-wk-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
+            </div>
           </div>
         </div>
       </section>
@@ -226,7 +266,7 @@
   </div>
 
   <script>
-    const CACHE_KEY = 'agent_tracking_live_quota_cache_v3';
+    const CACHE_KEY = 'agent_tracking_live_quota_cache_v4';
     const LOCAL_API = 'http://127.0.0.1:8787/api/quota';
     const GITHUB_RAW_JSON = 'https://raw.githubusercontent.com/Mrthomaslef/allinone/main/gemini-ultra/quota-live.json';
 
@@ -283,6 +323,8 @@
       const w5 = effectiveWindow(data.windows.fiveHour);
       const ww = effectiveWindow(data.windows.weekly);
       const wm = data.windows.monthly || {};
+      const tp5 = effectiveWindow(data.windows.thirdParty5h || { remainingPercent: 100, usedPercent: 0 });
+      const tpw = effectiveWindow(data.windows.thirdPartyWeekly || { remainingPercent: 100, usedPercent: 0 });
       const c5 = effectiveWindow(data.windows.claudeFiveHour || { remainingPercent: 100, usedPercent: 0 });
       const cw = effectiveWindow(data.windows.claudeWeekly || { remainingPercent: 100, usedPercent: 0 });
 
@@ -329,6 +371,29 @@
       document.getElementById('claude-cost-badge').textContent = `${formatEur(claudeEur)} (${formatUsd(claudeUsd)})`;
       document.getElementById('claude-tokens-badge').textContent = `${formatTokens(claudeTok)} tokens`;
 
+      // Claude via Antigravity (3P)
+      const tpWkExhausted = tpw.remainingPercent <= 0.1;
+      const tp5RemDisplay = tpWkExhausted ? 0 : Math.round(tp5.remainingPercent);
+      const tpWkRemDisplay = Math.round(tpw.remainingPercent);
+
+      const tpBadge = document.getElementById('tp-status-badge');
+      if (tpBadge) {
+        if (tpWkExhausted) {
+          tpBadge.textContent = 'Limite semaine atteinte (0%)';
+          tpBadge.className = 'font-bold text-rose-400';
+        } else {
+          tpBadge.textContent = `${tpWkRemDisplay}% dispo`;
+          tpBadge.className = 'font-bold text-amber-300';
+        }
+      }
+
+      document.getElementById('tp-5h-rem').textContent = tpWkExhausted ? `0% (${Math.round(tp5.remainingPercent)}%)` : `${tp5RemDisplay}%`;
+      document.getElementById('tp-5h-bar').style.width = `${tpWkExhausted ? 0 : Math.max(2, tp5.remainingPercent)}%`;
+
+      document.getElementById('tp-wk-rem').textContent = `${tpWkRemDisplay}%`;
+      document.getElementById('tp-wk-bar').style.width = `${tpWkExhausted ? 0 : Math.max(2, tpw.remainingPercent)}%`;
+
+      // Claude Pro Direct
       document.getElementById('claude-5h-rem').textContent = `${Math.round(c5.remainingPercent)}%`;
       document.getElementById('claude-5h-bar').style.width = `${Math.max(2, c5.remainingPercent)}%`;
 
@@ -342,11 +407,20 @@
       if (!currentData || !currentData.windows) return;
       const w5 = currentData.windows.fiveHour;
       const ww = currentData.windows.weekly;
+      const tp5 = currentData.windows.thirdParty5h;
+      const tpw = currentData.windows.thirdPartyWeekly;
       const c5 = currentData.windows.claudeFiveHour;
       const cw = currentData.windows.claudeWeekly;
 
       if (w5) document.getElementById('gem-5h-reset').textContent = formatCountdown(w5.resetsAt);
       if (ww) document.getElementById('gem-wk-reset').textContent = formatCountdown(ww.resetsAt);
+      if (tp5) {
+        const tpWkExhausted = tpw && tpw.remainingPercent <= 0.1;
+        document.getElementById('tp-5h-reset').textContent = tpWkExhausted
+          ? `Bloqué par limite 7j (${formatCountdown(tpw.resetsAt)})`
+          : formatCountdown(tp5.resetsAt);
+      }
+      if (tpw) document.getElementById('tp-wk-reset').textContent = formatCountdown(tpw.resetsAt);
       if (c5) document.getElementById('claude-5h-reset').textContent = formatCountdown(c5.resetsAt);
       if (cw) document.getElementById('claude-wk-reset').textContent = formatCountdown(cw.resetsAt);
     }
