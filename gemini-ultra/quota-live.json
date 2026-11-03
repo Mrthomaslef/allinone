@@ -735,10 +735,10 @@
   "favorites": {
     "ids": [
       "agenda-cochin",
-      "agenda-internes",
       "agenda-famille",
+      "agenda-internes",
       "biblioosteo"
     ],
-    "updatedAt": 1793744444874
+    "updatedAt": 1793744445771
   }
 }
