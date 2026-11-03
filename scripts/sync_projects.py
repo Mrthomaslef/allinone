@@ -34,13 +34,6 @@ KNOWN_METADATA = {
         "emoji": "🩺",
         "logoUrl": "assets/icons/agenda-internes.svg",
     },
-    "guide-interne-cochin-os": {
-        "title": "COCHIN·OS — Guide Internes",
-        "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
-        "category": "medical-imaging",
-        "emoji": "🦴",
-        "logoUrl": "assets/icons/guide-interne-cochin-os.svg",
-    },
     "quiz-imagerie": {
         "title": "QUIZ Imagerie — 1 Image 1 Diag",
         "subtitle": "Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)",
