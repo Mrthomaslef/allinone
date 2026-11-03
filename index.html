@@ -345,7 +345,7 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'tapp_store_live_repos_cache_v9';
+    const CACHE_KEY = 'tapp_store_live_repos_cache_v10';
     const VIEW_MODE_KEY = 'tapp_store_view_mode_v1';
     const FAVS_V2_KEY = 'tapp_store_favorites_v2';
     const FAVS_STORAGE_KEY = 'tapp_store_favorites_v1';
@@ -809,7 +809,7 @@
         subtitle: 'Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire',
         category: 'medical-imaging',
         emoji: '🩺',
-        logoUrl: 'https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6',
+        logoUrl: 'https://mrthomaslef.github.io/agenda-internes/icon.svg?v=8',
         extraFallbacks: [
           'https://mrthomaslef.github.io/agenda-internes/icon.svg'
         ]
@@ -819,7 +819,10 @@
         subtitle: 'Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)',
         category: 'medical-imaging',
         emoji: '🦴',
-        logoUrl: 'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg'
+        logoUrl: 'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5',
+        extraFallbacks: [
+          'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg'
+        ]
       },
       'quiz-imagerie': {
         title: 'QUIZ Imagerie — 1 Image 1 Diag',
@@ -922,7 +925,7 @@
 
     function withLogoVersion(url, p) {
       if (!url) return '';
-      const ver = lastManualSyncBust || 'tapp8_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
+      const ver = lastManualSyncBust || 'tapp10_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
       if (!ver) return url;
       const clean = url.split('?')[0];
       return `${clean}?v=${encodeURIComponent(ver)}`;
@@ -1044,7 +1047,18 @@
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
           const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.map(item => {
+              const known = KNOWN_METADATA[(item.id || '').toLowerCase()];
+              if (!known) return item;
+              return {
+                ...item,
+                logoUrl: known.logoUrl || item.logoUrl,
+                extraFallbacks: known.extraFallbacks || item.extraFallbacks || [],
+                logoFit: known.logoFit || item.logoFit || 'cover'
+              };
+            });
+          }
         }
       } catch (_) {}
 

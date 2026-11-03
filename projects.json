@@ -8,18 +8,18 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-03T21:21:53Z"
+    "pushedAt": "2026-11-03T22:12:55Z"
   },
   {
-    "id": "guide-interne-cochin-os",
-    "title": "COCHIN·OS — Guide Internes",
-    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
-    "category": "medical-imaging",
-    "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
-    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
-    "pushedAt": "2026-11-03T21:21:53Z"
+    "id": "agenda-famille",
+    "title": "Agenda Famille — Marie & Thomas",
+    "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
+    "category": "daily-tools",
+    "emoji": "🏡",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
+    "pushedAt": "2026-11-03T22:12:55Z"
   },
   {
     "id": "agenda-internes",
@@ -27,10 +27,21 @@
     "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
     "category": "medical-imaging",
     "emoji": "🩺",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-internes/icon.svg?v=8",
     "prodUrl": "https://mrthomaslef.github.io/agenda-internes/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-internes",
-    "pushedAt": "2026-11-03T21:21:01Z"
+    "pushedAt": "2026-11-03T22:01:27Z"
+  },
+  {
+    "id": "guide-interne-cochin-os",
+    "title": "COCHIN·OS — Guide Internes",
+    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
+    "category": "medical-imaging",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
+    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
+    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
+    "pushedAt": "2026-11-03T21:28:01Z"
   },
   {
     "id": "quiz-pokemon",
@@ -64,17 +75,6 @@
     "prodUrl": "https://mrthomaslef.github.io/quiz-imagerie/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-imagerie",
     "pushedAt": "2026-11-03T20:10:14Z"
-  },
-  {
-    "id": "agenda-famille",
-    "title": "Agenda Famille — Marie & Thomas",
-    "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
-    "category": "daily-tools",
-    "emoji": "🏡",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
-    "pushedAt": "2026-11-03T19:20:35Z"
   },
   {
     "id": "biblioosteo",
