@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Synchronise automatiquement tous les dépôts en production de @Mrthomaslef
-et génère `projects.json` avec leurs titres, descriptions, catégories, vrais logos et URLs live.
+et génère `projects.json` avec leurs titres, descriptions, catégories, logos fun du Tapp Store et URLs live.
 """
 from __future__ import annotations
 import json
@@ -18,64 +18,85 @@ KNOWN_METADATA = {
         "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
         "category": "medical-imaging",
         "emoji": "🦴",
-        "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
+        "logoUrl": "assets/icons/biblioosteo.svg",
     },
     "agenda-cochin": {
         "title": "Cochin RI — Agenda",
         "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
         "category": "medical-imaging",
         "emoji": "📅",
-        "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
+        "logoUrl": "assets/icons/agenda-cochin.svg",
+    },
+    "agenda-internes": {
+        "title": "Espace Internes — Radio B",
+        "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
+        "category": "medical-imaging",
+        "emoji": "🩺",
+        "logoUrl": "assets/icons/agenda-internes.svg",
+    },
+    "quiz-imagerie": {
+        "title": "QUIZ Imagerie — 1 Image 1 Diag",
+        "subtitle": "Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)",
+        "category": "medical-imaging",
+        "emoji": "🩻",
+        "logoUrl": "assets/icons/quiz-imagerie.svg",
     },
     "radio-thomas": {
-        "title": "QUIZ Cochin",
-        "subtitle": "Quiz d’imagerie musculosquelettique",
+        "title": "QUIZ Cochin MSK",
+        "subtitle": "Quiz interactif d’imagerie musculosquelettique",
         "category": "medical-imaging",
         "emoji": "🧠",
         "prodUrl": "https://radio-thomas-ten.vercel.app",
-        "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
+        "logoUrl": "assets/icons/radio-thomas.svg",
     },
     "dicomviewer": {
         "title": "TPack PACS",
-        "subtitle": "Visionneuse DICOM & imagerie médicale pédagogique",
+        "subtitle": "Visionneuse DICOM & console d’imagerie médicale pédagogique",
         "category": "medical-imaging",
         "emoji": "🖥️",
-        "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
+        "logoUrl": "assets/icons/dicomviewer.svg",
     },
     "tpack-cases": {
         "title": "TPack Cases",
-        "subtitle": "Banque de cas cliniques d’imagerie (.tpack)",
+        "subtitle": "Banque de dossiers et cas cliniques d’imagerie (.tpack)",
         "category": "medical-imaging",
         "emoji": "🗂️",
-        "logoUrl": "https://mrthomaslef.github.io/tpack-cases/favicon.svg",
+        "logoUrl": "assets/icons/tpack-cases.svg",
     },
     "tomatocalc": {
         "title": "TomatoCalc.",
         "subtitle": "Calculateurs médicaux, scores cliniques & classifications",
         "category": "clinical-calc",
         "emoji": "🍅",
-        "logoUrl": "https://mrthomaslef.github.io/Tomatocalc/image/logo2.png",
+        "logoUrl": "assets/icons/tomatocalc.svg",
     },
     "medicalc": {
         "title": "MediCalc",
-        "subtitle": "Calculateurs médicaux rapides & aide clinique",
+        "subtitle": "Calculateurs médicaux rapides & aide clinique au quotidien",
         "category": "clinical-calc",
         "emoji": "⚕️",
-        "logoUrl": "https://mrthomaslef.github.io/Medicalc/image/logo2.png",
+        "logoUrl": "assets/icons/medicalc.svg",
     },
     "colistrack": {
         "title": "ColisTrack",
-        "subtitle": "Suivi de livraisons & colis (PWA privée)",
+        "subtitle": "Suivi de livraisons & colis en temps réel (PWA privée)",
         "category": "daily-tools",
         "emoji": "📦",
-        "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
+        "logoUrl": "assets/icons/colistrack.svg",
     },
     "assistante-maternelle": {
         "title": "AssMat — Paie & Pajemploi",
-        "subtitle": "Calculateur de salaire, présence & fiche de paie",
+        "subtitle": "Calculateur de salaire, présence, congés & fiche de paie",
         "category": "daily-tools",
-        "emoji": "👶",
-        "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
+        "emoji": "🧸",
+        "logoUrl": "assets/icons/assistante-maternelle.svg",
+    },
+    "agenda-famille": {
+        "title": "Agenda Famille — Marie & Thomas",
+        "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
+        "category": "daily-tools",
+        "emoji": "🏡",
+        "logoUrl": "assets/icons/agenda-famille.svg",
     },
     "quiz-trentenaires": {
         "title": "QUIZ du 7TER",
@@ -93,10 +114,10 @@ KNOWN_METADATA = {
     },
     "holidamn": {
         "title": "Holidamn",
-        "subtitle": "Portail vidéo & souvenirs de vacances",
+        "subtitle": "Portail vidéo & souvenirs de vacances au soleil",
         "category": "games-family",
         "emoji": "🌴",
-        "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
+        "logoUrl": "assets/icons/holidamn.svg",
     },
     "m4-gaming": {
         "title": "M4 Gaming",
@@ -104,17 +125,24 @@ KNOWN_METADATA = {
         "category": "games-family",
         "emoji": "🎮",
         "prodUrl": "http://192.168.1.111:8765",
-        "logoUrl": "https://mrthomaslef.github.io/allinone/assets/m4-gaming-icon.png",
+        "logoUrl": "assets/m4-gaming-icon.png",
     },
     "monopoly": {
-        "title": "Jolly Roger's — Monopoly 3D des Caraïbes",
+        "title": "Jolly Roger's — Monopoly 3D",
         "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
         "category": "games-family",
         "emoji": "🏴‍☠️",
-        "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png?v=2",
+        "logoUrl": "assets/pirate-plunder-icon.png?v=2",
+    },
+    "dinociel-app-educative": {
+        "title": "DinoCiel — Petit Dino",
+        "subtitle": "App éducative interactive pour enfants de 3 ans avec Petit Dino animé",
+        "category": "games-family",
+        "emoji": "🦕",
+        "logoUrl": "assets/dinociel-icon.jpg",
     },
     "quiz-pokemon": {
-        "title": "PokéQuiz — Apprends le nom des Pokémon !",
+        "title": "PokéQuiz — Attrape-les tous !",
         "subtitle": "Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
         "category": "games-family",
         "emoji": "⚡",
@@ -127,7 +155,7 @@ def classify_repo(name: str, description: str, topics: list[str]) -> tuple[str, 
     t_list = [t.lower() for t in (topics or [])]
     text = f"{name} {description or ''} {' '.join(t_list)}".lower()
     if "imagerie" in t_list or "radiologie" in t_list or re.search(
-        r"(cochin|osteo|dicom|pacs|radio|tpack|imagerie|irm|scanner|rx|echographie|anatomie)", text
+        r"(cochin|osteo|dicom|pacs|radio|tpack|imagerie|irm|scanner|rx|echographie|anatomie|interne)", text
     ):
         return "medical-imaging", "🩺"
     if "calculateur" in t_list or "medical" in t_list or re.search(
@@ -135,7 +163,7 @@ def classify_repo(name: str, description: str, topics: list[str]) -> tuple[str, 
     ):
         return "clinical-calc", "🧮"
     if "jeu" in t_list or "famille" in t_list or "game" in t_list or re.search(
-        r"(quiz|tcg|game|jeu|holidamn|family|vacances|carte|soiree|soirée|blindtest|monopoly|pirate|plunder|pokemon|poké|plateau|board|arcade|dice|puzzle|play|joueur|multijoueur|aventure|casino|poker|ludo)",
+        r"(quiz|tcg|game|jeu|holidamn|vacances|carte|soiree|soirée|blindtest|monopoly|pirate|plunder|pokemon|poké|dino|enfant|plateau|board|arcade|dice|puzzle|play|joueur|multijoueur|aventure|casino|poker|ludo)",
         text,
     ):
         return "games-family", "🎮"
@@ -146,7 +174,7 @@ def _is_placeholder_svg(icon_url: str) -> bool:
     if not icon_url.lower().split("?")[0].endswith(".svg"):
         return False
     try:
-        req = urllib.request.Request(icon_url, headers={"User-Agent": "allinone-sync/1.0"})
+        req = urllib.request.Request(icon_url, headers={"User-Agent": "tappstore-sync/1.0"})
         with urllib.request.urlopen(req, timeout=3) as r:
             body = r.read().decode("utf-8", errors="ignore")
             return len(body) < 450 and "<text" in body
@@ -158,7 +186,7 @@ def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
     title = None
     logo_url = None
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "allinone-sync/1.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": "tappstore-sync/1.0"})
         with urllib.request.urlopen(req, timeout=5) as r:
             html = r.read().decode("utf-8", errors="ignore")
             m = re.search(r"<title>(.*?)</title>", html, re.I | re.S)
@@ -186,7 +214,7 @@ def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
             else:
                 if manifest_url:
                     try:
-                        mreq = urllib.request.Request(manifest_url, headers={"User-Agent": "allinone-sync/1.0"})
+                        mreq = urllib.request.Request(manifest_url, headers={"User-Agent": "tappstore-sync/1.0"})
                         with urllib.request.urlopen(mreq, timeout=3) as mr:
                             mdata = json.loads(mr.read().decode("utf-8", errors="ignore"))
                             for ic in mdata.get("icons") or []:
@@ -212,7 +240,7 @@ def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
 
 def main():
     headers = {
-        "User-Agent": "allinone-sync/1.0",
+        "User-Agent": "tappstore-sync/1.0",
         "Accept": "application/vnd.github+json",
     }
     token = os.environ.get("GITHUB_TOKEN")
@@ -278,7 +306,6 @@ def main():
             }
         )
 
-    # Include built-in Agent Tracking live quota app
     if not any(item["id"].lower() == "gemini-ultra" for item in output):
         output.insert(
             0,
@@ -288,7 +315,7 @@ def main():
                 "subtitle": "Consommation Gemini & Claude (Tokens, Prix API & Quotas)",
                 "category": "daily-tools",
                 "emoji": "🤖",
-                "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
+                "logoUrl": "assets/icons/gemini-ultra.svg",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/gemini-ultra",
                 "pushedAt": output[0]["pushedAt"] if output else None,

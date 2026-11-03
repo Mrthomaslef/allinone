@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="assets/logo.jpg" width="110" height="110" style="border-radius: 26px;" alt="All-In-One Nexus Logo" />
+  <img src="assets/logo.jpg" width="116" height="116" style="border-radius: 28px;" alt="Tapp Store Logo" />
 </p>
 
-<h1 align="center">All-In-One • Hub Mobile Projets &amp; GitHub</h1>
+<h1 align="center">🛍️ Tapp Store • Le Store d'Apps de @Mrthomaslef</h1>
 
 <p align="center">
-  Portail mobile unifié (PWA) regroupant l'ensemble des applications en production et dépôts GitHub de <strong>Thomas Lefèvre (<a href="https://github.com/Mrthomaslef">@Mrthomaslef</a>)</strong>, organisés par catégories avec synchronisation GitHub en temps réel.
+  Le store mobile fun, coloré et unifié (PWA) regroupant l'ensemble des applications en production, jeux et outils cliniques de <strong>Thomas Lefèvre (<a href="https://github.com/Mrthomaslef">@Mrthomaslef</a>)</strong>, avec synchronisation GitHub en temps réel.
 </p>
 
 ---

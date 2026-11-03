@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>All-In-One • @Mrthomaslef</title>
-  <meta name="description" content="Tous les projets en production et sur GitHub de Thomas Lefèvre (@Mrthomaslef), rangés par catégories et synchronisés automatiquement." />
-  <meta name="theme-color" content="#090D16" />
+  <title>Tapp Store 🛍️ • @Mrthomaslef</title>
+  <meta name="description" content="Bienvenue sur le Tapp Store ! Toutes les web-apps, jeux et outils cliniques de Thomas Lefèvre (@Mrthomaslef), synchronisés en direct." />
+  <meta name="theme-color" content="#0E0920" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="All-In-One" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
-  <link rel="apple-touch-icon" href="assets/logo.jpg" />
+  <meta name="apple-mobile-web-app-title" content="Tapp Store" />
+  <link rel="manifest" href="manifest.json?v=tapp1" />
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg?v=tapp1" />
+  <link rel="apple-touch-icon" href="assets/logo.jpg?v=tapp1" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -31,11 +31,30 @@
 
     html, body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #090D16;
+      background-color: #0E0920;
       color: #F8FAFC;
       min-height: 100dvh;
       margin: 0;
       overscroll-behavior-y: contain;
+      overflow-x: hidden;
+    }
+
+    .font-fun {
+      font-family: 'Fredoka', 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    /* Ambient Candy Aurora Background */
+    .cosmic-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(236, 72, 153, 0.22) 0%, transparent 42%),
+        radial-gradient(circle at 88% 16%, rgba(56, 189, 248, 0.20) 0%, transparent 44%),
+        radial-gradient(circle at 50% 60%, rgba(139, 92, 246, 0.16) 0%, transparent 50%),
+        radial-gradient(circle at 85% 88%, rgba(250, 204, 21, 0.12) 0%, transparent 40%),
+        linear-gradient(180deg, #0E0920 0%, #130D2A 50%, #0B0818 100%);
     }
 
     .no-scrollbar::-webkit-scrollbar {
@@ -46,22 +65,55 @@
       scrollbar-width: none;
     }
 
+    /* Fun Tactile Store Cards */
     .app-card {
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.025) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.10);
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .app-card:active {
-      transform: scale(0.985);
-      background: rgba(255, 255, 255, 0.06);
+      transform: scale(0.96);
     }
 
     @media (hover: hover) {
       .app-card:hover {
-        background: rgba(255, 255, 255, 0.055);
-        border-color: rgba(255, 255, 255, 0.14);
+        transform: translateY(-2px) scale(1.01);
+        border-color: rgba(244, 114, 182, 0.45);
+        box-shadow: 0 12px 28px -6px rgba(236, 72, 153, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
+    }
+
+    /* Bouncy App Icon Squircle */
+    .app-squircle {
+      border-radius: 28%;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.28);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .app-card:hover .app-squircle,
+    .grid-tile:hover .app-squircle {
+      transform: rotate(-4deg) scale(1.07);
+    }
+
+    /* Logo Halo Ring */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-3px) rotate(2deg); }
+    }
+    .logo-bounce {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
+
+    /* Roulette Highlight Animation */
+    @keyframes partyPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7), 0 0 30px rgba(236, 72, 153, 0.7); border-color: #FDE047; }
+      50% { box-shadow: 0 0 0 8px rgba(250, 204, 21, 0), 0 0 40px rgba(56, 189, 248, 0.9); border-color: #38BDF8; }
+    }
+    .roulette-winner {
+      animation: partyPulse 1s ease-in-out 3;
+      border-color: #FDE047 !important;
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(56, 189, 248, 0.20)) !important;
     }
 
     /* Pull-to-Refresh Indicator */
@@ -80,155 +132,212 @@
     }
   </style>
 </head>
-<body class="antialiased selection:bg-cyan-500/30">
+<body class="antialiased selection:bg-pink-500/30">
+  <div class="cosmic-bg"></div>
 
-  <!-- PULL-TO-REFRESH INDICATOR (Glisser vers le bas pour actualiser) -->
+  <!-- PULL-TO-REFRESH INDICATOR -->
   <div id="ptr-container" style="margin-top: var(--safe-top);">
-    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-slate-300 shadow-lg">
-      <svg id="ptr-spinner" class="w-4 h-4 text-cyan-400 transition-transform duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-fuchsia-500/20 border border-pink-400/30 text-xs font-bold text-pink-200 shadow-lg backdrop-blur-md">
+      <svg id="ptr-spinner" class="w-4 h-4 text-yellow-300 transition-transform duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
       </svg>
-      <span id="ptr-label">Tirer pour actualiser</span>
+      <span id="ptr-label">Tirer pour rafraîchir le Tapp Store ✨</span>
     </div>
   </div>
 
-  <div id="app-content" class="max-w-lg mx-auto min-h-dvh flex flex-col px-4" style="padding-top: max(0.75rem, var(--safe-top)); padding-bottom: max(2rem, var(--safe-bottom));">
+  <div id="app-content" class="max-w-lg mx-auto min-h-dvh flex flex-col px-4" style="padding-top: max(0.75rem, var(--safe-top)); padding-bottom: max(2.5rem, var(--safe-bottom));">
 
-    <!-- HEADER SIMPLE & ÉPURÉ -->
+    <!-- HEADER FUN : LE TAPP STORE -->
     <header class="pt-2 pb-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <img
-            src="assets/logo.jpg"
-            onerror="this.src='assets/icon.svg'"
-            alt="Logo All-In-One"
-            class="w-12 h-12 rounded-2xl object-cover shadow-lg shadow-cyan-500/10 border border-white/15"
-          />
-          <div>
-            <div class="flex items-center gap-2">
-              <h1 class="text-xl font-extrabold tracking-tight text-white">All-In-One</h1>
-              <span id="live-dot" class="w-2 h-2 rounded-full bg-emerald-400" title="Synchronisation automatique GitHub active"></span>
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="relative shrink-0 logo-bounce">
+            <div class="absolute -inset-1 rounded-[20px] bg-gradient-to-tr from-pink-500 via-purple-500 to-cyan-400 opacity-75 blur-sm"></div>
+            <img
+              src="assets/logo.jpg?v=tapp1"
+              onerror="this.src='assets/icon.svg?v=tapp1'"
+              alt="Logo Tapp Store"
+              class="relative w-14 h-14 rounded-[18px] object-cover shadow-xl border-2 border-white/30"
+            />
+            <span id="live-dot" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-[#0E0920]" title="Synchronisation GitHub en direct"></span>
+          </div>
+
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h1 class="font-fun text-2xl font-bold tracking-tight bg-gradient-to-r from-yellow-200 via-pink-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-sm">
+                Tapp Store
+              </h1>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-pink-500/30 to-purple-500/30 text-pink-200 border border-pink-400/30">
+                Arcade &amp; Apps
+              </span>
             </div>
-            <p id="sync-subtitle" class="text-xs text-slate-400">Tirer vers le bas pour actualiser</p>
+            <p id="sync-subtitle" class="text-xs text-purple-200/70 truncate mt-0.5">Le store fun de @Mrthomaslef ✨</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-1.5">
+        <!-- Boutons Action Header : Surprise + Grille/Liste + Refresh -->
+        <div class="flex items-center gap-1.5 shrink-0">
           <button
-            onclick="syncFromGitHub(true)"
-            title="Actualiser les projets depuis GitHub"
-            class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition active:scale-95"
+            onclick="pickRandomApp()"
+            title="Lancer une app au hasard !"
+            class="px-2.5 py-2 rounded-2xl bg-gradient-to-br from-amber-400/20 to-pink-500/20 hover:from-amber-400/30 hover:to-pink-500/30 border border-amber-300/30 text-amber-200 text-xs font-extrabold transition active:scale-90 flex items-center gap-1 shadow-md"
           >
-            <svg id="refresh-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            <span class="text-sm">🎲</span>
+            <span class="hidden sm:inline">Surprise</span>
+          </button>
+
+          <button
+            id="view-toggle-btn"
+            onclick="toggleViewMode()"
+            title="Changer l'affichage (Cartes / Grille iOS)"
+            class="p-2.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-pink-200 transition active:scale-90"
+          >
+            <svg id="view-toggle-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
           </button>
 
-          <a
-            href="https://github.com/Mrthomaslef?tab=repositories"
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 transition"
+          <button
+            onclick="syncFromGitHub(true)"
+            title="Actualiser depuis GitHub"
+            class="p-2.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-cyan-200 transition active:scale-90"
           >
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            <svg id="refresh-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            <span>GitHub</span>
-          </a>
+          </button>
         </div>
       </div>
 
-      <!-- CONSOMMATION GEMINI & CLAUDE (SIMPLE & ÉPURÉ) -->
+      <!-- AI POWER-UP WIDGET : GEMINI & CLAUDE -->
       <a
         href="./gemini-ultra/"
-        class="mt-3.5 block rounded-2xl p-3 bg-white/[0.035] hover:bg-white/[0.055] border border-white/10 transition active:scale-[0.99] space-y-2.5"
+        class="mt-4 block rounded-3xl p-3.5 bg-gradient-to-r from-indigo-950/80 via-purple-950/70 to-fuchsia-950/75 hover:from-indigo-900/80 hover:to-fuchsia-900/80 border border-pink-400/25 shadow-lg shadow-purple-950/50 transition active:scale-[0.99] space-y-2.5"
       >
-        <!-- Agent Tracking : Total Tokens + Estimation Prix (Hors Abonnement) -->
         <div class="flex items-center justify-between gap-2 px-0.5">
           <div class="flex items-center gap-2 min-w-0">
-            <span id="gu-live-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
-            <span class="text-xs font-semibold text-slate-300 truncate">Agent Tracking • <strong id="top-total-tokens" class="font-extrabold text-white tabular-nums">-- tokens</strong></span>
+            <span id="gu-live-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_#34d399]"></span>
+            <span class="text-xs font-bold text-purple-100 truncate">
+              🤖 AI Power-Up • <strong id="top-total-tokens" class="font-extrabold text-yellow-300 tabular-nums">-- tokens</strong>
+            </span>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
-            <span id="top-total-cost" class="px-2 py-0.5 rounded-lg bg-emerald-500/15 border border-emerald-400/25 text-xs font-extrabold text-emerald-300 tabular-nums">
+            <span id="top-total-cost" class="px-2.5 py-0.5 rounded-full bg-emerald-400/20 border border-emerald-300/35 text-xs font-extrabold text-emerald-200 tabular-nums">
               ~-- € (-- $)
             </span>
-            <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <svg class="w-4 h-4 text-pink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </div>
         </div>
 
-        <!-- 2 Cartes simples côte à côte : GEMINI vs CLAUDE -->
-        <div class="grid grid-cols-2 gap-2">
+        <!-- 2 Jauges Arcade : GEMINI vs CLAUDE -->
+        <div class="grid grid-cols-2 gap-2.5">
           <!-- Gemini -->
-          <div class="p-2.5 rounded-xl bg-slate-950/75 border border-sky-400/20 space-y-1.5">
+          <div class="p-2.5 rounded-2xl bg-[#0B0719]/80 border border-cyan-400/25 space-y-1.5">
             <div class="flex items-center justify-between gap-1">
-              <span class="text-xs font-extrabold text-sky-300">✨ Gemini</span>
+              <span class="text-xs font-extrabold text-cyan-300">✨ Gemini</span>
               <span id="gem-cost" class="text-[11px] font-extrabold text-emerald-300 tabular-nums">~-- €</span>
             </div>
             <div class="flex items-baseline justify-between gap-1">
               <span id="gem-tokens" class="text-sm font-extrabold text-white tabular-nums">-- tok</span>
-              <span id="gem-quotas" class="text-[10px] font-semibold text-slate-400 tabular-nums">5h --% • 7j --%</span>
+              <span id="gem-quotas" class="text-[10px] font-semibold text-purple-200/70 tabular-nums">5h --% • 7j --%</span>
             </div>
-            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-              <div id="gem-bar" class="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400 transition-all duration-300" style="width: 100%"></div>
+            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5">
+              <div id="gem-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-emerald-400 transition-all duration-300" style="width: 100%"></div>
             </div>
           </div>
 
           <!-- Claude -->
-          <div class="p-2.5 rounded-xl bg-slate-950/75 border border-amber-400/20 space-y-1.5">
+          <div class="p-2.5 rounded-2xl bg-[#0B0719]/80 border border-amber-400/25 space-y-1.5">
             <div class="flex items-center justify-between gap-1">
               <span class="text-xs font-extrabold text-amber-300">🟠 Claude</span>
               <span id="claude-cost" class="text-[11px] font-extrabold text-emerald-300 tabular-nums">~-- €</span>
             </div>
             <div class="flex items-baseline justify-between gap-1">
               <span id="claude-tokens" class="text-sm font-extrabold text-white tabular-nums">-- tok</span>
-              <span id="claude-quotas" class="text-[10px] font-semibold text-slate-400 tabular-nums">5h --% • 7j --%</span>
+              <span id="claude-quotas" class="text-[10px] font-semibold text-purple-200/70 tabular-nums">5h --% • 7j --%</span>
             </div>
-            <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-              <div id="claude-bar" class="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-400 transition-all duration-300" style="width: 100%"></div>
+            <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5">
+              <div id="claude-bar" class="h-full rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 transition-all duration-300" style="width: 100%"></div>
             </div>
           </div>
         </div>
       </a>
 
-      <!-- RECHERCHE SIMPLE -->
-      <div class="mt-3 relative">
-        <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <!-- BARRE DE RECHERCHE FUN -->
+      <div class="mt-3.5 relative">
+        <svg class="w-4 h-4 text-pink-300/70 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input
           id="search-input"
           type="search"
-          placeholder="Rechercher une application..."
+          placeholder="Fouiller dans le Tapp Store (jeu, radio, calc...)"
           oninput="handleSearch(this.value)"
-          class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/[0.04] border border-white/10 focus:border-cyan-400/50 focus:outline-none text-sm text-white placeholder-slate-500 transition"
+          class="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-white/[0.06] border border-white/15 focus:border-pink-400/70 focus:bg-white/[0.09] focus:outline-none text-sm text-white placeholder-purple-200/45 transition shadow-inner"
         />
       </div>
 
-      <!-- FILTRES PAR CATÉGORIES -->
-      <div id="category-tabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar mt-3 pt-0.5"></div>
+      <!-- ONGLETS CATÉGORIES COLORÉS -->
+      <div id="category-tabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar mt-3.5 pt-0.5"></div>
     </header>
 
-    <!-- LISTE DES PROJETS PAR CATÉGORIES -->
+    <!-- CONTENEUR DES APPS DU TAPP STORE -->
     <main id="projects-container" class="flex-1 space-y-6 pt-1"></main>
 
+    <!-- FOOTER MINI FUN -->
+    <footer class="mt-10 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-purple-200/50">
+      <span class="font-fun">🛍️ Tapp Store • Fait avec ❤️</span>
+      <a href="https://github.com/Mrthomaslef?tab=repositories" target="_blank" rel="noopener" class="hover:text-pink-300 transition inline-flex items-center gap-1 font-semibold">
+        <span>GitHub @Mrthomaslef</span>
+        <span>↗</span>
+      </a>
+    </footer>
   </div>
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'allinone_live_repos_cache_v8';
+    const CACHE_KEY = 'tapp_store_live_repos_cache_v2';
+    const VIEW_MODE_KEY = 'tapp_store_view_mode_v1';
     let lastManualSyncBust = '';
 
     const CATEGORIES = [
-      { id: 'medical-imaging', name: 'Imagerie & Radiologie', emoji: '🩺' },
-      { id: 'clinical-calc',   name: 'Calculateurs Médicaux', emoji: '🧮' },
-      { id: 'daily-tools',     name: 'Quotidien & Pratique',  emoji: '📦' },
-      { id: 'games-family',    name: 'Jeux & Famille',        emoji: '🎮' }
+      {
+        id: 'games-family',
+        name: 'Jeux & Famille',
+        emoji: '🎮',
+        pillActive: 'bg-gradient-to-r from-pink-500 to-amber-400 text-slate-950 shadow-lg shadow-pink-500/25',
+        badgeClass: 'from-pink-500 to-orange-400 text-white shadow-pink-500/25',
+        ctaLabel: 'JOUER'
+      },
+      {
+        id: 'medical-imaging',
+        name: 'Imagerie & Radio',
+        emoji: '🩺',
+        pillActive: 'bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-lg shadow-cyan-500/25',
+        badgeClass: 'from-cyan-400 to-blue-500 text-slate-950 shadow-cyan-500/25',
+        ctaLabel: 'TAP !'
+      },
+      {
+        id: 'clinical-calc',
+        name: 'Calculateurs',
+        emoji: '🧮',
+        pillActive: 'bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/25',
+        badgeClass: 'from-emerald-400 to-teal-500 text-slate-950 shadow-emerald-500/25',
+        ctaLabel: 'CALC'
+      },
+      {
+        id: 'daily-tools',
+        name: 'Quotidien & IA',
+        emoji: '🚀',
+        pillActive: 'bg-gradient-to-r from-violet-400 to-fuchsia-400 text-slate-950 shadow-lg shadow-violet-500/25',
+        badgeClass: 'from-violet-500 to-fuchsia-500 text-white shadow-violet-500/25',
+        ctaLabel: 'TAP !'
+      }
     ];
 
-    // Métadonnées & vrais logos officiels des applications en production
+    // Métadonnées & logos fun sur-mesure du Tapp Store
     const KNOWN_METADATA = {
       'm4-gaming': {
         title: 'M4 Gaming',
@@ -247,11 +356,11 @@
         emoji: '🤖',
         prodUrl: 'https://mrthomaslef.github.io/allinone/gemini-ultra/',
         githubUrl: 'https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra',
-        logoUrl: 'gemini-ultra/assets/icon.svg',
+        logoUrl: 'assets/icons/gemini-ultra.svg',
         alwaysInclude: true
       },
       'monopoly': {
-        title: "Jolly Roger's — Monopoly 3D des Caraïbes",
+        title: "Jolly Roger's — Monopoly 3D",
         subtitle: 'Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)',
         category: 'games-family',
         emoji: '🏴‍☠️',
@@ -261,8 +370,19 @@
           'https://mrthomaslef.github.io/monopoly/assets/compass_emblem.jpg'
         ]
       },
+      'dinociel-app-educative': {
+        title: 'DinoCiel — Petit Dino',
+        subtitle: 'App éducative interactive pour enfants de 3 ans avec Petit Dino animé',
+        category: 'games-family',
+        emoji: '🦕',
+        logoUrl: 'assets/dinociel-icon.jpg',
+        extraFallbacks: [
+          'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-emotion-happy.jpg',
+          'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-celebrate.jpg'
+        ]
+      },
       'quiz-pokemon': {
-        title: 'PokéQuiz — Apprends le nom des Pokémon !',
+        title: 'PokéQuiz — Attrape-les tous !',
         subtitle: 'Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)',
         category: 'games-family',
         emoji: '⚡',
@@ -272,73 +392,6 @@
           'https://mrthomaslef.github.io/quiz-pokemon/logo.png',
           'https://mrthomaslef.github.io/quiz-pokemon/icon.svg'
         ]
-      },
-      'biblioosteo': {
-        title: 'BiblioOstéo Cochin',
-        subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
-        category: 'medical-imaging',
-        emoji: '🦴',
-        logoUrl: 'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/biblioosteo/assets/apple-touch-icon.png']
-      },
-      'agenda-cochin': {
-        title: 'Cochin RI — Agenda',
-        subtitle: 'Planning de Radiologie Interventionnelle (Cochin Radio B)',
-        category: 'medical-imaging',
-        emoji: '📅',
-        logoUrl: 'https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3'
-      },
-      'radio-thomas': {
-        title: 'QUIZ Cochin',
-        subtitle: 'Quiz d’imagerie musculosquelettique',
-        category: 'medical-imaging',
-        emoji: '🧠',
-        prodUrl: 'https://radio-thomas-ten.vercel.app',
-        logoUrl: 'https://radio-thomas-ten.vercel.app/apple-touch-icon.png'
-      },
-      'dicomviewer': {
-        title: 'TPack PACS',
-        subtitle: 'Visionneuse DICOM & imagerie médicale pédagogique',
-        category: 'medical-imaging',
-        emoji: '🖥️',
-        logoUrl: 'https://mrthomaslef.github.io/dicomviewer/favicon.svg'
-      },
-      'tpack-cases': {
-        title: 'TPack Cases',
-        subtitle: 'Banque de cas cliniques d’imagerie (.tpack)',
-        category: 'medical-imaging',
-        emoji: '🗂️',
-        logoUrl: 'https://mrthomaslef.github.io/tpack-cases/favicon.svg'
-      },
-      'tomatocalc': {
-        title: 'TomatoCalc.',
-        subtitle: 'Calculateurs médicaux, scores cliniques & classifications',
-        category: 'clinical-calc',
-        emoji: '🍅',
-        logoUrl: 'https://mrthomaslef.github.io/Tomatocalc/image/logo2.png',
-        logoFit: 'contain'
-      },
-      'medicalc': {
-        title: 'MediCalc',
-        subtitle: 'Calculateurs médicaux rapides & aide clinique',
-        category: 'clinical-calc',
-        emoji: '⚕️',
-        logoUrl: 'https://mrthomaslef.github.io/Medicalc/image/logo2.png',
-        logoFit: 'contain'
-      },
-      'colistrack': {
-        title: 'ColisTrack',
-        subtitle: 'Suivi de livraisons & colis (PWA privée)',
-        category: 'daily-tools',
-        emoji: '📦',
-        logoUrl: 'https://mrthomaslef.github.io/colistrack/icon.svg'
-      },
-      'assistante-maternelle': {
-        title: 'AssMat — Paie & Pajemploi',
-        subtitle: 'Calculateur de salaire, présence & fiche de paie',
-        category: 'daily-tools',
-        emoji: '👶',
-        logoUrl: 'https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png'
       },
       'quiz-trentenaires': {
         title: 'QUIZ du 7TER',
@@ -356,11 +409,115 @@
       },
       'holidamn': {
         title: 'Holidamn',
-        subtitle: 'Portail vidéo & souvenirs de vacances',
+        subtitle: 'Portail vidéo & souvenirs de vacances au soleil',
         category: 'games-family',
         emoji: '🌴',
-        logoUrl: 'https://mrthomaslef.github.io/Holidamn/image/logo7.png',
-        logoFit: 'contain'
+        logoUrl: 'assets/icons/holidamn.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/Holidamn/image/logo7.png']
+      },
+      'biblioosteo': {
+        title: 'BiblioOstéo Cochin',
+        subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
+        category: 'medical-imaging',
+        emoji: '🦴',
+        logoUrl: 'assets/icons/biblioosteo.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/biblioosteo/assets/icon.svg']
+      },
+      'agenda-cochin': {
+        title: 'Cochin RI — Agenda',
+        subtitle: 'Planning de Radiologie Interventionnelle (Cochin Radio B)',
+        category: 'medical-imaging',
+        emoji: '📅',
+        logoUrl: 'assets/icons/agenda-cochin.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3']
+      },
+      'agenda-internes': {
+        title: 'Espace Internes — Radio B',
+        subtitle: 'Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire',
+        category: 'medical-imaging',
+        emoji: '🩺',
+        logoUrl: 'assets/icons/agenda-internes.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/agenda-internes/icon.svg']
+      },
+      'guide-interne-cochin-os': {
+        title: 'COCHIN·OS — Guide Internes',
+        subtitle: 'Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)',
+        category: 'medical-imaging',
+        emoji: '🦴',
+        logoUrl: 'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg'
+      },
+      'quiz-imagerie': {
+        title: 'QUIZ Imagerie — 1 Image 1 Diag',
+        subtitle: 'Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)',
+        category: 'medical-imaging',
+        emoji: '🩻',
+        logoUrl: 'assets/icons/quiz-imagerie.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png']
+      },
+      'radio-thomas': {
+        title: 'QUIZ Cochin MSK',
+        subtitle: 'Quiz interactif d’imagerie musculosquelettique',
+        category: 'medical-imaging',
+        emoji: '🧠',
+        prodUrl: 'https://radio-thomas-ten.vercel.app',
+        logoUrl: 'assets/icons/radio-thomas.svg',
+        extraFallbacks: ['https://radio-thomas-ten.vercel.app/apple-touch-icon.png']
+      },
+      'dicomviewer': {
+        title: 'TPack PACS',
+        subtitle: 'Visionneuse DICOM & console d’imagerie médicale pédagogique',
+        category: 'medical-imaging',
+        emoji: '🖥️',
+        logoUrl: 'assets/icons/dicomviewer.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/dicomviewer/favicon.svg']
+      },
+      'tpack-cases': {
+        title: 'TPack Cases',
+        subtitle: 'Banque de dossiers et cas cliniques d’imagerie (.tpack)',
+        category: 'medical-imaging',
+        emoji: '🗂️',
+        logoUrl: 'assets/icons/tpack-cases.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/tpack-cases/favicon.svg']
+      },
+      'tomatocalc': {
+        title: 'TomatoCalc.',
+        subtitle: 'Calculateurs médicaux, scores cliniques & classifications',
+        category: 'clinical-calc',
+        emoji: '🍅',
+        logoUrl: 'assets/icons/tomatocalc.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/Tomatocalc/image/logo2.png']
+      },
+      'medicalc': {
+        title: 'MediCalc',
+        subtitle: 'Calculateurs médicaux rapides & aide clinique au quotidien',
+        category: 'clinical-calc',
+        emoji: '⚕️',
+        logoUrl: 'assets/icons/medicalc.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/Medicalc/image/logo2.png']
+      },
+      'colistrack': {
+        title: 'ColisTrack',
+        subtitle: 'Suivi de livraisons & colis en temps réel (PWA privée)',
+        category: 'daily-tools',
+        emoji: '📦',
+        logoUrl: 'assets/icons/colistrack.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/colistrack/icon.svg']
+      },
+      'assistante-maternelle': {
+        title: 'AssMat — Paie & Pajemploi',
+        subtitle: 'Calculateur de salaire, présence, congés & fiche de paie',
+        category: 'daily-tools',
+        emoji: '🧸',
+        logoUrl: 'assets/icons/assistante-maternelle.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png']
+      },
+      'agenda-famille': {
+        title: 'Agenda Famille — Marie & Thomas',
+        subtitle: 'Planning partagé, gardes & indisponibilités à la maison',
+        category: 'daily-tools',
+        emoji: '🏡',
+        logoUrl: 'assets/icons/agenda-famille.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/agenda-famille/icon.svg']
       }
     };
 
@@ -368,13 +525,13 @@
       const topics = (repo.topics || []).map(t => t.toLowerCase());
       const text = `${repo.name} ${repo.description || ''} ${topics.join(' ')}`.toLowerCase();
 
-      if (topics.includes('imagerie') || topics.includes('radiologie') || /(cochin|osteo|dicom|pacs|radio|tpack|imagerie|irm|scanner|rx|echographie|anatomie)/.test(text)) {
+      if (topics.includes('imagerie') || topics.includes('radiologie') || /(cochin|osteo|dicom|pacs|radio|tpack|imagerie|irm|scanner|rx|echographie|anatomie|interne)/.test(text)) {
         return { category: 'medical-imaging', emoji: '🩺' };
       }
       if (topics.includes('calculateur') || topics.includes('medical') || /(calc|score|medi|clinique|dose|formule|clairance)/.test(text)) {
         return { category: 'clinical-calc', emoji: '🧮' };
       }
-      if (topics.includes('jeu') || topics.includes('famille') || topics.includes('game') || /(quiz|tcg|game|jeu|holidamn|family|vacances|carte|soirée|soiree|blindtest|poker|monopoly|pirate|plunder|pokemon|poké|plateau|board|arcade|dice|puzzle|play|joueur|multijoueur|aventure|casino|ludo)/.test(text)) {
+      if (topics.includes('jeu') || topics.includes('famille') || topics.includes('game') || /(quiz|tcg|game|jeu|holidamn|vacances|carte|soirée|soiree|blindtest|poker|monopoly|pirate|plunder|pokemon|poké|dino|enfant|plateau|board|arcade|dice|puzzle|play|joueur|multijoueur|aventure|casino|ludo)/.test(text)) {
         return { category: 'games-family', emoji: '🎮' };
       }
       return { category: 'daily-tools', emoji: '🚀' };
@@ -388,7 +545,7 @@
 
     function withLogoVersion(url, p) {
       if (!url) return '';
-      const ver = lastManualSyncBust || (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '');
+      const ver = lastManualSyncBust || (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : 'tapp1');
       if (!ver) return url;
       const clean = url.split('?')[0];
       return `${clean}?v=${encodeURIComponent(ver)}`;
@@ -404,7 +561,7 @@
         const emoji = imgEl.dataset.emoji || '🚀';
         const parent = imgEl.parentElement;
         if (parent) {
-          parent.innerHTML = `<span class="text-xl select-none">${emoji}</span>`;
+          parent.innerHTML = `<span class="text-2xl select-none">${emoji}</span>`;
         }
       }
     }
@@ -518,7 +675,7 @@
           extraFallbacks: meta.extraFallbacks || [],
           logoFit: meta.logoFit || 'cover',
           prodUrl,
-          githubUrl: `https://github.com/${GITHUB_USERNAME}/${repoSlug}`,
+          githubUrl: meta.githubUrl || `https://github.com/${GITHUB_USERNAME}/${repoSlug}`,
           pushedAt: null,
           isNew: false
         };
@@ -528,16 +685,54 @@
     let projects = getInitialProjects();
     let activeCategory = 'all';
     let searchQuery = '';
+    let viewMode = localStorage.getItem(VIEW_MODE_KEY) || 'list';
+
+    function updateViewToggleIcon() {
+      const iconEl = document.getElementById('view-toggle-icon');
+      if (!iconEl) return;
+      if (viewMode === 'grid') {
+        iconEl.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />`;
+      } else {
+        iconEl.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />`;
+      }
+    }
+
+    function toggleViewMode() {
+      viewMode = viewMode === 'list' ? 'grid' : 'list';
+      try {
+        localStorage.setItem(VIEW_MODE_KEY, viewMode);
+      } catch (_) {}
+      updateViewToggleIcon();
+      renderProjects();
+    }
+
+    function pickRandomApp() {
+      if (!projects || projects.length === 0) return;
+      const winner = projects[Math.floor(Math.random() * projects.length)];
+      activeCategory = 'all';
+      searchQuery = '';
+      const searchEl = document.getElementById('search-input');
+      if (searchEl) searchEl.value = '';
+      renderTabs();
+      renderProjects();
+
+      const cardEl = document.getElementById(`app-card-${winner.id.toLowerCase()}`);
+      if (cardEl) {
+        cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cardEl.classList.add('roulette-winner');
+        setTimeout(() => cardEl.classList.remove('roulette-winner'), 3200);
+      }
+    }
 
     function renderTabs() {
       const tabsEl = document.getElementById('category-tabs');
       const allBtn = `
-        <button onclick="setCategory('all')" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
+        <button onclick="setCategory('all')" class="shrink-0 px-4 py-1.5 rounded-full text-xs font-extrabold transition active:scale-95 ${
           activeCategory === 'all'
-            ? 'bg-white text-slate-950'
-            : 'bg-white/5 text-slate-400 hover:text-white'
+            ? 'bg-gradient-to-r from-yellow-300 via-pink-400 to-cyan-300 text-slate-950 shadow-lg shadow-pink-500/25'
+            : 'bg-white/[0.07] text-purple-200/80 hover:text-white border border-white/10'
         }">
-          Tout (${projects.length})
+          ✨ Tout (${projects.length})
         </button>
       `;
 
@@ -545,14 +740,14 @@
         const count = projects.filter(p => p.category === cat.id).length;
         const active = activeCategory === cat.id;
         return `
-          <button onclick="setCategory('${cat.id}')" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
+          <button onclick="setCategory('${cat.id}')" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold transition active:scale-95 ${
             active
-              ? 'bg-white text-slate-950'
-              : 'bg-white/5 text-slate-400 hover:text-white'
+              ? cat.pillActive
+              : 'bg-white/[0.07] text-purple-200/80 hover:text-white border border-white/10'
           }">
             <span>${cat.emoji}</span>
             <span>${cat.name}</span>
-            <span class="opacity-60">${count}</span>
+            <span class="opacity-70 text-[11px]">${count}</span>
           </button>
         `;
       }).join('');
@@ -560,7 +755,7 @@
       tabsEl.innerHTML = allBtn + catBtns;
     }
 
-    function renderAppLogo(p) {
+    function renderAppLogo(p, sizeClass = 'w-14 h-14') {
       const base = p.prodUrl.replace(/\/$/, '');
       const primaryClean = (p.logoUrl || '').split('?')[0];
       const rawFallbacks = [
@@ -573,11 +768,8 @@
         `${base}/icon.svg`,
         `${base}/assets/apple-touch-icon.png`,
         `${base}/assets/icon.svg`,
-        `${base}/assets/compass_emblem.jpg`,
         `${base}/favicon.svg`,
-        `${base}/favicon.png`,
-        `${base}/image/logo2.png`,
-        `${base}/image/logo7.png`
+        `${base}/favicon.png`
       ];
 
       const seen = new Set([primaryClean]);
@@ -597,7 +789,7 @@
         : 'w-full h-full object-cover';
 
       return `
-        <div class="w-12 h-12 rounded-2xl bg-slate-900/90 border border-white/10 overflow-hidden flex items-center justify-center shrink-0 shadow-md">
+        <div class="${sizeClass} app-squircle bg-slate-900/90 border border-white/20 overflow-hidden flex items-center justify-center shrink-0">
           <img
             src="${primarySrc}"
             alt="${p.title}"
@@ -630,66 +822,94 @@
 
         if (items.length === 0) return;
 
-        html += `
-          <section class="space-y-2.5">
-            <div class="flex items-center justify-between px-1">
-              <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <span>${cat.emoji}</span>
-                <span>${cat.name}</span>
-              </h2>
-              <span class="text-xs text-slate-600 font-medium">${items.length}</span>
-            </div>
+        if (viewMode === 'grid') {
+          html += `
+            <section class="space-y-3">
+              <div class="flex items-center justify-between px-1">
+                <h2 class="font-fun text-sm font-bold tracking-wide text-pink-200 flex items-center gap-2">
+                  <span class="text-base">${cat.emoji}</span>
+                  <span>${cat.name}</span>
+                </h2>
+                <span class="px-2 py-0.5 rounded-full bg-white/10 text-[11px] text-purple-200 font-bold">${items.length}</span>
+              </div>
 
-            <div class="space-y-2">
-              ${items.map(p => `
-                <div class="app-card rounded-2xl p-3 flex items-center justify-between gap-3">
-                  <a href="${p.prodUrl}" target="_blank" rel="noopener" class="flex items-center gap-3.5 min-w-0 flex-1">
-                    ${renderAppLogo(p)}
-                    <div class="min-w-0 flex-1">
-                      <div class="flex items-center gap-2">
-                        <span class="text-sm font-bold text-white truncate">${p.title}</span>
-                        ${p.isNew ? '<span class="px-1.5 py-0.5 text-[10px] font-bold uppercase rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Nouveau</span>' : ''}
-                      </div>
-                      <div class="text-xs text-slate-400 truncate mt-0.5">${p.subtitle}</div>
-                    </div>
+              <div class="grid grid-cols-4 gap-3 pt-1">
+                ${items.map(p => `
+                  <a
+                    id="app-card-${p.id.toLowerCase()}"
+                    href="${p.prodUrl}"
+                    target="_blank"
+                    rel="noopener"
+                    class="grid-tile flex flex-col items-center text-center p-2 rounded-2xl hover:bg-white/5 transition active:scale-90 group"
+                  >
+                    ${renderAppLogo(p, 'w-16 h-16')}
+                    <span class="text-[11px] font-bold text-white/95 line-clamp-2 leading-tight mt-2 group-hover:text-pink-300 transition">
+                      ${p.title.split('—')[0].trim()}
+                    </span>
                   </a>
+                `).join('')}
+              </div>
+            </section>
+          `;
+        } else {
+          html += `
+            <section class="space-y-2.5">
+              <div class="flex items-center justify-between px-1">
+                <h2 class="font-fun text-sm font-bold tracking-wide text-pink-200 flex items-center gap-2">
+                  <span class="text-base">${cat.emoji}</span>
+                  <span>${cat.name}</span>
+                </h2>
+                <span class="px-2 py-0.5 rounded-full bg-white/10 text-[11px] text-purple-200 font-bold">${items.length}</span>
+              </div>
 
-                  <div class="flex items-center gap-1.5 shrink-0">
-                    <a
-                      href="${p.githubUrl}"
-                      target="_blank"
-                      rel="noopener"
-                      title="Code source GitHub"
-                      class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition"
-                    >
-                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                      </svg>
+              <div class="space-y-2.5">
+                ${items.map(p => `
+                  <div id="app-card-${p.id.toLowerCase()}" class="app-card rounded-3xl p-3 flex items-center justify-between gap-3">
+                    <a href="${p.prodUrl}" target="_blank" rel="noopener" class="flex items-center gap-3.5 min-w-0 flex-1">
+                      ${renderAppLogo(p, 'w-14 h-14')}
+                      <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-sm font-extrabold text-white truncate">${p.title}</span>
+                          ${p.isNew ? '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-full bg-gradient-to-r from-yellow-300 to-pink-400 text-slate-950 shrink-0">NEW</span>' : ''}
+                        </div>
+                        <div class="text-xs text-purple-200/70 line-clamp-1 mt-0.5">${p.subtitle}</div>
+                      </div>
                     </a>
 
-                    <a
-                      href="${p.prodUrl}"
-                      target="_blank"
-                      rel="noopener"
-                      class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 font-semibold text-xs flex items-center gap-1 transition"
-                    >
-                      <span>Ouvrir</span>
-                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8M17 7V16" />
-                      </svg>
-                    </a>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <a
+                        href="${p.githubUrl}"
+                        target="_blank"
+                        rel="noopener"
+                        title="Code source GitHub"
+                        class="p-2 rounded-2xl bg-white/5 hover:bg-white/15 text-purple-200/60 hover:text-white transition"
+                      >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                        </svg>
+                      </a>
+
+                      <a
+                        href="${p.prodUrl}"
+                        target="_blank"
+                        rel="noopener"
+                        class="px-3.5 py-2 rounded-full bg-gradient-to-r ${cat.badgeClass} font-fun font-bold text-xs flex items-center gap-1 shadow-md transition active:scale-90"
+                      >
+                        <span>${cat.ctaLabel}</span>
+                      </a>
+                    </div>
                   </div>
-                </div>
-              `).join('')}
-            </div>
-          </section>
-        `;
+                `).join('')}
+              </div>
+            </section>
+          `;
+        }
       });
 
       if (!html) {
         html = `
-          <div class="text-center py-12 text-sm text-slate-500">
-            Aucun projet trouvé pour « ${searchQuery} ».
+          <div class="text-center py-12 text-sm text-purple-200/60 font-fun">
+            🕵️‍♂️ Aucune app trouvée pour « ${searchQuery} » dans le Tapp Store !
           </div>
         `;
       }
@@ -785,7 +1005,6 @@
             });
           });
         } else if (manifestArray.length > 0) {
-          // Fallback sur projects.json si l'API GitHub est limitée (rate-limit)
           syncedList = manifestArray.map(item => {
             const key = (item.id || '').toLowerCase();
             const known = KNOWN_METADATA[key];
@@ -807,7 +1026,6 @@
           });
         }
 
-        // Inclure systématiquement les web-apps intégrées marquées alwaysInclude (ex: gemini-ultra, m4-gaming)
         Object.entries(KNOWN_METADATA).forEach(([k, meta]) => {
           if (meta.alwaysInclude && !syncedList.some(item => item.id.toLowerCase() === k)) {
             syncedList.unshift({
@@ -822,7 +1040,7 @@
               prodUrl: meta.prodUrl,
               githubUrl: meta.githubUrl || `https://github.com/${GITHUB_USERNAME}/allinone`,
               pushedAt: new Date().toISOString(),
-              isNew: true
+              isNew: false
             });
           }
         });
@@ -833,7 +1051,6 @@
           renderTabs();
           renderProjects();
 
-          // Découverte en direct des vrais logos & titres depuis les pages live (pour toute nouvelle app ou mise à jour)
           const liveChecks = syncedList.map(async (item) => {
             const key = item.id.toLowerCase();
             const known = KNOWN_METADATA[key];
@@ -874,7 +1091,7 @@
 
           if (subtitle) {
             const nowStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-            subtitle.textContent = `${projects.length} projets en prod • Mis à jour à ${nowStr}`;
+            subtitle.textContent = `${projects.length} apps dans le store • Sync à ${nowStr} ✨`;
           }
         }
       } catch (_) {
@@ -1025,7 +1242,7 @@
       }
     }
 
-    // --- PULL-TO-REFRESH (Glisser vers le bas sur mobile & trackpad/souris) ---
+    // --- PULL-TO-REFRESH ---
     function initPullToRefresh() {
       const ptrContainer = document.getElementById('ptr-container');
       const ptrSpinner = document.getElementById('ptr-spinner');
@@ -1068,7 +1285,6 @@
           return;
         }
 
-        // Résistance élastique naturelle type iOS
         currentPull = Math.min(MAX_PULL, Math.pow(delta, 0.82) * 1.6);
         if (currentPull > 6 && event && event.cancelable) {
           event.preventDefault();
@@ -1080,10 +1296,10 @@
 
         if (currentPull >= THRESHOLD) {
           ptrSpinner.style.transform = 'rotate(180deg)';
-          ptrLabel.textContent = 'Relâcher pour actualiser';
+          ptrLabel.textContent = 'Relâcher pour mettre à jour le Store 🚀';
         } else {
           ptrSpinner.style.transform = 'rotate(0deg)';
-          ptrLabel.textContent = 'Tirer pour actualiser';
+          ptrLabel.textContent = 'Tirer pour rafraîchir le Tapp Store ✨';
         }
       };
 
@@ -1096,13 +1312,13 @@
           isRefreshing = true;
           ptrContainer.style.height = '54px';
           ptrContainer.style.opacity = '1';
-          ptrLabel.textContent = 'Actualisation GitHub...';
+          ptrLabel.textContent = 'Synchronisation du Tapp Store...';
           setSpinIcon();
           if (navigator.vibrate) navigator.vibrate(12);
 
           await syncFromGitHub(true);
 
-          ptrLabel.textContent = 'À jour ✓';
+          ptrLabel.textContent = 'Tapp Store à jour ! 🎉';
           ptrSpinner.classList.remove('animate-spin');
           setTimeout(() => {
             ptrContainer.style.height = '0px';
@@ -1119,7 +1335,6 @@
         currentPull = 0;
       };
 
-      // Événements tactiles (iOS / Android PWA)
       window.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) onStart(e.touches[0].clientY);
       }, { passive: true });
@@ -1131,7 +1346,6 @@
       window.addEventListener('touchend', onEnd, { passive: true });
       window.addEventListener('touchcancel', onEnd, { passive: true });
 
-      // Support souris sur ordinateur (drag vers le bas depuis le haut)
       window.addEventListener('mousedown', (e) => {
         if (e.button === 0 && !['INPUT', 'BUTTON', 'A'].includes(e.target.tagName)) {
           onStart(e.clientY);
@@ -1143,6 +1357,7 @@
       window.addEventListener('mouseup', onEnd);
     }
 
+    updateViewToggleIcon();
     renderTabs();
     renderProjects();
     initPullToRefresh();

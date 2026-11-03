@@ -5,21 +5,32 @@
     "subtitle": "Consommation Gemini & Claude (Tokens, Prix API & Quotas)",
     "category": "daily-tools",
     "emoji": "🤖",
-    "logoUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg",
+    "logoUrl": "assets/icons/gemini-ultra.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-01T22:00:56Z"
+    "pushedAt": "2026-11-03T21:08:02Z"
   },
   {
-    "id": "monopoly",
-    "title": "Jolly Roger's — Monopoly 3D des Caraïbes",
-    "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
+    "id": "guide-interne-cochin-os",
+    "title": "COCHIN·OS — Internes Radio B",
+    "subtitle": "COCHIN·OS — Portail & Annuaire des Internes de Radiologie B (Ostéo-Articulaire & RI) Hôpital Cochin",
+    "category": "medical-imaging",
+    "emoji": "🩺",
+    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
+    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
+    "pushedAt": "2026-11-03T21:08:02Z"
+  },
+  {
+    "id": "quiz-pokemon",
+    "title": "PokéQuiz — Attrape-les tous !",
+    "subtitle": "Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
     "category": "games-family",
-    "emoji": "🏴‍☠️",
-    "logoUrl": "https://mrthomaslef.github.io/allinone/assets/pirate-plunder-icon.png?v=2",
-    "prodUrl": "https://mrthomaslef.github.io/monopoly/",
-    "githubUrl": "https://github.com/Mrthomaslef/monopoly",
-    "pushedAt": "2026-11-01T22:00:56Z"
+    "emoji": "⚡",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
+    "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
+    "pushedAt": "2026-11-03T21:07:33Z"
   },
   {
     "id": "agenda-cochin",
@@ -27,21 +38,32 @@
     "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
     "category": "medical-imaging",
     "emoji": "📅",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
+    "logoUrl": "assets/icons/agenda-cochin.svg",
     "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
-    "pushedAt": "2026-11-01T12:31:48Z"
+    "pushedAt": "2026-11-03T20:47:10Z"
   },
   {
-    "id": "dinociel-app-educative",
-    "title": "DinoCiel — L'App Éducative de Petit Dino (3 ans)",
-    "subtitle": "DinoCiel — Application éducative interactive pour enfants de 3 ans avec Petit Dino animé (Higgsfield 2D)",
+    "id": "quiz-imagerie",
+    "title": "QUIZ Imagerie — 1 Image 1 Diag",
+    "subtitle": "Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)",
+    "category": "medical-imaging",
+    "emoji": "🩻",
+    "logoUrl": "assets/icons/quiz-imagerie.svg",
+    "prodUrl": "https://mrthomaslef.github.io/quiz-imagerie/",
+    "githubUrl": "https://github.com/Mrthomaslef/quiz-imagerie",
+    "pushedAt": "2026-11-03T20:10:14Z"
+  },
+  {
+    "id": "agenda-famille",
+    "title": "Agenda Famille — Marie & Thomas",
+    "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
     "category": "daily-tools",
-    "emoji": "🚀",
-    "logoUrl": "https://mrthomaslef.github.io/dinociel-app-educative/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/dinociel-app-educative/",
-    "githubUrl": "https://github.com/Mrthomaslef/dinociel-app-educative",
-    "pushedAt": "2026-11-01T11:51:25Z"
+    "emoji": "🏡",
+    "logoUrl": "assets/icons/agenda-famille.svg",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
+    "pushedAt": "2026-11-03T19:20:35Z"
   },
   {
     "id": "biblioosteo",
@@ -49,21 +71,43 @@
     "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
     "category": "medical-imaging",
     "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
+    "logoUrl": "assets/icons/biblioosteo.svg",
     "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
     "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
-    "pushedAt": "2026-11-01T10:06:01Z"
+    "pushedAt": "2026-11-03T19:12:17Z"
   },
   {
-    "id": "quiz-pokemon",
-    "title": "PokéQuiz — Apprends le nom des Pokémon !",
-    "subtitle": "Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
+    "id": "agenda-internes",
+    "title": "Espace Internes — Radio B",
+    "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
+    "category": "medical-imaging",
+    "emoji": "🩺",
+    "logoUrl": "assets/icons/agenda-internes.svg",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-internes/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-internes",
+    "pushedAt": "2026-11-03T16:25:02Z"
+  },
+  {
+    "id": "monopoly",
+    "title": "Jolly Roger's — Monopoly 3D",
+    "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
     "category": "games-family",
-    "emoji": "⚡",
-    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
-    "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
-    "pushedAt": "2026-11-01T09:27:16Z"
+    "emoji": "🏴‍☠️",
+    "logoUrl": "assets/pirate-plunder-icon.png?v=2",
+    "prodUrl": "https://mrthomaslef.github.io/monopoly/",
+    "githubUrl": "https://github.com/Mrthomaslef/monopoly",
+    "pushedAt": "2026-11-01T22:00:56Z"
+  },
+  {
+    "id": "dinociel-app-educative",
+    "title": "DinoCiel — Petit Dino",
+    "subtitle": "App éducative interactive pour enfants de 3 ans avec Petit Dino animé",
+    "category": "games-family",
+    "emoji": "🦕",
+    "logoUrl": "assets/dinociel-icon.jpg",
+    "prodUrl": "https://mrthomaslef.github.io/dinociel-app-educative/",
+    "githubUrl": "https://github.com/Mrthomaslef/dinociel-app-educative",
+    "pushedAt": "2026-11-01T11:51:25Z"
   },
   {
     "id": "quiz-trentenaires",
@@ -79,10 +123,10 @@
   {
     "id": "colistrack",
     "title": "ColisTrack",
-    "subtitle": "Suivi de livraisons & colis (PWA privée)",
+    "subtitle": "Suivi de livraisons & colis en temps réel (PWA privée)",
     "category": "daily-tools",
     "emoji": "📦",
-    "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
+    "logoUrl": "assets/icons/colistrack.svg",
     "prodUrl": "https://mrthomaslef.github.io/colistrack/",
     "githubUrl": "https://github.com/Mrthomaslef/colistrack",
     "pushedAt": "2026-10-31T09:58:50Z"
@@ -93,7 +137,7 @@
     "subtitle": "Télécommande Mac mini M4 (Mode TV 1080p/4K, ES-DE, Steam & Audio)",
     "category": "games-family",
     "emoji": "🎮",
-    "logoUrl": "https://mrthomaslef.github.io/allinone/assets/m4-gaming-icon.png",
+    "logoUrl": "assets/m4-gaming-icon.png",
     "prodUrl": "http://192.168.1.111:8765",
     "githubUrl": "https://github.com/Mrthomaslef/m4-gaming",
     "pushedAt": "2026-10-31T07:58:34Z"
@@ -101,10 +145,10 @@
   {
     "id": "Holidamn",
     "title": "Holidamn",
-    "subtitle": "Portail vidéo & souvenirs de vacances",
+    "subtitle": "Portail vidéo & souvenirs de vacances au soleil",
     "category": "games-family",
     "emoji": "🌴",
-    "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
+    "logoUrl": "assets/icons/holidamn.svg",
     "prodUrl": "https://mrthomaslef.github.io/Holidamn/",
     "githubUrl": "https://github.com/Mrthomaslef/Holidamn",
     "pushedAt": "2026-10-31T07:49:25Z"
@@ -112,10 +156,10 @@
   {
     "id": "Medicalc",
     "title": "MediCalc",
-    "subtitle": "Calculateurs médicaux rapides & aide clinique",
+    "subtitle": "Calculateurs médicaux rapides & aide clinique au quotidien",
     "category": "clinical-calc",
     "emoji": "⚕️",
-    "logoUrl": "https://mrthomaslef.github.io/Medicalc/image/logo2.png",
+    "logoUrl": "assets/icons/medicalc.svg",
     "prodUrl": "https://mrthomaslef.github.io/Medicalc/",
     "githubUrl": "https://github.com/Mrthomaslef/Medicalc",
     "pushedAt": "2026-10-31T07:49:24Z"
@@ -123,10 +167,10 @@
   {
     "id": "dicomviewer",
     "title": "TPack PACS",
-    "subtitle": "Visionneuse DICOM & imagerie médicale pédagogique",
+    "subtitle": "Visionneuse DICOM & console d’imagerie médicale pédagogique",
     "category": "medical-imaging",
     "emoji": "🖥️",
-    "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
+    "logoUrl": "assets/icons/dicomviewer.svg",
     "prodUrl": "https://mrthomaslef.github.io/dicomviewer/",
     "githubUrl": "https://github.com/Mrthomaslef/dicomviewer",
     "pushedAt": "2026-10-31T07:49:23Z"
@@ -134,10 +178,10 @@
   {
     "id": "tpack-cases",
     "title": "TPack Cases",
-    "subtitle": "Banque de cas cliniques d’imagerie (.tpack)",
+    "subtitle": "Banque de dossiers et cas cliniques d’imagerie (.tpack)",
     "category": "medical-imaging",
     "emoji": "🗂️",
-    "logoUrl": "https://mrthomaslef.github.io/tpack-cases/favicon.svg",
+    "logoUrl": "assets/icons/tpack-cases.svg",
     "prodUrl": "https://mrthomaslef.github.io/tpack-cases/",
     "githubUrl": "https://github.com/Mrthomaslef/tpack-cases",
     "pushedAt": "2026-10-31T07:49:21Z"
@@ -145,10 +189,10 @@
   {
     "id": "assistante-maternelle",
     "title": "AssMat — Paie & Pajemploi",
-    "subtitle": "Calculateur de salaire, présence & fiche de paie",
+    "subtitle": "Calculateur de salaire, présence, congés & fiche de paie",
     "category": "daily-tools",
-    "emoji": "👶",
-    "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
+    "emoji": "🧸",
+    "logoUrl": "assets/icons/assistante-maternelle.svg",
     "prodUrl": "https://mrthomaslef.github.io/assistante-maternelle/",
     "githubUrl": "https://github.com/Mrthomaslef/assistante-maternelle",
     "pushedAt": "2026-10-31T07:49:20Z"
@@ -170,18 +214,18 @@
     "subtitle": "Calculateurs médicaux, scores cliniques & classifications",
     "category": "clinical-calc",
     "emoji": "🍅",
-    "logoUrl": "https://mrthomaslef.github.io/Tomatocalc/image/logo2.png",
+    "logoUrl": "assets/icons/tomatocalc.svg",
     "prodUrl": "https://mrthomaslef.github.io/Tomatocalc/",
     "githubUrl": "https://github.com/Mrthomaslef/Tomatocalc",
     "pushedAt": "2026-10-31T07:49:14Z"
   },
   {
     "id": "radio-thomas",
-    "title": "QUIZ Cochin",
-    "subtitle": "Quiz d’imagerie musculosquelettique",
+    "title": "QUIZ Cochin MSK",
+    "subtitle": "Quiz interactif d’imagerie musculosquelettique",
     "category": "medical-imaging",
     "emoji": "🧠",
-    "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
+    "logoUrl": "assets/icons/radio-thomas.svg",
     "prodUrl": "https://radio-thomas-ten.vercel.app",
     "githubUrl": "https://github.com/Mrthomaslef/radio-thomas",
     "pushedAt": "2026-10-31T07:49:12Z"

@@ -1,21 +1,21 @@
 {
-  "name": "All-In-One • Hub Projets Dr T. Lefèvre",
-  "short_name": "All-In-One",
-  "description": "Portail mobile unifié de tous les projets en production et dépôts GitHub de Thomas Lefèvre (@Mrthomaslef), classés par catégories.",
+  "name": "Tapp Store • Le Store d'Apps de Thomas",
+  "short_name": "Tapp Store",
+  "description": "Le store fun et coloré de toutes les applications, jeux et outils médicaux de Thomas Lefèvre (@Mrthomaslef).",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#070B14",
-  "theme_color": "#070B14",
+  "background_color": "#0E0920",
+  "theme_color": "#0E0920",
   "icons": [
     {
-      "src": "assets/logo.jpg",
+      "src": "assets/logo.jpg?v=tapp1",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/icon.svg",
+      "src": "assets/icon.svg?v=tapp1",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

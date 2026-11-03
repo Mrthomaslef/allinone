@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#450A0A"/>
+      <stop offset="50%" stop-color="#7F1D1D"/>
+      <stop offset="100%" stop-color="#9A3412"/>
+    </linearGradient>
+    <radialGradient id="tom" cx="220" cy="240" r="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="55%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#B91C1C"/>
+    </radialGradient>
+    <filter id="sh" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <!-- Floating Calc Buttons Background -->
+  <rect x="64" y="64" width="100" height="100" rx="28" fill="#FACC15" fill-opacity="0.2" stroke="#FACC15" stroke-opacity="0.4" stroke-width="4"/>
+  <text x="114" y="132" text-anchor="middle" fill="#FDE047" font-family="system-ui, sans-serif" font-weight="900" font-size="56">+</text>
+  <!-- Big Cute 3D Tomato -->
+  <g filter="url(#sh)">
+    <ellipse cx="236" cy="278" rx="148" ry="132" fill="url(#tom)" stroke="#FCA5A5" stroke-width="5" stroke-opacity="0.5"/>
+    <!-- Glossy Shine -->
+    <ellipse cx="176" cy="216" rx="42" ry="22" transform="rotate(-25 176 216)" fill="#FFFFFF" fill-opacity="0.45"/>
+    <!-- Green Leaf Crown -->
+    <path d="M236 156 L190 112 L222 132 L236 92 L252 132 L286 110 L262 152 L310 156 L256 176 L236 156 Z" fill="#22C55E" stroke="#86EFAC" stroke-width="6" stroke-linejoin="round"/>
+    <!-- Cute Face -->
+    <circle cx="192" cy="272" r="16" fill="#1F2937"/>
+    <circle cx="187" cy="266" r="6" fill="#FFFFFF"/>
+    <circle cx="280" cy="272" r="16" fill="#1F2937"/>
+    <circle cx="275" cy="266" r="6" fill="#FFFFFF"/>
+    <ellipse cx="164" cy="292" rx="16" ry="9" fill="#F43F5E"/>
+    <ellipse cx="308" cy="292" rx="16" ry="9" fill="#F43F5E"/>
+    <path d="M214 294 Q236 320 258 294" stroke="#1F2937" stroke-width="10" stroke-linecap="round" fill="none"/>
+  </g>
+  <!-- Mini 3D Calculator Card (Bottom Right) -->
+  <g filter="url(#sh)" transform="translate(290, 260) rotate(8)">
+    <rect x="0" y="0" width="156" height="184" rx="34" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="6"/>
+    <rect x="20" y="20" width="116" height="44" rx="12" fill="#0F172A"/>
+    <text x="124" y="51" text-anchor="end" fill="#4ADE80" font-family="monospace" font-weight="900" font-size="28">99.8</text>
+    <circle cx="44" cy="96" r="18" fill="#38BDF8"/>
+    <circle cx="90" cy="96" r="18" fill="#A855F7"/>
+    <circle cx="44" cy="142" r="18" fill="#F59E0B"/>
+    <rect x="74" y="124" width="62" height="36" rx="18" fill="#10B981"/>
+  </g>
+</svg>
