@@ -1007,8 +1007,104 @@ def build_live_quota_payload() -> dict:
             "claudeWeekly": claude_pro["weekly"],
         },
         "models": models_list,
+        "favorites": load_favorites_file(),
     }
     return payload
+
+
+FAVORITES_JSON_PATH = os.path.join(ROOT_DIR, "favorites.json")
+
+
+def load_favorites_file() -> dict:
+    if os.path.exists(FAVORITES_JSON_PATH):
+        try:
+            with open(FAVORITES_JSON_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, dict) and isinstance(data.get("ids"), list):
+                return {
+                    "ids": [str(x).lower() for x in data["ids"] if x],
+                    "updatedAt": int(data.get("updatedAt") or 0),
+                }
+        except Exception:
+            pass
+    return {
+        "ids": [
+            "biblioosteo",
+            "agenda-cochin",
+            "guide-interne-cochin-os",
+            "agenda-internes",
+            "tomatocalc",
+            "colistrack",
+            "m4-gaming",
+            "monopoly",
+        ],
+        "updatedAt": 0,
+    }
+
+
+def save_favorites_file(ids: list[str], updated_at: int | None = None) -> dict:
+    clean_ids = []
+    seen = set()
+    for x in ids:
+        k = str(x or "").strip().lower()
+        if k and k not in seen:
+            seen.add(k)
+            clean_ids.append(k)
+    ts = int(updated_at) if updated_at else int(time.time() * 1000)
+    fav_obj = {"ids": clean_ids, "updatedAt": ts}
+    tmp_p = FAVORITES_JSON_PATH + ".tmp"
+    with open(tmp_p, "w", encoding="utf-8") as f:
+        json.dump(fav_obj, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    os.replace(tmp_p, FAVORITES_JSON_PATH)
+
+    with _state_lock:
+        if _last_payload is not None:
+            _last_payload["favorites"] = fav_obj
+            try:
+                save_quota_payload(_last_payload)
+            except Exception:
+                pass
+
+    def _async_push() -> None:
+        try:
+            subprocess.run(
+                ["git", "add", "favorites.json", "gemini-ultra/quota-live.json"],
+                cwd=ROOT_DIR,
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            diff = subprocess.run(
+                ["git", "diff", "--cached", "--quiet", "--", "favorites.json", "gemini-ultra/quota-live.json"],
+                cwd=ROOT_DIR,
+            )
+            if diff.returncode != 0:
+                subprocess.run(
+                    ["git", "commit", "-m", "chore(favorites): sync user favorites"],
+                    cwd=ROOT_DIR,
+                    check=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                subprocess.run(
+                    ["git", "pull", "--rebase", "--autostash", "origin", "main"],
+                    cwd=ROOT_DIR,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                subprocess.run(
+                    ["git", "push", "origin", "main"],
+                    cwd=ROOT_DIR,
+                    check=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+        except Exception:
+            pass
+
+    threading.Thread(target=_async_push, daemon=True).start()
+    return fav_obj
 
 
 def sync_t3_antigravity_cache(payload: dict) -> None:
@@ -1121,6 +1217,7 @@ def refresh_and_save(force: bool = False) -> dict:
         with _state_lock:
             if _current_tunnel_url:
                 _last_payload["tunnelUrl"] = _current_tunnel_url
+            _last_payload["favorites"] = load_favorites_file()
             return _last_payload
 
     payload = build_live_quota_payload()
@@ -1143,14 +1240,14 @@ def push_snapshot_to_github() -> bool:
                 stderr=subprocess.DEVNULL,
             )
         subprocess.run(
-            ["git", "add", "gemini-ultra/quota-live.json", "projects.json"],
+            ["git", "add", "gemini-ultra/quota-live.json", "projects.json", "favorites.json"],
             cwd=ROOT_DIR,
             check=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
         diff = subprocess.run(
-            ["git", "diff", "--cached", "--quiet", "--", "gemini-ultra/quota-live.json", "projects.json"],
+            ["git", "diff", "--cached", "--quiet", "--", "gemini-ultra/quota-live.json", "projects.json", "favorites.json"],
             cwd=ROOT_DIR,
         )
         if diff.returncode == 0:
@@ -1159,6 +1256,12 @@ def push_snapshot_to_github() -> bool:
             ["git", "commit", "-m", "chore(quota): auto-sync live Gemini Ultra limits snapshot"],
             cwd=ROOT_DIR,
             check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        subprocess.run(
+            ["git", "pull", "--rebase", "--autostash", "origin", "main"],
+            cwd=ROOT_DIR,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
@@ -1205,7 +1308,7 @@ def start_cloudflared_tunnel() -> None:
 class QuotaHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     def _send_cors(self) -> None:
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept, Cache-Control")
         self.send_header("Access-Control-Allow-Private-Network", "true")
         self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
@@ -1217,7 +1320,16 @@ class QuotaHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         parsed = urllib.parse.urlparse(self.path)
-        if parsed.path in ("/api/quota", "/quota-live.json", "/"):
+        if parsed.path == "/api/favorites":
+            fav_data = load_favorites_file()
+            raw = json.dumps(fav_data, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(raw)))
+            self._send_cors()
+            self.end_headers()
+            self.wfile.write(raw)
+        elif parsed.path in ("/api/quota", "/quota-live.json", "/"):
             qs = urllib.parse.parse_qs(parsed.query)
             force = "refresh" in qs or "force" in qs
             try:
@@ -1232,6 +1344,37 @@ class QuotaHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             except Exception as e:
                 err = json.dumps({"error": str(e)}).encode("utf-8")
                 self.send_response(500)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self._send_cors()
+                self.end_headers()
+                self.wfile.write(err)
+        else:
+            self.send_response(404)
+            self._send_cors()
+            self.end_headers()
+
+    def do_POST(self) -> None:
+        parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/api/favorites":
+            try:
+                length = int(self.headers.get("Content-Length") or 0)
+                body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
+                payload = json.loads(body)
+                ids = payload.get("ids") if isinstance(payload, dict) else payload
+                updated_at = payload.get("updatedAt") if isinstance(payload, dict) else None
+                if not isinstance(ids, list):
+                    raise ValueError("ids must be a list")
+                saved = save_favorites_file(ids, updated_at)
+                raw = json.dumps(saved, ensure_ascii=False).encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Content-Length", str(len(raw)))
+                self._send_cors()
+                self.end_headers()
+                self.wfile.write(raw)
+            except Exception as e:
+                err = json.dumps({"error": str(e)}).encode("utf-8")
+                self.send_response(400)
                 self.send_header("Content-Type", "application/json; charset=utf-8")
                 self._send_cors()
                 self.end_headers()
