@@ -1,46 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#1E1B4B"/>
-      <stop offset="50%" stop-color="#311042"/>
-      <stop offset="100%" stop-color="#0F172A"/>
+      <stop offset="0%" stop-color="#0B1120" />
+      <stop offset="55%" stop-color="#090D16" />
+      <stop offset="100%" stop-color="#131B2E" />
     </linearGradient>
-    <linearGradient id="botHead" x1="120" y1="130" x2="392" y2="380" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="50%" stop-color="#818CF8"/>
-      <stop offset="100%" stop-color="#C084FC"/>
+    <linearGradient id="geminiGrad" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#C084FC" />
     </linearGradient>
-    <linearGradient id="coin" x1="330" y1="310" x2="450" y2="430" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FDE047"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+    <linearGradient id="arcGrad" x1="80" y1="400" x2="432" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="55%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#8B5CF6" />
     </linearGradient>
-    <filter id="sh" x="-15%" y="-15%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity="0.5"/>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="14" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
-  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
-  <circle cx="256" cy="256" r="200" fill="#8B5CF6" fill-opacity="0.15"/>
-  <!-- Antenna -->
-  <line x1="256" y1="74" x2="256" y2="140" stroke="#38BDF8" stroke-width="16" stroke-linecap="round"/>
-  <circle cx="256" cy="70" r="24" fill="#F43F5E" stroke="#FDE047" stroke-width="6" filter="url(#sh)"/>
-  <!-- Ears -->
-  <rect x="76" y="220" width="44" height="90" rx="22" fill="#F59E0B"/>
-  <rect x="392" y="220" width="44" height="90" rx="22" fill="#38BDF8"/>
-  <!-- Cute 3D Robot Head -->
-  <g filter="url(#sh)">
-    <rect x="108" y="136" width="296" height="248" rx="76" fill="url(#botHead)" stroke="#FFFFFF" stroke-width="6" stroke-opacity="0.4"/>
-    <rect x="138" y="176" width="236" height="128" rx="44" fill="#0F172A"/>
-    <!-- Gemini Sparkle Eye (Left) -->
-    <path d="M202 204 C202 228 184 240 164 240 C184 240 202 252 202 276 C202 252 220 240 240 240 C220 240 202 228 202 204 Z" fill="#38BDF8"/>
-    <!-- Claude Sunburst Eye (Right) -->
-    <circle cx="312" cy="240" r="26" fill="#FB923C"/>
-    <circle cx="320" cy="232" r="8" fill="#FEF08A"/>
-    <!-- Happy Smile -->
-    <path d="M222 336 Q256 362 290 336" stroke="#0F172A" stroke-width="12" stroke-linecap="round" fill="none"/>
-  </g>
-  <!-- Gold Token Badge -->
-  <g filter="url(#sh)">
-    <circle cx="390" cy="382" r="64" fill="url(#coin)" stroke="#FEF08A" stroke-width="6"/>
-    <text x="390" y="404" text-anchor="middle" fill="#78350F" font-family="system-ui, sans-serif" font-weight="900" font-size="64">⚡</text>
-  </g>
+
+  <rect width="512" height="512" rx="116" fill="url(#bg)" />
+  <rect x="8" y="8" width="496" height="496" rx="108" stroke="rgba(255,255,255,0.08)" stroke-width="4" />
+
+  <circle cx="256" cy="256" r="172" stroke="#1E293B" stroke-width="26" stroke-linecap="round" stroke-dasharray="810 1080" stroke-dashoffset="0" transform="rotate(135 256 256)" />
+  <circle cx="256" cy="256" r="172" stroke="url(#arcGrad)" stroke-width="26" stroke-linecap="round" stroke-dasharray="620 1080" stroke-dashoffset="0" transform="rotate(135 256 256)" filter="url(#glow)" />
+
+  <path d="M256 124C256 196.9 196.9 256 124 256C196.9 256 256 315.1 256 388C256 315.1 315.1 256 388 256C315.1 256 256 196.9 256 124Z" fill="url(#geminiGrad)" filter="url(#glow)" />
+  <circle cx="364" cy="148" r="16" fill="#34D399" />
 </svg>
