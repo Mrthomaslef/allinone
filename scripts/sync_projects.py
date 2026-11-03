@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Synchronise automatiquement tous les dépôts en production de @Mrthomaslef
-et génère `projects.json` avec leurs titres, descriptions, catégories, vrais logos officiels et URLs live.
+et génère `projects.json` avec leurs titres, descriptions, catégories, logos fun du Tapp Store et URLs live.
 """
 from __future__ import annotations
 import json
@@ -18,35 +18,35 @@ KNOWN_METADATA = {
         "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
         "category": "medical-imaging",
         "emoji": "🦴",
-        "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
+        "logoUrl": "assets/icons/biblioosteo.svg",
     },
     "agenda-cochin": {
         "title": "Cochin RI — Agenda",
         "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
         "category": "medical-imaging",
         "emoji": "📅",
-        "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
+        "logoUrl": "assets/icons/agenda-cochin.svg",
     },
     "agenda-internes": {
         "title": "Espace Internes — Radio B",
         "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
         "category": "medical-imaging",
         "emoji": "🩺",
-        "logoUrl": "https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6",
+        "logoUrl": "assets/icons/agenda-internes.svg",
     },
     "guide-interne-cochin-os": {
         "title": "COCHIN·OS — Guide Internes",
         "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
         "category": "medical-imaging",
         "emoji": "🦴",
-        "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg",
+        "logoUrl": "assets/icons/guide-interne-cochin-os.svg",
     },
     "quiz-imagerie": {
         "title": "QUIZ Imagerie — 1 Image 1 Diag",
         "subtitle": "Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)",
         "category": "medical-imaging",
         "emoji": "🩻",
-        "logoUrl": "https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png",
+        "logoUrl": "assets/icons/quiz-imagerie.svg",
     },
     "radio-thomas": {
         "title": "QUIZ Cochin MSK",
@@ -54,56 +54,56 @@ KNOWN_METADATA = {
         "category": "medical-imaging",
         "emoji": "🧠",
         "prodUrl": "https://radio-thomas-ten.vercel.app",
-        "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
+        "logoUrl": "assets/icons/radio-thomas.svg",
     },
     "dicomviewer": {
         "title": "TPack PACS",
         "subtitle": "Visionneuse DICOM & console d’imagerie médicale pédagogique",
         "category": "medical-imaging",
         "emoji": "🖥️",
-        "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
+        "logoUrl": "assets/icons/dicomviewer.svg",
     },
     "tpack-cases": {
         "title": "TPack Cases",
         "subtitle": "Banque de dossiers et cas cliniques d’imagerie (.tpack)",
         "category": "medical-imaging",
         "emoji": "🗂️",
-        "logoUrl": "https://mrthomaslef.github.io/tpack-cases/favicon.svg",
+        "logoUrl": "assets/icons/tpack-cases.svg",
     },
     "tomatocalc": {
         "title": "TomatoCalc.",
         "subtitle": "Calculateurs médicaux, scores cliniques & classifications",
         "category": "clinical-calc",
         "emoji": "🍅",
-        "logoUrl": "https://mrthomaslef.github.io/Tomatocalc/image/logo2.png",
+        "logoUrl": "assets/icons/tomatocalc.svg",
     },
     "medicalc": {
         "title": "MediCalc",
         "subtitle": "Calculateurs médicaux rapides & aide clinique au quotidien",
         "category": "clinical-calc",
         "emoji": "⚕️",
-        "logoUrl": "https://mrthomaslef.github.io/Medicalc/image/logo2.png",
+        "logoUrl": "assets/icons/medicalc.svg",
     },
     "colistrack": {
         "title": "ColisTrack",
         "subtitle": "Suivi de livraisons & colis en temps réel (PWA privée)",
         "category": "daily-tools",
         "emoji": "📦",
-        "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
+        "logoUrl": "assets/icons/colistrack.svg",
     },
     "assistante-maternelle": {
         "title": "AssMat — Paie & Pajemploi",
         "subtitle": "Calculateur de salaire, présence, congés & fiche de paie",
         "category": "daily-tools",
-        "emoji": "👶",
-        "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
+        "emoji": "🧸",
+        "logoUrl": "assets/icons/assistante-maternelle.svg",
     },
     "agenda-famille": {
         "title": "Agenda Famille — Marie & Thomas",
         "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
         "category": "daily-tools",
         "emoji": "🏡",
-        "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
+        "logoUrl": "assets/icons/agenda-famille.svg",
     },
     "quiz-trentenaires": {
         "title": "QUIZ du 7TER",
@@ -124,7 +124,7 @@ KNOWN_METADATA = {
         "subtitle": "Portail vidéo & souvenirs de vacances au soleil",
         "category": "games-family",
         "emoji": "🌴",
-        "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
+        "logoUrl": "assets/icons/holidamn.svg",
     },
     "m4-gaming": {
         "title": "M4 Gaming",
@@ -139,14 +139,14 @@ KNOWN_METADATA = {
         "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
         "category": "games-family",
         "emoji": "🏴‍☠️",
-        "logoUrl": "https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png",
+        "logoUrl": "assets/pirate-plunder-icon.png?v=2",
     },
     "dinociel-app-educative": {
         "title": "DinoCiel — Petit Dino",
         "subtitle": "App éducative interactive pour enfants de 3 ans avec Petit Dino animé",
         "category": "games-family",
         "emoji": "🦕",
-        "logoUrl": "https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-emotion-happy.jpg",
+        "logoUrl": "assets/dinociel-icon.jpg",
     },
     "quiz-pokemon": {
         "title": "PokéQuiz — Attrape-les tous !",
@@ -202,8 +202,6 @@ def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
 
             apple_icons: list[str] = []
             other_icons: list[str] = []
-            ico_icons: list[str] = []
-            brand_imgs: list[str] = []
             manifest_url: str | None = None
 
             for link in re.findall(r"<link[^>]+>", html, re.I):
@@ -214,19 +212,9 @@ def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
                 if re.search(r'rel=["\']?apple-touch-icon', link, re.I):
                     apple_icons.append(resolved)
                 elif re.search(r'rel=["\']?(?:shortcut\s+)?icon', link, re.I):
-                    if resolved.split("?")[0].lower().endswith(".ico"):
-                        ico_icons.append(resolved)
-                    else:
-                        other_icons.append(resolved)
+                    other_icons.append(resolved)
                 elif re.search(r'rel=["\']?manifest', link, re.I):
                     manifest_url = resolved
-
-            for img in re.findall(r"<img[^>]+>", html, re.I):
-                src_m = re.search(r'src=["\']([^"\'>]+)["\']', img, re.I)
-                if not src_m or src_m.group(1).startswith("data:"):
-                    continue
-                if re.search(r"(logo|brand|icon|thumb)", img, re.I):
-                    brand_imgs.append(urllib.parse.urljoin(url, src_m.group(1)))
 
             if apple_icons:
                 logo_url = apple_icons[0]
@@ -250,10 +238,8 @@ def fetch_live_page_meta(url: str) -> tuple[str | None, str | None]:
                         if not _is_placeholder_svg(cand):
                             logo_url = cand
                             break
-                if not logo_url and brand_imgs:
-                    logo_url = brand_imgs[0]
-                if not logo_url and ico_icons:
-                    logo_url = ico_icons[0]
+                    if not logo_url and other_icons:
+                        logo_url = other_icons[0]
     except Exception:
         pass
     return title, logo_url
@@ -336,7 +322,7 @@ def main():
                 "subtitle": "Consommation Gemini & Claude (Tokens, Prix API & Quotas)",
                 "category": "daily-tools",
                 "emoji": "🤖",
-                "logoUrl": "gemini-ultra/assets/icon.svg",
+                "logoUrl": "assets/icons/gemini-ultra.svg",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/gemini-ultra",
                 "pushedAt": output[0]["pushedAt"] if output else None,

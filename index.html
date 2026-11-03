@@ -9,9 +9,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Tapp Store" />
-  <link rel="manifest" href="manifest.json?v=tapp1" />
-  <link rel="icon" type="image/svg+xml" href="assets/icon.svg?v=tapp1" />
-  <link rel="apple-touch-icon" href="assets/logo.jpg?v=tapp1" />
+  <link rel="manifest" href="manifest.json?v=tapp2" />
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg?v=tapp2" />
+  <link rel="shortcut icon" href="favicon.ico?v=tapp2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=tapp2" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -74,7 +75,7 @@
     }
 
     .app-card:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
     }
 
     @media (hover: hover) {
@@ -85,6 +86,13 @@
       }
     }
 
+    /* Favorites Dock Card */
+    .fav-dock-box {
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.10) 0%, rgba(236, 72, 153, 0.10) 50%, rgba(56, 189, 248, 0.08) 100%);
+      border: 1.5px solid rgba(250, 204, 21, 0.28);
+      box-shadow: 0 10px 30px -8px rgba(236, 72, 153, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
     /* Bouncy App Icon Squircle */
     .app-squircle {
       border-radius: 28%;
@@ -92,8 +100,17 @@
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .app-card:hover .app-squircle,
-    .grid-tile:hover .app-squircle {
+    .grid-tile:hover .app-squircle,
+    .fav-tile:hover .app-squircle {
       transform: rotate(-4deg) scale(1.07);
+    }
+
+    /* Star Button Bounce */
+    .star-btn {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.15s ease, background-color 0.15s ease;
+    }
+    .star-btn:active {
+      transform: scale(1.35) rotate(18deg);
     }
 
     /* Logo Halo Ring */
@@ -154,8 +171,8 @@
           <div class="relative shrink-0 logo-bounce">
             <div class="absolute -inset-1 rounded-[20px] bg-gradient-to-tr from-pink-500 via-purple-500 to-cyan-400 opacity-75 blur-sm"></div>
             <img
-              src="assets/logo.jpg?v=tapp1"
-              onerror="this.src='assets/icon.svg?v=tapp1'"
+              src="assets/logo.jpg?v=tapp2"
+              onerror="this.src='assets/icon.svg?v=tapp2'"
               alt="Logo Tapp Store"
               class="relative w-14 h-14 rounded-[18px] object-cover shadow-xl border-2 border-white/30"
             />
@@ -279,9 +296,27 @@
         />
       </div>
 
-      <!-- ONGLETS CATÉGORIES COLORÉS -->
+      <!-- ONGLETS CATÉGORIES COLORÉS (AVEC ONGLET FAVORIS ⭐) -->
       <div id="category-tabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar mt-3.5 pt-0.5"></div>
     </header>
+
+    <!-- DOCK "⭐ MES FAVORIS" ÉPINGLÉS EN HAUT -->
+    <section id="favorites-dock-section" class="mb-5 hidden">
+      <div class="fav-dock-box rounded-3xl p-3.5 space-y-3">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center gap-2">
+            <span class="text-base">⭐</span>
+            <h2 class="font-fun text-sm font-bold tracking-wide bg-gradient-to-r from-yellow-200 via-amber-300 to-pink-300 bg-clip-text text-transparent">
+              Mes Favoris
+            </h2>
+            <span id="fav-count-badge" class="px-2 py-0.5 rounded-full bg-yellow-400/20 border border-yellow-300/30 text-[10px] font-extrabold text-yellow-200">0</span>
+          </div>
+          <span class="text-[11px] text-purple-200/60">Touchez ★ sur une app pour l'épingler</span>
+        </div>
+
+        <div id="favorites-strip" class="grid grid-cols-4 sm:grid-cols-4 gap-2.5"></div>
+      </div>
+    </section>
 
     <!-- CONTENEUR DES APPS DU TAPP STORE -->
     <main id="projects-container" class="flex-1 space-y-6 pt-1"></main>
@@ -298,9 +333,67 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'tapp_store_live_repos_cache_v6';
+    const CACHE_KEY = 'tapp_store_live_repos_cache_v8';
     const VIEW_MODE_KEY = 'tapp_store_view_mode_v1';
+    const FAVS_STORAGE_KEY = 'tapp_store_favorites_v1';
+    const LEGACY_FAVS_KEY = 'allinone_favorites_v1';
     let lastManualSyncBust = '';
+
+    // Favoris épinglés par défaut si l'utilisateur n'a pas encore personnalisé sa liste
+    const DEFAULT_FAVORITES = [
+      'biblioosteo',
+      'agenda-cochin',
+      'guide-interne-cochin-os',
+      'agenda-internes',
+      'tomatocalc',
+      'colistrack',
+      'm4-gaming',
+      'monopoly'
+    ];
+
+    function loadFavoriteIds() {
+      try {
+        const raw = localStorage.getItem(FAVS_STORAGE_KEY) || localStorage.getItem(LEGACY_FAVS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            return new Set(parsed.map(id => String(id).toLowerCase()));
+          }
+        }
+      } catch (_) {}
+      return new Set(DEFAULT_FAVORITES.map(id => id.toLowerCase()));
+    }
+
+    let favoriteIds = loadFavoriteIds();
+
+    function saveFavoriteIds() {
+      try {
+        localStorage.setItem(FAVS_STORAGE_KEY, JSON.stringify([...favoriteIds]));
+      } catch (_) {}
+    }
+
+    function isFavorite(projectId) {
+      return favoriteIds.has(String(projectId || '').toLowerCase());
+    }
+
+    function toggleFavorite(event, projectId) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const key = String(projectId || '').toLowerCase();
+      if (!key) return;
+      if (favoriteIds.has(key)) {
+        favoriteIds.delete(key);
+      } else {
+        favoriteIds.add(key);
+      }
+      saveFavoriteIds();
+      if (navigator.vibrate) navigator.vibrate(10);
+      renderTabs();
+      renderFavoritesDock();
+      renderProjects();
+    }
 
     const CATEGORIES = [
       {
@@ -337,7 +430,7 @@
       }
     ];
 
-    // Métadonnées & vrais logos officiels des applications (avec icônes custom en fallback uniquement)
+    // Métadonnées & logos fun sur-mesure du Tapp Store
     const KNOWN_METADATA = {
       'm4-gaming': {
         title: 'M4 Gaming',
@@ -360,10 +453,9 @@
         emoji: '🤖',
         prodUrl: 'https://mrthomaslef.github.io/allinone/gemini-ultra/',
         githubUrl: 'https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra',
-        logoUrl: 'gemini-ultra/assets/icon.svg',
+        logoUrl: 'assets/icons/gemini-ultra.svg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg',
-          'assets/icons/gemini-ultra.svg'
+          'gemini-ultra/assets/icon.svg'
         ],
         alwaysInclude: true
       },
@@ -372,10 +464,9 @@
         subtitle: 'Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)',
         category: 'games-family',
         emoji: '🏴‍☠️',
-        logoUrl: 'https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png',
+        logoUrl: 'assets/pirate-plunder-icon.png?v=2',
         extraFallbacks: [
-          'assets/pirate-plunder-icon.png?v=2',
-          'https://mrthomaslef.github.io/monopoly/assets/icon.svg',
+          'https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png',
           'https://mrthomaslef.github.io/monopoly/assets/compass_emblem.jpg'
         ]
       },
@@ -384,10 +475,9 @@
         subtitle: 'App éducative interactive pour enfants de 3 ans avec Petit Dino animé',
         category: 'games-family',
         emoji: '🦕',
-        logoUrl: 'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-emotion-happy.jpg',
+        logoUrl: 'assets/dinociel-icon.jpg',
         extraFallbacks: [
-          'assets/dinociel-icon.jpg',
-          'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-idle.jpg',
+          'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-emotion-happy.jpg',
           'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-celebrate.jpg'
         ]
       },
@@ -424,19 +514,18 @@
         subtitle: 'Portail vidéo & souvenirs de vacances au soleil',
         category: 'games-family',
         emoji: '🌴',
-        logoUrl: 'https://mrthomaslef.github.io/Holidamn/image/logo7.png',
-        logoFit: 'contain',
-        extraFallbacks: ['assets/icons/holidamn.svg']
+        logoUrl: 'assets/icons/holidamn.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/Holidamn/image/logo7.png']
       },
       'biblioosteo': {
         title: 'BiblioOstéo Cochin',
         subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
         category: 'medical-imaging',
         emoji: '🦴',
-        logoUrl: 'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg',
+        logoUrl: 'assets/icons/biblioosteo.svg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/biblioosteo/assets/apple-touch-icon.png',
-          'assets/icons/biblioosteo.svg'
+          'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg',
+          'https://mrthomaslef.github.io/biblioosteo/assets/apple-touch-icon.png'
         ]
       },
       'agenda-cochin': {
@@ -444,10 +533,10 @@
         subtitle: 'Planning de Radiologie Interventionnelle (Cochin Radio B)',
         category: 'medical-imaging',
         emoji: '📅',
-        logoUrl: 'https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3',
+        logoUrl: 'assets/icons/agenda-cochin.svg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png?v=3',
-          'assets/icons/agenda-cochin.svg'
+          'https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3',
+          'https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png?v=3'
         ]
       },
       'agenda-internes': {
@@ -455,10 +544,10 @@
         subtitle: 'Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire',
         category: 'medical-imaging',
         emoji: '🩺',
-        logoUrl: 'https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6',
+        logoUrl: 'assets/icons/agenda-internes.svg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/agenda-internes/icon.svg',
-          'assets/icons/agenda-internes.svg'
+          'https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6',
+          'https://mrthomaslef.github.io/agenda-internes/icon.svg'
         ]
       },
       'guide-interne-cochin-os': {
@@ -466,17 +555,20 @@
         subtitle: 'Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)',
         category: 'medical-imaging',
         emoji: '🦴',
-        logoUrl: 'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg'
+        logoUrl: 'assets/icons/guide-interne-cochin-os.svg',
+        extraFallbacks: [
+          'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg'
+        ]
       },
       'quiz-imagerie': {
         title: 'QUIZ Imagerie — 1 Image 1 Diag',
         subtitle: 'Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)',
         category: 'medical-imaging',
         emoji: '🩻',
-        logoUrl: 'https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png',
+        logoUrl: 'assets/icons/quiz-imagerie.svg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/quiz-imagerie/icon.svg',
-          'assets/icons/quiz-imagerie.svg'
+          'https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png',
+          'https://mrthomaslef.github.io/quiz-imagerie/icon.svg'
         ]
       },
       'radio-thomas': {
@@ -485,10 +577,10 @@
         category: 'medical-imaging',
         emoji: '🧠',
         prodUrl: 'https://radio-thomas-ten.vercel.app',
-        logoUrl: 'https://radio-thomas-ten.vercel.app/apple-touch-icon.png',
+        logoUrl: 'assets/icons/radio-thomas.svg',
         extraFallbacks: [
-          'https://radio-thomas-ten.vercel.app/icon.svg',
-          'assets/icons/radio-thomas.svg'
+          'https://radio-thomas-ten.vercel.app/apple-touch-icon.png',
+          'https://radio-thomas-ten.vercel.app/icon.svg'
         ]
       },
       'dicomviewer': {
@@ -496,52 +588,50 @@
         subtitle: 'Visionneuse DICOM & console d’imagerie médicale pédagogique',
         category: 'medical-imaging',
         emoji: '🖥️',
-        logoUrl: 'https://mrthomaslef.github.io/dicomviewer/favicon.svg',
-        extraFallbacks: ['assets/icons/dicomviewer.svg']
+        logoUrl: 'assets/icons/dicomviewer.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/dicomviewer/favicon.svg']
       },
       'tpack-cases': {
         title: 'TPack Cases',
         subtitle: 'Banque de dossiers et cas cliniques d’imagerie (.tpack)',
         category: 'medical-imaging',
         emoji: '🗂️',
-        logoUrl: 'https://mrthomaslef.github.io/tpack-cases/favicon.svg',
-        extraFallbacks: ['assets/icons/tpack-cases.svg']
+        logoUrl: 'assets/icons/tpack-cases.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/tpack-cases/favicon.svg']
       },
       'tomatocalc': {
         title: 'TomatoCalc.',
         subtitle: 'Calculateurs médicaux, scores cliniques & classifications',
         category: 'clinical-calc',
         emoji: '🍅',
-        logoUrl: 'https://mrthomaslef.github.io/Tomatocalc/image/logo2.png',
-        logoFit: 'contain',
-        extraFallbacks: ['assets/icons/tomatocalc.svg']
+        logoUrl: 'assets/icons/tomatocalc.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/Tomatocalc/image/logo2.png']
       },
       'medicalc': {
         title: 'MediCalc',
         subtitle: 'Calculateurs médicaux rapides & aide clinique au quotidien',
         category: 'clinical-calc',
         emoji: '⚕️',
-        logoUrl: 'https://mrthomaslef.github.io/Medicalc/image/logo2.png',
-        logoFit: 'contain',
-        extraFallbacks: ['assets/icons/medicalc.svg']
+        logoUrl: 'assets/icons/medicalc.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/Medicalc/image/logo2.png']
       },
       'colistrack': {
         title: 'ColisTrack',
         subtitle: 'Suivi de livraisons & colis en temps réel (PWA privée)',
         category: 'daily-tools',
         emoji: '📦',
-        logoUrl: 'https://mrthomaslef.github.io/colistrack/icon.svg',
-        extraFallbacks: ['assets/icons/colistrack.svg']
+        logoUrl: 'assets/icons/colistrack.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/colistrack/icon.svg']
       },
       'assistante-maternelle': {
         title: 'AssMat — Paie & Pajemploi',
         subtitle: 'Calculateur de salaire, présence, congés & fiche de paie',
         category: 'daily-tools',
-        emoji: '👶',
-        logoUrl: 'https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png',
+        emoji: '🧸',
+        logoUrl: 'assets/icons/assistante-maternelle.svg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/assistante-maternelle/icon.svg',
-          'assets/icons/assistante-maternelle.svg'
+          'https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png',
+          'https://mrthomaslef.github.io/assistante-maternelle/icon.svg'
         ]
       },
       'agenda-famille': {
@@ -549,8 +639,8 @@
         subtitle: 'Planning partagé, gardes & indisponibilités à la maison',
         category: 'daily-tools',
         emoji: '🏡',
-        logoUrl: 'https://mrthomaslef.github.io/agenda-famille/icon.svg',
-        extraFallbacks: ['assets/icons/agenda-famille.svg']
+        logoUrl: 'assets/icons/agenda-famille.svg',
+        extraFallbacks: ['https://mrthomaslef.github.io/agenda-famille/icon.svg']
       }
     };
 
@@ -578,7 +668,7 @@
 
     function withLogoVersion(url, p) {
       if (!url) return '';
-      const ver = lastManualSyncBust || 'tapp6_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
+      const ver = lastManualSyncBust || 'tapp8_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
       if (!ver) return url;
       const clean = url.split('?')[0];
       return `${clean}?v=${encodeURIComponent(ver)}`;
@@ -762,6 +852,7 @@
       const searchEl = document.getElementById('search-input');
       if (searchEl) searchEl.value = '';
       renderTabs();
+      renderFavoritesDock();
       renderProjects();
 
       const cardEl = document.getElementById(`app-card-${winner.id.toLowerCase()}`);
@@ -774,6 +865,8 @@
 
     function renderTabs() {
       const tabsEl = document.getElementById('category-tabs');
+      const favCount = projects.filter(p => isFavorite(p.id)).length;
+
       const allBtn = `
         <button onclick="setCategory('all')" class="shrink-0 px-4 py-1.5 rounded-full text-xs font-extrabold transition active:scale-95 ${
           activeCategory === 'all'
@@ -781,6 +874,18 @@
             : 'bg-white/[0.07] text-purple-200/80 hover:text-white border border-white/10'
         }">
           ✨ Tout (${projects.length})
+        </button>
+      `;
+
+      const favBtn = `
+        <button onclick="setCategory('favorites')" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold transition active:scale-95 ${
+          activeCategory === 'favorites'
+            ? 'bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-400 text-slate-950 shadow-lg shadow-amber-500/25'
+            : 'bg-amber-400/10 text-amber-200 hover:bg-amber-400/20 border border-amber-300/25'
+        }">
+          <span>⭐</span>
+          <span>Favoris</span>
+          <span class="opacity-80 text-[11px]">${favCount}</span>
         </button>
       `;
 
@@ -800,7 +905,7 @@
         `;
       }).join('');
 
-      tabsEl.innerHTML = allBtn + catBtns;
+      tabsEl.innerHTML = allBtn + favBtn + catBtns;
     }
 
     function renderAppLogo(p, sizeClass = 'w-14 h-14') {
@@ -851,9 +956,84 @@
       `;
     }
 
+    function renderFavoritesDock() {
+      const dockSection = document.getElementById('favorites-dock-section');
+      const stripEl = document.getElementById('favorites-strip');
+      const countBadge = document.getElementById('fav-count-badge');
+      if (!dockSection || !stripEl) return;
+
+      const favItems = projects.filter(p => isFavorite(p.id));
+      if (countBadge) countBadge.textContent = String(favItems.length);
+
+      // Afficher le Dock Favoris quand on est sur "Tout" sans recherche active
+      if (favItems.length === 0 || activeCategory !== 'all' || searchQuery.trim() !== '') {
+        dockSection.classList.add('hidden');
+        return;
+      }
+
+      dockSection.classList.remove('hidden');
+
+      stripEl.innerHTML = favItems.map(p => `
+        <div class="fav-tile relative flex flex-col items-center text-center p-2 rounded-2xl bg-white/[0.05] hover:bg-white/[0.10] border border-white/10 transition group">
+          <button
+            onclick="toggleFavorite(event, '${p.id}')"
+            title="Retirer des favoris"
+            class="star-btn absolute top-1 right-1 z-10 w-6 h-6 rounded-full bg-slate-950/85 border border-yellow-400/40 flex items-center justify-center text-xs text-yellow-300 shadow"
+          >
+            ★
+          </button>
+          <a href="${p.prodUrl}" target="_blank" rel="noopener" class="flex flex-col items-center w-full active:scale-90 transition">
+            ${renderAppLogo(p, 'w-14 h-14')}
+            <span class="text-[11px] font-extrabold text-white/95 line-clamp-1 leading-tight mt-1.5 group-hover:text-yellow-200 transition">
+              ${p.title.split('—')[0].trim()}
+            </span>
+          </a>
+        </div>
+      `).join('');
+    }
+
     function renderProjects() {
       const container = document.getElementById('projects-container');
       const q = searchQuery.trim().toLowerCase();
+
+      // Si l'onglet "⭐ Favoris" est sélectionné
+      if (activeCategory === 'favorites') {
+        const favItems = projects.filter(p => {
+          if (!isFavorite(p.id)) return false;
+          if (!q) return true;
+          return `${p.title} ${p.subtitle} ${p.id}`.toLowerCase().includes(q);
+        });
+
+        if (favItems.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 px-4 rounded-3xl bg-white/[0.04] border border-white/10 space-y-2">
+              <div class="text-3xl">⭐</div>
+              <div class="font-fun text-base font-bold text-yellow-200">Aucun favori épinglé</div>
+              <p class="text-xs text-purple-200/70">Appuie sur l'étoile <strong>☆</strong> à côté de tes applications préférées pour les retrouver ici !</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <section class="space-y-2.5">
+            <div class="flex items-center justify-between px-1">
+              <h2 class="font-fun text-sm font-bold tracking-wide text-yellow-300 flex items-center gap-2">
+                <span class="text-base">⭐</span>
+                <span>Mes Applications Favorites</span>
+              </h2>
+              <span class="px-2 py-0.5 rounded-full bg-yellow-400/20 text-[11px] text-yellow-200 font-bold">${favItems.length}</span>
+            </div>
+            <div class="space-y-2.5">
+              ${favItems.map(p => {
+                const cat = CATEGORIES.find(c => c.id === p.category) || CATEGORIES[0];
+                return renderAppCardHtml(p, cat);
+              }).join('')}
+            </div>
+          </section>
+        `;
+        return;
+      }
 
       const visibleCategories = activeCategory === 'all'
         ? CATEGORIES
@@ -882,20 +1062,31 @@
               </div>
 
               <div class="grid grid-cols-4 gap-3 pt-1">
-                ${items.map(p => `
-                  <a
-                    id="app-card-${p.id.toLowerCase()}"
-                    href="${p.prodUrl}"
-                    target="_blank"
-                    rel="noopener"
-                    class="grid-tile flex flex-col items-center text-center p-2 rounded-2xl hover:bg-white/5 transition active:scale-90 group"
-                  >
-                    ${renderAppLogo(p, 'w-16 h-16')}
-                    <span class="text-[11px] font-bold text-white/95 line-clamp-2 leading-tight mt-2 group-hover:text-pink-300 transition">
-                      ${p.title.split('—')[0].trim()}
-                    </span>
-                  </a>
-                `).join('')}
+                ${items.map(p => {
+                  const fav = isFavorite(p.id);
+                  return `
+                    <div id="app-card-${p.id.toLowerCase()}" class="grid-tile relative flex flex-col items-center text-center p-2 rounded-2xl hover:bg-white/5 transition group">
+                      <button
+                        onclick="toggleFavorite(event, '${p.id}')"
+                        title="${fav ? 'Retirer des favoris' : 'Ajouter aux favoris'}"
+                        class="star-btn absolute top-1 right-1 z-10 w-6 h-6 rounded-full bg-slate-950/80 border ${fav ? 'border-yellow-400/50 text-yellow-300' : 'border-white/15 text-purple-300/50'} flex items-center justify-center text-xs shadow"
+                      >
+                        ${fav ? '★' : '☆'}
+                      </button>
+                      <a
+                        href="${p.prodUrl}"
+                        target="_blank"
+                        rel="noopener"
+                        class="flex flex-col items-center w-full active:scale-90 transition"
+                      >
+                        ${renderAppLogo(p, 'w-16 h-16')}
+                        <span class="text-[11px] font-bold text-white/95 line-clamp-2 leading-tight mt-2 group-hover:text-pink-300 transition">
+                          ${p.title.split('—')[0].trim()}
+                        </span>
+                      </a>
+                    </div>
+                  `;
+                }).join('')}
               </div>
             </section>
           `;
@@ -911,43 +1102,7 @@
               </div>
 
               <div class="space-y-2.5">
-                ${items.map(p => `
-                  <div id="app-card-${p.id.toLowerCase()}" class="app-card rounded-3xl p-3 flex items-center justify-between gap-3">
-                    <a href="${p.prodUrl}" target="_blank" rel="noopener" class="flex items-center gap-3.5 min-w-0 flex-1">
-                      ${renderAppLogo(p, 'w-14 h-14')}
-                      <div class="min-w-0 flex-1">
-                        <div class="flex items-center gap-1.5">
-                          <span class="text-sm font-extrabold text-white truncate">${p.title}</span>
-                          ${p.isNew ? '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-full bg-gradient-to-r from-yellow-300 to-pink-400 text-slate-950 shrink-0">NEW</span>' : ''}
-                        </div>
-                        <div class="text-xs text-purple-200/70 line-clamp-1 mt-0.5">${p.subtitle}</div>
-                      </div>
-                    </a>
-
-                    <div class="flex items-center gap-1.5 shrink-0">
-                      <a
-                        href="${p.githubUrl}"
-                        target="_blank"
-                        rel="noopener"
-                        title="Code source GitHub"
-                        class="p-2 rounded-2xl bg-white/5 hover:bg-white/15 text-purple-200/60 hover:text-white transition"
-                      >
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                        </svg>
-                      </a>
-
-                      <a
-                        href="${p.prodUrl}"
-                        target="_blank"
-                        rel="noopener"
-                        class="px-3.5 py-2 rounded-full bg-gradient-to-r ${cat.badgeClass} font-fun font-bold text-xs flex items-center gap-1 shadow-md transition active:scale-90"
-                      >
-                        <span>${cat.ctaLabel}</span>
-                      </a>
-                    </div>
-                  </div>
-                `).join('')}
+                ${items.map(p => renderAppCardHtml(p, cat)).join('')}
               </div>
             </section>
           `;
@@ -965,14 +1120,65 @@
       container.innerHTML = html;
     }
 
+    function renderAppCardHtml(p, cat) {
+      const fav = isFavorite(p.id);
+      return `
+        <div id="app-card-${p.id.toLowerCase()}" class="app-card rounded-3xl p-3 flex items-center justify-between gap-2.5">
+          <a href="${p.prodUrl}" target="_blank" rel="noopener" class="flex items-center gap-3 min-w-0 flex-1">
+            ${renderAppLogo(p, 'w-14 h-14')}
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-sm font-extrabold text-white truncate">${p.title}</span>
+                ${p.isNew ? '<span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-full bg-gradient-to-r from-yellow-300 to-pink-400 text-slate-950 shrink-0">NEW</span>' : ''}
+              </div>
+              <div class="text-xs text-purple-200/70 line-clamp-1 mt-0.5">${p.subtitle}</div>
+            </div>
+          </a>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <button
+              onclick="toggleFavorite(event, '${p.id}')"
+              title="${fav ? 'Retirer des favoris' : 'Épingler dans mes favoris'}"
+              class="star-btn p-2 rounded-2xl ${fav ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-300/40' : 'bg-white/5 text-purple-200/50 hover:text-yellow-200 border border-transparent'} text-sm leading-none"
+            >
+              ${fav ? '★' : '☆'}
+            </button>
+
+            <a
+              href="${p.githubUrl}"
+              target="_blank"
+              rel="noopener"
+              title="Code source GitHub"
+              class="p-2 rounded-2xl bg-white/5 hover:bg-white/15 text-purple-200/60 hover:text-white transition"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+            </a>
+
+            <a
+              href="${p.prodUrl}"
+              target="_blank"
+              rel="noopener"
+              class="px-3.5 py-2 rounded-full bg-gradient-to-r ${cat.badgeClass} font-fun font-bold text-xs flex items-center gap-1 shadow-md transition active:scale-90"
+            >
+              <span>${cat.ctaLabel}</span>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
     function setCategory(catId) {
       activeCategory = catId;
       renderTabs();
+      renderFavoritesDock();
       renderProjects();
     }
 
     function handleSearch(val) {
       searchQuery = val;
+      renderFavoritesDock();
       renderProjects();
     }
 
@@ -1097,6 +1303,7 @@
           projects = syncedList;
           localStorage.setItem(CACHE_KEY, JSON.stringify(projects));
           renderTabs();
+          renderFavoritesDock();
           renderProjects();
 
           const liveChecks = syncedList.map(async (item) => {
@@ -1134,6 +1341,7 @@
           const results = await Promise.allSettled(liveChecks);
           if (results.some(r => r.status === 'fulfilled' && r.value)) {
             localStorage.setItem(CACHE_KEY, JSON.stringify(projects));
+            renderFavoritesDock();
             renderProjects();
           }
 
@@ -1407,6 +1615,7 @@
 
     updateViewToggleIcon();
     renderTabs();
+    renderFavoritesDock();
     renderProjects();
     initPullToRefresh();
     syncGeminiUltraWidget(false);
