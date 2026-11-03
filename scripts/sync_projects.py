@@ -25,7 +25,7 @@ KNOWN_METADATA = {
         "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
         "category": "medical-imaging",
         "emoji": "📅",
-        "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png",
+        "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
     },
     "radio-thomas": {
         "title": "QUIZ Cochin",
