@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-03T17:06:40Z",
+  "checkedAt": "2026-11-03T17:16:04Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://viewer-sig-suits-comm.trycloudflare.com",
   "subscription": {
@@ -161,12 +161,12 @@
       "resetsAt": "2026-11-03T22:00:10Z",
       "startedAt": "2026-11-03T17:00:10Z",
       "durationMins": 300,
-      "remainingSeconds": 17609,
-      "elapsedPercent": 2.17,
-      "paceDeltaPercent": -1.58,
-      "burnRatePerHour": 5.44,
+      "remainingSeconds": 17045,
+      "elapsedPercent": 5.31,
+      "paceDeltaPercent": -4.72,
+      "burnRatePerHour": 2.22,
       "disabled": false,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in 4 hours, 53 minutes.",
+      "description": "You have used some of your 5-hour limit, it will fully refresh in 4 hours, 44 minutes.",
       "promptsWindow": 1,
       "stepsWindow": 18,
       "tokensWindow": 467681,
@@ -252,14 +252,14 @@
       "resetsAt": "2026-11-07T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 10080,
-      "remainingSeconds": 313621,
-      "elapsedPercent": 48.14,
-      "paceDeltaPercent": 0.0,
-      "burnRatePerHour": 0.6,
+      "remainingSeconds": 313057,
+      "elapsedPercent": 48.24,
+      "paceDeltaPercent": -0.1,
+      "burnRatePerHour": 0.59,
       "disabled": false,
-      "description": "You have used some of your weekly limit, it will fully refresh in 3 days, 15 hours.",
-      "dailyBudgetRemainingPercent": 14.29,
-      "burnRatePerDay": 14.4,
+      "description": "You have used some of your weekly limit, it will fully refresh in 3 days, 14 hours.",
+      "dailyBudgetRemainingPercent": 14.31,
+      "burnRatePerDay": 14.2,
       "promptsWindow": 492,
       "stepsWindow": 22063,
       "tokensWindow": 98659613,
@@ -367,8 +367,8 @@
       "durationMins": 43200,
       "resetsAt": "2026-11-30T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
-      "remainingSeconds": 2300821,
-      "elapsedPercent": 11.23,
+      "remainingSeconds": 2300257,
+      "elapsedPercent": 11.26,
       "usedPercent": 11.23,
       "remainingPercent": 88.77,
       "promptsCount": 492,
@@ -552,15 +552,15 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-03T22:06:40Z",
-      "startedAt": "2026-11-03T17:06:40Z",
+      "resetsAt": "2026-11-03T22:16:05Z",
+      "startedAt": "2026-11-03T17:16:05Z",
       "durationMins": 300,
-      "remainingSeconds": 17999,
+      "remainingSeconds": 18000,
       "elapsedPercent": 0.0,
       "paceDeltaPercent": 0.0,
       "burnRatePerHour": 0.0,
       "disabled": true,
-      "description": "You have hit your weekly limit, the 5-hour limit does not currently apply. Your weekly limit will fully refresh in 3 days, 16 hours."
+      "description": "You have hit your weekly limit, the 5-hour limit does not currently apply. Your weekly limit will fully refresh in 3 days, 15 hours."
     },
     "thirdPartyWeekly": {
       "id": "3p-weekly",
@@ -570,12 +570,12 @@
       "resetsAt": "2026-11-07T09:10:41Z",
       "startedAt": "2026-10-31T09:10:41Z",
       "durationMins": 10080,
-      "remainingSeconds": 317040,
-      "elapsedPercent": 47.58,
-      "paceDeltaPercent": 52.42,
+      "remainingSeconds": 316476,
+      "elapsedPercent": 47.67,
+      "paceDeltaPercent": 52.33,
       "burnRatePerHour": 1.25,
       "disabled": false,
-      "description": "You have hit your weekly limit, it refreshes in 3 days, 16 hours. If on a supported paid plan, you can use AI credits in the interim or upgrade to a higher tier."
+      "description": "You have hit your weekly limit, it refreshes in 3 days, 15 hours. If on a supported paid plan, you can use AI credits in the interim or upgrade to a higher tier."
     },
     "claudeFiveHour": {
       "id": "claude-5h",
@@ -591,8 +591,8 @@
       "durationMins": 10080,
       "usedPercent": 9.0,
       "remainingPercent": 91.0,
-      "resetsAt": "2026-11-05T01:00:00Z",
-      "remainingSeconds": 114923
+      "resetsAt": "2026-11-05T00:59:59Z",
+      "remainingSeconds": 114360
     }
   },
   "models": [
@@ -603,7 +603,7 @@
       "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
       "remainingPercent": 91.0,
       "usedPercent": 9.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-sonnet-5-5",
@@ -612,7 +612,7 @@
       "description": "Claude Pro Direct • Raisonnement rapide & efficace",
       "remainingPercent": 91.0,
       "usedPercent": 9.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-fable-5-1",
@@ -621,7 +621,7 @@
       "description": "Claude Pro Direct • Défis complexes & Ultracode",
       "remainingPercent": 91.0,
       "usedPercent": 9.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-haiku-5-5",
@@ -630,7 +630,7 @@
       "description": "Claude Pro Direct • Réponses instantanées",
       "remainingPercent": 91.0,
       "usedPercent": 9.0,
-      "resetsAt": "2026-11-05T01:00:00Z"
+      "resetsAt": "2026-11-05T00:59:59Z"
     },
     {
       "id": "claude-opus-5-5-high",
