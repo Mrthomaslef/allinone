@@ -333,7 +333,7 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'tapp_store_live_repos_cache_v8';
+    const CACHE_KEY = 'tapp_store_live_repos_cache_v9';
     const VIEW_MODE_KEY = 'tapp_store_view_mode_v1';
     const FAVS_STORAGE_KEY = 'tapp_store_favorites_v1';
     const LEGACY_FAVS_KEY = 'allinone_favorites_v1';
@@ -430,7 +430,7 @@
       }
     ];
 
-    // Métadonnées & logos fun sur-mesure du Tapp Store
+    // Métadonnées & vrais logos officiels des applications en production
     const KNOWN_METADATA = {
       'm4-gaming': {
         title: 'M4 Gaming',
@@ -453,9 +453,9 @@
         emoji: '🤖',
         prodUrl: 'https://mrthomaslef.github.io/allinone/gemini-ultra/',
         githubUrl: 'https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra',
-        logoUrl: 'assets/icons/gemini-ultra.svg',
+        logoUrl: 'gemini-ultra/assets/icon.svg',
         extraFallbacks: [
-          'gemini-ultra/assets/icon.svg'
+          'https://mrthomaslef.github.io/allinone/gemini-ultra/assets/icon.svg'
         ],
         alwaysInclude: true
       },
@@ -464,9 +464,10 @@
         subtitle: 'Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)',
         category: 'games-family',
         emoji: '🏴‍☠️',
-        logoUrl: 'assets/pirate-plunder-icon.png?v=2',
+        logoUrl: 'https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png',
+          'assets/pirate-plunder-icon.png?v=2',
+          'https://mrthomaslef.github.io/monopoly/assets/icon.svg',
           'https://mrthomaslef.github.io/monopoly/assets/compass_emblem.jpg'
         ]
       },
@@ -475,9 +476,10 @@
         subtitle: 'App éducative interactive pour enfants de 3 ans avec Petit Dino animé',
         category: 'games-family',
         emoji: '🦕',
-        logoUrl: 'assets/dinociel-icon.jpg',
+        logoUrl: 'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-emotion-happy.jpg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-emotion-happy.jpg',
+          'assets/dinociel-icon.jpg',
+          'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-idle.jpg',
           'https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-celebrate.jpg'
         ]
       },
@@ -514,17 +516,16 @@
         subtitle: 'Portail vidéo & souvenirs de vacances au soleil',
         category: 'games-family',
         emoji: '🌴',
-        logoUrl: 'assets/icons/holidamn.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/Holidamn/image/logo7.png']
+        logoUrl: 'https://mrthomaslef.github.io/Holidamn/image/logo7.png',
+        logoFit: 'contain'
       },
       'biblioosteo': {
         title: 'BiblioOstéo Cochin',
         subtitle: 'Portail bibliographique & résumés cliniques (RI & Ostéo)',
         category: 'medical-imaging',
         emoji: '🦴',
-        logoUrl: 'assets/icons/biblioosteo.svg',
+        logoUrl: 'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/biblioosteo/assets/icon.svg',
           'https://mrthomaslef.github.io/biblioosteo/assets/apple-touch-icon.png'
         ]
       },
@@ -533,9 +534,8 @@
         subtitle: 'Planning de Radiologie Interventionnelle (Cochin Radio B)',
         category: 'medical-imaging',
         emoji: '📅',
-        logoUrl: 'assets/icons/agenda-cochin.svg',
+        logoUrl: 'https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3',
           'https://mrthomaslef.github.io/agenda-cochin/apple-touch-icon.png?v=3'
         ]
       },
@@ -544,9 +544,8 @@
         subtitle: 'Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire',
         category: 'medical-imaging',
         emoji: '🩺',
-        logoUrl: 'assets/icons/agenda-internes.svg',
+        logoUrl: 'https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6',
           'https://mrthomaslef.github.io/agenda-internes/icon.svg'
         ]
       },
@@ -555,19 +554,15 @@
         subtitle: 'Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)',
         category: 'medical-imaging',
         emoji: '🦴',
-        logoUrl: 'assets/icons/guide-interne-cochin-os.svg',
-        extraFallbacks: [
-          'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg'
-        ]
+        logoUrl: 'https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg'
       },
       'quiz-imagerie': {
         title: 'QUIZ Imagerie — 1 Image 1 Diag',
         subtitle: 'Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)',
         category: 'medical-imaging',
         emoji: '🩻',
-        logoUrl: 'assets/icons/quiz-imagerie.svg',
+        logoUrl: 'https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png',
           'https://mrthomaslef.github.io/quiz-imagerie/icon.svg'
         ]
       },
@@ -577,9 +572,8 @@
         category: 'medical-imaging',
         emoji: '🧠',
         prodUrl: 'https://radio-thomas-ten.vercel.app',
-        logoUrl: 'assets/icons/radio-thomas.svg',
+        logoUrl: 'https://radio-thomas-ten.vercel.app/apple-touch-icon.png',
         extraFallbacks: [
-          'https://radio-thomas-ten.vercel.app/apple-touch-icon.png',
           'https://radio-thomas-ten.vercel.app/icon.svg'
         ]
       },
@@ -588,49 +582,45 @@
         subtitle: 'Visionneuse DICOM & console d’imagerie médicale pédagogique',
         category: 'medical-imaging',
         emoji: '🖥️',
-        logoUrl: 'assets/icons/dicomviewer.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/dicomviewer/favicon.svg']
+        logoUrl: 'https://mrthomaslef.github.io/dicomviewer/favicon.svg'
       },
       'tpack-cases': {
         title: 'TPack Cases',
         subtitle: 'Banque de dossiers et cas cliniques d’imagerie (.tpack)',
         category: 'medical-imaging',
         emoji: '🗂️',
-        logoUrl: 'assets/icons/tpack-cases.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/tpack-cases/favicon.svg']
+        logoUrl: 'https://mrthomaslef.github.io/tpack-cases/favicon.svg'
       },
       'tomatocalc': {
         title: 'TomatoCalc.',
         subtitle: 'Calculateurs médicaux, scores cliniques & classifications',
         category: 'clinical-calc',
         emoji: '🍅',
-        logoUrl: 'assets/icons/tomatocalc.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/Tomatocalc/image/logo2.png']
+        logoUrl: 'https://mrthomaslef.github.io/Tomatocalc/image/logo2.png',
+        logoFit: 'contain'
       },
       'medicalc': {
         title: 'MediCalc',
         subtitle: 'Calculateurs médicaux rapides & aide clinique au quotidien',
         category: 'clinical-calc',
         emoji: '⚕️',
-        logoUrl: 'assets/icons/medicalc.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/Medicalc/image/logo2.png']
+        logoUrl: 'https://mrthomaslef.github.io/Medicalc/image/logo2.png',
+        logoFit: 'contain'
       },
       'colistrack': {
         title: 'ColisTrack',
         subtitle: 'Suivi de livraisons & colis en temps réel (PWA privée)',
         category: 'daily-tools',
         emoji: '📦',
-        logoUrl: 'assets/icons/colistrack.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/colistrack/icon.svg']
+        logoUrl: 'https://mrthomaslef.github.io/colistrack/icon.svg'
       },
       'assistante-maternelle': {
         title: 'AssMat — Paie & Pajemploi',
         subtitle: 'Calculateur de salaire, présence, congés & fiche de paie',
         category: 'daily-tools',
-        emoji: '🧸',
-        logoUrl: 'assets/icons/assistante-maternelle.svg',
+        emoji: '👶',
+        logoUrl: 'https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png',
         extraFallbacks: [
-          'https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png',
           'https://mrthomaslef.github.io/assistante-maternelle/icon.svg'
         ]
       },
@@ -639,8 +629,7 @@
         subtitle: 'Planning partagé, gardes & indisponibilités à la maison',
         category: 'daily-tools',
         emoji: '🏡',
-        logoUrl: 'assets/icons/agenda-famille.svg',
-        extraFallbacks: ['https://mrthomaslef.github.io/agenda-famille/icon.svg']
+        logoUrl: 'https://mrthomaslef.github.io/agenda-famille/icon.svg'
       }
     };
 
