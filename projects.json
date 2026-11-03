@@ -5,21 +5,32 @@
     "subtitle": "Consommation Gemini & Claude (Tokens, Prix API & Quotas)",
     "category": "daily-tools",
     "emoji": "🤖",
-    "logoUrl": "assets/icons/gemini-ultra.svg",
+    "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-03T21:08:02Z"
+    "pushedAt": "2026-11-03T21:21:53Z"
   },
   {
     "id": "guide-interne-cochin-os",
-    "title": "COCHIN·OS — Internes Radio B",
-    "subtitle": "COCHIN·OS — Portail & Annuaire des Internes de Radiologie B (Ostéo-Articulaire & RI) Hôpital Cochin",
+    "title": "COCHIN·OS — Guide Internes",
+    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
     "category": "medical-imaging",
-    "emoji": "🩺",
-    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=2",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
-    "pushedAt": "2026-11-03T21:08:02Z"
+    "pushedAt": "2026-11-03T21:21:53Z"
+  },
+  {
+    "id": "agenda-internes",
+    "title": "Espace Internes — Radio B",
+    "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
+    "category": "medical-imaging",
+    "emoji": "🩺",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-internes/icon.svg?v=6",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-internes/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-internes",
+    "pushedAt": "2026-11-03T21:21:01Z"
   },
   {
     "id": "quiz-pokemon",
@@ -38,7 +49,7 @@
     "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
     "category": "medical-imaging",
     "emoji": "📅",
-    "logoUrl": "assets/icons/agenda-cochin.svg",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
     "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
     "pushedAt": "2026-11-03T20:47:10Z"
@@ -49,7 +60,7 @@
     "subtitle": "Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)",
     "category": "medical-imaging",
     "emoji": "🩻",
-    "logoUrl": "assets/icons/quiz-imagerie.svg",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/quiz-imagerie/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-imagerie",
     "pushedAt": "2026-11-03T20:10:14Z"
@@ -60,7 +71,7 @@
     "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
     "category": "daily-tools",
     "emoji": "🏡",
-    "logoUrl": "assets/icons/agenda-famille.svg",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
     "pushedAt": "2026-11-03T19:20:35Z"
@@ -71,21 +82,10 @@
     "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
     "category": "medical-imaging",
     "emoji": "🦴",
-    "logoUrl": "assets/icons/biblioosteo.svg",
+    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
     "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
     "pushedAt": "2026-11-03T19:12:17Z"
-  },
-  {
-    "id": "agenda-internes",
-    "title": "Espace Internes — Radio B",
-    "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
-    "category": "medical-imaging",
-    "emoji": "🩺",
-    "logoUrl": "assets/icons/agenda-internes.svg",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-internes/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-internes",
-    "pushedAt": "2026-11-03T16:25:02Z"
   },
   {
     "id": "monopoly",
@@ -93,7 +93,7 @@
     "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
     "category": "games-family",
     "emoji": "🏴‍☠️",
-    "logoUrl": "assets/pirate-plunder-icon.png?v=2",
+    "logoUrl": "https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png",
     "prodUrl": "https://mrthomaslef.github.io/monopoly/",
     "githubUrl": "https://github.com/Mrthomaslef/monopoly",
     "pushedAt": "2026-11-01T22:00:56Z"
@@ -104,7 +104,7 @@
     "subtitle": "App éducative interactive pour enfants de 3 ans avec Petit Dino animé",
     "category": "games-family",
     "emoji": "🦕",
-    "logoUrl": "assets/dinociel-icon.jpg",
+    "logoUrl": "https://mrthomaslef.github.io/dinociel-app-educative/assets/dino-emotion-happy.jpg",
     "prodUrl": "https://mrthomaslef.github.io/dinociel-app-educative/",
     "githubUrl": "https://github.com/Mrthomaslef/dinociel-app-educative",
     "pushedAt": "2026-11-01T11:51:25Z"
@@ -126,7 +126,7 @@
     "subtitle": "Suivi de livraisons & colis en temps réel (PWA privée)",
     "category": "daily-tools",
     "emoji": "📦",
-    "logoUrl": "assets/icons/colistrack.svg",
+    "logoUrl": "https://mrthomaslef.github.io/colistrack/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/colistrack/",
     "githubUrl": "https://github.com/Mrthomaslef/colistrack",
     "pushedAt": "2026-10-31T09:58:50Z"
@@ -148,7 +148,7 @@
     "subtitle": "Portail vidéo & souvenirs de vacances au soleil",
     "category": "games-family",
     "emoji": "🌴",
-    "logoUrl": "assets/icons/holidamn.svg",
+    "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
     "prodUrl": "https://mrthomaslef.github.io/Holidamn/",
     "githubUrl": "https://github.com/Mrthomaslef/Holidamn",
     "pushedAt": "2026-10-31T07:49:25Z"
@@ -159,7 +159,7 @@
     "subtitle": "Calculateurs médicaux rapides & aide clinique au quotidien",
     "category": "clinical-calc",
     "emoji": "⚕️",
-    "logoUrl": "assets/icons/medicalc.svg",
+    "logoUrl": "https://mrthomaslef.github.io/Medicalc/image/logo2.png",
     "prodUrl": "https://mrthomaslef.github.io/Medicalc/",
     "githubUrl": "https://github.com/Mrthomaslef/Medicalc",
     "pushedAt": "2026-10-31T07:49:24Z"
@@ -170,7 +170,7 @@
     "subtitle": "Visionneuse DICOM & console d’imagerie médicale pédagogique",
     "category": "medical-imaging",
     "emoji": "🖥️",
-    "logoUrl": "assets/icons/dicomviewer.svg",
+    "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
     "prodUrl": "https://mrthomaslef.github.io/dicomviewer/",
     "githubUrl": "https://github.com/Mrthomaslef/dicomviewer",
     "pushedAt": "2026-10-31T07:49:23Z"
@@ -181,7 +181,7 @@
     "subtitle": "Banque de dossiers et cas cliniques d’imagerie (.tpack)",
     "category": "medical-imaging",
     "emoji": "🗂️",
-    "logoUrl": "assets/icons/tpack-cases.svg",
+    "logoUrl": "https://mrthomaslef.github.io/tpack-cases/favicon.svg",
     "prodUrl": "https://mrthomaslef.github.io/tpack-cases/",
     "githubUrl": "https://github.com/Mrthomaslef/tpack-cases",
     "pushedAt": "2026-10-31T07:49:21Z"
@@ -191,8 +191,8 @@
     "title": "AssMat — Paie & Pajemploi",
     "subtitle": "Calculateur de salaire, présence, congés & fiche de paie",
     "category": "daily-tools",
-    "emoji": "🧸",
-    "logoUrl": "assets/icons/assistante-maternelle.svg",
+    "emoji": "👶",
+    "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
     "prodUrl": "https://mrthomaslef.github.io/assistante-maternelle/",
     "githubUrl": "https://github.com/Mrthomaslef/assistante-maternelle",
     "pushedAt": "2026-10-31T07:49:20Z"
@@ -214,7 +214,7 @@
     "subtitle": "Calculateurs médicaux, scores cliniques & classifications",
     "category": "clinical-calc",
     "emoji": "🍅",
-    "logoUrl": "assets/icons/tomatocalc.svg",
+    "logoUrl": "https://mrthomaslef.github.io/Tomatocalc/image/logo2.png",
     "prodUrl": "https://mrthomaslef.github.io/Tomatocalc/",
     "githubUrl": "https://github.com/Mrthomaslef/Tomatocalc",
     "pushedAt": "2026-10-31T07:49:14Z"
@@ -225,7 +225,7 @@
     "subtitle": "Quiz interactif d’imagerie musculosquelettique",
     "category": "medical-imaging",
     "emoji": "🧠",
-    "logoUrl": "assets/icons/radio-thomas.svg",
+    "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
     "prodUrl": "https://radio-thomas-ten.vercel.app",
     "githubUrl": "https://github.com/Mrthomaslef/radio-thomas",
     "pushedAt": "2026-10-31T07:49:12Z"
