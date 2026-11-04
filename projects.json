@@ -8,7 +8,18 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-04T22:40:45Z"
+    "pushedAt": "2026-11-04T22:51:57Z"
+  },
+  {
+    "id": "second-brain-voice",
+    "title": "Second Brain · Voice",
+    "subtitle": "Interface vocale mains-libres Cochin Radio B (Dictée médicale, RAG Obsidian & Synthèse vocale)",
+    "category": "medical-imaging",
+    "emoji": "🎙️",
+    "logoUrl": "second-brain-voice/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
+    "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
+    "pushedAt": "2026-11-04T22:51:57Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -19,7 +30,7 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-04T22:40:45Z"
+    "pushedAt": "2026-11-04T22:51:57Z"
   },
   {
     "id": "monopoly",
@@ -30,7 +41,7 @@
     "logoUrl": "https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png",
     "prodUrl": "https://mrthomaslef.github.io/monopoly/",
     "githubUrl": "https://github.com/Mrthomaslef/monopoly",
-    "pushedAt": "2026-11-04T22:40:45Z"
+    "pushedAt": "2026-11-04T22:51:57Z"
   },
   {
     "id": "mapp-store",
@@ -41,7 +52,7 @@
     "logoUrl": "https://mrthomaslef.github.io/mapp-store/apple-touch-icon.png?v=mapp1",
     "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
     "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
-    "pushedAt": "2026-11-04T22:38:53Z"
+    "pushedAt": "2026-11-04T22:41:47Z"
   },
   {
     "id": "forestia-mobile",

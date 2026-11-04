@@ -357,6 +357,22 @@ def main():
             },
         )
 
+    if not any(item["id"].lower() == "second-brain-voice" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "second-brain-voice",
+                "title": "Second Brain · Voice",
+                "subtitle": "Interface vocale mains-libres Cochin Radio B (Dictée médicale, RAG Obsidian & Synthèse vocale)",
+                "category": "medical-imaging",
+                "emoji": "🎙️",
+                "logoUrl": "second-brain-voice/icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/second-brain-voice",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
     if not any(item["id"].lower() == "gemini-ultra" for item in output):
         output.insert(
             0,
