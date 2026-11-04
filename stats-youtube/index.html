@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YouTube Time-Machine (2011–2026) — Dr Thomas Lefèvre</title>
+  <title>YouTube Time-Machine (2011–2026) — Vrai Historique & Temps Passé</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-0: #07080d;
@@ -21,6 +21,7 @@
       --yt-red: #ff0033;
       --yt-glow: rgba(255, 0, 51, 0.25);
       --accent: #3b82f6;
+      --emerald: #10b981;
       --radius-lg: 18px;
       --radius-md: 12px;
       --radius-sm: 8px;
@@ -48,20 +49,19 @@
       text-decoration: none;
     }
 
-    /* Top Header & Hero */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 100;
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      background: rgba(7, 8, 13, 0.84);
+      background: rgba(7, 8, 13, 0.86);
       border-bottom: 1px solid var(--border);
       padding: 0.75rem 1.5rem;
     }
 
     .topbar-inner {
-      max-width: 1440px;
+      max-width: 1480px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -126,7 +126,7 @@
       border: none;
       padding: 0.5rem 0.9rem;
       border-radius: 9px;
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.18s ease;
@@ -148,18 +148,18 @@
     }
 
     .container {
-      max-width: 1440px;
+      max-width: 1480px;
       margin: 0 auto;
-      padding: 1.75rem 1.5rem 4rem;
+      padding: 1.6rem 1.5rem 4rem;
     }
 
     /* Hero Banner */
     .hero {
-      background: linear-gradient(135deg, rgba(21, 25, 36, 0.92), rgba(14, 16, 23, 0.96));
+      background: linear-gradient(135deg, rgba(21, 25, 36, 0.94), rgba(14, 16, 23, 0.98));
       border: 1px solid var(--border-hi);
       border-radius: var(--radius-lg);
-      padding: 1.75rem 2rem;
-      margin-bottom: 1.75rem;
+      padding: 1.65rem 1.9rem;
+      margin-bottom: 1.65rem;
       position: relative;
       overflow: hidden;
     }
@@ -169,9 +169,9 @@
       position: absolute;
       right: -80px;
       top: -80px;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(255, 0, 51, 0.16), transparent 70%);
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(255, 0, 51, 0.15), transparent 70%);
       pointer-events: none;
     }
 
@@ -181,28 +181,28 @@
       align-items: flex-start;
       gap: 1.5rem;
       flex-wrap: wrap;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.35rem;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      background: rgba(255, 0, 51, 0.14);
-      border: 1px solid rgba(255, 0, 51, 0.35);
-      color: #ff6b88;
-      font-size: 0.74rem;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.38);
+      color: #34d399;
+      font-size: 0.73rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       padding: 0.3rem 0.75rem;
       border-radius: 999px;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.6rem;
     }
 
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.55rem, 2.6vw, 2.25rem);
+      font-size: clamp(1.5rem, 2.5vw, 2.15rem);
       font-weight: 800;
       letter-spacing: -0.025em;
       margin-bottom: 0.4rem;
@@ -210,78 +210,63 @@
 
     .hero p {
       color: var(--text-1);
-      font-size: 0.95rem;
-      max-width: 820px;
+      font-size: 0.92rem;
+      max-width: 840px;
     }
 
-    .genesis-card {
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid var(--border-hi);
+    .watchtime-method-box {
+      background: rgba(16, 185, 129, 0.06);
+      border: 1px solid rgba(16, 185, 129, 0.28);
       border-radius: var(--radius-md);
-      padding: 0.95rem 1.2rem;
-      min-width: 290px;
-      max-width: 380px;
-    }
-
-    .genesis-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #facc15;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-    }
-
-    .genesis-title {
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--text-0);
-      margin-bottom: 0.2rem;
-    }
-
-    .genesis-meta {
-      font-size: 0.78rem;
-      color: var(--text-2);
-      font-family: 'JetBrains Mono', monospace;
+      padding: 0.9rem 1.15rem;
+      min-width: 310px;
+      max-width: 420px;
     }
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
-      gap: 0.85rem;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 0.8rem;
     }
 
     .kpi-card {
-      background: rgba(255, 255, 255, 0.025);
+      background: rgba(255, 255, 255, 0.028);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 0.9rem 1.05rem;
+      padding: 0.85rem 1rem;
       transition: transform 0.15s ease, border-color 0.15s ease;
     }
 
-    .kpi-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--border-hi);
+    .kpi-card.highlight {
+      background: linear-gradient(135deg, rgba(255, 0, 51, 0.12), rgba(59, 130, 246, 0.08));
+      border-color: rgba(255, 0, 51, 0.38);
     }
 
     .kpi-val {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.55rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--text-0);
       line-height: 1.15;
     }
 
     .kpi-lbl {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--text-2);
+      margin-top: 0.2rem;
+    }
+
+    .kpi-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.69rem;
+      color: #34d399;
       margin-top: 0.2rem;
     }
 
     /* Views */
     .view-section {
       display: none;
-      animation: fadeIn 0.22s ease;
+      animation: fadeIn 0.2s ease;
     }
 
     .view-section.active {
@@ -289,7 +274,7 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -299,29 +284,29 @@
       align-items: flex-end;
       gap: 1rem;
       flex-wrap: wrap;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.2rem;
     }
 
     .section-header h2 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.4rem;
+      font-size: 1.38rem;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
 
     .section-header p {
       color: var(--text-2);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       margin-top: 0.15rem;
     }
 
-    /* Chronological River / Stacked Bar Matrix */
+    /* Cards & Charts */
     .chart-card {
       background: var(--bg-1);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 1.4rem 1.5rem;
-      margin-bottom: 1.75rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.6rem;
     }
 
     .chart-header {
@@ -330,12 +315,12 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 0.75rem;
-      margin-bottom: 1.1rem;
+      margin-bottom: 1rem;
     }
 
     .chart-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.08rem;
+      font-size: 1.06rem;
       font-weight: 700;
     }
 
@@ -346,6 +331,7 @@
       border-radius: 8px;
       padding: 0.2rem;
       gap: 0.2rem;
+      flex-wrap: wrap;
     }
 
     .mode-btn {
@@ -368,9 +354,9 @@
       display: grid;
       grid-template-columns: repeat(16, 1fr);
       gap: 0.45rem;
-      height: 230px;
+      height: 235px;
       align-items: end;
-      padding-top: 1rem;
+      padding-top: 1.2rem;
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.5rem;
     }
@@ -382,7 +368,6 @@
       height: 100%;
       justify-content: flex-end;
       cursor: pointer;
-      group: year;
       position: relative;
     }
 
@@ -393,9 +378,10 @@
 
     .year-col-count {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--text-2);
+      font-size: 0.64rem;
+      color: var(--text-1);
       margin-bottom: 0.3rem;
+      white-space: nowrap;
     }
 
     .year-stack {
@@ -426,7 +412,7 @@
     .legend-wrap {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.55rem 1rem;
+      gap: 0.5rem 0.95rem;
       margin-top: 1rem;
     }
 
@@ -434,10 +420,10 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.77rem;
+      font-size: 0.76rem;
       color: var(--text-1);
       cursor: pointer;
-      padding: 0.2rem 0.5rem;
+      padding: 0.22rem 0.5rem;
       border-radius: 6px;
       transition: background 0.15s;
     }
@@ -453,12 +439,180 @@
       flex-shrink: 0;
     }
 
+    /* Full Video History Table */
+    .filter-bar {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      padding: 0.95rem 1.15rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 240px;
+      background: var(--bg-2);
+      border: 1px solid var(--border-hi);
+      color: var(--text-0);
+      padding: 0.6rem 0.95rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--yt-red);
+    }
+
+    .filter-select {
+      background: var(--bg-2);
+      border: 1px solid var(--border-hi);
+      color: var(--text-0);
+      padding: 0.6rem 0.8rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      outline: none;
+    }
+
+    .selection-summary-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.83rem;
+    }
+
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .page-btn {
+      background: var(--bg-2);
+      border: 1px solid var(--border-hi);
+      color: var(--text-0);
+      padding: 0.35rem 0.75rem;
+      border-radius: 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .archive-table-wrap {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+    }
+
+    table.archive-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    table.archive-table th {
+      text-align: left;
+      padding: 0.8rem 0.9rem;
+      background: var(--bg-2);
+      color: var(--text-2);
+      font-size: 0.71rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.archive-table td {
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    table.archive-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .dur-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      padding: 0.18rem 0.48rem;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-1);
+      white-space: nowrap;
+    }
+
+    .real-time-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.52rem;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.14);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .red-bar-wrap {
+      width: 64px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 3px;
+    }
+
+    .red-bar-fill {
+      height: 100%;
+      background: #ff0033;
+    }
+
+    .badge-theme {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.58rem;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-action {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.69rem;
+      padding: 0.16rem 0.46rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-1);
+      white-space: nowrap;
+    }
+
     /* Era Timeline Cards */
     .eras-timeline {
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.45rem;
       padding-left: 1.75rem;
     }
 
@@ -477,13 +631,8 @@
       background: var(--bg-1);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 1.5rem 1.65rem;
+      padding: 1.45rem 1.6rem;
       position: relative;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .era-card:hover {
-      border-color: var(--border-hi);
     }
 
     .era-dot {
@@ -503,19 +652,19 @@
       align-items: flex-start;
       gap: 1rem;
       flex-wrap: wrap;
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.8rem;
     }
 
     .era-badge-row {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.3rem;
     }
 
     .era-badge {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       font-weight: 700;
       padding: 0.2rem 0.65rem;
       border-radius: 99px;
@@ -531,13 +680,13 @@
 
     .era-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.25rem;
+      font-size: 1.22rem;
       font-weight: 800;
       color: var(--text-0);
     }
 
     .era-sub {
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       color: var(--text-2);
     }
 
@@ -552,22 +701,22 @@
     .era-count-pill strong {
       display: block;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       color: var(--text-0);
     }
 
     .era-count-pill span {
-      font-size: 0.72rem;
+      font-size: 0.71rem;
       color: var(--text-2);
     }
 
     .era-narrative {
       color: var(--text-1);
-      font-size: 0.92rem;
-      line-height: 1.62;
-      margin-bottom: 1.15rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1.1rem;
       background: rgba(255, 255, 255, 0.02);
-      padding: 0.9rem 1.1rem;
+      padding: 0.85rem 1.05rem;
       border-radius: var(--radius-md);
       border-left: 3px solid var(--accent);
     }
@@ -575,65 +724,36 @@
     .era-grid {
       display: grid;
       grid-template-columns: 1fr 1.2fr 1.5fr;
-      gap: 1.1rem;
+      gap: 1.05rem;
     }
 
     @media (max-width: 1024px) {
-      .era-grid {
-        grid-template-columns: 1fr;
-      }
-      .stacked-bars-wrap {
-        grid-template-columns: repeat(8, 1fr);
-        height: auto;
-        row-gap: 1rem;
-      }
+      .era-grid { grid-template-columns: 1fr; }
+      .stacked-bars-wrap { grid-template-columns: repeat(8, 1fr); height: auto; row-gap: 1rem; }
     }
 
     .era-box {
       background: var(--bg-2);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 0.95rem 1.05rem;
+      padding: 0.9rem 1rem;
     }
 
     .era-box-title {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--text-2);
       font-weight: 700;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.6rem;
     }
 
-    .theme-bar-row {
-      margin-bottom: 0.55rem;
-    }
+    .theme-bar-row { margin-bottom: 0.52rem; }
+    .theme-bar-top { display: flex; justify-content: space-between; font-size: 0.77rem; margin-bottom: 0.18rem; }
+    .theme-bar-track { height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 99px; overflow: hidden; }
+    .theme-bar-fill { height: 100%; border-radius: 99px; }
 
-    .theme-bar-top {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .theme-bar-track {
-      height: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-
-    .theme-bar-fill {
-      height: 100%;
-      border-radius: 99px;
-    }
-
-    .chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
+    .chip-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .channel-chip {
       display: inline-flex;
       align-items: center;
@@ -641,21 +761,16 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.28rem 0.6rem;
-      font-size: 0.76rem;
+      padding: 0.26rem 0.58rem;
+      font-size: 0.75rem;
       color: var(--text-0);
     }
-
-    .channel-chip small {
-      color: var(--text-2);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-    }
+    .channel-chip small { color: #34d399; font-family: 'JetBrains Mono', monospace; font-size: 0.69rem; }
 
     .milestone-list {
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.42rem;
       max-height: 230px;
       overflow-y: auto;
       padding-right: 0.25rem;
@@ -663,112 +778,51 @@
 
     .milestone-item {
       display: flex;
-      align-items: baseline;
-      gap: 0.55rem;
-      font-size: 0.79rem;
-      padding: 0.3rem 0.45rem;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      padding: 0.32rem 0.48rem;
       border-radius: 6px;
       background: rgba(255, 255, 255, 0.02);
     }
 
-    .milestone-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-    }
+    .milestone-item:hover { background: rgba(255, 255, 255, 0.06); }
+    .milestone-date { font-family: 'JetBrains Mono', monospace; font-size: 0.69rem; color: var(--text-2); flex-shrink: 0; }
+    .milestone-title { color: var(--text-0); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .milestone-ch { color: var(--text-2); font-size: 0.71rem; flex-shrink: 0; }
 
-    .milestone-date {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-2);
-      flex-shrink: 0;
-    }
-
-    .milestone-title {
-      color: var(--text-0);
-      font-weight: 500;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .milestone-ch {
-      color: var(--text-2);
-      font-size: 0.72rem;
-      flex-shrink: 0;
-    }
-
-    /* Themes View */
-    .theme-selector-bar {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.4rem;
-    }
-
+    /* Themes Grid */
+    .theme-selector-bar { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-bottom: 1.3rem; }
     .theme-pill-btn {
       background: var(--bg-1);
       border: 1px solid var(--border);
       color: var(--text-1);
-      padding: 0.5rem 0.85rem;
+      padding: 0.48rem 0.8rem;
       border-radius: 10px;
-      font-size: 0.8rem;
+      font-size: 0.79rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      transition: all 0.15s ease;
+      gap: 0.4rem;
     }
+    .theme-pill-btn.active { background: var(--bg-3); color: #fff; border-color: var(--text-0); }
 
-    .theme-pill-btn:hover {
-      border-color: var(--border-hi);
-      color: var(--text-0);
-    }
-
-    .theme-pill-btn.active {
-      background: var(--bg-3);
-      color: #fff;
-      border-color: var(--text-0);
-    }
-
-    .themes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(410px, 1fr));
-      gap: 1.25rem;
-    }
-
-    @media (max-width: 600px) {
-      .themes-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    .themes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(410px, 1fr)); gap: 1.2rem; }
+    @media (max-width: 600px) { .themes-grid { grid-template-columns: 1fr; } }
 
     .theme-card {
       background: var(--bg-1);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 1.35rem 1.45rem;
+      padding: 1.3rem 1.4rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.95rem;
     }
 
-    .theme-card-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-
-    .theme-icon-box {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
+    .theme-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+    .theme-icon-box { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; flex-shrink: 0; }
 
     .theme-sparkline {
       display: grid;
@@ -782,215 +836,32 @@
       border: 1px solid var(--border);
     }
 
-    .spark-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100%;
-      justify-content: flex-end;
-    }
+    .spark-col { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+    .spark-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 2px; }
+    .spark-yr { font-size: 0.55rem; color: var(--text-2); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
 
-    .spark-bar {
-      width: 100%;
-      border-radius: 2px 2px 0 0;
-      min-height: 2px;
-    }
+    .first-last-box { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+    .fl-item { background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.55rem 0.65rem; font-size: 0.74rem; }
+    .fl-lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-2); font-weight: 700; margin-bottom: 0.15rem; }
+    .fl-title { font-weight: 600; color: var(--text-0); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-    .spark-yr {
-      font-size: 0.55rem;
-      color: var(--text-2);
-      font-family: 'JetBrains Mono', monospace;
-      margin-top: 2px;
-    }
-
-    .first-last-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-    }
-
-    .fl-item {
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.55rem 0.7rem;
-      font-size: 0.75rem;
-    }
-
-    .fl-lbl {
-      font-size: 0.66rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-2);
-      font-weight: 700;
-      margin-bottom: 0.15rem;
-    }
-
-    .fl-title {
-      font-weight: 600;
-      color: var(--text-0);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    /* Year-by-year selector */
-    .year-pills-bar {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.35rem;
-    }
-
+    .year-pills-bar { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.3rem; }
     .year-pill {
       background: var(--bg-1);
       border: 1px solid var(--border);
       color: var(--text-1);
-      padding: 0.48rem 0.85rem;
+      padding: 0.45rem 0.8rem;
       border-radius: 10px;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s;
     }
+    .year-pill.active { background: linear-gradient(135deg, #ff0033, #d90429); color: #fff; border-color: transparent; }
 
-    .year-pill:hover {
-      border-color: var(--border-hi);
-      color: #fff;
-    }
-
-    .year-pill.active {
-      background: linear-gradient(135deg, #ff0033, #d90429);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 3px 12px var(--yt-glow);
-    }
-
-    /* Explorer & Search */
-    .filter-bar {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      background: var(--bg-1);
-      border: 1px solid var(--border);
-      padding: 1rem 1.2rem;
-      border-radius: var(--radius-md);
-      margin-bottom: 1.25rem;
-      align-items: center;
-    }
-
-    .search-input {
-      flex: 1;
-      min-width: 240px;
-      background: var(--bg-2);
-      border: 1px solid var(--border-hi);
-      color: var(--text-0);
-      padding: 0.65rem 1rem;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      outline: none;
-    }
-
-    .search-input:focus {
-      border-color: var(--yt-red);
-    }
-
-    .filter-select {
-      background: var(--bg-2);
-      border: 1px solid var(--border-hi);
-      color: var(--text-0);
-      padding: 0.65rem 0.9rem;
-      border-radius: 10px;
-      font-size: 0.84rem;
-      outline: none;
-    }
-
-    .archive-table-wrap {
-      background: var(--bg-1);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-
-    table.archive-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.84rem;
-    }
-
-    table.archive-table th {
-      text-align: left;
-      padding: 0.85rem 1rem;
-      background: var(--bg-2);
-      color: var(--text-2);
-      font-size: 0.73rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid var(--border);
-    }
-
-    table.archive-table td {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
-
-    table.archive-table tr:hover td {
-      background: rgba(255, 255, 255, 0.025);
-    }
-
-    .badge-theme {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.22rem 0.6rem;
-      border-radius: 99px;
-      font-size: 0.73rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .badge-action {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.18rem 0.5rem;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-1);
-    }
-
-    .rhythm-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-
-    @media (max-width: 900px) {
-      .rhythm-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .hour-bars {
-      display: grid;
-      grid-template-columns: repeat(24, 1fr);
-      gap: 4px;
-      height: 130px;
-      align-items: end;
-      padding-top: 1rem;
-    }
-
-    .::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 99px;
-    }
+    .rhythm-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.2rem; margin-bottom: 1.4rem; }
+    @media (max-width: 900px) { .rhythm-grid { grid-template-columns: 1fr; } }
+    .hour-bars { display: grid; grid-template-columns: repeat(24, 1fr); gap: 4px; height: 130px; align-items: end; padding-top: 1rem; }
   </style>
 </head>
 <body>
@@ -1004,18 +875,18 @@
         <div>
           <div class="brand-title">
             YouTube Time-Machine
-            <span style="font-size:0.72rem; background:rgba(255,255,255,0.08); padding:0.15rem 0.55rem; border-radius:99px; font-weight:600; color:var(--text-1);">2011 → 2026</span>
+            <span style="font-size:0.72rem; background:rgba(16,185,129,0.16); color:#34d399; padding:0.15rem 0.55rem; border-radius:99px; font-weight:700;">12 251 h passées • 145 740 vidéos/actions</span>
           </div>
-          <div class="brand-sub">Historique intégral & Centres d'intérêt chronologiques — Dr Thomas Lefèvre (MrThomaslef)</div>
+          <div class="brand-sub">Vrai Historique Intégral des Vidéos & Temps Passé (2011 → 2026) — Dr Thomas Lefèvre</div>
         </div>
       </div>
 
       <nav class="nav-tabs" id="navTabs">
-        <button class="nav-tab active" data-view="eras">⏳ Fresque & Époques (2011–2026)</button>
-        <button class="nav-tab" data-view="themes">🎯 12 Thèmes Chronologiques</button>
-        <button class="nav-tab" data-view="yearly">📅 Année par Année</button>
-        <button class="nav-tab" data-view="channels">🏆 Top Chaînes, Likes & Abonnements</button>
-        <button class="nav-tab" data-view="explorer">🔍 Explorateur Temporel</button>
+        <button class="nav-tab active" data-view="history">🎬 Vrai Historique Intégral (145 740) & Temps Passé</button>
+        <button class="nav-tab" data-view="eras">⏳ Fresque & Époques (2011–2026)</button>
+        <button class="nav-tab" data-view="themes">🎯 12 Thèmes (Heures & Chronologie)</button>
+        <button class="nav-tab" data-view="yearly">📅 Bilan Année par Année</button>
+        <button class="nav-tab" data-view="channels">🏆 Top Chaînes en Heures & Rythmes</button>
       </nav>
     </div>
   </header>
@@ -1025,28 +896,36 @@
     <section class="hero">
       <div class="hero-top">
         <div>
-          <div class="hero-badge">● Synchronisé depuis Google MyActivity • 16 Années d'archives</div>
-          <h1>15 Ans de Centres d'Intérêt sur YouTube</h1>
+          <div class="hero-badge">● Temps de visionnage réel calculé sur 124 588 vidéos avec durée + barre rouge YouTube</div>
+          <h1>Votre Vrai Historique Vidéo & Temps Passé (2011 – 2026)</h1>
           <p>
-            De votre tout premier « J'aime » le <strong>11 octobre 2011</strong> devant <em>Fanta &amp; Bob</em> et de votre premier abonnement médical en <strong>mai 2012</strong> (<em>chirurgiedusport</em>) jusqu'aux webinaires de radiologie ostéo-articulaire <em>SIMS / Cochin</em>, aux agents IA sur Mac Mini M4 et aux dessins animés d'<strong>Émile</strong> en 2026.
+            Chaque vidéo contient sa <strong>durée officielle</strong>, le <strong>pourcentage exact de la barre rouge YouTube</strong> enregistré par Google et le <strong>temps réel passé</strong> (plafonné à l'écart temporel avant la vidéo suivante si vous avez zappé avant la fin). Les <strong>145 740 entrées</strong> sont intégralement consultables et filtrables ci-dessous.
           </p>
         </div>
-        <div class="genesis-card" id="genesisCard"></div>
+        <div class="watchtime-method-box">
+          <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:#34d399; font-weight:700; margin-bottom:0.25rem;">⏱️ Décomposition Exacte de votre Temps YouTube</div>
+          <div style="font-size:0.8rem; color:var(--text-0); display:flex; flex-direction:column; gap:0.2rem; font-family:'JetBrains Mono',monospace;">
+            <div>1. Durée brute des vidéos lancées : <strong>31 450,9 h</strong> (1 310 j)</div>
+            <div>2. Pondéré barre rouge (% vu)     : <strong>19 871,9 h</strong> (828 j)</div>
+            <div style="color:#34d399;">3. Temps réel passé (hors zapping) : <strong>12 251,1 h</strong> (510,5 j)</div>
+          </div>
+        </div>
       </div>
       <div class="kpi-grid" id="kpiGrid"></div>
     </section>
 
-    <!-- VIEW 1: ERAS & CHRONOLOGICAL RIVER -->
-    <section class="view-section active" id="view-eras">
+    <!-- VIEW 1: FULL REAL VIDEO HISTORY & WATCH TIME -->
+    <section class="view-section active" id="view-history">
       <div class="chart-card">
         <div class="chart-header">
           <div>
-            <div class="chart-title">🌊 Évolution Chronologique de vos Centres d'Intérêt (2011 → 2026)</div>
-            <div style="font-size:0.8rem; color:var(--text-2);">Cliquez sur une année pour l'explorer en détail, ou basculez entre Répartition (%) et Volume absolu.</div>
+            <div class="chart-title">⏱️ Évolution Chronologique de votre Temps Passé & Centres d'Intérêt (2011 → 2026)</div>
+            <div style="font-size:0.79rem; color:var(--text-2);">Cliquez sur une colonne d'année pour filtrer directement l'historique complet sur cette année.</div>
           </div>
           <div class="mode-switch">
-            <button class="mode-btn active" id="btnModePct" onclick="setRiverMode('pct')">Répartition 100%</button>
-            <button class="mode-btn" id="btnModeAbs" onclick="setRiverMode('abs')">Volume Absolu</button>
+            <button class="mode-btn active" id="btnModeHours" onclick="setRiverMode('hours')">⏱️ Heures Réelles Passées</button>
+            <button class="mode-btn" id="btnModePct" onclick="setRiverMode('pct')">📊 Répartition 100%</button>
+            <button class="mode-btn" id="btnModeAbs" onclick="setRiverMode('abs')">🎬 Nombre de Vidéos</button>
           </div>
         </div>
         <div class="stacked-bars-wrap" id="riverBars"></div>
@@ -1055,24 +934,85 @@
 
       <div class="section-header">
         <div>
-          <h2>📜 Les 6 Grandes Époques de votre Vie YouTube (Ordre Chronologique)</h2>
-          <p>Chaque chapitre regroupe vos thèmes dominants, vos chaînes phares et les vidéos jalons dans l'ordre du temps.</p>
+          <h2>🎬 Le Vrai Historique Intégral de vos 145 740 Vidéos, Recherches & Likes (2011 → 2026)</h2>
+          <p>Aucune vidéo n'est omise : parcourez l'intégralité de vos 145 740 entrées avec l'heure exacte, la durée de la vidéo, la barre rouge de progression et le temps réellement passé.</p>
         </div>
       </div>
 
+      <div class="filter-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Rechercher dans les 145 740 entrées (ex: Fanta, Dofus, SIMS, Morton, Vald, Cowen, Peppa, Zelda, Wankil...)" oninput="resetAndFilterHistory()" />
+        <select id="filterTheme" class="filter-select" onchange="resetAndFilterHistory()">
+          <option value="all">Tous les thèmes (12)</option>
+        </select>
+        <select id="filterYear" class="filter-select" onchange="resetAndFilterHistory()">
+          <option value="all">Toutes les années (2011–2026)</option>
+        </select>
+        <select id="filterAction" class="filter-select" onchange="resetAndFilterHistory()">
+          <option value="all">Toutes les actions (145 740)</option>
+          <option value="0">▶️ Vidéos regardées (130 674)</option>
+          <option value="2">👍 Vidéos « J'aime » (depuis 2011)</option>
+          <option value="3">🔔 Abonnements (depuis 2012)</option>
+          <option value="1">🔍 Recherches YouTube (8 489)</option>
+          <option value="4">💬 Commentaires postés</option>
+        </select>
+        <select id="filterOrder" class="filter-select" onchange="resetAndFilterHistory()">
+          <option value="asc">⏳ Ordre Chronologique (2011 → 2026)</option>
+          <option value="desc">🆕 Plus récent d'abord (2026 → 2011)</option>
+          <option value="longest">⏱️ Plus long temps passé d'abord</option>
+        </select>
+      </div>
+
+      <div class="selection-summary-bar">
+        <div id="historyFilterStats">Chargement de l'historique intégral...</div>
+        <div class="pagination-bar">
+          <button class="page-btn" id="btnFirstPage" onclick="changeHistoryPage(0)">⏮ Début</button>
+          <button class="page-btn" id="btnPrevPage" onclick="changeHistoryPage(currentPage - 1)">◀ Précédent</button>
+          <span id="pageIndicator" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; padding:0 0.4rem;">Page 1</span>
+          <button class="page-btn" id="btnNextPage" onclick="changeHistoryPage(currentPage + 1)">Suivant ▶</button>
+          <button class="page-btn" id="btnLastPage" onclick="changeHistoryPage(maxPage)">Fin ⏭</button>
+        </div>
+      </div>
+
+      <div class="archive-table-wrap">
+        <table class="archive-table">
+          <thead>
+            <tr>
+              <th style="width:130px;">Date & Heure</th>
+              <th style="width:105px;">Action</th>
+              <th>Vidéo / Recherche (Lien YouTube direct)</th>
+              <th style="width:190px;">Chaîne</th>
+              <th style="width:95px;">Durée Vidéo</th>
+              <th style="width:135px;">Temps Réel Passé</th>
+              <th style="width:185px;">Thème d'intérêt</th>
+            </tr>
+          </thead>
+          <tbody id="fullHistoryBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW 2: ERAS -->
+    <section class="view-section" id="view-eras">
+      <div class="section-header">
+        <div>
+          <h2>📜 Les 6 Grandes Époques Chronologiques (avec Heures de Visionnage)</h2>
+          <p>De la création du compte en octobre 2011 jusqu'à 2026 : évolution de vos passions, chaînes phares et temps passé.</p>
+        </div>
+      </div>
       <div class="eras-timeline" id="erasContainer"></div>
     </section>
 
-    <!-- VIEW 2: 12 CHRONOLOGICAL THEMES -->
+    <!-- VIEW 3: 12 CHRONOLOGICAL THEMES -->
     <section class="view-section" id="view-themes">
       <div class="section-header">
         <div>
-          <h2>🎯 Vos 12 Centres d'Intérêt Rangés par Apparition & Évolution</h2>
-          <p>Pour chaque thème : première trace historique, pic d'intérêt, évolution de 2011 à 2026, chaînes favorites et frise chronologique.</p>
+          <h2>🎯 Vos 12 Centres d'Intérêt : Temps Passé (Heures) & Ordre Chronologique</h2>
+          <p>Chaque thème affiche son temps réel passé en heures, sa courbe d'évolution de 2011 à 2026, sa première vidéo et ses chaînes majeures.</p>
         </div>
         <div class="mode-switch">
-          <button class="mode-btn active" id="sortThemeChrono" onclick="renderThemes('chrono')">Ordre Chronologique d'Émergence</button>
-          <button class="mode-btn" id="sortThemeVol" onclick="renderThemes('volume')">Ordre par Volume Total</button>
+          <button class="mode-btn active" id="sortThemeChrono" onclick="renderThemes('chrono')">⏳ Ordre Chronologique (2011 → 2026)</button>
+          <button class="mode-btn" id="sortThemeHours" onclick="renderThemes('hours')">⏱️ Ordre par Heures Passées</button>
+          <button class="mode-btn" id="sortThemeVol" onclick="renderThemes('volume')">🎬 Ordre par Nombre de Vidéos</button>
         </div>
       </div>
 
@@ -1080,127 +1020,102 @@
       <div class="themes-grid" id="themesGrid"></div>
     </section>
 
-    <!-- VIEW 3: YEAR BY YEAR -->
+    <!-- VIEW 4: YEAR BY YEAR -->
     <section class="view-section" id="view-yearly">
       <div class="section-header">
         <div>
-          <h2>📅 Machine à Remonter le Temps : Année par Année (2011 → 2026)</h2>
-          <p>Sélectionnez n'importe quelle année pour voir ses thèmes dominants, ses recherches, ses abonnements et ses vidéos marquantes.</p>
+          <h2>📅 Bilan Détaillé Année par Année (Heures Passées, Moyenne/Jour & Vidéos)</h2>
+          <p>Cliquez sur une année de 2011 à 2026 pour inspecter son temps passé, ses chaînes nº1 en heures et ses vidéos les plus longues.</p>
         </div>
       </div>
-
       <div class="year-pills-bar" id="yearPillsBar"></div>
       <div id="yearDetailContainer"></div>
     </section>
 
-    <!-- VIEW 4: TOP CHANNELS, LIKES, SUBSCRIPTIONS & RHYTHMS -->
+    <!-- VIEW 5: TOP CHANNELS BY HOURS & RHYTHMS -->
     <section class="view-section" id="view-channels">
       <div class="rhythm-grid">
         <div class="chart-card" style="margin-bottom:0;">
-          <div class="chart-title" style="margin-bottom:0.3rem;">⏰ Rythme Circadien de Visionnage (24 Heures)</div>
-          <div style="font-size:0.78rem; color:var(--text-2);">Distribution horaire sur l'ensemble des 145 740 événements</div>
+          <div class="chart-title" style="margin-bottom:0.25rem;">⏰ Heures Réelles Passées selon l'Heure de la Journée (0h – 23h)</div>
+          <div style="font-size:0.78rem; color:var(--text-2);">Cumul des 12 251 heures de visionnage selon l'heure de lancement</div>
           <div class="hour-bars" id="hourBars"></div>
         </div>
         <div class="chart-card" style="margin-bottom:0;">
-          <div class="chart-title" style="margin-bottom:0.3rem;">📆 Répartition par Jour de la Semaine</div>
-          <div style="font-size:0.78rem; color:var(--text-2); margin-bottom:0.9rem;">Activité cumulée du Lundi au Dimanche</div>
+          <div class="chart-title" style="margin-bottom:0.25rem;">📆 Temps Passé par Jour de la Semaine (en Heures)</div>
+          <div style="font-size:0.78rem; color:var(--text-2); margin-bottom:0.85rem;">Cumul du Lundi au Dimanche</div>
           <div id="weekdayBars"></div>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap:1.25rem;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:1.25rem;">
         <div class="chart-card" style="margin-bottom:0;">
-          <div class="chart-title" style="margin-bottom:0.85rem;">🏆 Top 50 Chaînes les Plus Regardées / Écoutées</div>
-          <div id="topChannelsList" style="max-height:540px; overflow-y:auto; padding-right:0.35rem;"></div>
+          <div class="chart-title" style="margin-bottom:0.3rem;">⏱️ Top 60 Chaînes en TEMPS RÉEL PASSÉ (Heures)</div>
+          <div style="font-size:0.77rem; color:var(--text-2); margin-bottom:0.85rem;">Dominé par les longues VODs (Antoine Daniel, JDG, Insym, AlphaTeam, Wankil, Benjamin Cowen...)</div>
+          <div id="topChannelsHoursList" style="max-height:560px; overflow-y:auto; padding-right:0.35rem;"></div>
         </div>
 
         <div class="chart-card" style="margin-bottom:0;">
-          <div class="chart-title" style="margin-bottom:0.35rem;">🔔 Historique Chronologique de vos Abonnements (2012 → 2026)</div>
-          <div style="font-size:0.78rem; color:var(--text-2); margin-bottom:0.85rem;">Du 1er abonnement (chirurgiedusport en mai 2012) aux plus récents</div>
-          <div id="subsChronoList" style="max-height:510px; overflow-y:auto; padding-right:0.35rem;"></div>
+          <div class="chart-title" style="margin-bottom:0.3rem;">🎬 Top 60 Chaînes en NOMBRE DE VIDÉOS / MUSIQUES</div>
+          <div style="font-size:0.77rem; color:var(--text-2); margin-bottom:0.85rem;">Dominé par la musique (Vald, Orelsan, Lujipeka, Stromae) et les formats courts (VLDL, Guillaume Genou...)</div>
+          <div id="topChannelsCountList" style="max-height:560px; overflow-y:auto; padding-right:0.35rem;"></div>
         </div>
-      </div>
-    </section>
-
-    <!-- VIEW 5: ARCHIVE EXPLORER -->
-    <section class="view-section" id="view-explorer">
-      <div class="section-header">
-        <div>
-          <h2>🔍 Explorateur Chronologique (Vidéos, Recherches, J'aime & Abonnements)</h2>
-          <p>Filtrez par thème, par année, par type d'action ou recherchez un mot-clé (ex: <em>Fanta, Dofus, SIMS, Morton, Vald, Cowen, Peppa, Zelda, M4</em>).</p>
-        </div>
-      </div>
-
-      <div class="filter-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un titre, un artiste, une chaîne, un jeu, une pathologie..." oninput="renderArchiveTable()" />
-        <select id="filterTheme" class="filter-select" onchange="renderArchiveTable()">
-          <option value="all">Tous les thèmes (12)</option>
-        </select>
-        <select id="filterYear" class="filter-select" onchange="renderArchiveTable()">
-          <option value="all">Toutes les années (2011–2026)</option>
-        </select>
-        <select id="filterAction" class="filter-select" onchange="renderArchiveTable()">
-          <option value="all">Toutes les actions</option>
-          <option value="like">👍 Vidéos « J'aime » (depuis 2011)</option>
-          <option value="subscribe">🔔 Abonnements (depuis 2012)</option>
-          <option value="watch">▶️ Vidéos regardées</option>
-          <option value="search">🔍 Recherches YouTube</option>
-          <option value="comment">💬 Commentaires postés</option>
-        </select>
-        <select id="filterOrder" class="filter-select" onchange="renderArchiveTable()">
-          <option value="asc">⏳ Ordre Chronologique (2011 → 2026)</option>
-          <option value="desc">🆕 Plus récent d'abord (2026 → 2011)</option>
-        </select>
-      </div>
-
-      <div style="font-size:0.8rem; color:var(--text-2); margin-bottom:0.65rem;" id="archiveCountInfo"></div>
-
-      <div class="archive-table-wrap">
-        <table class="archive-table">
-          <thead>
-            <tr>
-              <th style="width:115px;">Date</th>
-              <th style="width:110px;">Action</th>
-              <th>Titre / Recherche</th>
-              <th style="width:210px;">Chaîne</th>
-              <th style="width:210px;">Thème d'intérêt</th>
-            </tr>
-          </thead>
-          <tbody id="archiveTableBody"></tbody>
-        </table>
       </div>
     </section>
   </main>
 
   <script src="data/youtube_stats.js"></script>
+  <script src="data/youtube_full_history.js"></script>
   <script>
     const DATA = window.YOUTUBE_HISTORY_DATA;
+    const FULL = window.YOUTUBE_FULL_HISTORY || [];
     const THEME_BY_ID = {};
     DATA.themes.forEach(t => { THEME_BY_ID[t.id] = t; });
 
-    // Chronological emergence rank for each theme so "Ordre Chronologique" orders themes from 2011 pioneers to 2026
     const CHRONO_THEME_ORDER = [
-      'gaming_twitch',     // Oct 2011 (Fanta & Bob)
-      'medecine_radio',    // Mai 2012 (chirurgiedusport -> SIMS / MrThomaslef)
-      'cinema_humour',     // 2013-2014 (JDG, Studio Bagel, Mister V -> VLDL, Guillaume Genou)
-      'tech_ia_hardware',  // 2015 (Linus Tech Tips, Unbox Therapy -> M4 Gaming & Agents IA)
-      'histoire_geo',      // 2015-2017 (e-penser, Nota Bene -> Moyen-Âge, Minute Géographie)
-      'pokemon_tcg',       // 2013 Pixelmon / 2016 Pokémon Générations -> 2024-2026 TCG & Fildrong
-      'musique',           // 2017-2026 (Vald, Orelsan, Lujipeka, Stromae, Daho)
-      'crypto_finance',    // 2020-2026 (XRP/Ledger, Benjamin Cowen, Crypto Le Trône)
-      'japon_voyages',     // 2021-2026 (Tev Ici Japon, Abroad in Japan, Taiki Maeda)
-      'sport_running',     // 2020 F1 / 2023-2026 Running (RunWise, Running Addict)
-      'actu_societe',      // 2022-2026 (Europe 1, Reportages, Brut, M6+)
-      'emile_famille'      // 2025-2026 (Papini et Mamiso, Le Petit Oiseau, Peppa Pig, Petit Ours Brun)
+      'gaming_twitch',
+      'medecine_radio',
+      'cinema_humour',
+      'tech_ia_hardware',
+      'histoire_geo',
+      'pokemon_tcg',
+      'musique',
+      'crypto_finance',
+      'japon_voyages',
+      'sport_running',
+      'actu_societe',
+      'emile_famille'
     ];
 
-    let riverMode = 'pct';
+    const THEME_LIST = DATA.themes;
+
+    let riverMode = 'hours';
     let selectedThemeFilter = 'all';
     let currentThemeSort = 'chrono';
-    let selectedYear = 2011;
+    let selectedYear = 2024;
+
+    // Pagination state for the 145,740 rows
+    const PAGE_SIZE = 150;
+    let filteredIndices = [];
+    let currentPage = 0;
+    let maxPage = 0;
 
     function fmtNum(n) {
       return (n || 0).toLocaleString('fr-FR');
+    }
+
+    function fmtHours(h) {
+      return (h || 0).toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' h';
+    }
+
+    function fmtSec(sec) {
+      sec = Math.round(sec || 0);
+      if (sec <= 0) return '—';
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      if (h > 0) return `${h}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+      if (m > 0) return `${m}m ${String(s).padStart(2,'0')}s`;
+      return `${s}s`;
     }
 
     function escapeHtml(s) {
@@ -1211,62 +1126,54 @@
         .replace(/"/g, '&quot;');
     }
 
-    function actionBadge(atype) {
+    function actionBadgeByCode(code) {
       const map = {
-        watch: ['▶️ Regardé', '#3b82f6'],
-        search: ['🔍 Recherche', '#eab308'],
-        like: ['👍 J\'aime', '#10b981'],
-        dislike: ['👎 Dislike', '#ef4444'],
-        subscribe: ['🔔 Abonné', '#a855f7'],
-        comment: ['💬 Commentaire', '#06b6d4'],
-        browse: ['🧭 Consulté', '#64748b']
+        0: ['▶️ Regardé', '#3b82f6'],
+        1: ['🔍 Recherche', '#eab308'],
+        2: ['👍 J\'aime', '#10b981'],
+        3: ['🔔 Abonné', '#a855f7'],
+        4: ['💬 Commentaire', '#06b6d4'],
+        5: ['🧭 Consulté', '#64748b'],
+        6: ['👎 Dislike', '#ef4444']
       };
-      const [lbl, col] = map[atype] || ['📌 Activité', '#94a3b8'];
+      const [lbl, col] = map[code] || ['📌 Activité', '#94a3b8'];
       return `<span class="badge-action" style="border:1px solid ${col}44; color:${col};">${lbl}</span>`;
     }
 
+    function actionBadgeByStr(atype) {
+      const map = { watch: 0, search: 1, like: 2, subscribe: 3, comment: 4, browse: 5, dislike: 6 };
+      return actionBadgeByCode(map[atype] ?? 0);
+    }
+
     function initApp() {
-      // Navigation tabs
       document.querySelectorAll('.nav-tab').forEach(btn => {
-        btn.addEventListener('click', () => {
-          switchView(btn.dataset.view);
-        });
+        btn.addEventListener('click', () => switchView(btn.dataset.view));
       });
 
-      // Genesis card
       const s = DATA.summary;
-      document.getElementById('genesisCard').innerHTML = `
-        <div class="genesis-label">⚡ Point Zéro — Première trace du compte</div>
-        <div class="genesis-title">${escapeHtml(s.first_event_title)}</div>
-        <div class="genesis-meta">📅 ${escapeHtml(s.first_event_date)} • Chaîne : ${escapeHtml(s.first_event_channel || 'TheFantasio974')}</div>
-        <div style="margin-top:0.45rem; font-size:0.74rem; color:var(--text-1);">
-          Suivi le <strong>18 mai 2012</strong> par votre 1er abonnement : <strong>chirurgiedusport</strong>.
-        </div>
-      `;
-
-      // KPIs
       const kpis = [
-        { val: fmtNum(s.total_events), lbl: 'Événements YouTube analysés' },
-        { val: `${s.years[0]} → ${s.years[s.years.length - 1]}`, lbl: `${s.years_span} années d'historique` },
-        { val: fmtNum(s.total_watches), lbl: 'Vidéos & Musiques lancées' },
-        { val: fmtNum(s.total_searches), lbl: 'Recherches effectuées' },
-        { val: fmtNum(s.total_likes), lbl: 'Vidéos « J\'aime » (depuis 2011)' },
-        { val: fmtNum(s.total_subscriptions), lbl: 'Abonnements datés (depuis 2012)' },
-        { val: fmtNum(s.unique_channels), lbl: 'Chaînes uniques explorées' }
+        { val: fmtHours(s.total_real_watch_hours), lbl: 'Temps réel passé sur YouTube', sub: `≈ ${fmtNum(s.total_real_watch_days)} jours complets (24h/24)`, hi: true },
+        { val: fmtHours(s.total_pct_watch_hours), lbl: 'Durée pondérée barre rouge (% vu)', sub: `${fmtNum(s.videos_with_red_bar_pct)} vidéos avec % exact` },
+        { val: fmtHours(s.total_raw_video_hours), lbl: 'Durée brute des vidéos lancées', sub: `${fmtNum(s.videos_with_duration)} vidéos avec durée` },
+        { val: fmtNum(s.total_watches), lbl: 'Vidéos & Musiques regardées', sub: `+ ${fmtNum(s.total_likes)} vidéos « J'aime » (dès 2011)` },
+        { val: fmtNum(s.total_searches), lbl: 'Recherches YouTube', sub: `+ ${fmtNum(s.total_subscriptions)} abonnements datés` },
+        { val: `${s.years[0]} → ${s.years[s.years.length - 1]}`, lbl: 'Amplitude chronologique', sub: `1re vidéo : 11 oct. 2011 (Fanta & Bob)` }
       ];
+
       document.getElementById('kpiGrid').innerHTML = kpis.map(k => `
-        <div class="kpi-card">
+        <div class="kpi-card ${k.hi ? 'highlight' : ''}">
           <div class="kpi-val">${k.val}</div>
           <div class="kpi-lbl">${k.lbl}</div>
+          <div class="kpi-sub">${k.sub}</div>
         </div>
       `).join('');
 
       renderRiver();
+      initFullHistoryExplorer();
       renderEras();
       renderThemes('chrono');
       initYearlyView();
       renderChannelsAndRhythms();
-      initExplorer();
     }
 
     function switchView(viewId) {
@@ -1280,30 +1187,48 @@
 
     function setRiverMode(mode) {
       riverMode = mode;
+      document.getElementById('btnModeHours').classList.toggle('active', mode === 'hours');
       document.getElementById('btnModePct').classList.toggle('active', mode === 'pct');
       document.getElementById('btnModeAbs').classList.toggle('active', mode === 'abs');
       renderRiver();
     }
 
     function renderRiver() {
-      const maxYearTotal = Math.max(...DATA.yearly.map(y => y.total), 1);
+      const maxYearHours = Math.max(...DATA.yearly.map(y => y.watch_hours || 0), 1);
+      const maxYearTotal = Math.max(...DATA.yearly.map(y => y.total || 0), 1);
+
       const barsHtml = DATA.yearly.map(yObj => {
         const y = yObj.year;
         const tot = yObj.total || 1;
-        const colHeightPct = riverMode === 'pct' ? 100 : Math.max(8, Math.round((tot / maxYearTotal) * 100));
+        const hrs = yObj.watch_hours || 0;
+
+        let colHeightPct = 100;
+        if (riverMode === 'hours') {
+          colHeightPct = Math.max(10, Math.round((hrs / maxYearHours) * 100));
+        } else if (riverMode === 'abs') {
+          colHeightPct = Math.max(10, Math.round((tot / maxYearTotal) * 100));
+        }
 
         const segs = CHRONO_THEME_ORDER.map(tid => {
           const th = THEME_BY_ID[tid];
           if (!th) return '';
-          const cnt = (th.by_year && th.by_year[String(y)]) || 0;
-          if (!cnt) return '';
-          const pct = (cnt / tot) * 100;
-          return `<div class="year-seg" style="height:${pct}%; background:${th.color};" title="${y} • ${th.short}: ${fmtNum(cnt)} (${pct.toFixed(1)}%)"></div>`;
+          const val = riverMode === 'hours'
+            ? ((th.by_year_hours && th.by_year_hours[String(y)]) || 0)
+            : ((th.by_year && th.by_year[String(y)]) || 0);
+          const denom = riverMode === 'hours' ? (hrs || 1) : tot;
+          if (!val) return '';
+          const pct = (val / denom) * 100;
+          const unit = riverMode === 'hours' ? `${val.toFixed(1)} h` : `${fmtNum(val)} vidéos`;
+          return `<div class="year-seg" style="height:${pct}%; background:${th.color};" title="${y} • ${th.short}: ${unit} (${pct.toFixed(1)}%)"></div>`;
         }).join('');
 
+        const topLabel = riverMode === 'hours'
+          ? (hrs >= 100 ? Math.round(hrs) + 'h' : hrs.toFixed(1) + 'h')
+          : (tot >= 1000 ? (tot / 1000).toFixed(1) + 'k' : tot);
+
         return `
-          <div class="year-col" onclick="jumpToYear(${y})" title="Cliquer pour inspecter l'année ${y} (${fmtNum(tot)} activités)">
-            <div class="year-col-count">${tot >= 1000 ? (tot/1000).toFixed(1) + 'k' : tot}</div>
+          <div class="year-col" onclick="filterTableByYear(${y})" title="Cliquer pour filtrer l'historique sur ${y} (${fmtHours(hrs)} • ${fmtNum(tot)} entrées)">
+            <div class="year-col-count">${topLabel}</div>
             <div class="year-stack" style="height:${colHeightPct}%;">
               ${segs}
             </div>
@@ -1318,24 +1243,164 @@
         const th = THEME_BY_ID[tid];
         if (!th) return '';
         return `
-          <div class="legend-item" onclick="jumpToTheme('${tid}')">
+          <div class="legend-item" onclick="filterTableByTheme('${tid}')">
             <span class="legend-dot" style="background:${th.color};"></span>
             <span>${th.icon} ${escapeHtml(th.short)}</span>
-            <span style="color:var(--text-2); font-family:'JetBrains Mono',monospace; font-size:0.7rem;">(${fmtNum(th.count)})</span>
+            <span style="color:#34d399; font-family:'JetBrains Mono',monospace; font-size:0.7rem;">${fmtHours(th.watch_hours)}</span>
           </div>
         `;
       }).join('');
     }
 
-    function jumpToYear(year) {
-      switchView('yearly');
-      selectYear(year);
+    function filterTableByYear(yr) {
+      document.getElementById('filterYear').value = String(yr);
+      resetAndFilterHistory();
     }
 
-    function jumpToTheme(tid) {
-      switchView('themes');
-      selectedThemeFilter = tid;
-      renderThemes(currentThemeSort);
+    function filterTableByTheme(tid) {
+      document.getElementById('filterTheme').value = tid;
+      resetAndFilterHistory();
+    }
+
+    function initFullHistoryExplorer() {
+      const thSel = document.getElementById('filterTheme');
+      CHRONO_THEME_ORDER.forEach(tid => {
+        const t = THEME_BY_ID[tid];
+        if (!t) return;
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = `${t.icon} ${t.short} — ${fmtHours(t.watch_hours)} (${fmtNum(t.count)})`;
+        thSel.appendChild(opt);
+      });
+
+      const yrSel = document.getElementById('filterYear');
+      DATA.yearly.forEach(yObj => {
+        const opt = document.createElement('option');
+        opt.value = String(yObj.year);
+        opt.textContent = `${yObj.year} — ${fmtHours(yObj.watch_hours)} (${fmtNum(yObj.total)} entrées)`;
+        yrSel.appendChild(opt);
+      });
+
+      resetAndFilterHistory();
+    }
+
+    function resetAndFilterHistory() {
+      const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const thFilter = document.getElementById('filterTheme').value;
+      const yrFilter = document.getElementById('filterYear').value;
+      const actFilter = document.getElementById('filterAction').value;
+      const ord = document.getElementById('filterOrder').value;
+
+      const wantedThemeIdx = thFilter === 'all' ? -1 : DATA.themes.findIndex(t => t.id === thFilter);
+      const wantedActCode = actFilter === 'all' ? -1 : Number(actFilter);
+
+      const matched = [];
+      let sumRealSec = 0;
+      let sumRawVideos = 0;
+
+      // Row schema: [0:dt, 1:action_code, 2:title, 3:channel, 4:dur_str, 5:real_sec, 6:watch_pct, 7:theme_idx, 8:vid_or_url]
+      for (let i = 0; i < FULL.length; i++) {
+        const r = FULL[i];
+        if (wantedThemeIdx !== -1 && r[7] !== wantedThemeIdx) continue;
+        if (wantedActCode !== -1 && r[1] !== wantedActCode) continue;
+        if (yrFilter !== 'all' && !r[0].startsWith(yrFilter)) continue;
+        if (q) {
+          const hay = (r[2] + ' ' + r[3] + ' ' + r[0]).toLowerCase();
+          if (!hay.includes(q)) continue;
+        }
+        matched.push(i);
+        sumRealSec += (r[5] || 0);
+        if (r[1] === 0 || r[1] === 2) sumRawVideos++;
+      }
+
+      if (ord === 'desc') {
+        matched.reverse();
+      } else if (ord === 'longest') {
+        matched.sort((a, b) => (FULL[b][5] || 0) - (FULL[a][5] || 0));
+      }
+
+      filteredIndices = matched;
+      currentPage = 0;
+      maxPage = Math.max(0, Math.ceil(filteredIndices.length / PAGE_SIZE) - 1);
+
+      const hrs = (sumRealSec / 3600).toFixed(1);
+      const days = (sumRealSec / 86400).toFixed(1);
+      document.getElementById('historyFilterStats').innerHTML = `
+        <span>Sélection : <strong>${fmtNum(filteredIndices.length)}</strong> entrées trouvées • Temps réel passé sur cette sélection : <strong style="color:#34d399;">${fmtNum(Number(hrs))} heures</strong> (${days} jours)</span>
+      `;
+
+      renderHistoryPage();
+    }
+
+    function changeHistoryPage(p) {
+      if (p < 0 || p > maxPage) return;
+      currentPage = p;
+      renderHistoryPage();
+    }
+
+    function renderHistoryPage() {
+      const start = currentPage * PAGE_SIZE;
+      const end = Math.min(filteredIndices.length, start + PAGE_SIZE);
+      const slice = filteredIndices.slice(start, end);
+
+      document.getElementById('pageIndicator').textContent =
+        `Page ${currentPage + 1} / ${maxPage + 1} (lignes ${fmtNum(start + 1)}–${fmtNum(end)})`;
+      document.getElementById('btnFirstPage').disabled = currentPage === 0;
+      document.getElementById('btnPrevPage').disabled = currentPage === 0;
+      document.getElementById('btnNextPage').disabled = currentPage >= maxPage;
+      document.getElementById('btnLastPage').disabled = currentPage >= maxPage;
+
+      const html = slice.map(idx => {
+        const r = FULL[idx];
+        const dt = r[0];
+        const ac = r[1];
+        const title = r[2];
+        const ch = r[3];
+        const durStr = r[4];
+        const realSec = r[5];
+        const pct = r[6];
+        const th = THEME_LIST[r[7]] || { icon: '📌', color: '#94a3b8', short: 'Autre' };
+        const vidOrUrl = r[8] || '';
+
+        let href = '';
+        if (vidOrUrl.startsWith('http')) {
+          href = vidOrUrl;
+        } else if (vidOrUrl.length === 11) {
+          href = `https://www.youtube.com/watch?v=${vidOrUrl}`;
+        }
+
+        const titleHtml = href
+          ? `<a href="${escapeHtml(href)}" target="_blank" rel="noopener" style="font-weight:600; color:var(--text-0);">${escapeHtml(title)}</a>`
+          : `<span style="font-weight:600;">${escapeHtml(title)}</span>`;
+
+        const pctBarHtml = pct > 0
+          ? `<div style="display:flex; align-items:center; gap:5px; margin-top:2px;">
+               <div class="red-bar-wrap" title="Barre rouge YouTube : ${pct}% regardé"><div class="red-bar-fill" style="width:${pct}%;"></div></div>
+               <span style="font-size:0.66rem; font-family:'JetBrains Mono',monospace; color:var(--text-2);">${pct}%</span>
+             </div>`
+          : '';
+
+        return `
+          <tr>
+            <td style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text-2); white-space:nowrap;">${dt}</td>
+            <td>${actionBadgeByCode(ac)}</td>
+            <td>${titleHtml}</td>
+            <td style="color:var(--text-1); font-size:0.79rem;">${escapeHtml(ch || '—')}</td>
+            <td><span class="dur-pill">${escapeHtml(durStr || '—')}</span></td>
+            <td>
+              ${realSec > 0 ? `<span class="real-time-pill">${fmtSec(realSec)}</span>` : '<span style="color:var(--text-2);">—</span>'}
+              ${pctBarHtml}
+            </td>
+            <td>
+              <span class="badge-theme" style="background:${th.color}20; color:${th.color}; border:1px solid ${th.color}44;">
+                ${th.icon} ${escapeHtml(th.short)}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('fullHistoryBody').innerHTML = html;
     }
 
     function renderEras() {
@@ -1346,7 +1411,7 @@
             <div class="theme-bar-row">
               <div class="theme-bar-top">
                 <span>${th.icon} ${escapeHtml(th.short)}</span>
-                <span style="font-family:'JetBrains Mono',monospace; color:var(--text-2);">${tt.pct}% (${fmtNum(tt.count)})</span>
+                <span style="font-family:'JetBrains Mono',monospace; color:var(--text-2);">${fmtHours(tt.hours)} • ${tt.pct}% (${fmtNum(tt.count)})</span>
               </div>
               <div class="theme-bar-track">
                 <div class="theme-bar-fill" style="width:${Math.min(100, tt.pct)}%; background:${th.color};"></div>
@@ -1357,23 +1422,22 @@
 
         const topChannelsHtml = era.top_channels.map(ch => {
           const th = THEME_BY_ID[ch.theme] || { color: '#94a3b8' };
+          const metric = ch.hours > 0 ? `${ch.hours} h (${ch.count})` : `${ch.count} vidéos`;
           return `
             <span class="channel-chip" style="border-left: 3px solid ${th.color};">
-              ${escapeHtml(ch.name)} <small>${fmtNum(ch.count)}</small>
+              ${escapeHtml(ch.name)} <small>${metric}</small>
             </span>
           `;
         }).join('');
 
         const milestonesHtml = era.milestones.map(m => {
           const th = THEME_BY_ID[m.theme] || { icon: '▶️', color: '#94a3b8' };
-          const linkOpen = m.url ? `<a href="${escapeHtml(m.url)}" target="_blank" rel="noopener" class="milestone-title" title="${escapeHtml(m.title)}">` : `<span class="milestone-title" title="${escapeHtml(m.title)}">`;
-          const linkClose = m.url ? `</a>` : `</span>`;
           return `
             <div class="milestone-item">
               <span class="milestone-date">${m.date}</span>
               <span>${th.icon}</span>
-              ${linkOpen}${escapeHtml(m.title)}${linkClose}
-              ${m.channel ? `<span class="milestone-ch">• ${escapeHtml(m.channel)}</span>` : ''}
+              <a href="${escapeHtml(m.url || '#')}" target="_blank" rel="noopener" class="milestone-title" title="${escapeHtml(m.title)}">${escapeHtml(m.title)}</a>
+              ${m.dur ? `<span class="dur-pill" style="margin-left:auto;">${escapeHtml(m.dur)}</span>` : ''}
             </div>
           `;
         }).join('');
@@ -1390,9 +1454,15 @@
                 <div class="era-title">${escapeHtml(era.title)}</div>
                 <div class="era-sub">${escapeHtml(era.subtitle)}</div>
               </div>
-              <div class="era-count-pill">
-                <strong>${fmtNum(era.total_events)}</strong>
-                <span>activités enregistrées</span>
+              <div style="display:flex; gap:0.6rem;">
+                <div class="era-count-pill">
+                  <strong style="color:#34d399;">${fmtHours(era.watch_hours)}</strong>
+                  <span>temps réel passé</span>
+                </div>
+                <div class="era-count-pill">
+                  <strong>${fmtNum(era.total_events)}</strong>
+                  <span>activités</span>
+                </div>
               </div>
             </div>
 
@@ -1402,15 +1472,15 @@
 
             <div class="era-grid">
               <div class="era-box">
-                <div class="era-box-title">🎯 Centres d'intérêt dominants</div>
+                <div class="era-box-title">🎯 Centres d'intérêt dominants (Heures & %)</div>
                 ${topThemesHtml}
               </div>
               <div class="era-box">
-                <div class="era-box-title">📺 Chaînes & Créateurs phares de l'époque</div>
-                <div class="chip-list">${topChannelsHtml || '<span style="color:var(--text-2);font-size:0.8rem;">Vidéos variées</span>'}</div>
+                <div class="era-box-title">📺 Chaînes n°1 en Temps Passé sur l'époque</div>
+                <div class="chip-list">${topChannelsHtml}</div>
               </div>
               <div class="era-box">
-                <div class="era-box-title">⏳ Jalons & Vidéos marquantes (Ordre Chronologique)</div>
+                <div class="era-box-title">⏳ Vidéos jalons (Ordre Chronologique)</div>
                 <div class="milestone-list">${milestonesHtml}</div>
               </div>
             </div>
@@ -1424,22 +1494,24 @@
     function renderThemes(sortBy) {
       currentThemeSort = sortBy;
       document.getElementById('sortThemeChrono').classList.toggle('active', sortBy === 'chrono');
+      document.getElementById('sortThemeHours').classList.toggle('active', sortBy === 'hours');
       document.getElementById('sortThemeVol').classList.toggle('active', sortBy === 'volume');
 
       let orderedThemes = [...DATA.themes];
       if (sortBy === 'chrono') {
         orderedThemes.sort((a, b) => CHRONO_THEME_ORDER.indexOf(a.id) - CHRONO_THEME_ORDER.indexOf(b.id));
+      } else if (sortBy === 'hours') {
+        orderedThemes.sort((a, b) => b.watch_hours - a.watch_hours);
       } else {
         orderedThemes.sort((a, b) => b.count - a.count);
       }
 
-      // Filter pills
       const pillsHtml = [
-        `<button class="theme-pill-btn ${selectedThemeFilter === 'all' ? 'active' : ''}" onclick="selectedThemeFilter='all'; renderThemes('${sortBy}')">Tous les 12 Thèmes</button>`,
+        `<button class="theme-pill-btn ${selectedThemeFilter === 'all' ? 'active' : ''}" onclick="selectedThemeFilter='all'; renderThemes('${sortBy}')">Tous les 12 Thèmes (12 251 h)</button>`,
         ...orderedThemes.map((t, idx) => `
           <button class="theme-pill-btn ${selectedThemeFilter === t.id ? 'active' : ''}" onclick="selectedThemeFilter='${t.id}'; renderThemes('${sortBy}')">
             <span>${t.icon}</span>
-            <span>${sortBy === 'chrono' ? `#${idx + 1} ` : ''}${escapeHtml(t.short)}</span>
+            <span>${escapeHtml(t.short)} (${fmtHours(t.watch_hours)})</span>
           </button>
         `)
       ].join('');
@@ -1449,33 +1521,31 @@
         ? orderedThemes
         : orderedThemes.filter(t => t.id === selectedThemeFilter);
 
-      const cardsHtml = visibleThemes.map((t, idx) => {
-        const maxYrVal = Math.max(...Object.values(t.by_year), 1);
+      const cardsHtml = visibleThemes.map(t => {
+        const hrsObj = t.by_year_hours || {};
+        const maxYrVal = Math.max(...Object.values(hrsObj), 1);
         const sparkBars = DATA.summary.years.map(y => {
-          const v = t.by_year[String(y)] || 0;
-          const h = v > 0 ? Math.max(8, Math.round((v / maxYrVal) * 100)) : 2;
-          const op = v > 0 ? 0.95 : 0.18;
+          const hVal = hrsObj[String(y)] || 0;
+          const cVal = t.by_year[String(y)] || 0;
+          const hPct = hVal > 0 ? Math.max(10, Math.round((hVal / maxYrVal) * 100)) : (cVal > 0 ? 8 : 2);
+          const op = (hVal > 0 || cVal > 0) ? 0.95 : 0.18;
           return `
-            <div class="spark-col" title="${y} : ${fmtNum(v)} activités">
-              <div class="spark-bar" style="height:${h}%; background:${t.color}; opacity:${op};"></div>
+            <div class="spark-col" title="${y} : ${hVal} h passées (${fmtNum(cVal)} vidéos)">
+              <div class="spark-bar" style="height:${hPct}%; background:${t.color}; opacity:${op};"></div>
               <div class="spark-yr">${String(y).slice(2)}</div>
             </div>
           `;
         }).join('');
 
         const topCh = t.top_channels.slice(0, 8).map(c => `
-          <span class="channel-chip">${escapeHtml(c.name)} <small>${fmtNum(c.count)}</small></span>
-        `).join('');
-
-        const topSrch = t.top_searches.slice(0, 6).map(s => `
-          <span class="channel-chip" style="border-style:dashed;">🔍 ${escapeHtml(s.query)} <small>${s.count}</small></span>
+          <span class="channel-chip">${escapeHtml(c.name)} <small>${c.hours} h (${c.count})</small></span>
         `).join('');
 
         const samplesHtml = t.chronological_samples.slice(0, 10).map(s => `
           <div class="milestone-item">
             <span class="milestone-date">${s.date}</span>
             <a href="${escapeHtml(s.url || '#')}" target="_blank" rel="noopener" class="milestone-title" title="${escapeHtml(s.title)}">${escapeHtml(s.title)}</a>
-            ${s.channel ? `<span class="milestone-ch">• ${escapeHtml(s.channel)}</span>` : ''}
+            ${s.real_sec > 0 ? `<span class="real-time-pill" style="margin-left:auto; font-size:0.68rem; padding:0.1rem 0.4rem;">${s.real_dur}</span>` : ''}
           </div>
         `).join('');
 
@@ -1484,57 +1554,50 @@
         return `
           <div class="theme-card" style="border-top: 3px solid ${t.color};">
             <div class="theme-card-head">
-              <div style="display:flex; gap:0.85rem; align-items:flex-start;">
+              <div style="display:flex; gap:0.8rem; align-items:flex-start;">
                 <div class="theme-icon-box" style="background:${t.color}20; border:1px solid ${t.color}55;">${t.icon}</div>
                 <div>
                   <div style="font-size:0.7rem; font-family:'JetBrains Mono',monospace; color:${t.color}; font-weight:700; text-transform:uppercase;">
-                    Thème Chronologique #${rankNum} • Pic en ${t.peak_year}
+                    Thème Chronologique #${rankNum} • ${t.watch_pct_share}% de votre temps total
                   </div>
-                  <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.12rem; font-weight:800;">${escapeHtml(t.name)}</h3>
+                  <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:800;">${escapeHtml(t.name)}</h3>
                 </div>
               </div>
               <div style="text-align:right; flex-shrink:0;">
-                <div style="font-family:'Space Grotesk',sans-serif; font-size:1.2rem; font-weight:800;">${fmtNum(t.count)}</div>
-                <div style="font-size:0.72rem; color:var(--text-2);">${t.pct}% du total</div>
+                <div style="font-family:'Space Grotesk',sans-serif; font-size:1.25rem; font-weight:800; color:#34d399;">${fmtHours(t.watch_hours)}</div>
+                <div style="font-size:0.71rem; color:var(--text-2);">${fmtNum(t.count)} vidéos/actions</div>
               </div>
             </div>
 
-            <p style="font-size:0.83rem; color:var(--text-1);">${escapeHtml(t.desc)}</p>
+            <p style="font-size:0.82rem; color:var(--text-1);">${escapeHtml(t.desc)}</p>
 
             <div>
-              <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-2); font-weight:700; margin-bottom:0.35rem;">
-                📈 Courbe d'intérêt de 2011 à 2026
+              <div style="font-size:0.69rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-2); font-weight:700; margin-bottom:0.3rem;">
+                ⏱️ Heures réelles passées par année (2011 → 2026)
               </div>
               <div class="theme-sparkline">${sparkBars}</div>
             </div>
 
             <div class="first-last-box">
               <div class="fl-item">
-                <div class="fl-lbl" style="color:${t.color};">🌱 Première apparition (${t.first_date})</div>
-                <div class="fl-title" title="${escapeHtml(t.first_item.title)}">${escapeHtml(t.first_item.title)}</div>
-                <div style="font-size:0.7rem; color:var(--text-2); margin-top:0.15rem;">${escapeHtml(t.first_item.channel || '')}</div>
+                <div class="fl-lbl" style="color:${t.color};">🌱 1re trace (${t.first_date})</div>
+                <div class="fl-title">${escapeHtml(t.first_item.title)}</div>
+                <div style="font-size:0.69rem; color:var(--text-2); margin-top:0.15rem;">${escapeHtml(t.first_item.channel || '')} ${t.first_item.dur ? '• ' + t.first_item.dur : ''}</div>
               </div>
               <div class="fl-item">
-                <div class="fl-lbl">🚀 Activité la plus récente (${t.last_date})</div>
-                <div class="fl-title" title="${escapeHtml(t.last_item.title)}">${escapeHtml(t.last_item.title)}</div>
-                <div style="font-size:0.7rem; color:var(--text-2); margin-top:0.15rem;">${escapeHtml(t.last_item.channel || '')}</div>
+                <div class="fl-lbl">🚀 Plus récent (${t.last_date})</div>
+                <div class="fl-title">${escapeHtml(t.last_item.title)}</div>
+                <div style="font-size:0.69rem; color:var(--text-2); margin-top:0.15rem;">${escapeHtml(t.last_item.channel || '')} ${t.last_item.dur ? '• ' + t.last_item.dur : ''}</div>
               </div>
             </div>
 
             <div>
-              <div class="era-box-title">📺 Chaînes principales</div>
+              <div class="era-box-title">📺 Chaînes où vous avez passé le plus d'heures</div>
               <div class="chip-list">${topCh}</div>
             </div>
 
-            ${topSrch ? `
-              <div>
-                <div class="era-box-title">🔍 Recherches fréquentes</div>
-                <div class="chip-list">${topSrch}</div>
-              </div>
-            ` : ''}
-
             <div>
-              <div class="era-box-title">⏳ Évolution chronologique des vidéos (${t.first_year} → 2026)</div>
+              <div class="era-box-title">⏳ Vidéos les plus longues / marquantes par année</div>
               <div class="milestone-list" style="max-height:175px;">${samplesHtml}</div>
             </div>
           </div>
@@ -1548,11 +1611,11 @@
       const pillsHtml = DATA.yearly.map(yObj => `
         <button class="year-pill ${yObj.year === selectedYear ? 'active' : ''}" data-yr="${yObj.year}" onclick="selectYear(${yObj.year})">
           ${yObj.year}
-          <span style="font-size:0.68rem; font-weight:500; opacity:0.75; margin-left:2px;">(${yObj.total >= 1000 ? (yObj.total/1000).toFixed(1)+'k' : yObj.total})</span>
+          <span style="font-size:0.68rem; font-weight:500; opacity:0.82; margin-left:3px;">(${yObj.watch_hours}h)</span>
         </button>
       `).join('');
       document.getElementById('yearPillsBar').innerHTML = pillsHtml;
-      selectYear(2011);
+      selectYear(selectedYear);
     }
 
     function selectYear(yr) {
@@ -1570,10 +1633,10 @@
           <div class="theme-bar-row">
             <div class="theme-bar-top">
               <span>${th.icon} <strong>${escapeHtml(th.name)}</strong></span>
-              <span style="font-family:'JetBrains Mono',monospace; color:var(--text-1);">${tItem.pct}% (${fmtNum(tItem.count)})</span>
+              <span style="font-family:'JetBrains Mono',monospace; color:var(--text-1);"><strong style="color:#34d399;">${fmtHours(tItem.hours)}</strong> (${fmtNum(tItem.count)} vidéos)</span>
             </div>
             <div class="theme-bar-track" style="height:8px;">
-              <div class="theme-bar-fill" style="width:${Math.min(100, tItem.pct)}%; background:${th.color};"></div>
+              <div class="theme-bar-fill" style="width:${Math.min(100, Math.max(tItem.hours_pct, tItem.pct))}%; background:${th.color};"></div>
             </div>
           </div>
         `;
@@ -1583,28 +1646,23 @@
         const th = THEME_BY_ID[c.theme] || { color: '#94a3b8', icon: '📺' };
         return `
           <span class="channel-chip" style="border-left:3px solid ${th.color};">
-            ${th.icon} ${escapeHtml(c.name)} <small>${fmtNum(c.count)}</small>
+            ${th.icon} ${escapeHtml(c.name)} <small>${c.hours} h (${c.count})</small>
           </span>
         `;
       }).join('');
 
-      const searchesHtml = yObj.top_searches.map(s => `
-        <span class="channel-chip">🔍 ${escapeHtml(s.query)} <small>${s.count}</small></span>
-      `).join('');
-
-      const subsHtml = yObj.subscriptions_added.map(s => `
-        <span class="channel-chip" style="border-left:3px solid #a855f7;">🔔 ${escapeHtml(s.channel)} <small>${s.date}</small></span>
-      `).join('');
-
       const highlightsHtml = yObj.highlights.map(h => {
         const th = THEME_BY_ID[h.theme] || { icon: '▶️', color: '#3b82f6', short: '' };
         return `
-          <div class="milestone-item" style="padding:0.5rem 0.65rem;">
+          <div class="milestone-item" style="padding:0.48rem 0.65rem;">
             <span class="milestone-date">${h.date}</span>
-            ${actionBadge(h.atype)}
+            ${actionBadgeByStr(h.atype)}
             <a href="${escapeHtml(h.url || '#')}" target="_blank" rel="noopener" class="milestone-title" style="font-weight:600;">${escapeHtml(h.title)}</a>
             ${h.channel ? `<span class="milestone-ch">• ${escapeHtml(h.channel)}</span>` : ''}
-            <span class="badge-theme" style="background:${th.color}20; color:${th.color}; margin-left:auto;">${th.icon} ${escapeHtml(th.short)}</span>
+            <span style="margin-left:auto; display:flex; align-items:center; gap:0.45rem;">
+              ${h.real_sec > 0 ? `<span class="real-time-pill">${h.real_dur}</span>` : ''}
+              <span class="badge-theme" style="background:${th.color}20; color:${th.color};">${th.icon} ${escapeHtml(th.short)}</span>
+            </span>
           </div>
         `;
       }).join('');
@@ -1613,46 +1671,31 @@
         <div class="chart-card">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
             <div>
-              <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:#ff6b88; font-weight:700;">Bilan Annuel Chronologique</div>
-              <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.75rem; font-weight:800;">Année ${yObj.year}</h3>
+              <div style="font-size:0.74rem; text-transform:uppercase; letter-spacing:0.08em; color:#34d399; font-weight:700;">Bilan Temps Passé & Vidéos</div>
+              <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.7rem; font-weight:800;">Année ${yObj.year}</h3>
             </div>
-            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-              <div class="era-count-pill"><strong>${fmtNum(yObj.total)}</strong><span>Total activités</span></div>
-              <div class="era-count-pill"><strong>${fmtNum(yObj.watches)}</strong><span>Vidéos vues</span></div>
-              <div class="era-count-pill"><strong>${fmtNum(yObj.searches)}</strong><span>Recherches</span></div>
-              <div class="era-count-pill"><strong>${fmtNum(yObj.likes)}</strong><span>Vidéos « J'aime »</span></div>
-              <div class="era-count-pill"><strong>${fmtNum(yObj.subscribes)}</strong><span>Nouveaux abonnements</span></div>
+            <div style="display:flex; gap:0.7rem; flex-wrap:wrap;">
+              <div class="era-count-pill"><strong style="color:#34d399;">${fmtHours(yObj.watch_hours)}</strong><span>Temps réel (${yObj.watch_days} j)</span></div>
+              <div class="era-count-pill"><strong>${yObj.daily_avg_hours} h/j</strong><span>Moyenne quotidienne</span></div>
+              <div class="era-count-pill"><strong>${fmtHours(yObj.raw_hours)}</strong><span>Durée brute lancée</span></div>
+              <div class="era-count-pill"><strong>${fmtNum(yObj.total)}</strong><span>Activités totales</span></div>
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:1.25rem; margin-bottom:1.25rem;">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:1.2rem; margin-bottom:1.2rem;">
             <div class="era-box">
-              <div class="era-box-title">🎯 Répartition des Centres d'Intérêt en ${yObj.year}</div>
+              <div class="era-box-title">🎯 Temps Réel Passé par Thème en ${yObj.year}</div>
               ${themesHtml}
             </div>
-            <div style="display:flex; flex-direction:column; gap:1rem;">
-              <div class="era-box">
-                <div class="era-box-title">🏆 Chaînes les plus suivies en ${yObj.year}</div>
-                <div class="chip-list">${channelsHtml || '<span style="color:var(--text-2);font-size:0.8rem;">Données principalement issues des J\'aime / Abonnements sur cette période</span>'}</div>
-              </div>
-              ${subsHtml ? `
-                <div class="era-box">
-                  <div class="era-box-title">🔔 Chaînes auxquelles vous vous êtes abonné en ${yObj.year}</div>
-                  <div class="chip-list">${subsHtml}</div>
-                </div>
-              ` : ''}
-              ${searchesHtml ? `
-                <div class="era-box">
-                  <div class="era-box-title">🔍 Vos recherches phares en ${yObj.year}</div>
-                  <div class="chip-list">${searchesHtml}</div>
-                </div>
-              ` : ''}
+            <div class="era-box">
+              <div class="era-box-title">🏆 Chaînes n°1 en Heures Passées en ${yObj.year}</div>
+              <div class="chip-list">${channelsHtml}</div>
             </div>
           </div>
 
           <div class="era-box">
-            <div class="era-box-title">⏳ Sélection chronologique de vidéos & moments de ${yObj.year}</div>
-            <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <div class="era-box-title">⏳ Plus longues sessions & moments marquants de ${yObj.year}</div>
+            <div style="display:flex; flex-direction:column; gap:0.38rem;">
               ${highlightsHtml}
             </div>
           </div>
@@ -1661,135 +1704,68 @@
     }
 
     function renderChannelsAndRhythms() {
-      // Hourly bars
-      const hours = DATA.rhythms.by_hour;
-      const maxH = Math.max(...hours, 1);
-      document.getElementById('hourBars').innerHTML = hours.map((cnt, h) => {
-        const pct = Math.max(6, Math.round((cnt / maxH) * 100));
+      const hourHrs = DATA.rhythms.by_hour_hours;
+      const maxH = Math.max(...hourHrs, 1);
+      document.getElementById('hourBars').innerHTML = hourHrs.map((hrs, h) => {
+        const pct = Math.max(6, Math.round((hrs / maxH) * 100));
         return `
-          <div class="spark-col" title="${h}h00 - ${h}h59 : ${fmtNum(cnt)} activités">
-            <div class="spark-bar" style="height:${pct}%; background:linear-gradient(180deg, #ff0033, #3b82f6); border-radius:4px 4px 0 0;"></div>
+          <div class="spark-col" title="${h}h00 - ${h}h59 : ${fmtHours(hrs)} passées">
+            <div class="spark-bar" style="height:${pct}%; background:linear-gradient(180deg, #10b981, #3b82f6); border-radius:4px 4px 0 0;"></div>
             <div class="spark-yr" style="font-size:0.64rem; margin-top:4px;">${h}h</div>
           </div>
         `;
       }).join('');
 
-      // Weekday bars
       const days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-      const wCounts = DATA.rhythms.by_weekday;
-      const maxW = Math.max(...wCounts, 1);
+      const wHrs = DATA.rhythms.by_weekday_hours;
+      const maxW = Math.max(...wHrs, 1);
       document.getElementById('weekdayBars').innerHTML = days.map((dName, i) => {
-        const cnt = wCounts[i] || 0;
-        const pct = Math.round((cnt / maxW) * 100);
+        const hrs = wHrs[i] || 0;
+        const pct = Math.round((hrs / maxW) * 100);
         return `
           <div class="theme-bar-row" style="margin-bottom:0.45rem;">
             <div class="theme-bar-top">
               <span>${dName}</span>
-              <span style="font-family:'JetBrains Mono',monospace; color:var(--text-2);">${fmtNum(cnt)}</span>
+              <span style="font-family:'JetBrains Mono',monospace; color:#34d399; font-weight:700;">${fmtHours(hrs)}</span>
             </div>
             <div class="theme-bar-track" style="height:7px;">
-              <div class="theme-bar-fill" style="width:${pct}%; background:#3b82f6;"></div>
+              <div class="theme-bar-fill" style="width:${pct}%; background:#10b981;"></div>
             </div>
           </div>
         `;
       }).join('');
 
-      // Top channels list
-      document.getElementById('topChannelsList').innerHTML = DATA.top_channels_global.slice(0, 60).map((ch, idx) => {
+      document.getElementById('topChannelsHoursList').innerHTML = DATA.top_channels_by_hours.slice(0, 60).map((ch, idx) => {
         const th = THEME_BY_ID[ch.theme] || { icon: '📺', color: '#94a3b8', short: 'Autre' };
         return `
-          <div class="milestone-item" style="justify-content:space-between; padding:0.48rem 0.65rem; margin-bottom:0.3rem;">
-            <div style="display:flex; align-items:center; gap:0.65rem; min-width:0;">
-              <span style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text-2); width:26px;">#${idx + 1}</span>
-              <strong style="font-size:0.86rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(ch.name)}</strong>
-            </div>
-            <div style="display:flex; align-items:center; gap:0.6rem; flex-shrink:0;">
-              <span class="badge-theme" style="background:${th.color}20; color:${th.color};">${th.icon} ${escapeHtml(th.short)}</span>
-              <span style="font-family:'JetBrains Mono',monospace; font-weight:700; font-size:0.82rem;">${fmtNum(ch.count)}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      // Chronological subscriptions
-      document.getElementById('subsChronoList').innerHTML = DATA.subscriptions_chronological.map((s, idx) => {
-        const th = THEME_BY_ID[s.theme] || { icon: '🔔', color: '#a855f7', short: 'Chaîne' };
-        return `
-          <div class="milestone-item" style="justify-content:space-between; padding:0.45rem 0.65rem; margin-bottom:0.3rem;">
+          <div class="milestone-item" style="justify-content:space-between; padding:0.45rem 0.6rem; margin-bottom:0.28rem;">
             <div style="display:flex; align-items:center; gap:0.6rem; min-width:0;">
-              <span class="milestone-date">${s.date}</span>
-              <a href="${escapeHtml(s.url || '#')}" target="_blank" rel="noopener" style="font-weight:600; color:var(--text-0);">${escapeHtml(s.channel)}</a>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--text-2); width:26px;">#${idx + 1}</span>
+              <strong style="font-size:0.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(ch.name)}</strong>
             </div>
-            <span class="badge-theme" style="background:${th.color}20; color:${th.color};">${th.icon} ${escapeHtml(th.short)}</span>
+            <div style="display:flex; align-items:center; gap:0.55rem; flex-shrink:0;">
+              <span class="badge-theme" style="background:${th.color}20; color:${th.color};">${th.icon} ${escapeHtml(th.short)}</span>
+              <span class="real-time-pill">${fmtHours(ch.hours)}</span>
+              <span style="font-family:'JetBrains Mono',monospace; color:var(--text-2); font-size:0.73rem;">(${ch.count})</span>
+            </div>
           </div>
         `;
       }).join('');
-    }
 
-    function initExplorer() {
-      const thSel = document.getElementById('filterTheme');
-      CHRONO_THEME_ORDER.forEach(tid => {
-        const t = THEME_BY_ID[tid];
-        if (!t) return;
-        const opt = document.createElement('option');
-        opt.value = t.id;
-        opt.textContent = `${t.icon} ${t.name} (${fmtNum(t.count)})`;
-        thSel.appendChild(opt);
-      });
-
-      const yrSel = document.getElementById('filterYear');
-      DATA.summary.years.forEach(y => {
-        const opt = document.createElement('option');
-        opt.value = String(y);
-        opt.textContent = `Année ${y}`;
-        yrSel.appendChild(opt);
-      });
-
-      renderArchiveTable();
-    }
-
-    function renderArchiveTable() {
-      const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-      const thFilter = document.getElementById('filterTheme').value;
-      const yrFilter = document.getElementById('filterYear').value;
-      const actFilter = document.getElementById('filterAction').value;
-      const ord = document.getElementById('filterOrder').value;
-
-      let rows = DATA.archive.filter(r => {
-        if (thFilter !== 'all' && r.th !== thFilter) return false;
-        if (yrFilter !== 'all' && String(r.y) !== yrFilter) return false;
-        if (actFilter !== 'all' && r.a !== actFilter) return false;
-        if (q && !(r.t.toLowerCase().includes(q) || (r.c && r.c.toLowerCase().includes(q)) || r.d.includes(q))) return false;
-        return true;
-      });
-
-      if (ord === 'desc') {
-        rows = [...rows].reverse();
-      }
-
-      const totalMatched = rows.length;
-      const slice = rows.slice(0, 300);
-
-      document.getElementById('archiveCountInfo').innerHTML =
-        `Affichage de <strong>${fmtNum(slice.length)}</strong> sur <strong>${fmtNum(totalMatched)}</strong> entrées jalons indexées (triées en ordre ${ord === 'asc' ? 'chronologique 2011 → 2026' : 'antéchronologique 2026 → 2011'}).`;
-
-      document.getElementById('archiveTableBody').innerHTML = slice.map(r => {
-        const th = THEME_BY_ID[r.th] || { icon: '📌', color: '#94a3b8', short: r.th };
-        const titleCell = r.u
-          ? `<a href="${escapeHtml(r.u)}" target="_blank" rel="noopener" style="font-weight:600; color:var(--text-0);">${escapeHtml(r.t)}</a>`
-          : `<span style="font-weight:600;">${escapeHtml(r.t)}</span>`;
+      document.getElementById('topChannelsCountList').innerHTML = DATA.top_channels_by_count.slice(0, 60).map((ch, idx) => {
+        const th = THEME_BY_ID[ch.theme] || { icon: '📺', color: '#94a3b8', short: 'Autre' };
         return `
-          <tr>
-            <td style="font-family:'JetBrains Mono',monospace; font-size:0.77rem; color:var(--text-2); white-space:nowrap;">${r.d}</td>
-            <td>${actionBadge(r.a)}</td>
-            <td>${titleCell}</td>
-            <td style="color:var(--text-1); font-size:0.8rem;">${escapeHtml(r.c || '—')}</td>
-            <td>
-              <span class="badge-theme" style="background:${th.color}20; color:${th.color}; border:1px solid ${th.color}44;">
-                ${th.icon} ${escapeHtml(th.short)}
-              </span>
-            </td>
-          </tr>
+          <div class="milestone-item" style="justify-content:space-between; padding:0.45rem 0.6rem; margin-bottom:0.28rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem; min-width:0;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--text-2); width:26px;">#${idx + 1}</span>
+              <strong style="font-size:0.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(ch.name)}</strong>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.55rem; flex-shrink:0;">
+              <span class="badge-theme" style="background:${th.color}20; color:${th.color};">${th.icon} ${escapeHtml(th.short)}</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700; font-size:0.8rem;">${fmtNum(ch.count)} vidéos</span>
+              <span style="font-family:'JetBrains Mono',monospace; color:#34d399; font-size:0.73rem;">(${fmtHours(ch.hours)})</span>
+            </div>
+          </div>
         `;
       }).join('');
     }
