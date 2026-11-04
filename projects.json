@@ -22,6 +22,17 @@
     "pushedAt": "2026-11-04T22:51:57Z"
   },
   {
+    "id": "stats-youtube",
+    "title": "YouTube Time-Machine (2011–2026)",
+    "subtitle": "Historique global (145 740 vidéos/recherches/likes) & 12 centres d’intérêt en ordre chronologique",
+    "category": "daily-tools",
+    "emoji": "📺",
+    "logoUrl": "stats-youtube/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
+    "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
+    "pushedAt": "2026-11-04T22:51:57Z"
+  },
+  {
     "id": "mon-drive-tunnel",
     "title": "Mon Drive Privé — 774 Documents (Tunnel)",
     "subtitle": "Barre de recherche instantanée, aperçu PDF/Photo intégré & téléchargement via Tunnel Mac (PIN 1818)",

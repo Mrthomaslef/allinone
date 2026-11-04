@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "stats-youtube": {
+        "title": "YouTube Time-Machine (2011–2026)",
+        "subtitle": "Historique global (145 740 vidéos/recherches/likes) & 12 centres d’intérêt en ordre chronologique",
+        "category": "daily-tools",
+        "emoji": "📺",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
+        "logoUrl": "stats-youtube/icon.svg",
+    },
     "biblioosteo": {
         "title": "BiblioOstéo Cochin",
         "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
@@ -353,6 +361,22 @@ def main():
                 "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
                 "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/annuaire-prive",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "stats-youtube" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "stats-youtube",
+                "title": "YouTube Time-Machine (2011–2026)",
+                "subtitle": "Historique global (145 740 vidéos/recherches/likes) & 12 centres d’intérêt en ordre chronologique",
+                "category": "daily-tools",
+                "emoji": "📺",
+                "logoUrl": "stats-youtube/icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/stats-youtube",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
