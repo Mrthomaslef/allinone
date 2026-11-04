@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-04T15:20:27Z",
+  "checkedAt": "2026-11-04T15:21:04Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://johns-complex-href-consistency.trycloudflare.com",
   "subscription": {
@@ -79,16 +79,16 @@
     },
     "sevenDays": {
       "prompts": 858,
-      "steps": 34545,
-      "inputTokens": 130709489,
-      "outputTokens": 16079636,
-      "cachedTokens": 1923394114,
-      "activeTokens": 146789125,
-      "totalTokensWithCache": 2070183239,
-      "apiCostUsd": 916.41,
-      "uncachedValueUsd": 4740.13,
-      "apiCostEur": 843.1,
-      "uncachedValueEur": 4360.92,
+      "steps": 34540,
+      "inputTokens": 130702282,
+      "outputTokens": 16079111,
+      "cachedTokens": 1923289868,
+      "activeTokens": 146781393,
+      "totalTokensWithCache": 2070071261,
+      "apiCostUsd": 916.36,
+      "uncachedValueUsd": 4739.9,
+      "apiCostEur": 843.05,
+      "uncachedValueEur": 4360.71,
       "sessionsCount": 241
     },
     "thirtyDays": {
@@ -161,9 +161,9 @@
       "resetsAt": "2026-11-04T16:00:07Z",
       "startedAt": "2026-11-04T11:00:07Z",
       "durationMins": 300,
-      "remainingSeconds": 2379,
-      "elapsedPercent": 86.78,
-      "paceDeltaPercent": -79.04,
+      "remainingSeconds": 2342,
+      "elapsedPercent": 86.99,
+      "paceDeltaPercent": -79.25,
       "burnRatePerHour": 1.78,
       "disabled": false,
       "description": "You have used some of your 5-hour limit, it will fully refresh in 39 minutes.",
@@ -252,7 +252,7 @@
       "resetsAt": "2026-11-07T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
       "durationMins": 10080,
-      "remainingSeconds": 233594,
+      "remainingSeconds": 233557,
       "elapsedPercent": 61.38,
       "paceDeltaPercent": -2.91,
       "burnRatePerHour": 0.57,
@@ -271,15 +271,15 @@
       "apiCostEurWindow": 679.57,
       "uncachedValueUsdWindow": 3773.87,
       "promptsRolling": 858,
-      "stepsRolling": 34545,
-      "tokensRolling": 146789125,
-      "inputTokensRolling": 130709489,
-      "outputTokensRolling": 16079636,
-      "cachedTokensRolling": 1923394114,
-      "totalTokensWithCacheRolling": 2070183239,
-      "apiCostUsdRolling": 916.41,
-      "apiCostEurRolling": 843.1,
-      "uncachedValueUsdRolling": 4740.13,
+      "stepsRolling": 34540,
+      "tokensRolling": 146781393,
+      "inputTokensRolling": 130702282,
+      "outputTokensRolling": 16079111,
+      "cachedTokensRolling": 1923289868,
+      "totalTokensWithCacheRolling": 2070071261,
+      "apiCostUsdRolling": 916.36,
+      "apiCostEurRolling": 843.05,
+      "uncachedValueUsdRolling": 4739.9,
       "sessionsCount": 241,
       "estimatedCapacitySteps": 46195,
       "dailyBreakdown": [
@@ -367,7 +367,7 @@
       "durationMins": 43200,
       "resetsAt": "2026-11-30T08:13:42Z",
       "startedAt": "2026-10-31T08:13:42Z",
-      "remainingSeconds": 2220794,
+      "remainingSeconds": 2220757,
       "elapsedPercent": 14.32,
       "usedPercent": 13.64,
       "remainingPercent": 86.36,
@@ -552,8 +552,8 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-04T20:20:27Z",
-      "startedAt": "2026-11-04T15:20:27Z",
+      "resetsAt": "2026-11-04T20:21:04Z",
+      "startedAt": "2026-11-04T15:21:04Z",
       "durationMins": 300,
       "remainingSeconds": 17999,
       "elapsedPercent": 0.0,
@@ -570,9 +570,9 @@
       "resetsAt": "2026-11-07T09:10:41Z",
       "startedAt": "2026-10-31T09:10:41Z",
       "durationMins": 10080,
-      "remainingSeconds": 237013,
-      "elapsedPercent": 60.81,
-      "paceDeltaPercent": 39.19,
+      "remainingSeconds": 236976,
+      "elapsedPercent": 60.82,
+      "paceDeltaPercent": 39.18,
       "burnRatePerHour": 0.98,
       "disabled": false,
       "description": "You have hit your weekly limit, it refreshes in 2 days, 17 hours. If on a supported paid plan, you can use AI credits in the interim or upgrade to a higher tier."
@@ -580,10 +580,10 @@
     "claudeFiveHour": {
       "id": "claude-5h",
       "durationMins": 300,
-      "usedPercent": 18.0,
-      "remainingPercent": 82.0,
-      "resetsAt": "2026-11-04T19:39:59Z",
-      "remainingSeconds": 15881,
+      "usedPercent": 19.0,
+      "remainingPercent": 81.0,
+      "resetsAt": "2026-11-04T19:40:00Z",
+      "remainingSeconds": 15535,
       "status": "active"
     },
     "claudeWeekly": {
@@ -591,8 +591,8 @@
       "durationMins": 10080,
       "usedPercent": 17.0,
       "remainingPercent": 83.0,
-      "resetsAt": "2026-11-05T00:59:59Z",
-      "remainingSeconds": 35081
+      "resetsAt": "2026-11-05T01:00:00Z",
+      "remainingSeconds": 34735
     }
   },
   "models": [
@@ -601,36 +601,36 @@
       "label": "Claude Opus 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
-      "remainingPercent": 82.0,
-      "usedPercent": 18.0,
-      "resetsAt": "2026-11-04T19:39:59Z"
+      "remainingPercent": 81.0,
+      "usedPercent": 19.0,
+      "resetsAt": "2026-11-04T19:40:00Z"
     },
     {
       "id": "claude-sonnet-5-5",
       "label": "Claude Sonnet 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Raisonnement rapide & efficace",
-      "remainingPercent": 82.0,
-      "usedPercent": 18.0,
-      "resetsAt": "2026-11-04T19:39:59Z"
+      "remainingPercent": 81.0,
+      "usedPercent": 19.0,
+      "resetsAt": "2026-11-04T19:40:00Z"
     },
     {
       "id": "claude-fable-5-1",
       "label": "Claude Fable 5.1",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Défis complexes & Ultracode",
-      "remainingPercent": 82.0,
-      "usedPercent": 18.0,
-      "resetsAt": "2026-11-04T19:39:59Z"
+      "remainingPercent": 81.0,
+      "usedPercent": 19.0,
+      "resetsAt": "2026-11-04T19:40:00Z"
     },
     {
       "id": "claude-haiku-5-5",
       "label": "Claude Haiku 5.5",
       "family": "claude-pro",
       "description": "Claude Pro Direct • Réponses instantanées",
-      "remainingPercent": 82.0,
-      "usedPercent": 18.0,
-      "resetsAt": "2026-11-04T19:39:59Z"
+      "remainingPercent": 81.0,
+      "usedPercent": 19.0,
+      "resetsAt": "2026-11-04T19:40:00Z"
     },
     {
       "id": "claude-opus-5-5-high",
