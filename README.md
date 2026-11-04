@@ -31,7 +31,7 @@
 | Application | Description | Production | Code GitHub |
 | :--- | :--- | :--- | :--- |
 | **Gemini Ultra — Quotas Live** | Visualisation en temps réel des limites Google AI Ultra (5h, Semaine & Mois) | [Ouvrir](https://mrthomaslef.github.io/allinone/gemini-ultra/) | [Code](https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra) |
-| **Annuaire Privé — Pro & Perso** | 291 contacts (AP-HP Cochin, Pitié, Confrères, Famille), Postes DECT & 774 docs (verrouillé par PIN) | [Ouvrir](https://mrthomaslef.github.io/annuaire-prive/) | [Repo](https://github.com/Mrthomaslef/annuaire-prive) |
+| **Annuaire Privé — Pro & Perso** | 276 contacts (AP-HP Cochin, Pitié, Confrères, Famille), Postes DECT & 774 docs (verrouillé par PIN) | [Ouvrir](https://mrthomaslef.github.io/annuaire-prive/) | [Repo](https://github.com/Mrthomaslef/annuaire-prive) |
 | **ColisTrack PWA** | Suivi de livraisons & colis en temps réel (verrouillé par PIN) | [Ouvrir](https://mrthomaslef.github.io/colistrack/) | [Repo](https://github.com/Mrthomaslef/colistrack) |
 | **Resto en Amoureux — M&T** | Créneaux libres Marie & Thomas + Émile chez les grands-parents & Réservation auto | [Ouvrir](https://mrthomaslef.github.io/restaurant/) | [Repo](https://github.com/Mrthomaslef/restaurant) |
 | **AssMat — Paie & Pajemploi** | Calculateur de rémunération, présence, bulletin de salaire & Pajemploi | [Ouvrir](https://mrthomaslef.github.io/assistante-maternelle/) | [Repo](https://github.com/Mrthomaslef/assistante-maternelle) |

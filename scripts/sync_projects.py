@@ -86,7 +86,7 @@ KNOWN_METADATA = {
     },
     "annuaire-prive": {
         "title": "Annuaire Privé — Pro & Perso",
-        "subtitle": "291 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
+        "subtitle": "276 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
         "category": "daily-tools",
         "emoji": "📇",
         "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/icon.svg",
