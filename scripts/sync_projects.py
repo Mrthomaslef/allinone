@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "patrimoine-os": {
+        "title": "PatrimoineOS — Banque, Crypto & Pokémon",
+        "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",
+        "category": "daily-tools",
+        "emoji": "💎",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
+        "logoUrl": "patrimoine-os/icon.svg",
+    },
     "stats-youtube": {
         "title": "YouTube Time-Machine (2011–2026)",
         "subtitle": "Historique global (145 740 vidéos/recherches/likes) & 12 centres d’intérêt en ordre chronologique",
@@ -409,6 +417,22 @@ def main():
                 "logoUrl": "gemini-ultra/assets/icon.svg",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/gemini-ultra",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "patrimoine-os" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "patrimoine-os",
+                "title": "PatrimoineOS — Banque, Crypto & Pokémon",
+                "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",
+                "category": "daily-tools",
+                "emoji": "💎",
+                "logoUrl": "patrimoine-os/icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/patrimoine-os",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )

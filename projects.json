@@ -1,5 +1,16 @@
 [
   {
+    "id": "patrimoine-os",
+    "title": "PatrimoineOS — Banque, Crypto & Pokémon",
+    "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",
+    "category": "daily-tools",
+    "emoji": "💎",
+    "logoUrl": "patrimoine-os/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
+    "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
+    "pushedAt": "2026-11-04T22:51:57Z"
+  },
+  {
     "id": "gemini-ultra",
     "title": "Agent Tracking",
     "subtitle": "Consommation Gemini & Claude (Tokens, Prix API & Quotas)",
