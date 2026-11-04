@@ -8,7 +8,29 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-04T22:02:00Z"
+    "pushedAt": "2026-11-04T22:04:32Z"
+  },
+  {
+    "id": "photo-famille",
+    "title": "Album Famille Fontenay — WhatsApp",
+    "subtitle": "1 432 photos de famille classées par thème (Émile, Étretat/Yport/Corse, Ski, Fêtes & Messages)",
+    "category": "daily-tools",
+    "emoji": "📸",
+    "logoUrl": "https://mrthomaslef.github.io/photo-famille/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/photo-famille/",
+    "githubUrl": "https://github.com/Mrthomaslef/photo-famille",
+    "pushedAt": "2026-11-04T22:04:32Z"
+  },
+  {
+    "id": "mapp-store",
+    "title": "Mapp Store 💖 • Le Store d'Apps de Marie",
+    "subtitle": "Mapp Store • Le Store d'Apps de Marie (Pédiatrie, Famille & Jeux)",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "https://mrthomaslef.github.io/mapp-store/apple-touch-icon.png?v=mapp1",
+    "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
+    "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
+    "pushedAt": "2026-11-04T22:02:47Z"
   },
   {
     "id": "annuaire-prive",
@@ -53,17 +75,6 @@
     "prodUrl": "https://mrthomaslef.github.io/news-ai/",
     "githubUrl": "https://github.com/Mrthomaslef/news-ai",
     "pushedAt": "2026-11-04T21:47:58Z"
-  },
-  {
-    "id": "mapp-store",
-    "title": "Mapp Store 💖 • Le Store d'Apps de Marie",
-    "subtitle": "Mapp Store • Le Store d'Apps de Marie (Pédiatrie, Famille & Jeux)",
-    "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "https://mrthomaslef.github.io/mapp-store/apple-touch-icon.png?v=mapp1",
-    "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
-    "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
-    "pushedAt": "2026-11-04T21:46:16Z"
   },
   {
     "id": "forestia-mobile",

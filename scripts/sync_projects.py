@@ -126,6 +126,13 @@ KNOWN_METADATA = {
         "emoji": "✈️",
         "logoUrl": "https://mrthomaslef.github.io/voyages-voyages/assets/icon.svg",
     },
+    "photo-famille": {
+        "title": "Album Famille Fontenay — WhatsApp",
+        "subtitle": "1 432 photos de famille classées par thème (Émile, Étretat/Yport/Corse, Ski, Fêtes & Messages)",
+        "category": "daily-tools",
+        "emoji": "📸",
+        "logoUrl": "https://mrthomaslef.github.io/photo-famille/apple-touch-icon.png",
+    },
     "quiz-trentenaires": {
         "title": "QUIZ du 7TER",
         "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
