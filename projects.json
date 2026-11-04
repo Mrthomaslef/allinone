@@ -8,7 +8,18 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-04T21:09:56Z"
+    "pushedAt": "2026-11-04T21:33:17Z"
+  },
+  {
+    "id": "annuaire-prive",
+    "title": "Annuaire Privé — Pro & Perso",
+    "subtitle": "291 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
+    "category": "daily-tools",
+    "emoji": "📇",
+    "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/",
+    "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
+    "pushedAt": "2026-11-04T21:33:17Z"
   },
   {
     "id": "restaurant",
@@ -19,7 +30,7 @@
     "logoUrl": "https://mrthomaslef.github.io/restaurant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/restaurant/",
     "githubUrl": "https://github.com/Mrthomaslef/restaurant",
-    "pushedAt": "2026-11-04T21:09:56Z"
+    "pushedAt": "2026-11-04T21:28:40Z"
   },
   {
     "id": "forestia-mobile",
@@ -30,7 +41,7 @@
     "logoUrl": "https://mrthomaslef.github.io/forestia-mobile/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/forestia-mobile/",
     "githubUrl": "https://github.com/Mrthomaslef/forestia-mobile",
-    "pushedAt": "2026-11-04T20:39:18Z"
+    "pushedAt": "2026-11-04T21:18:49Z"
   },
   {
     "id": "news-ai",
@@ -41,7 +52,7 @@
     "logoUrl": "https://mrthomaslef.github.io/news-ai/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/news-ai/",
     "githubUrl": "https://github.com/Mrthomaslef/news-ai",
-    "pushedAt": "2026-11-04T20:26:07Z"
+    "pushedAt": "2026-11-04T21:14:52Z"
   },
   {
     "id": "guide-interne-cochin-os",

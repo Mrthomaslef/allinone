@@ -84,6 +84,13 @@ KNOWN_METADATA = {
         "emoji": "⚕️",
         "logoUrl": "https://mrthomaslef.github.io/Medicalc/image/logo2.png",
     },
+    "annuaire-prive": {
+        "title": "Annuaire Privé — Pro & Perso",
+        "subtitle": "291 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
+        "category": "daily-tools",
+        "emoji": "📇",
+        "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/icon.svg",
+    },
     "colistrack": {
         "title": "ColisTrack",
         "subtitle": "Suivi de livraisons & colis en temps réel (PWA privée)",
