@@ -408,7 +408,7 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'tapp_store_live_repos_cache_v10';
+    const CACHE_KEY = 'tapp_store_live_repos_cache_v11';
     const VIEW_MODE_KEY = 'tapp_store_view_mode_v1';
     const FAVS_V2_KEY = 'tapp_store_favorites_v2';
     const FAVS_STORAGE_KEY = 'tapp_store_favorites_v1';
@@ -943,6 +943,9 @@
         subtitle: '291 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)',
         category: 'daily-tools',
         emoji: '📇',
+        prodUrl: 'https://mrthomaslef.github.io/annuaire-prive/',
+        githubUrl: 'https://github.com/Mrthomaslef/annuaire-prive',
+        alwaysInclude: true,
         logoUrl: 'https://mrthomaslef.github.io/annuaire-prive/icon.svg',
         extraFallbacks: [
           'https://mrthomaslef.github.io/annuaire-prive/apple-touch-icon.png'
@@ -1005,7 +1008,7 @@
 
     function withLogoVersion(url, p) {
       if (!url) return '';
-      const ver = lastManualSyncBust || 'tapp10_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
+      const ver = lastManualSyncBust || 'tapp11_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
       if (!ver) return url;
       const clean = url.split('?')[0];
       return `${clean}?v=${encodeURIComponent(ver)}`;
