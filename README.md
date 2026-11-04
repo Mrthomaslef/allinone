@@ -32,6 +32,7 @@
 | :--- | :--- | :--- | :--- |
 | **Gemini Ultra — Quotas Live** | Visualisation en temps réel des limites Google AI Ultra (5h, Semaine & Mois) | [Ouvrir](https://mrthomaslef.github.io/allinone/gemini-ultra/) | [Code](https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra) |
 | **ColisTrack PWA** | Suivi de livraisons & colis en temps réel (verrouillé par PIN) | [Ouvrir](https://mrthomaslef.github.io/colistrack/) | [Repo](https://github.com/Mrthomaslef/colistrack) |
+| **Resto en Amoureux — M&T** | Créneaux libres Marie & Thomas + Émile chez les grands-parents & Réservation auto | [Ouvrir](https://mrthomaslef.github.io/restaurant/) | [Repo](https://github.com/Mrthomaslef/restaurant) |
 | **AssMat — Paie & Pajemploi** | Calculateur de rémunération, présence, bulletin de salaire & Pajemploi | [Ouvrir](https://mrthomaslef.github.io/assistante-maternelle/) | [Repo](https://github.com/Mrthomaslef/assistante-maternelle) |
 
 ### 4. 🎮 Jeux, Famille & Souvenirs

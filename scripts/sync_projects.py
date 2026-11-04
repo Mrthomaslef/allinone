@@ -105,6 +105,13 @@ KNOWN_METADATA = {
         "emoji": "🏡",
         "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
     },
+    "restaurant": {
+        "title": "Resto en Amoureux — Marie & Thomas",
+        "subtitle": "Créneaux libres M&T + Émile chez les grands-parents & Réservation auto",
+        "category": "daily-tools",
+        "emoji": "🍷",
+        "logoUrl": "https://mrthomaslef.github.io/restaurant/assets/icon.svg",
+    },
     "quiz-trentenaires": {
         "title": "QUIZ du 7TER",
         "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
