@@ -938,6 +938,19 @@
         logoUrl: 'https://mrthomaslef.github.io/Medicalc/image/logo2.png',
         logoFit: 'contain'
       },
+      'mon-drive-tunnel': {
+        title: 'Mon Drive Privé — 774 Documents (Tunnel)',
+        subtitle: 'Barre de recherche instantanée, aperçu PDF/Photo intégré & téléchargement via Tunnel Mac (PIN 1818)',
+        category: 'daily-tools',
+        emoji: '🗂️',
+        prodUrl: 'https://mrthomaslef.github.io/annuaire-prive/?mode=drive',
+        githubUrl: 'https://github.com/Mrthomaslef/annuaire-prive',
+        alwaysInclude: true,
+        logoUrl: 'https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg',
+        extraFallbacks: [
+          'https://mrthomaslef.github.io/annuaire-prive/icon.svg'
+        ]
+      },
       'annuaire-prive': {
         title: 'Annuaire Privé — Pro & Perso',
         subtitle: '276 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)',
@@ -1022,7 +1035,7 @@
 
     function withLogoVersion(url, p) {
       if (!url) return '';
-      const ver = lastManualSyncBust || 'tapp11_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
+      const ver = lastManualSyncBust || 'tapp12_' + (p && p.pushedAt ? (Date.parse(p.pushedAt) || p.pushedAt) : '1');
       if (!ver) return url;
       const clean = url.split('?')[0];
       return `${clean}?v=${encodeURIComponent(ver)}`;

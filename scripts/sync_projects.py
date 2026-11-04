@@ -341,6 +341,22 @@ def main():
             }
         )
 
+    if not any(item["id"].lower() == "mon-drive-tunnel" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "mon-drive-tunnel",
+                "title": "Mon Drive Privé — 774 Documents (Tunnel)",
+                "subtitle": "Barre de recherche instantanée, aperçu PDF/Photo intégré & téléchargement via Tunnel Mac (PIN 1818)",
+                "category": "daily-tools",
+                "emoji": "🗂️",
+                "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/annuaire-prive",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
     if not any(item["id"].lower() == "gemini-ultra" for item in output):
         output.insert(
             0,
