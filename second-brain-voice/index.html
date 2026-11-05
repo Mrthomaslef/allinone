@@ -3,28 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Second Brain Voice — Interface Audio Cochin & Super-Agent</title>
-  <meta name="theme-color" content="#070b14" />
+  <title>Second Brain · Voice — Compagnon de Pensée & Brainstorming Oral</title>
+  <meta name="theme-color" content="#070a12" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #070b14;
+      --bg: #070a12;
       --bg-card: rgba(15, 23, 42, 0.78);
       --bg-elevated: rgba(30, 41, 59, 0.65);
       --border: rgba(148, 163, 184, 0.16);
-      --border-active: rgba(56, 189, 248, 0.55);
+      --border-active: rgba(168, 85, 247, 0.55);
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --accent: #38bdf8;
-      --accent-2: #10b981;
-      --accent-warn: #f59e0b;
-      --accent-danger: #ef4444;
-      --accent-purple: #a855f7;
-      --radius: 18px;
+      --accent: #a855f7;
+      --accent-blue: #38bdf8;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
     }
 
     * {
@@ -36,21 +34,23 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at 50% 0%, #0f1f38 0%, #070b14 65%);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(168, 85, 247, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 80% 10%, rgba(56, 189, 248, 0.14) 0%, transparent 45%),
+        #070a12;
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      padding-bottom: 40px;
+      padding-bottom: 50px;
     }
 
-    /* Header */
     header {
       position: sticky;
       top: 0;
       z-index: 50;
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      background: rgba(7, 11, 20, 0.82);
+      background: rgba(7, 10, 18, 0.84);
       border-bottom: 1px solid var(--border);
       padding: 12px 20px;
       display: flex;
@@ -67,20 +67,20 @@
     }
 
     .brand-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #0ea5e9, #10b981);
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #a855f7, #38bdf8);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 0 20px rgba(14, 165, 233, 0.35);
+      font-size: 21px;
+      box-shadow: 0 0 24px rgba(168, 85, 247, 0.4);
     }
 
     .brand-title {
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 1.06rem;
       letter-spacing: -0.02em;
       display: flex;
       align-items: center;
@@ -105,11 +105,12 @@
       gap: 6px;
       font-size: 0.74rem;
       font-weight: 600;
-      padding: 5px 10px;
+      padding: 6px 11px;
       border-radius: 999px;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       color: var(--text-muted);
+      text-decoration: none;
     }
 
     .badge.online {
@@ -127,16 +128,16 @@
     }
 
     .container {
-      max-width: 1080px;
+      max-width: 1180px;
       margin: 0 auto;
       padding: 18px 16px;
-      display: grid;
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 18px;
     }
 
-    /* Mode Tabs */
-    .mode-tabs {
+    /* Stance selector (Thinking Posture) */
+    .stance-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
@@ -146,94 +147,108 @@
       border: 1px solid var(--border);
     }
 
-    @media (max-width: 680px) {
-      .mode-tabs {
+    @media (max-width: 760px) {
+      .stance-bar {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    .mode-tab {
+    .stance-btn {
       appearance: none;
       border: 1px solid transparent;
       background: transparent;
       color: var(--text-muted);
       font-family: inherit;
-      font-weight: 600;
-      font-size: 0.84rem;
-      padding: 11px 12px;
+      padding: 10px 12px;
       border-radius: 12px;
       cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stance-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    .stance-btn.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(56, 189, 248, 0.18));
+      border-color: var(--border-active);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.15);
+    }
+
+    .stance-title {
+      font-weight: 700;
+      font-size: 0.84rem;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
+      gap: 6px;
     }
 
-    .mode-tab:hover {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.04);
+    .stance-desc {
+      font-size: 0.71rem;
+      color: var(--text-muted);
+      line-height: 1.3;
     }
 
-    .mode-tab.active {
-      color: #fff;
-      background: linear-gradient(135deg, rgba(14, 165, 233, 0.28), rgba(16, 185, 129, 0.22));
-      border-color: var(--border-active);
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15);
+    .stance-btn.active .stance-desc {
+      color: #e2e8f0;
     }
 
-    /* Voice Stage Card */
+    /* Hero Voice Studio */
     .voice-stage {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 24px 20px;
+      border-radius: 26px;
+      padding: 26px 20px 22px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       position: relative;
-      overflow: hidden;
     }
 
     .orb-wrapper {
       position: relative;
-      width: 170px;
-      height: 170px;
+      width: 176px;
+      height: 176px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 6px 0 14px;
+      margin: 4px 0 12px;
     }
 
     .orb-ring {
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      border: 2px solid rgba(56, 189, 248, 0.25);
-      transition: transform 0.15s ease, border-color 0.2s ease;
+      border: 2px solid rgba(168, 85, 247, 0.28);
       pointer-events: none;
     }
 
     .orb-ring.r2 {
       inset: -14px;
-      border-color: rgba(16, 185, 129, 0.14);
+      border-color: rgba(56, 189, 248, 0.16);
     }
 
     .orb-btn {
-      width: 132px;
-      height: 132px;
+      width: 138px;
+      height: 138px;
       border-radius: 50%;
       border: none;
       cursor: pointer;
-      background: radial-gradient(circle at 35% 30%, #38bdf8, #0284c7 55%, #0f172a 100%);
+      background: radial-gradient(circle at 32% 28%, #c084fc, #7c3aed 55%, #1e1b4b 100%);
       color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      box-shadow: 0 0 40px rgba(56, 189, 248, 0.4), inset 0 2px 12px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 45px rgba(168, 85, 247, 0.45), inset 0 2px 14px rgba(255, 255, 255, 0.38);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       z-index: 2;
@@ -241,24 +256,24 @@
 
     .orb-btn:hover {
       transform: scale(1.04);
-      box-shadow: 0 0 55px rgba(56, 189, 248, 0.55), inset 0 2px 15px rgba(255, 255, 255, 0.45);
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.65), inset 0 2px 16px rgba(255, 255, 255, 0.45);
     }
 
     .orb-btn.listening {
       background: radial-gradient(circle at 35% 30%, #fb7185, #e11d48 60%, #4c0519 100%);
-      box-shadow: 0 0 65px rgba(244, 63, 94, 0.65), inset 0 2px 15px rgba(255, 255, 255, 0.45);
-      animation: pulseOrb 1.4s infinite ease-in-out;
+      box-shadow: 0 0 70px rgba(244, 63, 94, 0.7), inset 0 2px 15px rgba(255, 255, 255, 0.45);
+      animation: pulseOrb 1.35s infinite ease-in-out;
     }
 
     .orb-btn.speaking {
-      background: radial-gradient(circle at 35% 30%, #34d399, #059669 60%, #064e3b 100%);
-      box-shadow: 0 0 65px rgba(16, 185, 129, 0.65), inset 0 2px 15px rgba(255, 255, 255, 0.45);
+      background: radial-gradient(circle at 35% 30%, #38bdf8, #0284c7 60%, #0c4a6e 100%);
+      box-shadow: 0 0 70px rgba(56, 189, 248, 0.7), inset 0 2px 15px rgba(255, 255, 255, 0.45);
       animation: pulseOrb 1.1s infinite ease-in-out;
     }
 
     .orb-btn.thinking {
-      background: radial-gradient(circle at 35% 30%, #c084fc, #7c3aed 60%, #2e1065 100%);
-      box-shadow: 0 0 60px rgba(168, 85, 247, 0.6);
+      background: radial-gradient(circle at 35% 30%, #f59e0b, #d97706 60%, #451a03 100%);
+      box-shadow: 0 0 60px rgba(245, 158, 11, 0.65);
     }
 
     @keyframes pulseOrb {
@@ -267,16 +282,15 @@
     }
 
     .orb-icon {
-      font-size: 2.2rem;
+      font-size: 2.35rem;
       line-height: 1;
     }
 
     .orb-label {
-      font-size: 0.74rem;
-      font-weight: 700;
+      font-size: 0.73rem;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      opacity: 0.95;
     }
 
     .wave-bars {
@@ -284,46 +298,45 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
-      height: 28px;
-      margin-bottom: 10px;
+      height: 26px;
+      margin-bottom: 8px;
     }
 
     .wave-bar {
       width: 4px;
       height: 6px;
       border-radius: 99px;
-      background: var(--accent);
+      background: linear-gradient(to top, #a855f7, #38bdf8);
       transition: height 0.08s ease;
-      opacity: 0.75;
     }
 
     .stage-status {
-      font-size: 0.96rem;
-      font-weight: 600;
+      font-size: 1rem;
+      font-weight: 700;
       color: var(--text);
       margin-bottom: 4px;
+      max-width: 680px;
     }
 
     .stage-hint {
-      font-size: 0.8rem;
+      font-size: 0.81rem;
       color: var(--text-muted);
-      max-width: 560px;
+      max-width: 620px;
     }
 
-    /* Controls bar under Orb */
     .voice-controls {
-      margin-top: 16px;
+      margin-top: 14px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .ctrl-pill {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       color: var(--text);
@@ -333,10 +346,6 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
-    }
-
-    .ctrl-pill:hover {
-      border-color: var(--accent);
     }
 
     .ctrl-pill.active {
@@ -357,20 +366,20 @@
       cursor: pointer;
     }
 
-    /* Prompt chips */
+    /* Thought Starters */
     .chips-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 7px;
       justify-content: center;
-      margin-top: 14px;
+      margin-top: 13px;
     }
 
     .chip {
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid var(--border);
       color: #cbd5e1;
-      padding: 7px 12px;
+      padding: 7px 13px;
       border-radius: 999px;
       font-size: 0.76rem;
       cursor: pointer;
@@ -383,18 +392,17 @@
       transform: translateY(-1px);
     }
 
-    /* Input bar */
     .input-bar {
       width: 100%;
-      max-width: 760px;
-      margin-top: 16px;
+      max-width: 780px;
+      margin-top: 15px;
       display: flex;
       gap: 8px;
     }
 
     .text-input {
       flex: 1;
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.92);
       border: 1px solid var(--border);
       color: var(--text);
       padding: 12px 16px;
@@ -409,13 +417,13 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #0ea5e9, #10b981);
+      background: linear-gradient(135deg, #a855f7, #38bdf8);
       color: #fff;
       border: none;
-      padding: 12px 18px;
-      border-radius: 14px;
+      padding: 11px 17px;
+      border-radius: 13px;
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -427,74 +435,82 @@
       background: var(--bg-elevated);
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 10px 15px;
+      padding: 9px 14px;
       border-radius: 12px;
       font-weight: 600;
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
 
-    .btn-secondary:hover {
-      border-color: var(--accent);
+    /* Main Split Workspace: Conversation Left + Idea Sparks Right */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
+      gap: 18px;
+      align-items: start;
     }
 
-    /* Panels */
-    .panel {
-      display: none;
+    @media (max-width: 920px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-panel {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 22px;
-      padding: 20px;
-    }
-
-    .panel.active {
-      display: block;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     .panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .panel-title {
-      font-size: 1.02rem;
+      font-size: 0.98rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* Conversation Feed */
     .chat-feed {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
+      max-height: 540px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
 
     .msg {
-      padding: 14px 16px;
+      padding: 13px 15px;
       border-radius: 16px;
       border: 1px solid var(--border);
       line-height: 1.55;
-      font-size: 0.92rem;
+      font-size: 0.91rem;
     }
 
     .msg.user {
-      background: rgba(14, 165, 233, 0.12);
-      border-color: rgba(56, 189, 248, 0.3);
+      background: rgba(168, 85, 247, 0.14);
+      border-color: rgba(168, 85, 247, 0.35);
       align-self: flex-end;
-      max-width: 88%;
+      max-width: 90%;
     }
 
     .msg.assistant {
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.88);
       border-color: var(--border);
       width: 100%;
     }
@@ -503,163 +519,99 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--text-muted);
-      margin-bottom: 6px;
-      gap: 10px;
+      margin-bottom: 5px;
+      gap: 8px;
     }
 
     .msg-body {
       white-space: pre-wrap;
     }
 
-    .msg-sources {
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px dashed var(--border);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .source-tag {
-      font-size: 0.72rem;
-      padding: 3px 9px;
-      border-radius: 99px;
-      background: rgba(16, 185, 129, 0.12);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      cursor: pointer;
-    }
-
-    /* Dictation area */
-    .dictation-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    .dictation-meta {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 10px;
-    }
-
-    @media (max-width: 640px) {
-      .dictation-meta {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .dictation-textarea {
-      width: 100%;
-      min-height: 210px;
-      background: rgba(7, 11, 20, 0.85);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      color: var(--text);
-      padding: 14px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.94rem;
-      line-height: 1.6;
-      resize: vertical;
-    }
-
-    /* Notes Reader Grid */
-    .notes-grid {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width: 820px) {
-      .notes-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .notes-list {
+    /* Live Idea Sparks Board */
+    .sparks-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      max-height: 520px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .note-item {
-      padding: 11px 13px;
-      border-radius: 13px;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .note-item:hover, .note-item.active {
-      border-color: var(--accent);
-      background: rgba(14, 165, 233, 0.14);
-    }
-
-    .note-item-title {
-      font-weight: 700;
-      font-size: 0.86rem;
-      margin-bottom: 3px;
-    }
-
-    .note-item-folder {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
-    .note-viewer {
-      background: rgba(7, 11, 20, 0.8);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      max-height: 520px;
-      overflow-y: auto;
-      line-height: 1.65;
-      font-size: 0.9rem;
-      white-space: pre-wrap;
-    }
-
-    /* Router Grid */
-    .router-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 10px;
+      max-height: 380px;
+      overflow-y: auto;
     }
 
-    .project-card {
-      padding: 13px 14px;
+    .spark-card {
+      background: rgba(30, 41, 59, 0.55);
+      border: 1px solid rgba(168, 85, 247, 0.3);
       border-radius: 14px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      transition: all 0.15s ease;
+      gap: 4px;
     }
 
-    .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .project-card-title {
-      font-weight: 700;
-      font-size: 0.88rem;
+    .spark-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
     }
 
-    .project-card-desc {
-      font-size: 0.76rem;
+    .spark-title {
+      font-weight: 700;
+      font-size: 0.86rem;
+      color: #f3e8ff;
+    }
+
+    .spark-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: rgba(56, 189, 248, 0.16);
+      color: #38bdf8;
+    }
+
+    .spark-summary {
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    /* Saved Obsidian Ideas Archive */
+    .archive-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    .archive-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .archive-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-1px);
+    }
+
+    .archive-title {
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .archive-meta {
+      font-size: 0.72rem;
       color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .archive-excerpt {
+      font-size: 0.77rem;
+      color: #cbd5e1;
       line-height: 1.4;
     }
 
@@ -668,13 +620,13 @@
       bottom: 20px;
       right: 20px;
       background: #0f172a;
-      border: 1px solid var(--accent-2);
+      border: 1px solid #a855f7;
       color: #fff;
       padding: 12px 18px;
       border-radius: 14px;
       font-size: 0.85rem;
       font-weight: 600;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       z-index: 100;
       display: none;
     }
@@ -684,13 +636,13 @@
 
   <header>
     <div class="brand">
-      <div class="brand-logo">🎙️</div>
+      <div class="brand-logo">💭</div>
       <div>
         <div class="brand-title">
-          SECOND BRAIN · VOICE
-          <span style="font-size:0.7rem; padding:2px 8px; border-radius:99px; background:rgba(56,189,248,0.18); color:#38bdf8;">Cochin Radio B & 31 Projets</span>
+          SECOND BRAIN · COMPAGNON D'IDÉES
+          <span style="font-size:0.7rem; padding:2px 8px; border-radius:99px; background:rgba(168,85,247,0.2); color:#d8b4fe;">Brainstorming Oral & Pensée en Direct</span>
         </div>
-        <div class="brand-sub">Interface vocale mains-libres • Dictée médicale • RAG Obsidian • Synthèse vocale</div>
+        <div class="brand-sub">Pense à voix haute • Rebondit sur tes idées • Capture les pépites • Synthétise dans Obsidian</div>
       </div>
     </div>
     <div class="status-row">
@@ -698,36 +650,40 @@
         <span class="dot"></span>
         <span id="serverBadgeText">Connexion Second Brain...</span>
       </div>
-      <div id="notesCountBadge" class="badge">📚 11 notes</div>
-      <a href="https://mrthomaslef.github.io/allinone/" target="_blank" class="badge" style="text-decoration:none; color:#38bdf8;">🛍️ Tapp Store</a>
+      <a href="https://mrthomaslef.github.io/allinone/" target="_blank" class="badge" style="color:#38bdf8;">🛍️ Tapp Store</a>
     </div>
   </header>
 
   <main class="container">
-    <!-- Mode Selector -->
-    <div class="mode-tabs" role="tablist">
-      <button class="mode-tab active" data-mode="chat" onclick="switchMode('chat')">
-        🧠 Dialogue Second Brain
+
+    <!-- Thinking Posture Selector -->
+    <div class="stance-bar" role="tablist">
+      <button class="stance-btn active" data-stance="sparring" onclick="setStance('sparring')">
+        <div class="stance-title">⚡ Sparring Partner</div>
+        <div class="stance-desc">Rebondit sur tes idées, fait des liens et te pose une question ouverte stimulante.</div>
       </button>
-      <button class="mode-tab" data-mode="dictation" onclick="switchMode('dictation')">
-        🎙️ Dictée & Note Obsidian
+      <button class="stance-btn" data-stance="architect" onclick="setStance('architect')">
+        <div class="stance-title">🏗️ Architecte d'Idées</div>
+        <div class="stance-desc">Transforme tes intuitions en plan concret ou en nouvelle brique pour tes 31 projets.</div>
       </button>
-      <button class="mode-tab" data-mode="reader" onclick="switchMode('reader')">
-        🔊 Écouter mes Fiches
+      <button class="stance-btn" data-stance="challenger" onclick="setStance('challenger')">
+        <div class="stance-title">🎯 Challenger 80/20</div>
+        <div class="stance-desc">Teste la solidité de l'idée, élimine le superflu et cherche l'impact maximal.</div>
       </button>
-      <button class="mode-tab" data-mode="router" onclick="switchMode('router')">
-        🧭 Aiguillage 31 Apps
+      <button class="stance-btn" data-stance="mirror" onclick="setStance('mirror')">
+        <div class="stance-title">🪞 Miroir & Écoute</div>
+        <div class="stance-desc">Te laisse vider ton sac et penser tout haut avec des retours courts et apaisés.</div>
       </button>
     </div>
 
-    <!-- Central Voice Orb Stage -->
+    <!-- Central Voice Studio -->
     <section class="voice-stage">
       <div class="orb-wrapper">
-        <div class="orb-ring" id="orbRing1"></div>
-        <div class="orb-ring r2" id="orbRing2"></div>
-        <button class="orb-btn" id="orbBtn" onclick="toggleVoiceCapture()" title="Cliquer ou appuyer sur Espace pour parler">
+        <div class="orb-ring"></div>
+        <div class="orb-ring r2"></div>
+        <button class="orb-btn" id="orbBtn" onclick="toggleVoiceCapture()" title="Clique ou appuie sur Espace pour parler">
           <span class="orb-icon" id="orbIcon">🎙️</span>
-          <span class="orb-label" id="orbLabel">Parler</span>
+          <span class="orb-label" id="orbLabel">Penser tout haut</span>
         </button>
       </div>
 
@@ -738,139 +694,116 @@
         <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
       </div>
 
-      <div class="stage-status" id="stageStatus">Appuie sur l'orbe (ou la barre Espace) et parle naturellement</div>
+      <div class="stage-status" id="stageStatus">Clique sur l'orbe (ou Espace) et parle librement de ce que tu as en tête</div>
       <div class="stage-hint" id="stageHint">
-        Pose une question sur tes protocoles RI Cochin, tes 774 documents officiels, ou dicte directement une nouvelle note dans Obsidian.
+        Le mode <strong>Conversation Continue</strong> est activé par défaut : dès que ton Second Brain a fini de te répondre à l'oral, le micro se rouvre tout seul pour que tu puisses rebondir les mains dans les poches.
       </div>
 
-      <!-- Voice Settings Bar -->
       <div class="voice-controls">
+        <button class="ctrl-pill active" id="handsFreeBtn" onclick="toggleHandsFree()">
+          🔄 Conversation continue (Ping-Pong) : ON
+        </button>
         <button class="ctrl-pill active" id="ttsToggleBtn" onclick="toggleAutoSpeak()">
-          🔊 Réponse parlée : ON
+          🔊 Voix : ON
         </button>
-        <button class="ctrl-pill" id="handsFreeBtn" onclick="toggleHandsFree()">
-          🔄 Mains-libres continu : OFF
-        </button>
-        <select class="ctrl-select" id="ttsEngineSelect" title="Moteur de voix">
+        <select class="ctrl-select" id="ttsEngineSelect">
           <option value="mac"> Voix Mac Native (Thomas)</option>
           <option value="browser">🌐 Voix Navigateur FR</option>
         </select>
-        <select class="ctrl-select" id="ttsRateSelect" title="Vitesse de lecture">
+        <select class="ctrl-select" id="ttsRateSelect">
           <option value="1.0">Vitesse 1.0x</option>
-          <option value="1.15" selected>Vitesse 1.15x</option>
-          <option value="1.3">Vitesse 1.3x</option>
-          <option value="1.5">Vitesse 1.5x</option>
+          <option value="1.12" selected>Vitesse 1.12x (Naturel)</option>
+          <option value="1.25">Vitesse 1.25x (Vif)</option>
         </select>
-        <button class="ctrl-pill" onclick="stopSpeaking()" style="color:#f87171;">
-          ⏹️ Stop Audio
+        <button class="ctrl-pill" onclick="stopAllAudio()" style="color:#f87171;">
+          ⏹️ Pause / Stop
         </button>
       </div>
 
-      <!-- Quick Voice/Tap Prompts -->
-      <div class="chips-row" id="quickChips">
-        <button class="chip" onclick="runQuickPrompt('Quelle est la conduite à tenir pour les anticoagulants avant un geste RI profond ?')">
-          💉 Anticoagulants & RI profond
+      <!-- Conversation Starters for Brainstorming -->
+      <div class="chips-row">
+        <button class="chip" onclick="sendThought('J\\'ai une idée d\\'application ou d\\'outil à construire, aide-moi à la creuser.')">
+          💡 Creuser une nouvelle idée d'app
         </button>
-        <button class="chip" onclick="runQuickPrompt('Quelles sont les trames de compte-rendu officiel RI à Cochin ?')">
-          📋 Trames CRO Cochin
+        <button class="chip" onclick="sendThought('J\\'ai envie de réfléchir à l\\'organisation de mes journées à Cochin et comment gagner du temps.')">
+          🏥 Optimiser mon quotidien à Cochin
         </button>
-        <button class="chip" onclick="runQuickPrompt('Quels sont les repères et numéros utiles du service Radio B Achard et Ollier ?')">
-          🏥 Repères Radio B Cochin
+        <button class="chip" onclick="sendThought('Réfléchissons à un projet sympa pour Marie et Émile dans les prochaines semaines.')">
+          💖 Idée pour Marie & Émile
         </button>
-        <button class="chip" onclick="runQuickPrompt('Fais-moi le point sur mes mots de passe critiques à modifier')">
-          🔐 Audit mots de passe
-        </button>
-        <button class="chip" onclick="runQuickPrompt('Quelles sont les applications disponibles pour Marie sur le Mapp Store ?')">
-          💖 Apps de Marie (Mapp Store)
+        <button class="chip" onclick="sendThought('J\\'ai plein de choses en tête en ce moment, aide-moi à faire le tri et prioriser.')">
+          🧘 Vider ma tête & prioriser
         </button>
       </div>
 
-      <!-- Text Input Fallback -->
       <form class="input-bar" onsubmit="handleTextSubmit(event)">
         <input
           type="text"
           id="queryInput"
           class="text-input"
-          placeholder="Écris ou dicte à ton Second Brain (ex: « Note dans RI : protocole arthro-distension épaule... »)"
+          placeholder="Ou lance une piste à l'écrit (ex: « Je réfléchissais à un système pour... »)"
           autocomplete="off"
         />
-        <button type="submit" class="btn-primary">Envoyer ↵</button>
+        <button type="submit" class="btn-primary">Lancer ↵</button>
       </form>
     </section>
 
-    <!-- PANEL 1: CHAT & VOICE CONVERSATION -->
-    <section class="panel active" id="panel-chat">
-      <div class="panel-header">
-        <div class="panel-title">💬 Fil de discussion vocal avec Second Brain</div>
-        <button class="btn-secondary" onclick="clearConversation()">Effacer l'historique</button>
-      </div>
-      <div class="chat-feed" id="chatFeed">
-        <div class="msg assistant">
-          <div class="msg-head">
-            <span>🧠 <strong>Second Brain Cochin & Super-Agent</strong></span>
-            <span>Prêt</span>
+    <!-- Split Workspace: Live Dialogue + Live Captured Sparks -->
+    <div class="workspace-grid">
+
+      <!-- Left: Oral Conversation Stream -->
+      <section class="card-panel">
+        <div class="panel-header">
+          <div class="panel-title">🗣️ Fil de ta réflexion orale</div>
+          <button class="btn-secondary" onclick="resetSession()">🔄 Nouvelle session</button>
+        </div>
+        <div class="chat-feed" id="chatFeed">
+          <div class="msg assistant">
+            <div class="msg-head">
+              <span>💭 <strong>Ton Second Brain (Sparring Partner)</strong></span>
+              <span>Prêt à t'écouter</span>
+            </div>
+            <div class="msg-body">Salut Thomas ! Qu'est-ce qui te trotte dans la tête en ce moment ?
+Que ce soit une intuition pour Cochin, une idée d'application, un sujet de recherche ou un projet avec Marie et Émile, parle-moi comme ça vient : je rebondis avec toi et je note les pépites à droite au fur et à mesure.</div>
           </div>
-          <div class="msg-body">Bonjour Thomas ! Je suis connecté en direct à ton Second Brain Obsidian, à tes protocoles de Radiologie Interventionnelle Cochin, à tes 31 projets et à ton coffre-fort.
-
-Tu peux :
-• **Me poser une question à la voix** (ex : *« Quel est le délai d'arrêt des AOD avant une infiltration rachidienne ? »*)
-• **Me dicter une note à sauvegarder** (ex : *« Note dans RI : astuce de ponction sous scopie... »*)
-• **Écouter n'importe quelle fiche** dans l'onglet *Écouter mes Fiches*.</div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- PANEL 2: MEDICAL DICTATION & OBSIDIAN NOTE CREATOR -->
-    <section class="panel" id="panel-dictation">
+      <!-- Right: Live Idea Sparks & 1-Click Obsidian Synthesis -->
+      <section class="card-panel">
+        <div class="panel-header">
+          <div class="panel-title">✨ Pépites & Idées capturées en direct</div>
+          <button class="btn-primary" onclick="synthesizeToObsidian()" id="synthBtn">
+            💾 Synthétiser dans Obsidian
+          </button>
+        </div>
+
+        <input
+          type="text"
+          id="sessionTitleInput"
+          class="text-input"
+          style="padding:9px 12px; font-size:0.83rem;"
+          placeholder="Titre optionnel de la réflexion (sinon généré automatiquement par l'IA)"
+        />
+
+        <div class="sparks-list" id="sparksList">
+          <div style="padding:18px; text-align:center; color:var(--text-muted); font-size:0.82rem; border:1px dashed var(--border); border-radius:14px;">
+            Au fil de notre discussion orale, chaque idée forte ou décision que tu formules s'affichera automatiquement ici sous forme de carte.
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bottom: Archive of Brainstorming Notes & Second Brain Fiches -->
+    <section class="card-panel">
       <div class="panel-header">
-        <div class="panel-title">🎙️ Studio de Dictée Médicale & Création de Note Obsidian</div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn-secondary" onclick="structureDictationWithAI()">✨ Structurer proprement (IA)</button>
-          <button class="btn-primary" onclick="saveDictationToObsidian()">💾 Enregistrer dans Second Brain</button>
-        </div>
+        <div class="panel-title">📚 Journal d'Idées & Notes du Second Brain (Clique pour écouter ou relire)</div>
+        <span style="font-size:0.78rem; color:var(--text-muted);" id="archiveCountLabel"></span>
       </div>
-      <div class="dictation-grid">
-        <div class="dictation-meta">
-          <input type="text" id="noteTitleInput" class="text-input" placeholder="Titre de la note (ex: Protocole Biopsie Synoviale Genou)" />
-          <select id="noteCategorySelect" class="text-input">
-            <option value="ri">02 - Radiologie Interventionnelle (RI)</option>
-            <option value="cr">03 - Imagerie Diagnostique & CR-Types</option>
-            <option value="rcp">04 - RCP, Staffs & Cas Marquants</option>
-            <option value="biblio">05 - Biblio, Zotero & Enseignement</option>
-            <option value="cochin">01 - Prise de Poste & Organisation Cochin</option>
-          </select>
-        </div>
-        <textarea
-          id="dictationTextarea"
-          class="dictation-textarea"
-          placeholder="Clique sur l'orbe micro ci-dessus et dicte librement. Commandes vocales reconnues : « à la ligne », « nouveau paragraphe », « deux points »..."
-        ></textarea>
-      </div>
+      <div class="archive-list" id="archiveList"></div>
     </section>
 
-    <!-- PANEL 3: AUDIO READER FOR EXISTING SECOND BRAIN NOTES -->
-    <section class="panel" id="panel-reader">
-      <div class="panel-header">
-        <div class="panel-title">🔊 Bibliothèque Audio du Second Brain (Lecture Mains-Libres)</div>
-        <div style="display:flex; gap:8px;">
-          <button class="btn-primary" onclick="speakCurrentNote()">▶️ Lire cette fiche à voix haute</button>
-          <button class="btn-secondary" onclick="stopSpeaking()">⏹️ Stop</button>
-        </div>
-      </div>
-      <div class="notes-grid">
-        <div class="notes-list" id="notesList"></div>
-        <div class="note-viewer" id="noteViewer">Sélectionne une note à gauche pour l'afficher et l'écouter à voix haute.</div>
-      </div>
-    </section>
-
-    <!-- PANEL 4: 31 PROJECTS VOICE ROUTER -->
-    <section class="panel" id="panel-router">
-      <div class="panel-header">
-        <div class="panel-title">🧭 Aiguillage Vocal Rapide — Tes Applications & Stores</div>
-        <span style="font-size:0.8rem; color:var(--text-muted);">Dis « Ouvre [nom de l'app] » ou clique sur une carte</span>
-      </div>
-      <div class="router-grid" id="routerGrid"></div>
-    </section>
   </main>
 
   <div class="toast" id="toast"></div>
@@ -878,43 +811,26 @@ Tu peux :
   <script>
     const LOCAL_API = "http://127.0.0.1:8765";
     let serverOnline = false;
-    let currentMode = "chat";
+    let currentStance = "sparring";
+    let handsFree = true;
     let autoSpeak = true;
-    let handsFree = false;
     let isListening = false;
     let recognition = null;
     let mediaRecorder = null;
     let audioChunks = [];
-    let brainData = { notes: [], folders: [] };
-    let selectedNote = null;
-
-    const QUICK_PROJECTS = [
-      { name: "🛍️ Tapp Store (All-In-One)", url: "https://mrthomaslef.github.io/allinone/", desc: "Portail général de Thomas (31 projets + Agent Tracking)", keywords: ["tapp store", "all in one", "store thomas"] },
-      { name: "💖 Mapp Store (Store de Marie)", url: "https://mrthomaslef.github.io/mapp-store/", desc: "Portail dédié à Marie (Pédiatrie, Famille, Émile, Jeux)", keywords: ["mapp store", "store marie", "marie"] },
-      { name: "🗓️ Agenda RI Cochin", url: "https://mrthomaslef.github.io/agenda-cochin/", desc: "Planning interventionnel Cochin temps réel, vacations & biopsies", keywords: ["agenda interventionnel", "planning cochin", "vacations"] },
-      { name: "🦴 Guide Infiltrations & Biopsies", url: "https://mrthomaslef.github.io/guide-interne-cochin-os/infiltrations/", desc: "Fiches techniques illustrées d'infiltrations et arthrographies", keywords: ["guide infiltration", "infiltration", "arthrographie"] },
-      { name: "🏥 COCHIN·OS Portail Internes", url: "https://mrthomaslef.github.io/guide-interne-cochin-os/", desc: "Portail Radio B Cochin, annuaire & ressources internes", keywords: ["cochin os", "portail interne", "annuaire cochin"] },
-      { name: "📚 BiblioOstéo & Zotero", url: "https://mrthomaslef.github.io/biblioosteo/", desc: "Veille bibliographique Ostéo/RI & articles PDF commentés", keywords: ["biblio osteo", "zotero", "articles"] },
-      { name: "🦠 BiblioMarie (Pédiatrie)", url: "https://mrthomaslef.github.io/biblio-marie/", desc: "Veille infectiologie pédiatrique & résumés FR pour Marie", keywords: ["biblio marie", "pediatrie", "infectiologie"] },
-      { name: "🧠 Quiz Cotten MSK", url: "https://radio-thomas-ten.vercel.app", desc: "Quiz interactif multi-coupes d'imagerie ostéo-articulaire", keywords: ["quiz cotten", "radio thomas", "quiz msk"] },
-      { name: "🖼️ TPack PACS & DICOM", url: "https://mrthomaslef.github.io/dicomviewer/", desc: "Visionneuse DICOM pédagogique web & cas .tpack", keywords: ["dicom", "tpack", "pacs"] },
-      { name: "🧮 TomatoCalc & MediCalc", url: "https://mrthomaslef.github.io/Tomatocalc/", desc: "Calculateurs médicaux & scores radiologiques", keywords: ["tomatocalc", "medicalc", "calculateur"] },
-      { name: "👨‍👩‍👦 Agenda Famille (M&T + Émile)", url: "https://mrthomaslef.github.io/agenda-famille/", desc: "Planning partagé Marie & Thomas, gardes et relais d'Émile", keywords: ["agenda famille", "planning famille", "emile"] },
-      { name: "🍷 Resto en Amoureux", url: "https://mrthomaslef.github.io/restaurant/", desc: "Créneaux libres Marie & Thomas avec garde d'Émile + 18 restos", keywords: ["restaurant", "resto amoureux"] },
-      { name: "👶 AssMat (Nounou Mabrouka)", url: "https://mrthomaslef.github.io/assistante-maternelle/", desc: "Présence, salaire et déclaration Pajemploi de Mabrouka", keywords: ["nounou", "mabrouka", "pajemploi", "assistante maternelle"] },
-      { name: "🗂️ Coffre Documents & Annuaire", url: "https://mrthomaslef.github.io/annuaire-prive/", desc: "Index des 774 documents officiels & contacts VIP", keywords: ["documents officiels", "annuaire", "passeport", "impots"] }
-    ];
+    let conversationHistory = [];
+    let capturedSparks = [];
+    let brainData = { notes: [] };
 
     function showToast(msg) {
       const t = document.getElementById("toast");
       t.textContent = msg;
       t.style.display = "block";
       clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => { t.style.display = "none"; }, 3600);
+      window.__toastTimer = setTimeout(() => { t.style.display = "none"; }, 3800);
     }
 
     async function initApp() {
-      renderRouterCards();
       await loadKnowledge();
       setupSpeechRecognition();
       window.addEventListener("keydown", (e) => {
@@ -934,49 +850,40 @@ Tu peux :
           const st = await res.json();
           serverOnline = true;
           badge.classList.add("online");
-          badgeText.textContent = `Mac Local Connecté (${st.noteCount} notes • Gemini Actif)`;
+          badgeText.textContent = `Mac Connecté (${st.noteCount} notes • Gemini Live)`;
           const kRes = await fetch(`${LOCAL_API}/api/knowledge`);
           brainData = await kRes.json();
-          document.getElementById("notesCountBadge").textContent = `📚 ${brainData.noteCount} notes • 🔐 ${brainData.vaultCount} comptes`;
-          renderNotesList();
+          renderArchive();
           return;
         }
       } catch (_) {}
 
-      // Fallback to embedded/static brain_knowledge.json (GitHub Pages / Mobile mode)
       try {
         const kRes = await fetch("./brain_knowledge.json");
         if (kRes.ok) {
           brainData = await kRes.json();
           badge.classList.add("online");
-          badgeText.textContent = `Mode Mobile / Cloud (${brainData.noteCount} notes embarquées)`;
+          badgeText.textContent = `Mode Mobile (${brainData.noteCount} notes)`;
           document.getElementById("ttsEngineSelect").value = "browser";
-          document.getElementById("notesCountBadge").textContent = `📚 ${brainData.noteCount} notes`;
-          renderNotesList();
+          renderArchive();
         }
       } catch (_) {
-        badgeText.textContent = "Mode Autonome";
+        badgeText.textContent = "Mode Local";
       }
     }
 
-    function switchMode(mode) {
-      currentMode = mode;
-      document.querySelectorAll(".mode-tab").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.mode === mode);
+    function setStance(stance) {
+      currentStance = stance;
+      document.querySelectorAll(".stance-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.stance === stance);
       });
-      document.querySelectorAll(".panel").forEach(p => {
-        p.classList.toggle("active", p.id === `panel-${mode}`);
-      });
-      const hint = document.getElementById("stageHint");
-      if (mode === "chat") {
-        hint.textContent = "Pose une question vocale à ton Second Brain ou demande un protocole de Cochin.";
-      } else if (mode === "dictation") {
-        hint.textContent = "Mode Dictée Médicale actif : tout ce que tu dis s'ajoute directement dans l'éditeur de note Obsidian ci-dessous.";
-      } else if (mode === "reader") {
-        hint.textContent = "Sélectionne une fiche ci-dessous pour l'écouter à voix haute les mains libres.";
-      } else if (mode === "router") {
-        hint.textContent = "Dis « Ouvre l'agenda interventionnel » ou « Ouvre le guide d'infiltration » pour lancer l'application.";
-      }
+      const labels = {
+        sparring: "Mode Sparring Partner actif : je rebondis et creuse tes idées avec toi.",
+        architect: "Mode Architecte actif : je t'aide à structurer tes idées en plan d'action concret.",
+        challenger: "Mode Challenger 80/20 actif : on teste la solidité et la simplicité de tes idées.",
+        mirror: "Mode Miroir actif : écoute apaisée pour t'aider à vider ta tête."
+      };
+      showToast(labels[stance]);
     }
 
     function setupSpeechRecognition() {
@@ -1017,14 +924,14 @@ Tu peux :
 
     async function toggleVoiceCapture() {
       if (isListening) {
-        finishVoiceCapture();
+        await finishVoiceCapture();
       } else {
         await startVoiceCapture();
       }
     }
 
     async function startVoiceCapture() {
-      stopSpeaking();
+      stopSpeakingOnly();
       window.__lastSpeechTranscript = "";
       isListening = true;
 
@@ -1032,15 +939,14 @@ Tu peux :
       orbBtn.classList.remove("speaking", "thinking");
       orbBtn.classList.add("listening");
       document.getElementById("orbIcon").textContent = "⏹️";
-      document.getElementById("orbLabel").textContent = "Écoute...";
-      document.getElementById("stageStatus").textContent = "Je t'écoute... Parle naturellement puis clique pour envoyer";
+      document.getElementById("orbLabel").textContent = "Je t'écoute...";
+      document.getElementById("stageStatus").textContent = "Parle librement... (pause naturelle ou clic pour envoyer)";
       animateWaves(true);
 
       if (recognition) {
         try { recognition.start(); } catch (_) {}
       }
 
-      // Also record audio with MediaRecorder so Gemini can transcribe even if WebSpeech is absent
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -1083,23 +989,18 @@ Tu peux :
       resetOrbUI();
 
       if (!transcript && !audioBlob) {
-        document.getElementById("stageStatus").textContent = "Aucun son détecté. Clique sur l'orbe ou écris ta question ci-dessous.";
+        document.getElementById("stageStatus").textContent = "En attente. Clique sur l'orbe dès que tu veux reprendre.";
         return;
       }
 
-      if (currentMode === "dictation" && transcript) {
-        appendDictationText(transcript);
-        return;
-      }
-
-      await processUserTurn(transcript, audioBlob);
+      await sendThought(transcript, audioBlob);
     }
 
     function resetOrbUI() {
       const orbBtn = document.getElementById("orbBtn");
       orbBtn.classList.remove("listening", "speaking", "thinking");
       document.getElementById("orbIcon").textContent = "🎙️";
-      document.getElementById("orbLabel").textContent = "Parler";
+      document.getElementById("orbLabel").textContent = "Penser tout haut";
     }
 
     function animateWaves(active) {
@@ -1111,7 +1012,7 @@ Tu peux :
       }
       window.__waveInterval = setInterval(() => {
         bars.forEach(b => {
-          const h = Math.floor(Math.random() * 24) + 5;
+          const h = Math.floor(Math.random() * 22) + 5;
           b.style.height = `${h}px`;
         });
       }, 90);
@@ -1128,61 +1029,24 @@ Tu peux :
       });
     }
 
-    function appendDictationText(raw) {
-      const area = document.getElementById("dictationTextarea");
-      const formatted = raw
-        .replace(/\bà la ligne\b/gi, "\n")
-        .replace(/\bnouveau paragraphe\b/gi, "\n\n")
-        .replace(/\bpoint à la ligne\b/gi, ".\n")
-        .replace(/\bdeux points\b/gi, " :");
-      area.value = (area.value ? area.value.trimEnd() + " " : "") + formatted;
-      document.getElementById("stageStatus").textContent = "✅ Texte ajouté à la dictée médicale.";
-      showToast("🎙️ Segment vocal ajouté à la dictée");
-    }
-
     async function handleTextSubmit(e) {
       e.preventDefault();
       const input = document.getElementById("queryInput");
       const text = input.value.trim();
       if (!text) return;
       input.value = "";
-      if (currentMode === "dictation") {
-        appendDictationText(text);
-        return;
-      }
-      await processUserTurn(text, null);
+      await sendThought(text, null);
     }
 
-    async function runQuickPrompt(text) {
-      switchMode("chat");
-      await processUserTurn(text, null);
-    }
-
-    async function processUserTurn(transcript, audioBlob) {
-      // Check voice router commands first ("Ouvre ...")
-      if (transcript) {
-        const lower = transcript.toLowerCase();
-        if (lower.startsWith("ouvre ") || lower.startsWith("lance ") || lower.includes("ouvre l'application")) {
-          for (const proj of QUICK_PROJECTS) {
-            if (proj.keywords.some(k => lower.includes(k))) {
-              window.open(proj.url, "_blank");
-              const msg = `J'ouvre ${proj.name} dans un nouvel onglet.`;
-              appendMessage("user", transcript);
-              appendMessage("assistant", msg, []);
-              if (autoSpeak) speakText(msg);
-              return;
-            }
-          }
-        }
-      }
-
+    async function sendThought(transcript, audioBlob = null) {
       const orbBtn = document.getElementById("orbBtn");
       orbBtn.classList.add("thinking");
-      document.getElementById("orbIcon").textContent = "🧠";
-      document.getElementById("orbLabel").textContent = "Analyse...";
-      document.getElementById("stageStatus").textContent = "Recherche dans le Second Brain & formulation de la réponse...";
+      document.getElementById("orbIcon").textContent = "💭";
+      document.getElementById("orbLabel").textContent = "Réflexion...";
+      document.getElementById("stageStatus").textContent = "Je rebondis sur ton idée...";
 
       if (transcript) {
+        conversationHistory.push({ role: "user", content: transcript });
         appendMessage("user", transcript);
       }
 
@@ -1194,12 +1058,14 @@ Tu peux :
             audioBase64 = await blobToBase64(audioBlob);
             audioMime = audioBlob.type || "audio/webm";
           }
-          const resp = await fetch(`${LOCAL_API}/api/ask`, {
+
+          const resp = await fetch(`${LOCAL_API}/api/chat`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               query: transcript,
-              mode: currentMode,
+              history: conversationHistory,
+              stance: currentStance,
               audioBase64,
               audioMime
             })
@@ -1208,18 +1074,26 @@ Tu peux :
           resetOrbUI();
 
           if (!transcript && data.transcript) {
+            conversationHistory.push({ role: "user", content: data.transcript });
             appendMessage("user", data.transcript);
           }
 
+          const reply = data.answer || "Continue, je t'écoute.";
+          conversationHistory.push({ role: "assistant", content: reply });
+          appendMessage("assistant", reply);
+
+          if (data.ideaSpark) {
+            addSparkCard(data.ideaSpark);
+          }
+
           if (data.savedNote) {
-            showToast(`💾 Note créée dans ${data.savedNote.folder} : ${data.savedNote.title}`);
+            showToast(`💾 Note créée dans Obsidian : ${data.savedNote.title}`);
             await loadKnowledge();
           }
 
-          appendMessage("assistant", data.answer || "Voici les éléments trouvés.", data.sources || []);
-          document.getElementById("stageStatus").textContent = "Réponse prête.";
-          if (autoSpeak && (data.spokenText || data.answer)) {
-            await speakText(data.spokenText || data.answer);
+          document.getElementById("stageStatus").textContent = reply.slice(0, 110) + (reply.length > 110 ? "..." : "");
+          if (autoSpeak) {
+            await speakText(data.spokenText || reply);
           }
           return;
         } catch (err) {
@@ -1227,90 +1101,135 @@ Tu peux :
         }
       }
 
-      // Offline / Static RAG search in brainData
+      // Fallback when offline/mobile without local Mac server
       resetOrbUI();
-      const { answer, sources } = searchStaticBrain(transcript || "");
-      appendMessage("assistant", answer, sources);
-      document.getElementById("stageStatus").textContent = "Réponse trouvée dans le Second Brain embarqué.";
-      if (autoSpeak) {
-        await speakText(answer);
-      }
-    }
-
-    function searchStaticBrain(query) {
-      const words = query.toLowerCase().split(/\W+/).filter(w => w.length > 2);
-      const scored = (brainData.notes || []).map(n => {
-        let s = 0;
-        const hay = (n.title + " " + n.content).toLowerCase();
-        words.forEach(w => {
-          if (n.title.toLowerCase().includes(w)) s += 6;
-          if (hay.includes(w)) s += 2;
+      const fallbackReply = "C'est noté dans le fil de réflexion ! Quel est le prochain point ou l'étape la plus simple pour tester cette idée ?";
+      if (transcript) {
+        addSparkCard({
+          title: transcript.split(/\s+/).slice(0, 5).join(" ") + "...",
+          tag: "Idée capturée",
+          summary: transcript,
+          time: new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
         });
-        return { score: s, note: n };
-      }).sort((a, b) => b.score - a.score);
-
-      if (!scored.length || scored[0].score === 0) {
-        return {
-          answer: "Je suis en mode autonome. Dis-moi quelle fiche de ton Second Brain tu souhaites écouter, ou lance le serveur local sur ton Mac pour activer Gemini et l'écriture directe dans Obsidian.",
-          sources: []
-        };
       }
-      const top = scored[0].note;
-      const cleanLines = top.content
-        .split("\n")
-        .map(l => l.replace(/[#*>`_\-]+/g, "").trim())
-        .filter(l => l.length > 20)
-        .slice(0, 5)
-        .join(". ");
-      return {
-        answer: `D'après ta fiche « ${top.title} » (${top.folder}) : ${cleanLines}`,
-        sources: [{ title: top.title, relPath: top.relPath, folder: top.folder }]
-      };
+      conversationHistory.push({ role: "assistant", content: fallbackReply });
+      appendMessage("assistant", fallbackReply);
+      if (autoSpeak) {
+        await speakText(fallbackReply);
+      }
     }
 
-    function appendMessage(role, text, sources = []) {
+    function appendMessage(role, text) {
       const feed = document.getElementById("chatFeed");
       const div = document.createElement("div");
       div.className = `msg ${role}`;
       const timeStr = new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 
-      let sourcesHtml = "";
-      if (sources && sources.length > 0) {
-        sourcesHtml = `<div class="msg-sources">` +
-          sources.map(s => `<span class="source-tag" onclick="openNoteByTitle('${(s.title || '').replace(/'/g, "\\'")}')">📄 ${s.title}</span>`).join("") +
-          `</div>`;
-      }
-
       div.innerHTML = `
         <div class="msg-head">
-          <span>${role === "user" ? "🗣️ <strong>Toi (Thomas)</strong>" : "🧠 <strong>Second Brain</strong>"}</span>
-          <span>${timeStr} <button onclick="speakText(this.closest('.msg').querySelector('.msg-body').innerText)" style="background:none;border:none;color:#38bdf8;cursor:pointer;margin-left:6px;" title="Relire à voix haute">🔊</button></span>
+          <span>${role === "user" ? "🗣️ <strong>Thomas</strong>" : "💭 <strong>Second Brain</strong>"}</span>
+          <span>${timeStr} <button onclick="speakText(this.closest('.msg').querySelector('.msg-body').innerText)" style="background:none;border:none;color:#c084fc;cursor:pointer;margin-left:6px;" title="Réécouter">🔊</button></span>
         </div>
         <div class="msg-body"></div>
-        ${sourcesHtml}
       `;
       div.querySelector(".msg-body").textContent = text;
       feed.appendChild(div);
       div.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
-    function clearConversation() {
-      const feed = document.getElementById("chatFeed");
-      feed.innerHTML = "";
-      showToast("Historique de conversation effacé");
+    function addSparkCard(spark) {
+      capturedSparks.unshift(spark);
+      renderSparks();
+    }
+
+    function renderSparks() {
+      const box = document.getElementById("sparksList");
+      if (capturedSparks.length === 0) {
+        box.innerHTML = `
+          <div style="padding:18px; text-align:center; color:var(--text-muted); font-size:0.82rem; border:1px dashed var(--border); border-radius:14px;">
+            Au fil de notre discussion orale, chaque idée forte ou décision que tu formules s'affichera automatiquement ici sous forme de carte.
+          </div>
+        `;
+        return;
+      }
+      box.innerHTML = capturedSparks.map((s, idx) => `
+        <div class="spark-card">
+          <div class="spark-top">
+            <span class="spark-title">💡 ${s.title}</span>
+            <span class="spark-tag">${s.tag || "Idée"} • ${s.time || ""}</span>
+          </div>
+          <div class="spark-summary">${s.summary}</div>
+        </div>
+      `).join("");
+    }
+
+    async function synthesizeToObsidian() {
+      if (conversationHistory.length === 0 && capturedSparks.length === 0) {
+        showToast("Parle d'abord de tes idées avant de synthétiser la session");
+        return;
+      }
+      const btn = document.getElementById("synthBtn");
+      const customTitle = document.getElementById("sessionTitleInput").value.trim();
+
+      if (!serverOnline) {
+        const md = capturedSparks.map(s => `- **${s.title}** : ${s.summary}`).join("\n");
+        navigator.clipboard.writeText(`# ${customTitle || "Brainstorming Vocal"}\n\n${md}`);
+        showToast("📋 Synthèse copiée dans le presse-papiers !");
+        return;
+      }
+
+      btn.textContent = "⏳ Synthèse IA...";
+      try {
+        const resp = await fetch(`${LOCAL_API}/api/synthesize-session`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: customTitle,
+            history: conversationHistory,
+            sparks: capturedSparks
+          })
+        });
+        const data = await resp.json();
+        if (data.ok) {
+          showToast(`✅ Note créée dans Obsidian : ${data.title}`);
+          document.getElementById("sessionTitleInput").value = "";
+          await loadKnowledge();
+        }
+      } catch (e) {
+        showToast("Erreur lors de la synthèse");
+      } finally {
+        btn.textContent = "💾 Synthétiser dans Obsidian";
+      }
+    }
+
+    function resetSession() {
+      stopAllAudio();
+      conversationHistory = [];
+      capturedSparks = [];
+      renderSparks();
+      document.getElementById("chatFeed").innerHTML = `
+        <div class="msg assistant">
+          <div class="msg-head">
+            <span>💭 <strong>Ton Second Brain</strong></span>
+            <span>Nouvelle session</span>
+          </div>
+          <div class="msg-body">Nouvelle page blanche ! De quoi as-tu envie qu'on discute ?</div>
+        </div>
+      `;
+      showToast("Session réinitialisée");
     }
 
     async function speakText(rawText) {
-      stopSpeaking();
+      stopSpeakingOnly();
       const clean = rawText.replace(/[#*`_~>\[\]]+/g, " ").replace(/\s+/g, " ").trim();
       if (!clean) return;
 
       const engine = document.getElementById("ttsEngineSelect").value;
-      const rate = parseFloat(document.getElementById("ttsRateSelect").value || "1.15");
+      const rate = parseFloat(document.getElementById("ttsRateSelect").value || "1.12");
       const orbBtn = document.getElementById("orbBtn");
       orbBtn.classList.add("speaking");
       document.getElementById("orbIcon").textContent = "🔊";
-      document.getElementById("orbLabel").textContent = "Parle...";
+      document.getElementById("orbLabel").textContent = "Te répond...";
       animateWaves(true);
 
       if (engine === "mac" && serverOnline) {
@@ -1320,7 +1239,8 @@ Tu peux :
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: clean, rate })
           });
-          const approxMs = Math.min(Math.max((clean.split(/\s+/).length / (3.1 * rate)) * 1000, 1800), 25000);
+          const wordCount = clean.split(/\s+/).length;
+          const approxMs = Math.min(Math.max((wordCount / (3.1 * rate)) * 1000 + 600, 2000), 26000);
           clearTimeout(window.__speakTimer);
           window.__speakTimer = setTimeout(() => {
             animateWaves(false);
@@ -1336,7 +1256,7 @@ Tu peux :
         utter.lang = "fr-FR";
         utter.rate = rate;
         const voices = window.speechSynthesis.getVoices();
-        const frVoice = voices.find(v => v.lang.startsWith("fr") && (v.name.includes("Thomas") || v.name.includes("Amélie") || v.name.includes("Audrey") || v.name.includes("Premium"))) || voices.find(v => v.lang.startsWith("fr"));
+        const frVoice = voices.find(v => v.lang.startsWith("fr") && (v.name.includes("Thomas") || v.name.includes("Amélie") || v.name.includes("Audrey"))) || voices.find(v => v.lang.startsWith("fr"));
         if (frVoice) utter.voice = frVoice;
         utter.onend = () => {
           animateWaves(false);
@@ -1354,9 +1274,8 @@ Tu peux :
       }
     }
 
-    function stopSpeaking() {
+    function stopSpeakingOnly() {
       clearTimeout(window.__speakTimer);
-      animateWaves(false);
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
@@ -1367,127 +1286,55 @@ Tu peux :
           body: JSON.stringify({ stop: true })
         }).catch(() => {});
       }
-      if (!isListening) resetOrbUI();
     }
 
-    function toggleAutoSpeak() {
-      autoSpeak = !autoSpeak;
-      const btn = document.getElementById("ttsToggleBtn");
-      btn.classList.toggle("active", autoSpeak);
-      btn.textContent = autoSpeak ? "🔊 Réponse parlée : ON" : "🔇 Réponse parlée : OFF";
+    function stopAllAudio() {
+      handsFree = false;
+      const hfBtn = document.getElementById("handsFreeBtn");
+      hfBtn.classList.remove("active");
+      hfBtn.textContent = "🔄 Conversation continue (Ping-Pong) : OFF";
+      stopSpeakingOnly();
+      if (isListening) {
+        isListening = false;
+        if (recognition) {
+          try { recognition.stop(); } catch (_) {}
+        }
+      }
+      animateWaves(false);
+      resetOrbUI();
+      document.getElementById("stageStatus").textContent = "Audio en pause. Clique sur l'orbe quand tu veux reprendre.";
     }
 
     function toggleHandsFree() {
       handsFree = !handsFree;
       const btn = document.getElementById("handsFreeBtn");
       btn.classList.toggle("active", handsFree);
-      btn.textContent = handsFree ? "🔄 Mains-libres continu : ON" : "🔄 Mains-libres continu : OFF";
-      if (handsFree && !isListening) {
-        startVoiceCapture();
-      }
+      btn.textContent = handsFree
+        ? "🔄 Conversation continue (Ping-Pong) : ON"
+        : "🔄 Conversation continue (Ping-Pong) : OFF";
     }
 
-    async function structureDictationWithAI() {
-      const area = document.getElementById("dictationTextarea");
-      const content = area.value.trim();
-      if (!content) {
-        showToast("Dicte ou écris d'abord du texte à structurer");
-        return;
-      }
-      if (!serverOnline) {
-        showToast("Serveur local requis pour la structuration Gemini");
-        return;
-      }
-      showToast("✨ Structuration médicale en cours avec Gemini...");
-      const resp = await fetch(`${LOCAL_API}/api/ask`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          query: `Transforme cette dictée médicale brute en une fiche Markdown structurée et propre (avec titres et puces, sans commentaire autour) :\n\n${content}`
-        })
+    function toggleAutoSpeak() {
+      autoSpeak = !autoSpeak;
+      const btn = document.getElementById("ttsToggleBtn");
+      btn.classList.toggle("active", autoSpeak);
+      btn.textContent = autoSpeak ? "🔊 Voix : ON" : "🔇 Voix : OFF";
+    }
+
+    function renderArchive() {
+      const box = document.getElementById("archiveList");
+      const notes = [...(brainData.notes || [])].sort((a, b) => {
+        const aIdea = a.folder.includes("08 - Journal") ? 1 : 0;
+        const bIdea = b.folder.includes("08 - Journal") ? 1 : 0;
+        return bIdea - aIdea;
       });
-      const data = await resp.json();
-      if (data.answer) {
-        area.value = data.answer;
-        showToast("✅ Note structurée avec succès !");
-      }
-    }
-
-    async function saveDictationToObsidian() {
-      const title = document.getElementById("noteTitleInput").value.trim();
-      const category = document.getElementById("noteCategorySelect").value;
-      const content = document.getElementById("dictationTextarea").value.trim();
-      if (!content) {
-        showToast("Le contenu de la note est vide");
-        return;
-      }
-      if (!serverOnline) {
-        navigator.clipboard.writeText(`# ${title || "Note Vocale"}\n\n${content}`);
-        showToast("📋 Mode mobile : Note copiée dans le presse-papiers !");
-        return;
-      }
-      const resp = await fetch(`${LOCAL_API}/api/note`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, category, content, mode: "create" })
-      });
-      const data = await resp.json();
-      if (data.ok) {
-        showToast(`💾 Enregistré dans Obsidian : ${data.relPath}`);
-        document.getElementById("noteTitleInput").value = "";
-        document.getElementById("dictationTextarea").value = "";
-        await loadKnowledge();
-      }
-    }
-
-    function renderNotesList() {
-      const list = document.getElementById("notesList");
-      list.innerHTML = "";
-      (brainData.notes || []).forEach((n, idx) => {
-        const item = document.createElement("div");
-        item.className = "note-item" + (idx === 0 ? " active" : "");
-        item.innerHTML = `
-          <div class="note-item-title">📄 ${n.title}</div>
-          <div class="note-item-folder">${n.folder} • ${n.updatedAt || ""}</div>
-        `;
-        item.onclick = () => selectNoteForReading(n, item);
-        list.appendChild(item);
-        if (idx === 0 && !selectedNote) {
-          selectNoteForReading(n, item);
-        }
-      });
-    }
-
-    function selectNoteForReading(note, el) {
-      selectedNote = note;
-      document.querySelectorAll(".note-item").forEach(i => i.classList.remove("active"));
-      if (el) el.classList.add("active");
-      document.getElementById("noteViewer").textContent = note.content;
-    }
-
-    function openNoteByTitle(title) {
-      const found = (brainData.notes || []).find(n => n.title === title);
-      if (found) {
-        switchMode("reader");
-        selectNoteForReading(found, null);
-      }
-    }
-
-    function speakCurrentNote() {
-      if (!selectedNote) return;
-      speakText(selectedNote.content.slice(0, 2800));
-    }
-
-    function renderRouterCards() {
-      const grid = document.getElementById("routerGrid");
-      grid.innerHTML = QUICK_PROJECTS.map(p => `
-        <a class="project-card" href="${p.url}" target="_blank" rel="noopener">
-          <div class="project-card-title">
-            <span>${p.name}</span>
-            <span style="color:var(--accent);">↗</span>
-          </div>
-          <div class="project-card-desc">${p.desc}</div>
-        </a>
+      document.getElementById("archiveCountLabel").textContent = `${notes.length} notes dans ton Second Brain`;
+      box.innerHTML = notes.map(n => `
+        <div class="archive-card" onclick="speakText(${JSON.stringify(n.title + '. ' + n.excerpt)})">
+          <div class="archive-title">${n.folder.includes("08 - Journal") ? "💡" : "📄"} ${n.title}</div>
+          <div class="archive-meta">${n.folder} • ${n.updatedAt || ""}</div>
+          <div class="archive-excerpt">${(n.excerpt || "").slice(0, 140)}...</div>
+        </div>
       `).join("");
     }
 
