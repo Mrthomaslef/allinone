@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "ayn-thor": {
+        "title": "AYN Thor Studio — Contrôle & Sync (Mac mini)",
+        "subtitle": "Télécommande écran ADB Live, 23 dossiers de Sauvegardes, 103 Go ROMs & Drivers Turnip à distance",
+        "category": "games-entertainment",
+        "emoji": "⚡",
+        "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
+        "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
+    },
     "film-et-serie": {
         "title": "CinePreload — Stremio + TorBox (Mac mini)",
         "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
