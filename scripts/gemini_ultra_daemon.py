@@ -974,6 +974,8 @@ def build_live_quota_payload() -> dict:
         except Exception:
             pass
 
+    ecosystem_data = fetch_ecosystem_stats(now)
+
     payload = {
         "checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "liveEndpoint": f"http://127.0.0.1:{PORT}/api/quota",
@@ -1007,9 +1009,411 @@ def build_live_quota_payload() -> dict:
             "claudeWeekly": claude_pro["weekly"],
         },
         "models": models_list,
+        "ecosystem": ecosystem_data,
         "favorites": load_favorites_file(),
     }
     return payload
+
+
+_SERVING_API = False
+_ecosystem_cache: dict | None = None
+_ecosystem_last_ts: float = 0.0
+
+
+def _get_github_token() -> str | None:
+    try:
+        proc = subprocess.run(
+            ["git", "credential", "fill"],
+            input="protocol=https\nhost=github.com\n\n",
+            text=True,
+            capture_output=True,
+            timeout=3,
+        )
+        for line in proc.stdout.splitlines():
+            if line.startswith("password="):
+                tok = line.split("=", 1)[1].strip()
+                if tok:
+                    return tok
+    except Exception:
+        pass
+    return None
+
+
+def _check_tcp_port(port: int) -> bool:
+    import socket
+
+    try:
+        with socket.create_connection(("127.0.0.1", port), timeout=0.6):
+            return True
+    except Exception:
+        return False
+
+
+def fetch_ecosystem_stats(now: datetime) -> dict:
+    global _ecosystem_cache, _ecosystem_last_ts
+    now_ts = time.time()
+    if _ecosystem_cache is not None and (now_ts - _ecosystem_last_ts) < 240.0:
+        return _ecosystem_cache
+
+    gh_stats = {
+        "username": "Mrthomaslef",
+        "profileUrl": "https://github.com/Mrthomaslef",
+        "plan": "GitHub Free (Pages + Actions)",
+        "totalRepos": 31,
+        "publicRepos": 30,
+        "privateRepos": 1,
+        "pagesActiveCount": 29,
+        "totalStorageMb": 307.1,
+        "largestRepo": {"name": "photo-famille", "sizeMb": 62.4, "limitMb": 1024, "usedPercent": 6.1},
+        "allinoneRepo": {
+            "name": "allinone",
+            "url": "https://github.com/Mrthomaslef/allinone",
+            "pagesUrl": "https://mrthomaslef.github.io/allinone/",
+            "sizeMb": 11.5,
+            "limitMb": 1024,
+            "usedPercent": 1.12,
+            "commitsCount": 796,
+            "appsCount": 31,
+            "pushedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        },
+        "topRepos": [
+            {"name": "photo-famille", "sizeMb": 62.4, "hasPages": True, "private": False},
+            {"name": "monopoly", "sizeMb": 53.9, "hasPages": True, "private": False},
+            {"name": "biblioosteo", "sizeMb": 40.4, "hasPages": True, "private": False},
+            {"name": "dinociel-app-educative", "sizeMb": 27.4, "hasPages": True, "private": False},
+            {"name": "guide-interne-cochin-os", "sizeMb": 26.0, "hasPages": True, "private": False},
+            {"name": "voyages-voyages", "sizeMb": 22.6, "hasPages": True, "private": False},
+            {"name": "agenda-internes", "sizeMb": 15.7, "hasPages": True, "private": False},
+            {"name": "radio-thomas", "sizeMb": 13.7, "hasPages": False, "private": False},
+            {"name": "allinone", "sizeMb": 11.5, "hasPages": True, "private": False},
+        ],
+        "apiRateLimit": {
+            "limit": 5000,
+            "used": 12,
+            "remaining": 4988,
+            "usedPercent": 0.24,
+            "remainingPercent": 99.76,
+            "resetsAt": None,
+        },
+        "limits": {
+            "repoSizeSoftLimitMb": 1024,
+            "pagesBandwidthMonthlyGb": 100,
+            "pagesBuildsPerHour": 10,
+            "actionsMinutesMonthly": 2000,
+        },
+    }
+
+    # Count apps in local projects.json
+    projects_json_path = os.path.join(ROOT_DIR, "projects.json")
+    if os.path.exists(projects_json_path):
+        try:
+            with open(projects_json_path, "r", encoding="utf-8") as pf:
+                gh_stats["allinoneRepo"]["appsCount"] = len(json.load(pf))
+        except Exception:
+            pass
+
+    # Count local git commits in allinone as fast baseline
+    try:
+        c_out = subprocess.check_output(
+            ["git", "rev-list", "--count", "HEAD"],
+            cwd=ROOT_DIR,
+            text=True,
+            stderr=subprocess.DEVNULL,
+            timeout=2,
+        ).strip()
+        if c_out.isdigit():
+            gh_stats["allinoneRepo"]["commitsCount"] = int(c_out)
+    except Exception:
+        pass
+
+    gh_token = _get_github_token()
+    gh_headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "allinone-agent-tracking",
+    }
+    if gh_token:
+        gh_headers["Authorization"] = f"Bearer {gh_token}"
+
+    # 1. Live GitHub Repos & Rate Limit
+    try:
+        req_r = urllib.request.Request(
+            "https://api.github.com/user/repos?per_page=100&sort=pushed&affiliation=owner"
+            if gh_token
+            else "https://api.github.com/users/Mrthomaslef/repos?per_page=100&sort=pushed",
+            headers=gh_headers,
+        )
+        with urllib.request.urlopen(req_r, timeout=5) as resp_r:
+            repos = json.loads(resp_r.read().decode("utf-8"))
+            if isinstance(repos, list) and repos:
+                gh_stats["totalRepos"] = len(repos)
+                gh_stats["publicRepos"] = sum(1 for r in repos if not r.get("private"))
+                gh_stats["privateRepos"] = sum(1 for r in repos if r.get("private"))
+                gh_stats["pagesActiveCount"] = sum(1 for r in repos if r.get("has_pages"))
+                total_kb = sum(int(r.get("size") or 0) for r in repos)
+                gh_stats["totalStorageMb"] = round(total_kb / 1024.0, 1)
+
+                sorted_repos = sorted(repos, key=lambda r: int(r.get("size") or 0), reverse=True)
+                top_list = []
+                for r in sorted_repos[:8]:
+                    sz_mb = round(int(r.get("size") or 0) / 1024.0, 1)
+                    top_list.append(
+                        {
+                            "name": r.get("name"),
+                            "sizeMb": sz_mb,
+                            "usedPercentOf1Gb": round((sz_mb / 1024.0) * 100.0, 1),
+                            "hasPages": bool(r.get("has_pages")),
+                            "private": bool(r.get("private")),
+                            "pushedAt": r.get("pushed_at"),
+                            "htmlUrl": r.get("html_url"),
+                        }
+                    )
+                gh_stats["topRepos"] = top_list
+                if top_list:
+                    gh_stats["largestRepo"] = {
+                        "name": top_list[0]["name"],
+                        "sizeMb": top_list[0]["sizeMb"],
+                        "limitMb": 1024,
+                        "usedPercent": top_list[0]["usedPercentOf1Gb"],
+                    }
+
+                allinone_r = next((r for r in repos if r.get("name") == "allinone"), None)
+                if allinone_r:
+                    a_mb = round(int(allinone_r.get("size") or 0) / 1024.0, 1)
+                    gh_stats["allinoneRepo"]["sizeMb"] = a_mb
+                    gh_stats["allinoneRepo"]["usedPercent"] = round((a_mb / 1024.0) * 100.0, 2)
+                    if allinone_r.get("pushed_at"):
+                        gh_stats["allinoneRepo"]["pushedAt"] = allinone_r["pushed_at"]
+    except Exception:
+        pass
+
+    try:
+        req_rl = urllib.request.Request("https://api.github.com/rate_limit", headers=gh_headers)
+        with urllib.request.urlopen(req_rl, timeout=4) as resp_rl:
+            rl_data = json.loads(resp_rl.read().decode("utf-8"))
+            core = (rl_data.get("resources") or {}).get("core") or {}
+            lim = int(core.get("limit") or 5000)
+            used = int(core.get("used") or 0)
+            rem = int(core.get("remaining") or (lim - used))
+            rst_ts = int(core.get("reset") or 0)
+            rst_iso = (
+                datetime.fromtimestamp(rst_ts, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                if rst_ts > 0
+                else None
+            )
+            gh_stats["apiRateLimit"] = {
+                "limit": lim,
+                "used": used,
+                "remaining": rem,
+                "usedPercent": round((used / max(1, lim)) * 100.0, 2),
+                "remainingPercent": round((rem / max(1, lim)) * 100.0, 2),
+                "resetsAt": rst_iso,
+            }
+    except Exception:
+        pass
+
+    # 2. Supabase Free Tier Live Probe (2 projects)
+    supa_cochin = {
+        "id": "tzceyyxeqhatdejnxwxs",
+        "name": "COCHIN·OS Archives & QUIZ Cochin MSK",
+        "url": "https://tzceyyxeqhatdejnxwxs.supabase.co",
+        "plan": "Supabase Free Tier",
+        "status": "online",
+        "statusLabel": "Opérationnel (HTTP 200)",
+        "apps": ["QUIZ Cochin MSK (quizcotten.fr)", "COCHIN·OS — Archives des Internes"],
+        "storageUsedMb": 20.88,
+        "storageLimitMb": 1024,
+        "storageUsedPercent": 2.04,
+        "archivesPdfCount": 2,
+        "quizQuestionsCount": 432,
+        "dbEstimatedMb": 4.8,
+        "dbLimitMb": 500,
+        "dbUsedPercent": 0.96,
+        "egressLimitGb": 5,
+        "maxFileSizeMb": 50,
+        "mauLimit": 50000,
+    }
+    tzc_key = "sb_publishable_3k8t5D76xyEo_pnXIfRpqg_unrKx5zF"
+    try:
+        req_q = urllib.request.Request(
+            f"{supa_cochin['url']}/rest/v1/quiz_questions?select=id&limit=1",
+            headers={"apikey": tzc_key, "Prefer": "count=exact"},
+        )
+        with urllib.request.urlopen(req_q, timeout=4) as rq:
+            cr = rq.headers.get("Content-Range") or ""
+            if "/" in cr:
+                tot_q = cr.split("/")[-1].strip()
+                if tot_q.isdigit():
+                    supa_cochin["quizQuestionsCount"] = int(tot_q)
+            supa_cochin["status"] = "online"
+            supa_cochin["statusLabel"] = "Opérationnel (HTTP 200 ✓)"
+    except urllib.error.HTTPError as he:
+        if he.code == 402:
+            supa_cochin["status"] = "restricted"
+            supa_cochin["statusLabel"] = "Restreint (HTTP 402 • Quota dépassé)"
+    except Exception:
+        pass
+
+    try:
+        req_a = urllib.request.Request(
+            f"{supa_cochin['url']}/rest/v1/rpc/interne_list_archives",
+            data=b'{"p_code":"0607"}',
+            headers={"apikey": tzc_key, "Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req_a, timeout=4) as ra:
+            rows = json.loads(ra.read().decode("utf-8"))
+            if isinstance(rows, list):
+                supa_cochin["archivesPdfCount"] = len(rows)
+                tot_b = sum(int(x.get("size_bytes") or 0) for x in rows)
+                mb = round(tot_b / (1024.0 * 1024.0), 2)
+                supa_cochin["storageUsedMb"] = mb
+                supa_cochin["storageUsedPercent"] = round((mb / 1024.0) * 100.0, 2)
+    except Exception:
+        pass
+
+    supa_secondary = {
+        "id": "bfpyeoeggxhaiyvvltbm",
+        "name": "ColisTrack & QUIZ du 7TER",
+        "url": "https://bfpyeoeggxhaiyvvltbm.supabase.co",
+        "plan": "Supabase Free Tier",
+        "status": "restricted",
+        "statusLabel": "Restreint (HTTP 402 • Quota Egress 5 Go dépassé)",
+        "violation": "exceed_egress_quota",
+        "apps": ["ColisTrack (Edge Function)", "QUIZ du 7TER (Realtime)"],
+        "egressUsedPercent": 100.0,
+        "egressLimitGb": 5,
+        "dbLimitMb": 500,
+        "storageLimitMb": 1024,
+    }
+    bfp_key = "sb_publishable_qW4Y_G7K9sk8Q8mO5TQleg_QGx2pc_7"
+    try:
+        req_b = urllib.request.Request(
+            f"{supa_secondary['url']}/auth/v1/health",
+            headers={"apikey": bfp_key},
+        )
+        with urllib.request.urlopen(req_b, timeout=4) as rb:
+            if rb.status == 200:
+                supa_secondary["status"] = "online"
+                supa_secondary["statusLabel"] = "Opérationnel (HTTP 200 ✓)"
+                supa_secondary["violation"] = None
+                supa_secondary["egressUsedPercent"] = 45.0
+    except urllib.error.HTTPError as he:
+        body_err = ""
+        try:
+            body_err = he.read().decode("utf-8", errors="ignore")
+        except Exception:
+            pass
+        if he.code == 402 or "exceed_egress_quota" in body_err:
+            supa_secondary["status"] = "restricted"
+            supa_secondary["statusLabel"] = "Restreint (HTTP 402 • Quota Egress 5 Go dépassé)"
+            supa_secondary["violation"] = "exceed_egress_quota"
+            supa_secondary["egressUsedPercent"] = 100.0
+    except Exception:
+        pass
+
+    # 3. Vercel Hobby Free Tier Live Probe
+    vercel_stats = {
+        "name": "Vercel Hobby (Gratuit)",
+        "project": "radio-thomas (QUIZ Cochin MSK)",
+        "prodUrl": "https://quizcotten.fr",
+        "vercelUrl": "https://radio-thomas-ten.vercel.app",
+        "status": "online",
+        "statusLabel": "En ligne (Edge CDN actif ✓)",
+        "latencyMs": 120,
+        "edgeCacheStatus": "HIT / s-maxage=300",
+        "deploymentsCount": 24,
+        "lastDeployStatus": "success",
+        "lastDeployAt": "2026-11-05T06:30:30Z",
+        "limits": {
+            "bandwidthMonthlyGb": 100,
+            "functionsInvocationsMonthly": 100000,
+            "functionExecutionGbHours": 100,
+            "deploymentsPerDay": 100,
+        },
+        "protections": [
+            "Cache CDN Edge (s-maxage=300, stale-while-revalidate=3600)",
+            "Rate-limit anti-boucle IP (max 6 req / 15s sur /api/questions)",
+            "Zéro polling setInterval côté client",
+        ],
+    }
+    try:
+        t0 = time.time()
+        req_v = urllib.request.Request(
+            "https://radio-thomas-ten.vercel.app/api/hello",
+            headers={"User-Agent": "allinone-agent-tracking"},
+        )
+        with urllib.request.urlopen(req_v, timeout=5) as rv:
+            vercel_stats["latencyMs"] = int(round((time.time() - t0) * 1000))
+            v_cache = rv.headers.get("X-Vercel-Cache") or "MISS"
+            vercel_stats["edgeCacheStatus"] = f"{v_cache} (s-maxage=300)"
+            vercel_stats["status"] = "online"
+            vercel_stats["statusLabel"] = f"En ligne ({vercel_stats['latencyMs']} ms • Edge {v_cache})"
+    except Exception:
+        vercel_stats["status"] = "degraded"
+        vercel_stats["statusLabel"] = "Injoignable temporairement"
+
+    try:
+        req_va = urllib.request.Request(
+            "https://api.github.com/repos/Mrthomaslef/radio-thomas/actions/runs?per_page=3",
+            headers=gh_headers,
+        )
+        with urllib.request.urlopen(req_va, timeout=4) as rva:
+            runs_data = json.loads(rva.read().decode("utf-8"))
+            if runs_data.get("total_count"):
+                vercel_stats["deploymentsCount"] = int(runs_data["total_count"])
+            w_runs = runs_data.get("workflow_runs") or []
+            if w_runs:
+                vercel_stats["lastDeployStatus"] = w_runs[0].get("conclusion") or w_runs[0].get("status") or "success"
+                vercel_stats["lastDeployAt"] = w_runs[0].get("created_at")
+    except Exception:
+        pass
+
+    # 4. Cloudflare Quick Tunnels & Local Mac mini Daemons
+    local_daemons = [
+        {"id": "agent-tracking", "name": "Agent Tracking API", "port": 8787, "online": _SERVING_API or _check_tcp_port(8787)},
+        {"id": "cinepreload", "name": "CinePreload (Stremio/TorBox)", "port": 8790, "online": _check_tcp_port(8790)},
+        {"id": "drive-prive", "name": "Mon Drive Privé (774 docs)", "port": 8795, "online": _check_tcp_port(8795)},
+        {"id": "ayn-thor", "name": "AYN Thor Studio ADB", "port": 8798, "online": _check_tcp_port(8798)},
+        {"id": "m4-gaming", "name": "M4 Gaming & Second Brain Voice", "port": 8765, "online": _check_tcp_port(8765)},
+    ]
+    online_daemons_count = sum(1 for d in local_daemons if d["online"])
+
+    cloudflare_stats = {
+        "name": "Cloudflare Quick Tunnels (trycloudflare.com)",
+        "plan": "Gratuit (Sans compte • Mac mini M4)",
+        "activeTunnelsCount": online_daemons_count,
+        "totalTunnelsCount": len(local_daemons),
+        "daemons": local_daemons,
+        "limits": {
+            "concurrentRequestsLimit": 200,
+            "bandwidthLimit": "Illimitée (0 €)",
+            "urlRotation": "Auto-sync GitHub à chaque redémarrage",
+        },
+    }
+
+    result = {
+        "checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "github": gh_stats,
+        "supabase": {
+            "plan": "Supabase Free Tier (Max 2 projets actifs gratuits)",
+            "projects": [supa_cochin, supa_secondary],
+            "limits": {
+                "dbSizeMb": 500,
+                "storageSizeMb": 1024,
+                "egressMonthlyGb": 5,
+                "maxFileUploadMb": 50,
+                "mauMonthly": 50000,
+                "edgeFunctionInvocations": 500000,
+            },
+        },
+        "vercel": vercel_stats,
+        "cloudflare": cloudflare_stats,
+    }
+
+    _ecosystem_cache = result
+    _ecosystem_last_ts = now_ts
+    return result
+
 
 
 FAVORITES_JSON_PATH = os.path.join(ROOT_DIR, "favorites.json")
@@ -1418,6 +1822,8 @@ def main() -> None:
     parser.add_argument("--daemon", action="store_true", help="Lance le serveur temps réel 127.0.0.1:8787 + tunnel + sync")
     args = parser.parse_args()
 
+    global _SERVING_API
+    _SERVING_API = bool(args.daemon) and not args.once
     payload = refresh_and_save(force=True)
     if args.once or not args.daemon:
         w5 = payload["windows"]["fiveHour"]

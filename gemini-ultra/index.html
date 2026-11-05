@@ -267,6 +267,23 @@
       </section>
       </div>
 
+      <!-- 4. ÉCOSYSTÈME : GITHUB + SERVICES GRATUITS -->
+      <section id="eco-section" class="card rounded-2xl p-3.5 md:p-5 border-violet-400/20 space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl bg-violet-500/15 border border-violet-400/30 flex items-center justify-center text-sm">🌐</span>
+            <div>
+              <h2 class="text-sm font-extrabold text-white leading-tight">Écosystème & limites gratuites</h2>
+              <p id="eco-checked" class="text-[11px] font-semibold text-violet-300 tabular-nums">GitHub • Supabase • Vercel • Cloudflare</p>
+            </div>
+          </div>
+          <span id="eco-alert" class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-extrabold text-slate-300">--</span>
+        </div>
+        <div id="eco-grid" class="space-y-2.5 md:space-y-0 md:grid md:grid-cols-2 md:gap-3">
+          <div class="text-xs text-slate-500">Chargement des stats…</div>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -318,6 +335,100 @@
         return { ...win, remainingPercent: 100, usedPercent: 0 };
       }
       return win;
+    }
+
+    function escHtml(v) {
+      return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function ecoBar(label, pct, detail) {
+      const p = Math.max(0, Math.min(100, Number(pct) || 0));
+      const color = p >= 90 ? 'from-rose-500 to-rose-400' : p >= 70 ? 'from-amber-400 to-orange-400' : 'from-emerald-400 to-sky-400';
+      return `<div class="space-y-1">
+        <div class="flex items-center justify-between text-[11px] gap-2"><span class="text-slate-400 font-semibold truncate">${escHtml(label)}</span><span class="font-extrabold text-white tabular-nums shrink-0">${escHtml(detail)}</span></div>
+        <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r ${color}" style="width:${Math.max(2, p)}%"></div></div>
+      </div>`;
+    }
+
+    function ecoStat(label, value) {
+      return `<div class="py-1.5 px-2 rounded-lg bg-slate-950/50 border border-white/5 text-center"><div class="text-[10px] text-slate-400">${escHtml(label)}</div><div class="text-[11px] md:text-xs font-bold text-white tabular-nums mt-0.5">${escHtml(value)}</div></div>`;
+    }
+
+    function ecoCard(icon, title, badge, badgeOk, body) {
+      const bc = badgeOk ? 'bg-emerald-500/15 border-emerald-400/25 text-emerald-300' : 'bg-rose-500/15 border-rose-400/30 text-rose-300';
+      return `<div class="p-3 rounded-xl bg-slate-950/70 border border-white/5 space-y-2.5">
+        <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-1.5 min-w-0"><span class="text-sm">${icon}</span><span class="text-xs font-extrabold text-white truncate">${escHtml(title)}</span></div>
+        <span class="px-2 py-0.5 rounded-md border text-[10px] font-bold shrink-0 ${bc}">${escHtml(badge)}</span></div>${body}</div>`;
+    }
+
+    function renderEcosystem(eco) {
+      const grid = document.getElementById('eco-grid');
+      if (!grid) return;
+      if (!eco) { grid.innerHTML = '<div class="text-xs text-slate-500">Stats écosystème indisponibles (daemon Mac hors ligne ?)</div>'; return; }
+      const cards = [];
+      let alerts = 0;
+
+      const gh = eco.github;
+      if (gh) {
+        const a = gh.allinoneRepo || {}, rl = gh.apiRateLimit || {}, lim = gh.limits || {};
+        const top = (gh.topRepos || []).slice(0, 4).map(r =>
+          ecoBar(`${r.name}${r.hasPages ? ' • Pages' : ''}`, r.usedPercentOf1Gb, `${r.sizeMb} Mo / 1 Go`)).join('');
+        cards.push(ecoCard('🐙', `GitHub • ${gh.username || ''}`, gh.plan || 'Free', true, `
+          <div class="grid grid-cols-3 gap-1.5">${ecoStat('Repos', `${gh.totalRepos ?? '--'} (${gh.privateRepos ?? 0} privé)`)}${ecoStat('Pages actives', gh.pagesActiveCount ?? '--')}${ecoStat('Stockage total', `${gh.totalStorageMb ?? '--'} Mo`)}</div>
+          <div class="grid grid-cols-3 gap-1.5">${ecoStat('allinone commits', a.commitsCount ?? '--')}${ecoStat('Apps Tapp Store', a.appsCount ?? '--')}${ecoStat('Dernier push', a.pushedAt ? new Date(a.pushedAt).toLocaleString('fr-FR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : '--')}</div>
+          ${ecoBar('allinone (limite conseillée 1 Go)', a.usedPercent, `${a.sizeMb ?? '--'} Mo`)}
+          ${ecoBar('API GitHub (heure)', rl.usedPercent, `${rl.remaining ?? '--'} / ${rl.limit ?? '--'} restants`)}
+          <div class="text-[10px] text-slate-500 font-semibold pt-0.5">Plus gros repos</div>${top}
+          <div class="text-[10px] text-slate-500">Limites Free : Pages ${lim.pagesBandwidthMonthlyGb ?? 100} Go/mois • ${lim.pagesBuildsPerHour ?? 10} builds/h • Actions ${lim.actionsMinutesMonthly ?? 2000} min/mois</div>`));
+      }
+
+      const sb = eco.supabase;
+      if (sb) {
+        const projs = (sb.projects || []).map(p => {
+          const ok = p.status === 'online';
+          if (!ok) alerts++;
+          const bars = ok
+            ? ecoBar('Stockage fichiers', p.storageUsedPercent, `${p.storageUsedMb ?? '--'} / ${p.storageLimitMb ?? 1024} Mo`) +
+              ecoBar('Base de données (estim.)', p.dbUsedPercent, `${p.dbEstimatedMb ?? '--'} / ${p.dbLimitMb ?? 500} Mo`)
+            : ecoBar(`Egress (${p.egressLimitGb ?? 5} Go/mois)`, p.egressUsedPercent ?? 100, 'DÉPASSÉ');
+          return `<div class="p-2 rounded-lg bg-white/[0.03] border ${ok ? 'border-white/5' : 'border-rose-400/30'} space-y-1.5">
+            <div class="text-[11px] font-bold text-white truncate">${escHtml(p.name)}</div>
+            <div class="text-[10px] ${ok ? 'text-emerald-300' : 'text-rose-300'} font-semibold">${escHtml(p.statusLabel)}</div>
+            <div class="text-[10px] text-slate-500 truncate">${escHtml((p.apps || []).join(' • '))}${p.quizQuestionsCount ? ` • ${p.quizQuestionsCount} questions` : ''}</div>${bars}</div>`;
+        }).join('');
+        const allOk = (sb.projects || []).every(p => p.status === 'online');
+        const l = sb.limits || {};
+        cards.push(ecoCard('⚡', 'Supabase', allOk ? 'Free • OK' : 'Free • Restreint', allOk, `${projs}
+          <div class="text-[10px] text-slate-500">Limites Free/projet : DB ${l.dbSizeMb ?? 500} Mo • Stockage ${l.storageSizeMb ?? 1024} Mo • Egress ${l.egressMonthlyGb ?? 5} Go/mois • ${(l.mauMonthly ?? 50000).toLocaleString('fr-FR')} MAU</div>`));
+      }
+
+      const vc = eco.vercel;
+      if (vc) {
+        const ok = vc.status === 'online';
+        if (!ok) alerts++;
+        const l = vc.limits || {};
+        cards.push(ecoCard('▲', vc.name || 'Vercel Hobby', ok ? 'En ligne' : 'Hors ligne', ok, `
+          <div class="text-[11px] text-slate-300"><span class="font-bold text-white">${escHtml(vc.project)}</span> • ${escHtml(vc.prodUrl)}</div>
+          <div class="grid grid-cols-3 gap-1.5">${ecoStat('Latence', vc.latencyMs != null ? `${vc.latencyMs} ms` : '--')}${ecoStat('Cache Edge', (vc.edgeCacheStatus || '--').split(' ')[0])}${ecoStat('Déploiements', vc.deploymentsCount ?? '--')}</div>
+          <div class="text-[10px] text-slate-500">Limites Hobby : ${l.bandwidthMonthlyGb ?? 100} Go/mois • ${(l.functionsInvocationsMonthly ?? 100000).toLocaleString('fr-FR')} invocations • ${l.deploymentsPerDay ?? 100} déploiements/jour</div>
+          ${(vc.protections || []).length ? `<div class="text-[10px] text-slate-500">🛡️ ${escHtml(vc.protections.join(' • '))}</div>` : ''}`));
+      }
+
+      const cf = eco.cloudflare;
+      if (cf) {
+        const ds = cf.daemons || [];
+        const ok = (cf.activeTunnelsCount ?? 0) >= (cf.totalTunnelsCount ?? ds.length);
+        const rows = ds.map(d => `<div class="flex items-center justify-between text-[11px]"><span class="text-slate-300 truncate">${d.online ? '🟢' : '🔴'} ${escHtml(d.name)}</span><span class="text-slate-500 tabular-nums shrink-0">:${escHtml(d.port)}</span></div>`).join('');
+        cards.push(ecoCard('☁️', 'Cloudflare Tunnels', `${cf.activeTunnelsCount ?? '--'}/${cf.totalTunnelsCount ?? '--'} actifs`, ok, `
+          <div class="text-[10px] text-slate-500">${escHtml(cf.plan)}</div><div class="space-y-1">${rows}</div>
+          <div class="text-[10px] text-slate-500">Limite Quick Tunnel : ${(cf.limits && cf.limits.concurrentRequestsLimit) ?? 200} requêtes simultanées • URL change à chaque redémarrage</div>`));
+      }
+
+      grid.innerHTML = cards.join('') || '<div class="text-xs text-slate-500">Aucune donnée</div>';
+      const badge = document.getElementById('eco-alert');
+      badge.textContent = alerts ? `⚠️ ${alerts} alerte${alerts > 1 ? 's' : ''}` : '✓ Tout est OK';
+      badge.className = `px-2.5 py-1 rounded-lg border text-xs font-extrabold ${alerts ? 'bg-rose-500/15 border-rose-400/30 text-rose-300' : 'bg-emerald-500/15 border-emerald-400/25 text-emerald-300'}`;
+      if (eco.checkedAt) document.getElementById('eco-checked').textContent = `Vérifié ${new Date(eco.checkedAt).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'})} • GitHub • Supabase • Vercel • Cloudflare`;
     }
 
     function renderUI(data) {
@@ -405,6 +516,7 @@
       document.getElementById('claude-wk-rem').textContent = `${Math.round(cw.remainingPercent)}%`;
       document.getElementById('claude-wk-bar').style.width = `${Math.max(2, cw.remainingPercent)}%`;
 
+      try { renderEcosystem(data.ecosystem); } catch (e) { console.warn('eco render', e); }
       updateTimers();
     }
 
