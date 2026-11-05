@@ -22,12 +22,12 @@ KNOWN_METADATA = {
         "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     },
     "ayn-thor": {
-        "title": "Rom et Emulation",
-        "subtitle": "Téléchargement direct Switch NXBrew (7 772 jeux), 103 Go ROMs, Sauvegardes Cross-Play & AYN Thor (Mac mini)",
+        "title": "Rom et Emulation — Switch DL & Recomp",
+        "subtitle": "Index de téléchargement Switch (7 767 jeux NSP/XCI) avec statut Recomp vérifié Mac mini M4 & AYN Thor",
         "category": "games-family",
         "emoji": "🎮",
-        "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
-        "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
+        "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=3",
+        "logoUrl": "assets/ayn-thor-icon.svg?v=3",
     },
     "film-et-serie": {
         "title": "CinePreload — Stremio + TorBox (Mac mini)",
