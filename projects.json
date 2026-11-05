@@ -8,7 +8,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-05T21:05:16Z"
+    "pushedAt": "2026-11-05T21:49:12Z"
   },
   {
     "id": "film-et-serie",
@@ -19,7 +19,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-05T21:05:16Z"
+    "pushedAt": "2026-11-05T21:49:12Z"
   },
   {
     "id": "patrimoine-os",
@@ -30,7 +30,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-05T21:05:16Z"
+    "pushedAt": "2026-11-05T21:49:12Z"
   },
   {
     "id": "gemini-ultra",
@@ -41,7 +41,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-05T21:05:16Z"
+    "pushedAt": "2026-11-05T21:49:12Z"
   },
   {
     "id": "second-brain-voice",
@@ -52,7 +52,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-05T21:05:16Z"
+    "pushedAt": "2026-11-05T21:49:12Z"
   },
   {
     "id": "stats-youtube",
@@ -63,7 +63,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-05T21:05:16Z"
+    "pushedAt": "2026-11-05T21:49:12Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -74,7 +74,216 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-05T21:05:16Z"
+    "pushedAt": "2026-11-05T21:49:12Z"
+  },
+  {
+    "id": "ayn-thor",
+    "title": "Rom et Emulation — Switch DL & Recomp",
+    "subtitle": "Index de téléchargement Switch (7 767 jeux NSP/XCI) avec statut Recomp vérifié Mac mini M4 & AYN Thor",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "assets/ayn-thor-icon.svg?v=3",
+    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=3",
+    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
+    "pushedAt": "2026-11-05T21:49:12Z"
+  },
+  {
+    "id": "forestia-mobile",
+    "title": "Forestia — Lancer avec Moonlight",
+    "subtitle": "Forestia (1998) — Cloud & Mobile Web Player",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "https://mrthomaslef.github.io/forestia-mobile/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/forestia-mobile/",
+    "githubUrl": "https://github.com/Mrthomaslef/forestia-mobile",
+    "pushedAt": "2026-11-05T21:49:10Z"
+  },
+  {
+    "id": "quiz-pokemon",
+    "title": "PokéQuiz — Attrape-les tous !",
+    "subtitle": "Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
+    "category": "games-family",
+    "emoji": "⚡",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
+    "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
+    "pushedAt": "2026-11-05T21:49:05Z"
+  },
+  {
+    "id": "monopoly",
+    "title": "Jolly Roger's — Monopoly 3D",
+    "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
+    "category": "games-family",
+    "emoji": "🏴‍☠️",
+    "logoUrl": "https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png",
+    "prodUrl": "https://mrthomaslef.github.io/monopoly/",
+    "githubUrl": "https://github.com/Mrthomaslef/monopoly",
+    "pushedAt": "2026-11-05T21:49:03Z"
+  },
+  {
+    "id": "quiz-trentenaires",
+    "title": "QUIZ du 7TER",
+    "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
+    "category": "games-family",
+    "emoji": "🎉",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-trentenaires/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/quiz-trentenaires/",
+    "githubUrl": "https://github.com/Mrthomaslef/quiz-trentenaires",
+    "pushedAt": "2026-11-05T21:48:58Z"
+  },
+  {
+    "id": "pocket-tcg-family",
+    "title": "milTCG — Pocket Family",
+    "subtitle": "Ouverture de boosters & collection de cartes en famille",
+    "category": "games-family",
+    "emoji": "🃏",
+    "logoUrl": "https://mrthomaslef.github.io/pocket-tcg-family/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/pocket-tcg-family/",
+    "githubUrl": "https://github.com/Mrthomaslef/pocket-tcg-family",
+    "pushedAt": "2026-11-05T21:48:56Z"
+  },
+  {
+    "id": "news-ai",
+    "title": "News AI — Veille &amp; Méthodes IA",
+    "subtitle": "News AI — Veille technique IA & guide d'implantation dans le workflow (@Mrthomaslef)",
+    "category": "daily-tools",
+    "emoji": "🚀",
+    "logoUrl": "https://mrthomaslef.github.io/news-ai/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/news-ai/",
+    "githubUrl": "https://github.com/Mrthomaslef/news-ai",
+    "pushedAt": "2026-11-05T21:48:52Z"
+  },
+  {
+    "id": "annuaire-prive",
+    "title": "Annuaire Privé — Pro & Perso",
+    "subtitle": "276 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
+    "category": "daily-tools",
+    "emoji": "📇",
+    "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/",
+    "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
+    "pushedAt": "2026-11-05T21:48:49Z"
+  },
+  {
+    "id": "photo-famille",
+    "title": "Album Famille Fontenay — WhatsApp",
+    "subtitle": "1 432 photos de famille classées par thème (Émile, Étretat/Yport/Corse, Ski, Fêtes & Messages)",
+    "category": "daily-tools",
+    "emoji": "📸",
+    "logoUrl": "https://mrthomaslef.github.io/photo-famille/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/photo-famille/",
+    "githubUrl": "https://github.com/Mrthomaslef/photo-famille",
+    "pushedAt": "2026-11-05T21:48:46Z"
+  },
+  {
+    "id": "assistante-maternelle",
+    "title": "AssMat — Paie & Pajemploi",
+    "subtitle": "Calculateur de salaire, présence, congés & fiche de paie",
+    "category": "daily-tools",
+    "emoji": "👶",
+    "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/assistante-maternelle/",
+    "githubUrl": "https://github.com/Mrthomaslef/assistante-maternelle",
+    "pushedAt": "2026-11-05T21:48:43Z"
+  },
+  {
+    "id": "voyages-voyages",
+    "title": "Voyages • Voyages — Hub & Cartes",
+    "subtitle": "Cartes Avantage SNCF & Air France Week-End+, Vacances (Valloire, Corse) & Guichet Express",
+    "category": "daily-tools",
+    "emoji": "✈️",
+    "logoUrl": "https://mrthomaslef.github.io/voyages-voyages/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/voyages-voyages/",
+    "githubUrl": "https://github.com/Mrthomaslef/voyages-voyages",
+    "pushedAt": "2026-11-05T21:48:41Z"
+  },
+  {
+    "id": "agenda-famille",
+    "title": "Agenda Famille — Marie & Thomas",
+    "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
+    "category": "daily-tools",
+    "emoji": "🏡",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
+    "pushedAt": "2026-11-05T21:48:37Z"
+  },
+  {
+    "id": "biblio-marie",
+    "title": "BiblioMarie — Infectiologie pédiatrique",
+    "subtitle": "Le Carnet de Marie — veille bibliographique pédiatrie & infectiologie, résumés en français",
+    "category": "daily-tools",
+    "emoji": "🚀",
+    "logoUrl": "https://mrthomaslef.github.io/biblio-marie/assets/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/biblio-marie/",
+    "githubUrl": "https://github.com/Mrthomaslef/biblio-marie",
+    "pushedAt": "2026-11-05T21:48:35Z"
+  },
+  {
+    "id": "dicomviewer",
+    "title": "TPack PACS",
+    "subtitle": "Visionneuse DICOM & console d’imagerie médicale pédagogique",
+    "category": "medical-imaging",
+    "emoji": "🖥️",
+    "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/dicomviewer/",
+    "githubUrl": "https://github.com/Mrthomaslef/dicomviewer",
+    "pushedAt": "2026-11-05T21:48:32Z"
+  },
+  {
+    "id": "quiz-imagerie",
+    "title": "QUIZ Imagerie — 1 Image 1 Diag",
+    "subtitle": "Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)",
+    "category": "medical-imaging",
+    "emoji": "🩻",
+    "logoUrl": "https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png",
+    "prodUrl": "https://mrthomaslef.github.io/quiz-imagerie/",
+    "githubUrl": "https://github.com/Mrthomaslef/quiz-imagerie",
+    "pushedAt": "2026-11-05T21:48:30Z"
+  },
+  {
+    "id": "radio-thomas",
+    "title": "QUIZ Cochin MSK",
+    "subtitle": "Quiz interactif d’imagerie musculosquelettique",
+    "category": "medical-imaging",
+    "emoji": "🧠",
+    "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
+    "prodUrl": "https://radio-thomas-ten.vercel.app",
+    "githubUrl": "https://github.com/Mrthomaslef/radio-thomas",
+    "pushedAt": "2026-11-05T21:48:28Z"
+  },
+  {
+    "id": "biblioosteo",
+    "title": "BiblioOstéo Cochin",
+    "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
+    "category": "medical-imaging",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
+    "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
+    "pushedAt": "2026-11-05T21:48:25Z"
+  },
+  {
+    "id": "guide-interne-cochin-os",
+    "title": "COCHIN·OS — Guide Internes",
+    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
+    "category": "medical-imaging",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
+    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
+    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
+    "pushedAt": "2026-11-05T21:48:22Z"
+  },
+  {
+    "id": "agenda-internes",
+    "title": "Espace Internes — Radio B",
+    "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
+    "category": "medical-imaging",
+    "emoji": "🩺",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-internes/icon.svg?v=8",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-internes/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-internes",
+    "pushedAt": "2026-11-05T21:48:20Z"
   },
   {
     "id": "agenda-cochin",
@@ -86,17 +295,6 @@
     "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
     "pushedAt": "2026-11-05T21:05:16Z"
-  },
-  {
-    "id": "ayn-thor",
-    "title": "Rom et Emulation — Switch DL & Recomp",
-    "subtitle": "Index de téléchargement Switch (7 767 jeux NSP/XCI) avec statut Recomp vérifié Mac mini M4 & AYN Thor",
-    "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "assets/ayn-thor-icon.svg?v=3",
-    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=3",
-    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
-    "pushedAt": "2026-11-05T22:26:00Z"
   },
   {
     "id": "m4-gaming",
@@ -121,17 +319,6 @@
     "pushedAt": "2026-11-05T20:07:03Z"
   },
   {
-    "id": "guide-interne-cochin-os",
-    "title": "COCHIN·OS — Guide Internes",
-    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
-    "category": "medical-imaging",
-    "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
-    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
-    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
-    "pushedAt": "2026-11-05T16:23:26Z"
-  },
-  {
     "id": "restaurant",
     "title": "Resto en Amoureux — Marie & Thomas",
     "subtitle": "Créneaux libres M&T + Émile chez les grands-parents & Réservation auto",
@@ -141,193 +328,6 @@
     "prodUrl": "https://mrthomaslef.github.io/restaurant/",
     "githubUrl": "https://github.com/Mrthomaslef/restaurant",
     "pushedAt": "2026-11-05T14:41:04Z"
-  },
-  {
-    "id": "agenda-famille",
-    "title": "Agenda Famille — Marie & Thomas",
-    "subtitle": "Planning partagé, gardes & indisponibilités à la maison",
-    "category": "daily-tools",
-    "emoji": "🏡",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
-    "pushedAt": "2026-11-05T12:30:57Z"
-  },
-  {
-    "id": "annuaire-prive",
-    "title": "Annuaire Privé — Pro & Perso",
-    "subtitle": "276 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
-    "category": "daily-tools",
-    "emoji": "📇",
-    "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/",
-    "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-05T10:57:00Z"
-  },
-  {
-    "id": "forestia-mobile",
-    "title": "Forestia — Lancer avec Moonlight",
-    "subtitle": "Forestia (1998) — Cloud & Mobile Web Player",
-    "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "https://mrthomaslef.github.io/forestia-mobile/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/forestia-mobile/",
-    "githubUrl": "https://github.com/Mrthomaslef/forestia-mobile",
-    "pushedAt": "2026-11-05T06:30:53Z"
-  },
-  {
-    "id": "quiz-pokemon",
-    "title": "PokéQuiz — Attrape-les tous !",
-    "subtitle": "Quiz interactif pour apprendre les noms des Pokémon (Générations 1 à 3)",
-    "category": "games-family",
-    "emoji": "⚡",
-    "logoUrl": "https://mrthomaslef.github.io/quiz-pokemon/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/quiz-pokemon/",
-    "githubUrl": "https://github.com/Mrthomaslef/quiz-pokemon",
-    "pushedAt": "2026-11-05T06:30:51Z"
-  },
-  {
-    "id": "monopoly",
-    "title": "Jolly Roger's — Monopoly 3D",
-    "subtitle": "Jeu de plateau Monopoly 3D des Caraïbes (Batailles navales, Îles & Trésors)",
-    "category": "games-family",
-    "emoji": "🏴‍☠️",
-    "logoUrl": "https://mrthomaslef.github.io/monopoly/assets/pirate_logo.png",
-    "prodUrl": "https://mrthomaslef.github.io/monopoly/",
-    "githubUrl": "https://github.com/Mrthomaslef/monopoly",
-    "pushedAt": "2026-11-05T06:30:49Z"
-  },
-  {
-    "id": "quiz-trentenaires",
-    "title": "QUIZ du 7TER",
-    "subtitle": "Grand Quiz Show multijoueur (2 couples / 4 joueurs)",
-    "category": "games-family",
-    "emoji": "🎉",
-    "logoUrl": "https://mrthomaslef.github.io/quiz-trentenaires/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/quiz-trentenaires/",
-    "githubUrl": "https://github.com/Mrthomaslef/quiz-trentenaires",
-    "pushedAt": "2026-11-05T06:30:48Z"
-  },
-  {
-    "id": "pocket-tcg-family",
-    "title": "milTCG — Pocket Family",
-    "subtitle": "Ouverture de boosters & collection de cartes en famille",
-    "category": "games-family",
-    "emoji": "🃏",
-    "logoUrl": "https://mrthomaslef.github.io/pocket-tcg-family/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/pocket-tcg-family/",
-    "githubUrl": "https://github.com/Mrthomaslef/pocket-tcg-family",
-    "pushedAt": "2026-11-05T06:30:46Z"
-  },
-  {
-    "id": "news-ai",
-    "title": "News AI — Veille &amp; Méthodes IA",
-    "subtitle": "News AI — Veille technique IA & guide d'implantation dans le workflow (@Mrthomaslef)",
-    "category": "daily-tools",
-    "emoji": "🚀",
-    "logoUrl": "https://mrthomaslef.github.io/news-ai/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/news-ai/",
-    "githubUrl": "https://github.com/Mrthomaslef/news-ai",
-    "pushedAt": "2026-11-05T06:30:44Z"
-  },
-  {
-    "id": "photo-famille",
-    "title": "Album Famille Fontenay — WhatsApp",
-    "subtitle": "1 432 photos de famille classées par thème (Émile, Étretat/Yport/Corse, Ski, Fêtes & Messages)",
-    "category": "daily-tools",
-    "emoji": "📸",
-    "logoUrl": "https://mrthomaslef.github.io/photo-famille/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/photo-famille/",
-    "githubUrl": "https://github.com/Mrthomaslef/photo-famille",
-    "pushedAt": "2026-11-05T06:30:41Z"
-  },
-  {
-    "id": "assistante-maternelle",
-    "title": "AssMat — Paie & Pajemploi",
-    "subtitle": "Calculateur de salaire, présence, congés & fiche de paie",
-    "category": "daily-tools",
-    "emoji": "👶",
-    "logoUrl": "https://mrthomaslef.github.io/assistante-maternelle/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/assistante-maternelle/",
-    "githubUrl": "https://github.com/Mrthomaslef/assistante-maternelle",
-    "pushedAt": "2026-11-05T06:30:39Z"
-  },
-  {
-    "id": "voyages-voyages",
-    "title": "Voyages • Voyages — Hub & Cartes",
-    "subtitle": "Cartes Avantage SNCF & Air France Week-End+, Vacances (Valloire, Corse) & Guichet Express",
-    "category": "daily-tools",
-    "emoji": "✈️",
-    "logoUrl": "https://mrthomaslef.github.io/voyages-voyages/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/voyages-voyages/",
-    "githubUrl": "https://github.com/Mrthomaslef/voyages-voyages",
-    "pushedAt": "2026-11-05T06:30:38Z"
-  },
-  {
-    "id": "biblio-marie",
-    "title": "BiblioMarie — Infectiologie pédiatrique",
-    "subtitle": "Le Carnet de Marie — veille bibliographique pédiatrie & infectiologie, résumés en français",
-    "category": "daily-tools",
-    "emoji": "🚀",
-    "logoUrl": "https://mrthomaslef.github.io/biblio-marie/assets/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/biblio-marie/",
-    "githubUrl": "https://github.com/Mrthomaslef/biblio-marie",
-    "pushedAt": "2026-11-05T06:30:33Z"
-  },
-  {
-    "id": "dicomviewer",
-    "title": "TPack PACS",
-    "subtitle": "Visionneuse DICOM & console d’imagerie médicale pédagogique",
-    "category": "medical-imaging",
-    "emoji": "🖥️",
-    "logoUrl": "https://mrthomaslef.github.io/dicomviewer/favicon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/dicomviewer/",
-    "githubUrl": "https://github.com/Mrthomaslef/dicomviewer",
-    "pushedAt": "2026-11-05T06:30:31Z"
-  },
-  {
-    "id": "quiz-imagerie",
-    "title": "QUIZ Imagerie — 1 Image 1 Diag",
-    "subtitle": "Défi diagnostique rapide en imagerie ostéo-articulaire (Cochin)",
-    "category": "medical-imaging",
-    "emoji": "🩻",
-    "logoUrl": "https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png",
-    "prodUrl": "https://mrthomaslef.github.io/quiz-imagerie/",
-    "githubUrl": "https://github.com/Mrthomaslef/quiz-imagerie",
-    "pushedAt": "2026-11-05T06:30:30Z"
-  },
-  {
-    "id": "radio-thomas",
-    "title": "QUIZ Cochin MSK",
-    "subtitle": "Quiz interactif d’imagerie musculosquelettique",
-    "category": "medical-imaging",
-    "emoji": "🧠",
-    "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
-    "prodUrl": "https://radio-thomas-ten.vercel.app",
-    "githubUrl": "https://github.com/Mrthomaslef/radio-thomas",
-    "pushedAt": "2026-11-05T06:30:28Z"
-  },
-  {
-    "id": "biblioosteo",
-    "title": "BiblioOstéo Cochin",
-    "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
-    "category": "medical-imaging",
-    "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
-    "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
-    "pushedAt": "2026-11-05T06:30:26Z"
-  },
-  {
-    "id": "agenda-internes",
-    "title": "Espace Internes — Radio B",
-    "subtitle": "Planning, Vacances, Cas du Mardi, Biblio du Vendredi & Annuaire",
-    "category": "medical-imaging",
-    "emoji": "🩺",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-internes/icon.svg?v=8",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-internes/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-internes",
-    "pushedAt": "2026-11-05T06:30:23Z"
   },
   {
     "id": "tpack-cases",
