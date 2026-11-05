@@ -557,13 +557,13 @@
       }).join('');
     }
 
-    async function playOnTv(imdbId, title, type = 'movie', videoId = '') {
+    async function playOnTv(imdbId, title, type = 'movie', videoId = '', streamUrl = '') {
       showToast(`📺 Allumage de la TV Samsung + lancement de « ${title} »...`, '🍿');
       try {
         const res = await apiFetch('/api/play-on-tv', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imdbId, title, type, videoId: videoId || imdbId })
+          body: JSON.stringify({ imdbId, title, type, videoId: videoId || imdbId, streamUrl })
         });
         if (res.ok) {
           showToast(res.message || `📺 Télé allumée + « ${title} » lancé !`, '🍿');
@@ -741,7 +741,7 @@
                 <p class="text-xs text-slate-200 font-mono break-all">${s.filename || s.description || s.name}</p>
               </div>
               <div class="flex items-center gap-2 shrink-0">
-                <button onclick="playModalVideoOnTv()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow flex items-center gap-1.5 transition">
+                <button onclick="playModalVideoOnTv(${idx})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow flex items-center gap-1.5 transition">
                   <span>▶️</span> Play TV
                 </button>
                 <button onclick="startStreamPreload(${idx})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-semibold text-white shadow flex items-center gap-1.5 transition">
@@ -756,17 +756,20 @@
       }
     }
 
-    async function playModalVideoOnTv() {
+    async function playModalVideoOnTv(idx) {
       if (!activeModalItem) return;
+      const s = (typeof idx === 'number') ? window._currentModalStreams?.[idx] : null;
       const vid = window._currentModalVideoId || activeModalItem.imdbId;
       const title = window._currentModalDisplayTitle || activeModalItem.title;
       closeStreamModal();
-      await playOnTv(activeModalItem.imdbId, title, activeModalItem.type, vid);
+      await playOnTv(activeModalItem.imdbId, title, activeModalItem.type, vid, s?.url || '');
     }
 
     async function startStreamPreload(idx) {
-      const s = window._currentModalStreams?.[idx];
+      const allStreams = window._currentModalStreams || [];
+      const s = allStreams[idx];
       if (!s || !activeModalItem) return;
+      const fallbacks = allStreams.filter((_, i) => i !== idx).slice(0, 6);
       closeStreamModal();
       showToast(`Démarrage du préchargement : ${window._currentModalDisplayTitle}`, '🚀');
       await apiFetch('/api/preload', {
@@ -774,6 +777,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           imdbId: activeModalItem.imdbId,
+          videoId: window._currentModalVideoId || activeModalItem.imdbId,
           title: window._currentModalDisplayTitle || activeModalItem.title,
           poster: activeModalItem.poster,
           type: activeModalItem.type,
@@ -783,7 +787,8 @@
           streamName: s.description || s.name,
           streamUrl: s.url,
           filename: s.filename,
-          videoSize: s.videoSize
+          videoSize: s.videoSize,
+          fallbackStreams: fallbacks
         })
       });
       refreshStatus();
