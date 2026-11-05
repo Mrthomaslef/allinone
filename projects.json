@@ -1,5 +1,16 @@
 [
   {
+    "id": "film-et-serie",
+    "title": "CinePreload — Stremio + TorBox (Mac mini)",
+    "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
+    "category": "daily-tools",
+    "emoji": "🎬",
+    "logoUrl": "film-et-serie/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
+    "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
+    "pushedAt": "2026-11-05T08:55:19Z"
+  },
+  {
     "id": "patrimoine-os",
     "title": "PatrimoineOS — Banque, Crypto & Pokémon",
     "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",

@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "film-et-serie": {
+        "title": "CinePreload — Stremio + TorBox (Mac mini)",
+        "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
+        "category": "daily-tools",
+        "emoji": "🎬",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
+        "logoUrl": "film-et-serie/assets/icon.svg",
+    },
     "teletravail": {
         "title": "Télétravail AP-HP — Orbis & PACS Central",
         "subtitle": "Accès distant Citrix Workspace, portail mes-applications.aphp.fr & annuaire des 31 Site ID VuePACS",
@@ -441,6 +449,22 @@ def main():
                 "logoUrl": "patrimoine-os/icon.svg",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/patrimoine-os",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "film-et-serie" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "film-et-serie",
+                "title": "CinePreload — Stremio + TorBox (Mac mini)",
+                "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
+                "category": "daily-tools",
+                "emoji": "🎬",
+                "logoUrl": "film-et-serie/assets/icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/film-et-serie",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
