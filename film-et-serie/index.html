@@ -2,12 +2,16 @@
 <html lang="fr" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CinePreload · Stremio + TorBox Mac mini</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b0b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CinePreload" />
+  <title>CinePreload · Netflix Edition (Stremio + TorBox)</title>
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg?v=2" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=2" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -15,13 +19,22 @@
         extend: {
           fontFamily: {
             sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            display: ['Bebas Neue', 'Inter', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
           },
           colors: {
+            netflix: {
+              red: '#E50914',
+              hover: '#F40612',
+              dark: '#0B0B0B',
+              card: '#181818',
+              surface: '#141414',
+              muted: '#808080'
+            },
             stremio: {
-              500: '#8A5AAB',
-              600: '#724494',
-              400: '#A678C7'
+              500: '#E50914',
+              600: '#B81D24',
+              400: '#F40612'
             },
             torbox: {
               500: '#10B981',
@@ -33,225 +46,384 @@
     }
   </script>
   <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    * {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
     body {
-      background: radial-gradient(circle at 15% 0%, rgba(138, 90, 171, 0.18), transparent 42%),
-                  radial-gradient(circle at 85% 10%, rgba(16, 185, 129, 0.12), transparent 40%),
-                  #090A0F;
+      background-color: #0b0b0b;
       color: #F3F4F6;
       min-height: 100vh;
+      min-height: 100dvh;
+      overscroll-behavior-y: none;
     }
-    .glass {
-      background: rgba(18, 21, 30, 0.78);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    .netflix-glass {
+      background: rgba(20, 20, 20, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .glass-hover:hover {
-      border-color: rgba(166, 120, 199, 0.35);
-      box-shadow: 0 12px 32px -8px rgba(138, 90, 171, 0.22);
+    .netflix-header-gradient {
+      background: linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(11,11,11,0.78) 65%, rgba(11,11,11,0) 100%);
     }
-    .poster-card:hover .poster-overlay {
-      opacity: 1;
+    .netflix-hero-vignette {
+      background:
+        linear-gradient(180deg, rgba(11,11,11,0.65) 0%, rgba(11,11,11,0.15) 35%, rgba(11,11,11,0.88) 80%, #0b0b0b 100%),
+        linear-gradient(90deg, rgba(11,11,11,0.92) 0%, rgba(11,11,11,0.4) 55%, rgba(11,11,11,0.15) 100%);
     }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #090A0F; }
-    ::-webkit-scrollbar-thumb { background: #262936; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3E4359; }
+    .netflix-card {
+      background: #181818;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    @media (hover: hover) {
+      .netflix-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        border-color: rgba(229, 9, 20, 0.55);
+        box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.85), 0 0 20px -4px rgba(229, 9, 20, 0.25);
+      }
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0b0b; }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #E50914; }
+
+    /* Custom Range Slider for Mobile Volume */
+    input[type="range"].netflix-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #2b2b2b;
+      height: 8px;
+      border-radius: 999px;
+    }
+    input[type="range"].netflix-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #E50914;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      cursor: pointer;
+    }
+    .safe-pb {
+      padding-bottom: calc(5.5rem + var(--safe-bottom));
+    }
+    @media (min-width: 768px) {
+      .safe-pb {
+        padding-bottom: 2.5rem;
+      }
+    }
   </style>
 </head>
-<body class="antialiased selection:bg-purple-500/30 selection:text-purple-200">
+<body class="antialiased selection:bg-[#E50914]/40 selection:text-white safe-pb">
 
-  <!-- Top Navigation Bar -->
-  <header class="sticky top-0 z-40 glass border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-3.5">
-        <img src="assets/icon.svg?v=2" alt="CinePreload" class="w-11 h-11 rounded-xl shadow-lg shadow-purple-500/25" />
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg font-extrabold tracking-tight text-white">CinePreload</h1>
-            <span class="text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Stremio 5 ARM64</span>
-            <span class="text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">⚡ TorBox CDN</span>
+  <!-- Top Netflix Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-[#0b0b0b]/90 backdrop-blur-xl border-b border-white/[0.07]" style="padding-top: var(--safe-top);">
+    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 py-2.5 sm:py-3">
+      <!-- Row 1: Brand + Status + Quick TV Power -->
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <!-- Iconic Netflix-style N / C Badge -->
+          <div onclick="mobileShowSection('home')" class="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#E50914] flex items-center justify-center shadow-lg shadow-[#E50914]/30 shrink-0 select-none">
+            <span class="font-display text-2xl sm:text-3xl tracking-tighter text-white leading-none pt-0.5">C</span>
           </div>
-          <p class="text-xs text-slate-400" id="accountStatusText">Synchronisation avec ton compte Stremio & TorBox...</p>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <h1 onclick="mobileShowSection('home')" class="cursor-pointer font-display text-2xl sm:text-3xl tracking-wider text-[#E50914] leading-none">CINEPRELOAD</h1>
+              <span class="hidden sm:inline-flex text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10">Stremio 5</span>
+              <span class="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">⚡ TorBox</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 truncate max-w-[190px] sm:max-w-md" id="accountStatusText">Synchronisation Stremio & TorBox...</p>
+          </div>
+        </div>
+
+        <!-- Right Quick Controls (Mobile & Desktop) -->
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <!-- Connection Status Pill -->
+          <button onclick="endpointResolved=false; resolveBackendEndpoint().then(()=>refreshStatus(true))" id="daemonBadge" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 text-[11px] transition active:scale-95" title="Toucher pour rafraîchir la connexion au Mac mini">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" id="daemonDot"></span>
+            <span id="daemonText" class="hidden sm:inline text-zinc-200 font-medium">Connexion...</span>
+            <span class="text-[10px] font-mono text-zinc-400"><span id="diskFreeText">-- Go</span></span>
+          </button>
+
+          <!-- Desktop Folder Button -->
+          <button onclick="openPreloadFolder()" id="btnOpenFolder" class="hidden lg:flex px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-xs font-medium text-zinc-200 items-center gap-1.5 transition">
+            <span>📂</span> Finder
+          </button>
+
+          <!-- Quick TV ON -->
+          <button onclick="launchStremioApp()" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-[11px] sm:text-xs font-bold text-white shadow-md shadow-[#E50914]/25 flex items-center gap-1 transition" title="Allumer la TV Samsung et lancer Stremio">
+            <span>📺</span>
+            <span class="hidden xs:inline sm:inline">TV ON</span>
+          </button>
+
+          <!-- Quick TV OFF -->
+          <button onclick="closeStremioAndTurnOffTv()" id="btnCloseStremioTvOff" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-950/80 active:scale-95 text-[11px] sm:text-xs font-semibold text-zinc-200 hover:text-rose-200 border border-white/15 flex items-center gap-1 transition" title="Quitter Stremio et éteindre la TV Samsung">
+            <span>🌙</span>
+            <span class="hidden sm:inline">Éteindre</span>
+          </button>
         </div>
       </div>
 
-      <!-- Status Pills & Quick Actions -->
-      <div class="flex items-center gap-2.5 flex-wrap">
-        <button onclick="endpointResolved=false; resolveBackendEndpoint().then(()=>refreshStatus(true))" id="daemonBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-xs transition" title="Toucher pour rafraîchir la connexion au Mac mini">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="daemonDot"></span>
-          <span id="daemonText">Connexion au démon Mac mini...</span>
-        </button>
+      <!-- Row 2: Netflix Category Pills + Search Bar -->
+      <div class="mt-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <!-- Category Pills (Netflix iOS style) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+          <button onclick="switchTab('library')" id="tab-library" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-[#E50914] text-white shadow-sm">
+            Ma Liste (<span id="libCount">0</span>)
+          </button>
+          <button onclick="switchTab('movies')" id="tab-movies" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 hover:text-white">
+            Films
+          </button>
+          <button onclick="switchTab('series')" id="tab-series" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 hover:text-white">
+            Séries TV
+          </button>
+          <button onclick="toggleRemotePanel()" id="pill-remote" class="md:hidden shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 flex items-center gap-1">
+            <span>🎛️</span> Télécommande
+          </button>
+          <button onclick="scrollToDownloads()" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 flex items-center gap-1.5">
+            <span>📥</span> Fichiers <span id="dlBadgeCount" class="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-[#E50914] text-white">0</span>
+          </button>
+        </div>
 
-        <button onclick="openPreloadFolder()" id="btnOpenFolder" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition">
-          <span>📂</span> Dossier Films (<span id="diskFreeText">-- Go</span> libres)
-        </button>
-
-        <button onclick="launchStremioApp()" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-semibold text-white shadow-md shadow-purple-600/25 flex items-center gap-1.5 transition">
-          <span>📺▶️</span> Allumer TV & Stremio
-        </button>
-
-        <button onclick="closeStremioAndTurnOffTv()" id="btnCloseStremioTvOff" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-xs font-bold text-white shadow-md shadow-rose-600/25 border border-rose-400/30 flex items-center gap-1.5 transition" title="Quitter Stremio sur le Mac mini et éteindre la TV Samsung">
-          <span>🛑🌙</span> Fermer Stremio & Éteindre TV
-        </button>
+        <!-- Search Input (16px font on mobile to prevent iOS Safari auto-zoom) -->
+        <div id="searchBarContainer" class="relative w-full sm:w-72 md:w-80">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Titres, films, séries (Dune, Kaamelott...)"
+            class="w-full pl-9 pr-20 py-2 sm:py-1.5 rounded-full bg-zinc-900/95 border border-white/15 text-base sm:text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#E50914] transition"
+            onkeydown="if(event.key==='Enter'){ this.blur(); triggerSearch(); }"
+          />
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm">🔍</span>
+          <button onclick="clearSearchInput()" id="btnClearSearch" class="hidden absolute right-16 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-zinc-700 text-zinc-300 text-[10px] flex items-center justify-center">✕</button>
+          <button onclick="triggerSearch()" class="absolute right-1.5 top-1/2 -translate-y-1/2 px-3 py-1 rounded-full bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-[11px] font-bold text-white transition">
+            OK
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- Remote Warning Banner (Only visible if opened from GitHub Pages when local daemon isn't reachable) -->
-  <div id="offlineBanner" class="hidden bg-amber-500/10 border-b border-amber-500/30 px-4 py-3">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs text-amber-200">
+  <!-- Remote Warning Banner (Only visible if local daemon isn't reachable) -->
+  <div id="offlineBanner" class="hidden bg-amber-500/15 border-b border-amber-500/30 px-4 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs text-amber-200">
       <div class="flex items-center gap-2">
-        <span class="text-base">⚠️</span>
-        <span>Connexion au démon du Mac mini en cours de resynchronisation (Tunnel HTTPS Cloudflare)...</span>
+        <span>⚠️</span>
+        <span>Connexion au Mac mini en cours de resynchronisation (Tunnel HTTPS)...</span>
       </div>
-      <button onclick="endpointResolved=false; resolveBackendEndpoint().then(()=>refreshStatus(true))" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-100 font-semibold transition flex items-center gap-1.5">
-        <span>🔄</span> Reconnecter au Mac mini
+      <button onclick="endpointResolved=false; resolveBackendEndpoint().then(()=>refreshStatus(true))" class="px-3 py-1 rounded-full bg-amber-500/25 hover:bg-amber-500/35 border border-amber-400/40 text-amber-100 font-semibold transition text-[11px]">
+        🔄 Reconnecter
       </button>
     </div>
   </div>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+  <main class="max-w-7xl mx-auto px-3.5 sm:px-6 py-4 sm:py-6 space-y-6">
 
-    <!-- Mode Lecture & Télécommande Salon : Pause, Avancer/Reculer, Volume & Sortie Audio -->
-    <section id="playbackRemoteSection" class="glass rounded-2xl p-4 sm:p-5 border border-purple-500/25 shadow-xl shadow-purple-950/20 space-y-4">
-      <!-- Ligne 1 : Titre / État Stremio + Boutons TV On / Off -->
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3.5 border-b border-white/10">
-        <div class="flex items-center gap-3.5 min-w-0">
-          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-500/25 to-indigo-500/20 border border-purple-500/40 flex items-center justify-center text-xl shrink-0">🎬</div>
-          <div class="min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <h2 class="text-sm sm:text-base font-extrabold text-white tracking-tight">Mode Lecture · Télécommande Stremio & Son</h2>
-              <span id="stremioLiveBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-white/10">Stremio arrêté</span>
-              <span id="playbackStateBadge" class="hidden text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">▶️ En lecture</span>
-            </div>
-            <p id="nowPlayingTitle" class="text-xs text-slate-300 mt-0.5 truncate">Contrôle direct du film sur la TV Samsung : Pause/Lecture, Reculer/Avancer et Volume sonore.</p>
+    <!-- NETFLIX HERO BILLBOARD (Featured Movie / Now Playing on TV) -->
+    <section id="heroBillboard" class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#141414] min-h-[340px] sm:min-h-[390px] flex items-end">
+      <!-- Backdrop Image -->
+      <img
+        id="heroBackdrop"
+        src="https://images.metahub.space/background/medium/tt15239678/img"
+        onerror="this.src='assets/icon.svg'"
+        alt="Featured"
+        class="absolute inset-0 w-full h-full object-cover object-center scale-105 transition-all duration-700 opacity-65"
+      />
+      <div class="absolute inset-0 netflix-hero-vignette"></div>
+
+      <!-- Hero Content -->
+      <div class="relative z-10 w-full p-4 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+        <div class="space-y-2.5 max-w-2xl">
+          <!-- Netflix N Series / Film Tag -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold tracking-[0.2em] uppercase text-zinc-200">
+              <span class="font-display text-lg text-[#E50914] leading-none">N</span>
+              <span id="heroTypeLabel">FILM À LA UNE</span>
+            </span>
+            <span id="stremioLiveBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-zinc-900/90 text-zinc-400 border border-white/10">Stremio arrêté</span>
+            <span id="playbackStateBadge" class="hidden text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#E50914]/25 text-red-300 border border-[#E50914]/50">▶️ En lecture</span>
+          </div>
+
+          <!-- Big Title -->
+          <h2 id="heroTitle" class="font-display text-4xl sm:text-6xl tracking-wide text-white leading-none drop-shadow-lg line-clamp-2">
+            DUNE : DEUXIÈME PARTIE
+          </h2>
+
+          <!-- Netflix Match & Quality Metadata Row -->
+          <div class="flex items-center gap-2.5 flex-wrap text-xs font-semibold">
+            <span class="text-emerald-400 font-bold">Recommandé à 99%</span>
+            <span id="heroYear" class="text-zinc-300">2024</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-white/15 text-white border border-white/20">4K HDR</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">⚡ TorBox VF / MULTI</span>
+          </div>
+
+          <p id="nowPlayingTitle" class="text-xs sm:text-sm text-zinc-300 line-clamp-2 max-w-xl">
+            Lance directement ton film sur la TV Samsung ou précharge-le à vitesse maximale sur le Mac mini.
+          </p>
+
+          <!-- Netflix Action Buttons Row (Thumb-optimized for Mobile) -->
+          <div class="pt-1.5 flex items-center gap-2.5 flex-wrap">
+            <button id="heroBtnPlay" onclick="triggerHeroPlay()" class="flex-1 sm:flex-initial justify-center px-5 py-3 sm:py-2.5 rounded-lg bg-white hover:bg-zinc-200 active:scale-95 text-black font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition">
+              <span class="text-base leading-none">▶</span>
+              <span>Lecture TV</span>
+            </button>
+
+            <button id="heroBtnPreload" onclick="triggerHeroPreload()" class="flex-1 sm:flex-initial justify-center px-4 py-3 sm:py-2.5 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-[#E50914]/30 transition">
+              <span>⚡</span>
+              <span>Précharger</span>
+            </button>
+
+            <button id="heroBtnStreams" onclick="triggerHeroStreams()" class="w-full sm:w-auto justify-center px-4 py-2.5 rounded-lg bg-zinc-800/90 hover:bg-zinc-700/90 active:scale-95 text-white font-semibold text-xs sm:text-sm border border-white/15 flex items-center gap-2 transition">
+              <span>ⓘ</span>
+              <span>Versions & Épisodes</span>
+            </button>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
-          <button onclick="launchStremioApp()" class="flex-1 sm:flex-initial justify-center px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-600/25 flex items-center gap-1.5 transition">
-            <span>📺▶️</span> Allumer TV & Stremio
+        <!-- Mini Quick-Remote Pill on Hero (Desktop & Tablet) -->
+        <div class="hidden lg:flex flex-col gap-2 bg-black/65 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 min-w-[230px]">
+          <div class="flex items-center justify-between text-[11px] text-zinc-400">
+            <span class="font-bold text-white uppercase tracking-wider">🎛️ Télécommande TV</span>
+            <span id="heroAudioMini" class="font-mono text-emerald-400 truncate max-w-[110px]">TV / Mac</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button onclick="playerControl('seek_back_10')" class="py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-white">-15s</button>
+            <button onclick="playerControl('toggle_pause')" class="py-2 rounded-lg bg-[#E50914] hover:bg-[#F40612] text-xs font-bold text-white">⏯ Pause</button>
+            <button onclick="playerControl('seek_fwd_10')" class="py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-white">+15s</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÉLÉCOMMANDE SALON & SON (Tactile Mobile & Desktop Remote) -->
+    <section id="playbackRemoteSection" class="netflix-glass rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-white/10 shadow-2xl space-y-4">
+      <!-- Header Remote -->
+      <div class="flex items-center justify-between gap-2 pb-3 border-b border-white/10">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-xl bg-[#E50914]/20 border border-[#E50914]/40 flex items-center justify-center text-lg shrink-0">🎛️</div>
+          <div class="min-w-0">
+            <h2 class="text-sm sm:text-base font-extrabold text-white tracking-tight">Télécommande Salon · TV Samsung & Son</h2>
+            <p class="text-[11px] text-zinc-400 truncate">Contrôle direct sans quitter ton canapé : Pause, Navigation & Audio</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button onclick="playerControl('fullscreen')" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-200 transition">
+            ⛶ <span class="hidden sm:inline">Plein écran</span>
           </button>
-          <button onclick="closeStremioAndTurnOffTv()" class="flex-1 sm:flex-initial justify-center px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-xs font-bold text-white shadow-lg shadow-rose-600/30 border border-rose-400/30 flex items-center gap-1.5 transition">
-            <span>🛑🌙</span> Fermer Stremio & Éteindre TV
+          <button onclick="playerControl('back')" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-200 transition">
+            🔙 <span class="hidden sm:inline">Retour</span>
           </button>
         </div>
       </div>
 
-      <!-- Ligne 2 : Grille Contrôles de Lecture (Gauche) + Contrôles du Son & Sortie Audio (Droite) -->
+      <!-- Remote Grid: Transport Controls + Volume & Audio Output -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-        <!-- Pavé Contrôle Lecture (Pause / Reculer / Avancer) -->
-        <div class="lg:col-span-7 rounded-xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col justify-between gap-3">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
-              <span>⏯️</span> Contrôle Lecture (Stremio TV)
-            </span>
-            <div class="flex items-center gap-1.5">
-              <button onclick="playerControl('fullscreen')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[11px] font-medium text-slate-300 transition" title="Forcer le mode plein écran sur la TV">
-                ⛶ Plein écran
-              </button>
-              <button onclick="playerControl('back')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[11px] font-medium text-slate-300 transition" title="Touche Échap / Retour dans Stremio">
-                🔙 Retour
-              </button>
-            </div>
-          </div>
-
-          <!-- Boutons principaux : -1m, -30s, -15s, PAUSE/PLAY, +15s, +30s, +1m -->
-          <div class="grid grid-cols-5 sm:grid-cols-7 gap-2 items-center">
-            <button onclick="playerControl('seek_back_60')" class="hidden sm:flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
-              <span class="text-sm">⏮️</span>
-              <span class="text-[10px] font-mono font-semibold mt-0.5">-1 min</span>
+        <!-- Left: Transport Controls (Thumb-Friendly D-Pad layout on Mobile) -->
+        <div class="lg:col-span-7 rounded-2xl bg-[#181818] border border-white/[0.07] p-3.5 sm:p-4 flex flex-col justify-between gap-3">
+          <!-- Primary Row: -15s | PLAY/PAUSE | +15s -->
+          <div class="grid grid-cols-3 gap-2.5 items-center">
+            <button onclick="playerControl('seek_back_10')" class="h-14 sm:h-16 rounded-2xl bg-zinc-800/90 hover:bg-zinc-700 active:scale-95 border border-white/10 text-white flex flex-col items-center justify-center transition">
+              <span class="text-base sm:text-lg leading-none">⏪</span>
+              <span class="text-xs font-mono font-bold mt-1">-15 sec</span>
             </button>
 
-            <button onclick="playerControl('seek_back_30')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
-              <span class="text-base">⏪</span>
-              <span class="text-[10px] font-mono font-semibold mt-0.5">-30s</span>
-            </button>
-
-            <button onclick="playerControl('seek_back_10')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white transition">
-              <span class="text-base">◀️</span>
-              <span class="text-[11px] font-mono font-bold mt-0.5">-15s</span>
-            </button>
-
-            <button onclick="playerControl('toggle_pause')" id="btnMainPlayPause" class="flex flex-col items-center justify-center py-3 px-3 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-white shadow-lg shadow-purple-600/35 border border-purple-400/40 transition">
+            <button onclick="playerControl('toggle_pause')" id="btnMainPlayPause" class="h-14 sm:h-16 rounded-2xl bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-white shadow-lg shadow-[#E50914]/35 border border-red-400/30 flex flex-col items-center justify-center transition">
               <span class="text-xl leading-none" id="btnMainPlayPauseIcon">⏯️</span>
-              <span class="text-[11px] font-extrabold uppercase tracking-wide mt-1" id="btnMainPlayPauseText">Pause / Play</span>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider mt-1" id="btnMainPlayPauseText">Pause / Play</span>
             </button>
 
-            <button onclick="playerControl('seek_fwd_10')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white transition">
-              <span class="text-base">▶️</span>
-              <span class="text-[11px] font-mono font-bold mt-0.5">+15s</span>
-            </button>
-
-            <button onclick="playerControl('seek_fwd_30')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
-              <span class="text-base">⏩</span>
-              <span class="text-[10px] font-mono font-semibold mt-0.5">+30s</span>
-            </button>
-
-            <button onclick="playerControl('seek_fwd_60')" class="hidden sm:flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
-              <span class="text-sm">⏭️</span>
-              <span class="text-[10px] font-mono font-semibold mt-0.5">+1 min</span>
+            <button onclick="playerControl('seek_fwd_10')" class="h-14 sm:h-16 rounded-2xl bg-zinc-800/90 hover:bg-zinc-700 active:scale-95 border border-white/10 text-white flex flex-col items-center justify-center transition">
+              <span class="text-base sm:text-lg leading-none">⏩</span>
+              <span class="text-xs font-mono font-bold mt-1">+15 sec</span>
             </button>
           </div>
 
-          <!-- Petits boutons rapides mobile pour -1 min / +1 min -->
-          <div class="flex sm:hidden items-center justify-between gap-2 pt-1">
-            <button onclick="playerControl('seek_back_60')" class="flex-1 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono text-slate-300">⏮️ Reculer 1 min</button>
-            <button onclick="playerControl('seek_fwd_60')" class="flex-1 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono text-slate-300">Avancer 1 min ⏭️</button>
+          <!-- Secondary Seek Row: -1m | -30s | +30s | +1m -->
+          <div class="grid grid-cols-4 gap-2">
+            <button onclick="playerControl('seek_back_60')" class="py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-zinc-300 text-xs font-mono font-semibold transition">
+              ⏮ -1m
+            </button>
+            <button onclick="playerControl('seek_back_30')" class="py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-zinc-300 text-xs font-mono font-semibold transition">
+              ⏪ -30s
+            </button>
+            <button onclick="playerControl('seek_fwd_30')" class="py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-zinc-300 text-xs font-mono font-semibold transition">
+              +30s ⏩
+            </button>
+            <button onclick="playerControl('seek_fwd_60')" class="py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-zinc-300 text-xs font-mono font-semibold transition">
+              +1m ⏭
+            </button>
+          </div>
+
+          <!-- Power Bar inside Remote for 1-Thumb Access -->
+          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-white/5">
+            <button onclick="launchStremioApp()" class="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/15 active:scale-95 text-xs font-bold text-white flex items-center justify-center gap-1.5 transition">
+              <span>📺</span> Allumer TV & Stremio
+            </button>
+            <button onclick="closeStremioAndTurnOffTv()" class="py-2.5 px-3 rounded-xl bg-rose-950/60 hover:bg-rose-900/70 active:scale-95 border border-rose-500/30 text-xs font-bold text-rose-200 flex items-center justify-center gap-1.5 transition">
+              <span>🛑</span> Fermer & Éteindre TV
+            </button>
           </div>
         </div>
 
-        <!-- Pavé Contrôle du Son & Sortie Audio -->
-        <div class="lg:col-span-5 rounded-xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col justify-between gap-3">
+        <!-- Right: Volume & Audio Output -->
+        <div class="lg:col-span-5 rounded-2xl bg-[#181818] border border-white/[0.07] p-3.5 sm:p-4 flex flex-col justify-between gap-3">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+            <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
               <span>🔊</span> Volume & Sortie Audio
             </span>
-            <span id="audioDeviceBadge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 truncate max-w-[180px]">
+            <span id="audioDeviceBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 truncate max-w-[170px]">
               TV / Mac mini
             </span>
           </div>
 
-          <!-- Boutons Vol - / Mute / Vol + et Curseur -->
-          <div class="space-y-2.5">
-            <div class="grid grid-cols-3 gap-2">
-              <button onclick="volumeControl('down')" class="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
-                <span class="text-base">🔉</span> Vol −
-              </button>
-              <button onclick="volumeControl('mute')" id="btnMuteAudio" class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-rose-500/20 active:scale-95 border border-white/10 text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
-                <span class="text-base" id="btnMuteIcon">🔇</span> <span id="btnMuteText">Mute</span>
-              </button>
-              <button onclick="volumeControl('up')" class="py-2.5 px-3 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 active:scale-95 border border-emerald-400/40 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow transition">
-                <span class="text-base">🔊</span> Vol +
-              </button>
-            </div>
-
-            <div class="flex items-center gap-3 px-1">
-              <span class="text-xs text-slate-400">🔈</span>
-              <input
-                type="range"
-                id="volumeSlider"
-                min="0"
-                max="100"
-                value="50"
-                onchange="volumeControl('set', this.value)"
-                oninput="document.getElementById('volumeLevelText').textContent = this.value + '%'"
-                class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
-              />
-              <span id="volumeLevelText" class="text-xs font-mono font-bold text-emerald-300 w-10 text-right">50%</span>
-            </div>
+          <!-- Big Volume Buttons -->
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="volumeControl('down')" class="h-12 rounded-xl bg-zinc-800 hover:bg-zinc-700 active:scale-95 border border-white/10 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <span class="text-base">🔉</span> Vol −
+            </button>
+            <button onclick="volumeControl('mute')" id="btnMuteAudio" class="h-12 rounded-xl bg-zinc-900 hover:bg-rose-500/20 active:scale-95 border border-white/10 text-zinc-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
+              <span class="text-base" id="btnMuteIcon">🔇</span> <span id="btnMuteText">Mute</span>
+            </button>
+            <button onclick="volumeControl('up')" class="h-12 rounded-xl bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow transition">
+              <span class="text-base">🔊</span> Vol +
+            </button>
           </div>
 
-          <!-- Sélecteur rapide de sortie audio -->
-          <div class="grid grid-cols-3 gap-1.5 pt-1 border-t border-white/5">
-            <button onclick="switchAudioOutput('tv')" id="btnAudioTv" class="py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition">
+          <!-- Touch-Friendly Volume Slider -->
+          <div class="flex items-center gap-3 px-1 py-1">
+            <span class="text-xs text-zinc-400">🔈</span>
+            <input
+              type="range"
+              id="volumeSlider"
+              min="0"
+              max="100"
+              value="50"
+              onchange="volumeControl('set', this.value)"
+              oninput="document.getElementById('volumeLevelText').textContent = this.value + '%'"
+              class="w-full netflix-slider cursor-pointer"
+            />
+            <span id="volumeLevelText" class="text-xs font-mono font-bold text-white w-10 text-right">50%</span>
+          </div>
+
+          <!-- Audio Output Switcher -->
+          <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-white/5">
+            <button onclick="switchAudioOutput('tv')" id="btnAudioTv" class="py-2 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
               <span>📺</span> TV / Mac
             </button>
-            <button onclick="switchAudioOutput('homepod')" id="btnAudioHomepod" class="py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition">
+            <button onclick="switchAudioOutput('homepod')" id="btnAudioHomepod" class="py-2 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
               <span>🔊</span> HomePod
             </button>
-            <button onclick="switchAudioOutput('airpods')" id="btnAudioAirpods" class="py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition">
+            <button onclick="switchAudioOutput('airpods')" id="btnAudioAirpods" class="py-2 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
               <span>🎧</span> AirPods
             </button>
           </div>
@@ -259,152 +431,171 @@
       </div>
     </section>
 
-    <!-- Top KPI & Addons Strip -->
-    <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div class="glass rounded-2xl p-4 flex items-center justify-between">
-        <div>
-          <p class="text-xs text-slate-400 font-medium">Compte Stremio</p>
-          <p class="text-sm font-bold text-white mt-0.5 truncate max-w-[180px]" id="kpiAccount">thomaslefevre18@live.fr</p>
-          <p class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
-            <span>✓</span> Identifiants dans <code class="font-mono">t3-vault</code>
-          </p>
-        </div>
-        <div class="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-lg">🔐</div>
-      </div>
-
-      <div class="glass rounded-2xl p-4 flex items-center justify-between">
-        <div>
-          <p class="text-xs text-slate-400 font-medium">Plugins Debrid Actifs</p>
-          <p class="text-sm font-bold text-white mt-0.5" id="kpiAddons">StreamFusionReborn + Lumio</p>
-          <p class="text-[11px] text-emerald-400 mt-1">⚡ Cache TorBox FR (VFF / MULTI / 4K)</p>
-        </div>
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-lg">⚡</div>
-      </div>
-
-      <div class="glass rounded-2xl p-4 flex items-center justify-between">
-        <div>
-          <p class="text-xs text-slate-400 font-medium">Films Préchargés (Local)</p>
-          <p class="text-sm font-bold text-white mt-0.5"><span id="kpiPreloadedCount">0</span> fichier(s) · <span id="kpiPreloadedSize">0 Go</span></p>
-          <p class="text-[11px] text-slate-400 mt-1 truncate">~/Movies/Stremio-Preload</p>
-        </div>
-        <div class="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-lg">💾</div>
-      </div>
-
-      <div class="glass rounded-2xl p-4 flex items-center justify-between">
-        <div>
-          <p class="text-xs text-slate-400 font-medium">Téléchargements en cours</p>
-          <p class="text-sm font-bold text-white mt-0.5" id="kpiActiveDl">Aucun transfert actif</p>
-          <p class="text-[11px] text-purple-300 mt-1 font-mono" id="kpiActiveSpeed">Prêt (Débit max fibre)</p>
-        </div>
-        <div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-lg">🚀</div>
-      </div>
-    </section>
-
-    <!-- Active Downloads & Preloaded Files Section -->
-    <section id="downloadsSection" class="glass rounded-2xl p-5 space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3">
+    <!-- Active Downloads & Preloaded Files Section (Netflix "Mes Téléchargements" style) -->
+    <section id="downloadsSection" class="netflix-glass rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <span>📥</span> File de Préchargement & Films sur le Mac mini
+          <span class="w-1 h-5 rounded-full bg-[#E50914]"></span>
+          <h2 class="text-sm sm:text-base font-extrabold text-white tracking-tight">
+            Mes Téléchargements & Films Prêts sur le Mac mini
           </h2>
-          <span id="dlBadgeCount" class="text-xs font-mono px-2 py-0.5 rounded-full bg-white/10 text-slate-300">0</span>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="refreshStatus(true)" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition flex items-center gap-1.5">
-            <span>🔄</span> Resynchroniser Stremio
-          </button>
-        </div>
+        <button onclick="refreshStatus(true)" class="text-xs px-3 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-zinc-300 transition flex items-center gap-1.5">
+          <span>🔄</span> Actualiser
+        </button>
       </div>
 
       <!-- Active / Recent Queue -->
       <div id="downloadsList" class="space-y-2.5"></div>
 
       <!-- Local Disk Files in ~/Movies/Stremio-Preload -->
-      <div id="localFilesContainer" class="pt-2 border-t border-white/10 hidden">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">Fichiers prêts hors-ligne dans ~/Movies/Stremio-Preload</h3>
+      <div id="localFilesContainer" class="pt-3 border-t border-white/10 hidden">
+        <h3 class="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-2.5">Prêts à regarder hors-ligne (~/Movies/Stremio-Preload)</h3>
         <div id="localFilesList" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
       </div>
     </section>
 
-    <!-- Main Tabs + Search Bar -->
-    <section class="space-y-4">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <!-- Navigation Tabs -->
-        <div class="flex items-center gap-1.5 p-1 rounded-xl glass w-fit">
-          <button onclick="switchTab('library')" id="tab-library" class="px-4 py-2 rounded-lg text-xs font-semibold transition bg-purple-600 text-white shadow">
-            📚 Ma Bibliothèque Stremio (<span id="libCount">0</span>)
-          </button>
-          <button onclick="switchTab('movies')" id="tab-movies" class="px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white">
-            🍿 Films Populaires / Recherche
-          </button>
-          <button onclick="switchTab('series')" id="tab-series" class="px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white">
-            📺 Séries TV
-          </button>
+    <!-- Main Media Grid Section -->
+    <section id="catalogSection" class="space-y-3.5">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="w-1 h-5 rounded-full bg-[#E50914]"></span>
+          <h2 id="catalogSectionTitle" class="text-base sm:text-lg font-extrabold text-white tracking-tight">
+            Ma Liste Stremio
+          </h2>
         </div>
-
-        <!-- Search Input -->
-        <div class="relative flex-1 max-w-md">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Rechercher un film ou une série à précharger (ex: Dune, L'Amour ouf, Kaamelott...)"
-            class="w-full pl-10 pr-24 py-2.5 rounded-xl glass text-sm text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition"
-            onkeydown="if(event.key==='Enter') triggerSearch()"
-          />
-          <span class="absolute left-3.5 top-2.5 text-slate-400">🔍</span>
-          <button onclick="triggerSearch()" class="absolute right-1.5 top-1.5 px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-xs font-semibold text-white transition">
-            Chercher
-          </button>
-        </div>
+        <span class="text-[11px] text-zinc-400 hidden sm:inline">Toucher une affiche pour choisir la version ou lancer sur la TV</span>
       </div>
 
-      <!-- Grid Content -->
-      <div id="mediaGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+      <!-- Poster Grid (2 cols on phone, 3 on small tablet, 4 on tablet, 6 on desktop) -->
+      <div id="mediaGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"></div>
+    </section>
+
+    <!-- Compact Technical Status Strip at Bottom -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2">
+      <div class="rounded-xl bg-[#141414] border border-white/[0.06] p-3 flex items-center justify-between">
+        <div class="min-w-0">
+          <p class="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">Compte Stremio</p>
+          <p class="text-xs font-bold text-zinc-200 mt-0.5 truncate" id="kpiAccount">thomaslefevre18@live.fr</p>
+        </div>
+        <span class="text-sm shrink-0">🔐</span>
+      </div>
+
+      <div class="rounded-xl bg-[#141414] border border-white/[0.06] p-3 flex items-center justify-between">
+        <div class="min-w-0">
+          <p class="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">Plugins Debrid</p>
+          <p class="text-xs font-bold text-emerald-400 mt-0.5 truncate" id="kpiAddons">StreamFusion + Lumio</p>
+        </div>
+        <span class="text-sm shrink-0">⚡</span>
+      </div>
+
+      <div class="rounded-xl bg-[#141414] border border-white/[0.06] p-3 flex items-center justify-between">
+        <div class="min-w-0">
+          <p class="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">Disque Mac mini</p>
+          <p class="text-xs font-bold text-zinc-200 mt-0.5 truncate"><span id="kpiPreloadedCount">0</span> film(s) · <span id="kpiPreloadedSize">0 Go</span></p>
+        </div>
+        <span class="text-sm shrink-0">💾</span>
+      </div>
+
+      <div class="rounded-xl bg-[#141414] border border-white/[0.06] p-3 flex items-center justify-between">
+        <div class="min-w-0">
+          <p class="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">Statut Fibre / CDN</p>
+          <p class="text-xs font-bold text-zinc-200 mt-0.5 truncate" id="kpiActiveDl">Aucun transfert</p>
+          <p class="text-[10px] text-emerald-400 font-mono truncate" id="kpiActiveSpeed">Prêt (TorBox CDN)</p>
+        </div>
+        <span class="text-sm shrink-0">🚀</span>
+      </div>
     </section>
 
   </main>
 
-  <!-- Stream Picker & Episode Selector Modal -->
-  <div id="streamModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass rounded-2xl max-w-3xl w-full max-h-[88vh] flex flex-col overflow-hidden border border-white/15 shadow-2xl">
-      <!-- Modal Header -->
-      <div class="p-5 border-b border-white/10 flex items-start justify-between gap-4 bg-white/[0.02]">
-        <div class="flex items-center gap-4">
-          <img id="modalPoster" src="" alt="" class="w-14 h-20 object-cover rounded-lg border border-white/10 bg-slate-800" />
-          <div>
-            <div class="flex items-center gap-2">
-              <span id="modalTypeBadge" class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">FILM</span>
-              <span id="modalImdbId" class="text-xs font-mono text-slate-400">tt0000000</span>
-            </div>
-            <h3 id="modalTitle" class="text-lg font-bold text-white mt-1">Titre du film</h3>
-            <p id="modalSubtitle" class="text-xs text-slate-400 mt-0.5">Sélectionne le flux TorBox (StreamFusion / Lumio) à précharger sur le Mac mini</p>
-          </div>
-        </div>
-        <button onclick="closeStreamModal()" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 flex items-center justify-center text-lg">&times;</button>
+  <!-- MOBILE FLOATING MINI-REMOTE BAR + BOTTOM NAVIGATION (Phone Only < md) -->
+  <div class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-2xl border-t border-white/10" style="padding-bottom: var(--safe-bottom);">
+    <!-- Mini Remote Strip (Always accessible with 1 thumb) -->
+    <div class="px-3 py-1.5 bg-[#141414] border-b border-white/[0.06] flex items-center justify-between gap-2">
+      <div onclick="mobileShowSection('remote')" class="flex items-center gap-2 min-w-0 flex-1 cursor-pointer">
+        <span class="w-2 h-2 rounded-full bg-[#E50914] shrink-0"></span>
+        <span id="mobileMiniStatus" class="text-[11px] font-semibold text-zinc-200 truncate">Télécommande TV Samsung</span>
+      </div>
+      <div class="flex items-center gap-1 shrink-0">
+        <button onclick="playerControl('seek_back_10')" class="px-2.5 py-1 rounded-md bg-zinc-800 active:scale-90 text-[11px] font-mono font-bold text-zinc-200">-15s</button>
+        <button onclick="playerControl('toggle_pause')" class="px-3 py-1 rounded-md bg-[#E50914] active:scale-90 text-[11px] font-bold text-white">⏯</button>
+        <button onclick="playerControl('seek_fwd_10')" class="px-2.5 py-1 rounded-md bg-zinc-800 active:scale-90 text-[11px] font-mono font-bold text-zinc-200">+15s</button>
+        <button onclick="volumeControl('down')" class="px-2 py-1 rounded-md bg-zinc-800 active:scale-90 text-[11px] text-zinc-200">🔉</button>
+        <button onclick="volumeControl('up')" class="px-2 py-1 rounded-md bg-zinc-800 active:scale-90 text-[11px] text-zinc-200">🔊</button>
+      </div>
+    </div>
+
+    <!-- Netflix iOS Bottom Tab Bar -->
+    <nav class="grid grid-cols-4 py-1.5 text-[10px] font-semibold text-zinc-400">
+      <button onclick="mobileShowSection('home')" id="bnav-home" class="flex flex-col items-center justify-center gap-0.5 py-1 text-white">
+        <span class="text-base leading-none">🏠</span>
+        <span>Accueil</span>
+      </button>
+      <button onclick="mobileShowSection('search')" id="bnav-search" class="flex flex-col items-center justify-center gap-0.5 py-1 hover:text-white">
+        <span class="text-base leading-none">🔍</span>
+        <span>Rechercher</span>
+      </button>
+      <button onclick="mobileShowSection('remote')" id="bnav-remote" class="flex flex-col items-center justify-center gap-0.5 py-1 hover:text-white">
+        <span class="text-base leading-none">🎛️</span>
+        <span>Télécommande</span>
+      </button>
+      <button onclick="mobileShowSection('downloads')" id="bnav-downloads" class="flex flex-col items-center justify-center gap-0.5 py-1 hover:text-white relative">
+        <span class="text-base leading-none">📥</span>
+        <span>Téléchargés</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Netflix-Style Bottom Sheet Modal for Stream Picker & Episode Selector -->
+  <div id="streamModal" onclick="if(event.target===this) closeStreamModal()" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-[#181818] rounded-t-3xl sm:rounded-2xl max-w-3xl w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col overflow-hidden border-t sm:border border-white/15 shadow-2xl">
+      <!-- Mobile Drag Handle -->
+      <div class="sm:hidden pt-2.5 pb-1 flex justify-center bg-[#181818]" onclick="closeStreamModal()">
+        <div class="w-10 h-1 rounded-full bg-zinc-600"></div>
       </div>
 
-      <!-- Series Season / Episode Picker (Only for series) -->
-      <div id="seriesPickerBar" class="hidden px-5 py-3 bg-indigo-950/30 border-b border-white/10 flex flex-wrap items-center gap-3">
-        <span class="text-xs font-semibold text-indigo-300">Épisode à précharger :</span>
-        <select id="seasonSelect" onchange="onSeasonChange()" class="bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none"></select>
-        <select id="episodeSelect" onchange="loadStreamsForSelectedEpisode()" class="bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white flex-1 min-w-[180px] focus:outline-none"></select>
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 border-b border-white/10 flex items-start justify-between gap-3.5 bg-[#181818]">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <img id="modalPoster" src="" alt="" class="w-14 h-20 object-cover rounded-lg border border-white/10 bg-zinc-900 shrink-0" />
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="font-display text-base text-[#E50914] leading-none">N</span>
+              <span id="modalTypeBadge" class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-[#E50914]/20 text-red-300 border border-[#E50914]/40">FILM</span>
+              <span id="modalImdbId" class="text-xs font-mono text-zinc-400">tt0000000</span>
+            </div>
+            <h3 id="modalTitle" class="text-base sm:text-lg font-extrabold text-white mt-1 truncate">Titre du film</h3>
+            <p id="modalSubtitle" class="text-[11px] sm:text-xs text-zinc-400 mt-0.5">Choisis la version à lancer sur la TV ou à précharger sur le Mac mini</p>
+          </div>
+        </div>
+        <button onclick="closeStreamModal()" class="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center text-lg shrink-0">&times;</button>
+      </div>
+
+      <!-- Series Season / Episode Picker (Only for series, 16px on mobile to avoid iOS zoom) -->
+      <div id="seriesPickerBar" class="hidden px-4 sm:px-5 py-3 bg-[#141414] border-b border-white/10 flex flex-col sm:flex-row sm:items-center gap-2.5">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-[#E50914] shrink-0">Saison & Épisode :</span>
+          <select id="seasonSelect" onchange="onSeasonChange()" class="bg-zinc-900 border border-white/15 rounded-lg px-3 py-2 text-base sm:text-xs text-white font-semibold focus:outline-none focus:border-[#E50914]"></select>
+        </div>
+        <select id="episodeSelect" onchange="loadStreamsForSelectedEpisode()" class="bg-zinc-900 border border-white/15 rounded-lg px-3 py-2 text-base sm:text-xs text-white flex-1 focus:outline-none focus:border-[#E50914]"></select>
       </div>
 
       <!-- Streams List -->
-      <div id="modalStreamsList" class="p-5 overflow-y-auto space-y-2.5 flex-1"></div>
+      <div id="modalStreamsList" class="p-4 sm:p-5 overflow-y-auto space-y-2.5 flex-1"></div>
 
       <!-- Modal Footer -->
-      <div class="p-4 border-t border-white/10 bg-white/[0.02] flex items-center justify-between text-xs text-slate-400">
-        <span>💡 Les flux <strong class="text-emerald-400">⚡ Instant TorBox</strong> sont déjà en cache et se téléchargent à la vitesse max de ta fibre.</span>
-        <button onclick="closeStreamModal()" class="px-4 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-white font-medium">Fermer</button>
+      <div class="p-3.5 sm:p-4 border-t border-white/10 bg-[#141414] flex items-center justify-between gap-2 text-xs text-zinc-400" style="padding-bottom: max(0.875rem, var(--safe-bottom));">
+        <span class="truncate">💡 <strong class="text-emerald-400">⚡ Instant TorBox</strong> = Débit max fibre sans attente</span>
+        <button onclick="closeStreamModal()" class="px-4 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold shrink-0">Fermer</button>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden glass px-4 py-3 rounded-xl border border-emerald-500/40 shadow-xl flex items-center gap-3 text-xs text-white">
-    <span id="toastIcon">✅</span>
-    <span id="toastText">Action effectuée</span>
+  <!-- Toast Notification (Positioned cleanly above mobile bottom bar) -->
+  <div id="toast" class="fixed bottom-28 md:bottom-6 left-4 right-4 md:left-auto md:right-6 z-50 hidden netflix-glass px-4 py-3 rounded-xl border border-[#E50914]/50 shadow-2xl flex items-center gap-3 text-xs font-medium text-white">
+    <span id="toastIcon" class="text-base shrink-0">✅</span>
+    <span id="toastText" class="truncate">Action effectuée</span>
   </div>
 
   <script>
@@ -456,7 +647,6 @@
         }
       }
 
-      // 1. Fetch live endpoint.json from GitHub Contents API (bypasses Fastly 5-10 min CDN cache) + raw + local in parallel
       const addFromEp = (ep) => {
         if (!ep || typeof ep !== 'object') return;
         if (ep.tunnelUrl) candidates.add(ep.tunnelUrl.replace(/\/$/, ''));
@@ -465,7 +655,6 @@
       };
 
       await Promise.allSettled([
-        // GitHub Contents API returns immediate commit content in base64 without raw CDN delay
         fetch(`https://api.github.com/repos/Mrthomaslef/allinone/contents/film-et-serie/endpoint.json?ref=main&t=${Date.now()}`, {
           cache: 'no-store',
           headers: { 'Accept': 'application/vnd.github.v3+json' }
@@ -492,7 +681,6 @@
       const candidateList = [...candidates].filter(Boolean);
       if (candidateList.length === 0) return;
 
-      // Probe all candidate URLs in parallel and pick the fastest live responder
       try {
         const winner = await Promise.any(candidateList.map(base => probeEndpoint(base, 5000)));
         if (winner) {
@@ -514,6 +702,13 @@
     };
     let activeModalItem = null;
     let activeSeriesMeta = null;
+    let featuredHeroItem = {
+      id: 'tt15239678',
+      name: 'Dune : Deuxième Partie',
+      type: 'movie',
+      poster: 'https://images.metahub.space/poster/medium/tt15239678/img',
+      releaseInfo: '2024'
+    };
 
     function showToast(msg, icon = '✅') {
       const t = document.getElementById('toast');
@@ -521,7 +716,7 @@
       document.getElementById('toastText').textContent = msg;
       t.classList.remove('hidden');
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => t.classList.add('hidden'), 4000);
+      window._toastTimer = setTimeout(() => t.classList.add('hidden'), 3800);
     }
 
     function formatBytes(bytes) {
@@ -544,6 +739,86 @@
       const m = Math.floor(sec / 60);
       const s = sec % 60;
       return `${m}m ${s}s`;
+    }
+
+    function updateHeroBillboard(item) {
+      if (!item) return;
+      const id = item.id || item._id || item.imdb_id || 'tt15239678';
+      const name = item.name || item.title || 'Sans titre';
+      const type = item.type || 'movie';
+      const poster = item.poster || `https://images.metahub.space/poster/medium/${id}/img`;
+      const bgUrl = `https://images.metahub.space/background/medium/${id}/img`;
+
+      featuredHeroItem = { id, name, type, poster, releaseInfo: item.releaseInfo || '2025' };
+
+      const heroImg = document.getElementById('heroBackdrop');
+      if (heroImg && heroImg.dataset.currentId !== id) {
+        heroImg.dataset.currentId = id;
+        heroImg.onerror = () => { heroImg.onerror = null; heroImg.src = poster; };
+        heroImg.src = bgUrl;
+      }
+      const titleEl = document.getElementById('heroTitle');
+      if (titleEl) titleEl.textContent = name;
+      const typeEl = document.getElementById('heroTypeLabel');
+      if (typeEl) typeEl.textContent = type === 'series' ? 'SÉRIE STREMIO À LA UNE' : 'FILM À LA UNE';
+      const yearEl = document.getElementById('heroYear');
+      if (yearEl) yearEl.textContent = item.releaseInfo || 'HD / 4K';
+    }
+
+    function triggerHeroPlay() {
+      const it = featuredHeroItem;
+      playOnTv(it.id, it.name, it.type, it.id);
+    }
+
+    function triggerHeroPreload() {
+      const it = featuredHeroItem;
+      if (it.type === 'series') {
+        openStreamSelector(it.id, it.name, it.poster, 'series');
+      } else {
+        quickPreload(it.id, it.name, it.poster, 'movie');
+      }
+    }
+
+    function triggerHeroStreams() {
+      const it = featuredHeroItem;
+      openStreamSelector(it.id, it.name, it.poster, it.type);
+    }
+
+    function mobileShowSection(sec) {
+      ['home', 'search', 'remote', 'downloads'].forEach(k => {
+        const btn = document.getElementById(`bnav-${k}`);
+        if (btn) {
+          btn.className = (k === sec)
+            ? 'flex flex-col items-center justify-center gap-0.5 py-1 text-[#E50914] font-bold'
+            : 'flex flex-col items-center justify-center gap-0.5 py-1 text-zinc-400 hover:text-white';
+        }
+      });
+
+      if (sec === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (sec === 'search') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => document.getElementById('searchInput')?.focus(), 200);
+      } else if (sec === 'remote') {
+        document.getElementById('playbackRemoteSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (sec === 'downloads') {
+        document.getElementById('downloadsSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function toggleRemotePanel() {
+      mobileShowSection('remote');
+    }
+
+    function scrollToDownloads() {
+      mobileShowSection('downloads');
+    }
+
+    function clearSearchInput() {
+      const inp = document.getElementById('searchInput');
+      if (inp) inp.value = '';
+      document.getElementById('btnClearSearch')?.classList.add('hidden');
+      switchTab(currentTab);
     }
 
     async function apiFetch(path, opts = {}) {
@@ -574,9 +849,9 @@
         const data = await apiFetch(`/api/status${force ? '?force=1' : ''}`);
         consecutiveFailures = 0;
         document.getElementById('offlineBanner').classList.add('hidden');
-        document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-emerald-400';
+        document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-emerald-400 shrink-0';
         const isTunnel = API_BASE.includes('trycloudflare.com');
-        document.getElementById('daemonText').textContent = isTunnel ? 'Mac mini Connecté (Tunnel HTTPS)' : 'Mac mini Connecté';
+        document.getElementById('daemonText').textContent = isTunnel ? 'Mac mini (HTTPS)' : 'Mac mini';
 
         if (data.tunnelUrl && data.tunnelUrl.startsWith('https://')) {
           localStorage.setItem('cinepreload_last_endpoint', data.tunnelUrl.replace(/\/$/, ''));
@@ -586,7 +861,7 @@
         if (data.account?.email) {
           document.getElementById('kpiAccount').textContent = data.account.email;
           document.getElementById('accountStatusText').textContent =
-            `Connecté à ${data.account.email} · ${data.addons?.length || 0} plugins Stremio synchronisés`;
+            `${data.account.email} · ${data.addons?.length || 0} plugins actifs`;
         }
         if (data.disk) {
           document.getElementById('diskFreeText').textContent = formatBytes(data.disk.freeBytes);
@@ -596,27 +871,31 @@
           if (badge) {
             if (data.disk.stremioRunning) {
               badge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5';
-              badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Stremio ouvert sur le Mac';
+              badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Stremio ouvert sur TV';
             } else {
-              badge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-white/10';
+              badge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-zinc-900/90 text-zinc-400 border border-white/10';
               badge.textContent = 'Stremio arrêté';
             }
           }
         }
         document.getElementById('libCount').textContent = (data.library || []).length;
 
+        if ((data.library || []).length > 0 && featuredHeroItem.id === 'tt15239678') {
+          updateHeroBillboard(data.library[0]);
+        }
+
         updatePlaybackAndAudioUI(data);
         renderDownloadsAndFiles();
         if (currentTab === 'library' && !document.getElementById('searchInput').value.trim()) {
           renderMediaGrid(data.library || []);
         }
-        if (force) showToast('Compte Stremio et bibliothèque resynchronisés !');
+        if (force) showToast('Compte Stremio et bibliothèque synchronisés !');
       } catch (err) {
         consecutiveFailures++;
         if (consecutiveFailures >= 2 || force) {
           document.getElementById('offlineBanner').classList.remove('hidden');
-          document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-rose-500';
-          document.getElementById('daemonText').textContent = 'Démon local hors-ligne';
+          document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-rose-500 shrink-0';
+          document.getElementById('daemonText').textContent = 'Hors-ligne';
         }
       }
     }
@@ -628,6 +907,7 @@
       const nowPlayingEl = document.getElementById('nowPlayingTitle');
       const playPauseIcon = document.getElementById('btnMainPlayPauseIcon');
       const playPauseText = document.getElementById('btnMainPlayPauseText');
+      const mobileMini = document.getElementById('mobileMiniStatus');
 
       if (stremioRunning || pb.active) {
         if (stateBadge) {
@@ -636,14 +916,17 @@
             stateBadge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40';
             stateBadge.textContent = '⏸️ En pause';
           } else {
-            stateBadge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40';
+            stateBadge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#E50914]/25 text-red-300 border border-[#E50914]/50';
             stateBadge.textContent = '▶️ En lecture';
           }
         }
         if (nowPlayingEl) {
           nowPlayingEl.innerHTML = pb.title
-            ? `En cours sur la TV : <strong class="text-white">${pb.title}</strong> · Utilise les boutons ci-dessous pour Pause, Reculer/Avancer ou régler le son.`
-            : `Stremio est actif sur la TV · Utilise les boutons ci-dessous pour mettre en pause, reculer, avancer ou régler le son.`;
+            ? `En cours sur la TV : <strong class="text-white">${pb.title}</strong> · Contrôle direct via la télécommande ci-dessous.`
+            : `Stremio est actif sur la TV Samsung · Utilise la télécommande pour Pause, Reculer/Avancer ou régler le volume.`;
+        }
+        if (mobileMini) {
+          mobileMini.textContent = pb.title ? `📺 ${pb.title}` : '📺 Stremio actif sur la TV';
         }
         if (playPauseIcon && playPauseText) {
           playPauseIcon.textContent = pb.paused ? '▶️' : '⏸️';
@@ -652,7 +935,10 @@
       } else {
         if (stateBadge) stateBadge.classList.add('hidden');
         if (nowPlayingEl) {
-          nowPlayingEl.textContent = 'Contrôle direct du film sur la TV Samsung : Pause/Lecture, Reculer/Avancer et Volume sonore.';
+          nowPlayingEl.textContent = 'Lance directement ton film sur la TV Samsung ou précharge-le à vitesse maximale sur le Mac mini.';
+        }
+        if (mobileMini) {
+          mobileMini.textContent = 'Télécommande TV Samsung';
         }
         if (playPauseIcon && playPauseText) {
           playPauseIcon.textContent = '⏯️';
@@ -672,19 +958,23 @@
         }
       }
       const devBadge = document.getElementById('audioDeviceBadge');
+      const heroAudio = document.getElementById('heroAudioMini');
       if (devBadge && audio.device) {
         devBadge.textContent = `🔊 ${audio.device}`;
+      }
+      if (heroAudio && audio.device) {
+        heroAudio.textContent = audio.device;
       }
       const muteBtn = document.getElementById('btnMuteAudio');
       const muteIcon = document.getElementById('btnMuteIcon');
       const muteTxt = document.getElementById('btnMuteText');
       if (muteBtn && muteIcon && muteTxt) {
         if (audio.muted) {
-          muteBtn.className = 'py-2.5 px-3 rounded-xl bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 font-bold text-xs flex items-center justify-center gap-1.5 transition';
+          muteBtn.className = 'h-12 rounded-xl bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 font-bold text-xs flex items-center justify-center gap-1.5 transition';
           muteIcon.textContent = '🔇';
-          muteTxt.textContent = 'Son coupé';
+          muteTxt.textContent = 'Coupé';
         } else {
-          muteBtn.className = 'py-2.5 px-3 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/10 text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition';
+          muteBtn.className = 'h-12 rounded-xl bg-zinc-900 hover:bg-rose-500/20 border border-white/10 text-zinc-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition';
           muteIcon.textContent = '🔇';
           muteTxt.textContent = 'Mute';
         }
@@ -695,8 +985,8 @@
         const el = document.getElementById(id);
         if (!el) return;
         el.className = active
-          ? 'py-1.5 px-2 rounded-lg bg-emerald-500/25 border border-emerald-400/50 text-[10px] font-bold text-emerald-200 flex items-center justify-center gap-1 transition'
-          : 'py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition';
+          ? 'py-2 px-2 rounded-xl bg-[#E50914]/25 border border-[#E50914] text-[11px] font-bold text-white flex items-center justify-center gap-1 transition'
+          : 'py-2 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition';
       };
       setBtnActive('btnAudioTv', devLow.includes('samsung') || devLow.includes('mac') || devLow.includes('hdmi'));
       setBtnActive('btnAudioHomepod', devLow.includes('homepod') || devLow.includes('salon'));
@@ -711,7 +1001,7 @@
           body: JSON.stringify({ action })
         });
         if (res.ok) {
-          showToast(res.message || 'Commande envoyée au lecteur Stremio', '🎬');
+          showToast(res.message || 'Commande envoyée à Stremio', '🎬');
           refreshStatus(false);
         } else {
           showToast(res.error || 'Stremio ne répond pas', '⚠️');
@@ -768,22 +1058,22 @@
       const files = appState.disk?.files || [];
       const activeDls = dls.filter(d => ['downloading', 'resolving', 'starting'].includes(d.status));
 
-      document.getElementById('dlBadgeCount').textContent = dls.length;
+      document.getElementById('dlBadgeCount').textContent = dls.length + files.length;
 
       if (activeDls.length > 0) {
         const totalSpeed = activeDls.reduce((acc, d) => acc + (d.speed_bps || 0), 0);
-        document.getElementById('kpiActiveDl').textContent = `${activeDls.length} préchargement(s) en cours`;
+        document.getElementById('kpiActiveDl').textContent = `${activeDls.length} téléchargement(s)`;
         document.getElementById('kpiActiveSpeed').textContent = `⚡ ${formatSpeed(totalSpeed)}`;
       } else {
-        document.getElementById('kpiActiveDl').textContent = 'Aucun transfert en cours';
-        document.getElementById('kpiActiveSpeed').textContent = 'Prêt (Débit max TorBox CDN)';
+        document.getElementById('kpiActiveDl').textContent = 'Aucun transfert actif';
+        document.getElementById('kpiActiveSpeed').textContent = 'Prêt (TorBox CDN)';
       }
 
       const listEl = document.getElementById('downloadsList');
       if (dls.length === 0) {
         listEl.innerHTML = `
-          <div class="rounded-xl bg-white/[0.02] border border-dashed border-white/10 p-6 text-center text-xs text-slate-400">
-            Aucun film dans la file de préchargement. Clique sur <strong class="text-emerald-400">"⚡ Précharger 1-Clic"</strong> ou <strong class="text-purple-300">"Choisir la version"</strong> sur n'importe quel film ci-dessous pour le télécharger sur ton Mac mini avant de le regarder.
+          <div class="rounded-xl bg-[#181818] border border-white/[0.06] p-4 text-center text-xs text-zinc-400">
+            Aucun téléchargement en file d'attente. Appuie sur <strong class="text-white">"⚡ Précharger"</strong> sur n'importe quel titre pour le stocker sur le Mac mini.
           </div>
         `;
       } else {
@@ -795,47 +1085,47 @@
           const statusBadge = {
             starting: '<span class="text-amber-300">Initialisation...</span>',
             resolving: '<span class="text-amber-300">Résolution CDN TorBox...</span>',
-            downloading: `<span class="text-emerald-400 font-mono">⚡ ${formatSpeed(d.speed_bps)} · ETA ${formatEta(d.eta_seconds)}</span>`,
-            completed: '<span class="text-emerald-400 font-semibold">✓ Préchargé sur le Mac mini</span>',
+            downloading: `<span class="text-emerald-400 font-mono">⚡ ${formatSpeed(d.speed_bps)} · Reste ${formatEta(d.eta_seconds)}</span>`,
+            completed: '<span class="text-emerald-400 font-semibold">✓ Prêt sur le Mac mini</span>',
             paused: '<span class="text-amber-400">⏸ En pause</span>',
             interrupted: '<span class="text-amber-400">⏸ Interrompu (reprise dispo)</span>',
             error: `<span class="text-rose-400">Erreur: ${d.error || 'Échec'}</span>`,
-            cancelled: '<span class="text-slate-500">Annulé</span>'
+            cancelled: '<span class="text-zinc-500">Annulé</span>'
           }[d.status] || d.status;
 
           return `
-            <div class="rounded-xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div class="flex items-center gap-3.5 min-w-0 flex-1">
-                <img src="${d.poster || 'assets/icon.svg'}" onerror="this.src='assets/icon.svg'" class="w-11 h-16 object-cover rounded-lg bg-slate-800 shrink-0" />
+            <div class="rounded-xl bg-[#181818] border border-white/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0 w-full sm:w-auto flex-1">
+                <img src="${d.poster || 'assets/icon.svg'}" onerror="this.src='assets/icon.svg'" class="w-12 h-16 object-cover rounded-lg bg-zinc-900 shrink-0" />
                 <div class="min-w-0 flex-1">
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <h4 class="text-sm font-bold text-white truncate">${d.title}</h4>
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">${d.quality || '4K/1080p'}</span>
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">${d.addon || 'TorBox'}</span>
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <h4 class="text-xs sm:text-sm font-bold text-white truncate">${d.title}</h4>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#E50914]/20 text-red-300">${d.quality || '1080p'}</span>
                   </div>
-                  <p class="text-[11px] text-slate-400 truncate mt-0.5 font-mono">${d.filename || d.streamName || ''}</p>
-                  <div class="mt-2 flex items-center gap-3">
-                    <div class="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
-                      <div class="h-full rounded-full ${isDone ? 'bg-emerald-500' : 'bg-gradient-to-r from-purple-500 to-emerald-400'} transition-all duration-300" style="width: ${pct}%"></div>
+                  <div class="mt-2 flex items-center gap-2.5">
+                    <div class="flex-1 h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+                      <div class="h-full rounded-full ${isDone ? 'bg-emerald-500' : 'bg-[#E50914]'} transition-all duration-300" style="width: ${pct}%"></div>
                     </div>
-                    <span class="text-xs font-mono text-slate-300 shrink-0">${pct.toFixed(1)}% (${formatBytes(d.downloadedBytes)} / ${formatBytes(d.totalBytes)})</span>
+                    <span class="text-[11px] font-mono text-zinc-300 shrink-0">${pct.toFixed(0)}%</span>
                   </div>
-                  <div class="mt-1 text-[11px]">${statusBadge}</div>
+                  <div class="mt-1 flex items-center justify-between gap-2 text-[11px]">
+                    ${statusBadge}
+                    <span class="font-mono text-zinc-500">${formatBytes(d.downloadedBytes)} / ${formatBytes(d.totalBytes)}</span>
+                  </div>
                 </div>
               </div>
 
-              <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+              <div class="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-white/5">
                 ${isDone && d.targetPath ? `
-                  <button onclick="fileAction('play_stremio', '${d.targetPath.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow">▶️ Play (Allume TV)</button>
-                  <button onclick="fileAction('reveal', '${d.targetPath.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300">📂 Finder</button>
+                  <button onclick="fileAction('play_stremio', '${d.targetPath.replace(/'/g, "\\'")}')" class="flex-1 sm:flex-initial justify-center px-3.5 py-2 rounded-lg bg-white hover:bg-zinc-200 text-xs font-extrabold text-black flex items-center gap-1 shadow">▶ Lecture TV</button>
                 ` : ''}
                 ${isRunning ? `
-                  <button onclick="downloadAction('${d.id}', 'pause')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs">⏸ Pause</button>
+                  <button onclick="downloadAction('${d.id}', 'pause')" class="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold">⏸ Pause</button>
                 ` : ''}
                 ${isPaused || d.status === 'error' ? `
-                  <button onclick="downloadAction('${d.id}', 'resume')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs">▶️ Reprendre</button>
+                  <button onclick="downloadAction('${d.id}', 'resume')" class="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-semibold">▶ Reprendre</button>
                 ` : ''}
-                <button onclick="downloadAction('${d.id}', 'remove')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 text-xs" title="Supprimer de la liste">✕</button>
+                <button onclick="downloadAction('${d.id}', 'remove')" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-300 text-xs" title="Supprimer">✕</button>
               </div>
             </div>
           `;
@@ -849,15 +1139,14 @@
         localList.innerHTML = files.map(f => {
           const safePath = f.path.replace(/'/g, "\\'");
           return `
-            <div class="rounded-xl bg-white/[0.02] border border-white/10 p-3 flex items-center justify-between gap-3">
+            <div class="rounded-xl bg-[#181818] border border-white/10 p-3 flex items-center justify-between gap-3">
               <div class="min-w-0">
-                <p class="text-xs font-semibold text-white truncate" title="${f.name}">🎞️ ${f.name}</p>
-                <p class="text-[11px] font-mono text-emerald-400 mt-0.5">${formatBytes(f.sizeBytes)} · Prêt hors-ligne</p>
+                <p class="text-xs font-bold text-white truncate" title="${f.name}">🎬 ${f.name}</p>
+                <p class="text-[11px] font-mono text-emerald-400 mt-0.5">${formatBytes(f.sizeBytes)} · Prêt sur disque</p>
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="fileAction('play_stremio', '${safePath}')" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-[11px] font-bold text-white shadow">▶️ Play TV</button>
-                <button onclick="fileAction('reveal', '${safePath}')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] text-slate-300" title="Afficher dans le Finder">📂</button>
-                <button onclick="if(confirm('Supprimer ce fichier du disque ?')) fileAction('delete', '${safePath}')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-[11px] text-slate-400 hover:text-rose-300" title="Supprimer du disque">🗑️</button>
+                <button onclick="fileAction('play_stremio', '${safePath}')" class="px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black text-[11px] font-extrabold shadow">▶ TV</button>
+                <button onclick="if(confirm('Supprimer ce fichier du disque ?')) fileAction('delete', '${safePath}')" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-500/20 text-[11px] text-zinc-400 hover:text-rose-300">🗑️</button>
               </div>
             </div>
           `;
@@ -870,51 +1159,63 @@
     function renderMediaGrid(items) {
       const grid = document.getElementById('mediaGrid');
       if (!items || items.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">Aucun titre trouvé.</div>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-zinc-500 text-sm">Aucun titre trouvé.</div>`;
         return;
       }
 
-      grid.innerHTML = items.map(item => {
+      grid.innerHTML = items.map((item, idx) => {
         const id = item.id || item._id || item.imdb_id;
-        const title = (item.name || 'Sans titre').replace(/'/g, "\\'");
+        const rawName = item.name || 'Sans titre';
+        const title = rawName.replace(/'/g, "\\'");
         const mtype = item.type || 'movie';
         const poster = item.poster || `https://images.metahub.space/poster/medium/${id}/img`;
         const year = item.releaseInfo || '';
         const lastVideoId = (item.state && item.state.video_id) ? item.state.video_id : id;
 
         return `
-          <div class="glass glass-hover rounded-2xl overflow-hidden flex flex-col transition duration-200 group">
-            <div class="relative aspect-[2/3] bg-slate-900 overflow-hidden">
-              <img src="${poster}" alt="${item.name}" loading="lazy" onerror="this.src='assets/icon.svg'" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+          <div class="netflix-card rounded-xl sm:rounded-2xl overflow-hidden flex flex-col group">
+            <!-- Poster Image with Netflix N badge & Tap-to-Open Streams -->
+            <div onclick="openStreamSelector('${id}', '${title}', '${poster}', '${mtype}')" class="cursor-pointer relative aspect-[2/3] bg-zinc-900 overflow-hidden">
+              <img src="${poster}" alt="${rawName}" loading="lazy" onerror="this.src='assets/icon.svg'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#181818] via-transparent to-black/40 opacity-90"></div>
+
+              <!-- Top Left Netflix Badge -->
               <div class="absolute top-2 left-2 flex items-center gap-1">
-                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-white border border-white/15">
-                  ${mtype === 'series' ? '📺 Série' : '🎬 Film'}
+                <span class="w-5 h-5 rounded bg-[#E50914] text-white font-display text-sm flex items-center justify-center shadow">N</span>
+                <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-md text-zinc-200 border border-white/10">
+                  ${mtype === 'series' ? 'SÉRIE' : 'FILM'}
                 </span>
               </div>
-              ${year ? `<span class="absolute top-2 right-2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/75 text-slate-300">${year}</span>` : ''}
-              <button onclick="playOnTv('${id}', '${title}', '${mtype}', '${lastVideoId}')" title="Allumer la TV et lancer le film" class="absolute bottom-2.5 right-2.5 w-10 h-10 rounded-full bg-purple-600/95 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/60 border border-white/25 flex items-center justify-center text-sm transition transform hover:scale-110">
-                ▶️
+
+              ${year ? `<span class="absolute top-2 right-2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/75 text-zinc-300">${year}</span>` : ''}
+
+              <!-- Floating Play Button on Poster Corner -->
+              <button onclick="event.stopPropagation(); playOnTv('${id}', '${title}', '${mtype}', '${lastVideoId}')" title="Lancer sur la TV Samsung" class="absolute bottom-2 right-2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-zinc-200 active:scale-90 text-black shadow-xl flex items-center justify-center text-xs font-black transition">
+                ▶
               </button>
             </div>
 
-            <div class="p-3 flex-1 flex flex-col justify-between gap-2.5">
+            <!-- Card Footer Actions -->
+            <div class="p-2.5 sm:p-3 flex-1 flex flex-col justify-between gap-2 bg-[#181818]">
               <div>
-                <h3 class="text-xs font-bold text-white line-clamp-1" title="${item.name}">${item.name}</h3>
-                <p class="text-[10px] font-mono text-slate-400 mt-0.5">${id}</p>
+                <h3 class="text-xs font-bold text-white line-clamp-1" title="${rawName}">${rawName}</h3>
+                <p class="text-[10px] text-emerald-400 font-medium mt-0.5">⚡ TorBox 4K / VF</p>
               </div>
 
               <div class="space-y-1.5">
-                <button onclick="playOnTv('${id}', '${title}', '${mtype}', '${lastVideoId}')" class="w-full py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-[11px] font-bold text-white shadow-md shadow-purple-600/20 flex items-center justify-center gap-1.5 transition">
-                  <span>▶️</span> Play (Allume TV)
+                <button onclick="playOnTv('${id}', '${title}', '${mtype}', '${lastVideoId}')" class="w-full py-2 px-2 rounded-lg bg-white hover:bg-zinc-200 active:scale-95 text-[11px] font-extrabold text-black flex items-center justify-center gap-1 shadow transition">
+                  <span>▶</span> Lecture TV
                 </button>
-                ${mtype === 'movie' ? `
-                  <button onclick="quickPreload('${id}', '${title}', '${poster}', 'movie')" class="w-full py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-[11px] font-semibold text-white shadow flex items-center justify-center gap-1 transition">
-                    <span>⚡</span> Précharger 1-Clic
+                <div class="grid ${mtype === 'movie' ? 'grid-cols-2' : 'grid-cols-1'} gap-1.5">
+                  ${mtype === 'movie' ? `
+                    <button onclick="quickPreload('${id}', '${title}', '${poster}', 'movie')" class="py-1.5 px-2 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-[10px] font-bold text-white flex items-center justify-center gap-1 transition">
+                      <span>⚡</span> 1-Clic
+                    </button>
+                  ` : ''}
+                  <button onclick="openStreamSelector('${id}', '${title}', '${poster}', '${mtype}')" class="py-1.5 px-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 active:scale-95 text-[10px] font-semibold text-zinc-200 border border-white/10 flex items-center justify-center gap-1 transition">
+                    <span>ⓘ</span> ${mtype === 'series' ? 'Épisodes' : 'Flux'}
                   </button>
-                ` : ''}
-                <button onclick="openStreamSelector('${id}', '${title}', '${poster}', '${mtype}')" class="w-full py-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/15 text-[11px] font-medium text-slate-200 flex items-center justify-center gap-1 transition">
-                  <span>🎯</span> ${mtype === 'series' ? 'Choisir Épisode & Flux' : 'Choisir la version'}
-                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -923,7 +1224,7 @@
     }
 
     async function playOnTv(imdbId, title, type = 'movie', videoId = '', streamUrl = '') {
-      showToast(`📺 Allumage de la TV Samsung + lancement de « ${title} »...`, '🍿');
+      showToast(`📺 Allumage TV Samsung + lancement de « ${title} »...`, '🍿');
       try {
         const res = await apiFetch('/api/play-on-tv', {
           method: 'POST',
@@ -941,7 +1242,7 @@
     }
 
     async function closeStremioAndTurnOffTv() {
-      showToast('🛑 Fermeture de Stremio + 🌙 Extinction de la TV Samsung...', '🌙');
+      showToast('🛑 Fermeture de Stremio + 🌙 Extinction TV Samsung...', '🌙');
       try {
         const res = await apiFetch('/api/close-stremio-tv-off', {
           method: 'POST',
@@ -961,25 +1262,41 @@
 
     async function switchTab(tab) {
       currentTab = tab;
-      document.getElementById('searchInput').value = '';
+      const inp = document.getElementById('searchInput');
+      if (inp) inp.value = '';
+      document.getElementById('btnClearSearch')?.classList.add('hidden');
+
+      const titles = {
+        library: 'Ma Liste Stremio',
+        movies: 'Films Populaires sur Stremio',
+        series: 'Séries TV Populaires'
+      };
+      const titleEl = document.getElementById('catalogSectionTitle');
+      if (titleEl) titleEl.textContent = titles[tab] || 'Catalogue';
+
       ['library', 'movies', 'series'].forEach(t => {
         const btn = document.getElementById(`tab-${t}`);
+        if (!btn) return;
         if (t === tab) {
-          btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold transition bg-purple-600 text-white shadow';
+          btn.className = 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-[#E50914] text-white shadow-sm';
         } else {
-          btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white';
+          btn.className = 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 hover:text-white';
         }
       });
 
       if (tab === 'library') {
-        renderMediaGrid(appState.library || []);
+        const lib = appState.library || [];
+        renderMediaGrid(lib);
+        if (lib.length > 0) updateHeroBillboard(lib[0]);
       } else {
         const mtype = tab === 'series' ? 'series' : 'movie';
-        document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">Chargement du catalogue Cinemeta...</div>`;
+        document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-zinc-400 text-sm">Chargement du catalogue Netflix / Cinemeta...</div>`;
         try {
           const res = await fetch(`https://v3-cinemeta.strem.io/catalog/${mtype}/top.json`);
           const data = await res.json();
-          renderMediaGrid((data.metas || []).slice(0, 24));
+          const metas = (data.metas || []).slice(0, 24);
+          renderMediaGrid(metas);
+          if (metas.length > 0) updateHeroBillboard(metas[0]);
         } catch (e) {
           document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-rose-400 text-sm">Erreur chargement catalogue.</div>`;
         }
@@ -989,10 +1306,15 @@
     async function triggerSearch() {
       const q = document.getElementById('searchInput').value.trim();
       if (!q) {
+        document.getElementById('btnClearSearch')?.classList.add('hidden');
         return switchTab(currentTab);
       }
-      const mtype = currentTab === 'series' ? 'series' : 'movie';
-      document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">Recherche de "${q}"...</div>`;
+      document.getElementById('btnClearSearch')?.classList.remove('hidden');
+      const titleEl = document.getElementById('catalogSectionTitle');
+      if (titleEl) titleEl.textContent = `Résultats pour « ${q} »`;
+
+      document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-zinc-400 text-sm">Recherche de « ${q} »...</div>`;
+      document.getElementById('catalogSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       try {
         const [moviesRes, seriesRes] = await Promise.all([
           fetch(`https://v3-cinemeta.strem.io/catalog/movie/top/search=${encodeURIComponent(q)}.json`).then(r => r.json()).catch(() => ({ metas: [] })),
@@ -1000,6 +1322,7 @@
         ]);
         const combined = [...(moviesRes.metas || []).slice(0, 14), ...(seriesRes.metas || []).slice(0, 10)];
         renderMediaGrid(combined);
+        if (combined.length > 0) updateHeroBillboard(combined[0]);
       } catch (e) {
         showToast('Erreur lors de la recherche', '⚠️');
       }
@@ -1035,7 +1358,7 @@
       const seriesBar = document.getElementById('seriesPickerBar');
       if (type === 'series') {
         seriesBar.classList.remove('hidden');
-        document.getElementById('modalStreamsList').innerHTML = `<div class="text-center py-10 text-xs text-slate-400">Chargement des saisons et épisodes...</div>`;
+        document.getElementById('modalStreamsList').innerHTML = `<div class="text-center py-10 text-xs text-zinc-400">Chargement des saisons et épisodes...</div>`;
         try {
           const metaRes = await fetch(`https://v3-cinemeta.strem.io/meta/series/${encodeURIComponent(imdbId)}.json`).then(r => r.json());
           activeSeriesMeta = metaRes.meta || {};
@@ -1063,7 +1386,7 @@
       epSel.innerHTML = episodes.map(ep => {
         const epNum = ep.episode || ep.number || 1;
         const epId = ep.id || `${activeModalItem.imdbId}:${season}:${epNum}`;
-        return `<option value="${epId}">Épisode ${epNum} — ${ep.name || ep.title || ''}</option>`;
+        return `<option value="${epId}">Ép. ${epNum} — ${ep.name || ep.title || ''}</option>`;
       }).join('');
       loadStreamsForSelectedEpisode();
     }
@@ -1078,16 +1401,16 @@
     async function fetchAndRenderStreams(type, id, displayTitle) {
       const container = document.getElementById('modalStreamsList');
       container.innerHTML = `
-        <div class="text-center py-12 space-y-2">
-          <div class="inline-block w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-          <p class="text-xs text-slate-400">Interrogation de tes plugins <strong class="text-white">StreamFusionReborn</strong> & <strong class="text-white">Lumio</strong> (TorBox)...</p>
+        <div class="text-center py-12 space-y-2.5">
+          <div class="inline-block w-7 h-7 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-xs text-zinc-400">Recherche des flux <strong class="text-white">StreamFusionReborn</strong> & <strong class="text-white">Lumio</strong> (TorBox)...</p>
         </div>
       `;
       try {
         const data = await apiFetch(`/api/streams?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`);
         const streams = data.streams || [];
         if (streams.length === 0) {
-          container.innerHTML = `<div class="text-center py-10 text-xs text-slate-400">Aucun flux retourné par tes plugins pour ce titre.</div>`;
+          container.innerHTML = `<div class="text-center py-10 text-xs text-zinc-400">Aucun flux retourné par tes plugins pour ce titre.</div>`;
           return;
         }
         window._currentModalStreams = streams;
@@ -1098,27 +1421,27 @@
             `<span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-mono">${l}</span>`
           ).join('');
           const tagBadges = (s.tags || []).map(t =>
-            `<span class="px-2 py-0.5 rounded bg-white/10 text-slate-300 text-[10px] font-mono">${t}</span>`
+            `<span class="px-2 py-0.5 rounded bg-white/10 text-zinc-300 text-[10px] font-mono">${t}</span>`
           ).join('');
           const sizeStr = s.videoSize ? ` · ${formatBytes(s.videoSize)}` : '';
 
           return `
-            <div class="rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition">
-              <div class="space-y-1 min-w-0 flex-1">
+            <div class="rounded-xl bg-[#141414] hover:bg-zinc-900 border border-white/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition">
+              <div class="space-y-1.5 min-w-0 w-full sm:w-auto flex-1">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   ${s.isCached ? `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold">⚡ Instant TorBox</span>` : ''}
-                  <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-bold">${s.quality}</span>
+                  <span class="px-2 py-0.5 rounded bg-[#E50914]/20 text-red-300 border border-[#E50914]/40 text-[10px] font-mono font-bold">${s.quality}</span>
                   ${langBadges}
                   ${tagBadges}
-                  <span class="text-[10px] font-mono text-slate-400">${s.addon}${sizeStr}</span>
+                  <span class="text-[10px] font-mono text-zinc-400">${s.addon}${sizeStr}</span>
                 </div>
-                <p class="text-xs text-slate-200 font-mono break-all">${s.filename || s.description || s.name}</p>
+                <p class="text-[11px] sm:text-xs text-zinc-300 font-mono line-clamp-2 break-all">${s.filename || s.description || s.name}</p>
               </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <button onclick="playModalVideoOnTv(${idx})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow flex items-center gap-1.5 transition">
-                  <span>▶️</span> Play TV
+              <div class="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto shrink-0">
+                <button onclick="playModalVideoOnTv(${idx})" class="justify-center px-3.5 py-2.5 sm:py-2 rounded-lg bg-white hover:bg-zinc-200 active:scale-95 text-xs font-extrabold text-black shadow flex items-center gap-1.5 transition">
+                  <span>▶</span> Lecture TV
                 </button>
-                <button onclick="startStreamPreload(${idx})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-semibold text-white shadow flex items-center gap-1.5 transition">
+                <button onclick="startStreamPreload(${idx})" class="justify-center px-3.5 py-2.5 sm:py-2 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-xs font-bold text-white shadow flex items-center gap-1.5 transition">
                   <span>📥</span> Précharger
                 </button>
               </div>
@@ -1210,7 +1533,7 @@
       }
     }
 
-    // Initial load + live polling every 1.5s when downloads are running
+    // Initial load + live polling every 2s
     refreshStatus();
     setInterval(() => {
       refreshStatus(false);
