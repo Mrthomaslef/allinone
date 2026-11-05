@@ -22,10 +22,10 @@ KNOWN_METADATA = {
         "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     },
     "ayn-thor": {
-        "title": "AYN Thor Studio — Contrôle & Sync (Mac mini)",
-        "subtitle": "Télécommande écran ADB Live, 23 dossiers de Sauvegardes, 103 Go ROMs & Drivers Turnip à distance",
+        "title": "Rom et Emulation",
+        "subtitle": "Téléchargement direct Switch NXBrew (7 772 jeux), 103 Go ROMs, Sauvegardes Cross-Play & AYN Thor (Mac mini)",
         "category": "games-entertainment",
-        "emoji": "⚡",
+        "emoji": "🎮",
         "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
         "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
     },
