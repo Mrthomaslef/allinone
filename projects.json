@@ -8,7 +8,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
     "id": "film-et-serie",
@@ -19,7 +19,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
     "id": "patrimoine-os",
@@ -30,7 +30,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
     "id": "gemini-ultra",
@@ -41,7 +41,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
     "id": "second-brain-voice",
@@ -52,7 +52,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
     "id": "stats-youtube",
@@ -63,7 +63,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -74,18 +74,18 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
-    "id": "guide-interne-cochin-os",
-    "title": "COCHIN·OS — Guide Internes",
-    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
-    "category": "medical-imaging",
-    "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
-    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
-    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
-    "pushedAt": "2026-11-05T15:36:01Z"
+    "id": "m4-gaming",
+    "title": "M4 Gaming",
+    "subtitle": "Télécommande Mac mini M4 (Mode TV 1080p/4K, ES-DE, Steam & Audio)",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "assets/m4-gaming-icon.png",
+    "prodUrl": "http://192.168.1.111:8765",
+    "githubUrl": "https://github.com/Mrthomaslef/m4-gaming",
+    "pushedAt": "2026-11-05T17:37:51Z"
   },
   {
     "id": "agenda-cochin",
@@ -96,7 +96,18 @@
     "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
     "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
-    "pushedAt": "2026-11-05T15:07:17Z"
+    "pushedAt": "2026-11-05T16:40:15Z"
+  },
+  {
+    "id": "guide-interne-cochin-os",
+    "title": "COCHIN·OS — Guide Internes",
+    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
+    "category": "medical-imaging",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
+    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
+    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
+    "pushedAt": "2026-11-05T16:23:26Z"
   },
   {
     "id": "restaurant",
@@ -372,17 +383,6 @@
     "prodUrl": "https://mrthomaslef.github.io/dinociel-app-educative/",
     "githubUrl": "https://github.com/Mrthomaslef/dinociel-app-educative",
     "pushedAt": "2026-11-01T11:51:25Z"
-  },
-  {
-    "id": "m4-gaming",
-    "title": "M4 Gaming",
-    "subtitle": "Télécommande Mac mini M4 (Mode TV 1080p/4K, ES-DE, Steam & Audio)",
-    "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "assets/m4-gaming-icon.png",
-    "prodUrl": "http://192.168.1.111:8765",
-    "githubUrl": "https://github.com/Mrthomaslef/m4-gaming",
-    "pushedAt": "2026-10-31T07:58:34Z"
   },
   {
     "id": "Holidamn",
