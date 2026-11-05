@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Télétravail AP-HP — Accès Orbis & PACS Central à distance</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-2: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --accent: #818cf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top right, #1e293b 0%, #0b1120 60%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem 1.25rem 4rem;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.75rem 2rem;
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .brand-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
+    }
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .quick-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-dark), #2563eb);
+      color: white;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.1); }
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--primary); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .card {
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-info { background: rgba(56, 189, 248, 0.15); color: var(--primary); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-success { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-warn { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex;
+      gap: 1.1rem;
+      padding: 1.25rem 1.4rem;
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--primary-dark);
+      color: white;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+    .step-body h3 {
+      font-size: 1.02rem;
+      margin-bottom: 0.3rem;
+    }
+    .step-body p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    code {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.18rem 0.45rem;
+      border-radius: 6px;
+      font-family: "SF Mono", Menlo, monospace;
+      font-size: 0.86rem;
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .copy-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .copy-pill:hover code {
+      border-color: var(--primary);
+      background: rgba(2, 132, 199, 0.2);
+    }
+
+    .sites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+    .site-chip {
+      padding: 0.65rem 0.8rem;
+      border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      transition: all 0.15s;
+    }
+    .site-chip.highlight {
+      background: rgba(2, 132, 199, 0.18);
+      border-color: var(--primary);
+    }
+    .site-code { font-weight: 700; color: var(--text); }
+    .site-id {
+      font-family: "SF Mono", monospace;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(15, 23, 42, 0.8);
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.65rem 0.95rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .search-input:focus { outline: none; border-color: var(--primary); }
+
+    .feat-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-size: 0.92rem;
+    }
+    .feat-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .screenshot-box {
+      margin-top: 1rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #000;
+    }
+    .screenshot-box img {
+      width: 100%;
+      display: block;
+    }
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #0284c7;
+      color: white;
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">🏥</div>
+        <div>
+          <h1>Télétravail AP-HP — Orbis & PACS Central</h1>
+          <div class="subtitle">Procédure officielle (Mail Dr Nacer El Alj / Jean-Marc Ginesta — DSN IMALAB)</div>
+        </div>
+      </div>
+      <div class="quick-actions">
+        <a href="https://mes-applications.aphp.fr/" target="_blank" rel="noopener" class="btn btn-primary">
+          🚀 Ouvrir Mes Applications AP-HP
+        </a>
+        <a href="https://citrix.aphp.fr/" target="_blank" rel="noopener" class="btn btn-secondary">
+          🏢 Portail Intranet (Hôpital)
+        </a>
+      </div>
+    </header>
+
+    <div class="card" style="margin-bottom: 1.75rem;">
+      <div class="card-header">
+        <div class="card-title">📋 Procédure pas-à-pas depuis ton Mac (Domicile)</div>
+        <span class="badge badge-info">Citrix Workspace + NetScaler</span>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Installer Citrix Workspace pour macOS (Client lourd obligatoire)</h3>
+            <p>
+              Le client lourd <strong>VuePACS V12.2 (PACS central)</strong> et le <strong>Bureau APHP / ORBIS</strong> tournent via Citrix Workspace.
+              L'installateur officiel a été téléchargé sur ton Mac dans <code>/tmp/CitrixWorkspaceAppUniversal.pkg</code> et ouvert automatiquement.
+              Termines les clics ("Continuer" → "Installer").
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Se connecter au portail externe AP-HP</h3>
+            <p>
+              Ouvre <a href="https://mes-applications.aphp.fr/" target="_blank" style="color:var(--primary)">https://mes-applications.aphp.fr/</a>.
+              Connecte-toi avec ton identifiant AP-HP :
+              <span class="copy-pill" onclick="copyText('4107759')"><code>4107759</code> 📋</span>
+              (ou <span class="copy-pill" onclick="copyText('thomas-jean.lefevre@aphp.fr')"><code>thomas-jean.lefevre@aphp.fr</code> 📋</span>)
+              et ton mot de passe AP-HP actuel, puis valide le code à 6 chiffres envoyé par <code>authentification@aphp.fr</code>.
+            </p>
+            <p style="margin-top:0.4rem; color:#fbbf24; font-size:0.86rem;">
+              ⚠️ <strong>Note importante du tuto de Nacer :</strong> Si ton matricule affiche <em>"Try again after some time or contact your help desk"</em>, c'est que l'accès externe à <code>mes-applications.aphp.fr</code> n'est pas encore activé sur ton profil AD : il faut en faire la demande sur <strong>SMAX</strong> (ou appeler le support CSU au <strong>*75</strong> / <code>assistance.informatique.aphp@aphp.fr</code>).
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Lancer « PACS central » (VuePACS V12.2) et « ORBIS / Bureau APHP »</h3>
+            <p>
+              Une fois sur le portail Citrix :
+              dans l'onglet <strong>APPLICATIONS</strong> (ou <strong>FAVORIS</strong>), clique sur <strong>« PACS central »</strong> pour ouvrir VuePACS V12.2, et sur <strong>« ORBIS »</strong> (ou dans l'onglet <strong>BUREAUX</strong> → <strong>« Bureau APHP »</strong>) pour accéder à Orbis à distance.
+            </p>
+            <div class="screenshot-box">
+              <img src="assets/image006.jpg" alt="Capture portail Mes Applications AP-HP - PACS central" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">✅ Fonctionnalités PACS Central à distance</div>
+          <span class="badge badge-success">Groupes PMRADIOJUNIOR & MEDECINS</span>
+        </div>
+        <ul class="feat-list">
+          <li>🟢 <strong>Visualisation des examens</strong> (tous les sites AP-HP)</li>
+          <li>🟢 <strong>Post-traitement</strong> (MPR, MIP, 3D VuePACS V12.2)</li>
+          <li>🟢 <strong>Comparaison des examens</strong> antérieurs</li>
+          <li>🟢 <strong>Affichage des comptes rendus (CR)</strong></li>
+          <li style="margin-top:0.6rem; padding-top:0.6rem; border-top:1px solid var(--border); color:var(--muted);">
+            🔴 <em>Non disponible sur PACS central distant :</em> Rédaction/gestion des CR (module d'interprétation), impression CR/images, et fonction « Copier vers » (transfert DICOM).
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🛠️ Contacts Support & Référents PACS</div>
+          <span class="badge badge-warn">En cas de blocage SMAX</span>
+        </div>
+        <ul class="feat-list">
+          <li>📞 <strong>Support Informatique CSU AP-HP :</strong> <code>*75</code> (interne) ou <code>assistance.informatique.aphp@aphp.fr</code></li>
+          <li>👩‍💼 <strong>Référente PACS Cochin Radio B :</strong> <strong>Laila SELLAMI</strong> — <code>laila.sellami@aphp.fr</code> (Tél : <code>01 58 41 21 97</code> / DECT <code>12197</code>)</li>
+          <li>👨‍💻 <strong>Chef de Projets PACS Central (DSN) :</strong> <strong>Jean-Marc GINESTA</strong> — <code>07 78 07 73 45</code> / <code>01 48 04 22 94</code></li>
+          <li>🎫 <strong>Demande d'ouverture :</strong> Faire un ticket <strong>SMAX</strong> : <em>« Demande d'accès à distance mes-applications.aphp.fr + groupes PACS AD PMRADIOJUNIOR / MEDECINS et accès ORBIS »</em>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">🔢 Numéros de Site ID (Filtre VuePACS V12.2 Central)</div>
+        <span class="badge badge-info">31 Hôpitaux AP-HP</span>
+      </div>
+      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:0.5rem;">
+        Dans <strong>PACS central</strong>, filtre par <strong>Site ID</strong> pour afficher uniquement les examens de ton hôpital (ex: <strong>CCH = 9</strong> pour Cochin, <strong>PSL = 25</strong> pour Pitié, <strong>HTD = 14</strong> pour Hôtel-Dieu).
+      </p>
+      <input type="text" id="siteSearch" class="search-input" placeholder="Rechercher un hôpital (ex: CCH, Cochin, PSL, TRS, SAT...)" oninput="filterSites()" />
+      <div class="sites-grid" id="sitesGrid"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copié dans le presse-papiers !</div>
+
+  <script>
+    const SITES = [
+      { code: "CCH", id: 9, name: "Cochin", fav: true },
+      { code: "HTD", id: 14, name: "Hôtel-Dieu", fav: true },
+      { code: "PSL", id: 25, name: "Pitié-Salpêtrière", fav: true },
+      { code: "TRS", id: 2, name: "Trousseau", fav: true },
+      { code: "SAT", id: 1, name: "Saint-Antoine", fav: false },
+      { code: "LRB", id: 3, name: "Lariboisière", fav: false },
+      { code: "SLS", id: 4, name: "Saint-Louis", fav: false },
+      { code: "APR", id: 5, name: "Ambroise-Paré", fav: false },
+      { code: "AVC", id: 6, name: "Avicenne", fav: false },
+      { code: "BCT", id: 7, name: "Bicêtre", fav: false },
+      { code: "HMN", id: 8, name: "Henri-Mondor", fav: false },
+      { code: "NCK", id: 10, name: "Necker", fav: false },
+      { code: "ABC", id: 11, name: "Antoine-Béclère", fav: false },
+      { code: "BCH", id: 12, name: "Bichat", fav: false },
+      { code: "BJN", id: 13, name: "Beaujon", fav: false },
+      { code: "JVR", id: 15, name: "Jean-Verdier", fav: false },
+      { code: "LMR", id: 16, name: "Louis-Mourier", fav: false },
+      { code: "PBR", id: 17, name: "Paul-Brousse", fav: false },
+      { code: "RDB", id: 18, name: "Robert-Debré", fav: false },
+      { code: "RPC", id: 19, name: "Raymond-Poincaré", fav: false },
+      { code: "TNN", id: 20, name: "Tenon", fav: false },
+      { code: "CFX", id: 21, name: "Charles-Foix", fav: false },
+      { code: "RTH", id: 22, name: "Rothschild", fav: false },
+      { code: "EGP", id: 30, name: "HEGP (Pompidou)", fav: false },
+      { code: "SPR", id: 51, name: "Sainte-Périne", fav: false },
+      { code: "ACH", id: 81, name: "Albert-Chenevier", fav: false },
+      { code: "JFR", id: 82, name: "Joffre-Dupuytren", fav: false },
+      { code: "GCL", id: 83, name: "Georges-Clémenceau", fav: false },
+      { code: "ERX", id: 84, name: "Émile-Roux", fav: false },
+      { code: "RMB", id: 151, name: "René-Muret", fav: false },
+      { code: "CCL", id: 301, name: "Corentin-Celton", fav: false }
+    ];
+
+    function renderSites(filter = "") {
+      const q = filter.trim().toLowerCase();
+      const grid = document.getElementById("sitesGrid");
+      grid.innerHTML = SITES
+        .filter(s => !q || s.code.toLowerCase().includes(q) || s.name.toLowerCase().includes(q) || String(s.id) === q)
+        .map(s => `
+          <div class="site-chip ${s.fav ? 'highlight' : ''}" onclick="copyText('${s.id}')" style="cursor:pointer" title="Cliquer pour copier l'ID ${s.id}">
+            <div>
+              <div class="site-code">${s.code}</div>
+              <div style="font-size:0.75rem; color:var(--muted)">${s.name}</div>
+            </div>
+            <span class="site-id">ID ${s.id}</span>
+          </div>
+        `).join("");
+    }
+
+    function filterSites() {
+      renderSites(document.getElementById("siteSearch").value);
+    }
+
+    function copyText(txt) {
+      navigator.clipboard.writeText(txt);
+      const t = document.getElementById("toast");
+      t.textContent = `Copié : ${txt}`;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 1800);
+    }
+
+    renderSites();
+  </script>
+</body>
+</html>

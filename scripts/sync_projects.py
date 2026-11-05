@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "teletravail": {
+        "title": "Télétravail AP-HP — Orbis & PACS Central",
+        "subtitle": "Accès distant Citrix Workspace, portail mes-applications.aphp.fr & annuaire des 31 Site ID VuePACS",
+        "category": "medical-imaging",
+        "emoji": "🏥",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/teletravail/",
+        "logoUrl": "teletravail/assets/icon.svg",
+    },
     "patrimoine-os": {
         "title": "PatrimoineOS — Banque, Crypto & Pokémon",
         "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",
