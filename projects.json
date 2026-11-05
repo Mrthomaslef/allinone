@@ -1,5 +1,16 @@
 [
   {
+    "id": "gestion-anticoagulant",
+    "title": "Anticoagulants & AAP — Protocole Cochin RI",
+    "subtitle": "Gestion des anticoagulants et antiplaquettaires (22 gestes RI, règles d'arrêt/adaptation/reprise RFE GIHP/SFAR/FRI/SFR 2026)",
+    "category": "medical-imaging",
+    "emoji": "🩸",
+    "logoUrl": "gestion-anticoagulant/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
+    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
+    "pushedAt": "2026-11-05T13:08:55Z"
+  },
+  {
     "id": "film-et-serie",
     "title": "CinePreload — Stremio + TorBox (Mac mini)",
     "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
@@ -8,7 +19,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-05T12:53:22Z"
+    "pushedAt": "2026-11-05T13:08:55Z"
   },
   {
     "id": "patrimoine-os",
@@ -19,7 +30,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-05T12:53:22Z"
+    "pushedAt": "2026-11-05T13:08:55Z"
   },
   {
     "id": "gemini-ultra",
@@ -30,7 +41,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-05T12:53:22Z"
+    "pushedAt": "2026-11-05T13:08:55Z"
   },
   {
     "id": "second-brain-voice",
@@ -41,7 +52,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-05T12:53:22Z"
+    "pushedAt": "2026-11-05T13:08:55Z"
   },
   {
     "id": "stats-youtube",
@@ -52,7 +63,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-05T12:53:22Z"
+    "pushedAt": "2026-11-05T13:08:55Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -63,7 +74,18 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-05T12:53:22Z"
+    "pushedAt": "2026-11-05T13:08:55Z"
+  },
+  {
+    "id": "agenda-cochin",
+    "title": "Cochin RI — Agenda",
+    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
+    "category": "medical-imaging",
+    "emoji": "📅",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
+    "pushedAt": "2026-11-05T13:08:55Z"
   },
   {
     "id": "guide-interne-cochin-os",
@@ -75,17 +97,6 @@
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
     "pushedAt": "2026-11-05T12:53:22Z"
-  },
-  {
-    "id": "agenda-cochin",
-    "title": "Cochin RI — Agenda",
-    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
-    "category": "medical-imaging",
-    "emoji": "📅",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
-    "pushedAt": "2026-11-05T12:53:18Z"
   },
   {
     "id": "agenda-famille",

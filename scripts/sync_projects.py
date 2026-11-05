@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "gestion-anticoagulant": {
+        "title": "Anticoagulants & AAP — Protocole Cochin RI",
+        "subtitle": "Gestion des anticoagulants et antiplaquettaires (22 gestes RI, règles d'arrêt/adaptation/reprise RFE GIHP/SFAR/FRI/SFR 2026)",
+        "category": "medical-imaging",
+        "emoji": "🩸",
+        "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
+        "logoUrl": "gestion-anticoagulant/assets/icon.svg",
+    },
     "ayn-thor": {
         "title": "AYN Thor Studio — Contrôle & Sync (Mac mini)",
         "subtitle": "Télécommande écran ADB Live, 23 dossiers de Sauvegardes, 103 Go ROMs & Drivers Turnip à distance",
@@ -473,6 +481,22 @@ def main():
                 "logoUrl": "film-et-serie/assets/icon.svg?v=2",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/film-et-serie",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "gestion-anticoagulant" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "gestion-anticoagulant",
+                "title": "Anticoagulants & AAP — Protocole Cochin RI",
+                "subtitle": "Gestion des anticoagulants et antiplaquettaires (22 gestes RI, règles d'arrêt/adaptation/reprise RFE GIHP/SFAR/FRI/SFR 2026)",
+                "category": "medical-imaging",
+                "emoji": "🩸",
+                "logoUrl": "gestion-anticoagulant/assets/icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/guide-interne-cochin-os/tree/main/anticoagulants",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
