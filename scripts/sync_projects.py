@@ -24,7 +24,7 @@ KNOWN_METADATA = {
     "ayn-thor": {
         "title": "Rom et Emulation",
         "subtitle": "Téléchargement direct Switch NXBrew (7 772 jeux), 103 Go ROMs, Sauvegardes Cross-Play & AYN Thor (Mac mini)",
-        "category": "games-entertainment",
+        "category": "games-family",
         "emoji": "🎮",
         "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
         "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",

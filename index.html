@@ -408,7 +408,7 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'tapp_store_live_repos_cache_v12';
+    const CACHE_KEY = 'tapp_store_live_repos_cache_v13';
     const VIEW_MODE_KEY = 'tapp_store_view_mode_v1';
     const FAVS_V2_KEY = 'tapp_store_favorites_v2';
     const FAVS_STORAGE_KEY = 'tapp_store_favorites_v1';
@@ -776,7 +776,7 @@
     "ayn-thor": {
         "title": "Rom et Emulation",
         "subtitle": "Téléchargement direct Switch NXBrew (7 772 jeux), 103 Go ROMs, Sauvegardes Cross-Play & AYN Thor (Mac mini)",
-        "category": "games-entertainment",
+        "category": "games-family",
         "emoji": "🎮",
         "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
         "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
@@ -1241,6 +1241,10 @@
               if (!known) return item;
               return {
                 ...item,
+                title: known.title || item.title,
+                subtitle: known.subtitle || item.subtitle,
+                category: known.category || item.category,
+                emoji: known.emoji || item.emoji,
                 logoUrl: known.logoUrl || item.logoUrl,
                 extraFallbacks: known.extraFallbacks || item.extraFallbacks || [],
                 logoFit: known.logoFit || item.logoFit || 'cover'
