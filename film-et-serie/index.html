@@ -259,9 +259,44 @@
   </div>
 
   <script>
-    const API_BASE = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
+    let API_BASE = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
       ? ''
-      : 'http://127.0.0.1:8765';
+      : 'http://127.0.0.1:8790';
+    let endpointResolved = false;
+
+    async function resolveBackendEndpoint() {
+      if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+        API_BASE = '';
+        endpointResolved = true;
+        return;
+      }
+      const candidates = [];
+      try {
+        const epRes = await fetch(`endpoint.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (epRes.ok) {
+          const ep = await epRes.json();
+          if (ep.tunnelUrl) candidates.push(ep.tunnelUrl.replace(/\/$/, ''));
+          if (ep.lanUrl && window.location.protocol !== 'https:') candidates.push(ep.lanUrl.replace(/\/$/, ''));
+          if (ep.localUrl && window.location.protocol !== 'https:') candidates.push(ep.localUrl.replace(/\/$/, ''));
+        }
+      } catch (_) {}
+      candidates.push('http://127.0.0.1:8790');
+      candidates.push('http://192.168.1.111:8790');
+
+      for (const base of candidates) {
+        try {
+          const ctrl = new AbortController();
+          const tid = setTimeout(() => ctrl.abort(), 4000);
+          const r = await fetch(`${base}/api/status`, { signal: ctrl.signal });
+          clearTimeout(tid);
+          if (r.ok) {
+            API_BASE = base;
+            endpointResolved = true;
+            return;
+          }
+        } catch (_) {}
+      }
+    }
 
     let currentTab = 'library';
     let appState = {
@@ -305,8 +340,18 @@
     }
 
     async function apiFetch(path, opts = {}) {
-      const res = await fetch(`${API_BASE}${path}`, opts);
-      return await res.json();
+      if (!endpointResolved) {
+        await resolveBackendEndpoint();
+      }
+      try {
+        const res = await fetch(`${API_BASE}${path}`, opts);
+        return await res.json();
+      } catch (err) {
+        endpointResolved = false;
+        await resolveBackendEndpoint();
+        const res = await fetch(`${API_BASE}${path}`, opts);
+        return await res.json();
+      }
     }
 
     async function refreshStatus(force = false) {
@@ -314,7 +359,8 @@
         const data = await apiFetch(`/api/status${force ? '?force=1' : ''}`);
         document.getElementById('offlineBanner').classList.add('hidden');
         document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-emerald-400';
-        document.getElementById('daemonText').textContent = 'Mac mini Connecté';
+        const isTunnel = API_BASE.includes('trycloudflare.com');
+        document.getElementById('daemonText').textContent = isTunnel ? 'Mac mini Connecté (Tunnel HTTPS)' : 'Mac mini Connecté';
 
         appState = data;
         if (data.account?.email) {
