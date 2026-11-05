@@ -935,8 +935,22 @@
       <div class="section-header">
         <div>
           <h2>🎬 Le Vrai Historique Intégral de vos 145 740 Vidéos, Recherches & Likes (2011 → 2026)</h2>
-          <p>Aucune vidéo n'est omise : parcourez l'intégralité de vos 145 740 entrées avec l'heure exacte, la durée de la vidéo, la barre rouge de progression et le temps réellement passé.</p>
+          <p>Aucune vidéo n'est omise : parcourez vos <strong>130 674 vidéos regardées</strong>, <strong>12 889 recherches</strong>, <strong>893 vidéos « J'aime »</strong> et <strong>281 abonnements</strong> avec la durée exacte, la barre rouge YouTube et le temps réellement passé.</p>
         </div>
+      </div>
+
+      <div style="background:rgba(59,130,246,0.09); border:1px solid rgba(59,130,246,0.28); border-radius:12px; padding:0.85rem 1.1rem; margin-bottom:0.9rem; font-size:0.82rem; color:var(--text-1); line-height:1.5;">
+        💡 <strong>Pourquoi les années 2011–2019 contiennent des « J'aime » / Abonnements alors que 2020–2026 contient 130 674 vidéos regardées ?</strong><br>
+        Sur votre compte Google (<code>myactivity.google.com</code>), l'historique de visionnage brut antérieur au <strong>25 juillet 2020</strong> a été purgé par Google, mais Google n'efface jamais votre playlist <em>Vidéos « J'aime »</em> (893 vidéos depuis le 11 oct. 2011), vos <em>Abonnements</em> (281 chaînes depuis 2012) ni vos <em>Commentaires</em>. En revanche, du <strong>25 juillet 2020 à 2026</strong>, vous avez bien <strong>130 674 vraies vidéos regardées (▶️ Regardé)</strong> et <strong>12 889 recherches</strong> !
+      </div>
+
+      <div class="theme-selector-bar" style="margin-bottom:0.85rem;">
+        <button class="theme-pill-btn active" id="qBtnWatch" onclick="quickSetHistoryMode('0','desc',this)">▶️ Vidéos Regardées (130 674)</button>
+        <button class="theme-pill-btn" id="qBtnLongest" onclick="quickSetHistoryMode('0','longest',this)">⏱️ Plus Long Temps Passé (Top VODs)</button>
+        <button class="theme-pill-btn" id="qBtnWatchAsc" onclick="quickSetHistoryMode('0','asc',this)">📅 Vidéos Regardées dès Juil. 2020 → 2026</button>
+        <button class="theme-pill-btn" id="qBtnSearch" onclick="quickSetHistoryMode('1','desc',this)">🔍 Recherches YouTube (12 889)</button>
+        <button class="theme-pill-btn" id="qBtnLikes" onclick="quickSetHistoryMode('2','asc',this)">👍 Vidéos « J'aime » 2011 → 2026 (893)</button>
+        <button class="theme-pill-btn" id="qBtnAll" onclick="quickSetHistoryMode('all','asc',this)">🌐 Tout l'Historique 2011 → 2026 (145 740)</button>
       </div>
 
       <div class="filter-bar">
@@ -948,17 +962,17 @@
           <option value="all">Toutes les années (2011–2026)</option>
         </select>
         <select id="filterAction" class="filter-select" onchange="resetAndFilterHistory()">
-          <option value="all">Toutes les actions (145 740)</option>
-          <option value="0">▶️ Vidéos regardées (130 674)</option>
-          <option value="2">👍 Vidéos « J'aime » (depuis 2011)</option>
-          <option value="3">🔔 Abonnements (depuis 2012)</option>
-          <option value="1">🔍 Recherches YouTube (8 489)</option>
-          <option value="4">💬 Commentaires postés</option>
+          <option value="0" selected>▶️ Vidéos regardées uniquement (130 674)</option>
+          <option value="all">🌐 Toutes les actions (145 740)</option>
+          <option value="2">👍 Vidéos « J'aime » (893 depuis 2011)</option>
+          <option value="3">🔔 Abonnements (281 depuis 2012)</option>
+          <option value="1">🔍 Recherches YouTube (12 889)</option>
+          <option value="4">💬 Commentaires & Interactions</option>
         </select>
         <select id="filterOrder" class="filter-select" onchange="resetAndFilterHistory()">
-          <option value="asc">⏳ Ordre Chronologique (2011 → 2026)</option>
-          <option value="desc">🆕 Plus récent d'abord (2026 → 2011)</option>
+          <option value="desc" selected>🆕 Plus récent d'abord (2026 → 2011)</option>
           <option value="longest">⏱️ Plus long temps passé d'abord</option>
+          <option value="asc">⏳ Ordre Chronologique (2011 → 2026)</option>
         </select>
       </div>
 
@@ -1252,8 +1266,19 @@
       }).join('');
     }
 
+    function quickSetHistoryMode(actVal, ordVal, btnEl) {
+      document.getElementById('filterAction').value = actVal;
+      document.getElementById('filterOrder').value = ordVal;
+      document.querySelectorAll('#qBtnWatch, #qBtnLongest, #qBtnWatchAsc, #qBtnSearch, #qBtnLikes, #qBtnAll').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      resetAndFilterHistory();
+    }
+
     function filterTableByYear(yr) {
       document.getElementById('filterYear').value = String(yr);
+      if (yr < 2020 && document.getElementById('filterAction').value === '0') {
+        document.getElementById('filterAction').value = 'all';
+      }
       resetAndFilterHistory();
     }
 

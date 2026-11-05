@@ -848,19 +848,26 @@ def main() -> None:
 
         by_year_samples = []
         seen_titles = set()
-        for y in sorted(by_y_cnt):
-            y_candidates = [
+        for y in sorted(by_y_cnt, reverse=True):
+            y_watches = [
                 r
                 for r in t_recs
                 if r["year"] == y
-                and r["atype"] in ("like", "watch", "subscribe")
+                and r["atype"] == "watch"
                 and not r["title"].startswith("http")
             ]
-            y_candidates.sort(
+            y_Pool = y_watches if y_watches else [
+                r
+                for r in t_recs
+                if r["year"] == y
+                and r["atype"] in ("like", "subscribe")
+                and not r["title"].startswith("http")
+            ]
+            y_Pool.sort(
                 key=lambda x: (-x["real_sec"], x["ts"])
             )
             picked = 0
-            for cand in y_candidates:
+            for cand in y_Pool:
                 key = (cand["title"][:40].lower(), cand["channel"].lower())
                 if key in seen_titles:
                     continue
@@ -880,7 +887,7 @@ def main() -> None:
                     }
                 )
                 picked += 1
-                if picked >= 4:
+                if picked >= (3 if y >= 2021 else 1):
                     break
 
         peak_year = by_y_sec.most_common(1)[0][0] if sum(by_y_sec.values()) > 0 else by_y_cnt.most_common(1)[0][0]
@@ -1062,15 +1069,21 @@ def main() -> None:
                 ch_cnt[r["channel"]] += 1
                 ch_sec[r["channel"]] += r["real_sec"]
 
+        watches_pool = [
+            r
+            for r in e_recs
+            if r["atype"] == "watch"
+            and not r["title"].startswith("http")
+            and r["real_sec"] > 0
+        ]
+        watches_pool.sort(key=lambda x: (-x["real_sec"], x["ts"]))
         likes_pool = [
             r
             for r in e_recs
-            if r["atype"] in ("like", "subscribe", "watch")
+            if r["atype"] in ("like", "subscribe")
             and not r["title"].startswith("http")
         ]
-        priority_pool = [
-            r for r in likes_pool if r["atype"] in ("like", "subscribe")
-        ] or likes_pool
+        priority_pool = watches_pool[:80] if len(watches_pool) >= 12 else (watches_pool + likes_pool)
         step = max(1, len(priority_pool) // 16)
         milestones = []
         seen_m = set()
@@ -1241,7 +1254,7 @@ def main() -> None:
 
     full_rows = []
     for r in records:
-        ac = ACTION_CODE.get(r["atype"], 0)
+        ac = ACTION_CODE.get(r["atype"], 4)
         ti = THEME_INDEX.get(r["theme"], 0)
         vid_or_url = r["vid_id"] if r["vid_id"] else r["url"]
         full_rows.append(
