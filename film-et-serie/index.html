@@ -78,10 +78,10 @@
 
       <!-- Status Pills & Quick Actions -->
       <div class="flex items-center gap-2.5 flex-wrap">
-        <div id="daemonBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-white/10 text-xs">
+        <button onclick="endpointResolved=false; resolveBackendEndpoint().then(()=>refreshStatus(true))" id="daemonBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-white/10 text-xs transition" title="Toucher pour rafraîchir la connexion au Mac mini">
           <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="daemonDot"></span>
           <span id="daemonText">Connexion au démon Mac mini...</span>
-        </div>
+        </button>
 
         <button onclick="openPreloadFolder()" id="btnOpenFolder" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition">
           <span>📂</span> Dossier Films (<span id="diskFreeText">-- Go</span> libres)
@@ -98,14 +98,16 @@
     </div>
   </header>
 
-  <!-- Remote Warning Banner (Only visible if opened from GitHub Pages when local daemon isn't running) -->
+  <!-- Remote Warning Banner (Only visible if opened from GitHub Pages when local daemon isn't reachable) -->
   <div id="offlineBanner" class="hidden bg-amber-500/10 border-b border-amber-500/30 px-4 py-3">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs text-amber-200">
       <div class="flex items-center gap-2">
         <span class="text-base">⚠️</span>
-        <span>Le démon local du Mac mini (<code class="font-mono bg-black/30 px-1.5 py-0.5 rounded">http://127.0.0.1:8790</code>) ne répond pas. La recherche Cinemeta fonctionne, mais lance le serveur sur ton Mac mini pour précharger via TorBox.</span>
+        <span>Connexion au démon du Mac mini en cours de resynchronisation (Tunnel HTTPS Cloudflare)...</span>
       </div>
-      <code class="font-mono bg-black/40 px-2.5 py-1 rounded border border-amber-500/30">python3 ~/.t3/projects/film-et-serie/server.py</code>
+      <button onclick="endpointResolved=false; resolveBackendEndpoint().then(()=>refreshStatus(true))" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-100 font-semibold transition flex items-center gap-1.5">
+        <span>🔄</span> Reconnecter au Mac mini
+      </button>
     </div>
   </div>
 
@@ -284,8 +286,30 @@
   <script>
     let API_BASE = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
       ? ''
-      : 'http://127.0.0.1:8790';
+      : (localStorage.getItem('cinepreload_last_endpoint') || 'http://127.0.0.1:8790');
     let endpointResolved = false;
+    let consecutiveFailures = 0;
+
+    async function probeEndpoint(base, timeoutMs = 4500) {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), timeoutMs);
+      try {
+        const r = await fetch(`${base}/api/status`, {
+          signal: ctrl.signal,
+          cache: 'no-store'
+        });
+        clearTimeout(tid);
+        if (r.ok) {
+          const data = await r.json();
+          if (data && typeof data === 'object' && 'ok' in data) {
+            return base;
+          }
+        }
+      } catch (_) {
+        clearTimeout(tid);
+      }
+      throw new Error('Unreachable: ' + base);
+    }
 
     async function resolveBackendEndpoint() {
       if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
@@ -293,41 +317,67 @@
         endpointResolved = true;
         return;
       }
-      const candidates = [];
-      const epUrls = [
-        `https://raw.githubusercontent.com/Mrthomaslef/allinone/main/film-et-serie/endpoint.json?t=${Date.now()}`,
-        `endpoint.json?t=${Date.now()}`
-      ];
-      for (const epUrl of epUrls) {
-        try {
-          const epRes = await fetch(epUrl, { cache: 'no-store' });
-          if (epRes.ok) {
-            const ep = await epRes.json();
-            if (ep.tunnelUrl && !candidates.includes(ep.tunnelUrl.replace(/\/$/, ''))) {
-              candidates.push(ep.tunnelUrl.replace(/\/$/, ''));
-            }
-            if (ep.lanUrl && window.location.protocol !== 'https:') candidates.push(ep.lanUrl.replace(/\/$/, ''));
-            if (ep.localUrl && window.location.protocol !== 'https:') candidates.push(ep.localUrl.replace(/\/$/, ''));
-          }
-        } catch (_) {}
-      }
-      if (window.location.protocol !== 'https:') {
-        candidates.push('http://127.0.0.1:8790');
-        candidates.push('http://192.168.1.111:8790');
+      if (window.location.hostname.endsWith('.trycloudflare.com')) {
+        API_BASE = window.location.origin;
+        localStorage.setItem('cinepreload_last_endpoint', API_BASE);
+        endpointResolved = true;
+        return;
       }
 
-      for (const base of candidates) {
-        try {
-          const ctrl = new AbortController();
-          const tid = setTimeout(() => ctrl.abort(), 8000);
-          const r = await fetch(`${base}/api/status`, { signal: ctrl.signal });
-          clearTimeout(tid);
+      const candidates = new Set();
+      const cachedEp = localStorage.getItem('cinepreload_last_endpoint');
+      if (cachedEp) {
+        if (window.location.protocol !== 'https:' || cachedEp.startsWith('https://')) {
+          candidates.add(cachedEp.replace(/\/$/, ''));
+        }
+      }
+
+      // 1. Fetch live endpoint.json from GitHub Contents API (bypasses Fastly 5-10 min CDN cache) + raw + local in parallel
+      const addFromEp = (ep) => {
+        if (!ep || typeof ep !== 'object') return;
+        if (ep.tunnelUrl) candidates.add(ep.tunnelUrl.replace(/\/$/, ''));
+        if (ep.lanUrl && window.location.protocol !== 'https:') candidates.add(ep.lanUrl.replace(/\/$/, ''));
+        if (ep.localUrl && window.location.protocol !== 'https:') candidates.add(ep.localUrl.replace(/\/$/, ''));
+      };
+
+      await Promise.allSettled([
+        // GitHub Contents API returns immediate commit content in base64 without raw CDN delay
+        fetch(`https://api.github.com/repos/Mrthomaslef/allinone/contents/film-et-serie/endpoint.json?ref=main&t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        }).then(async r => {
           if (r.ok) {
-            API_BASE = base;
-            endpointResolved = true;
-            return;
+            const meta = await r.json();
+            if (meta && meta.content) {
+              const decoded = JSON.parse(atob(meta.content.replace(/\s/g, '')));
+              addFromEp(decoded);
+            }
           }
-        } catch (_) {}
+        }),
+        fetch(`https://raw.githubusercontent.com/Mrthomaslef/allinone/main/film-et-serie/endpoint.json?t=${Date.now()}`, { cache: 'no-store' })
+          .then(async r => { if (r.ok) addFromEp(await r.json()); }),
+        fetch(`endpoint.json?t=${Date.now()}`, { cache: 'no-store' })
+          .then(async r => { if (r.ok) addFromEp(await r.json()); })
+      ]);
+
+      if (window.location.protocol !== 'https:') {
+        candidates.add('http://127.0.0.1:8790');
+        candidates.add('http://192.168.1.111:8790');
+      }
+
+      const candidateList = [...candidates].filter(Boolean);
+      if (candidateList.length === 0) return;
+
+      // Probe all candidate URLs in parallel and pick the fastest live responder
+      try {
+        const winner = await Promise.any(candidateList.map(base => probeEndpoint(base, 5000)));
+        if (winner) {
+          API_BASE = winner;
+          localStorage.setItem('cinepreload_last_endpoint', winner);
+          endpointResolved = true;
+        }
+      } catch (_) {
+        endpointResolved = false;
       }
     }
 
@@ -377,12 +427,20 @@
         await resolveBackendEndpoint();
       }
       try {
-        const res = await fetch(`${API_BASE}${path}`, opts);
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 7000);
+        const res = await fetch(`${API_BASE}${path}`, { ...opts, signal: ctrl.signal, cache: 'no-store' });
+        clearTimeout(tid);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
       } catch (err) {
         endpointResolved = false;
         await resolveBackendEndpoint();
-        const res = await fetch(`${API_BASE}${path}`, opts);
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 7000);
+        const res = await fetch(`${API_BASE}${path}`, { ...opts, signal: ctrl.signal, cache: 'no-store' });
+        clearTimeout(tid);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
       }
     }
@@ -390,10 +448,15 @@
     async function refreshStatus(force = false) {
       try {
         const data = await apiFetch(`/api/status${force ? '?force=1' : ''}`);
+        consecutiveFailures = 0;
         document.getElementById('offlineBanner').classList.add('hidden');
         document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-emerald-400';
         const isTunnel = API_BASE.includes('trycloudflare.com');
         document.getElementById('daemonText').textContent = isTunnel ? 'Mac mini Connecté (Tunnel HTTPS)' : 'Mac mini Connecté';
+
+        if (data.tunnelUrl && data.tunnelUrl.startsWith('https://')) {
+          localStorage.setItem('cinepreload_last_endpoint', data.tunnelUrl.replace(/\/$/, ''));
+        }
 
         appState = data;
         if (data.account?.email) {
@@ -424,9 +487,12 @@
         }
         if (force) showToast('Compte Stremio et bibliothèque resynchronisés !');
       } catch (err) {
-        document.getElementById('offlineBanner').classList.remove('hidden');
-        document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-rose-500';
-        document.getElementById('daemonText').textContent = 'Démon local hors-ligne';
+        consecutiveFailures++;
+        if (consecutiveFailures >= 2 || force) {
+          document.getElementById('offlineBanner').classList.remove('hidden');
+          document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-rose-500';
+          document.getElementById('daemonText').textContent = 'Démon local hors-ligne';
+        }
       }
     }
 
