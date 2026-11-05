@@ -1855,10 +1855,10 @@
             if (!hasLiveUrl) return;
 
             const autoClass = classifyNewRepo(r);
-            const prodUrl = (r.homepage && r.homepage.trim().startsWith('http'))
-              ? r.homepage.trim()
-              : (known && known.prodUrl)
-                ? known.prodUrl
+            const prodUrl = (known && known.prodUrl)
+              ? known.prodUrl
+              : (r.homepage && r.homepage.trim().startsWith('http'))
+                ? r.homepage.trim()
                 : (fromManifest && fromManifest.prodUrl)
                   ? fromManifest.prodUrl
                   : `https://${GITHUB_USERNAME.toLowerCase()}.github.io/${r.name}/`;

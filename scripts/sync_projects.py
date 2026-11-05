@@ -352,9 +352,9 @@ def main():
             continue
 
         prod_url = (
-            homepage
-            if homepage.startswith("http")
-            else (known.get("prodUrl") if known and known.get("prodUrl") else f"https://{GITHUB_USERNAME.lower()}.github.io/{name}/")
+            known.get("prodUrl")
+            if (known and known.get("prodUrl"))
+            else (homepage if homepage.startswith("http") else f"https://{GITHUB_USERNAME.lower()}.github.io/{name}/")
         )
 
         auto_cat, auto_emoji = classify_repo(name, repo.get("description") or "", repo.get("topics") or [])
