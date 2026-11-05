@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CinePreload · Stremio + TorBox Mac mini</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            stremio: {
+              500: '#8A5AAB',
+              600: '#724494',
+              400: '#A678C7'
+            },
+            torbox: {
+              500: '#10B981',
+              400: '#34D399'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: radial-gradient(circle at 15% 0%, rgba(138, 90, 171, 0.18), transparent 42%),
+                  radial-gradient(circle at 85% 10%, rgba(16, 185, 129, 0.12), transparent 40%),
+                  #090A0F;
+      color: #F3F4F6;
+      min-height: 100vh;
+    }
+    .glass {
+      background: rgba(18, 21, 30, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-hover:hover {
+      border-color: rgba(166, 120, 199, 0.35);
+      box-shadow: 0 12px 32px -8px rgba(138, 90, 171, 0.22);
+    }
+    .poster-card:hover .poster-overlay {
+      opacity: 1;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #090A0F; }
+    ::-webkit-scrollbar-thumb { background: #262936; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3E4359; }
+  </style>
+</head>
+<body class="antialiased selection:bg-purple-500/30 selection:text-purple-200">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-40 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 via-indigo-600 to-emerald-500 p-0.5 shadow-lg shadow-purple-500/20">
+          <div class="w-full h-full bg-[#0D0F17] rounded-[10px] flex items-center justify-center text-xl">
+            🎬
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-extrabold tracking-tight text-white">CinePreload</h1>
+            <span class="text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Stremio 5 ARM64</span>
+            <span class="text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">⚡ TorBox CDN</span>
+          </div>
+          <p class="text-xs text-slate-400" id="accountStatusText">Synchronisation avec ton compte Stremio & TorBox...</p>
+        </div>
+      </div>
+
+      <!-- Status Pills & Quick Actions -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <div id="daemonBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-white/10 text-xs">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="daemonDot"></span>
+          <span id="daemonText">Connexion au démon Mac mini...</span>
+        </div>
+
+        <button onclick="openPreloadFolder()" id="btnOpenFolder" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition">
+          <span>📂</span> Dossier Films (<span id="diskFreeText">-- Go</span> libres)
+        </button>
+
+        <button onclick="launchStremioApp()" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-semibold text-white shadow-md shadow-purple-600/25 flex items-center gap-1.5 transition">
+          <span>▶️</span> Ouvrir Stremio Mac
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Remote Warning Banner (Only visible if opened from GitHub Pages when local daemon isn't running) -->
+  <div id="offlineBanner" class="hidden bg-amber-500/10 border-b border-amber-500/30 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs text-amber-200">
+      <div class="flex items-center gap-2">
+        <span class="text-base">⚠️</span>
+        <span>Le démon local du Mac mini (<code class="font-mono bg-black/30 px-1.5 py-0.5 rounded">http://127.0.0.1:8790</code>) ne répond pas. La recherche Cinemeta fonctionne, mais lance le serveur sur ton Mac mini pour précharger via TorBox.</span>
+      </div>
+      <code class="font-mono bg-black/40 px-2.5 py-1 rounded border border-amber-500/30">python3 ~/.t3/projects/film-et-serie/server.py</code>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- Top KPI & Addons Strip -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Compte Stremio</p>
+          <p class="text-sm font-bold text-white mt-0.5 truncate max-w-[180px]" id="kpiAccount">thomaslefevre18@live.fr</p>
+          <p class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+            <span>✓</span> Identifiants dans <code class="font-mono">t3-vault</code>
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-lg">🔐</div>
+      </div>
+
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Plugins Debrid Actifs</p>
+          <p class="text-sm font-bold text-white mt-0.5" id="kpiAddons">StreamFusionReborn + Lumio</p>
+          <p class="text-[11px] text-emerald-400 mt-1">⚡ Cache TorBox FR (VFF / MULTI / 4K)</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-lg">⚡</div>
+      </div>
+
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Films Préchargés (Local)</p>
+          <p class="text-sm font-bold text-white mt-0.5"><span id="kpiPreloadedCount">0</span> fichier(s) · <span id="kpiPreloadedSize">0 Go</span></p>
+          <p class="text-[11px] text-slate-400 mt-1 truncate">~/Movies/Stremio-Preload</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-lg">💾</div>
+      </div>
+
+      <div class="glass rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Téléchargements en cours</p>
+          <p class="text-sm font-bold text-white mt-0.5" id="kpiActiveDl">Aucun transfert actif</p>
+          <p class="text-[11px] text-purple-300 mt-1 font-mono" id="kpiActiveSpeed">Prêt (Débit max fibre)</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-lg">🚀</div>
+      </div>
+    </section>
+
+    <!-- Active Downloads & Preloaded Files Section -->
+    <section id="downloadsSection" class="glass rounded-2xl p-5 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span>📥</span> File de Préchargement & Films sur le Mac mini
+          </h2>
+          <span id="dlBadgeCount" class="text-xs font-mono px-2 py-0.5 rounded-full bg-white/10 text-slate-300">0</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="refreshStatus(true)" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition flex items-center gap-1.5">
+            <span>🔄</span> Resynchroniser Stremio
+          </button>
+        </div>
+      </div>
+
+      <!-- Active / Recent Queue -->
+      <div id="downloadsList" class="space-y-2.5"></div>
+
+      <!-- Local Disk Files in ~/Movies/Stremio-Preload -->
+      <div id="localFilesContainer" class="pt-2 border-t border-white/10 hidden">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">Fichiers prêts hors-ligne dans ~/Movies/Stremio-Preload</h3>
+        <div id="localFilesList" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
+      </div>
+    </section>
+
+    <!-- Main Tabs + Search Bar -->
+    <section class="space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Navigation Tabs -->
+        <div class="flex items-center gap-1.5 p-1 rounded-xl glass w-fit">
+          <button onclick="switchTab('library')" id="tab-library" class="px-4 py-2 rounded-lg text-xs font-semibold transition bg-purple-600 text-white shadow">
+            📚 Ma Bibliothèque Stremio (<span id="libCount">0</span>)
+          </button>
+          <button onclick="switchTab('movies')" id="tab-movies" class="px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white">
+            🍿 Films Populaires / Recherche
+          </button>
+          <button onclick="switchTab('series')" id="tab-series" class="px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white">
+            📺 Séries TV
+          </button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative flex-1 max-w-md">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Rechercher un film ou une série à précharger (ex: Dune, L'Amour ouf, Kaamelott...)"
+            class="w-full pl-10 pr-24 py-2.5 rounded-xl glass text-sm text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition"
+            onkeydown="if(event.key==='Enter') triggerSearch()"
+          />
+          <span class="absolute left-3.5 top-2.5 text-slate-400">🔍</span>
+          <button onclick="triggerSearch()" class="absolute right-1.5 top-1.5 px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-xs font-semibold text-white transition">
+            Chercher
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid Content -->
+      <div id="mediaGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+    </section>
+
+  </main>
+
+  <!-- Stream Picker & Episode Selector Modal -->
+  <div id="streamModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass rounded-2xl max-w-3xl w-full max-h-[88vh] flex flex-col overflow-hidden border border-white/15 shadow-2xl">
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-white/10 flex items-start justify-between gap-4 bg-white/[0.02]">
+        <div class="flex items-center gap-4">
+          <img id="modalPoster" src="" alt="" class="w-14 h-20 object-cover rounded-lg border border-white/10 bg-slate-800" />
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="modalTypeBadge" class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">FILM</span>
+              <span id="modalImdbId" class="text-xs font-mono text-slate-400">tt0000000</span>
+            </div>
+            <h3 id="modalTitle" class="text-lg font-bold text-white mt-1">Titre du film</h3>
+            <p id="modalSubtitle" class="text-xs text-slate-400 mt-0.5">Sélectionne le flux TorBox (StreamFusion / Lumio) à précharger sur le Mac mini</p>
+          </div>
+        </div>
+        <button onclick="closeStreamModal()" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 flex items-center justify-center text-lg">&times;</button>
+      </div>
+
+      <!-- Series Season / Episode Picker (Only for series) -->
+      <div id="seriesPickerBar" class="hidden px-5 py-3 bg-indigo-950/30 border-b border-white/10 flex flex-wrap items-center gap-3">
+        <span class="text-xs font-semibold text-indigo-300">Épisode à précharger :</span>
+        <select id="seasonSelect" onchange="onSeasonChange()" class="bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none"></select>
+        <select id="episodeSelect" onchange="loadStreamsForSelectedEpisode()" class="bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white flex-1 min-w-[180px] focus:outline-none"></select>
+      </div>
+
+      <!-- Streams List -->
+      <div id="modalStreamsList" class="p-5 overflow-y-auto space-y-2.5 flex-1"></div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-white/10 bg-white/[0.02] flex items-center justify-between text-xs text-slate-400">
+        <span>💡 Les flux <strong class="text-emerald-400">⚡ Instant TorBox</strong> sont déjà en cache et se téléchargent à la vitesse max de ta fibre.</span>
+        <button onclick="closeStreamModal()" class="px-4 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-white font-medium">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden glass px-4 py-3 rounded-xl border border-emerald-500/40 shadow-xl flex items-center gap-3 text-xs text-white">
+    <span id="toastIcon">✅</span>
+    <span id="toastText">Action effectuée</span>
+  </div>
+
+  <script>
+    const API_BASE = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
+      ? ''
+      : 'http://127.0.0.1:8765';
+
+    let currentTab = 'library';
+    let appState = {
+      library: [],
+      downloads: [],
+      disk: { files: [] },
+      addons: []
+    };
+    let activeModalItem = null;
+    let activeSeriesMeta = null;
+
+    function showToast(msg, icon = '✅') {
+      const t = document.getElementById('toast');
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastText').textContent = msg;
+      t.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.add('hidden'), 4000);
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes <= 0) return '0 Mo';
+      const gb = bytes / (1024 ** 3);
+      if (gb >= 1) return gb.toFixed(2) + ' Go';
+      const mb = bytes / (1024 ** 2);
+      return mb.toFixed(0) + ' Mo';
+    }
+
+    function formatSpeed(bps) {
+      if (!bps || bps <= 0) return '0 Mo/s';
+      const mbps = bps / (1024 * 1024);
+      return mbps.toFixed(1) + ' Mo/s';
+    }
+
+    function formatEta(sec) {
+      if (!sec || sec <= 0) return '--';
+      if (sec < 60) return `${sec}s`;
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}m ${s}s`;
+    }
+
+    async function apiFetch(path, opts = {}) {
+      const res = await fetch(`${API_BASE}${path}`, opts);
+      return await res.json();
+    }
+
+    async function refreshStatus(force = false) {
+      try {
+        const data = await apiFetch(`/api/status${force ? '?force=1' : ''}`);
+        document.getElementById('offlineBanner').classList.add('hidden');
+        document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-emerald-400';
+        document.getElementById('daemonText').textContent = 'Mac mini Connecté';
+
+        appState = data;
+        if (data.account?.email) {
+          document.getElementById('kpiAccount').textContent = data.account.email;
+          document.getElementById('accountStatusText').textContent =
+            `Connecté à ${data.account.email} · ${data.addons?.length || 0} plugins Stremio synchronisés`;
+        }
+        if (data.disk) {
+          document.getElementById('diskFreeText').textContent = formatBytes(data.disk.freeBytes);
+          document.getElementById('kpiPreloadedCount').textContent = (data.disk.files || []).length;
+          document.getElementById('kpiPreloadedSize').textContent = formatBytes(data.disk.preloadedBytes);
+        }
+        document.getElementById('libCount').textContent = (data.library || []).length;
+
+        renderDownloadsAndFiles();
+        if (currentTab === 'library' && !document.getElementById('searchInput').value.trim()) {
+          renderMediaGrid(data.library || []);
+        }
+        if (force) showToast('Compte Stremio et bibliothèque resynchronisés !');
+      } catch (err) {
+        document.getElementById('offlineBanner').classList.remove('hidden');
+        document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-rose-500';
+        document.getElementById('daemonText').textContent = 'Démon local hors-ligne';
+      }
+    }
+
+    function renderDownloadsAndFiles() {
+      const dls = appState.downloads || [];
+      const files = appState.disk?.files || [];
+      const activeDls = dls.filter(d => ['downloading', 'resolving', 'starting'].includes(d.status));
+
+      document.getElementById('dlBadgeCount').textContent = dls.length;
+
+      if (activeDls.length > 0) {
+        const totalSpeed = activeDls.reduce((acc, d) => acc + (d.speed_bps || 0), 0);
+        document.getElementById('kpiActiveDl').textContent = `${activeDls.length} préchargement(s) en cours`;
+        document.getElementById('kpiActiveSpeed').textContent = `⚡ ${formatSpeed(totalSpeed)}`;
+      } else {
+        document.getElementById('kpiActiveDl').textContent = 'Aucun transfert en cours';
+        document.getElementById('kpiActiveSpeed').textContent = 'Prêt (Débit max TorBox CDN)';
+      }
+
+      const listEl = document.getElementById('downloadsList');
+      if (dls.length === 0) {
+        listEl.innerHTML = `
+          <div class="rounded-xl bg-white/[0.02] border border-dashed border-white/10 p-6 text-center text-xs text-slate-400">
+            Aucun film dans la file de préchargement. Clique sur <strong class="text-emerald-400">"⚡ Précharger 1-Clic"</strong> ou <strong class="text-purple-300">"Choisir la version"</strong> sur n'importe quel film ci-dessous pour le télécharger sur ton Mac mini avant de le regarder.
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = dls.map(d => {
+          const pct = d.progress || 0;
+          const isRunning = ['downloading', 'resolving', 'starting'].includes(d.status);
+          const isDone = d.status === 'completed';
+          const isPaused = d.status === 'paused' || d.status === 'interrupted';
+          const statusBadge = {
+            starting: '<span class="text-amber-300">Initialisation...</span>',
+            resolving: '<span class="text-amber-300">Résolution CDN TorBox...</span>',
+            downloading: `<span class="text-emerald-400 font-mono">⚡ ${formatSpeed(d.speed_bps)} · ETA ${formatEta(d.eta_seconds)}</span>`,
+            completed: '<span class="text-emerald-400 font-semibold">✓ Préchargé sur le Mac mini</span>',
+            paused: '<span class="text-amber-400">⏸ En pause</span>',
+            interrupted: '<span class="text-amber-400">⏸ Interrompu (reprise dispo)</span>',
+            error: `<span class="text-rose-400">Erreur: ${d.error || 'Échec'}</span>`,
+            cancelled: '<span class="text-slate-500">Annulé</span>'
+          }[d.status] || d.status;
+
+          return `
+            <div class="rounded-xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                <img src="${d.poster || 'assets/icon.svg'}" onerror="this.src='assets/icon.svg'" class="w-11 h-16 object-cover rounded-lg bg-slate-800 shrink-0" />
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h4 class="text-sm font-bold text-white truncate">${d.title}</h4>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">${d.quality || '4K/1080p'}</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">${d.addon || 'TorBox'}</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 truncate mt-0.5 font-mono">${d.filename || d.streamName || ''}</p>
+                  <div class="mt-2 flex items-center gap-3">
+                    <div class="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
+                      <div class="h-full rounded-full ${isDone ? 'bg-emerald-500' : 'bg-gradient-to-r from-purple-500 to-emerald-400'} transition-all duration-300" style="width: ${pct}%"></div>
+                    </div>
+                    <span class="text-xs font-mono text-slate-300 shrink-0">${pct.toFixed(1)}% (${formatBytes(d.downloadedBytes)} / ${formatBytes(d.totalBytes)})</span>
+                  </div>
+                  <div class="mt-1 text-[11px]">${statusBadge}</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                ${isDone && d.targetPath ? `
+                  <button onclick="fileAction('play_stremio', '${d.targetPath.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-xs font-semibold text-white">▶️ Lire dans Stremio</button>
+                  <button onclick="fileAction('reveal', '${d.targetPath.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300">📂 Finder</button>
+                ` : ''}
+                ${isRunning ? `
+                  <button onclick="downloadAction('${d.id}', 'pause')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs">⏸ Pause</button>
+                ` : ''}
+                ${isPaused || d.status === 'error' ? `
+                  <button onclick="downloadAction('${d.id}', 'resume')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs">▶️ Reprendre</button>
+                ` : ''}
+                <button onclick="downloadAction('${d.id}', 'remove')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 text-xs" title="Supprimer de la liste">✕</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const localContainer = document.getElementById('localFilesContainer');
+      const localList = document.getElementById('localFilesList');
+      if (files.length > 0) {
+        localContainer.classList.remove('hidden');
+        localList.innerHTML = files.map(f => {
+          const safePath = f.path.replace(/'/g, "\\'");
+          return `
+            <div class="rounded-xl bg-white/[0.02] border border-white/10 p-3 flex items-center justify-between gap-3">
+              <div class="min-w-0">
+                <p class="text-xs font-semibold text-white truncate" title="${f.name}">🎞️ ${f.name}</p>
+                <p class="text-[11px] font-mono text-emerald-400 mt-0.5">${formatBytes(f.sizeBytes)} · Prêt hors-ligne</p>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="fileAction('play_stremio', '${safePath}')" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-[11px] font-semibold text-white">▶️ Stremio</button>
+                <button onclick="fileAction('reveal', '${safePath}')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] text-slate-300" title="Afficher dans le Finder">📂</button>
+                <button onclick="if(confirm('Supprimer ce fichier du disque ?')) fileAction('delete', '${safePath}')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-[11px] text-slate-400 hover:text-rose-300" title="Supprimer du disque">🗑️</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        localContainer.classList.add('hidden');
+      }
+    }
+
+    function renderMediaGrid(items) {
+      const grid = document.getElementById('mediaGrid');
+      if (!items || items.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">Aucun titre trouvé.</div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => {
+        const id = item.id || item._id || item.imdb_id;
+        const title = (item.name || 'Sans titre').replace(/'/g, "\\'");
+        const mtype = item.type || 'movie';
+        const poster = item.poster || `https://images.metahub.space/poster/medium/${id}/img`;
+        const year = item.releaseInfo || '';
+
+        return `
+          <div class="glass glass-hover rounded-2xl overflow-hidden flex flex-col transition duration-200 group">
+            <div class="relative aspect-[2/3] bg-slate-900 overflow-hidden">
+              <img src="${poster}" alt="${item.name}" loading="lazy" onerror="this.src='assets/icon.svg'" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+              <div class="absolute top-2 left-2 flex items-center gap-1">
+                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-white border border-white/15">
+                  ${mtype === 'series' ? '📺 Série' : '🎬 Film'}
+                </span>
+              </div>
+              ${year ? `<span class="absolute top-2 right-2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/75 text-slate-300">${year}</span>` : ''}
+            </div>
+
+            <div class="p-3 flex-1 flex flex-col justify-between gap-2.5">
+              <div>
+                <h3 class="text-xs font-bold text-white line-clamp-1" title="${item.name}">${item.name}</h3>
+                <p class="text-[10px] font-mono text-slate-400 mt-0.5">${id}</p>
+              </div>
+
+              <div class="space-y-1.5">
+                ${mtype === 'movie' ? `
+                  <button onclick="quickPreload('${id}', '${title}', '${poster}', 'movie')" class="w-full py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-[11px] font-semibold text-white shadow flex items-center justify-center gap-1 transition">
+                    <span>⚡</span> Précharger 1-Clic
+                  </button>
+                ` : ''}
+                <button onclick="openStreamSelector('${id}', '${title}', '${poster}', '${mtype}')" class="w-full py-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-white/15 text-[11px] font-medium text-slate-200 flex items-center justify-center gap-1 transition">
+                  <span>🎯</span> ${mtype === 'series' ? 'Choisir Épisode & Flux' : 'Choisir la version'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('searchInput').value = '';
+      ['library', 'movies', 'series'].forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (t === tab) {
+          btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold transition bg-purple-600 text-white shadow';
+        } else {
+          btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-300 hover:text-white';
+        }
+      });
+
+      if (tab === 'library') {
+        renderMediaGrid(appState.library || []);
+      } else {
+        const mtype = tab === 'series' ? 'series' : 'movie';
+        document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">Chargement du catalogue Cinemeta...</div>`;
+        try {
+          const res = await fetch(`https://v3-cinemeta.strem.io/catalog/${mtype}/top.json`);
+          const data = await res.json();
+          renderMediaGrid((data.metas || []).slice(0, 24));
+        } catch (e) {
+          document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-rose-400 text-sm">Erreur chargement catalogue.</div>`;
+        }
+      }
+    }
+
+    async function triggerSearch() {
+      const q = document.getElementById('searchInput').value.trim();
+      if (!q) {
+        return switchTab(currentTab);
+      }
+      const mtype = currentTab === 'series' ? 'series' : 'movie';
+      document.getElementById('mediaGrid').innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">Recherche de "${q}"...</div>`;
+      try {
+        const [moviesRes, seriesRes] = await Promise.all([
+          fetch(`https://v3-cinemeta.strem.io/catalog/movie/top/search=${encodeURIComponent(q)}.json`).then(r => r.json()).catch(() => ({ metas: [] })),
+          fetch(`https://v3-cinemeta.strem.io/catalog/series/top/search=${encodeURIComponent(q)}.json`).then(r => r.json()).catch(() => ({ metas: [] }))
+        ]);
+        const combined = [...(moviesRes.metas || []).slice(0, 14), ...(seriesRes.metas || []).slice(0, 10)];
+        renderMediaGrid(combined);
+      } catch (e) {
+        showToast('Erreur lors de la recherche', '⚠️');
+      }
+    }
+
+    async function quickPreload(imdbId, title, poster, type = 'movie') {
+      showToast(`Recherche du meilleur flux TorBox (VF/4K) pour "${title}"...`, '⚡');
+      try {
+        const res = await apiFetch('/api/preload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imdbId, title, poster, type })
+        });
+        if (!res.ok) {
+          showToast(res.error || 'Aucun flux trouvé', '⚠️');
+          return;
+        }
+        showToast(`Préchargement lancé : ${title} (${res.download.quality})`, '🚀');
+        refreshStatus();
+      } catch (e) {
+        showToast('Le démon local du Mac mini est hors-ligne.', '⚠️');
+      }
+    }
+
+    async function openStreamSelector(imdbId, title, poster, type = 'movie') {
+      activeModalItem = { imdbId, title, poster, type };
+      document.getElementById('modalPoster').src = poster || 'assets/icon.svg';
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalImdbId').textContent = imdbId;
+      document.getElementById('modalTypeBadge').textContent = type === 'series' ? 'SÉRIE TV' : 'FILM';
+      document.getElementById('streamModal').classList.remove('hidden');
+
+      const seriesBar = document.getElementById('seriesPickerBar');
+      if (type === 'series') {
+        seriesBar.classList.remove('hidden');
+        document.getElementById('modalStreamsList').innerHTML = `<div class="text-center py-10 text-xs text-slate-400">Chargement des saisons et épisodes...</div>`;
+        try {
+          const metaRes = await fetch(`https://v3-cinemeta.strem.io/meta/series/${encodeURIComponent(imdbId)}.json`).then(r => r.json());
+          activeSeriesMeta = metaRes.meta || {};
+          const videos = (activeSeriesMeta.videos || []).filter(v => v.season && v.season > 0);
+          const seasons = [...new Set(videos.map(v => v.season))].sort((a, b) => a - b);
+          const seasonSel = document.getElementById('seasonSelect');
+          seasonSel.innerHTML = seasons.map(s => `<option value="${s}">Saison ${s}</option>`).join('');
+          onSeasonChange();
+        } catch (e) {
+          document.getElementById('modalStreamsList').innerHTML = `<div class="text-center py-10 text-xs text-rose-400">Impossible de charger les épisodes.</div>`;
+        }
+      } else {
+        seriesBar.classList.add('hidden');
+        await fetchAndRenderStreams('movie', imdbId, title);
+      }
+    }
+
+    function onSeasonChange() {
+      if (!activeSeriesMeta) return;
+      const season = parseInt(document.getElementById('seasonSelect').value, 10);
+      const episodes = (activeSeriesMeta.videos || [])
+        .filter(v => v.season === season)
+        .sort((a, b) => (a.episode || a.number || 0) - (b.episode || b.number || 0));
+      const epSel = document.getElementById('episodeSelect');
+      epSel.innerHTML = episodes.map(ep => {
+        const epNum = ep.episode || ep.number || 1;
+        const epId = ep.id || `${activeModalItem.imdbId}:${season}:${epNum}`;
+        return `<option value="${epId}">Épisode ${epNum} — ${ep.name || ep.title || ''}</option>`;
+      }).join('');
+      loadStreamsForSelectedEpisode();
+    }
+
+    async function loadStreamsForSelectedEpisode() {
+      const epId = document.getElementById('episodeSelect').value;
+      const epText = document.getElementById('episodeSelect').selectedOptions[0]?.textContent || '';
+      const fullTitle = `${activeModalItem.title} (${epText.split('—')[0].trim()})`;
+      await fetchAndRenderStreams('series', epId, fullTitle);
+    }
+
+    async function fetchAndRenderStreams(type, id, displayTitle) {
+      const container = document.getElementById('modalStreamsList');
+      container.innerHTML = `
+        <div class="text-center py-12 space-y-2">
+          <div class="inline-block w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-xs text-slate-400">Interrogation de tes plugins <strong class="text-white">StreamFusionReborn</strong> & <strong class="text-white">Lumio</strong> (TorBox)...</p>
+        </div>
+      `;
+      try {
+        const data = await apiFetch(`/api/streams?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`);
+        const streams = data.streams || [];
+        if (streams.length === 0) {
+          container.innerHTML = `<div class="text-center py-10 text-xs text-slate-400">Aucun flux retourné par tes plugins pour ce titre.</div>`;
+          return;
+        }
+        window._currentModalStreams = streams;
+        window._currentModalDisplayTitle = displayTitle;
+        container.innerHTML = streams.map((s, idx) => {
+          const langBadges = (s.languages || []).map(l =>
+            `<span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-mono">${l}</span>`
+          ).join('');
+          const tagBadges = (s.tags || []).map(t =>
+            `<span class="px-2 py-0.5 rounded bg-white/10 text-slate-300 text-[10px] font-mono">${t}</span>`
+          ).join('');
+          const sizeStr = s.videoSize ? ` · ${formatBytes(s.videoSize)}` : '';
+
+          return `
+            <div class="rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition">
+              <div class="space-y-1 min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  ${s.isCached ? `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold">⚡ Instant TorBox</span>` : ''}
+                  <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono font-bold">${s.quality}</span>
+                  ${langBadges}
+                  ${tagBadges}
+                  <span class="text-[10px] font-mono text-slate-400">${s.addon}${sizeStr}</span>
+                </div>
+                <p class="text-xs text-slate-200 font-mono break-all">${s.filename || s.description || s.name}</p>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button onclick="startStreamPreload(${idx})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-semibold text-white shadow flex items-center gap-1.5 transition">
+                  <span>📥</span> Précharger
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        container.innerHTML = `<div class="text-center py-10 text-xs text-rose-400">Erreur de communication avec le démon local du Mac mini.</div>`;
+      }
+    }
+
+    async function startStreamPreload(idx) {
+      const s = window._currentModalStreams?.[idx];
+      if (!s || !activeModalItem) return;
+      closeStreamModal();
+      showToast(`Démarrage du préchargement : ${window._currentModalDisplayTitle}`, '🚀');
+      await apiFetch('/api/preload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          imdbId: activeModalItem.imdbId,
+          title: window._currentModalDisplayTitle || activeModalItem.title,
+          poster: activeModalItem.poster,
+          type: activeModalItem.type,
+          addon: s.addon,
+          quality: s.quality,
+          languages: s.languages,
+          streamName: s.description || s.name,
+          streamUrl: s.url,
+          filename: s.filename,
+          videoSize: s.videoSize
+        })
+      });
+      refreshStatus();
+    }
+
+    function closeStreamModal() {
+      document.getElementById('streamModal').classList.add('hidden');
+    }
+
+    async function downloadAction(id, action) {
+      await apiFetch('/api/download/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, action })
+      });
+      refreshStatus();
+    }
+
+    async function fileAction(action, path) {
+      await apiFetch('/api/file/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, path })
+      });
+      if (action === 'delete') {
+        showToast('Fichier supprimé du disque');
+        refreshStatus();
+      } else if (action === 'play_stremio') {
+        showToast('Ouverture du film dans Stremio Mac !', '🍿');
+      }
+    }
+
+    async function openPreloadFolder() {
+      try {
+        await apiFetch('/api/open-folder', { method: 'POST' });
+      } catch (e) {}
+    }
+
+    async function launchStremioApp() {
+      try {
+        await apiFetch('/api/open-stremio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        showToast('Stremio 5 lancé sur ton Mac mini !', '▶️');
+      } catch (e) {
+        window.location.href = 'stremio://';
+      }
+    }
+
+    // Initial load + live polling every 1.5s when downloads are running
+    refreshStatus();
+    setInterval(() => {
+      refreshStatus(false);
+    }, 2000);
+  </script>
+</body>
+</html>
