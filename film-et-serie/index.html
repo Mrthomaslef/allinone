@@ -88,7 +88,11 @@
         </button>
 
         <button onclick="launchStremioApp()" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-semibold text-white shadow-md shadow-purple-600/25 flex items-center gap-1.5 transition">
-          <span>▶️</span> Ouvrir Stremio Mac
+          <span>📺▶️</span> Allumer TV & Stremio
+        </button>
+
+        <button onclick="turnOffTv()" class="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-medium text-rose-300 flex items-center gap-1.5 transition" title="Éteindre la TV Samsung">
+          <span>🌙</span> TV Off
         </button>
       </div>
     </div>
@@ -457,7 +461,7 @@
 
               <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
                 ${isDone && d.targetPath ? `
-                  <button onclick="fileAction('play_stremio', '${d.targetPath.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-xs font-semibold text-white">▶️ Lire dans Stremio</button>
+                  <button onclick="fileAction('play_stremio', '${d.targetPath.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow">▶️ Play (Allume TV)</button>
                   <button onclick="fileAction('reveal', '${d.targetPath.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300">📂 Finder</button>
                 ` : ''}
                 ${isRunning ? `
@@ -486,7 +490,7 @@
                 <p class="text-[11px] font-mono text-emerald-400 mt-0.5">${formatBytes(f.sizeBytes)} · Prêt hors-ligne</p>
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="fileAction('play_stremio', '${safePath}')" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-[11px] font-semibold text-white">▶️ Stremio</button>
+                <button onclick="fileAction('play_stremio', '${safePath}')" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-[11px] font-bold text-white shadow">▶️ Play TV</button>
                 <button onclick="fileAction('reveal', '${safePath}')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] text-slate-300" title="Afficher dans le Finder">📂</button>
                 <button onclick="if(confirm('Supprimer ce fichier du disque ?')) fileAction('delete', '${safePath}')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-rose-500/20 text-[11px] text-slate-400 hover:text-rose-300" title="Supprimer du disque">🗑️</button>
               </div>
@@ -511,6 +515,7 @@
         const mtype = item.type || 'movie';
         const poster = item.poster || `https://images.metahub.space/poster/medium/${id}/img`;
         const year = item.releaseInfo || '';
+        const lastVideoId = (item.state && item.state.video_id) ? item.state.video_id : id;
 
         return `
           <div class="glass glass-hover rounded-2xl overflow-hidden flex flex-col transition duration-200 group">
@@ -522,6 +527,9 @@
                 </span>
               </div>
               ${year ? `<span class="absolute top-2 right-2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/75 text-slate-300">${year}</span>` : ''}
+              <button onclick="playOnTv('${id}', '${title}', '${mtype}', '${lastVideoId}')" title="Allumer la TV et lancer le film" class="absolute bottom-2.5 right-2.5 w-10 h-10 rounded-full bg-purple-600/95 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/60 border border-white/25 flex items-center justify-center text-sm transition transform hover:scale-110">
+                ▶️
+              </button>
             </div>
 
             <div class="p-3 flex-1 flex flex-col justify-between gap-2.5">
@@ -531,6 +539,9 @@
               </div>
 
               <div class="space-y-1.5">
+                <button onclick="playOnTv('${id}', '${title}', '${mtype}', '${lastVideoId}')" class="w-full py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-[11px] font-bold text-white shadow-md shadow-purple-600/20 flex items-center justify-center gap-1.5 transition">
+                  <span>▶️</span> Play (Allume TV)
+                </button>
                 ${mtype === 'movie' ? `
                   <button onclick="quickPreload('${id}', '${title}', '${poster}', 'movie')" class="w-full py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-[11px] font-semibold text-white shadow flex items-center justify-center gap-1 transition">
                     <span>⚡</span> Précharger 1-Clic
@@ -544,6 +555,34 @@
           </div>
         `;
       }).join('');
+    }
+
+    async function playOnTv(imdbId, title, type = 'movie', videoId = '') {
+      showToast(`📺 Allumage de la TV Samsung + lancement de « ${title} »...`, '🍿');
+      try {
+        const res = await apiFetch('/api/play-on-tv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imdbId, title, type, videoId: videoId || imdbId })
+        });
+        if (res.ok) {
+          showToast(res.message || `📺 Télé allumée + « ${title} » lancé !`, '🍿');
+        } else {
+          showToast(res.error || 'Erreur lors du lancement sur la TV', '⚠️');
+        }
+      } catch (e) {
+        showToast('Impossible de joindre le Mac mini.', '⚠️');
+      }
+    }
+
+    async function turnOffTv() {
+      showToast('🌙 Extinction de la TV Samsung...', '🌙');
+      try {
+        const res = await apiFetch('/api/tv-off', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        showToast(res.message || '🌙 Télé éteinte !', '🌙');
+      } catch (e) {
+        showToast('Impossible de joindre le Mac mini.', '⚠️');
+      }
     }
 
     async function switchTab(tab) {
@@ -679,6 +718,7 @@
         }
         window._currentModalStreams = streams;
         window._currentModalDisplayTitle = displayTitle;
+        window._currentModalVideoId = id;
         container.innerHTML = streams.map((s, idx) => {
           const langBadges = (s.languages || []).map(l =>
             `<span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-mono">${l}</span>`
@@ -701,6 +741,9 @@
                 <p class="text-xs text-slate-200 font-mono break-all">${s.filename || s.description || s.name}</p>
               </div>
               <div class="flex items-center gap-2 shrink-0">
+                <button onclick="playModalVideoOnTv()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow flex items-center gap-1.5 transition">
+                  <span>▶️</span> Play TV
+                </button>
                 <button onclick="startStreamPreload(${idx})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-semibold text-white shadow flex items-center gap-1.5 transition">
                   <span>📥</span> Précharger
                 </button>
@@ -711,6 +754,14 @@
       } catch (e) {
         container.innerHTML = `<div class="text-center py-10 text-xs text-rose-400">Erreur de communication avec le démon local du Mac mini.</div>`;
       }
+    }
+
+    async function playModalVideoOnTv() {
+      if (!activeModalItem) return;
+      const vid = window._currentModalVideoId || activeModalItem.imdbId;
+      const title = window._currentModalDisplayTitle || activeModalItem.title;
+      closeStreamModal();
+      await playOnTv(activeModalItem.imdbId, title, activeModalItem.type, vid);
     }
 
     async function startStreamPreload(idx) {
@@ -752,7 +803,7 @@
     }
 
     async function fileAction(action, path) {
-      await apiFetch('/api/file/action', {
+      const res = await apiFetch('/api/file/action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, path })
@@ -761,7 +812,7 @@
         showToast('Fichier supprimé du disque');
         refreshStatus();
       } else if (action === 'play_stremio') {
-        showToast('Ouverture du film dans Stremio Mac !', '🍿');
+        showToast(res.message || '📺 Télé allumée + Ouverture du film dans Stremio Mac !', '🍿');
       }
     }
 
@@ -773,8 +824,8 @@
 
     async function launchStremioApp() {
       try {
-        await apiFetch('/api/open-stremio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-        showToast('Stremio 5 lancé sur ton Mac mini !', '▶️');
+        const res = await apiFetch('/api/open-stremio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        showToast(res.message || '📺 Télé allumée + Stremio 5 lancé sur ton Mac mini !', '▶️');
       } catch (e) {
         window.location.href = 'stremio://';
       }
