@@ -91,8 +91,8 @@
           <span>📺▶️</span> Allumer TV & Stremio
         </button>
 
-        <button onclick="turnOffTv()" class="px-3 py-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-medium text-rose-300 flex items-center gap-1.5 transition" title="Éteindre la TV Samsung">
-          <span>🌙</span> TV Off
+        <button onclick="closeStremioAndTurnOffTv()" id="btnCloseStremioTvOff" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-xs font-bold text-white shadow-md shadow-rose-600/25 border border-rose-400/30 flex items-center gap-1.5 transition" title="Quitter Stremio sur le Mac mini et éteindre la TV Samsung">
+          <span>🛑🌙</span> Fermer Stremio & Éteindre TV
         </button>
       </div>
     </div>
@@ -110,6 +110,28 @@
   </div>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- Télécommande Salon : Contrôle Rapide Stremio & TV Samsung -->
+    <section class="glass rounded-2xl p-4 border border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-lg shrink-0">📺</div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h2 class="text-sm font-bold text-white">Télécommande Salon · TV Samsung & Stremio</h2>
+            <span id="stremioLiveBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-white/10">Stremio arrêté</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">Allume la télé en 1080p plein écran ou ferme Stremio + éteins la TV en 1 clic depuis le canapé.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+        <button onclick="launchStremioApp()" class="flex-1 sm:flex-initial justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-600/25 flex items-center gap-2 transition">
+          <span>📺▶️</span> Allumer TV & Stremio
+        </button>
+        <button onclick="closeStremioAndTurnOffTv()" class="flex-1 sm:flex-initial justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-xs font-bold text-white shadow-lg shadow-rose-600/30 border border-rose-400/30 flex items-center gap-2 transition">
+          <span>🛑🌙</span> Fermer Stremio & Éteindre la Télé
+        </button>
+      </div>
+    </section>
 
     <!-- Top KPI & Addons Strip -->
     <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -383,6 +405,16 @@
           document.getElementById('diskFreeText').textContent = formatBytes(data.disk.freeBytes);
           document.getElementById('kpiPreloadedCount').textContent = (data.disk.files || []).length;
           document.getElementById('kpiPreloadedSize').textContent = formatBytes(data.disk.preloadedBytes);
+          const badge = document.getElementById('stremioLiveBadge');
+          if (badge) {
+            if (data.disk.stremioRunning) {
+              badge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5';
+              badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Stremio ouvert sur le Mac';
+            } else {
+              badge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-white/10';
+              badge.textContent = 'Stremio arrêté';
+            }
+          }
         }
         document.getElementById('libCount').textContent = (data.library || []).length;
 
@@ -575,14 +607,23 @@
       }
     }
 
-    async function turnOffTv() {
-      showToast('🌙 Extinction de la TV Samsung...', '🌙');
+    async function closeStremioAndTurnOffTv() {
+      showToast('🛑 Fermeture de Stremio + 🌙 Extinction de la TV Samsung...', '🌙');
       try {
-        const res = await apiFetch('/api/tv-off', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-        showToast(res.message || '🌙 Télé éteinte !', '🌙');
+        const res = await apiFetch('/api/close-stremio-tv-off', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ closeStremio: true })
+        });
+        showToast(res.message || '🛑 Stremio fermé + 🌙 Télé Samsung éteinte !', '🌙');
+        setTimeout(() => refreshStatus(false), 800);
       } catch (e) {
         showToast('Impossible de joindre le Mac mini.', '⚠️');
       }
+    }
+
+    async function turnOffTv() {
+      return closeStremioAndTurnOffTv();
     }
 
     async function switchTab(tab) {
