@@ -1,4 +1,121 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#c026d3"/>
-  <text x="32" y="32" dy="0.35em" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="26" font-weight="600" fill="#ffffff">FE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#141026"/>
+      <stop offset="50%" stop-color="#0B0E17"/>
+      <stop offset="100%" stop-color="#071F1B"/>
+    </linearGradient>
+
+    <!-- Neon Rim Gradient (Stremio Purple -> TorBox Emerald) -->
+    <linearGradient id="rimGrad" x1="32" y1="32" x2="480" y2="480" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#B877FF"/>
+      <stop offset="45%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <!-- Play Button Gradient -->
+    <linearGradient id="playGrad" x1="160" y1="210" x2="310" y2="370" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+
+    <!-- Lightning / Download Bolt Gradient -->
+    <linearGradient id="boltGrad" x1="250" y1="150" x2="390" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6EE7B7"/>
+      <stop offset="50%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- Clapper Top Slate Gradient -->
+    <linearGradient id="slateGrad" x1="110" y1="100" x2="400" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2E264E"/>
+      <stop offset="100%" stop-color="#181B28"/>
+    </linearGradient>
+
+    <!-- Ambient Glow Filter -->
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000000" flood-opacity="0.65"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#bgGrad)"/>
+
+  <!-- Ambient Internal Glows -->
+  <circle cx="150" cy="140" r="140" fill="#8B5CF6" opacity="0.18" filter="url(#neonGlow)"/>
+  <circle cx="370" cy="370" r="140" fill="#10B981" opacity="0.18" filter="url(#neonGlow)"/>
+
+  <!-- Glowing Outer Squircle Border -->
+  <rect x="22" y="22" width="468" height="468" rx="106" stroke="url(#rimGrad)" stroke-width="10" opacity="0.95"/>
+  <rect x="30" y="30" width="452" height="452" rx="98" stroke="#FFFFFF" stroke-width="1.5" opacity="0.12"/>
+
+  <!-- Cinema Clapperboard Body -->
+  <g filter="url(#softShadow)">
+    <rect x="108" y="196" width="296" height="212" rx="32" fill="#131724" stroke="url(#rimGrad)" stroke-width="4"/>
+
+    <!-- Film Perforations Top & Bottom inside screen -->
+    <g fill="#FFFFFF" opacity="0.12">
+      <rect x="132" y="212" width="18" height="10" rx="3"/>
+      <rect x="164" y="212" width="18" height="10" rx="3"/>
+      <rect x="196" y="212" width="18" height="10" rx="3"/>
+      <rect x="228" y="212" width="18" height="10" rx="3"/>
+      <rect x="260" y="212" width="18" height="10" rx="3"/>
+      <rect x="292" y="212" width="18" height="10" rx="3"/>
+      <rect x="324" y="212" width="18" height="10" rx="3"/>
+      <rect x="356" y="212" width="18" height="10" rx="3"/>
+
+      <rect x="132" y="382" width="18" height="10" rx="3"/>
+      <rect x="164" y="382" width="18" height="10" rx="3"/>
+      <rect x="196" y="382" width="18" height="10" rx="3"/>
+      <rect x="228" y="382" width="18" height="10" rx="3"/>
+      <rect x="260" y="382" width="18" height="10" rx="3"/>
+      <rect x="292" y="382" width="18" height="10" rx="3"/>
+      <rect x="324" y="382" width="18" height="10" rx="3"/>
+      <rect x="356" y="382" width="18" height="10" rx="3"/>
+    </g>
+
+    <!-- Clapperboard Lower Bar -->
+    <rect x="108" y="168" width="296" height="34" rx="10" fill="url(#slateGrad)" stroke="#A78BFA" stroke-width="2" stroke-opacity="0.4"/>
+    <path d="M165 168 L190 202 H225 L200 168 Z" fill="#A78BFA" opacity="0.8"/>
+    <path d="M245 168 L270 202 H305 L280 168 Z" fill="#34D399" opacity="0.8"/>
+    <path d="M325 168 L350 202 H385 L360 168 Z" fill="#A78BFA" opacity="0.8"/>
+
+    <!-- Clapperboard Tilted Upper Clap Stick -->
+    <g transform="rotate(-11 118 166)">
+      <rect x="106" y="124" width="294" height="34" rx="10" fill="url(#slateGrad)" stroke="url(#rimGrad)" stroke-width="3"/>
+      <path d="M165 124 L190 158 H225 L200 124 Z" fill="#C084FC" opacity="0.9"/>
+      <path d="M245 124 L270 158 H305 L280 124 Z" fill="#34D399" opacity="0.9"/>
+      <path d="M325 124 L350 158 H385 L360 124 Z" fill="#C084FC" opacity="0.9"/>
+    </g>
+
+    <!-- Clapper Hinge Joint -->
+    <path d="M108 140 C108 131 115 124 124 124 L156 124 L176 196 L108 196 Z" fill="#1F2437" stroke="#A78BFA" stroke-width="2.5"/>
+    <circle cx="128" cy="144" r="6" fill="#E2E8F0"/>
+    <circle cx="128" cy="180" r="6" fill="#E2E8F0"/>
+    <circle cx="154" cy="180" r="6" fill="#E2E8F0"/>
+  </g>
+
+  <!-- Stremio Violet Play Triangle -->
+  <g filter="url(#neonGlow)">
+    <path d="M174 252 C174 240 187 233 197 239 L276 287 C286 293 286 307 276 313 L197 361 C187 367 174 360 174 348 Z"
+          fill="url(#playGrad)" stroke="#F3E8FF" stroke-width="3"/>
+  </g>
+
+  <!-- TorBox Emerald Lightning + Preload Download Arrow -->
+  <g filter="url(#neonGlow)">
+    <path d="M336 168 L244 294 H304 L268 424 L384 276 H320 L336 168 Z"
+          fill="url(#boltGrad)" stroke="#ECFDF5" stroke-width="3.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- 4K Badge Pill -->
+  <g filter="url(#softShadow)">
+    <rect x="318" y="344" width="68" height="32" rx="10" fill="#064E3B" stroke="#34D399" stroke-width="2.5"/>
+    <text x="352" y="366" text-anchor="middle" fill="#6EE7B7" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="900" font-size="18" letter-spacing="1">4K</text>
+  </g>
 </svg>

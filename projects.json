@@ -5,10 +5,10 @@
     "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
     "category": "daily-tools",
     "emoji": "🎬",
-    "logoUrl": "film-et-serie/assets/icon.svg",
+    "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-05T09:07:20Z"
+    "pushedAt": "2026-11-05T09:09:35Z"
   },
   {
     "id": "patrimoine-os",
@@ -19,7 +19,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-05T09:07:20Z"
+    "pushedAt": "2026-11-05T09:09:35Z"
   },
   {
     "id": "gemini-ultra",
@@ -30,7 +30,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-05T09:07:20Z"
+    "pushedAt": "2026-11-05T09:09:35Z"
   },
   {
     "id": "second-brain-voice",
@@ -41,7 +41,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-05T09:07:20Z"
+    "pushedAt": "2026-11-05T09:09:35Z"
   },
   {
     "id": "stats-youtube",
@@ -52,7 +52,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-05T09:07:20Z"
+    "pushedAt": "2026-11-05T09:09:35Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -63,18 +63,7 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-05T09:07:20Z"
-  },
-  {
-    "id": "ayn-thor",
-    "title": "AYN Thor Studio — Contrôle & Sync (Mac mini)",
-    "subtitle": "Télécommande écran ADB Live, 23 dossiers de Sauvegardes, 103 Go ROMs & Drivers Turnip à distance",
-    "category": "games-entertainment",
-    "emoji": "⚡",
-    "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
-    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
-    "pushedAt": "2026-11-05T09:07:20Z"
+    "pushedAt": "2026-11-05T09:09:35Z"
   },
   {
     "id": "guide-interne-cochin-os",
@@ -85,7 +74,18 @@
     "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
-    "pushedAt": "2026-11-05T09:00:12Z"
+    "pushedAt": "2026-11-05T09:09:35Z"
+  },
+  {
+    "id": "ayn-thor",
+    "title": "AYN Thor Studio — Contrôle & Sync (Mac mini)",
+    "subtitle": "Télécommande écran ADB Live, 23 dossiers de Sauvegardes, 103 Go ROMs & Drivers Turnip à distance",
+    "category": "games-entertainment",
+    "emoji": "⚡",
+    "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
+    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
+    "pushedAt": "2026-11-05T09:07:24Z"
   },
   {
     "id": "mapp-store",

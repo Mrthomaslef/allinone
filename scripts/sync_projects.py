@@ -27,7 +27,7 @@ KNOWN_METADATA = {
         "category": "daily-tools",
         "emoji": "🎬",
         "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
-        "logoUrl": "film-et-serie/assets/icon.svg",
+        "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     },
     "teletravail": {
         "title": "Télétravail AP-HP — Orbis & PACS Central",
@@ -470,7 +470,7 @@ def main():
                 "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
                 "category": "daily-tools",
                 "emoji": "🎬",
-                "logoUrl": "film-et-serie/assets/icon.svg",
+                "logoUrl": "film-et-serie/assets/icon.svg?v=2",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/film-et-serie",
                 "pushedAt": output[0]["pushedAt"] if output else None,
