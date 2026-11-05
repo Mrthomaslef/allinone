@@ -127,7 +127,7 @@
 
   <!-- Top Netflix Navigation Bar -->
   <header class="sticky top-0 z-40 bg-[#0b0b0b]/90 backdrop-blur-xl border-b border-white/[0.07]" style="padding-top: var(--safe-top);">
-    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 py-2.5 sm:py-3">
+    <div class="w-full px-3.5 sm:px-8 xl:px-14 py-2.5 sm:py-3">
       <!-- Row 1: Brand + Status + Quick TV Power -->
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 min-w-0">
@@ -160,7 +160,7 @@
           </button>
 
           <!-- Quick TV ON -->
-          <button onclick="launchStremioApp()" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-[11px] sm:text-xs font-bold text-white shadow-md shadow-[#E50914]/25 flex items-center gap-1 transition" title="Allumer la TV Samsung et lancer Stremio">
+          <button onclick="launchStremioApp()" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-[11px] sm:text-xs font-bold text-white shadow-md shadow-[#E50914]/25 flex items-center gap-1 transition" title="Allumer la TV Samsung et lancer Stremio en plein écran">
             <span>📺</span>
             <span class="hidden xs:inline sm:inline">TV ON</span>
           </button>
@@ -195,7 +195,7 @@
         </div>
 
         <!-- Search Input (16px font on mobile to prevent iOS Safari auto-zoom) -->
-        <div id="searchBarContainer" class="relative w-full sm:w-72 md:w-80">
+        <div id="searchBarContainer" class="relative w-full sm:w-72 md:w-96">
           <input
             type="search"
             id="searchInput"
@@ -215,7 +215,7 @@
 
   <!-- Remote Warning Banner (Only visible if local daemon isn't reachable) -->
   <div id="offlineBanner" class="hidden bg-amber-500/15 border-b border-amber-500/30 px-4 py-2.5">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs text-amber-200">
+    <div class="w-full px-2 sm:px-8 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-200">
       <div class="flex items-center gap-2">
         <span>⚠️</span>
         <span>Connexion au Mac mini en cours de resynchronisation (Tunnel HTTPS)...</span>
@@ -226,10 +226,10 @@
     </div>
   </div>
 
-  <main class="max-w-7xl mx-auto px-3.5 sm:px-6 py-4 sm:py-6 space-y-6">
+  <main class="w-full px-3.5 sm:px-8 xl:px-14 py-4 sm:py-6 space-y-6">
 
     <!-- NETFLIX HERO BILLBOARD (Featured Movie / Now Playing on TV) -->
-    <section id="heroBillboard" class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#141414] min-h-[340px] sm:min-h-[390px] flex items-end">
+    <section id="heroBillboard" class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#141414] min-h-[360px] sm:min-h-[460px] xl:min-h-[540px] flex items-end">
       <!-- Backdrop Image -->
       <img
         id="heroBackdrop"
