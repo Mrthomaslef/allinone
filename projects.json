@@ -8,7 +8,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
   },
   {
     "id": "film-et-serie",
@@ -19,7 +19,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
   },
   {
     "id": "patrimoine-os",
@@ -30,7 +30,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
   },
   {
     "id": "gemini-ultra",
@@ -41,7 +41,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
   },
   {
     "id": "second-brain-voice",
@@ -52,7 +52,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
   },
   {
     "id": "stats-youtube",
@@ -63,7 +63,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -74,18 +74,29 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
   },
   {
     "id": "m4-gaming",
     "title": "M4 Gaming",
-    "subtitle": "Télécommande Mac mini M4 (Mode TV 1080p/4K, ES-DE, Steam & Audio)",
+    "subtitle": "82 Jeux avec Icônes • Allume la Télé & Lance sur Mac mini M4",
     "category": "games-family",
     "emoji": "🎮",
     "logoUrl": "assets/m4-gaming-icon.png",
     "prodUrl": "http://192.168.1.111:8765",
     "githubUrl": "https://github.com/Mrthomaslef/m4-gaming",
-    "pushedAt": "2026-11-05T17:37:51Z"
+    "pushedAt": "2026-11-05T17:46:17Z"
+  },
+  {
+    "id": "ayn-thor",
+    "title": "AYN Thor Studio — Contrôle & Sync (Mac mini)",
+    "subtitle": "Télécommande écran ADB Live, 23 dossiers de Sauvegardes, 103 Go ROMs & Drivers Turnip à distance",
+    "category": "games-entertainment",
+    "emoji": "⚡",
+    "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
+    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
+    "pushedAt": "2026-11-05T17:39:43Z"
   },
   {
     "id": "agenda-cochin",
@@ -130,17 +141,6 @@
     "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
     "pushedAt": "2026-11-05T12:30:57Z"
-  },
-  {
-    "id": "ayn-thor",
-    "title": "AYN Thor Studio — Contrôle & Sync (Mac mini)",
-    "subtitle": "Télécommande écran ADB Live, 23 dossiers de Sauvegardes, 103 Go ROMs & Drivers Turnip à distance",
-    "category": "games-entertainment",
-    "emoji": "⚡",
-    "logoUrl": "https://mrthomaslef.github.io/ayn-thor/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/",
-    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
-    "pushedAt": "2026-11-05T11:38:14Z"
   },
   {
     "id": "annuaire-prive",

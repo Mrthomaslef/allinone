@@ -204,10 +204,10 @@ KNOWN_METADATA = {
     },
     "m4-gaming": {
         "title": "M4 Gaming",
-        "subtitle": "Télécommande Mac mini M4 (Mode TV 1080p/4K, ES-DE, Steam & Audio)",
+        "subtitle": "82 Jeux avec Icônes • Allume la Télé & Lance sur Mac mini M4",
         "category": "games-family",
         "emoji": "🎮",
-        "prodUrl": "http://192.168.1.111:8765",
+        "prodUrl": "https://mrthomaslef.github.io/m4-gaming/",
         "logoUrl": "assets/m4-gaming-icon.png",
     },
     "monopoly": {
