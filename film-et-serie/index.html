@@ -268,22 +268,32 @@
         return;
       }
       const candidates = [];
-      try {
-        const epRes = await fetch(`endpoint.json?t=${Date.now()}`, { cache: 'no-store' });
-        if (epRes.ok) {
-          const ep = await epRes.json();
-          if (ep.tunnelUrl) candidates.push(ep.tunnelUrl.replace(/\/$/, ''));
-          if (ep.lanUrl && window.location.protocol !== 'https:') candidates.push(ep.lanUrl.replace(/\/$/, ''));
-          if (ep.localUrl && window.location.protocol !== 'https:') candidates.push(ep.localUrl.replace(/\/$/, ''));
-        }
-      } catch (_) {}
-      candidates.push('http://127.0.0.1:8790');
-      candidates.push('http://192.168.1.111:8790');
+      const epUrls = [
+        `https://raw.githubusercontent.com/Mrthomaslef/allinone/main/film-et-serie/endpoint.json?t=${Date.now()}`,
+        `endpoint.json?t=${Date.now()}`
+      ];
+      for (const epUrl of epUrls) {
+        try {
+          const epRes = await fetch(epUrl, { cache: 'no-store' });
+          if (epRes.ok) {
+            const ep = await epRes.json();
+            if (ep.tunnelUrl && !candidates.includes(ep.tunnelUrl.replace(/\/$/, ''))) {
+              candidates.push(ep.tunnelUrl.replace(/\/$/, ''));
+            }
+            if (ep.lanUrl && window.location.protocol !== 'https:') candidates.push(ep.lanUrl.replace(/\/$/, ''));
+            if (ep.localUrl && window.location.protocol !== 'https:') candidates.push(ep.localUrl.replace(/\/$/, ''));
+          }
+        } catch (_) {}
+      }
+      if (window.location.protocol !== 'https:') {
+        candidates.push('http://127.0.0.1:8790');
+        candidates.push('http://192.168.1.111:8790');
+      }
 
       for (const base of candidates) {
         try {
           const ctrl = new AbortController();
-          const tid = setTimeout(() => ctrl.abort(), 4000);
+          const tid = setTimeout(() => ctrl.abort(), 8000);
           const r = await fetch(`${base}/api/status`, { signal: ctrl.signal });
           clearTimeout(tid);
           if (r.ok) {
