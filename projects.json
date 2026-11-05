@@ -8,7 +8,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-05T13:08:55Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
   },
   {
     "id": "film-et-serie",
@@ -19,7 +19,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-05T13:08:55Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
   },
   {
     "id": "patrimoine-os",
@@ -30,7 +30,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-05T13:08:55Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
   },
   {
     "id": "gemini-ultra",
@@ -41,7 +41,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-05T13:08:55Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
   },
   {
     "id": "second-brain-voice",
@@ -52,7 +52,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-05T13:08:55Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
   },
   {
     "id": "stats-youtube",
@@ -63,7 +63,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-05T13:08:55Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -74,18 +74,7 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-05T13:08:55Z"
-  },
-  {
-    "id": "agenda-cochin",
-    "title": "Cochin RI — Agenda",
-    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
-    "category": "medical-imaging",
-    "emoji": "📅",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
-    "pushedAt": "2026-11-05T13:08:55Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
   },
   {
     "id": "guide-interne-cochin-os",
@@ -96,7 +85,29 @@
     "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
-    "pushedAt": "2026-11-05T12:53:22Z"
+    "pushedAt": "2026-11-05T15:36:01Z"
+  },
+  {
+    "id": "agenda-cochin",
+    "title": "Cochin RI — Agenda",
+    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
+    "category": "medical-imaging",
+    "emoji": "📅",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
+    "pushedAt": "2026-11-05T15:07:17Z"
+  },
+  {
+    "id": "restaurant",
+    "title": "Resto en Amoureux — Marie & Thomas",
+    "subtitle": "Créneaux libres M&T + Émile chez les grands-parents & Réservation auto",
+    "category": "daily-tools",
+    "emoji": "🍷",
+    "logoUrl": "https://mrthomaslef.github.io/restaurant/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/restaurant/",
+    "githubUrl": "https://github.com/Mrthomaslef/restaurant",
+    "pushedAt": "2026-11-05T14:41:04Z"
   },
   {
     "id": "agenda-famille",
@@ -240,17 +251,6 @@
     "prodUrl": "https://mrthomaslef.github.io/voyages-voyages/",
     "githubUrl": "https://github.com/Mrthomaslef/voyages-voyages",
     "pushedAt": "2026-11-05T06:30:38Z"
-  },
-  {
-    "id": "restaurant",
-    "title": "Resto en Amoureux — Marie & Thomas",
-    "subtitle": "Créneaux libres M&T + Émile chez les grands-parents & Réservation auto",
-    "category": "daily-tools",
-    "emoji": "🍷",
-    "logoUrl": "https://mrthomaslef.github.io/restaurant/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/restaurant/",
-    "githubUrl": "https://github.com/Mrthomaslef/restaurant",
-    "pushedAt": "2026-11-05T06:30:36Z"
   },
   {
     "id": "biblio-marie",
