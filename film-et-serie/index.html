@@ -113,25 +113,149 @@
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-    <!-- Télécommande Salon : Contrôle Rapide Stremio & TV Samsung -->
-    <section class="glass rounded-2xl p-4 border border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-lg shrink-0">📺</div>
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <h2 class="text-sm font-bold text-white">Télécommande Salon · TV Samsung & Stremio</h2>
-            <span id="stremioLiveBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-white/10">Stremio arrêté</span>
+    <!-- Mode Lecture & Télécommande Salon : Pause, Avancer/Reculer, Volume & Sortie Audio -->
+    <section id="playbackRemoteSection" class="glass rounded-2xl p-4 sm:p-5 border border-purple-500/25 shadow-xl shadow-purple-950/20 space-y-4">
+      <!-- Ligne 1 : Titre / État Stremio + Boutons TV On / Off -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3.5 border-b border-white/10">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-500/25 to-indigo-500/20 border border-purple-500/40 flex items-center justify-center text-xl shrink-0">🎬</div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-sm sm:text-base font-extrabold text-white tracking-tight">Mode Lecture · Télécommande Stremio & Son</h2>
+              <span id="stremioLiveBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-white/10">Stremio arrêté</span>
+              <span id="playbackStateBadge" class="hidden text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">▶️ En lecture</span>
+            </div>
+            <p id="nowPlayingTitle" class="text-xs text-slate-300 mt-0.5 truncate">Contrôle direct du film sur la TV Samsung : Pause/Lecture, Reculer/Avancer et Volume sonore.</p>
           </div>
-          <p class="text-xs text-slate-400 mt-0.5">Allume la télé en 1080p plein écran ou ferme Stremio + éteins la TV en 1 clic depuis le canapé.</p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
+          <button onclick="launchStremioApp()" class="flex-1 sm:flex-initial justify-center px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-600/25 flex items-center gap-1.5 transition">
+            <span>📺▶️</span> Allumer TV & Stremio
+          </button>
+          <button onclick="closeStremioAndTurnOffTv()" class="flex-1 sm:flex-initial justify-center px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-xs font-bold text-white shadow-lg shadow-rose-600/30 border border-rose-400/30 flex items-center gap-1.5 transition">
+            <span>🛑🌙</span> Fermer Stremio & Éteindre TV
+          </button>
         </div>
       </div>
-      <div class="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
-        <button onclick="launchStremioApp()" class="flex-1 sm:flex-initial justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-600/25 flex items-center gap-2 transition">
-          <span>📺▶️</span> Allumer TV & Stremio
-        </button>
-        <button onclick="closeStremioAndTurnOffTv()" class="flex-1 sm:flex-initial justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-xs font-bold text-white shadow-lg shadow-rose-600/30 border border-rose-400/30 flex items-center gap-2 transition">
-          <span>🛑🌙</span> Fermer Stremio & Éteindre la Télé
-        </button>
+
+      <!-- Ligne 2 : Grille Contrôles de Lecture (Gauche) + Contrôles du Son & Sortie Audio (Droite) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        <!-- Pavé Contrôle Lecture (Pause / Reculer / Avancer) -->
+        <div class="lg:col-span-7 rounded-xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col justify-between gap-3">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-purple-300 flex items-center gap-1.5">
+              <span>⏯️</span> Contrôle Lecture (Stremio TV)
+            </span>
+            <div class="flex items-center gap-1.5">
+              <button onclick="playerControl('fullscreen')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[11px] font-medium text-slate-300 transition" title="Forcer le mode plein écran sur la TV">
+                ⛶ Plein écran
+              </button>
+              <button onclick="playerControl('back')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[11px] font-medium text-slate-300 transition" title="Touche Échap / Retour dans Stremio">
+                🔙 Retour
+              </button>
+            </div>
+          </div>
+
+          <!-- Boutons principaux : -1m, -30s, -15s, PAUSE/PLAY, +15s, +30s, +1m -->
+          <div class="grid grid-cols-5 sm:grid-cols-7 gap-2 items-center">
+            <button onclick="playerControl('seek_back_60')" class="hidden sm:flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
+              <span class="text-sm">⏮️</span>
+              <span class="text-[10px] font-mono font-semibold mt-0.5">-1 min</span>
+            </button>
+
+            <button onclick="playerControl('seek_back_30')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
+              <span class="text-base">⏪</span>
+              <span class="text-[10px] font-mono font-semibold mt-0.5">-30s</span>
+            </button>
+
+            <button onclick="playerControl('seek_back_10')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white transition">
+              <span class="text-base">◀️</span>
+              <span class="text-[11px] font-mono font-bold mt-0.5">-15s</span>
+            </button>
+
+            <button onclick="playerControl('toggle_pause')" id="btnMainPlayPause" class="flex flex-col items-center justify-center py-3 px-3 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-white shadow-lg shadow-purple-600/35 border border-purple-400/40 transition">
+              <span class="text-xl leading-none" id="btnMainPlayPauseIcon">⏯️</span>
+              <span class="text-[11px] font-extrabold uppercase tracking-wide mt-1" id="btnMainPlayPauseText">Pause / Play</span>
+            </button>
+
+            <button onclick="playerControl('seek_fwd_10')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white transition">
+              <span class="text-base">▶️</span>
+              <span class="text-[11px] font-mono font-bold mt-0.5">+15s</span>
+            </button>
+
+            <button onclick="playerControl('seek_fwd_30')" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
+              <span class="text-base">⏩</span>
+              <span class="text-[10px] font-mono font-semibold mt-0.5">+30s</span>
+            </button>
+
+            <button onclick="playerControl('seek_fwd_60')" class="hidden sm:flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 border border-white/10 text-slate-200 transition">
+              <span class="text-sm">⏭️</span>
+              <span class="text-[10px] font-mono font-semibold mt-0.5">+1 min</span>
+            </button>
+          </div>
+
+          <!-- Petits boutons rapides mobile pour -1 min / +1 min -->
+          <div class="flex sm:hidden items-center justify-between gap-2 pt-1">
+            <button onclick="playerControl('seek_back_60')" class="flex-1 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono text-slate-300">⏮️ Reculer 1 min</button>
+            <button onclick="playerControl('seek_fwd_60')" class="flex-1 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-mono text-slate-300">Avancer 1 min ⏭️</button>
+          </div>
+        </div>
+
+        <!-- Pavé Contrôle du Son & Sortie Audio -->
+        <div class="lg:col-span-5 rounded-xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col justify-between gap-3">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+              <span>🔊</span> Volume & Sortie Audio
+            </span>
+            <span id="audioDeviceBadge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 truncate max-w-[180px]">
+              TV / Mac mini
+            </span>
+          </div>
+
+          <!-- Boutons Vol - / Mute / Vol + et Curseur -->
+          <div class="space-y-2.5">
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="volumeControl('down')" class="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
+                <span class="text-base">🔉</span> Vol −
+              </button>
+              <button onclick="volumeControl('mute')" id="btnMuteAudio" class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-rose-500/20 active:scale-95 border border-white/10 text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
+                <span class="text-base" id="btnMuteIcon">🔇</span> <span id="btnMuteText">Mute</span>
+              </button>
+              <button onclick="volumeControl('up')" class="py-2.5 px-3 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 active:scale-95 border border-emerald-400/40 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow transition">
+                <span class="text-base">🔊</span> Vol +
+              </button>
+            </div>
+
+            <div class="flex items-center gap-3 px-1">
+              <span class="text-xs text-slate-400">🔈</span>
+              <input
+                type="range"
+                id="volumeSlider"
+                min="0"
+                max="100"
+                value="50"
+                onchange="volumeControl('set', this.value)"
+                oninput="document.getElementById('volumeLevelText').textContent = this.value + '%'"
+                class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+              />
+              <span id="volumeLevelText" class="text-xs font-mono font-bold text-emerald-300 w-10 text-right">50%</span>
+            </div>
+          </div>
+
+          <!-- Sélecteur rapide de sortie audio -->
+          <div class="grid grid-cols-3 gap-1.5 pt-1 border-t border-white/5">
+            <button onclick="switchAudioOutput('tv')" id="btnAudioTv" class="py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition">
+              <span>📺</span> TV / Mac
+            </button>
+            <button onclick="switchAudioOutput('homepod')" id="btnAudioHomepod" class="py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition">
+              <span>🔊</span> HomePod
+            </button>
+            <button onclick="switchAudioOutput('airpods')" id="btnAudioAirpods" class="py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition">
+              <span>🎧</span> AirPods
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -481,6 +605,7 @@
         }
         document.getElementById('libCount').textContent = (data.library || []).length;
 
+        updatePlaybackAndAudioUI(data);
         renderDownloadsAndFiles();
         if (currentTab === 'library' && !document.getElementById('searchInput').value.trim()) {
           renderMediaGrid(data.library || []);
@@ -493,6 +618,148 @@
           document.getElementById('daemonDot').className = 'w-2 h-2 rounded-full bg-rose-500';
           document.getElementById('daemonText').textContent = 'Démon local hors-ligne';
         }
+      }
+    }
+
+    function updatePlaybackAndAudioUI(data) {
+      const pb = data.playback || {};
+      const stremioRunning = !!(data.disk && data.disk.stremioRunning);
+      const stateBadge = document.getElementById('playbackStateBadge');
+      const nowPlayingEl = document.getElementById('nowPlayingTitle');
+      const playPauseIcon = document.getElementById('btnMainPlayPauseIcon');
+      const playPauseText = document.getElementById('btnMainPlayPauseText');
+
+      if (stremioRunning || pb.active) {
+        if (stateBadge) {
+          stateBadge.classList.remove('hidden');
+          if (pb.paused) {
+            stateBadge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40';
+            stateBadge.textContent = '⏸️ En pause';
+          } else {
+            stateBadge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40';
+            stateBadge.textContent = '▶️ En lecture';
+          }
+        }
+        if (nowPlayingEl) {
+          nowPlayingEl.innerHTML = pb.title
+            ? `En cours sur la TV : <strong class="text-white">${pb.title}</strong> · Utilise les boutons ci-dessous pour Pause, Reculer/Avancer ou régler le son.`
+            : `Stremio est actif sur la TV · Utilise les boutons ci-dessous pour mettre en pause, reculer, avancer ou régler le son.`;
+        }
+        if (playPauseIcon && playPauseText) {
+          playPauseIcon.textContent = pb.paused ? '▶️' : '⏸️';
+          playPauseText.textContent = pb.paused ? 'Reprendre' : 'Pause';
+        }
+      } else {
+        if (stateBadge) stateBadge.classList.add('hidden');
+        if (nowPlayingEl) {
+          nowPlayingEl.textContent = 'Contrôle direct du film sur la TV Samsung : Pause/Lecture, Reculer/Avancer et Volume sonore.';
+        }
+        if (playPauseIcon && playPauseText) {
+          playPauseIcon.textContent = '⏯️';
+          playPauseText.textContent = 'Pause / Play';
+        }
+      }
+
+      const audio = data.audio || {};
+      if (typeof audio.level === 'number') {
+        const slider = document.getElementById('volumeSlider');
+        const lvlTxt = document.getElementById('volumeLevelText');
+        if (slider && document.activeElement !== slider) {
+          slider.value = audio.level;
+        }
+        if (lvlTxt) {
+          lvlTxt.textContent = audio.muted ? 'Muet' : `${audio.level}%`;
+        }
+      }
+      const devBadge = document.getElementById('audioDeviceBadge');
+      if (devBadge && audio.device) {
+        devBadge.textContent = `🔊 ${audio.device}`;
+      }
+      const muteBtn = document.getElementById('btnMuteAudio');
+      const muteIcon = document.getElementById('btnMuteIcon');
+      const muteTxt = document.getElementById('btnMuteText');
+      if (muteBtn && muteIcon && muteTxt) {
+        if (audio.muted) {
+          muteBtn.className = 'py-2.5 px-3 rounded-xl bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 font-bold text-xs flex items-center justify-center gap-1.5 transition';
+          muteIcon.textContent = '🔇';
+          muteTxt.textContent = 'Son coupé';
+        } else {
+          muteBtn.className = 'py-2.5 px-3 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/10 text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition';
+          muteIcon.textContent = '🔇';
+          muteTxt.textContent = 'Mute';
+        }
+      }
+
+      const devLow = (audio.device || '').toLowerCase();
+      const setBtnActive = (id, active) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.className = active
+          ? 'py-1.5 px-2 rounded-lg bg-emerald-500/25 border border-emerald-400/50 text-[10px] font-bold text-emerald-200 flex items-center justify-center gap-1 transition'
+          : 'py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-[10px] font-semibold text-slate-300 flex items-center justify-center gap-1 transition';
+      };
+      setBtnActive('btnAudioTv', devLow.includes('samsung') || devLow.includes('mac') || devLow.includes('hdmi'));
+      setBtnActive('btnAudioHomepod', devLow.includes('homepod') || devLow.includes('salon'));
+      setBtnActive('btnAudioAirpods', devLow.includes('airpods'));
+    }
+
+    async function playerControl(action) {
+      try {
+        const res = await apiFetch('/api/player-control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action })
+        });
+        if (res.ok) {
+          showToast(res.message || 'Commande envoyée au lecteur Stremio', '🎬');
+          refreshStatus(false);
+        } else {
+          showToast(res.error || 'Stremio ne répond pas', '⚠️');
+        }
+      } catch (e) {
+        showToast('Impossible de joindre le Mac mini.', '⚠️');
+      }
+    }
+
+    async function volumeControl(action, value = null) {
+      try {
+        const payload = { action };
+        if (value !== null) payload.value = parseInt(value, 10);
+        const res = await apiFetch('/api/volume', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          showToast(res.message || 'Volume modifié', '🔊');
+          updatePlaybackAndAudioUI({
+            playback: appState.playback,
+            disk: appState.disk,
+            audio: res
+          });
+        } else {
+          showToast(res.error || 'Erreur volume', '⚠️');
+        }
+      } catch (e) {
+        showToast('Impossible de modifier le volume.', '⚠️');
+      }
+    }
+
+    async function switchAudioOutput(target) {
+      const labels = { tv: 'TV Samsung / Mac mini', homepod: 'HomePod Salon', airpods: 'AirPods' };
+      showToast(`Bascule du son vers ${labels[target] || target}...`, '🔊');
+      try {
+        const res = await apiFetch('/api/audio-output', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ target })
+        });
+        if (res.ok) {
+          showToast(res.message || 'Sortie audio modifiée', '🔊');
+          refreshStatus(false);
+        }
+      } catch (e) {
+        showToast('Impossible de changer la sortie audio.', '⚠️');
       }
     }
 
