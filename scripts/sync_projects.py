@@ -22,11 +22,11 @@ KNOWN_METADATA = {
         "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     },
     "ayn-thor": {
-        "title": "Rom et Emulation — Switch DL & Recomp",
-        "subtitle": "Index de téléchargement Switch (7 767 jeux NSP/XCI) avec statut Recomp vérifié Mac mini M4 & AYN Thor",
+        "title": "Rom et Émulation — Switch & 20 Consoles",
+        "subtitle": "55 791 ROMs (Switch + 20 Consoles : 3DS, NDS, GC, Wii, Wii U, PS2, PS1, PSP, GBA, N64, SNES, Xbox 360…) · Auto-Install Mac M4 & AYN Thor",
         "category": "games-family",
         "emoji": "🎮",
-        "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=3",
+        "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=11",
         "logoUrl": "assets/ayn-thor-icon.svg?v=3",
     },
     "film-et-serie": {
