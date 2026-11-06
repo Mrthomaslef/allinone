@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "pdf-master": {
+        "title": "PDF Master — Lecteur & Éditeur Ultra-Fluide",
+        "subtitle": "Lecteur & éditeur PDF sans fioritures (Texte, Signature, Surligneur, Tampons, Rotation, Fusion) · 100% local Mobile & Ordi",
+        "category": "daily-tools",
+        "emoji": "📄",
+        "prodUrl": "https://mrthomaslef.github.io/pdf-master/",
+        "logoUrl": "https://mrthomaslef.github.io/pdf-master/assets/icon.svg",
+    },
     "anatomie-quiz": {
         "title": "IMAIOS Anatomy Quiz — Membre Supérieur",
         "subtitle": "Quiz interactif sur les 92 planches IMAIOS e-Anatomy (Coupes axiales, Nerfs, Artères, Veines, Muscles, Os) · 4 modes de révision",
