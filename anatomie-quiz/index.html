@@ -17,24 +17,15 @@
       --bg-app: #f8fafc;
       --bg-panel: #ffffff;
       --bg-subtle: #f1f5f9;
-      --bg-hover: #e2e8f0;
       --text-main: #0f172a;
-      --text-muted: #475569;
-      --text-dim: #94a3b8;
+      --text-muted: #64748b;
       --border: #e2e8f0;
       --primary: #2563eb;
-      --primary-hover: #1d4ed8;
       --primary-soft: rgba(37, 99, 235, 0.12);
       --success: #10b981;
-      --success-soft: rgba(16, 185, 129, 0.15);
+      --success-soft: rgba(16, 185, 129, 0.16);
       --danger: #ef4444;
-      --danger-soft: rgba(239, 68, 68, 0.15);
-      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-      --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
-      --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.16);
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
+      --danger-soft: rgba(239, 68, 68, 0.16);
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -43,17 +34,11 @@
       --bg-app: #0b1120;
       --bg-panel: #111827;
       --bg-subtle: #1e293b;
-      --bg-hover: #334155;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --text-dim: #64748b;
       --border: #1e293b;
       --primary: #3b82f6;
-      --primary-hover: #60a5fa;
       --primary-soft: rgba(59, 130, 246, 0.2);
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
-      --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.65);
     }
 
     * {
@@ -77,7 +62,7 @@
     }
 
     /* ==========================================
-       1. COMPACT TOPBAR (MOBILE & DESKTOP)
+       1. ULTRA-COMPACT TOPBAR
        ========================================== */
     .topbar {
       padding-top: var(--safe-top);
@@ -88,364 +73,128 @@
     }
 
     .topbar-inner {
-      height: 50px;
+      height: 46px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      gap: 8px;
+      padding: 0 8px;
+      gap: 6px;
     }
 
-    .brand {
+    .nav-slice-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       min-width: 0;
-      flex-shrink: 0;
+      flex: 1;
     }
 
-    .brand-badge {
+    .nav-btn {
       width: 32px;
       height: 32px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, #2563eb, #0ea5e9);
-      color: #fff;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 13px;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
       flex-shrink: 0;
     }
 
-    .slice-title-wrap {
+    .nav-btn:active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .slice-info {
       display: flex;
       flex-direction: column;
       min-width: 0;
       flex: 1;
+      cursor: pointer;
     }
 
-    .slice-main-title {
-      font-size: 13.5px;
+    .slice-title {
+      font-size: 13px;
       font-weight: 700;
-      color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .slice-sub-meta {
-      font-size: 11px;
+    .slice-sub {
+      font-size: 10.5px;
       color: var(--text-muted);
-      font-weight: 500;
+      font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .topbar-right {
+    .top-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
-    .select-series {
-      appearance: none;
-      background: var(--bg-subtle);
-      color: var(--text-main);
-      border: 1px solid var(--border);
+    .score-badge {
+      background: var(--success-soft);
+      color: #059669;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 5px 8px;
       border-radius: 8px;
-      padding: 6px 24px 6px 9px;
-      font-size: 12px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      max-width: 155px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 7px center;
+    }
+    [data-theme="dark"] .score-badge {
+      color: #34d399;
     }
 
-    .icon-btn {
+    .settings-btn {
       height: 32px;
-      min-width: 32px;
-      padding: 0 8px;
+      padding: 0 10px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--bg-subtle);
       color: var(--text-main);
       font-size: 12px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      transition: all 0.15s;
-    }
-
-    .icon-btn.active {
-      background: var(--primary-soft);
-      color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    /* ==========================================
-       2. MODE + CATEGORY BAR (SWIPEABLE CHIPS)
-       ========================================== */
-    .subbar {
-      background: var(--bg-panel);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      z-index: 35;
-      flex-shrink: 0;
-    }
-
-    .mode-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 10px;
-      gap: 6px;
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .mode-row::-webkit-scrollbar { display: none; }
-
-    .mode-pills {
-      display: flex;
-      background: var(--bg-subtle);
-      padding: 2px;
-      border-radius: 9px;
-      border: 1px solid var(--border);
-      gap: 2px;
-      width: 100%;
-    }
-
-    .mode-pill {
-      flex: 1;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      padding: 6px 8px;
-      font-size: 12px;
       font-weight: 700;
       font-family: inherit;
-      border-radius: 7px;
       cursor: pointer;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      white-space: nowrap;
-      transition: all 0.15s;
-    }
-
-    .mode-pill.active {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 2px 5px rgba(37, 99, 235, 0.25);
-    }
-
-    .filter-bar {
-      padding: 6px 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-    }
-    .filter-bar::-webkit-scrollbar { display: none; }
-
-    .preset-btn {
-      border: 1px dashed var(--border);
-      background: var(--bg-subtle);
-      color: var(--text-main);
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: 11.5px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .preset-btn:active, .preset-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    .filter-divider {
-      width: 1px;
-      height: 18px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
-
-    .cat-chip {
-      border: 1.5px solid var(--border);
-      background: var(--bg-subtle);
-      color: var(--text-muted);
-      padding: 4px 9px;
-      border-radius: 999px;
-      font-size: 11.5px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      display: inline-flex;
       align-items: center;
       gap: 5px;
       white-space: nowrap;
-      flex-shrink: 0;
-      opacity: 0.6;
     }
 
-    .cat-chip.active {
-      opacity: 1;
-      background: var(--bg-panel);
-      color: var(--text-main);
-      border-color: var(--cat-color, var(--primary));
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-    }
-
-    .cat-chip.empty {
-      display: none; /* Hide categories that have 0 points on current plate to save mobile space! */
-    }
-
-    .cat-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--cat-color, #94a3b8);
-      border: 1px solid rgba(0, 0, 0, 0.25);
-      flex-shrink: 0;
-    }
-
-    .cat-count {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 1px 5px;
-      border-radius: 999px;
-      background: var(--bg-subtle);
-      color: var(--text-muted);
-    }
-
-    .cat-chip.active .cat-count {
-      background: var(--primary-soft);
-      color: var(--primary);
-    }
-
-    /* ==========================================
-       3. QUIZ STATUS BAR (CLEAN, NON-OVERLAPPING)
-       ========================================== */
-    .quiz-banner {
-      background: #0f172a;
-      color: #f8fafc;
-      padding: 7px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12.5px;
-      flex-shrink: 0;
-      z-index: 30;
-    }
-
-    .quiz-banner.hidden {
-      display: none;
-    }
-
-    .quiz-prompt {
-      font-weight: 600;
-      min-width: 0;
-      flex: 1;
-      line-height: 1.3;
-    }
-
-    .quiz-target-highlight {
-      color: #38bdf8;
-      font-weight: 800;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    .quiz-stats-right {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .score-pill {
-      background: rgba(16, 185, 129, 0.22);
-      color: #34d399;
-      padding: 3px 7px;
-      border-radius: 6px;
-      font-size: 11.5px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .mini-action-btn {
-      background: rgba(255, 255, 255, 0.14);
+    .settings-btn.active {
+      background: var(--primary);
       color: #fff;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
+      border-color: var(--primary);
     }
 
     /* ==========================================
-       4. MAIN WORKSPACE (RESPONSIVE SPLIT)
+       2. GIANT ANATOMICAL STAGE (MAXIMIZED SPACE)
        ========================================== */
-    .workspace {
+    .stage-wrapper {
       flex: 1;
-      display: flex;
-      min-height: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .viewport-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
       position: relative;
       background: #ffffff;
-      min-width: 0;
-      min-height: 0;
       overflow: hidden;
-    }
-
-    .stage-container {
-      flex: 1;
-      width: 100%;
-      height: 100%;
-      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      min-height: 0;
       touch-action: none;
       cursor: grab;
-      background: #ffffff;
     }
 
-    .stage-container.is-panning {
+    .stage-wrapper.is-panning {
       cursor: grabbing;
     }
 
@@ -457,598 +206,501 @@
       will-change: transform;
     }
 
-    /* FLOATING ZOOM TOOLBAR */
-    .zoom-toolbar {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      z-index: 22;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(15, 23, 42, 0.82);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: 4px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-    }
-
-    .zoom-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 7px;
-      border: none;
-      background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-      font-size: 16px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s;
-    }
-
-    .zoom-btn:hover, .zoom-btn:active {
-      background: rgba(255, 255, 255, 0.26);
-    }
-
-    .zoom-level-badge {
-      padding: 0 7px;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: #f8fafc;
-      min-width: 44px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    /* SVG ELEMENTS */
-    .leader-line {
-      stroke: #0f172a;
-      stroke-width: 1.5;
-      fill: none;
-      transition: stroke 0.15s, stroke-width 0.15s, opacity 0.15s;
-      pointer-events: none;
-    }
-    .leader-line.dimmed { opacity: 0.18; }
-    .leader-line.highlighted { stroke: #2563eb; stroke-width: 2.8; opacity: 1 !important; }
-    .leader-line.correct { stroke: #10b981; stroke-width: 2.4; }
-    .leader-line.wrong { stroke: #ef4444; stroke-width: 2.4; }
-
-    .leader-bracket {
-      stroke: #0f172a;
-      stroke-width: 1.5;
-    }
-
+    /* SVG POINTS & TARGET MARKER */
     .anat-point-group {
       cursor: pointer;
     }
 
     .anat-point-hit {
       fill: transparent;
-      r: 20px; /* Large 40px touch target for mobile fingers! */
+      r: 22px;
     }
 
     .anat-point-outer {
-      r: 6.5px;
+      r: 6px;
       stroke: #0f172a;
       stroke-width: 1.8px;
-      transition: r 0.15s, stroke-width 0.15s;
+      transition: r 0.15s, stroke-width 0.15s, opacity 0.15s;
     }
 
     .anat-point-inner {
-      r: 2.4px;
+      r: 2.2px;
       fill: #0f172a;
       pointer-events: none;
     }
 
-    .anat-point-group.highlighted .anat-point-outer {
-      r: 9.5px;
-      stroke: #2563eb;
-      stroke-width: 2.8px;
+    .anat-point-group.faded {
+      opacity: 0.35;
     }
 
-    .anat-point-group.pulse-target .anat-point-outer {
-      r: 11px;
-      stroke: #2563eb;
-      stroke-width: 3.5px;
-      filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.85));
+    .anat-point-group.done-ok .anat-point-outer {
+      fill: #10b981 !important;
+      stroke: #064e3b;
+      r: 5.5px;
     }
 
-    /* Mobile Numbered Callout Badges on the Image */
-    .mobile-pin-badge {
-      cursor: pointer;
+    .anat-point-group.done-ko .anat-point-outer {
+      fill: #ef4444 !important;
+      stroke: #7f1d1d;
+      r: 5.5px;
     }
-    .mobile-pin-circle {
-      r: 13px;
-      stroke: #0f172a;
-      stroke-width: 1.8px;
-      transition: transform 0.15s, r 0.15s;
+
+    @keyframes pulseRing {
+      0% { r: 10px; stroke-opacity: 0.95; stroke-width: 4px; }
+      100% { r: 28px; stroke-opacity: 0; stroke-width: 1px; }
     }
-    .mobile-pin-badge.highlighted .mobile-pin-circle {
-      r: 16px;
+
+    .target-pulse-ring {
+      fill: none;
       stroke: #2563eb;
-      stroke-width: 3px;
+      pointer-events: none;
+      animation: pulseRing 1.4s infinite ease-out;
     }
-    .mobile-pin-badge.ok .mobile-pin-circle {
-      stroke: #10b981;
-      stroke-width: 3px;
-    }
-    .mobile-pin-badge.ko .mobile-pin-circle {
-      stroke: #ef4444;
-      stroke-width: 3px;
-    }
-    .mobile-pin-text {
-      font-family: 'Inter', -apple-system, sans-serif;
-      font-size: 11px;
-      font-weight: 800;
-      fill: #0f172a;
-      text-anchor: middle;
-      dominant-baseline: central;
+
+    .target-leader-line {
+      stroke: #2563eb;
+      stroke-width: 2.8;
+      stroke-dasharray: 5 3;
       pointer-events: none;
     }
 
-    /* Desktop SVG Labels */
-    .label-box-group {
-      cursor: pointer;
-      transition: opacity 0.15s;
+    .target-callout-pill {
+      fill: #1e293b;
+      stroke: #38bdf8;
+      stroke-width: 2;
+      rx: 8;
+      ry: 8;
     }
-    .label-box-group.dimmed { opacity: 0.25; }
-    .label-pill-bg {
-      fill: rgba(255, 255, 255, 0.94);
-      stroke: transparent;
-      stroke-width: 1.5;
-      rx: 6;
-      ry: 6;
-    }
-    .label-box-group:hover .label-pill-bg,
-    .label-box-group.highlighted .label-pill-bg {
-      fill: #eff6ff;
-      stroke: #2563eb;
-    }
-    .label-box-group.masked .label-pill-bg {
-      fill: #f1f5f9;
-      stroke: #cbd5e1;
-      stroke-dasharray: 3 2;
-    }
-    .label-box-group.revealed-ok .label-pill-bg {
-      fill: #ecfdf5;
-      stroke: #10b981;
-      stroke-dasharray: none;
-    }
-    .label-box-group.revealed-ko .label-pill-bg {
-      fill: #fef2f2;
-      stroke: #ef4444;
-      stroke-dasharray: none;
-    }
-    .label-text {
+
+    .target-callout-text {
       font-family: 'Inter', -apple-system, sans-serif;
       font-size: 13px;
-      font-weight: 600;
-      fill: #0f172a;
-      dominant-baseline: middle;
-      pointer-events: none;
-    }
-    .label-subtext {
-      font-family: 'Inter', -apple-system, sans-serif;
-      font-size: 10.5px;
-      font-weight: 500;
-      font-style: italic;
-      fill: #64748b;
-      dominant-baseline: middle;
-      pointer-events: none;
-    }
-    .label-box-group.masked .label-text { fill: #475569; font-weight: 700; }
-    .label-box-group.revealed-ok .label-text { fill: #065f46; font-weight: 700; }
-    .label-box-group.revealed-ko .label-text { fill: #991b1b; font-weight: 700; }
-
-    /* ==========================================
-       5. MOBILE ACTIVE POPUP CARD (WHEN TAPPING A PIN)
-       ========================================== */
-    .mobile-Inspector {
-      background: var(--bg-panel);
-      border-top: 1px solid var(--border);
-      padding: 8px 12px;
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
-      z-index: 25;
-      flex-shrink: 0;
-    }
-
-    .mobile-Inspector.visible {
-      display: flex;
-    }
-
-    .inspector-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-      flex: 1;
-    }
-
-    .inspector-badge {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      font-size: 12px;
       font-weight: 800;
-      color: #0f172a;
+      fill: #ffffff;
+      dominant-baseline: central;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    /* FLOATING ZOOM BAR */
+    .zoom-toolbar {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 22;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .zoom-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: none;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1.5px solid #0f172a;
-      flex-shrink: 0;
     }
 
-    .inspector-texts {
+    .zoom-level-badge {
+      padding: 0 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #f8fafc;
+      min-width: 40px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    /* PROGRESS PILL OVERLAY TOP-LEFT */
+    .progress-pill {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 22;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #f8fafc;
+      padding: 5px 10px;
+      border-radius: 9px;
+      font-size: 11.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .progress-cat-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 1px solid #fff;
+    }
+
+    /* ==========================================
+       3. COMPACT ONE-BY-ONE QUESTION DOCK (BOTTOM)
+       ========================================== */
+    .question-dock {
+      padding-bottom: var(--safe-bottom);
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border);
+      z-index: 30;
+      flex-shrink: 0;
+      box-shadow: 0 -4px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .dock-inner {
+      padding: 10px 12px;
+      max-width: 760px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      min-width: 0;
-      flex: 1;
+      gap: 8px;
     }
 
-    .inspector-title {
+    .dock-prompt-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .dock-prompt-text {
       font-size: 13.5px;
       font-weight: 700;
       color: var(--text-main);
       line-height: 1.25;
+      flex: 1;
     }
 
-    .inspector-latin {
-      font-size: 11px;
-      font-style: italic;
-      color: var(--text-muted);
-    }
-
-    .inspector-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .insp-btn {
-      height: 34px;
-      padding: 0 11px;
-      border-radius: 8px;
-      font-size: 12.5px;
-      font-weight: 700;
-      font-family: inherit;
+    .dock-skip-btn {
       border: 1px solid var(--border);
       background: var(--bg-subtle);
-      color: var(--text-main);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .insp-btn.reveal {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-
-    .insp-btn.ok {
-      background: var(--success-soft);
-      color: #059669;
-      border-color: var(--success);
-    }
-
-    .insp-btn.ko {
-      background: var(--danger-soft);
-      color: #dc2626;
-      border-color: var(--danger);
-    }
-
-    /* ==========================================
-       6. QCM PANEL (DOCKED CLEANLY AT BOTTOM OF VIEWPORT)
-       ========================================== */
-    .qcm-card {
-      background: var(--bg-panel);
-      border-top: 1px solid var(--border);
-      padding: 10px 12px;
-      z-index: 26;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex-shrink: 0;
-      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
-    }
-
-    .qcm-card.hidden {
-      display: none;
-    }
-
-    .qcm-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      font-weight: 700;
       color: var(--text-muted);
+      padding: 5px 9px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .qcm-options {
+    /* QCM 2x2 COMPACT GRID */
+    .qcm-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 6px;
     }
 
-    .qcm-opt-btn {
+    @media (max-width: 520px) {
+      .qcm-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2x2 compact buttons on mobile so dock stays super low-profile! */
+      }
+    }
+
+    .qcm-btn {
       padding: 9px 10px;
-      border-radius: 8px;
+      border-radius: 9px;
       border: 1.5px solid var(--border);
       background: var(--bg-subtle);
       color: var(--text-main);
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       font-family: inherit;
       text-align: left;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 7px;
-      line-height: 1.25;
+      gap: 6px;
+      line-height: 1.2;
+      min-height: 42px;
+      transition: all 0.12s;
     }
 
-    .qcm-opt-btn.correct {
+    .qcm-btn:active {
+      transform: scale(0.98);
+    }
+
+    .qcm-btn.correct {
       background: var(--success-soft);
       border-color: var(--success);
       color: #065f46;
+      font-weight: 700;
     }
-    [data-theme="dark"] .qcm-opt-btn.correct { color: #6ee7b7; }
+    [data-theme="dark"] .qcm-btn.correct { color: #6ee7b7; }
 
-    .qcm-opt-btn.wrong {
+    .qcm-btn.wrong {
       background: var(--danger-soft);
       border-color: var(--danger);
       color: #991b1b;
     }
-    [data-theme="dark"] .qcm-opt-btn.wrong { color: #fca5a5; }
+    [data-theme="dark"] .qcm-btn.wrong { color: #fca5a5; }
 
-    .qcm-key {
-      width: 20px;
-      height: 20px;
-      border-radius: 5px;
-      background: var(--bg-panel);
+    /* FLASHCARD MODE (1 QUESTION AT A TIME: REVEAL -> JUSTE / FAUX) */
+    .flashcard-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg-subtle);
       border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 10px;
+      min-height: 48px;
+    }
+
+    .flashcard-answer {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .flashcard-fr {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .flashcard-la {
+      font-size: 11px;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .flashcard-btns {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .fc-btn {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--text-muted);
-      flex-shrink: 0;
+      gap: 5px;
     }
 
-    /* ==========================================
-       7. STRUCTURES LIST PANEL (SIDEBAR ON DESKTOP, BOTTOM SHEET / SPLIT ON MOBILE)
-       ========================================== */
-    .sidebar {
-      width: 330px;
-      background: var(--bg-panel);
-      border-left: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      z-index: 32;
-    }
-
-    .sidebar.collapsed {
-      display: none;
-    }
-
-    .sidebar-header {
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .search-input {
-      flex: 1;
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-subtle);
-      color: var(--text-main);
-      font-size: 12px;
-      font-family: inherit;
-      outline: none;
-      min-width: 0;
-    }
-
-    .sidebar-mini-btn {
-      padding: 5px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      font-family: inherit;
-      border-radius: 7px;
-      border: 1px solid var(--border);
-      background: var(--bg-subtle);
-      color: var(--text-main);
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .sidebar-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 6px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .struct-item {
-      padding: 7px 9px;
-      border-radius: 8px;
-      border: 1px solid transparent;
-      background: var(--bg-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      cursor: pointer;
-    }
-
-    .struct-item.highlighted {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    .struct-item-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-      flex: 1;
-    }
-
-    .struct-num {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      font-size: 11px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0f172a;
-      flex-shrink: 0;
-      border: 1.5px solid rgba(15, 23, 42, 0.35);
-    }
-
-    .struct-names {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .struct-fr {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .struct-item.masked .struct-fr {
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    .struct-la {
-      font-size: 10.5px;
-      color: var(--text-muted);
-      font-style: italic;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .struct-eval-btns {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    .eval-mini-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg-panel);
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
+    .fc-btn.reveal {
+      background: var(--primary);
+      color: #fff;
+      width: 100%;
       justify-content: center;
     }
 
-    .eval-mini-btn.ok.selected {
+    .fc-btn.ok {
       background: var(--success);
       color: #fff;
-      border-color: var(--success);
     }
 
-    .eval-mini-btn.ko.selected {
+    .fc-btn.ko {
       background: var(--danger);
       color: #fff;
-      border-color: var(--danger);
     }
 
     /* ==========================================
-       8. BOTTOM THUMBNAIL STRIP & NAVIGATION
+       4. SETTINGS & FILTERS MODAL DRAWER
        ========================================== */
-    .bottom-bar {
-      padding-bottom: var(--safe-bottom);
-      background: var(--bg-panel);
-      border-top: 1px solid var(--border);
-      z-index: 35;
-      flex-shrink: 0;
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(3px);
+      z-index: 60;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
     }
 
-    .bottom-bar-inner {
-      height: 58px;
+    .drawer-backdrop.open {
+      display: flex;
+    }
+
+    .drawer-sheet {
+      background: var(--bg-panel);
+      width: min(560px, 100%);
+      max-height: 86dvh;
+      border-radius: 18px 18px 0 0;
+      padding: 16px;
+      padding-bottom: calc(16px + var(--safe-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .drawer-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      gap: 8px;
     }
 
-    .nav-arrow-btn {
-      height: 38px;
-      padding: 0 12px;
+    .drawer-title {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .drawer-close {
+      border: none;
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .drawer-section {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .drawer-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    .drawer-select {
+      width: 100%;
+      padding: 9px 12px;
       border-radius: 9px;
       border: 1px solid var(--border);
       background: var(--bg-subtle);
       color: var(--text-main);
       font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .mode-card {
+      padding: 9px 10px;
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      font-size: 12.5px;
       font-weight: 700;
       font-family: inherit;
       cursor: pointer;
+      text-align: left;
       display: flex;
       align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
+      gap: 6px;
     }
 
-    .nav-arrow-btn:active {
-      background: var(--primary);
-      color: #fff;
+    .mode-card.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .presets-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .preset-chip {
+      border: 1px dashed var(--border);
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .cats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .cat-pill {
+      border: 1.5px solid var(--border);
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.55;
+    }
+
+    .cat-pill.active {
+      opacity: 1;
+      background: var(--bg-panel);
+      color: var(--text-main);
+      border-color: var(--cat-color, var(--primary));
+    }
+
+    .cat-pill.empty {
+      display: none;
+    }
+
+    .cat-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.25);
     }
 
     .thumb-strip {
-      flex: 1;
       display: flex;
       align-items: center;
       gap: 6px;
       overflow-x: auto;
       padding: 4px 2px;
-      scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
-    .thumb-strip::-webkit-scrollbar { display: none; }
 
     .thumb-item {
-      width: 42px;
-      height: 44px;
-      border-radius: 7px;
+      width: 48px;
+      height: 50px;
+      border-radius: 8px;
       border: 2px solid var(--border);
       background: #fff;
       cursor: pointer;
@@ -1059,7 +711,6 @@
 
     .thumb-item.active {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px var(--primary-soft);
     }
 
     .thumb-item img {
@@ -1079,159 +730,96 @@
       padding: 0 3px;
       border-radius: 3px;
     }
-
-    .slice-counter {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
-
-    /* ==========================================
-       9. MOBILE-SPECIFIC ADAPTATIONS (< 820px)
-       ========================================== */
-    @media (max-width: 820px) {
-      .workspace {
-        flex-direction: column;
-      }
-
-      /* On mobile, when the list is open, split screen 54% illustration / 46% interactive list */
-      .sidebar {
-        width: 100%;
-        height: 42%;
-        border-left: none;
-        border-top: 2px solid var(--border);
-      }
-
-      .qcm-options {
-        grid-template-columns: 1fr;
-      }
-
-      .qcm-opt-btn {
-        padding: 10px 12px;
-        font-size: 13px;
-      }
-
-      .hide-on-mobile {
-        display: none !important;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- 1. COMPACT TOPBAR -->
+  <!-- 1. ULTRA-COMPACT TOPBAR -->
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-badge">eA</div>
+      <div class="nav-slice-group">
+        <button class="nav-btn" id="btn-prev-slice" title="Coupe précédente">←</button>
+        <div class="slice-info" id="open-drawer-title" title="Changer de coupe ou de filtres">
+          <div class="slice-title" id="slice-title-display">Région deltoïdienne</div>
+          <div class="slice-sub" id="slice-sub-display">Coupe 1/13 • Nerfs, Artères, Veines</div>
+        </div>
+        <button class="nav-btn" id="btn-next-slice" title="Coupe suivante">→</button>
       </div>
 
-      <div class="slice-title-wrap">
-        <div class="slice-main-title" id="slice-title-display">Région deltoïdienne</div>
-        <div class="slice-sub-meta" id="slice-orientation-display">Coupe axiale • 1/13</div>
-      </div>
-
-      <div class="topbar-right">
-        <select id="series-select" class="select-series" title="Choisir la série de planches"></select>
-        <button id="btn-latin" class="icon-btn hide-on-mobile" title="Nomenclature internationale (Latin)">🏛️ Latin</button>
-        <button id="btn-sidebar" class="icon-btn active" title="Afficher / masquer la liste des structures">📋 <span class="hide-on-mobile">Liste</span></button>
-        <button id="btn-theme" class="icon-btn" title="Mode clair / sombre">🌙</button>
+      <div class="top-actions">
+        <span class="score-badge" id="score-badge">0 / 0</span>
+        <button class="settings-btn" id="btn-open-drawer">⚙️ Réglages</button>
       </div>
     </div>
   </header>
 
-  <!-- 2. MODE & CATEGORY FILTER BARS -->
-  <section class="subbar">
-    <div class="mode-row">
-      <div class="mode-pills" role="tablist">
-        <button class="mode-pill active" data-mode="blind">🙈 Révision</button>
-        <button class="mode-pill" data-mode="pin">🎯 Épingle</button>
-        <button class="mode-pill" data-mode="qcm">🧠 QCM</button>
-        <button class="mode-pill" data-mode="study">📖 Étude</button>
-      </div>
+  <!-- 2. GIANT ANATOMICAL STAGE -->
+  <main class="stage-wrapper" id="stage-container">
+    <!-- Top-left current question progress pill -->
+    <div class="progress-pill" id="progress-pill">
+      <span class="progress-cat-dot" id="progress-cat-dot" style="background:#FBE94F"></span>
+      <span id="progress-text">Question 1 / 12</span>
     </div>
 
-    <nav class="filter-bar" aria-label="Filtres anatomiques">
-      <button class="preset-btn" id="preset-vasc-nerf">⚡ Nerfs + Vaisseaux</button>
-      <button class="preset-btn" id="preset-nerf-only">🟡 Nerfs</button>
-      <button class="preset-btn" id="preset-art-only">🔴 Artères</button>
-      <button class="preset-btn" id="preset-muscles">💪 Muscles</button>
-      <button class="preset-btn" id="preset-osteo">🦴 Os/Artic.</button>
-      <button class="preset-btn" id="preset-all">✅ Tout</button>
-      <div class="filter-divider"></div>
-      <div id="category-chips-container" style="display:flex;align-items:center;gap:5px;"></div>
-    </nav>
-  </section>
-
-  <!-- 3. QUIZ PROMPT BANNER -->
-  <div id="quiz-hud" class="quiz-banner">
-    <div class="quiz-prompt" id="hud-prompt-text">
-      Touchez un numéro ou une structure pour vérifier
+    <!-- Floating Zoom Controls -->
+    <div class="zoom-toolbar" aria-label="Contrôles de zoom">
+      <button class="zoom-btn" id="btn-zoom-out" title="Dézoomer">−</button>
+      <span class="zoom-level-badge" id="zoom-level-badge" title="100%">100%</span>
+      <button class="zoom-btn" id="btn-zoom-in" title="Zoomer">+</button>
+      <button class="zoom-btn" id="btn-zoom-reset" title="Recadrer" style="font-size:12px;">⟲</button>
     </div>
-    <div class="quiz-stats-right">
-      <span class="score-pill" id="hud-score-display">0 / 0</span>
-      <button class="mini-action-btn" id="hud-btn-reveal-all">👁️ Tout</button>
-      <button class="mini-action-btn" id="hud-btn-reset">🔄</button>
-    </div>
-  </div>
 
-  <!-- 4. MAIN WORKSPACE -->
-  <main class="workspace">
-    <section class="viewport-area" id="viewport-area">
-      <!-- INTERACTIVE SVG STAGE -->
-      <div class="stage-container" id="stage-container">
-        <svg id="anatomy-svg" viewBox="0 0 1320 740" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="zoom-toolbar" aria-label="Contrôles de zoom">
-          <button class="zoom-btn" id="btn-zoom-out" title="Dézoomer (-)">−</button>
-          <span class="zoom-level-badge" id="zoom-level-badge" title="Réinitialiser le zoom (100%)">100%</span>
-          <button class="zoom-btn" id="btn-zoom-in" title="Zoomer (+)">+</button>
-          <button class="zoom-btn" id="btn-zoom-reset" title="Recadrer (100%)" style="font-size:13px;">⟲</button>
-        </div>
-      </div>
-
-      <!-- MOBILE INSPECTOR BAR (WHEN TAPPING A POINT ON MOBILE) -->
-      <div id="mobile-inspector" class="mobile-Inspector">
-        <div class="inspector-left">
-          <span id="insp-badge" class="inspector-badge">1</span>
-          <div class="inspector-texts">
-            <div id="insp-title" class="inspector-title">Touchez un point sur la coupe</div>
-            <div id="insp-latin" class="inspector-latin"></div>
-          </div>
-        </div>
-        <div class="inspector-actions" id="insp-actions"></div>
-      </div>
-
-      <!-- QCM DOCKED CARD -->
-      <div id="qcm-card" class="qcm-card hidden">
-        <div class="qcm-header">
-          <span id="qcm-question-label">Quelle est la structure pointée en bleu ?</span>
-          <button class="sidebar-mini-btn" id="qcm-skip-btn">Passer →</button>
-        </div>
-        <div class="qcm-options" id="qcm-options-grid"></div>
-      </div>
-    </section>
-
-    <!-- STRUCTURES LIST (RIGHT SIDEBAR ON DESKTOP / SPLIT DRAWER ON MOBILE) -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <input type="search" id="struct-search" class="search-input" placeholder="Rechercher nerf, artère, muscle..." />
-        <button class="sidebar-mini-btn" id="btn-mask-all">🙈 Masquer</button>
-        <button class="sidebar-mini-btn" id="btn-reveal-all">👁️ Voir</button>
-      </div>
-      <div class="sidebar-list" id="sidebar-list"></div>
-    </aside>
+    <svg id="anatomy-svg" viewBox="0 0 640 670" preserveAspectRatio="xMidYMid meet"></svg>
   </main>
 
-  <!-- 5. BOTTOM NAVIGATION & THUMBNAIL STRIP -->
-  <footer class="bottom-bar">
-    <div class="bottom-bar-inner">
-      <button class="nav-arrow-btn" id="btn-prev-slice">←</button>
-      <div class="thumb-strip" id="thumb-strip"></div>
-      <span class="slice-counter" id="slice-counter">1/13</span>
-      <button class="nav-arrow-btn" id="btn-next-slice">→</button>
-    </div>
+  <!-- 3. ONE-QUESTION-AT-A-TIME BOTTOM DOCK -->
+  <footer class="question-dock" id="question-dock">
+    <div class="dock-inner" id="dock-inner"></div>
   </footer>
+
+  <!-- 4. SETTINGS & FILTERS DRAWER MODAL -->
+  <div class="drawer-backdrop" id="drawer-backdrop">
+    <div class="drawer-sheet" id="drawer-sheet">
+      <div class="drawer-header">
+        <span class="drawer-title">⚙️ Configurer le Quiz</span>
+        <button class="drawer-close" id="btn-close-drawer">✕</button>
+      </div>
+
+      <div class="drawer-section">
+        <span class="drawer-label">Mode de révision (1 question par 1)</span>
+        <div class="mode-grid">
+          <button class="mode-card active" data-mode="qcm">🧠 Quiz QCM (4 choix)</button>
+          <button class="mode-card" data-mode="flashcard">🙈 Flashcard (Deviner)</button>
+          <button class="mode-card" data-mode="pin">🎯 Quiz Épingle (Localiser)</button>
+          <button class="mode-card" data-mode="study">📖 Mode Exploration</button>
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <span class="drawer-label">Que voulez-vous réviser ?</span>
+        <div class="presets-row">
+          <button class="preset-chip" id="preset-vasc-nerf">⚡ Nerfs + Vaisseaux</button>
+          <button class="preset-chip" id="preset-nerf-only">🟡 Nerfs seuls</button>
+          <button class="preset-chip" id="preset-art-only">🔴 Artères seules</button>
+          <button class="preset-chip" id="preset-muscles">💪 Muscles & Tendons</button>
+          <button class="preset-chip" id="preset-osteo">🦴 Os & Articulations</button>
+          <button class="preset-chip" id="preset-all">✅ Tout</button>
+        </div>
+        <div class="cats-grid" id="category-chips-container"></div>
+      </div>
+
+      <div class="drawer-section">
+        <span class="drawer-label">Série & Planche IMAIOS</span>
+        <select id="series-select" class="drawer-select"></select>
+        <div class="thumb-strip" id="thumb-strip"></div>
+      </div>
+
+      <div class="drawer-section" style="flex-direction:row;justify-content:space-between;align-items:center;">
+        <button class="settings-btn" id="btn-reset-quiz" style="flex:1;justify-content:center;height:38px;">🔄 Recommencer cette coupe</button>
+        <button class="settings-btn" id="btn-theme" style="height:38px;">🌙 Thème</button>
+      </div>
+    </div>
+  </div>
 
   <script src="data/imaios_upper_limb.js"></script>
   <script>
@@ -1253,51 +841,34 @@
         P: { label: "Régions", color: "#CBD5E1", icon: "🗺️" }
       };
 
-      const isMobileQuery = window.matchMedia("(max-width: 820px)");
-
       const state = {
         currentSeriesId: 243,
         currentSliceId: 8019,
         activeCategories: new Set(["N", "A", "V"]),
-        mode: "blind", // 'blind' | 'pin' | 'qcm' | 'study'
-        showLatin: false,
-        searchQuery: "",
-        hoveredPointId: null,
-        selectedMobilePointId: null,
-        pointStatus: {},
-        scoreOk: 0,
-        scoreTotal: 0,
+        mode: "qcm", // Default to 1-by-1 QCM so user immediately gets 1 clear question at a time!
+        pointStatus: {}, // 'pending' | 'ok' | 'ko'
         quizQueue: [],
         currentTargetPointId: null,
+        flashcardRevealed: false,
         qcmOptions: [],
-        qcmAnswered: false
+        qcmAnswered: false,
+        scoreOk: 0,
+        scoreTotal: 0,
+        didPan: false
       };
 
-      // DOM refs
-      const elSeriesSelect = document.getElementById("series-select");
+      // DOM Elements
       const elSliceTitle = document.getElementById("slice-title-display");
-      const elSliceOrientation = document.getElementById("slice-orientation-display");
-      const elCatChips = document.getElementById("category-chips-container");
+      const elSliceSub = document.getElementById("slice-sub-display");
+      const elScoreBadge = document.getElementById("score-badge");
+      const elProgressDot = document.getElementById("progress-cat-dot");
+      const elProgressText = document.getElementById("progress-text");
       const elSvg = document.getElementById("anatomy-svg");
-      const elSidebar = document.getElementById("sidebar");
-      const elSidebarList = document.getElementById("sidebar-list");
-      const elSearchInput = document.getElementById("struct-search");
+      const elDockInner = document.getElementById("dock-inner");
+      const elDrawerBackdrop = document.getElementById("drawer-backdrop");
+      const elSeriesSelect = document.getElementById("series-select");
+      const elCatChips = document.getElementById("category-chips-container");
       const elThumbStrip = document.getElementById("thumb-strip");
-      const elSliceCounter = document.getElementById("slice-counter");
-      const elQuizHud = document.getElementById("quiz-hud");
-      const elHudPrompt = document.getElementById("hud-prompt-text");
-      const elHudScore = document.getElementById("hud-score-display");
-      const elQcmCard = document.getElementById("qcm-card");
-      const elQcmOptions = document.getElementById("qcm-options-grid");
-      const elMobileInspector = document.getElementById("mobile-inspector");
-      const elInspBadge = document.getElementById("insp-badge");
-      const elInspTitle = document.getElementById("insp-title");
-      const elInspLatin = document.getElementById("insp-latin");
-      const elInspActions = document.getElementById("insp-actions");
-
-      function isMobileView() {
-        return isMobileQuery.matches;
-      }
 
       function getSeriesSlices(seriesId) {
         if (seriesId === 0) return DATA.slices;
@@ -1309,23 +880,21 @@
       }
 
       function getFilteredPoints(slice) {
-        const q = state.searchQuery.trim().toLowerCase();
-        return slice.points.filter(p => {
-          if (!state.activeCategories.has(p.category)) return false;
-          if (q) {
-            const matchFr = (p.labelFr || "").toLowerCase().includes(q);
-            const matchLa = (p.labelLa || "").toLowerCase().includes(q);
-            return matchFr || matchLa;
-          }
-          return true;
-        });
+        return slice.points.filter(p => state.activeCategories.has(p.category));
+      }
+
+      function ensureNonEmptyCategoriesForSlice(slice) {
+        const hasAny = slice.points.some(p => state.activeCategories.has(p.category));
+        if (!hasAny && slice.points.length > 0) {
+          slice.points.forEach(p => state.activeCategories.add(p.category));
+        }
       }
 
       function initSeriesDropdown() {
         elSeriesSelect.innerHTML = "";
         const optAll = document.createElement("option");
         optAll.value = "0";
-        optAll.textContent = `Toutes (${DATA.slices.length})`;
+        optAll.textContent = `Toutes les séries (${DATA.slices.length} planches)`;
         elSeriesSelect.appendChild(optAll);
 
         DATA.series.forEach(ser => {
@@ -1343,34 +912,17 @@
         });
       }
 
-      function ensureNonEmptyCategoriesForSlice(slice) {
-        const hasAny = slice.points.some(p => state.activeCategories.has(p.category));
-        if (!hasAny && slice.points.length > 0) {
-          slice.points.forEach(p => state.activeCategories.add(p.category));
-        }
-      }
-
-      function selectSlice(sliceId, autoAdjust = false) {
-        state.currentSliceId = sliceId;
-        const slice = getCurrentSlice();
-        if (autoAdjust) ensureNonEmptyCategoriesForSlice(slice);
-        initSliceQuizState();
-        renderAll();
-      }
-
       function initSliceQuizState() {
         const slice = getCurrentSlice();
         const pts = getFilteredPoints(slice);
         state.pointStatus = {};
-        pts.forEach(p => {
-          state.pointStatus[p.id] = state.mode === "study" ? "revealed" : "masked";
-        });
-        state.selectedMobilePointId = pts[0] ? pts[0].id : null;
+        pts.forEach(p => { state.pointStatus[p.id] = "pending"; });
+
+        // Order questions top-to-bottom or shuffled
         state.quizQueue = pts.map(p => p.id).sort(() => Math.random() - 0.5);
         state.currentTargetPointId = state.quizQueue[0] || null;
-        if (state.mode === "qcm") {
-          prepareQcmOptions();
-        }
+        state.flashcardRevealed = false;
+        prepareQcmOptions();
       }
 
       function prepareQcmOptions() {
@@ -1381,583 +933,190 @@
           state.qcmOptions = [];
           return;
         }
-        const sameCatPool = [];
-        const seenLabels = new Set([targetPt.labelFr]);
+        // Prefer distractors from the same slice & category first, then global category
+        const sameSliceCat = [];
+        const globalCat = [];
+        const seen = new Set([targetPt.labelFr]);
+
+        slice.points.forEach(p => {
+          if (p.category === targetPt.category && !seen.has(p.labelFr)) {
+            seen.add(p.labelFr);
+            sameSliceCat.push(p.labelFr);
+          }
+        });
+
         DATA.slices.forEach(s => {
           s.points.forEach(p => {
-            if (p.category === targetPt.category && !seenLabels.has(p.labelFr)) {
-              seenLabels.add(p.labelFr);
-              sameCatPool.push(p.labelFr);
+            if (p.category === targetPt.category && !seen.has(p.labelFr)) {
+              seen.add(p.labelFr);
+              globalCat.push(p.labelFr);
             }
           });
         });
-        if (sameCatPool.length < 3) {
-          slice.points.forEach(p => {
-            if (!seenLabels.has(p.labelFr)) {
-              seenLabels.add(p.labelFr);
-              sameCatPool.push(p.labelFr);
-            }
-          });
-        }
-        const distractors = sameCatPool.sort(() => Math.random() - 0.5).slice(0, 3);
+
+        const pool = [...sameSliceCat.sort(() => Math.random() - 0.5), ...globalCat.sort(() => Math.random() - 0.5)];
+        const distractors = pool.slice(0, 3);
         state.qcmOptions = [targetPt.labelFr, ...distractors].sort(() => Math.random() - 0.5);
       }
 
-      function renderCategoryChips() {
-        const slice = getCurrentSlice();
-        const countsByCat = {};
-        slice.points.forEach(p => {
-          countsByCat[p.category] = (countsByCat[p.category] || 0) + 1;
-        });
-
-        elCatChips.innerHTML = "";
-        Object.keys(CATEGORY_META).forEach(catKey => {
-          const meta = CATEGORY_META[catKey];
-          const count = countsByCat[catKey] || 0;
-          const isActive = state.activeCategories.has(catKey);
-
-          const btn = document.createElement("button");
-          btn.className = `cat-chip ${isActive ? "active" : ""} ${count === 0 ? "empty" : ""}`;
-          btn.style.setProperty("--cat-color", meta.color);
-          btn.innerHTML = `
-            <span class="cat-dot" style="background:${meta.color}"></span>
-            <span>${meta.label}</span>
-            <span class="cat-count">${count}</span>
-          `;
-          btn.addEventListener("click", (e) => {
-            if (e.altKey || e.metaKey) {
-              state.activeCategories = new Set([catKey]);
-            } else {
-              if (state.activeCategories.has(catKey)) {
-                state.activeCategories.delete(catKey);
-              } else {
-                state.activeCategories.add(catKey);
-              }
-            }
-            initSliceQuizState();
-            renderAll();
-          });
-          elCatChips.appendChild(btn);
-        });
+      function advanceQuestion() {
+        state.quizQueue = state.quizQueue.filter(id => state.pointStatus[id] === "pending");
+        state.currentTargetPointId = state.quizQueue[0] || null;
+        state.flashcardRevealed = false;
+        prepareQcmOptions();
+        renderAll();
       }
 
-      function computeDesktopLabelLayout(points, imgX, imgY, imgW, imgH) {
-        const maxPtX = Math.max(...points.map(p => p.x), 0);
-        const allLeftSide = points.length <= 14 && maxPtX <= 330;
-        const leftPts = [];
-        const rightPts = [];
-
-        points.forEach(p => {
-          if (allLeftSide || p.x < 320) leftPts.push(p);
-          else rightPts.push(p);
-        });
-
-        leftPts.sort((a, b) => a.y - b.y);
-        rightPts.sort((a, b) => a.y - b.y);
-
-        function distributeVertical(list, side) {
-          const n = list.length;
-          if (n === 0) return [];
-          const topPad = 36;
-          const bottomPad = 704;
-          const availH = bottomPad - topPad;
-          const minGap = Math.min(38, Math.max(20, availH / Math.max(n, 1)));
-
-          const positions = list.map(pt => {
-            const targetY = imgY + (pt.y / 670) * imgH;
-            return {
-              pt,
-              side,
-              anchorX: imgX + (pt.x / 640) * imgW,
-              anchorY: targetY,
-              labelY: Math.max(topPad, Math.min(bottomPad, targetY))
-            };
-          });
-
-          for (let i = 1; i < n; i++) {
-            if (positions[i].labelY < positions[i - 1].labelY + minGap) {
-              positions[i].labelY = positions[i - 1].labelY + minGap;
-            }
-          }
-          if (positions[n - 1].labelY > bottomPad) {
-            positions[n - 1].labelY = bottomPad;
-            for (let i = n - 2; i >= 0; i--) {
-              if (positions[i].labelY > positions[i + 1].labelY - minGap) {
-                positions[i].labelY = positions[i + 1].labelY - minGap;
-              }
-            }
-          }
-          return positions;
-        }
-
-        return [
-          ...distributeVertical(leftPts, "left"),
-          ...distributeVertical(rightPts, "right")
-        ];
-      }
-
-      // Compute radial/margin numbered badge layout for Mobile so the illustration fills the screen!
-      function computeMobileBadgeLayout(points) {
-        const leftPts = [];
-        const rightPts = [];
-        points.forEach((pt, idx) => {
-          const item = { pt, num: idx + 1 };
-          if (pt.x < 320) leftPts.push(item);
-          else rightPts.push(item);
-        });
-
-        leftPts.sort((a, b) => a.pt.y - b.pt.y);
-        rightPts.sort((a, b) => a.pt.y - b.pt.y);
-
-        function placeSideBadges(list, badgeX) {
-          const n = list.length;
-          if (n === 0) return [];
-          const topY = 26;
-          const botY = 644;
-          const minGap = Math.min(34, Math.max(22, (botY - topY) / Math.max(n, 1)));
-
-          const res = list.map(item => ({
-            ...item,
-            anchorX: item.pt.x,
-            anchorY: item.pt.y,
-            badgeX,
-            badgeY: Math.max(topY, Math.min(botY, item.pt.y))
-          }));
-
-          for (let i = 1; i < n; i++) {
-            if (res[i].badgeY < res[i - 1].badgeY + minGap) {
-              res[i].badgeY = res[i - 1].badgeY + minGap;
-            }
-          }
-          if (res[n - 1].badgeY > botY) {
-            res[n - 1].badgeY = botY;
-            for (let i = n - 2; i >= 0; i--) {
-              if (res[i].badgeY > res[i + 1].badgeY - minGap) {
-                res[i].badgeY = res[i + 1].badgeY - minGap;
-              }
-            }
-          }
-          return res;
-        }
-
-        return [
-          ...placeSideBadges(leftPts, 24),
-          ...placeSideBadges(rightPts, 616)
-        ];
-      }
-
+      // ==========================================
+      // RENDER GIANT CLEAN SVG PLATE (ONLY 1 QUESTION HIGHLIGHTED AT A TIME!)
+      // ==========================================
       function renderSvgStage() {
         const slice = getCurrentSlice();
         const points = getFilteredPoints(slice);
-        const mobile = isMobileView();
+        const targetPt = points.find(p => p.id === state.currentTargetPointId);
 
-        if (mobile) {
-          // MOBILE VIEWPORT:Tight 640x670 viewBox so the anatomical plate is huge, crisp, and touch-friendly!
-          elSvg.setAttribute("viewBox", "0 0 640 670");
-          const badgeLayout = computeMobileBadgeLayout(points);
+        let svgHtml = `
+          <defs>
+            <filter id="pt-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.45"/>
+            </filter>
+          </defs>
+          <image href="${slice.image}" x="0" y="0" width="640" height="670" preserveAspectRatio="none" />
+        `;
 
-          let svgHtml = `
-            <defs>
-              <filter id="point-shadow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.4"/>
-              </filter>
-            </defs>
-            <image href="${slice.image}" x="0" y="0" width="640" height="670" preserveAspectRatio="none" />
+        // In QCM, Flashcard, or Study mode, draw ONLY the leader line and callout for the single active point!
+        if (targetPt && state.mode !== "pin") {
+          const tx = targetPt.x;
+          const ty = targetPt.y;
+          // Place a clean callout badge offset from the point so it never covers the anatomy
+          const calloutY = ty > 110 ? Math.max(36, ty - 75) : Math.min(634, ty + 75);
+          const calloutX = tx < 320 ? Math.max(95, tx - 50) : Math.min(545, tx + 50);
+
+          const showAnswerOnPlate = state.mode === "study" || (state.mode === "flashcard" && state.flashcardRevealed);
+          const boxText = showAnswerOnPlate ? targetPt.labelFr : "❓ À identifier";
+          const shortText = boxText.length > 32 ? boxText.slice(0, 31) + "…" : boxText;
+          const boxW = Math.max(125, shortText.length * 7.8 + 24);
+
+          svgHtml += `
+            <line class="target-leader-line" x1="${tx}" y1="${ty}" x2="${calloutX}" y2="${calloutY}" />
+            <circle class="target-pulse-ring" cx="${tx}" cy="${ty}" r="14" />
+            <g transform="translate(${calloutX}, ${calloutY})">
+              <rect class="target-callout-pill" x="${-boxW / 2}" y="-15" width="${boxW}" height="30" />
+              <text class="target-callout-text" x="0" y="0">${escapeHtml(shortText)}</text>
+            </g>
           `;
-
-          const activeId = state.hoveredPointId || state.selectedMobilePointId;
-
-          // 1. Leader lines from anatomical point to numbered margin badge (hidden in 'pin' mode for unfound points)
-          badgeLayout.forEach(item => {
-            const { pt, anchorX, anchorY, badgeX, badgeY } = item;
-            const status = state.pointStatus[pt.id] || "masked";
-            const isSelected = activeId === pt.id;
-            const isTarget = state.currentTargetPointId === pt.id;
-
-            if (state.mode === "pin" && status === "masked") return;
-
-            let lineClass = "leader-line";
-            if (isSelected || (state.mode === "qcm" && isTarget)) lineClass += " highlighted";
-            if (status === "ok") lineClass += " correct";
-            if (status === "ko") lineClass += " wrong";
-
-            svgHtml += `
-              <line class="${lineClass}" data-pt-id="${pt.id}" x1="${badgeX}" y1="${badgeY}" x2="${anchorX}" y2="${anchorY}" />
-            `;
-          });
-
-          // 2. Anatomical points on the plate
-          badgeLayout.forEach(item => {
-            const { pt, anchorX, anchorY } = item;
-            const isSelected = activeId === pt.id;
-            const isTarget = state.currentTargetPointId === pt.id;
-            const fillHex = `#${pt.color || "FFFFFF"}`;
-
-            let ptClass = "anat-point-group";
-            if (isSelected) ptClass += " highlighted";
-            if (state.mode === "qcm" && isTarget) ptClass += " pulse-target";
-
-            svgHtml += `
-              <g class="${ptClass}" data-pt-id="${pt.id}" filter="url(#point-shadow)">
-                <circle class="anat-point-hit" cx="${anchorX}" cy="${anchorY}" />
-                <circle class="anat-point-outer" cx="${anchorX}" cy="${anchorY}" fill="${fillHex}" />
-                <circle class="anat-point-inner" cx="${anchorX}" cy="${anchorY}" />
-              </g>
-            `;
-          });
-
-          // 3. Numbered Margin Callout Badges (1, 2, 3...)
-          badgeLayout.forEach(item => {
-            const { pt, num, badgeX, badgeY } = item;
-            const status = state.pointStatus[pt.id] || "masked";
-            const isSelected = activeId === pt.id;
-            const isTarget = state.currentTargetPointId === pt.id;
-
-            if (state.mode === "pin" && status === "masked") return;
-
-            const fillHex = `#${pt.color || "FFFFFF"}`;
-            let badgeClass = "mobile-pin-badge";
-            if (isSelected || (state.mode === "qcm" && isTarget)) badgeClass += " highlighted";
-            if (status === "ok") badgeClass += " ok";
-            if (status === "ko") badgeClass += " ko";
-
-            svgHtml += `
-              <g class="${badgeClass}" data-pt-id="${pt.id}" filter="url(#point-shadow)">
-                <circle class="anat-point-hit" cx="${badgeX}" cy="${badgeY}" />
-                <circle class="mobile-pin-circle" cx="${badgeX}" cy="${badgeY}" fill="${fillHex}" />
-                <text class="mobile-pin-text" x="${badgeX}" y="${badgeY}">${num}</text>
-              </g>
-            `;
-          });
-
-          elSvg.innerHTML = svgHtml;
-        } else {
-          // DESKTOP VIEWPORT: Wide 1320x740 with full IMAIOS left/right text labels
-          elSvg.setAttribute("viewBox", "0 0 1320 740");
-          const imgW = 640, imgH = 670, imgX = 340, imgY = 35;
-          const layout = computeDesktopLabelLayout(points, imgX, imgY, imgW, imgH);
-          const leftBracketX = 295, rightBracketX = 1025;
-
-          let svgHtml = `
-            <defs>
-              <filter id="point-shadow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.35"/>
-              </filter>
-            </defs>
-            <image href="${slice.image}" x="${imgX}" y="${imgY}" width="${imgW}" height="${imgH}" preserveAspectRatio="none" />
-          `;
-
-          layout.forEach(item => {
-            const { pt, side, anchorX, anchorY, labelY } = item;
-            const status = state.pointStatus[pt.id] || "masked";
-            const isHovered = state.hoveredPointId === pt.id;
-            const isTarget = (state.mode === "qcm" || state.mode === "pin") && state.currentTargetPointId === pt.id;
-            if (state.mode === "pin" && status === "masked") return;
-
-            const lineEndX = side === "left" ? leftBracketX : rightBracketX;
-            let lineClass = "leader-line";
-            if (state.hoveredPointId && !isHovered) lineClass += " dimmed";
-            if (isHovered || (state.mode === "qcm" && isTarget)) lineClass += " highlighted";
-            if (status === "ok") lineClass += " correct";
-            if (status === "ko") lineClass += " wrong";
-
-            svgHtml += `<line class="${lineClass}" data-pt-id="${pt.id}" x1="${lineEndX}" y1="${labelY}" x2="${anchorX}" y2="${anchorY}" />`;
-          });
-
-          layout.forEach(item => {
-            const { pt, anchorX, anchorY } = item;
-            const isHovered = state.hoveredPointId === pt.id;
-            const isTarget = state.currentTargetPointId === pt.id;
-            const fillHex = `#${pt.color || "FFFFFF"}`;
-
-            let ptClass = "anat-point-group";
-            if (isHovered) ptClass += " highlighted";
-            if (state.mode === "qcm" && isTarget) ptClass += " pulse-target";
-
-            svgHtml += `
-              <g class="${ptClass}" data-pt-id="${pt.id}" filter="url(#point-shadow)">
-                <circle class="anat-point-hit" cx="${anchorX}" cy="${anchorY}" />
-                <circle class="anat-point-outer" cx="${anchorX}" cy="${anchorY}" fill="${fillHex}" />
-                <circle class="anat-point-inner" cx="${anchorX}" cy="${anchorY}" />
-              </g>
-            `;
-          });
-
-          layout.forEach((item, idx) => {
-            const { pt, side, labelY } = item;
-            const status = state.pointStatus[pt.id] || "masked";
-            const isHovered = state.hoveredPointId === pt.id;
-            const isTarget = state.currentTargetPointId === pt.id;
-            if (state.mode === "pin" && status === "masked") return;
-
-            const bracketX = side === "left" ? leftBracketX : rightBracketX;
-
-            if (state.mode === "qcm" && isTarget && status === "masked") {
-              const boxW = 210, boxH = 28;
-              const boxX = side === "left" ? leftBracketX - boxW - 8 : rightBracketX + 8;
-              const textX = side === "left" ? leftBracketX - 16 : rightBracketX + 16;
-              const anchor = side === "left" ? "end" : "start";
-              svgHtml += `
-                <g class="label-box-group highlighted" data-pt-id="${pt.id}">
-                  <line class="leader-bracket" x1="${bracketX}" y1="${labelY - 11}" x2="${bracketX}" y2="${labelY + 11}" />
-                  <rect class="label-pill-bg" x="${boxX}" y="${labelY - boxH / 2}" width="${boxW}" height="${boxH}" style="fill:#dbeafe;stroke:#2563eb;stroke-width:2;" />
-                  <text class="label-text" x="${textX}" y="${labelY}" text-anchor="${anchor}" style="fill:#1d4ed8;font-weight:800;">
-                    ❓ Structure #${idx + 1} à identifier
-                  </text>
-                </g>
-              `;
-              return;
-            }
-
-            const isMasked = status === "masked" && state.mode !== "study";
-            const catMeta = CATEGORY_META[pt.category] || { label: pt.category };
-            const displayFr = isMasked
-              ? `#${idx + 1} • ${catMeta.label} (cliquer)`
-              : pt.labelFr;
-
-            const showSubLatin = !isMasked && state.showLatin && pt.labelLa && pt.labelLa.toLowerCase() !== pt.labelFr.toLowerCase();
-            const boxH = showSubLatin ? 34 : 26;
-            const boxW = 282;
-            const boxX = side === "left" ? leftBracketX - boxW - 6 : rightBracketX + 6;
-            const textX = side === "left" ? leftBracketX - 12 : rightBracketX + 12;
-            const textAnchor = side === "left" ? "end" : "start";
-
-            let groupClass = "label-box-group";
-            if (state.hoveredPointId && !isHovered) groupClass += " dimmed";
-            if (isHovered) groupClass += " highlighted";
-            if (isMasked) groupClass += " masked";
-            if (status === "ok") groupClass += " revealed-ok";
-            if (status === "ko") groupClass += " revealed-ko";
-
-            const maxChars = 40;
-            const shortFr = displayFr.length > maxChars ? displayFr.slice(0, maxChars - 1) + "…" : displayFr;
-
-            svgHtml += `
-              <g class="${groupClass}" data-pt-id="${pt.id}">
-                <line class="leader-bracket" x1="${bracketX}" y1="${labelY - boxH / 2 + 2}" x2="${bracketX}" y2="${labelY + boxH / 2 - 2}" />
-                <rect class="label-pill-bg" x="${boxX}" y="${labelY - boxH / 2}" width="${boxW}" height="${boxH}" />
-                <text class="label-text" x="${textX}" y="${showSubLatin ? labelY - 5 : labelY}" text-anchor="${textAnchor}">
-                  ${escapeHtml(shortFr)}
-                </text>
-                ${showSubLatin ? `
-                  <text class="label-subtext" x="${textX}" y="${labelY + 9}" text-anchor="${textAnchor}">
-                    ${escapeHtml(pt.labelLa.length > 44 ? pt.labelLa.slice(0, 43) + "…" : pt.labelLa)}
-                  </text>
-                ` : ""}
-              </g>
-            `;
-          });
-
-          elSvg.innerHTML = svgHtml;
         }
 
-        // Bind events on SVG elements
+        // Draw anatomical points
+        points.forEach(pt => {
+          const isTarget = state.currentTargetPointId === pt.id;
+          const status = state.pointStatus[pt.id] || "pending";
+          const fillHex = `#${pt.color || "FFFFFF"}`;
+
+          let groupClass = "anat-point-group";
+          if (status === "ok") groupClass += " done-ok";
+          else if (status === "ko") groupClass += " done-ko";
+          else if (state.mode !== "pin" && !isTarget) groupClass += " faded";
+
+          const rOuter = (isTarget && state.mode !== "pin") ? 8.5 : 6;
+          const strokeColor = (isTarget && state.mode !== "pin") ? "#2563eb" : "#0f172a";
+          const strokeW = (isTarget && state.mode !== "pin") ? 3 : 1.8;
+
+          svgHtml += `
+            <g class="${groupClass}" data-pt-id="${pt.id}" filter="url(#pt-shadow)">
+              <circle class="anat-point-hit" cx="${pt.x}" cy="${pt.y}" />
+              <circle class="anat-point-outer" cx="${pt.x}" cy="${pt.y}" fill="${fillHex}" style="r:${rOuter}px;stroke:${strokeColor};stroke-width:${strokeW}px;" />
+              <circle class="anat-point-inner" cx="${pt.x}" cy="${pt.y}" />
+            </g>
+          `;
+        });
+
+        elSvg.innerHTML = svgHtml;
+
+        // Clicking any point on the plate:
+        // - In 'pin' mode: answers the location quiz!
+        // - In 'qcm' / 'flashcard' / 'study' mode: switches the active question to that point!
         elSvg.querySelectorAll("[data-pt-id]").forEach(el => {
           const ptId = Number(el.getAttribute("data-pt-id"));
-          el.addEventListener("mouseenter", () => {
-            if (!isMobileView()) {
-              state.hoveredPointId = ptId;
-              updateHighlightClasses();
-            }
-          });
-          el.addEventListener("mouseleave", () => {
-            if (!isMobileView()) {
-              state.hoveredPointId = null;
-              updateHighlightClasses();
-            }
-          });
           el.addEventListener("click", (e) => {
             if (state.didPan) return;
             e.stopPropagation();
-            handlePointOrLabelClick(ptId);
+            onPointTapped(ptId);
           });
         });
       }
 
-      function renderMobileInspector() {
-        if (!isMobileView() || state.mode === "qcm" || state.mode === "pin") {
-          elMobileInspector.classList.remove("visible");
-          return;
-        }
-        const slice = getCurrentSlice();
-        const points = getFilteredPoints(slice);
-        const idx = points.findIndex(p => p.id === state.selectedMobilePointId);
-        if (idx === -1) {
-          elMobileInspector.classList.remove("visible");
-          return;
-        }
-        const pt = points[idx];
-        const status = state.pointStatus[pt.id] || "masked";
-        const isMasked = status === "masked" && state.mode !== "study";
-        const catMeta = CATEGORY_META[pt.category] || { label: pt.category };
-
-        elMobileInspector.classList.add("visible");
-        elInspBadge.textContent = String(idx + 1);
-        elInspBadge.style.background = `#${pt.color || "cbd5e1"}`;
-
-        if (isMasked) {
-          elInspTitle.textContent = `#${idx + 1} • ${catMeta.label} (masqué)`;
-          elInspLatin.textContent = "Touchez « Voir » pour révéler la réponse";
-          elInspActions.innerHTML = `
-            <button class="insp-btn reveal" id="insp-btn-reveal">👁️ Voir la réponse</button>
-          `;
-          document.getElementById("insp-btn-reveal").addEventListener("click", () => {
-            state.pointStatus[pt.id] = "revealed";
-            renderAll();
-          });
-        } else {
-          elInspTitle.textContent = pt.labelFr;
-          elInspLatin.textContent = pt.labelLa || "";
-          elInspActions.innerHTML = `
-            <button class="insp-btn ok" id="insp-btn-ok">✓ Juste</button>
-            <button class="insp-btn ko" id="insp-btn-ko">✗ Faux</button>
-          `;
-          document.getElementById("insp-btn-ok").addEventListener("click", () => {
-            if (state.pointStatus[pt.id] !== "ok") {
-              state.scoreOk++;
-              state.scoreTotal++;
-            }
-            state.pointStatus[pt.id] = "ok";
-            // Auto-advance to next point on mobile for fast thumb revision!
-            const nextPt = points[(idx + 1) % points.length];
-            if (nextPt) state.selectedMobilePointId = nextPt.id;
-            renderAll();
-          });
-          document.getElementById("insp-btn-ko").addEventListener("click", () => {
-            if (state.pointStatus[pt.id] !== "ko") {
-              state.scoreTotal++;
-            }
-            state.pointStatus[pt.id] = "ko";
-            const nextPt = points[(idx + 1) % points.length];
-            if (nextPt) state.selectedMobilePointId = nextPt.id;
-            renderAll();
-          });
-        }
-      }
-
-      function updateHighlightClasses() {
-        const hid = state.hoveredPointId || (isMobileView() ? state.selectedMobilePointId : null);
-        elSvg.querySelectorAll(".leader-line").forEach(el => {
-          const id = Number(el.getAttribute("data-pt-id"));
-          el.classList.toggle("highlighted", hid === id);
-          if (!isMobileView()) el.classList.toggle("dimmed", hid !== null && hid !== id);
-        });
-        elSvg.querySelectorAll(".anat-point-group, .mobile-pin-badge").forEach(el => {
-          const id = Number(el.getAttribute("data-pt-id"));
-          el.classList.toggle("highlighted", hid === id);
-        });
-        elSvg.querySelectorAll(".label-box-group").forEach(el => {
-          const id = Number(el.getAttribute("data-pt-id"));
-          el.classList.toggle("highlighted", hid === id);
-          el.classList.toggle("dimmed", hid !== null && hid !== id);
-        });
-        elSidebarList.querySelectorAll(".struct-item").forEach(el => {
-          const id = Number(el.getAttribute("data-pt-id"));
-          el.classList.toggle("highlighted", hid === id);
-        });
-      }
-
-      function handlePointOrLabelClick(ptId) {
-        const slice = getCurrentSlice();
-        const pt = slice.points.find(p => p.id === ptId);
-        if (!pt) return;
-
-        state.selectedMobilePointId = ptId;
-
-        if (state.mode === "study") {
-          state.hoveredPointId = state.hoveredPointId === ptId ? null : ptId;
-          renderAll();
-          scrollToSidebarItem(ptId);
-          return;
-        }
-
-        if (state.mode === "blind") {
-          const cur = state.pointStatus[ptId] || "masked";
-          state.pointStatus[ptId] = cur === "masked" ? "revealed" : "masked";
-          renderAll();
-          scrollToSidebarItem(ptId);
-          return;
-        }
-
+      function onPointTapped(ptId) {
         if (state.mode === "pin") {
           if (!state.currentTargetPointId) return;
+          state.scoreTotal++;
           if (ptId === state.currentTargetPointId) {
-            state.pointStatus[ptId] = "ok";
             state.scoreOk++;
-            state.scoreTotal++;
-            advanceQuizQueue();
+            state.pointStatus[ptId] = "ok";
+            advanceQuestion();
           } else {
             state.pointStatus[ptId] = "ko";
-            state.scoreTotal++;
+            renderAll();
           }
-          renderAll();
-          return;
-        }
-      }
-
-      function scrollToSidebarItem(ptId) {
-        const row = elSidebarList.querySelector(`[data-pt-id="${ptId}"]`);
-        if (row) {
-          row.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
-      }
-
-      function advanceQuizQueue() {
-        state.quizQueue = state.quizQueue.filter(id => (state.pointStatus[id] || "masked") === "masked");
-        state.currentTargetPointId = state.quizQueue[0] || null;
-        if (state.mode === "qcm") {
+        } else {
+          // Allow user to tap any point on the plate to immediately question/inspect that point!
+          state.currentTargetPointId = ptId;
+          state.flashcardRevealed = state.mode === "study";
           prepareQcmOptions();
+          renderAll();
         }
       }
 
-      function renderQuizHudAndQcm() {
+      // ==========================================
+      // RENDER BOTTOM DOCK (1 QUESTION AT A TIME)
+      // ==========================================
+      function renderBottomDock() {
         const slice = getCurrentSlice();
-        const pts = getFilteredPoints(slice);
-        const remaining = pts.filter(p => (state.pointStatus[p.id] || "masked") === "masked").length;
+        const points = getFilteredPoints(slice);
+        const targetPt = points.find(p => p.id === state.currentTargetPointId);
+        const doneCount = points.filter(p => state.pointStatus[p.id] !== "pending").length;
 
-        if (state.mode === "study") {
-          elQuizHud.classList.add("hidden");
-          elQcmCard.classList.add("hidden");
+        elScoreBadge.textContent = `✓ ${state.scoreOk}/${state.scoreTotal}`;
+
+        if (!targetPt) {
+          elProgressText.textContent = `Terminé (${points.length}/${points.length})`;
+          elDockInner.innerHTML = `
+            <div class="flashcard-box">
+              <div class="flashcard-answer">
+                <div class="flashcard-fr">🎉 Coupe terminée ! (${state.scoreOk}/${state.scoreTotal} bonnes réponses)</div>
+                <div class="flashcard-la">Passez à la coupe suivante ou recommencez</div>
+              </div>
+              <div class="flashcard-btns">
+                <button class="fc-btn ok" id="dock-btn-restart">🔄 Rejouer</button>
+                <button class="fc-btn reveal" id="dock-btn-next-slice">Coupe suiv. →</button>
+              </div>
+            </div>
+          `;
+          document.getElementById("dock-btn-restart").addEventListener("click", () => {
+            initSliceQuizState();
+            renderAll();
+          });
+          document.getElementById("dock-btn-next-slice").addEventListener("click", () => stepSlice(1));
           return;
         }
 
-        elQuizHud.classList.remove("hidden");
-        elHudScore.textContent = `${state.scoreOk}/${state.scoreTotal} • Reste ${remaining}`;
+        const catMeta = CATEGORY_META[targetPt.category] || { label: "Structure", color: "#38bdf8", icon: "🎯" };
+        elProgressDot.style.background = catMeta.color;
+        elProgressText.textContent = `${catMeta.label} • ${ Math.min(doneCount + 1, points.length) } / ${points.length}`;
 
-        if (state.mode === "blind") {
-          elQcmCard.classList.add("hidden");
-          elHudPrompt.innerHTML = isMobileView()
-            ? `🙈 Touchez un numéro <b>1..${pts.length}</b> sur la coupe ou dans la liste`
-            : `🙈 Cliquez sur une légende ou un point pour révéler la structure`;
-        } else if (state.mode === "pin") {
-          elQcmCard.classList.add("hidden");
-          const targetPt = slice.points.find(p => p.id === state.currentTargetPointId);
-          if (targetPt) {
-            const catMeta = CATEGORY_META[targetPt.category] || { icon: "🎯" };
-            elHudPrompt.innerHTML = `🎯 Touchez : <span class="quiz-target-highlight">${catMeta.icon} ${escapeHtml(targetPt.labelFr)}</span>`;
-          } else {
-            elHudPrompt.innerHTML = `🎉 Bravo ! Toutes les structures de cette coupe ont été localisées !`;
-          }
-        } else if (state.mode === "qcm") {
-          const targetPt = slice.points.find(p => p.id === state.currentTargetPointId);
-          if (!targetPt) {
-            elQcmCard.classList.add("hidden");
-            elHudPrompt.innerHTML = `🎉 Quiz QCM terminé sur cette planche !`;
-            return;
-          }
-          const idxNum = pts.findIndex(p => p.id === targetPt.id) + 1;
-          const catMeta = CATEGORY_META[targetPt.category] || { label: "Structure", icon: "🧠" };
-          elHudPrompt.innerHTML = `🧠 Identifiez le point <b>#${idxNum}</b> (${catMeta.icon} ${catMeta.label})`;
-          elQcmCard.classList.remove("hidden");
-
-          elQcmOptions.innerHTML = "";
-          state.qcmOptions.forEach((optLabel, i) => {
+        if (state.mode === "qcm") {
+          elDockInner.innerHTML = `
+            <div class="dock-prompt-row">
+              <div class="dock-prompt-text">${catMeta.icon} Quelle est la structure pointée sur la planche ?</div>
+              <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+            </div>
+            <div class="qcm-grid" id="qcm-grid"></div>
+          `;
+          const grid = document.getElementById("qcm-grid");
+          state.qcmOptions.forEach(optLabel => {
             const btn = document.createElement("button");
-            btn.className = "qcm-opt-btn";
-            btn.innerHTML = `
-              <span class="qcm-key">${i + 1}</span>
-              <span>${escapeHtml(optLabel)}</span>
-            `;
+            btn.className = "qcm-btn";
+            btn.textContent = optLabel;
             btn.addEventListener("click", () => {
               if (state.qcmAnswered) return;
               state.qcmAnswered = true;
@@ -1970,98 +1129,132 @@
               } else {
                 state.pointStatus[targetPt.id] = "ko";
                 btn.classList.add("wrong");
-                [...elQcmOptions.children].forEach(b => {
-                  if (b.textContent.includes(targetPt.labelFr)) b.classList.add("correct");
+                [...grid.children].forEach(b => {
+                  if (b.textContent === targetPt.labelFr) b.classList.add("correct");
                 });
               }
-              setTimeout(() => {
-                advanceQuizQueue();
-                renderAll();
-              }, 700);
+              setTimeout(() => advanceQuestion(), 650);
             });
-            elQcmOptions.appendChild(btn);
+            grid.appendChild(btn);
           });
+          document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
+        } else if (state.mode === "flashcard") {
+          if (!state.flashcardRevealed) {
+            elDockInner.innerHTML = `
+              <div class="dock-prompt-row">
+                <div class="dock-prompt-text">${catMeta.icon} Devinez la structure pointée (${catMeta.label})</div>
+                <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+              </div>
+              <div class="flashcard-box" style="padding:6px;">
+                <button class="fc-btn reveal" id="btn-fc-reveal">👁️ Voir la réponse</button>
+              </div>
+            `;
+            document.getElementById("btn-fc-reveal").addEventListener("click", () => {
+              state.flashcardRevealed = true;
+              renderAll();
+            });
+            document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
+          } else {
+            elDockInner.innerHTML = `
+              <div class="flashcard-box">
+                <div class="flashcard-answer">
+                  <div class="flashcard-fr">${escapeHtml(targetPt.labelFr)}</div>
+                  ${targetPt.labelLa ? `<div class="flashcard-la">${escapeHtml(targetPt.labelLa)}</div>` : ""}
+                </div>
+                <div class="flashcard-btns">
+                  <button class="fc-btn ok" id="btn-fc-ok">✓ J'avais bon</button>
+                  <button class="fc-btn ko" id="btn-fc-ko">✗ À revoir</button>
+                </div>
+              </div>
+            `;
+            document.getElementById("btn-fc-ok").addEventListener("click", () => {
+              state.scoreOk++;
+              state.scoreTotal++;
+              state.pointStatus[targetPt.id] = "ok";
+              advanceQuestion();
+            });
+            document.getElementById("btn-fc-ko").addEventListener("click", () => {
+              state.scoreTotal++;
+              state.pointStatus[targetPt.id] = "ko";
+              advanceQuestion();
+            });
+          }
+        } else if (state.mode === "pin") {
+          elDockInner.innerHTML = `
+            <div class="flashcard-box">
+              <div class="flashcard-answer">
+                <div class="flashcard-la">🎯 Touchez ce point directement sur la planche :</div>
+                <div class="flashcard-fr" style="color:var(--primary)">${catMeta.icon} ${escapeHtml(targetPt.labelFr)}</div>
+              </div>
+              <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+            </div>
+          `;
+          document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
+        } else if (state.mode === "study") {
+          elDockInner.innerHTML = `
+            <div class="flashcard-box">
+              <div class="flashcard-answer">
+                <div class="flashcard-fr">${catMeta.icon} ${escapeHtml(targetPt.labelFr)}</div>
+                <div class="flashcard-la">${escapeHtml(targetPt.labelLa || "Touchez n'importe quel point sur la coupe pour l'afficher")}</div>
+              </div>
+              <button class="dock-skip-btn" id="btn-skip-q">Suivant →</button>
+            </div>
+          `;
+          document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
         }
       }
 
-      function renderSidebar() {
-        const slice = getCurrentSlice();
-        const points = getFilteredPoints(slice);
-        const activeId = state.hoveredPointId || (isMobileView() ? state.selectedMobilePointId : null);
-
-        elSidebarList.innerHTML = "";
-        points.forEach((pt, idx) => {
-          const status = state.pointStatus[pt.id] || "masked";
-          const isMasked = status === "masked" && state.mode !== "study";
-          const catMeta = CATEGORY_META[pt.category] || { label: pt.category, color: "#cbd5e1" };
-
-          const row = document.createElement("div");
-          row.className = `struct-item ${isMasked ? "masked" : ""} ${activeId === pt.id ? "highlighted" : ""}`;
-          row.setAttribute("data-pt-id", pt.id);
-
-          row.innerHTML = `
-            <div class="struct-item-left">
-              <span class="struct-num" style="background:#${pt.color || "cbd5e1"}">${idx + 1}</span>
-              <div class="struct-names">
-                <div class="struct-fr">${isMasked ? `Touchez pour révéler (${catMeta.label})` : escapeHtml(pt.labelFr)}</div>
-                ${(!isMasked && pt.labelLa) ? `<div class="struct-la">${escapeHtml(pt.labelLa)}</div>` : ""}
-              </div>
-            </div>
-            <div class="struct-eval-btns">
-              <button class="eval-mini-btn ok ${status === "ok" ? "selected" : ""}" title="Juste">✓</button>
-              <button class="eval-mini-btn ko ${status === "ko" ? "selected" : ""}" title="Faux">✗</button>
-            </div>
-          `;
-
-          row.addEventListener("mouseenter", () => {
-            if (!isMobileView()) {
-              state.hoveredPointId = pt.id;
-              updateHighlightClasses();
-            }
-          });
-          row.addEventListener("mouseleave", () => {
-            if (!isMobileView()) {
-              state.hoveredPointId = null;
-              updateHighlightClasses();
-            }
-          });
-          row.addEventListener("click", () => {
-            handlePointOrLabelClick(pt.id);
-          });
-
-          const btnOk = row.querySelector(".eval-mini-btn.ok");
-          const btnKo = row.querySelector(".eval-mini-btn.ko");
-
-          btnOk.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (state.pointStatus[pt.id] !== "ok") {
-              state.scoreOk++;
-              state.scoreTotal++;
-            }
-            state.pointStatus[pt.id] = "ok";
-            renderAll();
-          });
-
-          btnKo.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (state.pointStatus[pt.id] !== "ko") {
-              state.scoreTotal++;
-            }
-            state.pointStatus[pt.id] = "ko";
-            renderAll();
-          });
-
-          elSidebarList.appendChild(row);
-        });
+      function skipCurrentQuestion() {
+        if (state.quizQueue.length > 1) {
+          const first = state.quizQueue.shift();
+          state.quizQueue.push(first);
+          state.currentTargetPointId = state.quizQueue[0];
+          state.flashcardRevealed = false;
+          prepareQcmOptions();
+          renderAll();
+        }
       }
 
-      function renderThumbStrip() {
+      function renderHeaderAndDrawer() {
+        const slice = getCurrentSlice();
         const slices = getSeriesSlices(state.currentSeriesId);
         const curIdx = slices.findIndex(s => s.id === state.currentSliceId);
+        const activeNames = [...state.activeCategories].map(c => CATEGORY_META[c]?.label).filter(Boolean);
 
-        elSliceCounter.textContent = `${curIdx + 1}/${slices.length}`;
+        elSliceTitle.textContent = slice.title_2 ? `${slice.title_1} — ${slice.title_2}` : slice.title_1;
+        elSliceSub.textContent = `Coupe ${curIdx + 1}/${slices.length} • ${activeNames.length <= 3 ? activeNames.join(", ") : `${activeNames.length} catégories`}`;
+
+        // Category pills in Drawer
+        const countsByCat = {};
+        slice.points.forEach(p => { countsByCat[p.category] = (countsByCat[p.category] || 0) + 1; });
+
+        elCatChips.innerHTML = "";
+        Object.keys(CATEGORY_META).forEach(catKey => {
+          const meta = CATEGORY_META[catKey];
+          const count = countsByCat[catKey] || 0;
+          const isActive = state.activeCategories.has(catKey);
+
+          const btn = document.createElement("button");
+          btn.className = `cat-pill ${isActive ? "active" : ""} ${count === 0 ? "empty" : ""}`;
+          btn.style.setProperty("--cat-color", meta.color);
+          btn.innerHTML = `
+            <span class="cat-dot" style="background:${meta.color}"></span>
+            <span>${meta.label} (${count})</span>
+          `;
+          btn.addEventListener("click", () => {
+            if (state.activeCategories.has(catKey)) {
+              if (state.activeCategories.size > 1) state.activeCategories.delete(catKey);
+            } else {
+              state.activeCategories.add(catKey);
+            }
+            initSliceQuizState();
+            renderAll();
+          });
+          elCatChips.appendChild(btn);
+        });
+
+        // Thumbnails in Drawer
         elThumbStrip.innerHTML = "";
-
         slices.forEach((sl, idx) => {
           const item = document.createElement("div");
           item.className = `thumb-item ${sl.id === state.currentSliceId ? "active" : ""}`;
@@ -2069,28 +1262,35 @@
             <img src="${sl.image}" alt="${escapeHtml(sl.title_1)}" loading="lazy" />
             <span class="thumb-index">${idx + 1}</span>
           `;
-          item.addEventListener("click", () => selectSlice(sl.id, false));
+          item.addEventListener("click", () => {
+            selectSlice(sl.id, false);
+            elDrawerBackdrop.classList.remove("open");
+          });
           elThumbStrip.appendChild(item);
         });
       }
 
-      function renderHeaderInfo() {
+      function selectSlice(sliceId, autoAdjust = false) {
+        state.currentSliceId = sliceId;
         const slice = getCurrentSlice();
+        if (autoAdjust) ensureNonEmptyCategoriesForSlice(slice);
+        resetZoom();
+        initSliceQuizState();
+        renderAll();
+      }
+
+      function stepSlice(delta) {
         const slices = getSeriesSlices(state.currentSeriesId);
-        const curIdx = slices.findIndex(s => s.id === state.currentSliceId);
-        const fullTitle = slice.title_2 ? `${slice.title_1} — ${slice.title_2}` : slice.title_1;
-        elSliceTitle.textContent = fullTitle;
-        elSliceOrientation.textContent = `${slice.orientation || "Planche"} • ${curIdx + 1}/${slices.length}`;
+        const idx = slices.findIndex(s => s.id === state.currentSliceId);
+        if (idx === -1) return;
+        const nextIdx = (idx + delta + slices.length) % slices.length;
+        selectSlice(slices[nextIdx].id, false);
       }
 
       function renderAll() {
-        renderHeaderInfo();
-        renderCategoryChips();
+        renderHeaderAndDrawer();
         renderSvgStage();
-        renderMobileInspector();
-        renderQuizHudAndQcm();
-        renderSidebar();
-        renderThumbStrip();
+        renderBottomDock();
       }
 
       function escapeHtml(str) {
@@ -2101,144 +1301,58 @@
           .replace(/"/g, "&quot;");
       }
 
-      // Mode pills
-      document.querySelectorAll(".mode-pill").forEach(btn => {
+      // Drawer Controls
+      document.getElementById("btn-open-drawer").addEventListener("click", () => elDrawerBackdrop.classList.add("open"));
+      document.getElementById("open-drawer-title").addEventListener("click", () => elDrawerBackdrop.classList.add("open"));
+      document.getElementById("btn-close-drawer").addEventListener("click", () => elDrawerBackdrop.classList.remove("open"));
+      elDrawerBackdrop.addEventListener("click", (e) => {
+        if (e.target === elDrawerBackdrop) elDrawerBackdrop.classList.remove("open");
+      });
+
+      document.querySelectorAll(".mode-card").forEach(btn => {
         btn.addEventListener("click", () => {
-          document.querySelectorAll(".mode-pill").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".mode-card").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
           state.mode = btn.getAttribute("data-mode");
-          // In Pin or QCM mode on mobile, auto-collapse the bottom list so the plate + QCM takes 100% height!
-          if (isMobileView() && (state.mode === "pin" || state.mode === "qcm")) {
-            elSidebar.classList.add("collapsed");
-            document.getElementById("btn-sidebar").classList.remove("active");
-          }
           initSliceQuizState();
           renderAll();
+          elDrawerBackdrop.classList.remove("open");
         });
       });
 
-      // Category presets
-      document.getElementById("preset-vasc-nerf").addEventListener("click", () => {
-        state.activeCategories = new Set(["N", "A", "V"]);
+      function setPresetCategories(cats) {
+        state.activeCategories = new Set(cats);
         initSliceQuizState();
         renderAll();
-      });
-      document.getElementById("preset-nerf-only").addEventListener("click", () => {
-        state.activeCategories = new Set(["N"]);
-        initSliceQuizState();
-        renderAll();
-      });
-      document.getElementById("preset-art-only").addEventListener("click", () => {
-        state.activeCategories = new Set(["A"]);
-        initSliceQuizState();
-        renderAll();
-      });
-      document.getElementById("preset-muscles").addEventListener("click", () => {
-        state.activeCategories = new Set(["M", "T", "F"]);
-        initSliceQuizState();
-        renderAll();
-      });
-      document.getElementById("preset-osteo").addEventListener("click", () => {
-        state.activeCategories = new Set(["O", "E", "L"]);
-        initSliceQuizState();
-        renderAll();
-      });
-      document.getElementById("preset-all").addEventListener("click", () => {
-        state.activeCategories = new Set(Object.keys(CATEGORY_META));
-        initSliceQuizState();
-        renderAll();
-      });
+        elDrawerBackdrop.classList.remove("open");
+      }
 
-      // Topbar buttons
-      const btnLatin = document.getElementById("btn-latin");
-      btnLatin.addEventListener("click", () => {
-        state.showLatin = !state.showLatin;
-        btnLatin.classList.toggle("active", state.showLatin);
-        renderAll();
-      });
+      document.getElementById("preset-vasc-nerf").addEventListener("click", () => setPresetCategories(["N", "A", "V"]));
+      document.getElementById("preset-nerf-only").addEventListener("click", () => setPresetCategories(["N"]));
+      document.getElementById("preset-art-only").addEventListener("click", () => setPresetCategories(["A"]));
+      document.getElementById("preset-muscles").addEventListener("click", () => setPresetCategories(["M", "T", "F"]));
+      document.getElementById("preset-osteo").addEventListener("click", () => setPresetCategories(["O", "E", "L"]));
+      document.getElementById("preset-all").addEventListener("click", () => setPresetCategories(Object.keys(CATEGORY_META)));
 
-      const btnSidebar = document.getElementById("btn-sidebar");
-      btnSidebar.addEventListener("click", () => {
-        elSidebar.classList.toggle("collapsed");
-        btnSidebar.classList.toggle("active", !elSidebar.classList.contains("collapsed"));
-      });
-
-      const btnTheme = document.getElementById("btn-theme");
-      btnTheme.addEventListener("click", () => {
-        const html = document.documentElement;
-        const isDark = html.getAttribute("data-theme") === "dark";
-        html.setAttribute("data-theme", isDark ? "light" : "dark");
-        btnTheme.textContent = isDark ? "🌙" : "☀️";
-      });
-
-      // Bulk actions
-      document.getElementById("btn-mask-all").addEventListener("click", () => {
-        getFilteredPoints(getCurrentSlice()).forEach(p => { state.pointStatus[p.id] = "masked"; });
-        renderAll();
-      });
-      document.getElementById("btn-reveal-all").addEventListener("click", () => {
-        getFilteredPoints(getCurrentSlice()).forEach(p => { state.pointStatus[p.id] = "revealed"; });
-        renderAll();
-      });
-      document.getElementById("hud-btn-reveal-all").addEventListener("click", () => {
-        getFilteredPoints(getCurrentSlice()).forEach(p => { state.pointStatus[p.id] = "revealed"; });
-        renderAll();
-      });
-      document.getElementById("hud-btn-reset").addEventListener("click", () => {
+      document.getElementById("btn-reset-quiz").addEventListener("click", () => {
         state.scoreOk = 0;
         state.scoreTotal = 0;
         initSliceQuizState();
         renderAll();
-      });
-      document.getElementById("qcm-skip-btn").addEventListener("click", () => {
-        if (state.quizQueue.length > 1) {
-          const first = state.quizQueue.shift();
-          state.quizQueue.push(first);
-          state.currentTargetPointId = state.quizQueue[0];
-          prepareQcmOptions();
-          renderAll();
-        }
+        elDrawerBackdrop.classList.remove("open");
       });
 
-      elSearchInput.addEventListener("input", () => {
-        state.searchQuery = elSearchInput.value;
-        renderAll();
+      document.getElementById("btn-theme").addEventListener("click", () => {
+        const html = document.documentElement;
+        const isDark = html.getAttribute("data-theme") === "dark";
+        html.setAttribute("data-theme", isDark ? "light" : "dark");
       });
-
-      function stepSlice(delta) {
-        const slices = getSeriesSlices(state.currentSeriesId);
-        const idx = slices.findIndex(s => s.id === state.currentSliceId);
-        if (idx === -1) return;
-        const nextIdx = (idx + delta + slices.length) % slices.length;
-        selectSlice(slices[nextIdx].id, false);
-      }
 
       document.getElementById("btn-prev-slice").addEventListener("click", () => stepSlice(-1));
       document.getElementById("btn-next-slice").addEventListener("click", () => stepSlice(1));
 
-      window.addEventListener("keydown", (e) => {
-        if (document.activeElement === elSearchInput) return;
-        if (e.key === "ArrowLeft") {
-          e.preventDefault();
-          stepSlice(-1);
-        } else if (e.key === "ArrowRight") {
-          e.preventDefault();
-          stepSlice(1);
-        } else if (e.key === " ") {
-          e.preventDefault();
-          const pts = getFilteredPoints(getCurrentSlice());
-          const anyMasked = pts.some(p => (state.pointStatus[p.id] || "masked") === "masked");
-          pts.forEach(p => { state.pointStatus[p.id] = anyMasked ? "revealed" : "masked"; });
-          renderAll();
-        } else if (state.mode === "qcm" && ["1", "2", "3", "4"].includes(e.key)) {
-          const idx = Number(e.key) - 1;
-          const btn = elQcmOptions.children[idx];
-          if (btn) btn.click();
-        }
-      });
-
       // ==========================================
-      // ZOOM & PAN (PINCH, WHEEL, DRAG, DOUBLE-TAP, BUTTONS)
+      // ZOOM & PAN (PINCH, DOUBLE-TAP, WHEEL, DRAG)
       // ==========================================
       const elStage = document.getElementById("stage-container");
       const elZoomBadge = document.getElementById("zoom-level-badge");
@@ -2304,15 +1418,13 @@
         resetZoom();
       });
 
-      // Mouse wheel & Trackpad pinch zoom
       elStage.addEventListener("wheel", (e) => {
         e.preventDefault();
         const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
         zoomAboutPoint(zoomScale * factor, e.clientX, e.clientY);
       }, { passive: false });
 
-      // Touch Pinch-to-Zoom & 1-Finger Pan
-      let touchMode = null; // 'pan' | 'pinch'
+      let touchMode = null;
       let startTouchX = 0;
       let startTouchY = 0;
       let startPanX = 0;
@@ -2335,12 +1447,8 @@
         } else if (e.touches.length === 1) {
           const now = Date.now();
           if (now - lastTapTime < 280 && !e.target.closest("[data-pt-id]")) {
-            // Double-tap on background toggles 2.4x zoom at tap point
-            if (zoomScale > 1.2) {
-              resetZoom();
-            } else {
-              zoomAboutPoint(2.4, e.touches[0].clientX, e.touches[0].clientY);
-            }
+            if (zoomScale > 1.2) resetZoom();
+            else zoomAboutPoint(2.5, e.touches[0].clientX, e.touches[0].clientY);
             lastTapTime = 0;
             return;
           }
@@ -2389,7 +1497,6 @@
         }
       });
 
-      // Desktop Mouse Drag-to-Pan
       let isMouseDragging = false;
       elStage.addEventListener("mousedown", (e) => {
         if (e.button !== 0 || e.target.closest(".zoom-toolbar")) return;
@@ -2420,18 +1527,6 @@
           elStage.classList.remove("is-panning");
           setTimeout(() => { state.didPan = false; }, 50);
         }
-      });
-
-      // Reset zoom when switching slices
-      const origSelectSlice = selectSlice;
-      selectSlice = function(sliceId, autoAdjust = false) {
-        resetZoom();
-        origSelectSlice(sliceId, autoAdjust);
-      };
-
-      isMobileQuery.addEventListener("change", () => {
-        resetZoom();
-        renderAll();
       });
 
       initSeriesDropdown();
