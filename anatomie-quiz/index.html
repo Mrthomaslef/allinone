@@ -809,13 +809,31 @@
   <div class="drawer-backdrop" id="drawer-backdrop">
     <div class="drawer-sheet" id="drawer-sheet">
       <div class="drawer-header">
-        <span class="drawer-title">⚙️ Configurer le Quiz</span>
+        <span class="drawer-title">⚙️ Configurer le Quiz MSK (278 planches)</span>
         <button class="drawer-close" id="btn-close-drawer">✕</button>
       </div>
 
       <div class="drawer-section">
+        <span class="drawer-label">Atlas Musculo-Squelettique IMAIOS</span>
+        <div class="mode-grid" id="module-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <button class="mode-card active" data-module="ms" style="flex-direction:column;align-items:center;text-align:center;padding:8px 6px;">
+            <span style="font-size:18px;">🦾</span>
+            <span style="font-size:11.5px;">Membre Sup. (92)</span>
+          </button>
+          <button class="mode-card" data-module="mi" style="flex-direction:column;align-items:center;text-align:center;padding:8px 6px;">
+            <span style="font-size:18px;">🦵</span>
+            <span style="font-size:11.5px;">Membre Inf. (119)</span>
+          </button>
+          <button class="mode-card" data-module="rachis" style="flex-direction:column;align-items:center;text-align:center;padding:8px 6px;">
+            <span style="font-size:18px;">🦴</span>
+            <span style="font-size:11.5px;">Rachis & Dos (67)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="drawer-section">
         <span class="drawer-label">Mode de révision (1 question par 1)</span>
-        <div class="mode-grid">
+        <div class="mode-grid" id="mode-grid">
           <button class="mode-card active" data-mode="qcm">🧠 Quiz QCM (4 choix)</button>
           <button class="mode-card" data-mode="flashcard">🙈 Flashcard (Deviner)</button>
           <button class="mode-card" data-mode="pin">🎯 Quiz Épingle (Localiser)</button>
@@ -849,11 +867,11 @@
     </div>
   </div>
 
-  <script src="data/imaios_upper_limb.js"></script>
+  <script src="data/imaios_msk_all.js"></script>
   <script>
     (function () {
-      const DATA = window.IMAIOS_UPPER_LIMB_DATA;
-      if (!DATA) return;
+      const MODULES = window.IMAIOS_MSK_MODULES;
+      if (!MODULES) return;
 
       const CATEGORY_META = {
         N: { label: "Nerfs", color: "#FBE94F", icon: "⚡" },
@@ -870,11 +888,12 @@
       };
 
       const state = {
+        currentModuleKey: "ms",
         currentSeriesId: 243,
         currentSliceId: 8019,
         activeCategories: new Set(["N", "A", "V"]),
-        mode: "qcm", // Default to 1-by-1 QCM so user immediately gets 1 clear question at a time!
-        pointStatus: {}, // 'pending' | 'ok' | 'ko'
+        mode: "qcm",
+        pointStatus: {},
         quizQueue: [],
         currentTargetPointId: null,
         flashcardRevealed: false,
@@ -885,6 +904,10 @@
         scoreTotal: 0,
         didPan: false
       };
+
+      function getActiveModule() {
+        return MODULES[state.currentModuleKey] || MODULES.ms;
+      }
 
       // Helper to wrap long anatomical labels cleanly into multiple lines without any truncation
       function wrapTextLines(str, maxCharsPerLine) {
@@ -908,7 +931,7 @@
         return lines;
       }
 
-      // Convert client (screen) coordinates into SVG (640x670) coordinates accurately under any zoom/pan
+      // Convert client (screen) coordinates into SVG coordinates accurately under any zoom/pan
       function clientToSvgCoords(clientX, clientY) {
         const pt = elSvg.createSVGPoint();
         pt.x = clientX;
@@ -933,11 +956,13 @@
       const elThumbStrip = document.getElementById("thumb-strip");
 
       function getSeriesSlices(seriesId) {
+        const DATA = getActiveModule();
         if (seriesId === 0) return DATA.slices;
         return DATA.slices.filter(s => s.series_id === seriesId);
       }
 
       function getCurrentSlice() {
+        const DATA = getActiveModule();
         return DATA.slices.find(s => s.id === state.currentSliceId) || DATA.slices[0];
       }
 
@@ -953,10 +978,11 @@
       }
 
       function initSeriesDropdown() {
+        const DATA = getActiveModule();
         elSeriesSelect.innerHTML = "";
         const optAll = document.createElement("option");
         optAll.value = "0";
-        optAll.textContent = `Toutes les séries (${DATA.slices.length} planches)`;
+        optAll.textContent = `Toutes les séries — ${DATA.name} (${DATA.slices.length} planches)`;
         elSeriesSelect.appendChild(optAll);
 
         DATA.series.forEach(ser => {
@@ -966,16 +992,17 @@
           if (ser.id === state.currentSeriesId) opt.selected = true;
           elSeriesSelect.appendChild(opt);
         });
-
-        elSeriesSelect.addEventListener("change", () => {
-          state.currentSeriesId = Number(elSeriesSelect.value);
-          const slices = getSeriesSlices(state.currentSeriesId);
-          if (slices.length > 0) selectSlice(slices[0].id, true);
-        });
       }
+
+      elSeriesSelect.addEventListener("change", () => {
+        state.currentSeriesId = Number(elSeriesSelect.value);
+        const slices = getSeriesSlices(state.currentSeriesId);
+        if (slices.length > 0) selectSlice(slices[0].id, true);
+      });
 
       function initSliceQuizState() {
         const slice = getCurrentSlice();
+        ensureNonEmptyCategoriesForSlice(slice);
         const pts = getFilteredPoints(slice);
         state.pointStatus = {};
         state.userCalloutPos = null;
@@ -989,6 +1016,7 @@
       }
 
       function prepareQcmOptions() {
+        const DATA = getActiveModule();
         const slice = getCurrentSlice();
         const targetPt = slice.points.find(p => p.id === state.currentTargetPointId);
         state.qcmAnswered = false;
@@ -996,7 +1024,7 @@
           state.qcmOptions = [];
           return;
         }
-        // Prefer distractors from the same slice & category first, then global category
+        // Prefer distractors from the same slice & category first, then global category in module
         const sameSliceCat = [];
         const globalCat = [];
         const seen = new Set([targetPt.labelFr]);
@@ -1035,6 +1063,10 @@
       // ==========================================
       function renderSvgStage() {
         const slice = getCurrentSlice();
+        const sliceW = slice.width || 640;
+        const sliceH = slice.height || 670;
+        elSvg.setAttribute("viewBox", `0 0 ${sliceW} ${sliceH}`);
+
         const points = getFilteredPoints(slice);
         const targetPt = points.find(p => p.id === state.currentTargetPointId);
 
@@ -1044,7 +1076,7 @@
               <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.45"/>
             </filter>
           </defs>
-          <image href="${slice.image}" x="0" y="0" width="640" height="670" preserveAspectRatio="none" />
+          <image href="${slice.image}" x="0" y="0" width="${sliceW}" height="${sliceH}" preserveAspectRatio="none" />
         `;
 
         // 1. Draw anatomical points first so the active legend callout always sits clearly above them
@@ -1094,7 +1126,7 @@
           const maxMainChars = mainLines.reduce((m, l) => Math.max(m, l.length), 0);
           const maxSubChars = subLines.reduce((m, l) => Math.max(m, l.length), 0);
           const contentW = Math.max(maxMainChars * 7.2, maxSubChars * 5.8);
-          const boxW = Math.min(610, Math.max(170, Math.ceil(contentW + 44)));
+          const boxW = Math.min(sliceW - 20, Math.max(170, Math.ceil(contentW + 44)));
 
           const mainLineH = 16;
           const subLineH = 14;
@@ -1108,18 +1140,18 @@
             calloutY = state.userCalloutPos.y;
           } else {
             calloutY = ty > 150 ? ty - Math.max(82, boxH / 2 + 54) : ty + Math.max(82, boxH / 2 + 54);
-            calloutX = tx < 320 ? tx + 60 : tx - 60;
+            calloutX = tx < sliceW / 2 ? tx + 60 : tx - 60;
           }
 
-          // Clamp inside the 640x670 SVG canvas so the full text box is never cut off at the edges
+          // Clamp inside the sliceW x sliceH SVG canvas so the full text box is never cut off at the edges
           const minX = boxW / 2 + 8;
-          const maxX = 640 - boxW / 2 - 8;
+          const maxX = sliceW - boxW / 2 - 8;
           const minY = boxH / 2 + 8;
-          const maxY = 670 - boxH / 2 - 8;
+          const maxY = sliceH - boxH / 2 - 8;
           calloutX = Math.max(minX, Math.min(maxX, calloutX));
           calloutY = Math.max(minY, Math.min(maxY, calloutY));
 
-          calloutBounds = { tx, ty, boxW, boxH, calloutX, calloutY, ptId: targetPt.id };
+          calloutBounds = { tx, ty, boxW, boxH, calloutX, calloutY, sliceW, sliceH, ptId: targetPt.id };
 
           // Build multi-line SVG <tspan> elements
           let curY = -totalTextH / 2 + mainLineH * 0.78;
@@ -1172,9 +1204,9 @@
               if (!isDraggingCallout) return;
               const svgPt = clientToSvgCoords(clientX, clientY);
               const minX = calloutBounds.boxW / 2 + 6;
-              const maxX = 640 - calloutBounds.boxW / 2 - 6;
+              const maxX = calloutBounds.sliceW - calloutBounds.boxW / 2 - 6;
               const minY = calloutBounds.boxH / 2 + 6;
-              const maxY = 670 - calloutBounds.boxH / 2 - 6;
+              const maxY = calloutBounds.sliceH - calloutBounds.boxH / 2 - 6;
               curX = Math.max(minX, Math.min(maxX, svgPt.x + dragOffsetX));
               curY = Math.max(minY, Math.min(maxY, svgPt.y + dragOffsetY));
               state.userCalloutPos = { x: curX, y: curY };
@@ -1412,13 +1444,14 @@
       }
 
       function renderHeaderAndDrawer() {
+        const mod = getActiveModule();
         const slice = getCurrentSlice();
         const slices = getSeriesSlices(state.currentSeriesId);
         const curIdx = slices.findIndex(s => s.id === state.currentSliceId);
         const activeNames = [...state.activeCategories].map(c => CATEGORY_META[c]?.label).filter(Boolean);
 
-        elSliceTitle.textContent = slice.title_2 ? `${slice.title_1} — ${slice.title_2}` : slice.title_1;
-        elSliceSub.textContent = `Coupe ${curIdx + 1}/${slices.length} • ${activeNames.length <= 3 ? activeNames.join(", ") : `${activeNames.length} catégories`}`;
+        elSliceTitle.textContent = slice.title_2 ? `${mod.icon} ${slice.title_1} — ${slice.title_2}` : `${mod.icon} ${slice.title_1}`;
+        elSliceSub.textContent = `${mod.name} (${curIdx + 1}/${slices.length}) • ${activeNames.length <= 3 ? activeNames.join(", ") : `${activeNames.length} catégories`}`;
 
         // Category pills in Drawer
         const countsByCat = {};
@@ -1505,9 +1538,27 @@
         if (e.target === elDrawerBackdrop) elDrawerBackdrop.classList.remove("open");
       });
 
-      document.querySelectorAll(".mode-card").forEach(btn => {
+      // Module Switching (Membre Supérieur / Membre Inférieur / Rachis & Dos)
+      document.querySelectorAll("#module-grid [data-module]").forEach(btn => {
         btn.addEventListener("click", () => {
-          document.querySelectorAll(".mode-card").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll("#module-grid [data-module]").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          const modKey = btn.getAttribute("data-module");
+          state.currentModuleKey = modKey;
+          const mod = getActiveModule();
+          state.currentSeriesId = mod.defaultSeriesId;
+          state.currentSliceId = mod.defaultSliceId;
+          initSeriesDropdown();
+          resetZoom();
+          initSliceQuizState();
+          renderAll();
+        });
+      });
+
+      // Quiz Mode Switching
+      document.querySelectorAll("#mode-grid [data-mode]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#mode-grid [data-mode]").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
           state.mode = btn.getAttribute("data-mode");
           initSliceQuizState();
