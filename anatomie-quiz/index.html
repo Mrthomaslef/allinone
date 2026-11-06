@@ -280,6 +280,50 @@
       rx: 10;
       ry: 10;
       filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+      transition: fill 0.2s, stroke 0.2s;
+    }
+
+    .target-callout-pill.success {
+      fill: #064e3b;
+      stroke: #34d399;
+      stroke-width: 2.8;
+      filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.65));
+    }
+
+    @keyframes scoreBounce {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.28); background: #10b981; color: #ffffff; box-shadow: 0 0 16px rgba(16, 185, 129, 0.6); }
+      100% { transform: scale(1); }
+    }
+
+    .score-badge.pop {
+      animation: scoreBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* FLOATING PRAISE TOAST */
+    .praise-toast {
+      position: absolute;
+      top: 52px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.7);
+      z-index: 35;
+      pointer-events: none;
+      opacity: 0;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45), 0 0 0 2px rgba(255, 255, 255, 0.35);
+      white-space: nowrap;
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.22s ease;
+    }
+
+    .praise-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
     }
 
     .target-callout-text {
@@ -438,7 +482,7 @@
 
     @media (max-width: 520px) {
       .qcm-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2x2 compact buttons on mobile so dock stays super low-profile! */
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
@@ -458,25 +502,39 @@
       gap: 6px;
       line-height: 1.2;
       min-height: 42px;
-      transition: all 0.12s;
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .qcm-btn:active {
-      transform: scale(0.98);
+      transform: scale(0.96);
+    }
+
+    @keyframes qcmCorrectPop {
+      0% { transform: scale(0.95); }
+      45% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes qcmWrongShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
     }
 
     .qcm-btn.correct {
-      background: var(--success-soft);
-      border-color: var(--success);
-      color: #065f46;
-      font-weight: 700;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+      border-color: #34d399 !important;
+      color: #ffffff !important;
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.42);
+      animation: qcmCorrectPop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    [data-theme="dark"] .qcm-btn.correct { color: #6ee7b7; }
 
     .qcm-btn.wrong {
       background: var(--danger-soft);
       border-color: var(--danger);
       color: #991b1b;
+      animation: qcmWrongShake 0.3s ease;
     }
     [data-theme="dark"] .qcm-btn.wrong { color: #fca5a5; }
 
@@ -789,6 +847,9 @@
       <span id="progress-text">Question 1 / 12</span>
     </div>
 
+    <!-- Floating celebratory praise toast -->
+    <div class="praise-toast" id="praise-toast">✓ Exact !</div>
+
     <!-- Floating Zoom Controls -->
     <div class="zoom-toolbar" aria-label="Contrôles de zoom">
       <button class="zoom-btn" id="btn-zoom-out" title="Dézoomer">−</button>
@@ -899,11 +960,172 @@
         flashcardRevealed: false,
         qcmOptions: [],
         qcmAnswered: false,
+        lastAnswerCorrect: false,
         userCalloutPos: null,
         scoreOk: 0,
         scoreTotal: 0,
+        streak: 0,
         didPan: false
       };
+
+      // ==========================================
+      // SATISFYING AUDIO, HAPTICS & CONFETTI BURST
+      // ==========================================
+      let audioCtx = null;
+      function getAudioCtx() {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (Ctx) audioCtx = new Ctx();
+        }
+        if (audioCtx && audioCtx.state === "suspended") {
+          audioCtx.resume().catch(() => {});
+        }
+        return audioCtx;
+      }
+
+      function playSuccessChime(streakCount) {
+        try {
+          const ctx = getAudioCtx();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          // Pitch climbs slightly with streak for extra dopamine!
+          const pitchMult = 1 + Math.min(streakCount - 1, 8) * 0.035;
+          const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 - E5 - G5 - C6
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = idx === notes.length - 1 ? "triangle" : "sine";
+            osc.frequency.setValueAtTime(freq * pitchMult, now + idx * 0.055);
+            gain.gain.setValueAtTime(0.001, now + idx * 0.055);
+            gain.gain.exponentialRampToValueAtTime(0.16, now + idx * 0.055 + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.055 + 0.32);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.055);
+            osc.stop(now + idx * 0.055 + 0.34);
+          });
+        } catch (_) {}
+      }
+
+      function playErrorThud() {
+        try {
+          const ctx = getAudioCtx();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(190, now);
+          osc.frequency.exponentialRampToValueAtTime(125, now + 0.18);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } catch (_) {}
+      }
+
+      let praiseTimer = null;
+      function showPraiseToast(streakCount, labelFr) {
+        const toast = document.getElementById("praise-toast");
+        if (!toast) return;
+        const praises = ["✨ Exact !", "🎯 Bien joué !", "⚡ Nickel !", "👏 Parfait !"];
+        const base = praises[Math.floor(Math.random() * praises.length)];
+        if (streakCount >= 10) {
+          toast.textContent = `👑 Série x${streakCount} — Légendaire !`;
+        } else if (streakCount >= 5) {
+          toast.textContent = `🔥 Série x${streakCount} — Imparable !`;
+        } else if (streakCount >= 2) {
+          toast.textContent = `🔥 Série x${streakCount} • ${base}`;
+        } else {
+          toast.textContent = `${base} +1`;
+        }
+        toast.classList.add("show");
+        if (praiseTimer) clearTimeout(praiseTimer);
+        praiseTimer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 1050);
+      }
+
+      function spawnSvgSuccessBurst(pt) {
+        if (!pt || !elSvg) return;
+        const ns = "http://www.w3.org/2000/svg";
+        const g = document.createElementNS(ns, "g");
+        g.setAttribute("pointer-events", "none");
+
+        // 1. Expanding emerald + gold shockwave rings
+        ["#10b981", "#fbbf24"].forEach((color, idx) => {
+          const ring = document.createElementNS(ns, "circle");
+          ring.setAttribute("cx", String(pt.x));
+          ring.setAttribute("cy", String(pt.y));
+          ring.setAttribute("r", "8");
+          ring.setAttribute("fill", "none");
+          ring.setAttribute("stroke", color);
+          ring.setAttribute("stroke-width", idx === 0 ? "4" : "2.5");
+          g.appendChild(ring);
+          if (ring.animate) {
+            ring.animate(
+              [
+                { r: "8px", strokeOpacity: 1, strokeWidth: idx === 0 ? "4.5px" : "3px" },
+                { r: idx === 0 ? "58px" : "42px", strokeOpacity: 0, strokeWidth: "0.5px" }
+              ],
+              { duration: 580, delay: idx * 70, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "forwards" }
+            );
+          }
+        });
+
+        // 2. 18 celebratory particles flying outward from the anatomical point
+        const colors = ["#10b981", "#34d399", "#fbbf24", "#38bdf8", "#a3e635", "#f472b6"];
+        const count = 18;
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.25;
+          const dist = 28 + Math.random() * 44;
+          const dx = Math.cos(angle) * dist;
+          const dy = Math.sin(angle) * dist;
+          const dot = document.createElementNS(ns, "circle");
+          dot.setAttribute("cx", String(pt.x));
+          dot.setAttribute("cy", String(pt.y));
+          dot.setAttribute("r", String(3.2 + Math.random() * 2.5));
+          dot.setAttribute("fill", colors[i % colors.length]);
+          g.appendChild(dot);
+          if (dot.animate) {
+            dot.animate(
+              [
+                { transform: "translate(0px, 0px) scale(1)", opacity: 1 },
+                { transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(0.1)`, opacity: 0 }
+              ],
+              { duration: 560 + Math.random() * 180, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "forwards" }
+            );
+          }
+        }
+
+        elSvg.appendChild(g);
+        setTimeout(() => {
+          if (g.parentNode) g.parentNode.removeChild(g);
+        }, 800);
+      }
+
+      function celebrateCorrectAnswer(targetPt) {
+        state.scoreOk++;
+        state.streak++;
+        state.lastAnswerCorrect = true;
+        if (navigator.vibrate) navigator.vibrate([18, 35, 30]);
+        playSuccessChime(state.streak);
+        showPraiseToast(state.streak, targetPt ? targetPt.labelFr : "");
+        elScoreBadge.classList.remove("pop");
+        void elScoreBadge.offsetWidth;
+        elScoreBadge.classList.add("pop");
+        renderSvgStage();
+        if (targetPt) spawnSvgSuccessBurst(targetPt);
+      }
+
+      function registerWrongAnswer() {
+        state.streak = 0;
+        state.lastAnswerCorrect = false;
+        if (navigator.vibrate) navigator.vibrate(40);
+        playErrorThud();
+      }
 
       function getActiveModule() {
         return MODULES[state.currentModuleKey] || MODULES.ms;
@@ -1006,6 +1228,7 @@
         const pts = getFilteredPoints(slice);
         state.pointStatus = {};
         state.userCalloutPos = null;
+        state.lastAnswerCorrect = false;
         pts.forEach(p => { state.pointStatus[p.id] = "pending"; });
 
         // Order questions shuffled
@@ -1020,6 +1243,7 @@
         const slice = getCurrentSlice();
         const targetPt = slice.points.find(p => p.id === state.currentTargetPointId);
         state.qcmAnswered = false;
+        state.lastAnswerCorrect = false;
         if (!targetPt) {
           state.qcmOptions = [];
           return;
@@ -1054,6 +1278,7 @@
         state.quizQueue = state.quizQueue.filter(id => state.pointStatus[id] === "pending");
         state.currentTargetPointId = state.quizQueue[0] || null;
         state.flashcardRevealed = false;
+        state.lastAnswerCorrect = false;
         prepareQcmOptions();
         renderAll();
       }
@@ -1115,8 +1340,9 @@
             (state.mode === "flashcard" && state.flashcardRevealed) ||
             (state.mode === "qcm" && state.qcmAnswered);
 
+          const prefix = state.lastAnswerCorrect ? "✓ " : "";
           const mainText = showAnswerOnPlate
-            ? targetPt.labelFr
+            ? `${prefix}${targetPt.labelFr}`
             : `❓ À identifier (${catMeta.label}) — glisser pour déplacer`;
           const subText = (showAnswerOnPlate && targetPt.labelLa) ? targetPt.labelLa : "";
 
@@ -1168,11 +1394,14 @@
             });
           }
 
+          const pillClass = state.lastAnswerCorrect ? "target-callout-pill success" : "target-callout-pill";
+          const leaderColor = state.lastAnswerCorrect ? "#10b981" : "#2563eb";
+
           svgHtml += `
-            <line id="target-leader-line" class="target-leader-line" x1="${tx}" y1="${ty}" x2="${calloutX}" y2="${calloutY}" />
-            <circle class="target-pulse-ring" cx="${tx}" cy="${ty}" r="14" />
+            <line id="target-leader-line" class="target-leader-line" style="stroke:${leaderColor}" x1="${tx}" y1="${ty}" x2="${calloutX}" y2="${calloutY}" />
+            <circle class="target-pulse-ring" style="stroke:${leaderColor}" cx="${tx}" cy="${ty}" r="14" />
             <g id="target-callout-group" class="target-callout-group" transform="translate(${calloutX}, ${calloutY})">
-              <rect class="target-callout-pill" x="${-boxW / 2}" y="${-boxH / 2}" width="${boxW}" height="${boxH}" />
+              <rect class="${pillClass}" x="${-boxW / 2}" y="${-boxH / 2}" width="${boxW}" height="${boxH}" />
               <text class="target-callout-grip" x="${-boxW / 2 + 12}" y="0">⠿</text>
               ${tspansHtml}
             </g>
@@ -1274,14 +1503,17 @@
       }
 
       function onPointTapped(ptId) {
+        const slice = getCurrentSlice();
         if (state.mode === "pin") {
           if (!state.currentTargetPointId) return;
           state.scoreTotal++;
           if (ptId === state.currentTargetPointId) {
-            state.scoreOk++;
             state.pointStatus[ptId] = "ok";
-            advanceQuestion();
+            const targetPt = slice.points.find(p => p.id === ptId);
+            celebrateCorrectAnswer(targetPt);
+            setTimeout(() => advanceQuestion(), 650);
           } else {
+            registerWrongAnswer();
             state.pointStatus[ptId] = "ko";
             renderAll();
           }
@@ -1303,7 +1535,8 @@
         const targetPt = points.find(p => p.id === state.currentTargetPointId);
         const doneCount = points.filter(p => state.pointStatus[p.id] !== "pending").length;
 
-        elScoreBadge.textContent = `✓ ${state.scoreOk}/${state.scoreTotal}`;
+        const streakTag = state.streak >= 2 ? ` 🔥${state.streak}` : "";
+        elScoreBadge.textContent = `✓ ${state.scoreOk}/${state.scoreTotal}${streakTag}`;
 
         if (!targetPt) {
           elProgressText.textContent = `Terminé (${points.length}/${points.length})`;
@@ -1350,18 +1583,27 @@
               const isCorrect = optLabel === targetPt.labelFr;
               state.scoreTotal++;
               if (isCorrect) {
-                state.scoreOk++;
                 state.pointStatus[targetPt.id] = "ok";
+                btn.textContent = `✓ ${optLabel}`;
                 btn.classList.add("correct");
+                celebrateCorrectAnswer(targetPt);
+                const sTag = state.streak >= 2 ? ` 🔥${state.streak}` : "";
+                elScoreBadge.textContent = `✓ ${state.scoreOk}/${state.scoreTotal}${sTag}`;
               } else {
+                registerWrongAnswer();
                 state.pointStatus[targetPt.id] = "ko";
+                btn.textContent = `✗ ${optLabel}`;
                 btn.classList.add("wrong");
                 [...grid.children].forEach(b => {
-                  if (b.textContent === targetPt.labelFr) b.classList.add("correct");
+                  if (b.textContent === targetPt.labelFr) {
+                    b.textContent = `✓ ${targetPt.labelFr}`;
+                    b.classList.add("correct");
+                  }
                 });
+                elScoreBadge.textContent = `✓ ${state.scoreOk}/${state.scoreTotal}`;
+                renderSvgStage();
               }
-              renderSvgStage();
-              setTimeout(() => advanceQuestion(), 900);
+              setTimeout(() => advanceQuestion(), 950);
             });
             grid.appendChild(btn);
           });
@@ -1396,12 +1638,13 @@
               </div>
             `;
             document.getElementById("btn-fc-ok").addEventListener("click", () => {
-              state.scoreOk++;
               state.scoreTotal++;
               state.pointStatus[targetPt.id] = "ok";
-              advanceQuestion();
+              celebrateCorrectAnswer(targetPt);
+              setTimeout(() => advanceQuestion(), 620);
             });
             document.getElementById("btn-fc-ko").addEventListener("click", () => {
+              registerWrongAnswer();
               state.scoreTotal++;
               state.pointStatus[targetPt.id] = "ko";
               advanceQuestion();
