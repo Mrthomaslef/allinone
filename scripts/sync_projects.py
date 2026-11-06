@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "anatomie-quiz": {
+        "title": "IMAIOS Anatomy Quiz — Membre Supérieur",
+        "subtitle": "Quiz interactif sur les 92 planches IMAIOS e-Anatomy (Coupes axiales, Nerfs, Artères, Veines, Muscles, Os) · 4 modes de révision",
+        "category": "medical-imaging",
+        "emoji": "🦾",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/anatomie-quiz/",
+        "logoUrl": "anatomie-quiz/assets/icon.svg",
+    },
     "infiltration-sous-echo": {
         "title": "Infiltrations sous Échographie — Guide SIMS",
         "subtitle": "37 gestes écho-guidés · 295 Planches · Intégrale des 33 Gel Contact & Vidéos SIMS",
@@ -513,6 +521,22 @@ def main():
                 "logoUrl": "gestion-anticoagulant/assets/icon.svg",
                 "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/guide-interne-cochin-os/tree/main/anticoagulants",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "anatomie-quiz" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "anatomie-quiz",
+                "title": "IMAIOS Anatomy Quiz — Membre Supérieur",
+                "subtitle": "Quiz interactif sur les 92 planches IMAIOS e-Anatomy (Coupes axiales, Nerfs, Artères, Veines, Muscles, Os) · 4 modes de révision",
+                "category": "medical-imaging",
+                "emoji": "🦾",
+                "logoUrl": "anatomie-quiz/assets/icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/anatomie-quiz/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/anatomie-quiz",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
