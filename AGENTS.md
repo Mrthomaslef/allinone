@@ -37,7 +37,7 @@ Vous êtes connecté à l'**Écosystème Global & Second Brain** de Thomas Lefè
 ### ⚡ 4. Instincts Atomiques Appris des Inputs de Thomas (`t3-instincts` — Ne jamais répéter ces erreurs) :
 Ces règles sont extraites chaque nuit des inputs et corrections de Thomas. **Appliquez-les systématiquement sans qu'il ait besoin de le redemander** :
 ```text
-# Active Instincts (10/18 | project=allinone)
+# Active Instincts (11/19 | project=allinone)
 - [0.98][GLOBAL][ui-pwa] fullscreen-launch-and-controller-verify: WHEN Lors de la création ou configuration d'un lanceur de jeu (Recomp, Pegasus, Moonlight), d'un lecteur vidéo (Stremio/Film) ou d'un bouton 'Jouer direct' -> Toujours forcer l'ouverture en plein écran d'emblée (sans modale ni pop-up bloquante), vérifier le mapping manette (8BitDo) et la présence des sauvegardes avant d'annoncer que c'est terminé.
 - [0.98][GLOBAL][workflow] mobile-first-no-overflow-no-zoom: WHEN Lors de la création d'interfaces web, de tableaux cliniques ou de boutons interactifs consultés sur iPhone / mobile -> Empêcher le zoom au double-clic (touch-action: manipulation), garantir zéro débordement horizontal des tableaux sur mobile et privilégier des interfaces épurées orientées action directe.
 - [0.95][GLOBAL][workflow] auto-handle-macos-permission-dialogs: WHEN Après tout lancement d'app/jeu/script sur le Mac (osascript, nouvelle app, fichier sur GamingSSD/volume externe) ou quand une app reste figée sans fenêtre -> Faire screencapture -x et lire l'image ; s'il y a une fenêtre d'autorisation macOS (System Events, volume amovible, Accessibilité, Documents, Bluetooth, micro…) pour un outil/app légitime de Thomas, cliquer soi-même Autoriser avec /Users/thomaslefevre/.t3/bin/mac-click X Y (coords en points 1920x1080), re-capturer pour traiter les fenêtres empilées dessous, et ne jamais laisser de pop-up à Thomas. Ne jamais autoriser une demande inconnue/suspecte : la signaler.
@@ -48,10 +48,12 @@ Ces règles sont extraites chaque nuit des inputs et corrections de Thomas. **Ap
 - [0.92][GLOBAL][workflow] superpowers-verify-before-completion: WHEN Avant d'affirmer qu'une tâche, un script ou un déploiement est terminé -> Exécuter une vérification réelle (test, build_data.py, sync_projects.py, git status/diff) et citer le résultat observé. Pas de sous-agent par micro-tâche pour les petits correctifs afin de préserver les quotas 5h.
 - [0.85][GLOBAL][git-deploy] git-push-systematic-verification: WHEN À la fin de toute modification de code, d'application web ou de configuration -> Vérifier systématiquement avec git status et git push que tous les dépôts modifiés (ainsi que Tapp Store / Mapp Store) sont poussés et à jour sur GitHub.
 - [0.85][GLOBAL][git-deploy] tapp-store-custom-logo-and-cache-bust: WHEN À chaque création ou modification d'une application web ou PWA référencée sur le Tapp Store (allinone) ou Mapp Store -> Créer systématiquement un vrai logo SVG/PNG illustré dans assets/, le copier dans allinone/assets/, incrémenter CACHE_KEY dans index.html, purger les Service Workers pour que les modifications soient visibles immédiatement sans cache, et faire git commit + git push sur le projet ET sur le store.
+- [0.75][GLOBAL][security] t3-vault-immediate-lookup: WHEN Dès qu'une application, un script ou le navigateur (preview_*) a besoin d'un mot de passe, d'un identifiant ou d'une connexion (IMAIOS, AP-HP/Orbis, SIMS, SNCF, Crédit Mutuel, Gmail/Google, GitHub...) -> Exécuter immédiatement /Users/thomaslefevre/.t3/bin/t3-vault find <service> et /Users/thomaslefevre/.t3/bin/t3-vault get <service> --field user|notes|password depuis le Trousseau macOS privé sans jamais redemander à Thomas ni exposer le secret en clair.
 ```
 - Dès que Thomas exprime une préférence récurrente ou corrige un comportement en session, enregistrez l'instinct immédiatement :
   `/Users/thomaslefevre/.t3/bin/t3-instincts learn --id "<slug>" --trigger "<quand>" --action "<action>" --project "$PWD"`
 <!-- SUPER_AGENT_ROUTER_END -->
+
 
 
 
