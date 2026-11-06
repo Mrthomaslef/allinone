@@ -167,6 +167,44 @@
         0 0 38px -4px rgba(229, 9, 20, 0.38),
         inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
     }
+    .wheel-host { container-type: size; }
+    .remote-wheel {
+      position: relative;
+      width: min(100cqw, 100cqh, 340px);
+      height: min(100cqw, 100cqh, 340px);
+      border-radius: 9999px;
+      background: radial-gradient(circle at 50% 35%, #2a2a2e 0%, #18181b 60%, #0f0f11 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: inset 0 2px 2px rgba(255,255,255,0.08), inset 0 -10px 30px rgba(0,0,0,0.6), 0 18px 40px -12px rgba(0,0,0,0.9);
+      touch-action: manipulation;
+    }
+    .wheel-btn {
+      position: absolute;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem;
+      color: #f4f4f5; font-size: 0.72rem; font-weight: 800;
+      border-radius: 9999px;
+      transition: background 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .wheel-btn:active { background: rgba(255,255,255,0.08); transform: scale(0.94); }
+    .wheel-top    { top: 3%;    left: 30%; width: 40%; height: 26%; }
+    .wheel-bottom { bottom: 3%; left: 30%; width: 40%; height: 26%; }
+    .wheel-left   { left: 3%;   top: 30%;  width: 26%; height: 40%; }
+    .wheel-right  { right: 3%;  top: 30%;  width: 26%; height: 40%; }
+    .wheel-center {
+      position: absolute; left: 50%; top: 50%;
+      width: 40%; height: 40%; transform: translate(-50%, -50%);
+      border-radius: 9999px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.15rem;
+      color: #fff; font-size: 0.7rem;
+      background: linear-gradient(to bottom, #ff1f2a, #c90610);
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 10px 30px -6px rgba(229,9,20,0.6), inset 0 1px 1px rgba(255,255,255,0.3);
+      transition: transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .wheel-center #btnMainPlayPauseIcon { font-size: 1.9rem; }
+    .wheel-center:active { transform: translate(-50%, -50%) scale(0.94); }
     body.remote-lock {
       overflow: hidden !important;
       height: 100dvh !important;
@@ -345,50 +383,35 @@
           </button>
         </div>
 
-        <!-- 3. MAIN TACTILE TRANSPORT PAD (Flex-1 so it adapts to any phone height without scrolling) -->
-        <div class="remote-ring rounded-2xl p-2.5 sm:p-4 flex-1 min-h-0 flex flex-col justify-between gap-2">
-          <!-- Primary Big Jog Row: -15s | PLAY/PAUSE | +15s -->
-          <div class="grid grid-cols-12 gap-2 sm:gap-3 flex-1 min-h-[72px] max-h-[120px] items-stretch">
-            <button onclick="playerControl('seek_back_10')" class="col-span-4 rounded-2xl remote-btn-tactile text-white flex flex-col items-center justify-center gap-0.5 active:scale-95">
-              <span class="text-lg sm:text-2xl leading-none">⏪</span>
-              <span class="text-xs sm:text-sm font-mono font-extrabold">-15s</span>
-            </button>
-
-            <button onclick="playerControl('toggle_pause')" id="btnMainPlayPause" class="col-span-4 rounded-2xl bg-gradient-to-b from-[#ff1f2a] to-[#c90610] hover:from-[#ff313b] hover:to-[#e50914] active:scale-95 text-white shadow-xl shadow-[#E50914]/45 border border-white/25 flex flex-col items-center justify-center gap-0.5 transition">
-              <span class="text-2xl sm:text-3xl leading-none drop-shadow" id="btnMainPlayPauseIcon">⏯️</span>
-              <span class="text-[11px] sm:text-xs font-black uppercase tracking-wider" id="btnMainPlayPauseText">Pause</span>
-            </button>
-
-            <button onclick="playerControl('seek_fwd_10')" class="col-span-4 rounded-2xl remote-btn-tactile text-white flex flex-col items-center justify-center gap-0.5 active:scale-95">
-              <span class="text-lg sm:text-2xl leading-none">⏩</span>
-              <span class="text-xs sm:text-sm font-mono font-extrabold">+15s</span>
-            </button>
+        <!-- 3. MAIN TRANSPORT PAD: Apple-TV-style click wheel that scales to the available height + jump row -->
+        <div class="remote-ring rounded-2xl p-3 sm:p-4 flex-1 min-h-0 flex flex-col gap-3">
+          <div class="wheel-host flex-1 min-h-0 flex items-center justify-center">
+            <div class="remote-wheel">
+              <button onclick="playerControl('subtitles')" class="wheel-btn wheel-top" title="Sous-titres">
+                <span class="text-lg leading-none">💬</span><span>Sous-titres</span>
+              </button>
+              <button onclick="playerControl('seek_back_10')" class="wheel-btn wheel-left" title="Reculer 15 s">
+                <span class="text-2xl leading-none">⏪</span><span class="font-mono">-15s</span>
+              </button>
+              <button onclick="playerControl('seek_fwd_10')" class="wheel-btn wheel-right" title="Avancer 15 s">
+                <span class="text-2xl leading-none">⏩</span><span class="font-mono">+15s</span>
+              </button>
+              <button onclick="playerControl('audio_track')" class="wheel-btn wheel-bottom" title="Piste audio VF/VO">
+                <span class="text-lg leading-none">🗣️</span><span>Audio VF/VO</span>
+              </button>
+              <button onclick="playerControl('toggle_pause')" id="btnMainPlayPause" class="wheel-center" title="Lecture / Pause">
+                <span class="leading-none drop-shadow" id="btnMainPlayPauseIcon">⏯️</span>
+                <span class="font-black uppercase tracking-wider" id="btnMainPlayPauseText">Pause</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Secondary Time-Jump Row: -1m | -30s | +30s | +1m -->
-          <div class="grid grid-cols-4 gap-1.5 sm:gap-2 shrink-0">
-            <button onclick="playerControl('seek_back_60')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
-              <span>⏮</span> -1m
-            </button>
-            <button onclick="playerControl('seek_back_30')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
-              <span>⏪</span> -30s
-            </button>
-            <button onclick="playerControl('seek_fwd_30')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
-              +30s <span>⏩</span>
-            </button>
-            <button onclick="playerControl('seek_fwd_60')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
-              +1m <span>⏭</span>
-            </button>
-          </div>
-
-          <!-- Audio Track (VF/VO) & Subtitles Strip -->
-          <div class="grid grid-cols-2 gap-2 shrink-0">
-            <button onclick="playerControl('audio_track')" class="py-2 px-2.5 rounded-xl remote-btn-tactile text-[11px] sm:text-xs font-bold text-zinc-200 flex items-center justify-center gap-1.5">
-              <span>🗣️</span> Piste Audio (VF/VO)
-            </button>
-            <button onclick="playerControl('subtitles')" class="py-2 px-2.5 rounded-xl remote-btn-tactile text-[11px] sm:text-xs font-bold text-zinc-200 flex items-center justify-center gap-1.5">
-              <span>💬</span> Sous-titres (ST)
-            </button>
+          <!-- Time-jump row: -1m | -30s | +30s | +1m -->
+          <div class="grid grid-cols-4 gap-2 shrink-0">
+            <button onclick="playerControl('seek_back_60')" class="h-11 rounded-xl remote-btn-tactile text-zinc-100 text-xs font-mono font-bold flex items-center justify-center gap-1">⏮ -1m</button>
+            <button onclick="playerControl('seek_back_30')" class="h-11 rounded-xl remote-btn-tactile text-zinc-100 text-xs font-mono font-bold flex items-center justify-center gap-1">⏪ -30s</button>
+            <button onclick="playerControl('seek_fwd_30')" class="h-11 rounded-xl remote-btn-tactile text-zinc-100 text-xs font-mono font-bold flex items-center justify-center gap-1">+30s ⏩</button>
+            <button onclick="playerControl('seek_fwd_60')" class="h-11 rounded-xl remote-btn-tactile text-zinc-100 text-xs font-mono font-bold flex items-center justify-center gap-1">+1m ⏭</button>
           </div>
         </div>
 
