@@ -160,6 +160,13 @@
     .remote-btn-menu:active {
       transform: scale(0.95);
     }
+    .remote-chassis-active {
+      border-color: rgba(229, 9, 20, 0.7) !important;
+      box-shadow:
+        0 28px 70px -10px rgba(0, 0, 0, 0.95),
+        0 0 38px -4px rgba(229, 9, 20, 0.38),
+        inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+    }
     .safe-pb {
       padding-bottom: calc(5.5rem + var(--safe-bottom));
     }
@@ -281,93 +288,34 @@
 
   <main class="w-full px-3.5 sm:px-8 xl:px-14 py-4 sm:py-6 space-y-6">
 
-    <!-- NETFLIX HERO BILLBOARD (Featured Movie / Now Playing on TV) -->
-    <section id="heroBillboard" class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#141414] min-h-[360px] sm:min-h-[460px] xl:min-h-[540px] flex items-end">
-      <!-- Backdrop Image -->
-      <img
-        id="heroBackdrop"
-        src="https://images.metahub.space/background/medium/tt15239678/img"
-        onerror="this.src='assets/icon.svg'"
-        alt="Featured"
-        class="absolute inset-0 w-full h-full object-cover object-center scale-105 transition-all duration-700 opacity-65"
-      />
-      <div class="absolute inset-0 netflix-hero-vignette"></div>
+    <!-- TÉLÉCOMMANDE SALON DESIGN (Cachée de base · Mise au 1er plan dès qu'un film est lancé) -->
+    <section id="playbackRemoteSection" class="hidden remote-chassis rounded-3xl p-4 sm:p-6 space-y-5 relative overflow-hidden transition-all duration-300">
+      <!-- Subtle top ambient glow -->
+      <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-36 bg-[#E50914]/25 blur-3xl rounded-full"></div>
 
-      <!-- Hero Content -->
-      <div class="relative z-10 w-full p-4 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-5">
-        <div class="space-y-2.5 max-w-2xl">
-          <!-- Netflix N Series / Film Tag -->
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold tracking-[0.2em] uppercase text-zinc-200">
-              <span class="font-display text-lg text-[#E50914] leading-none">N</span>
-              <span id="heroTypeLabel">FILM À LA UNE</span>
-            </span>
-            <span id="stremioLiveBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-zinc-900/90 text-zinc-400 border border-white/10">Stremio arrêté</span>
-            <span id="playbackStateBadge" class="hidden text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#E50914]/25 text-red-300 border border-[#E50914]/50">▶️ En lecture</span>
-          </div>
-
-          <!-- Big Title -->
-          <h2 id="heroTitle" class="font-display text-4xl sm:text-6xl tracking-wide text-white leading-none drop-shadow-lg line-clamp-2">
-            DUNE : DEUXIÈME PARTIE
-          </h2>
-
-          <!-- Netflix Match & Quality Metadata Row -->
-          <div class="flex items-center gap-2.5 flex-wrap text-xs font-semibold">
-            <span class="text-emerald-400 font-bold">Recommandé à 99%</span>
-            <span id="heroYear" class="text-zinc-300">2024</span>
-            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-white/15 text-white border border-white/20">4K HDR</span>
-            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">⚡ TorBox VF / MULTI</span>
-          </div>
-
-          <p id="nowPlayingTitle" class="text-xs sm:text-sm text-zinc-300 line-clamp-2 max-w-xl">
-            Lance directement ton film sur la TV Samsung ou précharge-le à vitesse maximale sur le Mac mini.
-          </p>
-
-          <!-- Netflix Action Buttons Row (Thumb-optimized for Mobile) -->
-          <div class="pt-1.5 flex items-center gap-2.5 flex-wrap">
-            <button id="heroBtnPlay" onclick="triggerHeroPlay()" class="flex-1 sm:flex-initial justify-center px-5 py-3 sm:py-2.5 rounded-lg bg-white hover:bg-zinc-200 active:scale-95 text-black font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition">
-              <span class="text-base leading-none">▶</span>
-              <span>Lecture TV</span>
-            </button>
-
-            <button id="heroBtnPreload" onclick="triggerHeroPreload()" class="flex-1 sm:flex-initial justify-center px-4 py-3 sm:py-2.5 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-[#E50914]/30 transition">
-              <span>⚡</span>
-              <span>Précharger</span>
-            </button>
-
-            <button id="heroBtnStreams" onclick="triggerHeroStreams()" class="w-full sm:w-auto justify-center px-4 py-2.5 rounded-lg bg-zinc-800/90 hover:bg-zinc-700/90 active:scale-95 text-white font-semibold text-xs sm:text-sm border border-white/15 flex items-center gap-2 transition">
-              <span>ⓘ</span>
-              <span>Versions & Épisodes</span>
-            </button>
+      <!-- Active Movie Now-Playing Spotlight Banner (Shown when a film is playing on TV) -->
+      <div id="remoteNowPlayingBanner" class="hidden relative z-10 rounded-2xl bg-gradient-to-r from-[#E50914]/25 via-[#E50914]/10 to-zinc-900/90 border border-[#E50914]/50 p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="relative flex h-3 w-3 shrink-0">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E50914] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-[#E50914]"></span>
+          </span>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-mono font-extrabold uppercase tracking-widest text-red-300" id="remoteLiveStateLabel">EN LECTURE SUR LA TV SAMSUNG</span>
+            </div>
+            <p class="text-sm sm:text-base font-black text-white truncate mt-0.5" id="remoteNowPlayingMovie">Film en cours</p>
           </div>
         </div>
-
-        <!-- Mini Quick-Remote Pill on Hero (Desktop & Tablet) -->
-        <div class="hidden lg:flex flex-col gap-2.5 remote-chassis p-4 rounded-2xl min-w-[260px]">
-          <div class="flex items-center justify-between text-[11px] text-zinc-400">
-            <span class="font-extrabold text-white uppercase tracking-wider flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-[#E50914] animate-pulse"></span>
-              Télécommande Salon
-            </span>
-            <span id="heroAudioMini" class="font-mono text-emerald-400 truncate max-w-[110px]">TV / Mac</span>
-          </div>
-          <!-- Dedicated Menu Button on Hero Mini-Remote -->
-          <button onclick="openStremioMenu()" class="w-full py-2 px-3 rounded-xl remote-btn-menu text-xs font-extrabold flex items-center justify-center gap-2">
-            <span>🏠</span> Menu Principal TV & Catalogue
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="openStremioMenu()" class="px-3.5 py-2 rounded-xl remote-btn-menu text-xs font-black flex items-center gap-1.5 shadow">
+            <span>🏠</span> Ouvrir le Menu TV
           </button>
-          <div class="grid grid-cols-3 gap-1.5">
-            <button onclick="playerControl('seek_back_10')" class="py-2 rounded-xl remote-btn-tactile text-xs font-mono font-bold text-white">-15s</button>
-            <button onclick="playerControl('toggle_pause')" class="py-2 rounded-xl bg-[#E50914] hover:bg-[#F40612] text-xs font-bold text-white shadow shadow-[#E50914]/40">⏯ Pause</button>
-            <button onclick="playerControl('seek_fwd_10')" class="py-2 rounded-xl remote-btn-tactile text-xs font-mono font-bold text-white">+15s</button>
-          </div>
+          <button onclick="hideRemotePanel()" class="px-3 py-2 rounded-xl bg-black/50 hover:bg-black/70 border border-white/15 text-xs font-semibold text-zinc-300 hover:text-white transition" title="Replier la télécommande">
+            ✕ Masquer
+          </button>
         </div>
       </div>
-    </section>
-
-    <!-- TÉLÉCOMMANDE SALON DESIGN (Anodized Apple TV / Netflix Tactile Remote + Dedicated Menu Button) -->
-    <section id="playbackRemoteSection" class="remote-chassis rounded-3xl p-4 sm:p-6 space-y-5 relative overflow-hidden">
-      <!-- Subtle top ambient glow -->
-      <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-36 bg-[#E50914]/15 blur-3xl rounded-full"></div>
 
       <!-- Top Bar of Remote: Brand + Dedicated Prominent MENU Button + TV Power -->
       <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
@@ -399,6 +347,11 @@
           <button onclick="playerControl('back')" class="px-3 py-2.5 rounded-2xl remote-btn-tactile text-xs font-bold text-zinc-200 flex items-center gap-1.5" title="Touche Retour / Échap dans Stremio">
             <span>↩️</span>
             <span class="hidden md:inline">Retour</span>
+          </button>
+
+          <button onclick="hideRemotePanel()" class="px-3 py-2.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-1" title="Cacher la télécommande">
+            <span>✕</span>
+            <span class="hidden xl:inline">Fermer</span>
           </button>
         </div>
       </div>
@@ -543,6 +496,89 @@
       </div>
     </section>
 
+    <!-- NETFLIX HERO BILLBOARD (Featured Movie / Now Playing on TV) -->
+    <section id="heroBillboard" class="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#141414] min-h-[360px] sm:min-h-[460px] xl:min-h-[540px] flex items-end">
+      <!-- Backdrop Image -->
+      <img
+        id="heroBackdrop"
+        src="https://images.metahub.space/background/medium/tt15239678/img"
+        onerror="this.src='assets/icon.svg'"
+        alt="Featured"
+        class="absolute inset-0 w-full h-full object-cover object-center scale-105 transition-all duration-700 opacity-65"
+      />
+      <div class="absolute inset-0 netflix-hero-vignette"></div>
+
+      <!-- Hero Content -->
+      <div class="relative z-10 w-full p-4 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+        <div class="space-y-2.5 max-w-2xl">
+          <!-- Netflix N Series / Film Tag -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold tracking-[0.2em] uppercase text-zinc-200">
+              <span class="font-display text-lg text-[#E50914] leading-none">N</span>
+              <span id="heroTypeLabel">FILM À LA UNE</span>
+            </span>
+            <span id="stremioLiveBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-zinc-900/90 text-zinc-400 border border-white/10">Stremio arrêté</span>
+            <span id="playbackStateBadge" class="hidden text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#E50914]/25 text-red-300 border border-[#E50914]/50">▶️ En lecture</span>
+          </div>
+
+          <!-- Big Title -->
+          <h2 id="heroTitle" class="font-display text-4xl sm:text-6xl tracking-wide text-white leading-none drop-shadow-lg line-clamp-2">
+            DUNE : DEUXIÈME PARTIE
+          </h2>
+
+          <!-- Netflix Match & Quality Metadata Row -->
+          <div class="flex items-center gap-2.5 flex-wrap text-xs font-semibold">
+            <span class="text-emerald-400 font-bold">Recommandé à 99%</span>
+            <span id="heroYear" class="text-zinc-300">2024</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-white/15 text-white border border-white/20">4K HDR</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">⚡ TorBox VF / MULTI</span>
+          </div>
+
+          <p id="nowPlayingTitle" class="text-xs sm:text-sm text-zinc-300 line-clamp-2 max-w-xl">
+            Lance directement ton film sur la TV Samsung ou précharge-le à vitesse maximale sur le Mac mini.
+          </p>
+
+          <!-- Netflix Action Buttons Row (Thumb-optimized for Mobile) -->
+          <div class="pt-1.5 flex items-center gap-2.5 flex-wrap">
+            <button id="heroBtnPlay" onclick="triggerHeroPlay()" class="flex-1 sm:flex-initial justify-center px-5 py-3 sm:py-2.5 rounded-lg bg-white hover:bg-zinc-200 active:scale-95 text-black font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition">
+              <span class="text-base leading-none">▶</span>
+              <span>Lecture TV</span>
+            </button>
+
+            <button id="heroBtnPreload" onclick="triggerHeroPreload()" class="flex-1 sm:flex-initial justify-center px-4 py-3 sm:py-2.5 rounded-lg bg-[#E50914] hover:bg-[#F40612] active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-[#E50914]/30 transition">
+              <span>⚡</span>
+              <span>Précharger</span>
+            </button>
+
+            <button id="heroBtnStreams" onclick="triggerHeroStreams()" class="w-full sm:w-auto justify-center px-4 py-2.5 rounded-lg bg-zinc-800/90 hover:bg-zinc-700/90 active:scale-95 text-white font-semibold text-xs sm:text-sm border border-white/15 flex items-center gap-2 transition">
+              <span>ⓘ</span>
+              <span>Versions & Épisodes</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mini Quick-Remote Pill on Hero (Hidden by default, shown only when a movie is playing) -->
+        <div id="heroMiniRemoteCard" class="hidden flex-col gap-2.5 remote-chassis remote-chassis-active p-4 rounded-2xl min-w-[260px]">
+          <div class="flex items-center justify-between text-[11px] text-zinc-400">
+            <span class="font-extrabold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#E50914] animate-pulse"></span>
+              Télécommande Salon
+            </span>
+            <span id="heroAudioMini" class="font-mono text-emerald-400 truncate max-w-[110px]">TV / Mac</span>
+          </div>
+          <!-- Dedicated Menu Button on Hero Mini-Remote -->
+          <button onclick="openStremioMenu()" class="w-full py-2 px-3 rounded-xl remote-btn-menu text-xs font-extrabold flex items-center justify-center gap-2">
+            <span>🏠</span> Menu Principal TV & Catalogue
+          </button>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button onclick="playerControl('seek_back_10')" class="py-2 rounded-xl remote-btn-tactile text-xs font-mono font-bold text-white">-15s</button>
+            <button onclick="playerControl('toggle_pause')" class="py-2 rounded-xl bg-[#E50914] hover:bg-[#F40612] text-xs font-bold text-white shadow shadow-[#E50914]/40">⏯ Pause</button>
+            <button onclick="playerControl('seek_fwd_10')" class="py-2 rounded-xl remote-btn-tactile text-xs font-mono font-bold text-white">+15s</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Active Downloads & Preloaded Files Section (Netflix "Mes Téléchargements" style) -->
     <section id="downloadsSection" class="netflix-glass rounded-2xl sm:rounded-3xl p-4 sm:p-5 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
@@ -623,8 +659,8 @@
 
   <!-- MOBILE FLOATING MINI-REMOTE BAR + BOTTOM NAVIGATION (Phone Only < md) -->
   <div class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0b0b0b]/95 backdrop-blur-2xl border-t border-white/10" style="padding-bottom: var(--safe-bottom);">
-    <!-- Mini Remote Strip (Always accessible with 1 thumb + Dedicated MENU button) -->
-    <div class="px-2.5 py-1.5 bg-[#141414] border-b border-white/[0.08] flex items-center justify-between gap-1.5">
+    <!-- Mini Remote Strip (Hidden by default · Shown automatically when a film is playing) -->
+    <div id="mobileMiniRemoteStrip" class="hidden px-2.5 py-1.5 bg-[#141414] border-b border-[#E50914]/40 flex items-center justify-between gap-1.5">
       <!-- Dedicated Menu Button on Mobile Mini-Bar -->
       <button onclick="openStremioMenu()" class="px-2.5 py-1.5 rounded-lg bg-white text-black active:scale-90 text-[11px] font-black flex items-center gap-1 shrink-0 shadow">
         <span>🏠</span> Menu TV
@@ -900,6 +936,38 @@
       openStreamSelector(it.id, it.name, it.poster, it.type);
     }
 
+    let remoteManuallyOpened = false;
+    let remoteDismissedForSession = 0;
+    let lastAutoScrolledSession = 0;
+
+    function revealRemoteSpotlight(scrollToTop = true) {
+      remoteManuallyOpened = true;
+      remoteDismissedForSession = 0;
+      const remoteSec = document.getElementById('playbackRemoteSection');
+      if (remoteSec) {
+        remoteSec.classList.remove('hidden');
+        remoteSec.classList.add('remote-chassis-active');
+      }
+      if (scrollToTop) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function hideRemotePanel() {
+      remoteManuallyOpened = false;
+      const pb = appState.playback || {};
+      if (pb.startedAt) {
+        remoteDismissedForSession = pb.startedAt;
+      } else {
+        remoteDismissedForSession = -1;
+      }
+      document.getElementById('playbackRemoteSection')?.classList.add('hidden');
+      const pill = document.getElementById('pill-remote');
+      if (pill) {
+        pill.className = 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 hover:text-white flex items-center gap-1';
+      }
+    }
+
     function mobileShowSection(sec) {
       ['home', 'search', 'remote', 'downloads'].forEach(k => {
         const btn = document.getElementById(`bnav-${k}`);
@@ -916,14 +984,19 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => document.getElementById('searchInput')?.focus(), 200);
       } else if (sec === 'remote') {
-        document.getElementById('playbackRemoteSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        revealRemoteSpotlight(true);
       } else if (sec === 'downloads') {
         document.getElementById('downloadsSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
     function toggleRemotePanel() {
-      mobileShowSection('remote');
+      const remoteSec = document.getElementById('playbackRemoteSection');
+      if (remoteSec && !remoteSec.classList.contains('hidden')) {
+        hideRemotePanel();
+      } else {
+        revealRemoteSpotlight(true);
+      }
     }
 
     function scrollToDownloads() {
@@ -1019,13 +1092,56 @@
     function updatePlaybackAndAudioUI(data) {
       const pb = data.playback || {};
       const stremioRunning = !!(data.disk && data.disk.stremioRunning);
+      const isMoviePlaying = !!(pb.active && stremioRunning);
+
       const stateBadge = document.getElementById('playbackStateBadge');
       const nowPlayingEl = document.getElementById('nowPlayingTitle');
       const playPauseIcon = document.getElementById('btnMainPlayPauseIcon');
       const playPauseText = document.getElementById('btnMainPlayPauseText');
       const mobileMini = document.getElementById('mobileMiniStatus');
+      const mobileMiniStrip = document.getElementById('mobileMiniRemoteStrip');
+      const remoteSec = document.getElementById('playbackRemoteSection');
+      const remoteBanner = document.getElementById('remoteNowPlayingBanner');
+      const remoteMovieEl = document.getElementById('remoteNowPlayingMovie');
+      const remoteLiveLabel = document.getElementById('remoteLiveStateLabel');
+      const heroMiniCard = document.getElementById('heroMiniRemoteCard');
+      const pillRemote = document.getElementById('pill-remote');
 
-      if (stremioRunning || pb.active) {
+      if (isMoviePlaying) {
+        const sessionKey = pb.startedAt || 1;
+        const wasDismissed = (remoteDismissedForSession === sessionKey);
+
+        if (remoteSec) {
+          if (!wasDismissed || remoteManuallyOpened) {
+            remoteSec.classList.remove('hidden');
+            remoteSec.classList.add('remote-chassis-active');
+            if (lastAutoScrolledSession !== sessionKey) {
+              lastAutoScrolledSession = sessionKey;
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }
+        }
+        if (remoteBanner) {
+          remoteBanner.classList.remove('hidden');
+          if (remoteMovieEl) {
+            remoteMovieEl.textContent = pb.title || 'Lecture en cours sur Stremio';
+          }
+          if (remoteLiveLabel) {
+            remoteLiveLabel.textContent = pb.paused
+              ? '⏸ FILM EN PAUSE SUR LA TV SAMSUNG'
+              : '▶ FILM EN LECTURE SUR LA TV SAMSUNG';
+          }
+        }
+        if (mobileMiniStrip) {
+          mobileMiniStrip.classList.remove('hidden');
+        }
+        if (heroMiniCard) {
+          heroMiniCard.className = 'hidden lg:flex flex-col gap-2.5 remote-chassis remote-chassis-active p-4 rounded-2xl min-w-[260px]';
+        }
+        if (pillRemote) {
+          pillRemote.className = 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-extrabold transition bg-[#E50914] text-white shadow-md shadow-[#E50914]/40 flex items-center gap-1.5 animate-pulse';
+        }
+
         if (stateBadge) {
           stateBadge.classList.remove('hidden');
           if (pb.paused) {
@@ -1038,17 +1154,40 @@
         }
         if (nowPlayingEl) {
           nowPlayingEl.innerHTML = pb.title
-            ? `En cours sur la TV : <strong class="text-white">${pb.title}</strong> · Contrôle direct via la télécommande ci-dessous.`
-            : `Stremio est actif sur la TV Samsung · Utilise la télécommande pour Pause, Reculer/Avancer ou régler le volume.`;
+            ? `En cours sur la TV : <strong class="text-white">${pb.title}</strong> · Télécommande active en haut de l'écran.`
+            : `Stremio est en lecture sur la TV Samsung · Télécommande active en haut de l'écran.`;
         }
         if (mobileMini) {
-          mobileMini.textContent = pb.title ? `📺 ${pb.title}` : '📺 Stremio actif sur la TV';
+          mobileMini.textContent = pb.title ? `📺 ${pb.title}` : '📺 En lecture sur la TV';
         }
         if (playPauseIcon && playPauseText) {
           playPauseIcon.textContent = pb.paused ? '▶️' : '⏸️';
           playPauseText.textContent = pb.paused ? 'Reprendre' : 'Pause';
         }
       } else {
+        if (remoteSec) {
+          if (remoteManuallyOpened) {
+            remoteSec.classList.remove('hidden');
+            remoteSec.classList.remove('remote-chassis-active');
+          } else {
+            remoteSec.classList.add('hidden');
+            remoteSec.classList.remove('remote-chassis-active');
+          }
+        }
+        if (remoteBanner) {
+          remoteBanner.classList.add('hidden');
+        }
+        if (mobileMiniStrip) {
+          mobileMiniStrip.classList.add('hidden');
+        }
+        if (heroMiniCard) {
+          heroMiniCard.className = 'hidden';
+        }
+        if (pillRemote) {
+          pillRemote.className = remoteManuallyOpened
+            ? 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition bg-white text-black flex items-center gap-1'
+            : 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 hover:text-white flex items-center gap-1';
+        }
         if (stateBadge) stateBadge.classList.add('hidden');
         if (nowPlayingEl) {
           nowPlayingEl.textContent = 'Lance directement ton film sur la TV Samsung ou précharge-le à vitesse maximale sur le Mac mini.';
@@ -1356,6 +1495,15 @@
 
     async function playOnTv(imdbId, title, type = 'movie', videoId = '', streamUrl = '') {
       showToast(`📺 Allumage TV Samsung + lancement de « ${title} »...`, '🍿');
+      remoteDismissedForSession = 0;
+      remoteManuallyOpened = true;
+      revealRemoteSpotlight(true);
+      const remoteBanner = document.getElementById('remoteNowPlayingBanner');
+      const remoteMovieEl = document.getElementById('remoteNowPlayingMovie');
+      if (remoteBanner && remoteMovieEl) {
+        remoteBanner.classList.remove('hidden');
+        remoteMovieEl.textContent = title;
+      }
       try {
         const res = await apiFetch('/api/play-on-tv', {
           method: 'POST',
@@ -1364,6 +1512,7 @@
         });
         if (res.ok) {
           showToast(res.message || `📺 Télé allumée + « ${title} » lancé !`, '🍿');
+          refreshStatus(false);
         } else {
           showToast(res.error || 'Erreur lors du lancement sur la TV', '⚠️');
         }
@@ -1374,6 +1523,8 @@
 
     async function closeStremioAndTurnOffTv() {
       showToast('🛑 Fermeture de Stremio + 🌙 Extinction TV Samsung...', '🌙');
+      remoteManuallyOpened = false;
+      hideRemotePanel();
       try {
         const res = await apiFetch('/api/close-stremio-tv-off', {
           method: 'POST',
@@ -1636,6 +1787,11 @@
     }
 
     async function fileAction(action, path) {
+      if (action === 'play_stremio') {
+        remoteDismissedForSession = 0;
+        remoteManuallyOpened = true;
+        revealRemoteSpotlight(true);
+      }
       const res = await apiFetch('/api/file/action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1646,6 +1802,7 @@
         refreshStatus();
       } else if (action === 'play_stremio') {
         showToast(res.message || '📺 Télé allumée + Ouverture du film dans Stremio Mac !', '🍿');
+        refreshStatus(false);
       }
     }
 
