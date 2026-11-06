@@ -264,21 +264,49 @@
       pointer-events: none;
     }
 
+    .target-callout-group {
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .target-callout-group.dragging {
+      cursor: grabbing;
+    }
+
     .target-callout-pill {
-      fill: #1e293b;
+      fill: rgba(15, 23, 42, 0.94);
       stroke: #38bdf8;
-      stroke-width: 2;
-      rx: 8;
-      ry: 8;
+      stroke-width: 2.2;
+      rx: 10;
+      ry: 10;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
     }
 
     .target-callout-text {
       font-family: 'Inter', -apple-system, sans-serif;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 800;
       fill: #ffffff;
-      dominant-baseline: central;
       text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .target-callout-subtext {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 10.5px;
+      font-style: italic;
+      font-weight: 500;
+      fill: #93c5fd;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .target-callout-grip {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      fill: #64748b;
+      dominant-baseline: central;
       pointer-events: none;
     }
 
@@ -852,10 +880,44 @@
         flashcardRevealed: false,
         qcmOptions: [],
         qcmAnswered: false,
+        userCalloutPos: null,
         scoreOk: 0,
         scoreTotal: 0,
         didPan: false
       };
+
+      // Helper to wrap long anatomical labels cleanly into multiple lines without any truncation
+      function wrapTextLines(str, maxCharsPerLine) {
+        const text = String(str || "").trim();
+        if (!text) return [];
+        if (text.length <= maxCharsPerLine) return [text];
+        const words = text.split(/\s+/);
+        const lines = [];
+        let current = "";
+        words.forEach(word => {
+          if (!current) {
+            current = word;
+          } else if ((current + " " + word).length <= maxCharsPerLine) {
+            current += " " + word;
+          } else {
+            lines.push(current);
+            current = word;
+          }
+        });
+        if (current) lines.push(current);
+        return lines;
+      }
+
+      // Convert client (screen) coordinates into SVG (640x670) coordinates accurately under any zoom/pan
+      function clientToSvgCoords(clientX, clientY) {
+        const pt = elSvg.createSVGPoint();
+        pt.x = clientX;
+        pt.y = clientY;
+        const ctm = elSvg.getScreenCTM();
+        if (!ctm) return { x: 320, y: 335 };
+        const transformed = pt.matrixTransform(ctm.inverse());
+        return { x: transformed.x, y: transformed.y };
+      }
 
       // DOM Elements
       const elSliceTitle = document.getElementById("slice-title-display");
@@ -916,9 +978,10 @@
         const slice = getCurrentSlice();
         const pts = getFilteredPoints(slice);
         state.pointStatus = {};
+        state.userCalloutPos = null;
         pts.forEach(p => { state.pointStatus[p.id] = "pending"; });
 
-        // Order questions top-to-bottom or shuffled
+        // Order questions shuffled
         state.quizQueue = pts.map(p => p.id).sort(() => Math.random() - 0.5);
         state.currentTargetPointId = state.quizQueue[0] || null;
         state.flashcardRevealed = false;
@@ -984,30 +1047,7 @@
           <image href="${slice.image}" x="0" y="0" width="640" height="670" preserveAspectRatio="none" />
         `;
 
-        // In QCM, Flashcard, or Study mode, draw ONLY the leader line and callout for the single active point!
-        if (targetPt && state.mode !== "pin") {
-          const tx = targetPt.x;
-          const ty = targetPt.y;
-          // Place a clean callout badge offset from the point so it never covers the anatomy
-          const calloutY = ty > 110 ? Math.max(36, ty - 75) : Math.min(634, ty + 75);
-          const calloutX = tx < 320 ? Math.max(95, tx - 50) : Math.min(545, tx + 50);
-
-          const showAnswerOnPlate = state.mode === "study" || (state.mode === "flashcard" && state.flashcardRevealed);
-          const boxText = showAnswerOnPlate ? targetPt.labelFr : "❓ À identifier";
-          const shortText = boxText.length > 32 ? boxText.slice(0, 31) + "…" : boxText;
-          const boxW = Math.max(125, shortText.length * 7.8 + 24);
-
-          svgHtml += `
-            <line class="target-leader-line" x1="${tx}" y1="${ty}" x2="${calloutX}" y2="${calloutY}" />
-            <circle class="target-pulse-ring" cx="${tx}" cy="${ty}" r="14" />
-            <g transform="translate(${calloutX}, ${calloutY})">
-              <rect class="target-callout-pill" x="${-boxW / 2}" y="-15" width="${boxW}" height="30" />
-              <text class="target-callout-text" x="0" y="0">${escapeHtml(shortText)}</text>
-            </g>
-          `;
-        }
-
-        // Draw anatomical points
+        // 1. Draw anatomical points first so the active legend callout always sits clearly above them
         points.forEach(pt => {
           const isTarget = state.currentTargetPointId === pt.id;
           const status = state.pointStatus[pt.id] || "pending";
@@ -1031,7 +1071,162 @@
           `;
         });
 
+        // 2. Draw ONLY the leader line and draggable full-text legend for the single active point!
+        let calloutBounds = null;
+        if (targetPt && state.mode !== "pin") {
+          const tx = targetPt.x;
+          const ty = targetPt.y;
+          const catMeta = CATEGORY_META[targetPt.category] || { label: "Structure" };
+
+          const showAnswerOnPlate =
+            state.mode === "study" ||
+            (state.mode === "flashcard" && state.flashcardRevealed) ||
+            (state.mode === "qcm" && state.qcmAnswered);
+
+          const mainText = showAnswerOnPlate
+            ? targetPt.labelFr
+            : `❓ À identifier (${catMeta.label}) — glisser pour déplacer`;
+          const subText = (showAnswerOnPlate && targetPt.labelLa) ? targetPt.labelLa : "";
+
+          const mainLines = wrapTextLines(mainText, 34);
+          const subLines = subText ? wrapTextLines(subText, 40) : [];
+
+          const maxMainChars = mainLines.reduce((m, l) => Math.max(m, l.length), 0);
+          const maxSubChars = subLines.reduce((m, l) => Math.max(m, l.length), 0);
+          const contentW = Math.max(maxMainChars * 7.2, maxSubChars * 5.8);
+          const boxW = Math.min(610, Math.max(170, Math.ceil(contentW + 44)));
+
+          const mainLineH = 16;
+          const subLineH = 14;
+          const totalTextH = mainLines.length * mainLineH + (subLines.length > 0 ? subLines.length * subLineH + 4 : 0);
+          const boxH = Math.max(34, totalTextH + 16);
+
+          // Determine position: use user-dragged position if available, else smart default offset in margin
+          let calloutX, calloutY;
+          if (state.userCalloutPos) {
+            calloutX = state.userCalloutPos.x;
+            calloutY = state.userCalloutPos.y;
+          } else {
+            calloutY = ty > 150 ? ty - Math.max(82, boxH / 2 + 54) : ty + Math.max(82, boxH / 2 + 54);
+            calloutX = tx < 320 ? tx + 60 : tx - 60;
+          }
+
+          // Clamp inside the 640x670 SVG canvas so the full text box is never cut off at the edges
+          const minX = boxW / 2 + 8;
+          const maxX = 640 - boxW / 2 - 8;
+          const minY = boxH / 2 + 8;
+          const maxY = 670 - boxH / 2 - 8;
+          calloutX = Math.max(minX, Math.min(maxX, calloutX));
+          calloutY = Math.max(minY, Math.min(maxY, calloutY));
+
+          calloutBounds = { tx, ty, boxW, boxH, calloutX, calloutY, ptId: targetPt.id };
+
+          // Build multi-line SVG <tspan> elements
+          let curY = -totalTextH / 2 + mainLineH * 0.78;
+          let tspansHtml = "";
+          mainLines.forEach(line => {
+            tspansHtml += `<text class="target-callout-text" x="6" y="${curY.toFixed(1)}">${escapeHtml(line)}</text>`;
+            curY += mainLineH;
+          });
+          if (subLines.length > 0) {
+            curY += 2;
+            subLines.forEach(line => {
+              tspansHtml += `<text class="target-callout-subtext" x="6" y="${curY.toFixed(1)}">${escapeHtml(line)}</text>`;
+              curY += subLineH;
+            });
+          }
+
+          svgHtml += `
+            <line id="target-leader-line" class="target-leader-line" x1="${tx}" y1="${ty}" x2="${calloutX}" y2="${calloutY}" />
+            <circle class="target-pulse-ring" cx="${tx}" cy="${ty}" r="14" />
+            <g id="target-callout-group" class="target-callout-group" transform="translate(${calloutX}, ${calloutY})">
+              <rect class="target-callout-pill" x="${-boxW / 2}" y="${-boxH / 2}" width="${boxW}" height="${boxH}" />
+              <text class="target-callout-grip" x="${-boxW / 2 + 12}" y="0">⠿</text>
+              ${tspansHtml}
+            </g>
+          `;
+        }
+
         elSvg.innerHTML = svgHtml;
+
+        // Attach drag handler to the on-plate callout legend so user can move it freely
+        if (calloutBounds) {
+          const elCallout = document.getElementById("target-callout-group");
+          const elLeader = document.getElementById("target-leader-line");
+          if (elCallout && elLeader) {
+            let isDraggingCallout = false;
+            let dragOffsetX = 0;
+            let dragOffsetY = 0;
+            let curX = calloutBounds.calloutX;
+            let curY = calloutBounds.calloutY;
+
+            const startDrag = (clientX, clientY) => {
+              isDraggingCallout = true;
+              elCallout.classList.add("dragging");
+              const svgPt = clientToSvgCoords(clientX, clientY);
+              dragOffsetX = curX - svgPt.x;
+              dragOffsetY = curY - svgPt.y;
+            };
+
+            const moveDrag = (clientX, clientY) => {
+              if (!isDraggingCallout) return;
+              const svgPt = clientToSvgCoords(clientX, clientY);
+              const minX = calloutBounds.boxW / 2 + 6;
+              const maxX = 640 - calloutBounds.boxW / 2 - 6;
+              const minY = calloutBounds.boxH / 2 + 6;
+              const maxY = 670 - calloutBounds.boxH / 2 - 6;
+              curX = Math.max(minX, Math.min(maxX, svgPt.x + dragOffsetX));
+              curY = Math.max(minY, Math.min(maxY, svgPt.y + dragOffsetY));
+              state.userCalloutPos = { x: curX, y: curY };
+              elCallout.setAttribute("transform", `translate(${curX}, ${curY})`);
+              elLeader.setAttribute("x2", String(curX));
+              elLeader.setAttribute("y2", String(curY));
+            };
+
+            const endDrag = () => {
+              if (!isDraggingCallout) return;
+              isDraggingCallout = false;
+              elCallout.classList.remove("dragging");
+            };
+
+            elCallout.addEventListener("touchstart", (e) => {
+              if (e.touches.length === 1) {
+                e.stopPropagation();
+                startDrag(e.touches[0].clientX, e.touches[0].clientY);
+              }
+            }, { passive: false });
+
+            elCallout.addEventListener("touchmove", (e) => {
+              if (isDraggingCallout && e.touches.length === 1) {
+                e.preventDefault();
+                e.stopPropagation();
+                moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+              }
+            }, { passive: false });
+
+            elCallout.addEventListener("touchend", (e) => {
+              if (isDraggingCallout) {
+                e.stopPropagation();
+                endDrag();
+              }
+            });
+
+            elCallout.addEventListener("mousedown", (e) => {
+              if (e.button !== 0) return;
+              e.preventDefault();
+              e.stopPropagation();
+              startDrag(e.clientX, e.clientY);
+              const onWinMove = (ev) => moveDrag(ev.clientX, ev.clientY);
+              const onWinUp = () => {
+                endDrag();
+                window.removeEventListener("mousemove", onWinMove);
+                window.removeEventListener("mouseup", onWinUp);
+              };
+              window.addEventListener("mousemove", onWinMove);
+              window.addEventListener("mouseup", onWinUp);
+            });
+          }
+        }
 
         // Clicking any point on the plate:
         // - In 'pin' mode: answers the location quiz!
@@ -1133,7 +1328,8 @@
                   if (b.textContent === targetPt.labelFr) b.classList.add("correct");
                 });
               }
-              setTimeout(() => advanceQuestion(), 650);
+              renderSvgStage();
+              setTimeout(() => advanceQuestion(), 900);
             });
             grid.appendChild(btn);
           });
