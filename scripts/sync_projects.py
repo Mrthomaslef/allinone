@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "assurance": {
+        "title": "AssurImpôts & Contrats — Famille Lefèvre-Parizot",
+        "subtitle": "Synthèse Assurances (Habitation, Auto CL-330-JQ, RCP MACSF, Mutuelle ACTIL, Fiido), Impôts/URSSAF & 317 Documents accessibles",
+        "category": "daily-tools",
+        "emoji": "🛡️",
+        "prodUrl": "https://mrthomaslef.github.io/assurance/",
+        "logoUrl": "assets/assurance-icon.svg?v=2",
+    },
     "gestion-anticoagulant": {
         "title": "Anticoagulants & AAP — Protocole Cochin RI",
         "subtitle": "Gestion des anticoagulants et antiplaquettaires (22 gestes RI, règles d'arrêt/adaptation/reprise RFE GIHP/SFAR/FRI/SFR 2026)",
