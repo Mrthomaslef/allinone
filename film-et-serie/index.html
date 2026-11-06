@@ -167,6 +167,10 @@
         0 0 38px -4px rgba(229, 9, 20, 0.38),
         inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
     }
+    body.remote-lock {
+      overflow: hidden !important;
+      height: 100dvh !important;
+    }
     .safe-pb {
       padding-bottom: calc(5.5rem + var(--safe-bottom));
     }
@@ -288,181 +292,136 @@
 
   <main class="w-full px-3.5 sm:px-8 xl:px-14 py-4 sm:py-6 space-y-6">
 
-    <!-- TÉLÉCOMMANDE SALON DESIGN (Cachée de base · Mise au 1er plan dès qu'un film est lancé) -->
-    <section id="playbackRemoteSection" class="hidden remote-chassis rounded-3xl p-4 sm:p-6 space-y-5 relative overflow-hidden transition-all duration-300">
+    <!-- TÉLÉCOMMANDE PLEIN ÉCRAN FIXE (100% contenue sur l'écran sans scroll · Cachée de base · S'ouvre au lancement d'un film) -->
+    <section id="playbackRemoteSection" class="hidden fixed inset-0 z-50 bg-[#09090b]/98 backdrop-blur-2xl flex flex-col items-center justify-center overflow-hidden select-none" style="height: 100dvh; padding-top: max(0.5rem, var(--safe-top)); padding-bottom: max(0.5rem, var(--safe-bottom)); padding-left: 0.75rem; padding-right: 0.75rem;">
       <!-- Subtle top ambient glow -->
-      <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-36 bg-[#E50914]/25 blur-3xl rounded-full"></div>
+      <div class="pointer-events-none absolute -top-20 left-1/2 -translate-x-1/2 w-80 h-32 bg-[#E50914]/25 blur-3xl rounded-full"></div>
 
-      <!-- Active Movie Now-Playing Spotlight Banner (Shown when a film is playing on TV) -->
-      <div id="remoteNowPlayingBanner" class="hidden relative z-10 rounded-2xl bg-gradient-to-r from-[#E50914]/25 via-[#E50914]/10 to-zinc-900/90 border border-[#E50914]/50 p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
-        <div class="flex items-center gap-3 min-w-0">
-          <span class="relative flex h-3 w-3 shrink-0">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E50914] opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-[#E50914]"></span>
-          </span>
-          <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] font-mono font-extrabold uppercase tracking-widest text-red-300" id="remoteLiveStateLabel">EN LECTURE SUR LA TV SAMSUNG</span>
+      <!-- Fixed Chassis Container: 100% height flex-col justify-between, max-w-md on mobile / max-w-2xl on desktop -->
+      <div id="remoteChassisBox" class="remote-chassis remote-chassis-active w-full max-w-md lg:max-w-3xl h-full max-h-[820px] rounded-3xl p-3 sm:p-5 flex flex-col justify-between gap-2 sm:gap-3 relative overflow-hidden">
+
+        <!-- 1. TOP HEADER BAR + NOW PLAYING STATUS + CLOSE/CATALOGUE -->
+        <div class="flex items-center justify-between gap-2 pb-2 border-b border-white/10 shrink-0">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#E50914] to-[#99060d] shadow-md shadow-[#E50914]/30 border border-white/20 flex items-center justify-center text-base sm:text-lg shrink-0">
+              🎛️
             </div>
-            <p class="text-sm sm:text-base font-black text-white truncate mt-0.5" id="remoteNowPlayingMovie">Film en cours</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <button onclick="openStremioMenu()" class="px-3.5 py-2 rounded-xl remote-btn-menu text-xs font-black flex items-center gap-1.5 shadow">
-            <span>🏠</span> Ouvrir le Menu TV
-          </button>
-          <button onclick="hideRemotePanel()" class="px-3 py-2 rounded-xl bg-black/50 hover:bg-black/70 border border-white/15 text-xs font-semibold text-zinc-300 hover:text-white transition" title="Replier la télécommande">
-            ✕ Masquer
-          </button>
-        </div>
-      </div>
-
-      <!-- Top Bar of Remote: Brand + Dedicated Prominent MENU Button + TV Power -->
-      <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#E50914] to-[#99060d] shadow-lg shadow-[#E50914]/30 border border-white/20 flex items-center justify-center text-xl shrink-0">
-            🎛️
-          </div>
-          <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">Télécommande Salon Pro</h2>
-              <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/15">TV Samsung · Mac</span>
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="relative flex h-2 w-2 shrink-0" id="remoteNowPlayingBanner">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E50914] opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-[#E50914]"></span>
+                </span>
+                <span id="remoteLiveStateLabel" class="text-[10px] font-mono font-extrabold uppercase tracking-wider text-red-400 truncate">TÉLÉCOMMANDE TV SAMSUNG</span>
+              </div>
+              <p id="remoteNowPlayingMovie" class="text-xs sm:text-sm font-black text-white truncate">Prêt à contrôler Stremio</p>
             </div>
-            <p class="text-[11px] sm:text-xs text-zinc-400 truncate">Design tactile direct : Menu Stremio, Pause, Navigation rapide & Audio</p>
+          </div>
+
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="openCatalogMenuFromRemote()" class="px-2.5 sm:px-3 py-2 rounded-xl remote-btn-tactile text-[11px] sm:text-xs font-bold text-white flex items-center gap-1" title="Choisir une autre version ou épisode">
+              <span>🎬</span>
+              <span class="hidden xs:inline sm:inline">Versions</span>
+            </button>
+            <button onclick="hideRemotePanel()" class="px-3 py-2 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 active:scale-95 border border-white/15 text-[11px] sm:text-xs font-extrabold text-zinc-200 flex items-center gap-1 transition" title="Revenir au catalogue de films">
+              <span>✕</span>
+              <span>Catalogue</span>
+            </button>
           </div>
         </div>
 
-        <!-- DEDICATED PROMINENT MENU BUTTONS (Well-placed at the top-right / thumb center) -->
-        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
-          <button onclick="openStremioMenu()" class="flex-1 sm:flex-initial justify-center px-4 py-2.5 rounded-2xl remote-btn-menu text-xs sm:text-sm font-black tracking-tight flex items-center gap-2 shadow-xl" title="Quitter le lecteur plein écran et ouvrir le Menu Principal Stremio sur la TV">
+        <!-- 2. DEDICATED PROMINENT MENU BAR (Well-placed right below header) -->
+        <div class="grid grid-cols-12 gap-2 shrink-0">
+          <button onclick="openStremioMenu()" class="col-span-7 py-2.5 sm:py-3 px-3 rounded-2xl remote-btn-menu text-xs sm:text-sm font-black tracking-tight flex items-center justify-center gap-2 shadow-xl">
             <span class="text-base leading-none">🏠</span>
             <span>MENU TV (Stremio)</span>
           </button>
-
-          <button onclick="openCatalogMenuFromRemote()" class="flex-1 sm:flex-initial justify-center px-3.5 py-2.5 rounded-2xl remote-btn-tactile text-xs font-bold text-white flex items-center gap-1.5" title="Ouvrir le menu des versions ou parcourir les films">
-            <span class="text-sm leading-none">🎬</span>
-            <span>Menu Films</span>
-          </button>
-
-          <button onclick="playerControl('back')" class="px-3 py-2.5 rounded-2xl remote-btn-tactile text-xs font-bold text-zinc-200 flex items-center gap-1.5" title="Touche Retour / Échap dans Stremio">
+          <button onclick="playerControl('back')" class="col-span-3 py-2.5 sm:py-3 px-2 rounded-2xl remote-btn-tactile text-xs font-bold text-zinc-100 flex items-center justify-center gap-1">
             <span>↩️</span>
-            <span class="hidden md:inline">Retour</span>
+            <span>Retour</span>
           </button>
-
-          <button onclick="hideRemotePanel()" class="px-3 py-2.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-1" title="Cacher la télécommande">
-            <span>✕</span>
-            <span class="hidden xl:inline">Fermer</span>
+          <button onclick="playerControl('fullscreen')" class="col-span-2 py-2.5 sm:py-3 px-2 rounded-2xl remote-btn-tactile text-xs font-bold text-zinc-100 flex items-center justify-center" title="Plein écran TV">
+            <span>⛶</span>
           </button>
         </div>
-      </div>
 
-      <!-- Main Remote Body: Left = Tactile Transport Ring & Menu Pad | Right = Sound & Output Console -->
-      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-
-        <!-- Left (7 cols): Tactile Transport Ring + Seek Pad + Media Options -->
-        <div class="lg:col-span-7 remote-ring rounded-3xl p-4 sm:p-5 flex flex-col justify-between gap-4">
-
-          <!-- Top Dedicated Quick-Menu & Screen Strip inside the Pad -->
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="openStremioMenu()" class="py-2.5 px-3 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-xs font-extrabold text-white flex items-center justify-center gap-1.5 transition">
-              <span>🏠</span> Menu Accueil
-            </button>
-            <button onclick="playerControl('back')" class="py-2.5 px-3 rounded-2xl remote-btn-tactile text-xs font-bold text-zinc-200 flex items-center justify-center gap-1.5">
-              <span>↩️</span> Retour Épisodes
-            </button>
-            <button onclick="playerControl('fullscreen')" class="py-2.5 px-3 rounded-2xl remote-btn-tactile text-xs font-bold text-zinc-200 flex items-center justify-center gap-1.5">
-              <span>⛶</span> Plein Écran
-            </button>
-          </div>
-
-          <!-- Center Circular / Pill Tactile Jog: -15s | PLAY/PAUSE | +15s -->
-          <div class="grid grid-cols-12 gap-2.5 sm:gap-3 items-center my-0.5">
-            <!-- Rewind 15s -->
-            <button onclick="playerControl('seek_back_10')" class="col-span-4 h-20 sm:h-24 rounded-3xl remote-btn-tactile text-white flex flex-col items-center justify-center gap-1 group">
-              <span class="text-xl sm:text-2xl leading-none group-active:-translate-x-1 transition-transform">⏪</span>
-              <span class="text-xs sm:text-sm font-mono font-extrabold tracking-tight">-15 sec</span>
-              <span class="text-[10px] text-zinc-400 hidden sm:inline">Reculer</span>
+        <!-- 3. MAIN TACTILE TRANSPORT PAD (Flex-1 so it adapts to any phone height without scrolling) -->
+        <div class="remote-ring rounded-2xl p-2.5 sm:p-4 flex-1 min-h-0 flex flex-col justify-between gap-2">
+          <!-- Primary Big Jog Row: -15s | PLAY/PAUSE | +15s -->
+          <div class="grid grid-cols-12 gap-2 sm:gap-3 flex-1 min-h-[72px] max-h-[120px] items-stretch">
+            <button onclick="playerControl('seek_back_10')" class="col-span-4 rounded-2xl remote-btn-tactile text-white flex flex-col items-center justify-center gap-0.5 active:scale-95">
+              <span class="text-lg sm:text-2xl leading-none">⏪</span>
+              <span class="text-xs sm:text-sm font-mono font-extrabold">-15s</span>
             </button>
 
-            <!-- Center Hero Play / Pause Button -->
-            <button onclick="playerControl('toggle_pause')" id="btnMainPlayPause" class="col-span-4 h-20 sm:h-24 rounded-3xl bg-gradient-to-b from-[#ff1f2a] to-[#c90610] hover:from-[#ff313b] hover:to-[#e50914] active:scale-95 text-white shadow-2xl shadow-[#E50914]/45 border border-white/25 flex flex-col items-center justify-center gap-1 transition">
+            <button onclick="playerControl('toggle_pause')" id="btnMainPlayPause" class="col-span-4 rounded-2xl bg-gradient-to-b from-[#ff1f2a] to-[#c90610] hover:from-[#ff313b] hover:to-[#e50914] active:scale-95 text-white shadow-xl shadow-[#E50914]/45 border border-white/25 flex flex-col items-center justify-center gap-0.5 transition">
               <span class="text-2xl sm:text-3xl leading-none drop-shadow" id="btnMainPlayPauseIcon">⏯️</span>
-              <span class="text-xs sm:text-sm font-black uppercase tracking-wider" id="btnMainPlayPauseText">Pause / Play</span>
+              <span class="text-[11px] sm:text-xs font-black uppercase tracking-wider" id="btnMainPlayPauseText">Pause</span>
             </button>
 
-            <!-- Forward 15s -->
-            <button onclick="playerControl('seek_fwd_10')" class="col-span-4 h-20 sm:h-24 rounded-3xl remote-btn-tactile text-white flex flex-col items-center justify-center gap-1 group">
-              <span class="text-xl sm:text-2xl leading-none group-active:translate-x-1 transition-transform">⏩</span>
-              <span class="text-xs sm:text-sm font-mono font-extrabold tracking-tight">+15 sec</span>
-              <span class="text-[10px] text-zinc-400 hidden sm:inline">Avancer</span>
+            <button onclick="playerControl('seek_fwd_10')" class="col-span-4 rounded-2xl remote-btn-tactile text-white flex flex-col items-center justify-center gap-0.5 active:scale-95">
+              <span class="text-lg sm:text-2xl leading-none">⏩</span>
+              <span class="text-xs sm:text-sm font-mono font-extrabold">+15s</span>
             </button>
           </div>
 
-          <!-- Precision Time-Jump Row: -1m | -30s | +30s | +1m -->
-          <div class="grid grid-cols-4 gap-2">
-            <button onclick="playerControl('seek_back_60')" class="py-2.5 rounded-2xl remote-btn-tactile text-zinc-200 text-xs font-mono font-bold flex items-center justify-center gap-1">
-              <span>⏮</span> -1 min
+          <!-- Secondary Time-Jump Row: -1m | -30s | +30s | +1m -->
+          <div class="grid grid-cols-4 gap-1.5 sm:gap-2 shrink-0">
+            <button onclick="playerControl('seek_back_60')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
+              <span>⏮</span> -1m
             </button>
-            <button onclick="playerControl('seek_back_30')" class="py-2.5 rounded-2xl remote-btn-tactile text-zinc-200 text-xs font-mono font-bold flex items-center justify-center gap-1">
+            <button onclick="playerControl('seek_back_30')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
               <span>⏪</span> -30s
             </button>
-            <button onclick="playerControl('seek_fwd_30')" class="py-2.5 rounded-2xl remote-btn-tactile text-zinc-200 text-xs font-mono font-bold flex items-center justify-center gap-1">
+            <button onclick="playerControl('seek_fwd_30')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
               +30s <span>⏩</span>
             </button>
-            <button onclick="playerControl('seek_fwd_60')" class="py-2.5 rounded-2xl remote-btn-tactile text-zinc-200 text-xs font-mono font-bold flex items-center justify-center gap-1">
-              +1 min <span>⏭</span>
+            <button onclick="playerControl('seek_fwd_60')" class="py-2 sm:py-2.5 rounded-xl remote-btn-tactile text-zinc-200 text-[11px] sm:text-xs font-mono font-bold flex items-center justify-center gap-0.5">
+              +1m <span>⏭</span>
             </button>
           </div>
 
-          <!-- Bottom Row: Audio Track (VF/VO) | Subtitles | TV Power ON/OFF -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/10">
-            <button onclick="playerControl('audio_track')" class="py-2.5 px-2.5 rounded-xl remote-btn-tactile text-[11px] font-bold text-zinc-200 flex items-center justify-center gap-1.5" title="Changer la piste audio (VF / VOST) dans Stremio">
-              <span>🗣️</span> Langue VF/VO
+          <!-- Audio Track (VF/VO) & Subtitles Strip -->
+          <div class="grid grid-cols-2 gap-2 shrink-0">
+            <button onclick="playerControl('audio_track')" class="py-2 px-2.5 rounded-xl remote-btn-tactile text-[11px] sm:text-xs font-bold text-zinc-200 flex items-center justify-center gap-1.5">
+              <span>🗣️</span> Piste Audio (VF/VO)
             </button>
-            <button onclick="playerControl('subtitles')" class="py-2.5 px-2.5 rounded-xl remote-btn-tactile text-[11px] font-bold text-zinc-200 flex items-center justify-center gap-1.5" title="Activer / changer les sous-titres dans Stremio">
-              <span>💬</span> Sous-titres
-            </button>
-            <button onclick="launchStremioApp()" class="py-2.5 px-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 active:scale-95 border border-emerald-500/30 text-[11px] font-bold text-emerald-300 flex items-center justify-center gap-1.5 transition">
-              <span>📺</span> Allumer TV
-            </button>
-            <button onclick="closeStremioAndTurnOffTv()" class="py-2.5 px-2.5 rounded-xl bg-rose-950/70 hover:bg-rose-900/80 active:scale-95 border border-rose-500/35 text-[11px] font-bold text-rose-200 flex items-center justify-center gap-1.5 transition">
-              <span>🌙</span> Éteindre TV
+            <button onclick="playerControl('subtitles')" class="py-2 px-2.5 rounded-xl remote-btn-tactile text-[11px] sm:text-xs font-bold text-zinc-200 flex items-center justify-center gap-1.5">
+              <span>💬</span> Sous-titres (ST)
             </button>
           </div>
         </div>
 
-        <!-- Right (5 cols): Sound & Output Studio Console -->
-        <div class="lg:col-span-5 remote-ring rounded-3xl p-4 sm:p-5 flex flex-col justify-between gap-4">
+        <!-- 4. SOUND & AUDIO OUTPUT CONSOLE (Compact & 1-Thumb Accessible) -->
+        <div class="remote-ring rounded-2xl p-2.5 sm:p-4 flex flex-col justify-between gap-2 shrink-0">
+          <!-- Volume Header + Active Speaker Badge -->
           <div class="flex items-center justify-between gap-2">
-            <div>
-              <span class="text-xs font-extrabold uppercase tracking-wider text-white flex items-center gap-1.5">
-                <span>🔊</span> Contrôle du Son
-              </span>
-              <p class="text-[11px] text-zinc-400 mt-0.5">Volume principal & enceintes du salon</p>
-            </div>
-            <span id="audioDeviceBadge" class="text-[11px] font-mono px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 truncate max-w-[175px]">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-zinc-300 flex items-center gap-1">
+              <span>🔊</span> Son & Enceintes
+            </span>
+            <span id="audioDeviceBadge" class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 truncate max-w-[170px]">
               TV / Mac mini
             </span>
           </div>
 
-          <!-- Tactile Volume Rocker: Vol - | Mute | Vol + -->
-          <div class="grid grid-cols-3 gap-2.5">
-            <button onclick="volumeControl('down')" class="h-16 rounded-2xl remote-btn-tactile text-white font-extrabold text-xs sm:text-sm flex flex-col items-center justify-center gap-1">
-              <span class="text-lg leading-none">🔉</span>
+          <!-- Volume Rocker: Vol - | Muet | Vol + -->
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="volumeControl('down')" class="h-11 sm:h-12 rounded-xl remote-btn-tactile text-white font-extrabold text-xs flex items-center justify-center gap-1.5">
+              <span class="text-base leading-none">🔉</span>
               <span>Vol −</span>
             </button>
-            <button onclick="volumeControl('mute')" id="btnMuteAudio" class="h-16 rounded-2xl remote-btn-tactile text-zinc-200 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1">
-              <span class="text-lg leading-none" id="btnMuteIcon">🔇</span>
+            <button onclick="volumeControl('mute')" id="btnMuteAudio" class="h-11 sm:h-12 rounded-xl remote-btn-tactile text-zinc-200 font-bold text-xs flex items-center justify-center gap-1.5">
+              <span class="text-base leading-none" id="btnMuteIcon">🔇</span>
               <span id="btnMuteText">Muet</span>
             </button>
-            <button onclick="volumeControl('up')" class="h-16 rounded-2xl bg-gradient-to-b from-[#ff1f2a] to-[#c90610] hover:from-[#ff313b] hover:to-[#e50914] active:scale-95 border border-white/20 text-white font-extrabold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-lg shadow-[#E50914]/30 transition">
-              <span class="text-lg leading-none">🔊</span>
+            <button onclick="volumeControl('up')" class="h-11 sm:h-12 rounded-xl bg-gradient-to-b from-[#ff1f2a] to-[#c90610] active:scale-95 border border-white/20 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-[#E50914]/30">
+              <span class="text-base leading-none">🔊</span>
               <span>Vol +</span>
             </button>
           </div>
 
-          <!-- Precision Volume Slider -->
-          <div class="rounded-2xl bg-black/40 border border-white/10 px-3.5 py-3 flex items-center gap-3">
+          <!-- Volume Slider -->
+          <div class="rounded-xl bg-black/45 border border-white/10 px-3 py-1.5 flex items-center gap-2.5">
             <span class="text-xs text-zinc-400">🔈</span>
             <input
               type="range"
@@ -474,25 +433,33 @@
               oninput="document.getElementById('volumeLevelText').textContent = this.value + '%'"
               class="w-full netflix-slider cursor-pointer"
             />
-            <span id="volumeLevelText" class="text-xs font-mono font-extrabold text-white w-11 text-right">50%</span>
+            <span id="volumeLevelText" class="text-xs font-mono font-extrabold text-white w-10 text-right">50%</span>
           </div>
 
-          <!-- Audio Output Switcher -->
-          <div class="space-y-1.5 pt-1 border-t border-white/10">
-            <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Sortie Audio Active</p>
-            <div class="grid grid-cols-3 gap-2">
-              <button onclick="switchAudioOutput('tv')" id="btnAudioTv" class="py-2.5 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
-                <span>📺</span> TV / Mac
-              </button>
-              <button onclick="switchAudioOutput('homepod')" id="btnAudioHomepod" class="py-2.5 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
-                <span>🔊</span> HomePod
-              </button>
-              <button onclick="switchAudioOutput('airpods')" id="btnAudioAirpods" class="py-2.5 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
-                <span>🎧</span> AirPods
-              </button>
-            </div>
+          <!-- Audio Output Switcher: TV / HomePod / AirPods -->
+          <div class="grid grid-cols-3 gap-1.5">
+            <button onclick="switchAudioOutput('tv')" id="btnAudioTv" class="py-2 px-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
+              <span>📺</span> TV / Mac
+            </button>
+            <button onclick="switchAudioOutput('homepod')" id="btnAudioHomepod" class="py-2 px-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
+              <span>🔊</span> HomePod
+            </button>
+            <button onclick="switchAudioOutput('airpods')" id="btnAudioAirpods" class="py-2 px-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 active:scale-95 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition">
+              <span>🎧</span> AirPods
+            </button>
           </div>
         </div>
+
+        <!-- 5. FOOTER BAR: TV Power ON / OFF & Back to Catalogue -->
+        <div class="grid grid-cols-2 gap-2 shrink-0">
+          <button onclick="launchStremioApp()" class="py-2 px-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 active:scale-95 border border-emerald-500/30 text-[11px] font-bold text-emerald-300 flex items-center justify-center gap-1.5 transition">
+            <span>📺</span> Allumer TV & Stremio
+          </button>
+          <button onclick="closeStremioAndTurnOffTv()" class="py-2 px-3 rounded-xl bg-rose-950/70 hover:bg-rose-900/80 active:scale-95 border border-rose-500/35 text-[11px] font-bold text-rose-200 flex items-center justify-center gap-1.5 transition">
+            <span>🌙</span> Fermer & Éteindre TV
+          </button>
+        </div>
+
       </div>
     </section>
 
@@ -700,7 +667,7 @@
   </div>
 
   <!-- Netflix-Style Bottom Sheet Modal for Stream Picker & Episode Selector -->
-  <div id="streamModal" onclick="if(event.target===this) closeStreamModal()" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+  <div id="streamModal" onclick="if(event.target===this) closeStreamModal()" class="fixed inset-0 z-[60] hidden bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-[#181818] rounded-t-3xl sm:rounded-2xl max-w-3xl w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col overflow-hidden border-t sm:border border-white/15 shadow-2xl">
       <!-- Mobile Drag Handle -->
       <div class="sm:hidden pt-2.5 pb-1 flex justify-center bg-[#181818]" onclick="closeStreamModal()">
@@ -744,8 +711,8 @@
     </div>
   </div>
 
-  <!-- Toast Notification (Positioned cleanly above mobile bottom bar) -->
-  <div id="toast" class="fixed bottom-28 md:bottom-6 left-4 right-4 md:left-auto md:right-6 z-50 hidden netflix-glass px-4 py-3 rounded-xl border border-[#E50914]/50 shadow-2xl flex items-center gap-3 text-xs font-medium text-white">
+  <!-- Toast Notification (Positioned cleanly above mobile bottom bar & full-screen remote) -->
+  <div id="toast" class="fixed bottom-16 md:bottom-6 left-4 right-4 md:left-auto md:right-6 z-[65] hidden netflix-glass px-4 py-2.5 rounded-xl border border-[#E50914]/50 shadow-2xl flex items-center gap-3 text-xs font-medium text-white pointer-events-none">
     <span id="toastIcon" class="text-base shrink-0">✅</span>
     <span id="toastText" class="truncate">Action effectuée</span>
   </div>
@@ -938,19 +905,15 @@
 
     let remoteManuallyOpened = false;
     let remoteDismissedForSession = 0;
-    let lastAutoScrolledSession = 0;
 
-    function revealRemoteSpotlight(scrollToTop = true) {
+    function revealRemoteSpotlight() {
       remoteManuallyOpened = true;
       remoteDismissedForSession = 0;
       const remoteSec = document.getElementById('playbackRemoteSection');
       if (remoteSec) {
         remoteSec.classList.remove('hidden');
-        remoteSec.classList.add('remote-chassis-active');
       }
-      if (scrollToTop) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      document.body.classList.add('remote-lock');
     }
 
     function hideRemotePanel() {
@@ -962,6 +925,7 @@
         remoteDismissedForSession = -1;
       }
       document.getElementById('playbackRemoteSection')?.classList.add('hidden');
+      document.body.classList.remove('remote-lock');
       const pill = document.getElementById('pill-remote');
       if (pill) {
         pill.className = 'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-zinc-900 text-zinc-300 border border-white/15 hover:text-white flex items-center gap-1';
@@ -978,13 +942,19 @@
         }
       });
 
+      if (sec === 'remote') {
+        revealRemoteSpotlight();
+        return;
+      }
+
+      // Leaving the remote page: unlock screen & hide fixed remote overlay
+      hideRemotePanel();
+
       if (sec === 'home') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (sec === 'search') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => document.getElementById('searchInput')?.focus(), 200);
-      } else if (sec === 'remote') {
-        revealRemoteSpotlight(true);
       } else if (sec === 'downloads') {
         document.getElementById('downloadsSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -995,7 +965,7 @@
       if (remoteSec && !remoteSec.classList.contains('hidden')) {
         hideRemotePanel();
       } else {
-        revealRemoteSpotlight(true);
+        revealRemoteSpotlight();
       }
     }
 
@@ -1101,7 +1071,6 @@
       const mobileMini = document.getElementById('mobileMiniStatus');
       const mobileMiniStrip = document.getElementById('mobileMiniRemoteStrip');
       const remoteSec = document.getElementById('playbackRemoteSection');
-      const remoteBanner = document.getElementById('remoteNowPlayingBanner');
       const remoteMovieEl = document.getElementById('remoteNowPlayingMovie');
       const remoteLiveLabel = document.getElementById('remoteLiveStateLabel');
       const heroMiniCard = document.getElementById('heroMiniRemoteCard');
@@ -1114,23 +1083,16 @@
         if (remoteSec) {
           if (!wasDismissed || remoteManuallyOpened) {
             remoteSec.classList.remove('hidden');
-            remoteSec.classList.add('remote-chassis-active');
-            if (lastAutoScrolledSession !== sessionKey) {
-              lastAutoScrolledSession = sessionKey;
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            document.body.classList.add('remote-lock');
           }
         }
-        if (remoteBanner) {
-          remoteBanner.classList.remove('hidden');
-          if (remoteMovieEl) {
-            remoteMovieEl.textContent = pb.title || 'Lecture en cours sur Stremio';
-          }
-          if (remoteLiveLabel) {
-            remoteLiveLabel.textContent = pb.paused
-              ? '⏸ FILM EN PAUSE SUR LA TV SAMSUNG'
-              : '▶ FILM EN LECTURE SUR LA TV SAMSUNG';
-          }
+        if (remoteMovieEl) {
+          remoteMovieEl.textContent = pb.title || 'Lecture en cours sur Stremio';
+        }
+        if (remoteLiveLabel) {
+          remoteLiveLabel.textContent = pb.paused
+            ? '⏸ EN PAUSE SUR LA TV SAMSUNG'
+            : '▶ EN LECTURE SUR LA TV SAMSUNG';
         }
         if (mobileMiniStrip) {
           mobileMiniStrip.classList.remove('hidden');
@@ -1154,8 +1116,8 @@
         }
         if (nowPlayingEl) {
           nowPlayingEl.innerHTML = pb.title
-            ? `En cours sur la TV : <strong class="text-white">${pb.title}</strong> · Télécommande active en haut de l'écran.`
-            : `Stremio est en lecture sur la TV Samsung · Télécommande active en haut de l'écran.`;
+            ? `En cours sur la TV : <strong class="text-white">${pb.title}</strong> · Appuie sur Télécommande pour ouvrir le contrôle plein écran.`
+            : `Stremio est en lecture sur la TV Samsung.`;
         }
         if (mobileMini) {
           mobileMini.textContent = pb.title ? `📺 ${pb.title}` : '📺 En lecture sur la TV';
@@ -1168,14 +1130,17 @@
         if (remoteSec) {
           if (remoteManuallyOpened) {
             remoteSec.classList.remove('hidden');
-            remoteSec.classList.remove('remote-chassis-active');
+            document.body.classList.add('remote-lock');
           } else {
             remoteSec.classList.add('hidden');
-            remoteSec.classList.remove('remote-chassis-active');
+            document.body.classList.remove('remote-lock');
           }
         }
-        if (remoteBanner) {
-          remoteBanner.classList.add('hidden');
+        if (remoteMovieEl) {
+          remoteMovieEl.textContent = 'Prêt à contrôler Stremio';
+        }
+        if (remoteLiveLabel) {
+          remoteLiveLabel.textContent = 'TÉLÉCOMMANDE TV SAMSUNG';
         }
         if (mobileMiniStrip) {
           mobileMiniStrip.classList.add('hidden');
@@ -1197,7 +1162,7 @@
         }
         if (playPauseIcon && playPauseText) {
           playPauseIcon.textContent = '⏯️';
-          playPauseText.textContent = 'Pause / Play';
+          playPauseText.textContent = 'Pause';
         }
       }
 
@@ -1225,11 +1190,11 @@
       const muteTxt = document.getElementById('btnMuteText');
       if (muteBtn && muteIcon && muteTxt) {
         if (audio.muted) {
-          muteBtn.className = 'h-16 rounded-2xl bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 transition';
+          muteBtn.className = 'h-11 sm:h-12 rounded-xl bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 font-bold text-xs flex items-center justify-center gap-1.5 transition';
           muteIcon.textContent = '🔇';
           muteTxt.textContent = 'Coupé';
         } else {
-          muteBtn.className = 'h-16 rounded-2xl remote-btn-tactile text-zinc-200 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1';
+          muteBtn.className = 'h-11 sm:h-12 rounded-xl remote-btn-tactile text-zinc-200 font-bold text-xs flex items-center justify-center gap-1.5';
           muteIcon.textContent = '🔇';
           muteTxt.textContent = 'Muet';
         }
@@ -1240,8 +1205,8 @@
         const el = document.getElementById(id);
         if (!el) return;
         el.className = active
-          ? 'py-2.5 px-2 rounded-xl bg-[#E50914]/25 border border-[#E50914] text-[11px] font-bold text-white flex items-center justify-center gap-1 transition'
-          : 'py-2.5 px-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition';
+          ? 'py-2 px-1.5 rounded-xl bg-[#E50914]/25 border border-[#E50914] text-[11px] font-bold text-white flex items-center justify-center gap-1 transition'
+          : 'py-2 px-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-[11px] font-semibold text-zinc-300 flex items-center justify-center gap-1 transition';
       };
       setBtnActive('btnAudioTv', devLow.includes('samsung') || devLow.includes('mac') || devLow.includes('hdmi'));
       setBtnActive('btnAudioHomepod', devLow.includes('homepod') || devLow.includes('salon'));
@@ -1254,12 +1219,13 @@
 
     function openCatalogMenuFromRemote() {
       const pb = appState.playback || {};
+      hideRemotePanel();
       if (pb.imdbId && pb.title) {
         const poster = `https://images.metahub.space/poster/medium/${pb.imdbId}/img`;
         openStreamSelector(pb.imdbId, pb.title, poster, pb.type || 'movie');
       } else {
         document.getElementById('catalogSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        showToast('Menu Catalogue ouvert', '🎬');
+        showToast('Catalogue ouvert', '🎬');
       }
     }
 
