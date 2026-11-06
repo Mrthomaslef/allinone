@@ -8,7 +8,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
   },
   {
     "id": "film-et-serie",
@@ -19,7 +19,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
   },
   {
     "id": "patrimoine-os",
@@ -30,7 +30,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
   },
   {
     "id": "gemini-ultra",
@@ -41,7 +41,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
   },
   {
     "id": "second-brain-voice",
@@ -52,7 +52,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
   },
   {
     "id": "stats-youtube",
@@ -63,7 +63,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -74,18 +74,40 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
   },
   {
     "id": "infiltration-sous-echo",
     "title": "Infiltrations sous Échographie — Guide SIMS",
-    "subtitle": "35 gestes écho-guidés (Épaule, Poignet, Hanche, Genou, Cheville, Nerfs & PRP) · 185 Planches & Vidéos SIMS",
+    "subtitle": "37 gestes écho-guidés · 295 Planches · Intégrale des 33 Gel Contact & Vidéos SIMS",
     "category": "medical-imaging",
     "emoji": "💉",
     "logoUrl": "assets/infiltration-sous-echo-icon.svg?v=1",
-    "prodUrl": "https://mrthomaslef.github.io/infiltration-sous-echo/",
+    "prodUrl": "https://mrthomaslef.github.io/infiltration-sous-echo/?v=2",
     "githubUrl": "https://github.com/Mrthomaslef/infiltration-sous-echo",
-    "pushedAt": "2026-11-06T09:13:53Z"
+    "pushedAt": "2026-11-06T11:47:22Z"
+  },
+  {
+    "id": "guide-interne-cochin-os",
+    "title": "COCHIN·OS — Guide Internes",
+    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
+    "category": "medical-imaging",
+    "emoji": "🦴",
+    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
+    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
+    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
+    "pushedAt": "2026-11-06T11:23:40Z"
+  },
+  {
+    "id": "agenda-cochin",
+    "title": "Cochin RI — Agenda",
+    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
+    "category": "medical-imaging",
+    "emoji": "📅",
+    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
+    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
+    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
+    "pushedAt": "2026-11-06T11:06:18Z"
   },
   {
     "id": "mapp-store",
@@ -119,17 +141,6 @@
     "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
     "pushedAt": "2026-11-06T07:48:28Z"
-  },
-  {
-    "id": "agenda-cochin",
-    "title": "Cochin RI — Agenda",
-    "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
-    "category": "medical-imaging",
-    "emoji": "📅",
-    "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
-    "prodUrl": "https://mrthomaslef.github.io/agenda-cochin/",
-    "githubUrl": "https://github.com/Mrthomaslef/agenda-cochin",
-    "pushedAt": "2026-11-06T07:47:23Z"
   },
   {
     "id": "ayn-thor",
@@ -317,17 +328,6 @@
     "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
     "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
     "pushedAt": "2026-11-06T06:30:42Z"
-  },
-  {
-    "id": "guide-interne-cochin-os",
-    "title": "COCHIN·OS — Guide Internes",
-    "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
-    "category": "medical-imaging",
-    "emoji": "🦴",
-    "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
-    "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/",
-    "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os",
-    "pushedAt": "2026-11-06T06:30:39Z"
   },
   {
     "id": "agenda-internes",

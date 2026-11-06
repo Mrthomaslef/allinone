@@ -15,10 +15,10 @@ GITHUB_USERNAME = "Mrthomaslef"
 KNOWN_METADATA = {
     "infiltration-sous-echo": {
         "title": "Infiltrations sous Échographie — Guide SIMS",
-        "subtitle": "35 gestes écho-guidés (Épaule, Poignet, Hanche, Genou, Cheville, Nerfs & PRP) · 185 Planches & Vidéos SIMS",
+        "subtitle": "37 gestes écho-guidés · 295 Planches · Intégrale des 33 Gel Contact & Vidéos SIMS",
         "category": "medical-imaging",
         "emoji": "💉",
-        "prodUrl": "https://mrthomaslef.github.io/infiltration-sous-echo/",
+        "prodUrl": "https://mrthomaslef.github.io/infiltration-sous-echo/?v=2",
         "logoUrl": "assets/infiltration-sous-echo-icon.svg?v=1",
     },
     "assurance": {
