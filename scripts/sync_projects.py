@@ -19,7 +19,7 @@ KNOWN_METADATA = {
         "category": "daily-tools",
         "emoji": "📄",
         "prodUrl": "https://mrthomaslef.github.io/pdf-master/",
-        "logoUrl": "https://mrthomaslef.github.io/pdf-master/assets/icon.svg",
+        "logoUrl": "assets/pdf-master-icon.svg?v=1",
     },
     "anatomie-quiz": {
         "title": "IMAIOS Anatomy Quiz — Membre Supérieur",
