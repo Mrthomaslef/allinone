@@ -34,7 +34,7 @@ KNOWN_METADATA = {
         "subtitle": "37 gestes écho-guidés · 295 Planches · Intégrale des 33 Gel Contact & Vidéos SIMS",
         "category": "medical-imaging",
         "emoji": "💉",
-        "prodUrl": "https://mrthomaslef.github.io/infiltration-sous-echo/?v=6",
+        "prodUrl": "https://mrthomaslef.github.io/infiltration-sous-echo/?v=7",
         "logoUrl": "assets/infiltration-sous-echo-icon.svg?v=1",
     },
     "assurance": {
