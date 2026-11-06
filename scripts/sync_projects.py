@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "infiltration-sous-echo": {
+        "title": "Infiltrations sous Échographie — Guide SIMS",
+        "subtitle": "35 gestes écho-guidés (Épaule, Poignet, Hanche, Genou, Cheville, Nerfs & PRP) · 185 Planches & Vidéos SIMS",
+        "category": "medical-imaging",
+        "emoji": "💉",
+        "prodUrl": "https://mrthomaslef.github.io/infiltration-sous-echo/",
+        "logoUrl": "assets/infiltration-sous-echo-icon.svg?v=1",
+    },
     "assurance": {
         "title": "AssurImpôts & Contrats — Famille Lefèvre-Parizot",
         "subtitle": "Synthèse Assurances (Habitation, Auto CL-330-JQ, RCP MACSF, Mutuelle ACTIL, Fiido), Impôts/URSSAF & 317 Documents accessibles",
