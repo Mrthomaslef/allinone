@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "uncensored": {
+        "title": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI",
+        "subtitle": "Client API Venice AI & OpenRouter pour grands modèles Abliterated 306B+ (DeepSeek V4.1 Flash 1017, Qwen 3.8, GLM 5.3, Dolphin) · Studio Red-Team & Comparateur",
+        "category": "daily-tools",
+        "emoji": "🔓",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
+        "logoUrl": "uncensored/assets/icon.svg?v=1",
+    },
     "carte-et-abonnement": {
         "title": "Pass Zoo de Vincennes & MNHN — Billets & Abonnements",
         "subtitle": "Portefeuille mobile hors-ligne des 2 Pass Annuels SOLO (Parc Zoologique de Paris, Jardin des Plantes, Grande Galerie, Musée de l'Homme) · QR Codes & PDF",
@@ -577,6 +585,22 @@ def main():
                 "logoUrl": "anatomie-quiz/assets/icon.svg",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/anatomie-quiz/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/anatomie-quiz",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "uncensored" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "uncensored",
+                "title": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI",
+                "subtitle": "Client API Venice AI & OpenRouter pour grands modèles Abliterated 306B+ (DeepSeek V4.1 Flash 1017, Qwen 3.8, GLM 5.3, Dolphin) · Studio Red-Team & Comparateur",
+                "category": "daily-tools",
+                "emoji": "🔓",
+                "logoUrl": "uncensored/assets/icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/uncensored",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )

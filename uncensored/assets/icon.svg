@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0A0A0F"/>
+      <stop offset="55%" stop-color="#140C1C"/>
+      <stop offset="100%" stop-color="#220917"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="16" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF2A6D"/>
+      <stop offset="50%" stop-color="#FF5E36"/>
+      <stop offset="100%" stop-color="#05D5FA"/>
+    </linearGradient>
+    <linearGradient id="shackle" x1="40" y1="14" x2="92" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#05D5FA"/>
+      <stop offset="100%" stop-color="#FF2A6D"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <rect x="3" y="3" width="122" height="122" rx="25" stroke="url(#neon)" stroke-opacity="0.45" stroke-width="2"/>
+  <!-- Neural Grid Lines -->
+  <path d="M22 64H42M86 64H106M64 96V110" stroke="#05D5FA" stroke-opacity="0.35" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Unlocked / Shattered Shackle (Abliterated Refusal Vector) -->
+  <path d="M46 54V36C46 25.5066 54.5066 17 65 17C73.8 17 81.2 23 83.4 31.2" stroke="url(#shackle)" stroke-width="7" stroke-linecap="round"/>
+  <!-- Laser Vector Cut Slash -->
+  <path d="M26 98L102 26" stroke="#05D5FA" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="6 4"/>
+  <!-- Core Lock Body with Neural Core -->
+  <rect x="34" y="52" width="60" height="48" rx="14" fill="#151022" stroke="url(#neon)" stroke-width="4"/>
+  <circle cx="64" cy="72" r="7" fill="#FF2A6D"/>
+  <path d="M64 79V89" stroke="#FF2A6D" stroke-width="5" stroke-linecap="round"/>
+  <!-- Sparks of Abliteration -->
+  <circle cx="92" cy="24" r="3.5" fill="#05D5FA"/>
+  <circle cx="101" cy="36" r="2.5" fill="#FF2A6D"/>
+  <circle cx="82" cy="16" r="2" fill="#FF5E36"/>
+</svg>

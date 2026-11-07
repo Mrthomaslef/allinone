@@ -1,0 +1,17 @@
+{
+  "name": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI Client",
+  "short_name": "Uncensored AI",
+  "description": "Client API Venice AI & OpenRouter pour grands modèles Abliterated / Uncensored (DeepSeek V4.1 Flash 1017, Qwen 3.8, GLM 5.3, Dolphin) + Console Red-Team & Comparateur.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#09090e",
+  "theme_color": "#ff2a6d",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
