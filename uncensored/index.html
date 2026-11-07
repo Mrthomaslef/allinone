@@ -1065,12 +1065,26 @@
       let ttft = null;
       let totalChars = 0;
 
-      const response = await fetch(`${baseUrl}/chat/completions`, {
+      let response = await fetch(`${baseUrl}/chat/completions`, {
         method: 'POST',
         headers,
         body: JSON.stringify(payload),
         signal
       });
+
+      // Automatic fallback if an upstream :free provider is temporarily rate-limited (HTTP 429)
+      if (response.status === 429 && provider === 'openrouter') {
+        const fallbackModel = model === 'nvidia/nemotron-3-ultra-550b-a55b:free'
+          ? 'openrouter/free'
+          : 'nvidia/nemotron-3-ultra-550b-a55b:free';
+        payload.model = fallbackModel;
+        response = await fetch(`${baseUrl}/chat/completions`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload),
+          signal
+        });
+      }
 
       if (!response.ok) {
         const errText = await response.text();
