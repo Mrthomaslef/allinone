@@ -69,6 +69,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=11",
         "logoUrl": "assets/ayn-thor-icon.svg?v=3",
     },
+    "torrent": {
+        "title": "1337·Mac — Station Torrent & TorBox (Mac mini)",
+        "subtitle": "Recherche 1337x, RARBG, TPB & Nyaa · Vérification Cache Instantané TorBox & téléchargement direct sur le Mac Mini (SSD / Movies / P2P)",
+        "category": "daily-tools",
+        "emoji": "🧲",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
+        "logoUrl": "torrent/assets/icon.svg?v=1",
+    },
     "film-et-serie": {
         "title": "CinePreload — Stremio + TorBox (Mac mini)",
         "subtitle": "Préchargement local 4K/VF depuis ta bibliothèque Stremio via TorBox CDN (StreamFusion & Lumio)",
@@ -505,6 +513,22 @@ def main():
                 "logoUrl": "patrimoine-os/icon.svg",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/patrimoine-os",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "torrent" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "torrent",
+                "title": "1337·Mac — Station Torrent & TorBox (Mac mini)",
+                "subtitle": "Recherche 1337x, RARBG, TPB & Nyaa · Vérification Cache Instantané TorBox & téléchargement direct sur le Mac Mini (SSD / Movies / P2P)",
+                "category": "daily-tools",
+                "emoji": "🧲",
+                "logoUrl": "torrent/assets/icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/torrent",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )

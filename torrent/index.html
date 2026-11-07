@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>1337·Mac — Station Torrent & TorBox Mac Mini</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0b0f17" />
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bg0: '#080b11',
+            bg1: '#0f141f',
+            bg2: '#161e2e',
+            accent: '#ff5a1f',
+            torbox: '#10b981',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #080b11;
+      color: #f1f5f9;
+      -webkit-font-smoothing: antialiased;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .glass {
+      background: rgba(15, 20, 31, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .card-hover {
+      transition: all 0.18s ease;
+    }
+    .card-hover:hover {
+      border-color: rgba(255, 90, 31, 0.4);
+      transform: translateY(-1px);
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #080b11; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-orange-500/30 selection:text-orange-200">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg shadow-orange-500/25 font-extrabold text-white tracking-tighter text-base">
+          1337
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-lg tracking-tight text-white">1337<span class="text-orange-500">·Mac</span></h1>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-400 border border-orange-500/30">
+              Mac Mini M4
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Recherche 1337x Multi-Indexers · Cache Instantané TorBox & P2P</p>
+        </div>
+      </div>
+
+      <!-- Live Status Pills -->
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <div id="connBadge" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-white/10 text-slate-300">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>Connexion Mac Mini...</span>
+        </div>
+        <div id="torboxBadge" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
+          <span>⚡</span>
+          <span>TorBox Premium</span>
+        </div>
+        <a href="https://mrthomaslef.github.io/allinone/" class="px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition flex items-center gap-1">
+          <span>🛍️</span>
+          <span class="hidden md:inline">Tapp Store</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- DESTINATION DISK BAR + TABS -->
+    <div class="max-w-7xl mx-auto px-4 pb-2.5 flex flex-wrap items-center justify-between gap-3 border-t border-white/5 pt-2">
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-white/10 overflow-x-auto">
+        <button onclick="switchTab('search')" id="tabBtn-search" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-orange-500 text-white shadow">
+          <span>🔥</span>
+          <span>1337x & Recherche</span>
+        </button>
+        <button onclick="switchTab('downloads')" id="tabBtn-downloads" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-400 hover:text-white">
+          <span>📥</span>
+          <span>Téléchargements Mac</span>
+          <span id="activeJobsCount" class="hidden px-1.5 py-0.2 rounded-full text-[10px] bg-orange-500/20 text-orange-300 border border-orange-500/40 mono">0</span>
+        </button>
+        <button onclick="switchTab('cloud')" id="tabBtn-cloud" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-400 hover:text-white">
+          <span>☁️</span>
+          <span>Mon Cloud TorBox</span>
+        </button>
+        <button onclick="switchTab('magnet')" id="tabBtn-magnet" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-400 hover:text-white">
+          <span>🧲</span>
+          <span>Magnet Direct</span>
+        </button>
+      </nav>
+
+      <!-- Global Destination Folder Selector -->
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-slate-400 hidden lg:inline">Disque cible :</span>
+        <select id="globalDestSelect" onchange="onGlobalDestChange()" class="bg-slate-900 text-slate-200 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs font-medium focus:outline-none focus:border-orange-500">
+          <option value="ssd_torrents">⚡ SSD Externe (GamingSSD/Torrents)</option>
+          <option value="movies">🎬 Films & Séries (Movies/Stremio-Preload)</option>
+          <option value="games">🎮 Jeux & ROMs (GamingSSD/Games/Torrents)</option>
+          <option value="mac_downloads">💻 Mac Mini Interne (Downloads/Torrents)</option>
+        </select>
+        <button onclick="openCurrentFolderInFinder()" title="Ouvrir ce dossier dans le Finder sur le Mac Mini" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-white/10 text-slate-200 transition flex items-center gap-1">
+          <span>📂</span>
+          <span class="hidden sm:inline">Finder</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 space-y-6">
+
+    <!-- ACTIVE DOWNLOADS MINI BANNER (always visible when downloading) -->
+    <div id="miniQueueBanner" class="hidden glass rounded-2xl p-3.5 border border-emerald-500/30 bg-emerald-950/15">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2 text-xs font-semibold text-emerald-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span id="miniQueueTitle">Téléchargement actif sur le Mac Mini</span>
+        </div>
+        <button onclick="switchTab('downloads')" class="text-xs text-emerald-400 hover:underline font-medium">
+          Voir les détails →
+        </button>
+      </div>
+      <div id="miniQueueList" class="space-y-2"></div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- TAB 1 : 1337x & MULTI-INDEXER SEARCH                       -->
+    <!-- ========================================================== -->
+    <section id="tab-search" class="space-y-4">
+      <!-- Search Box Card -->
+      <div class="glass rounded-2xl p-4 sm:p-5 space-y-4">
+        <form onsubmit="submitSearch(event)" class="flex flex-col sm:flex-row gap-2.5">
+          <div class="relative flex-1">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Rechercher sur 1337x, RARBG, TPB, Nyaa (ex: Dune 2160p, FitGirl, Zelda NSP, macOS...)"
+              class="w-full pl-10 pr-24 py-3 rounded-xl bg-slate-950/90 border border-white/15 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition"
+            />
+            <button
+              type="button"
+              onclick="clearSearch()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-white px-2 py-1"
+            >
+              Effacer
+            </button>
+          </div>
+          <button
+            type="submit"
+            id="searchBtn"
+            class="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 text-white font-bold text-sm shadow-lg shadow-orange-500/20 transition flex items-center justify-center gap-2"
+          >
+            <span>Rechercher</span>
+          </button>
+        </form>
+
+        <!-- Quick Presets & Category Filters -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <!-- Categories -->
+          <div class="flex flex-wrap items-center gap-1.5" id="categoryButtons">
+            <button onclick="setCategory('all')" data-cat="all" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-orange-500/20 text-orange-300 border border-orange-500/40">
+              🔥 Tous
+            </button>
+            <button onclick="setCategory('movies')" data-cat="movies" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-white/10">
+              🎬 Films
+            </button>
+            <button onclick="setCategory('tv')" data-cat="tv" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-white/10">
+              📺 Séries
+            </button>
+            <button onclick="setCategory('games')" data-cat="games" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-white/10">
+              🎮 Jeux PC / Switch
+            </button>
+            <button onclick="setCategory('mac')" data-cat="mac" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-white/10">
+              🍎 Apps macOS
+            </button>
+            <button onclick="setCategory('anime')" data-cat="anime" class="cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-white/10">
+              ⛩️ Anime
+            </button>
+          </div>
+
+          <!-- Source & Cache Filter -->
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="sourceSelect" onchange="runSearch()" class="bg-slate-900 text-slate-300 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs">
+              <option value="all">🌐 1337x + Tous Indexeurs</option>
+              <option value="1337x">🟠 1337x Exclusivement</option>
+              <option value="rarbg">🟣 TheRARBG</option>
+              <option value="apibay">🏴‍☠️ ThePirateBay</option>
+              <option value="nyaa">🐱 Nyaa.si</option>
+            </select>
+
+            <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs cursor-pointer select-none">
+              <input type="checkbox" id="onlyCachedCheckbox" onchange="renderSearchResults()" class="accent-emerald-500 rounded" />
+              <span>⚡ Cache Instantané uniquement</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 1-Click Quick Searches (1337x Specialties) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+          <span class="text-slate-500 shrink-0">Raccourcis 1337x :</span>
+          <button onclick="quickQuery('', 'all', '1337x')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🏆 Top 100 1337x
+          </button>
+          <button onclick="quickQuery('FitGirl', 'games', 'all')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🥄 FitGirl Repacks
+          </button>
+          <button onclick="quickQuery('DODI', 'games', 'all')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🎮 DODI Repacks
+          </button>
+          <button onclick="quickQuery('2160p MULTI', 'movies', 'all')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🍿 Films 4K MULTI
+          </button>
+          <button onclick="quickQuery('Switch NSP', 'games', 'all')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🕹️ Switch NSP/XCI
+          </button>
+          <button onclick="quickQuery('macOS ARM64', 'mac', 'all')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🍏 macOS Apple Silicon
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Results Stats Bar -->
+      <div id="searchStatsBar" class="flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-slate-400">
+        <div id="searchSummaryText">Chargement des tendances 1337x...</div>
+        <div class="flex items-center gap-2">
+          <span>Trier par :</span>
+          <select id="sortSelect" onchange="renderSearchResults()" class="bg-slate-900 text-slate-300 border border-white/10 rounded-lg px-2 py-1 text-xs">
+            <option value="seeders">🌱 Plus de Seeders</option>
+            <option value="cached_first">⚡ Cache TorBox d'abord + Seeders</option>
+            <option value="size_desc">📦 Taille (Décroissant)</option>
+            <option value="size_asc">🪶 Taille (Croissant)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Search Results List -->
+      <div id="searchResultsContainer" class="space-y-2.5"></div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- TAB 2 : MAC MINI DOWNLOADS QUEUE                           -->
+    <!-- ========================================================== -->
+    <section id="tab-downloads" class="hidden space-y-4">
+      <!-- Storage Cards -->
+      <div id="storageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+
+      <!-- Jobs List -->
+      <div class="glass rounded-2xl p-4 sm:p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="font-bold text-base text-white flex items-center gap-2">
+            <span>📥</span>
+            <span>File de téléchargement sur le Mac Mini</span>
+          </h2>
+          <button onclick="fetchStatus()" class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300">
+            🔄 Actualiser
+          </button>
+        </div>
+        <div id="jobsListContainer" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- TAB 3 : MON CLOUD TORBOX                                   -->
+    <!-- ========================================================== -->
+    <section id="tab-cloud" class="hidden space-y-4">
+      <div class="glass rounded-2xl p-4 sm:p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="font-bold text-base text-white flex items-center gap-2">
+              <span>☁️</span>
+              <span>Bibliothèque Cloud TorBox (Seedbox Débridée)</span>
+            </h2>
+            <p class="text-xs text-slate-400">
+              Tous les torrents déjà présents sur votre compte TorBox Premium — cliquez sur « Télécharger sur Mac Mini » pour les rapatrier à pleine vitesse.
+            </p>
+          </div>
+          <button onclick="loadTorboxCloud()" class="px-3.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold">
+            🔄 Rafraîchir le Cloud
+          </button>
+        </div>
+        <div id="torboxCloudContainer" class="space-y-2.5"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- TAB 4 : MAGNET / HASH DIRECT                               -->
+    <!-- ========================================================== -->
+    <section id="tab-magnet" class="hidden space-y-4">
+      <div class="glass rounded-2xl p-5 max-w-2xl mx-auto space-y-4">
+        <h2 class="font-bold text-base text-white flex items-center gap-2">
+          <span>🧲</span>
+          <span>Lancer un lien Magnet ou InfoHash sur le Mac Mini</span>
+        </h2>
+        <p class="text-xs text-slate-400">
+          Collez n'importe quel lien <code class="text-orange-400">magnet:?xt=urn:btih:...</code> ou hash 40 caractères provenant de 1337x, YGG, FitGirl ou autre.
+        </p>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Nom du téléchargement (optionnel)</label>
+            <input id="manualTitle" type="text" placeholder="Ex: Cyberpunk 2077 FitGirl Repack" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-sm text-white focus:outline-none focus:border-orange-500" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Lien Magnet ou InfoHash *</label>
+            <textarea id="manualMagnet" rows="3" placeholder="magnet:?xt=urn:btih:..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-xs mono text-white focus:outline-none focus:border-orange-500"></textarea>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Dossier de destination sur le Mac Mini</label>
+              <select id="manualDest" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-xs text-white">
+                <option value="ssd_torrents">⚡ SSD Externe (GamingSSD/Torrents)</option>
+                <option value="movies">🎬 Films & Séries (Movies/Stremio-Preload)</option>
+                <option value="games">🎮 Jeux & ROMs (GamingSSD/Games/Torrents)</option>
+                <option value="mac_downloads">💻 Mac Mini Interne (Downloads/Torrents)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Moteur de téléchargement</label>
+              <select id="manualEngine" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-xs text-white">
+                <option value="torbox">⚡ TorBox Cloud -> Mac Mini (Sans P2P / Ultra-Rapide)</option>
+                <option value="transmission">🌐 Transmission.app P2P Direct sur Mac Mini</option>
+                <option value="torbox_cloud_only">☁️ Envoyer dans mon Cloud TorBox uniquement</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="submitManualMagnet()" class="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 text-white font-bold text-sm shadow-lg shadow-orange-500/20 transition">
+            🚀 Lancer le téléchargement sur le Mac Mini
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden px-4 py-3 rounded-xl glass border border-orange-500/40 shadow-2xl text-xs font-medium text-white max-w-sm"></div>
+
+  <script>
+    let API_BASE = "";
+    let currentTab = "search";
+    let currentCategory = "all";
+    let lastSearchResults = [];
+    let liveStatus = { destinations: [], jobs: [] };
+
+    function showToast(msg, isError = false) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.className = `fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl glass shadow-2xl text-xs font-semibold max-w-sm transition ${
+        isError ? "border-red-500/50 text-red-200 bg-red-950/80" : "border-emerald-500/50 text-emerald-200 bg-slate-900/95"
+      }`;
+      el.classList.remove("hidden");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => el.classList.add("hidden"), 4200);
+    }
+
+    async function resolveBackendEndpoint() {
+      // 1. If opened directly on the Mac Mini daemon port (localhost or LAN), use relative URLs
+      if (location.port === "8799" || location.hostname === "127.0.0.1" || location.hostname === "localhost") {
+        try {
+          const r = await fetch("/api/status", { signal: AbortSignal.timeout(2500) });
+          if (r.ok) {
+            API_BASE = "";
+            updateConnBadge("🟢 Mac Mini M4 · Local Direct", true);
+            return;
+          }
+        } catch (e) {}
+      }
+
+      // 2. Try local loopback 127.0.0.1:8799
+      try {
+        const r = await fetch("http://127.0.0.1:8799/api/status", { signal: AbortSignal.timeout(2000) });
+        if (r.ok) {
+          API_BASE = "http://127.0.0.1:8799";
+          updateConnBadge("🟢 Mac Mini M4 · Localhost", true);
+          return;
+        }
+      } catch (e) {}
+
+      // 3. Read endpoint.json (for GitHub Pages / iPhone 4G/5G via Cloudflare Tunnel)
+      try {
+        const epResp = await fetch(`endpoint.json?t=${Date.now()}`, { cache: "no-store" });
+        if (epResp.ok) {
+          const ep = await epResp.json();
+          if (ep.tunnelUrl) {
+            const tr = await fetch(`${ep.tunnelUrl}/api/status`, { signal: AbortSignal.timeout(4000) });
+            if (tr.ok) {
+              API_BASE = ep.tunnelUrl;
+              updateConnBadge("🟣 Mac Mini M4 · Tunnel HTTPS", true);
+              return;
+            }
+          }
+          if (ep.lanUrl) {
+            const lr = await fetch(`${ep.lanUrl}/api/status`, { signal: AbortSignal.timeout(2500) });
+            if (lr.ok) {
+              API_BASE = ep.lanUrl;
+              updateConnBadge("🟢 Mac Mini M4 · Wi-Fi LAN", true);
+              return;
+            }
+          }
+        }
+      } catch (e) {}
+
+      updateConnBadge("🔴 Mac Mini hors-ligne", false);
+    }
+
+    function updateConnBadge(text, ok) {
+      const badge = document.getElementById("connBadge");
+      badge.innerHTML = `
+        <span class="w-2 h-2 rounded-full ${ok ? 'bg-emerald-400' : 'bg-red-500'}"></span>
+        <span>${text}</span>
+      `;
+    }
+
+    function formatSpeed(bps) {
+      if (!bps || bps <= 0) return "";
+      const mb = bps / (1024 * 1024);
+      if (mb >= 1) return `${mb.toFixed(1)} Mo/s`;
+      return `${(bps / 1024).toFixed(0)} Ko/s`;
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes <= 0) return "0 Mo";
+      const gb = bytes / (1024 ** 3);
+      if (gb >= 1) return `${gb.toFixed(2)} Go`;
+      const mb = bytes / (1024 ** 2);
+      return `${mb.toFixed(0)} Mo`;
+    }
+
+    function formatEta(sec) {
+      if (!sec || sec <= 0) return "";
+      if (sec < 60) return `${sec}s`;
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      if (m < 60) return `${m}m ${s}s`;
+      const h = Math.floor(m / 60);
+      return `${h}h ${m % 60}m`;
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      ["search", "downloads", "cloud", "magnet"].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.toggle("hidden", t !== tab);
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (t === tab) {
+          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-orange-500 text-white shadow";
+        } else {
+          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 text-slate-400 hover:text-white";
+        }
+      });
+      if (tab === "cloud") loadTorboxCloud();
+      if (tab === "downloads") fetchStatus();
+    }
+
+    function onGlobalDestChange() {
+      const val = document.getElementById("globalDestSelect").value;
+      document.getElementById("manualDest").value = val;
+    }
+
+    async function openCurrentFolderInFinder(destIdOverride) {
+      const destId = destIdOverride || document.getElementById("globalDestSelect").value;
+      try {
+        const r = await fetch(`${API_BASE}/api/open-folder`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ destId }),
+        });
+        const d = await r.json();
+        if (d.ok) showToast(`📂 Dossier ouvert sur le Mac Mini : ${d.path}`);
+      } catch (e) {
+        showToast("Impossible d'ouvrir le Finder à distance", true);
+      }
+    }
+
+    async function fetchStatus() {
+      try {
+        const r = await fetch(`${API_BASE}/api/status`);
+        if (!r.ok) return;
+        const d = await r.json();
+        liveStatus = d;
+
+        // Populate destinations dropdown with free space
+        const sel = document.getElementById("globalDestSelect");
+        const curVal = sel.value;
+        if (d.destinations && d.destinations.length) {
+          sel.innerHTML = d.destinations.map(dest =>
+            `<option value="${dest.id}">${dest.icon} ${dest.label} (${dest.freeGb} Go libres)</option>`
+          ).join("");
+          if (curVal) sel.value = curVal;
+        }
+
+        renderStorageCards(d.destinations || []);
+        renderJobs(d.jobs || []);
+      } catch (e) {}
+    }
+
+    function renderStorageCards(destinations) {
+      const grid = document.getElementById("storageGrid");
+      if (!grid) return;
+      grid.innerHTML = destinations.map(d => {
+        const usedPct = d.totalGb > 0 ? Math.min(100, Math.round(((d.totalGb - d.freeGb) / d.totalGb) * 100)) : 20;
+        return `
+          <div class="glass rounded-xl p-3.5 border border-white/10 flex flex-col justify-between gap-2">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>${d.icon}</span>
+                  <span>${d.label.split('(')[0]}</span>
+                </div>
+                <div class="text-[11px] text-slate-400 mono truncate max-w-[210px]" title="${d.path}">${d.path}</div>
+              </div>
+              <button onclick="openCurrentFolderInFinder('${d.id}')" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-[11px] text-slate-300">
+                📂 Finder
+              </button>
+            </div>
+            <div>
+              <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                <span>Libre : <strong class="text-emerald-400">${d.freeGb} Go</strong></span>
+                <span>Total : ${d.totalGb} Go</span>
+              </div>
+              <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-400" style="width: ${usedPct}%"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderJobs(jobs) {
+      const activeJobs = jobs.filter(j => ["starting", "resolving", "caching_cloud", "downloading", "paused"].includes(j.status));
+      const countEl = document.getElementById("activeJobsCount");
+      if (activeJobs.length > 0) {
+        countEl.textContent = activeJobs.length;
+        countEl.classList.remove("hidden");
+      } else {
+        countEl.classList.add("hidden");
+      }
+
+      // Mini banner on top of Search tab when downloading
+      const banner = document.getElementById("miniQueueBanner");
+      const miniList = document.getElementById("miniQueueList");
+      if (activeJobs.length > 0 && currentTab !== "downloads") {
+        banner.classList.remove("hidden");
+        miniList.innerHTML = activeJobs.slice(0, 3).map(j => {
+          const sp = formatSpeed(j.speedBps);
+          const eta = formatEta(j.etaSeconds);
+          return `
+            <div class="bg-slate-900/90 rounded-xl p-2.5 border border-white/10 flex flex-col gap-1.5">
+              <div class="flex items-center justify-between text-xs gap-2">
+                <span class="font-semibold text-white truncate">${escapeHtml(j.title)}</span>
+                <span class="mono text-emerald-400 shrink-0">${j.progress || 0}% ${sp ? '· ' + sp : ''} ${eta ? '· ' + eta : ''}</span>
+              </div>
+              <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-orange-500 to-emerald-400 transition-all duration-300" style="width: ${Math.max(2, j.progress || 0)}%"></div>
+              </div>
+              <div class="text-[11px] text-slate-400 flex justify-between">
+                <span>${escapeHtml(j.statusText || '')}</span>
+                <span class="mono">${formatBytes(j.downloadedBytes)} / ${formatBytes(j.totalBytes)}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+      } else {
+        banner.classList.add("hidden");
+      }
+
+      const container = document.getElementById("jobsListContainer");
+      if (!container) return;
+      if (!jobs.length) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-slate-500 text-sm">
+            Aucun téléchargement dans l'historique. Lancez un torrent depuis l'onglet <strong>1337x & Recherche</strong> !
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = jobs.map(j => {
+        const isDone = j.status === "completed" || j.status === "completed_cloud" || j.status === "transmission_active";
+        const isErr = j.status === "error" || j.status === "cancelled";
+        const isPaused = j.status === "paused";
+        const isRunning = ["starting", "resolving", "caching_cloud", "downloading"].includes(j.status);
+        const sp = formatSpeed(j.speedBps);
+        const eta = formatEta(j.etaSeconds);
+
+        let badgeClass = "bg-blue-500/15 text-blue-300 border-blue-500/30";
+        if (isDone) badgeClass = "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
+        if (isErr) badgeClass = "bg-red-500/15 text-red-300 border-red-500/30";
+        if (isPaused) badgeClass = "bg-amber-500/15 text-amber-300 border-amber-500/30";
+
+        return `
+          <div class="bg-slate-900/80 rounded-xl p-4 border border-white/10 space-y-2.5">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div class="space-y-1 min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold border ${badgeClass}">
+                    ${escapeHtml(j.statusText || j.status)}
+                  </span>
+                  <span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-slate-400 mono">
+                    ${j.engine === 'transmission' ? '🌐 Transmission P2P' : '⚡ TorBox CDN -> Mac Mini'}
+                  </span>
+                </div>
+                <h3 class="font-bold text-sm text-white break-all">${escapeHtml(j.title)}</h3>
+                <div class="text-[11px] text-slate-400 mono truncate" title="${escapeHtml(j.targetPath || '')}">
+                  📁 ${escapeHtml(j.targetPath || j.destPath || '')}
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+                ${isRunning ? `
+                  <button onclick="jobAction('${j.id}', 'pause')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-medium">
+                    ⏸ Pause
+                  </button>
+                ` : ''}
+                ${(isPaused || j.status === 'error' || j.status === 'interrupted') ? `
+                  <button onclick="jobAction('${j.id}', 'resume')" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-medium">
+                    ▶️ Reprendre
+                  </button>
+                ` : ''}
+                ${isDone ? `
+                  <button onclick="jobAction('${j.id}', 'open_file')" class="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold">
+                    ▶️ Ouvrir sur Mac
+                  </button>
+                ` : ''}
+                <button onclick="jobAction('${j.id}', 'reveal')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-xs">
+                  📂 Finder
+                </button>
+                <button onclick="jobAction('${j.id}', 'delete', false)" title="Retirer de la liste" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-red-500/20 text-slate-400 hover:text-red-300 text-xs">
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="space-y-1">
+              <div class="w-full h-2 rounded-full bg-slate-950 overflow-hidden border border-white/5">
+                <div class="h-full ${isDone ? 'bg-emerald-500' : isErr ? 'bg-red-500' : 'bg-gradient-to-r from-orange-500 to-emerald-400'} transition-all duration-300" style="width: ${Math.max(2, j.progress || 0)}%"></div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-400 mono">
+                <span>${formatBytes(j.downloadedBytes)} / ${formatBytes(j.totalBytes)} (${j.progress || 0}%)</span>
+                <span>${sp ? sp : ''} ${eta ? '· ETA ' + eta : ''}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function jobAction(id, action, deleteFiles = false) {
+      try {
+        await fetch(`${API_BASE}/api/job/action`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, action, deleteFiles }),
+        });
+        fetchStatus();
+      } catch (e) {
+        showToast("Erreur lors de l'action", true);
+      }
+    }
+
+    // ==========================================================
+    // SEARCH FUNCTIONS
+    // ==========================================================
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        if (btn.dataset.cat === cat) {
+          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-orange-500/20 text-orange-300 border border-orange-500/40";
+        } else {
+          btn.className = "cat-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 hover:text-white border border-white/10";
+        }
+      });
+      // Auto-adjust global destination dropdown based on category
+      if (cat === "movies" || cat === "tv" || cat === "anime") {
+        document.getElementById("globalDestSelect").value = "movies";
+      } else if (cat === "games") {
+        document.getElementById("globalDestSelect").value = "games";
+      } else {
+        document.getElementById("globalDestSelect").value = "ssd_torrents";
+      }
+      runSearch();
+    }
+
+    function quickQuery(q, cat, src) {
+      document.getElementById("searchInput").value = q;
+      if (src) document.getElementById("sourceSelect").value = src;
+      setCategory(cat || "all");
+    }
+
+    function clearSearch() {
+      document.getElementById("searchInput").value = "";
+      runSearch();
+    }
+
+    function submitSearch(e) {
+      if (e) e.preventDefault();
+      runSearch();
+    }
+
+    async function runSearch() {
+      const q = document.getElementById("searchInput").value.trim();
+      const src = document.getElementById("sourceSelect").value;
+      const container = document.getElementById("searchResultsContainer");
+      const summary = document.getElementById("searchSummaryText");
+
+      summary.innerHTML = `<span class="text-orange-400 animate-pulse">⚡ Interrogation de 1337x & vérification du Cache Instantané TorBox...</span>`;
+      container.innerHTML = `
+        <div class="glass rounded-2xl p-10 text-center space-y-2">
+          <div class="inline-block w-7 h-7 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          <div class="text-xs text-slate-400">Recherche multi-indexeurs + vérification du cache TorBox en cours...</div>
+        </div>
+      `;
+
+      try {
+        const url = `${API_BASE}/api/search?q=${encodeURIComponent(q)}&cat=${encodeURIComponent(currentCategory)}&src=${encodeURIComponent(src)}`;
+        const r = await fetch(url);
+        const d = await r.json();
+        lastSearchResults = d.results || [];
+        renderSearchResults(d.elapsedMs, d.cachedCount);
+      } catch (e) {
+        summary.textContent = "Erreur de connexion au démon Mac Mini.";
+        container.innerHTML = `
+          <div class="glass rounded-2xl p-8 text-center text-red-400 text-xs">
+            Impossible de joindre le serveur local sur le Mac Mini (port 8799).
+          </div>
+        `;
+      }
+    }
+
+    function renderSearchResults(elapsedMs, cachedCount) {
+      const container = document.getElementById("searchResultsContainer");
+      const summary = document.getElementById("searchSummaryText");
+      const onlyCached = document.getElementById("onlyCachedCheckbox").checked;
+      const sortMode = document.getElementById("sortSelect").value;
+
+      let items = [...lastSearchResults];
+      if (onlyCached) {
+        items = items.filter(it => it.torboxCached);
+      }
+
+      if (sortMode === "cached_first") {
+        items.sort((a, b) => (Number(!!b.torboxCached) - Number(!!a.torboxCached)) || (b.seeders - a.seeders));
+      } else if (sortMode === "size_desc") {
+        items.sort((a, b) => (b.sizeBytes || 0) - (a.sizeBytes || 0));
+      } else if (sortMode === "size_asc") {
+        items.sort((a, b) => (a.sizeBytes || 0) - (b.sizeBytes || 0));
+      } else {
+        items.sort((a, b) => (b.seeders || 0) - (a.seeders || 0));
+      }
+
+      const totalCached = lastSearchResults.filter(i => i.torboxCached).length;
+      summary.innerHTML = `
+        <strong>${items.length}</strong> torrents trouvés
+        · <span class="text-emerald-400 font-semibold">⚡ ${totalCached} en Cache Instantané TorBox</span>
+        ${elapsedMs ? `<span class="text-slate-500">(${elapsedMs} ms)</span>` : ''}
+      `;
+
+      if (!items.length) {
+        container.innerHTML = `
+          <div class="glass rounded-2xl p-10 text-center text-slate-400 text-sm">
+            Aucun résultat trouvé pour ce filtre. Essayez d'élargir la recherche ou de décocher « Cache Instantané uniquement ».
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map((it, idx) => {
+        const is1337 = (it.tracker || "").toLowerCase().includes("1337");
+        const trackerBadge = is1337
+          ? `<span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold text-[10px]">1337x</span>`
+          : `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-white/10 font-medium text-[10px]">${escapeHtml(it.tracker || 'Torrent')}</span>`;
+
+        const cacheBadge = it.torboxCached
+          ? `<span class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold text-[10px] flex items-center gap-1">⚡ CACHE INSTANTANÉ</span>`
+          : `<span class="px-2 py-0.5 rounded-md bg-slate-800/80 text-slate-400 border border-white/5 text-[10px]">🌱 Seedbox / P2P</span>`;
+
+        const qualityBadge = it.quality
+          ? `<span class="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-bold text-[10px]">${it.quality}</span>`
+          : "";
+
+        const langBadges = (it.languages || []).map(l =>
+          `<span class="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30 font-semibold text-[10px]">${l}</span>`
+        ).join("");
+
+        const tagBadges = (it.tags || []).map(t =>
+          `<span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold text-[10px]">${t}</span>`
+        ).join("");
+
+        return `
+          <div class="glass card-hover rounded-xl p-3.5 sm:p-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">
+            <div class="space-y-1.5 min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-1.5">
+                ${trackerBadge}
+                ${cacheBadge}
+                ${qualityBadge}
+                ${langBadges}
+                ${tagBadges}
+                <span class="text-[11px] text-slate-400">${escapeHtml(it.category || '')}</span>
+              </div>
+              <h3 class="font-semibold text-sm text-white break-words leading-snug">
+                ${escapeHtml(it.title)}
+              </h3>
+              <div class="flex flex-wrap items-center gap-3 text-xs mono text-slate-400">
+                <span class="text-slate-200 font-semibold">📦 ${escapeHtml(it.sizeFormatted || '—')}</span>
+                <span class="text-emerald-400 font-semibold">▲ ${it.seeders || 0} seeds</span>
+                <span class="text-amber-400/80">▼ ${it.leechers || 0} peers</span>
+                ${it.date ? `<span>📅 ${escapeHtml(it.date)}</span>` : ''}
+                ${it.detailsUrl ? `<a href="${escapeHtml(it.detailsUrl)}" target="_blank" rel="noopener" class="text-orange-400 hover:underline font-sans">Source ↗</a>` : ''}
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center gap-2 shrink-0 w-full lg:w-auto justify-end border-t lg:border-t-0 border-white/5 pt-2.5 lg:pt-0">
+              <button
+                onclick="triggerDownloadResult(${idx}, 'torbox')"
+                class="flex-1 lg:flex-initial px-3.5 py-2 rounded-xl ${
+                  it.torboxCached
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/20'
+                    : 'bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 text-white shadow-lg shadow-orange-500/20'
+                } font-bold text-xs transition flex items-center justify-center gap-1.5"
+              >
+                <span>${it.torboxCached ? '⚡ Télécharger sur Mac (Instant)' : '🚀 Télécharger sur Mac Mini'}</span>
+              </button>
+
+              <button
+                onclick="triggerDownloadResult(${idx}, 'transmission')"
+                title="Lancer en P2P direct dans Transmission.app sur le Mac Mini"
+                class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/10 text-slate-200 text-xs font-medium transition"
+              >
+                🌐 P2P
+              </button>
+
+              <button
+                onclick="copyMagnet(${idx})"
+                title="Copier le lien Magnet"
+                class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/10 text-slate-300 text-xs transition"
+              >
+                🧲
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      // Save currently rendered array for button index lookup
+      window._renderedItems = items;
+    }
+
+    async function triggerDownloadResult(idx, engine = "torbox") {
+      const it = (window._renderedItems || [])[idx];
+      if (!it) return;
+      const destId = document.getElementById("globalDestSelect").value || it.suggestedDest || "ssd_torrents";
+      await startDownloadJob({
+        title: it.title,
+        magnet: it.magnet,
+        hash: it.hash,
+        sizeBytes: it.sizeBytes || 0,
+        destId,
+        engine,
+      });
+    }
+
+    function copyMagnet(idx) {
+      const it = (window._renderedItems || [])[idx];
+      if (!it || !it.magnet) return;
+      navigator.clipboard.writeText(it.magnet);
+      showToast("🧲 Lien Magnet copié dans le presse-papiers !");
+    }
+
+    async function startDownloadJob(payload) {
+      try {
+        showToast(`🚀 Lancement sur le Mac Mini : ${payload.title.slice(0, 45)}...`);
+        const r = await fetch(`${API_BASE}/api/download`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const d = await r.json();
+        if (!d.ok) {
+          showToast(`Erreur : ${d.error}`, true);
+          return;
+        }
+        showToast(`✅ Téléchargement démarré vers ${d.job.destPath}`);
+        fetchStatus();
+      } catch (e) {
+        showToast("Erreur réseau avec le Mac Mini", true);
+      }
+    }
+
+    async function submitManualMagnet() {
+      const title = document.getElementById("manualTitle").value.trim() || "Téléchargement Magnet Direct";
+      const magnet = document.getElementById("manualMagnet").value.trim();
+      const destId = document.getElementById("manualDest").value;
+      const engine = document.getElementById("manualEngine").value;
+      if (!magnet) {
+        showToast("Veuillez coller un lien magnet ou un hash.", true);
+        return;
+      }
+      await startDownloadJob({
+        title,
+        magnet: magnet.startsWith("magnet:") ? magnet : "",
+        hash: !magnet.startsWith("magnet:") ? magnet : "",
+        destId,
+        engine,
+      });
+      document.getElementById("manualMagnet").value = "";
+      switchTab("downloads");
+    }
+
+    async function loadTorboxCloud() {
+      const container = document.getElementById("torboxCloudContainer");
+      container.innerHTML = `<div class="text-xs text-slate-400 py-6 text-center">Chargement de votre bibliothèque Cloud TorBox...</div>`;
+      try {
+        const r = await fetch(`${API_BASE}/api/torbox/cloud`);
+        const d = await r.json();
+        if (!d.ok) {
+          container.innerHTML = `<div class="text-xs text-red-400 py-6 text-center">${escapeHtml(d.error || 'Erreur')}</div>`;
+          return;
+        }
+        const items = d.items || [];
+        if (!items.length) {
+          container.innerHTML = `<div class="text-xs text-slate-500 py-6 text-center">Votre Cloud TorBox est vide.</div>`;
+          return;
+        }
+        window._cloudItems = items;
+        container.innerHTML = items.map((it, idx) => `
+          <div class="bg-slate-900/80 rounded-xl p-3.5 border border-white/10 flex flex-wrap items-center justify-between gap-3">
+            <div class="space-y-1 min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
+                  ${escapeHtml(it.state || 'ready')} (${it.progress}%)
+                </span>
+                <span class="text-xs mono text-slate-400">${escapeHtml(it.sizeFormatted)}</span>
+                <span class="text-[11px] text-slate-500">${escapeHtml(it.createdAt || '')}</span>
+              </div>
+              <div class="font-semibold text-sm text-white break-all">${escapeHtml(it.name || '')}</div>
+            </div>
+            <button
+              onclick="pullFromTorboxCloud(${idx})"
+              class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shrink-0"
+            >
+              📥 Télécharger sur le Mac Mini
+            </button>
+          </div>
+        `).join("");
+      } catch (e) {
+        container.innerHTML = `<div class="text-xs text-red-400 py-6 text-center">Impossible de charger le Cloud TorBox.</div>`;
+      }
+    }
+
+    async function pullFromTorboxCloud(idx) {
+      const it = (window._cloudItems || [])[idx];
+      if (!it) return;
+      const destId = document.getElementById("globalDestSelect").value;
+      await startDownloadJob({
+        title: it.name,
+        hash: it.hash,
+        torboxTorrentId: it.id,
+        sizeBytes: it.sizeBytes || 0,
+        destId,
+        engine: "torbox",
+      });
+      switchTab("downloads");
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    // Boot
+    (async function init() {
+      await resolveBackendEndpoint();
+      await fetchStatus();
+      await runSearch();
+      setInterval(fetchStatus, 2500);
+    })();
+  </script>
+</body>
+</html>

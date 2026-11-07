@@ -8,7 +8,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
     "id": "film-et-serie",
@@ -19,7 +19,18 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "pushedAt": "2026-11-07T13:03:21Z"
+  },
+  {
+    "id": "torrent",
+    "title": "1337·Mac — Station Torrent & TorBox (Mac mini)",
+    "subtitle": "Recherche 1337x, RARBG, TPB & Nyaa · Vérification Cache Instantané TorBox & téléchargement direct sur le Mac Mini (SSD / Movies / P2P)",
+    "category": "daily-tools",
+    "emoji": "🧲",
+    "logoUrl": "torrent/assets/icon.svg?v=1",
+    "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
+    "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/torrent",
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
     "id": "patrimoine-os",
@@ -30,7 +41,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
     "id": "gemini-ultra",
@@ -41,7 +52,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
     "id": "second-brain-voice",
@@ -52,7 +63,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
     "id": "stats-youtube",
@@ -63,7 +74,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -74,18 +85,18 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
-    "id": "carte-et-abonnement",
-    "title": "Pass Zoo de Vincennes & MNHN — Billets & Abonnements",
-    "subtitle": "Portefeuille mobile hors-ligne des 2 Pass Annuels SOLO (Parc Zoologique de Paris, Jardin des Plantes, Grande Galerie, Musée de l'Homme) · QR Codes & PDF",
+    "id": "restaurant",
+    "title": "Resto en Amoureux — Marie & Thomas",
+    "subtitle": "Créneaux libres M&T + Émile chez les grands-parents & Réservation auto",
     "category": "daily-tools",
-    "emoji": "🦒",
-    "logoUrl": "assets/carte-et-abonnement-icon.svg?v=1",
-    "prodUrl": "https://mrthomaslef.github.io/carte-et-abonnement/",
-    "githubUrl": "https://github.com/Mrthomaslef/carte-et-abonnement",
-    "pushedAt": "2026-11-07T11:03:37Z"
+    "emoji": "🍷",
+    "logoUrl": "https://mrthomaslef.github.io/restaurant/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/restaurant/",
+    "githubUrl": "https://github.com/Mrthomaslef/restaurant",
+    "pushedAt": "2026-11-07T13:03:21Z"
   },
   {
     "id": "mapp-store",
@@ -96,7 +107,18 @@
     "logoUrl": "https://mrthomaslef.github.io/mapp-store/apple-touch-icon.png?v=mapp1",
     "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
     "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
-    "pushedAt": "2026-11-07T10:29:44Z"
+    "pushedAt": "2026-11-07T11:27:05Z"
+  },
+  {
+    "id": "carte-et-abonnement",
+    "title": "Pass Zoo de Vincennes & MNHN — Billets & Abonnements",
+    "subtitle": "Portefeuille mobile hors-ligne des 2 Pass Annuels SOLO (Parc Zoologique de Paris, Jardin des Plantes, Grande Galerie, Musée de l'Homme) · QR Codes & PDF",
+    "category": "daily-tools",
+    "emoji": "🦒",
+    "logoUrl": "assets/carte-et-abonnement-icon.svg?v=1",
+    "prodUrl": "https://mrthomaslef.github.io/carte-et-abonnement/",
+    "githubUrl": "https://github.com/Mrthomaslef/carte-et-abonnement",
+    "pushedAt": "2026-11-07T11:27:02Z"
   },
   {
     "id": "agenda-cochin",
@@ -196,17 +218,6 @@
     "prodUrl": "https://mrthomaslef.github.io/quiz-imagerie/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-imagerie",
     "pushedAt": "2026-11-06T20:37:00Z"
-  },
-  {
-    "id": "restaurant",
-    "title": "Resto en Amoureux — Marie & Thomas",
-    "subtitle": "Créneaux libres M&T + Émile chez les grands-parents & Réservation auto",
-    "category": "daily-tools",
-    "emoji": "🍷",
-    "logoUrl": "https://mrthomaslef.github.io/restaurant/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/restaurant/",
-    "githubUrl": "https://github.com/Mrthomaslef/restaurant",
-    "pushedAt": "2026-11-06T14:17:48Z"
   },
   {
     "id": "assurance",
