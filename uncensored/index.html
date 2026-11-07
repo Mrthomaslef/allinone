@@ -154,8 +154,8 @@
             1. Fournisseur Cloud API
           </label>
           <select id="providerSelect" onchange="onProviderChange()" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-cyber-pink">
-            <option value="venice">🔥 Venice AI (Non-KYC · Zero-Retention · Abliterated)</option>
-            <option value="openrouter">🌐 OpenRouter (300+ Modèles · Uncensored &amp; Free Tiers)</option>
+            <option value="openrouter" selected>🌐 OpenRouter (100% GRATUIT :free · 550B Nemotron, Gemma 4 &amp; Uncensored)</option>
+            <option value="venice">🔥 Venice AI (Offre Pro · DeepSeek V4.1 1017 Abliterated E2EE)</option>
             <option value="custom">🖥️ Serveur Local / Custom (Ollama · LM Studio · vLLM)</option>
           </select>
         </div>
@@ -407,11 +407,11 @@
         <div class="glass rounded-2xl p-4 flex flex-col border border-cyber-pink/30">
           <div class="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
             <select id="arenaModelA" class="bg-black/60 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs font-mono text-cyber-pink font-semibold w-full">
-              <option value="venice|deepseek-v4-1-flash-1017-uncensored">Venice · DeepSeek V4.1 Flash 1017 Uncensored</option>
-              <option value="venice|e2ee-deepseek-v4-1-flash-1017-abliterated">Venice · DeepSeek V4.1 1017 Abliterated (E2EE)</option>
-              <option value="venice|abliteration-abliterated-model-large-v2">Venice · Abliterated Large V2 (1M ctx)</option>
-              <option value="openrouter|cognitivecomputations/dolphin-mistral-24b-venice-edition">OpenRouter · Venice Uncensored (Dolphin 24B)</option>
-              <option value="openrouter|deepseek/deepseek-v4.1-flash-1017">OpenRouter · DeepSeek V4.1 Flash 1017</option>
+              <option value="openrouter|nvidia/nemotron-3-ultra-550b-a55b:free" selected>🆓 OpenRouter · NVIDIA Nemotron 3 Ultra 550B (GRATUIT 0€)</option>
+              <option value="openrouter|nvidia/nemotron-3.5-super-vl:free">🆓 OpenRouter · NVIDIA Nemotron 3.5 Super VL (GRATUIT 0€)</option>
+              <option value="openrouter|xingchen-agi/xing4.0-29b-a4b:free">🆓 OpenRouter · Xing4.0 29B A4B (GRATUIT 0€)</option>
+              <option value="openrouter|cognitivecomputations/dolphin-mistral-24b-venice-edition">🐬 OpenRouter · Venice Uncensored Dolphin 24B (Crédits)</option>
+              <option value="venice|deepseek-v4-1-flash-1017-uncensored">🔥 Venice · DeepSeek V4.1 Flash 1017 Uncensored</option>
             </select>
             <span id="arenaStatsA" class="text-[11px] font-mono text-slate-400 shrink-0">— tok/s</span>
           </div>
@@ -424,11 +424,11 @@
         <div class="glass rounded-2xl p-4 flex flex-col border border-cyber-cyan/30">
           <div class="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10">
             <select id="arenaModelB" class="bg-black/60 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs font-mono text-cyber-cyan font-semibold w-full">
-              <option value="openrouter|nvidia/nemotron-3-ultra-550b-a55b:free">OpenRouter · NVIDIA Nemotron 3 Ultra 550B (FREE)</option>
-              <option value="openrouter|qwen/qwen3.8-27b">OpenRouter · Qwen 3.8 27B (1M ctx)</option>
-              <option value="openrouter|z-ai/glm-5.3">OpenRouter · GLM 5.3 (1M ctx)</option>
-              <option value="venice|qwen-3-6-plus">Venice · Qwen 3.6 Plus Uncensored (1M ctx)</option>
-              <option value="venice|gemma-4-uncensored">Venice · Gemma 4 Uncensored (256k ctx)</option>
+              <option value="openrouter|google/gemma-4-31b-it:free" selected>🆓 OpenRouter · Google Gemma 4 31B (GRATUIT 0€)</option>
+              <option value="openrouter|google/gemma-4-26b-a4b-it:free">🆓 OpenRouter · Google Gemma 4 26B A4B (GRATUIT 0€)</option>
+              <option value="openrouter|nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free">🆓 OpenRouter · Nemotron 3 Nano Omni Reasoning (GRATUIT 0€)</option>
+              <option value="openrouter|deepseek/deepseek-v4.1-flash-1017">🔥 OpenRouter · DeepSeek V4.1 Flash 1017 (Crédits)</option>
+              <option value="openrouter|z-ai/glm-5.3">🛡️ OpenRouter · GLM 5.3 1M ctx (Crédits)</option>
             </select>
             <span id="arenaStatsB" class="text-[11px] font-mono text-slate-400 shrink-0">— tok/s</span>
           </div>
@@ -666,54 +666,79 @@
       ],
       openrouter: [
         {
+          id: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+          name: '🆓 NVIDIA Nemotron 3 Ultra 550B (100% GRATUIT · 0€)',
+          specs: '550B paramètres MoE · 1 000 000 tokens · 0,00 €/token (Aucune CB requise)',
+        },
+        {
+          id: 'google/gemma-4-31b-it:free',
+          name: '🆓 Google Gemma 4 31B (100% GRATUIT · 0€)',
+          specs: '31B paramètres · 262 144 tokens · 0,00 €/token (Aucune CB requise)',
+        },
+        {
+          id: 'google/gemma-4-26b-a4b-it:free',
+          name: '🆓 Google Gemma 4 26B A4B (100% GRATUIT · 0€)',
+          specs: '26B MoE ultra-rapide · 262 144 tokens · 0,00 €/token',
+        },
+        {
+          id: 'nvidia/nemotron-3.5-super-vl:free',
+          name: '🆓 NVIDIA Nemotron 3.5 Super VL (100% GRATUIT · 0€)',
+          specs: '1 000 000 tokens · Vision & Raisonnement · 0,00 €/token',
+        },
+        {
+          id: 'nvidia/nemotron-3.5-lightning:free',
+          name: '🆓 NVIDIA Nemotron 3.5 Lightning (100% GRATUIT · 0€)',
+          specs: '1 000 000 tokens · Ultra-rapide · 0,00 €/token',
+        },
+        {
+          id: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+          name: '🆓 NVIDIA Nemotron 3 Nano Omni 30B Reasoning (100% GRATUIT · 0€)',
+          specs: '30B MoE Reasoning · 256 000 tokens · 0,00 €/token',
+        },
+        {
+          id: 'xingchen-agi/xing4.0-29b-a4b:free',
+          name: '🆓 XingChen Xing4.0 29B A4B (100% GRATUIT · 0€)',
+          specs: '29B MoE · 262 144 tokens · 0,00 €/token',
+        },
+        {
+          id: 'cohere/north-mini-code:free',
+          name: '🆓 Cohere North Mini Code (100% GRATUIT · 0€)',
+          specs: 'Spécialisé Code · 256 000 tokens · 0,00 €/token',
+        },
+        {
+          id: 'openrouter/free',
+          name: '🆓 OpenRouter Auto-Free Router (100% GRATUIT · 0€)',
+          specs: 'Sélectionne automatiquement le meilleur modèle gratuit disponible',
+        },
+        {
           id: 'cognitivecomputations/dolphin-mistral-24b-venice-edition',
-          name: '🐬 Venice: Uncensored (Dolphin Mistral 24B)',
+          name: '🐬 Venice: Uncensored · Dolphin Mistral 24B (Crédits ~0.20$/M)',
           specs: '128k ctx · Édition officielle Venice Uncensored sur OpenRouter',
         },
         {
           id: 'deepseek/deepseek-v4.1-flash-1017',
-          name: '🔥 DeepSeek V4.1 Flash 1017 (306B · 1M ctx)',
-          specs: '306B MoE · 1 048 576 tokens · Ultra-rapide ($0.15/M)',
+          name: '🔥 DeepSeek V4.1 Flash 1017 · 306B (Crédits ~0.15$/M)',
+          specs: '306B MoE · 1 048 576 tokens · Star de la vidéo ($0.15/M)',
         },
         {
           id: 'deepseek/deepseek-v4.1-flash',
-          name: '⚡ DeepSeek V4.1 Flash (1M ctx)',
+          name: '⚡ DeepSeek V4.1 Flash (Crédits ~0.05$/M)',
           specs: '306B MoE · 1 048 576 tokens · Très économique ($0.05/M)',
         },
         {
           id: 'qwen/qwen3.8-2.4t-a95b',
-          name: '🏔️ Qwen 3.8 2.4T A95B (2 400 Milliards params)',
+          name: '🏔️ Qwen 3.8 2.4T A95B (Crédits ~2$/M)',
           specs: '2.4 Trillions MoE · 1 048 576 tokens · Modèle géant',
         },
         {
           id: 'qwen/qwen3.8-27b',
-          name: '🚀 Qwen 3.8 27B (1M ctx · Cité dans la vidéo)',
+          name: '🚀 Qwen 3.8 27B (Crédits ~0.15$/M)',
           specs: '27B dense · 1 024 000 tokens',
         },
         {
           id: 'z-ai/glm-5.3',
-          name: '🛡️ Z.ai GLM 5.3 (1M ctx · Cité dans la vidéo)',
+          name: '🛡️ Z.ai GLM 5.3 · 1M ctx (Crédits ~0.07$/M)',
           specs: '1 048 576 tokens · Excellent en cyberdéfense & code',
-        },
-        {
-          id: 'z-ai/glm-5.3-flash',
-          name: '⚡ Z.ai GLM 5.3 Flash (1M ctx)',
-          specs: '1 048 576 tokens · Haute vélocité',
-        },
-        {
-          id: 'nvidia/nemotron-3-ultra-550b-a55b:free',
-          name: '🆓 NVIDIA Nemotron 3 Ultra 550B (GRATUIT :free)',
-          specs: '550B paramètres · 1 000 000 tokens · 0,00 €/token',
-        },
-        {
-          id: 'google/gemma-4-31b-it:free',
-          name: '🆓 Google Gemma 4 31B (GRATUIT :free)',
-          specs: '31B paramètres · 262 144 tokens · 0,00 €/token',
-        },
-        {
-          id: 'google/gemma-4-26b-a4b-it:free',
-          name: '🆓 Google Gemma 4 26B A4B (GRATUIT :free)',
-          specs: '26B MoE · 262 144 tokens · 0,00 €/token',
         }
       ],
       custom: [

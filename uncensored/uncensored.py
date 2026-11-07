@@ -38,11 +38,11 @@ PROVIDERS = {
         "key_url": "https://venice.ai/settings/api",
     },
     "openrouter": {
-        "name": "OpenRouter (Multi-Models · Uncensored & Free Tiers)",
+        "name": "OpenRouter (Modèles 100% Gratuits :free & Uncensored)",
         "base_url": "https://openrouter.ai/api/v1",
         "vault_service": "openrouter-api",
         "env_var": "OPENROUTER_API_KEY",
-        "default_model": "deepseek/deepseek-v4.1-flash-1017",
+        "default_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
         "key_url": "https://openrouter.ai/settings/keys",
     },
 }
@@ -166,14 +166,14 @@ def auto_select_provider_and_model(
         model = requested_model or PROVIDERS[prov]["default_model"]
         return prov, model, key
 
-    # Auto-detect whichever provider has a configured key in t3-vault
-    for p in ("venice", "openrouter"):
+    # Auto-detect whichever provider has a configured key in t3-vault (OpenRouter first)
+    for p in ("openrouter", "venice"):
         k = get_api_key(p)
         if k:
             return p, requested_model or PROVIDERS[p]["default_model"], k
 
-    # Default to venice if none configured yet
-    prov = "venice"
+    # Default to openrouter (free tier) if none configured yet
+    prov = "openrouter"
     return prov, requested_model or PROVIDERS[prov]["default_model"], None
 
 
