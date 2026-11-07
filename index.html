@@ -408,7 +408,7 @@
 
   <script>
     const GITHUB_USERNAME = 'Mrthomaslef';
-    const CACHE_KEY = 'tapp_store_live_repos_cache_v25';
+    const CACHE_KEY = 'tapp_store_live_repos_cache_v26';
     const VIEW_MODE_KEY = 'tapp_store_view_mode_v1';
     const FAVS_V2_KEY = 'tapp_store_favorites_v2';
     const FAVS_STORAGE_KEY = 'tapp_store_favorites_v1';
@@ -2042,7 +2042,7 @@
       }
     }
 
-    const QUOTA_WIDGET_CACHE_KEY = 'allinone_live_quota_widget_v3';
+    const QUOTA_WIDGET_CACHE_KEY = 'allinone_live_quota_widget_v4';
     let lastQuotaData = null;
 
     function formatCompactTokens(n) {
@@ -2125,10 +2125,11 @@
       const claudeBarEl = document.getElementById('claude-bar');
       if (claudeCostEl) claudeCostEl.textContent = `${formatEur(claudeEur)} (${formatUsd(claudeUsd)})`;
       if (claudeTokEl) claudeTokEl.textContent = `${formatCompactTokens(claudeTok)} tok`;
+      const claudeSubType = (data.claudeSubscription?.subscriptionType || '').toLowerCase();
+      const claudePlanName = data.claudeSubscription?.planName || 'Claude Max';
+      const claudeShortPlan = claudePlanName.includes('20x') ? 'Max 20x' : (claudePlanName.includes('5x') ? 'Max 5x' : (claudeSubType.includes('max') ? 'Max' : 'Pro'));
       if (claudeQuotasEl) {
-        claudeQuotasEl.textContent = tpwRem <= 0
-          ? `3P 0% • Pro ${cwRem}%`
-          : `3P ${tpwRem}% • Pro ${cwRem}%`;
+        claudeQuotasEl.textContent = `${claudeShortPlan} 5h ${c5Rem}% • 7j ${cwRem}%`;
       }
       if (claudeBarEl) claudeBarEl.style.width = `${Math.max(4, Math.min(c5Rem, cwRem))}%`;
     }

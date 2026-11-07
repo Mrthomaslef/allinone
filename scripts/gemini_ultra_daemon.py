@@ -615,11 +615,12 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
     global _claude_oauth_cache, _claude_oauth_last_ts, _claude_oauth_backoff_until
     info = {
         "active": False,
-        "planName": "Claude Pro",
+        "planName": "Claude Max (5x)",
         "email": "thomaslefevre18@live.fr",
         "orgId": None,
-        "subscriptionType": "pro",
-        "billingType": "apple / claude.ai",
+        "subscriptionType": "max",
+        "rateLimitTier": "default_claude_max_5x",
+        "billingType": "stripe_subscription",
         "upgradedAt": None,
         "fiveHour": {
             "id": "claude-5h",
@@ -642,8 +643,8 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
             {
                 "id": "claude-opus-5-5",
                 "label": "Claude Opus 5.5",
-                "family": "claude-pro",
-                "description": "Claude Pro Direct • Raisonnement Low → Ultrathink + Fast Mode",
+                "family": "claude-max",
+                "description": "Claude Max (5x) Direct • Raisonnement Low → Ultrathink + Fast Mode",
                 "remainingPercent": 100.0,
                 "usedPercent": 0.0,
                 "resetsAt": None,
@@ -651,8 +652,8 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
             {
                 "id": "claude-sonnet-5-5",
                 "label": "Claude Sonnet 5.5",
-                "family": "claude-pro",
-                "description": "Claude Pro Direct • Raisonnement rapide & efficace",
+                "family": "claude-max",
+                "description": "Claude Max (5x) Direct • Raisonnement rapide & efficace",
                 "remainingPercent": 100.0,
                 "usedPercent": 0.0,
                 "resetsAt": None,
@@ -660,8 +661,8 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
             {
                 "id": "claude-fable-5-1",
                 "label": "Claude Fable 5.1",
-                "family": "claude-pro",
-                "description": "Claude Pro Direct • Défis complexes & Ultracode",
+                "family": "claude-max",
+                "description": "Claude Max (5x) Direct • Défis complexes & Ultracode",
                 "remainingPercent": 100.0,
                 "usedPercent": 0.0,
                 "resetsAt": None,
@@ -669,8 +670,8 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
             {
                 "id": "claude-haiku-5-5",
                 "label": "Claude Haiku 5.5",
-                "family": "claude-pro",
-                "description": "Claude Pro Direct • Réponses instantanées",
+                "family": "claude-max",
+                "description": "Claude Max (5x) Direct • Réponses instantanées",
                 "remainingPercent": 100.0,
                 "usedPercent": 0.0,
                 "resetsAt": None,
@@ -693,6 +694,8 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
                     info["orgId"] = auth["workspaceId"]
                 if auth.get("type"):
                     info["planName"] = auth["type"]
+                    if "max" in auth["type"].lower():
+                        info["subscriptionType"] = "max"
             ul = c_data.get("usageLimits") or {}
             for w in ul.get("windows", []):
                 wid = w.get("id")
@@ -728,13 +731,13 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
                 stderr=subprocess.DEVNULL,
                 timeout=3,
             ).strip()
-            cred_json = json.loads(raw_cred).get("claudeAiOauth", {})
+            full_cred_obj = json.loads(raw_cred)
+            cred_json = full_cred_obj.get("claudeAiOauth", {})
             token = cred_json.get("accessToken")
             if token:
                 info["active"] = True
-                sub_type = cred_json.get("subscriptionType") or "pro"
-                info["subscriptionType"] = sub_type
-                info["planName"] = "Claude Max" if "max" in sub_type.lower() else "Claude Pro"
+                sub_type = cred_json.get("subscriptionType") or "max"
+                rate_tier = cred_json.get("rateLimitTier") or "default_claude_max_5x"
 
                 headers = {
                     "Authorization": f"Bearer {token}",
@@ -742,6 +745,80 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
                     "User-Agent": "claude-code/2.1.316",
                     "Accept": "application/json",
                 }
+
+                # Live profile check to detect subscription upgrades (e.g. Claude Pro -> Claude Max 5x / 20x)
+                try:
+                    req_p = urllib.request.Request("https://api.anthropic.com/api/oauth/profile", headers=headers)
+                    with urllib.request.urlopen(req_p, timeout=6) as resp_p:
+                        p_data = json.loads(resp_p.read().decode("utf-8"))
+                    p_acc = p_data.get("account") or {}
+                    p_org = p_data.get("organization") or {}
+                    if p_acc.get("email"):
+                        info["email"] = p_acc["email"]
+                    if p_org.get("uuid"):
+                        info["orgId"] = p_org["uuid"]
+                    if p_org.get("billing_type"):
+                        info["billingType"] = p_org["billing_type"]
+                    if p_org.get("subscription_created_at"):
+                        info["upgradedAt"] = p_org["subscription_created_at"]
+
+                    org_type = (p_org.get("organization_type") or "").lower()
+                    r_tier = (p_org.get("rate_limit_tier") or "").lower()
+                    if p_acc.get("has_claude_max") or "max" in org_type or "max" in r_tier:
+                        sub_type = "max"
+                        rate_tier = p_org.get("rate_limit_tier") or "default_claude_max_5x"
+                    elif p_acc.get("has_claude_pro") or "pro" in org_type:
+                        sub_type = "pro"
+                        rate_tier = p_org.get("rate_limit_tier") or "default_claude_ai"
+
+                    # Sync Keychain if subscriptionType or rateLimitTier was stale from initial sign_in
+                    if cred_json.get("subscriptionType") != sub_type or cred_json.get("rateLimitTier") != rate_tier:
+                        try:
+                            cred_json["subscriptionType"] = sub_type
+                            cred_json["rateLimitTier"] = rate_tier
+                            full_cred_obj["claudeAiOauth"] = cred_json
+                            acct_name = subprocess.check_output(
+                                ["security", "find-generic-password", "-s", "Claude Code-credentials"],
+                                text=True,
+                                stderr=subprocess.DEVNULL,
+                                timeout=3,
+                            )
+                            m_acct = re.search(r'"acct"<blob>="([^"]+)"', acct_name)
+                            acct_val = m_acct.group(1) if m_acct else os.environ.get("USER", "thomaslefevre")
+                            subprocess.run(
+                                [
+                                    "security",
+                                    "add-generic-password",
+                                    "-U",
+                                    "-a",
+                                    acct_val,
+                                    "-s",
+                                    "Claude Code-credentials",
+                                    "-w",
+                                    json.dumps(full_cred_obj, separators=(",", ":")),
+                                ],
+                                check=False,
+                                stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL,
+                                timeout=3,
+                            )
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
+
+                info["subscriptionType"] = sub_type
+                info["rateLimitTier"] = rate_tier
+                if "max" in sub_type.lower() or "max" in rate_tier.lower():
+                    if "20x" in rate_tier.lower():
+                        info["planName"] = "Claude Max (20x)"
+                    elif "5x" in rate_tier.lower():
+                        info["planName"] = "Claude Max (5x)"
+                    else:
+                        info["planName"] = "Claude Max"
+                else:
+                    info["planName"] = "Claude Pro"
+
                 req_u = urllib.request.Request("https://api.anthropic.com/api/oauth/usage", headers=headers)
                 with urllib.request.urlopen(req_u, timeout=6) as resp_u:
                     u_data = json.loads(resp_u.read().decode("utf-8"))
@@ -778,7 +855,12 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
                 _claude_oauth_last_ts = now_ts
                 _claude_oauth_cache = {
                     "active": info["active"],
+                    "email": info["email"],
+                    "orgId": info["orgId"],
                     "subscriptionType": info["subscriptionType"],
+                    "rateLimitTier": info["rateLimitTier"],
+                    "billingType": info["billingType"],
+                    "upgradedAt": info["upgradedAt"],
                     "planName": info["planName"],
                     "fiveHour": info["fiveHour"],
                     "weekly": info["weekly"],
@@ -788,6 +870,13 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
                     try:
                         with open(cache_path, "r", encoding="utf-8") as cf:
                             c_obj = json.load(cf)
+                        if isinstance(c_obj.get("auth"), dict):
+                            c_obj["auth"]["type"] = info["planName"]
+                            c_obj["auth"]["label"] = f"{info['planName']} Subscription"
+                            if info.get("email"):
+                                c_obj["auth"]["email"] = info["email"]
+                            if info.get("orgId"):
+                                c_obj["auth"]["workspaceId"] = info["orgId"]
                         c_obj["usageLimits"] = {
                             "checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
                             "windows": [
@@ -822,10 +911,15 @@ def fetch_claude_pro_quota(now: datetime) -> dict:
         except Exception:
             _claude_oauth_backoff_until = now_ts + 60.0
 
+    plan_prefix = f"{info['planName']} Direct"
     eff_rem = min(info["fiveHour"]["remainingPercent"], info["weekly"]["remainingPercent"])
     eff_used = round(100.0 - eff_rem, 2)
     eff_reset = info["fiveHour"]["resetsAt"] or info["weekly"]["resetsAt"]
     for m in info["models"]:
+        m["family"] = "claude-max" if info["subscriptionType"] == "max" else "claude-pro"
+        if "•" in m.get("description", ""):
+            suffix = m["description"].split("•", 1)[1].strip()
+            m["description"] = f"{plan_prefix} • {suffix}"
         m["remainingPercent"] = eff_rem
         m["usedPercent"] = eff_used
         m["resetsAt"] = eff_reset
@@ -995,8 +1089,10 @@ def build_live_quota_payload() -> dict:
             "email": claude_pro["email"],
             "orgId": claude_pro["orgId"],
             "subscriptionType": claude_pro["subscriptionType"],
+            "rateLimitTier": claude_pro.get("rateLimitTier"),
+            "billingType": claude_pro.get("billingType"),
             "upgradedAt": claude_pro["upgradedAt"],
-            "harness": "Anthropic Claude Code • Compte Apple",
+            "harness": f"{claude_pro['planName']} • Anthropic Claude Code",
         },
         "tokenSummary": telemetry["tokenSummary"],
         "windows": {

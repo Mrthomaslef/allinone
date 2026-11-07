@@ -148,8 +148,11 @@
           <div class="flex items-center gap-2">
             <span class="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sm">✨</span>
             <div>
-              <h2 class="text-sm font-extrabold text-white leading-tight">Gemini</h2>
-              <p id="gem-tokens-badge" class="text-[11px] font-semibold text-sky-300 tabular-nums">-- tokens</p>
+              <div class="flex items-center gap-1.5">
+                <h2 class="text-sm font-extrabold text-white leading-tight">Gemini</h2>
+                <span id="gem-plan-badge" class="px-1.5 py-0.5 rounded-md bg-sky-500/15 border border-sky-400/30 text-[10px] font-bold text-sky-300 leading-none">Google AI Ultra</span>
+              </div>
+              <p id="gem-tokens-badge" class="text-[11px] font-semibold text-sky-300 tabular-nums mt-0.5">-- tokens</p>
             </div>
           </div>
           <span id="gem-cost-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/25 text-xs font-extrabold text-emerald-300 tabular-nums">
@@ -190,8 +193,11 @@
           <div class="flex items-center gap-2">
             <span class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-sm">🟠</span>
             <div>
-              <h2 class="text-sm font-extrabold text-white leading-tight">Claude</h2>
-              <p id="claude-tokens-badge" class="text-[11px] font-semibold text-amber-300 tabular-nums">-- tokens</p>
+              <div class="flex items-center gap-1.5">
+                <h2 class="text-sm font-extrabold text-white leading-tight">Claude</h2>
+                <span id="claude-plan-badge" class="px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-400/30 text-[10px] font-bold text-amber-300 leading-none">Claude Max (5x)</span>
+              </div>
+              <p id="claude-tokens-badge" class="text-[11px] font-semibold text-amber-300 tabular-nums mt-0.5">-- tokens</p>
             </div>
           </div>
           <span id="claude-cost-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/25 text-xs font-extrabold text-emerald-300 tabular-nums">
@@ -232,14 +238,14 @@
           </div>
         </div>
 
-        <!-- Quota Claude Pro Direct (Anthropic / Compte Apple) -->
+        <!-- Quota Claude Max Direct (Anthropic CLI) -->
         <div class="space-y-1.5 pt-1 border-t border-white/5">
           <div class="flex items-center justify-between text-[10px] px-0.5">
-            <span class="font-bold uppercase tracking-wider text-slate-400">Claude Pro Direct (Anthropic CLI)</span>
+            <span id="claude-direct-title" class="font-bold uppercase tracking-wider text-slate-400">Claude Max (5x) Direct (Anthropic CLI)</span>
             <span id="claude-direct-badge" class="font-bold text-emerald-400">Actif ✓</span>
           </div>
           <div class="grid grid-cols-2 gap-2">
-            <!-- 5h Claude Pro -->
+            <!-- 5h Claude Direct -->
             <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
               <div class="flex items-center justify-between text-[11px]">
                 <span class="text-slate-400 font-semibold">Session 5h</span>
@@ -251,7 +257,7 @@
               <div id="claude-5h-reset" class="text-[10px] text-slate-400 tabular-nums truncate">Reset --</div>
             </div>
 
-            <!-- 7j Claude Pro -->
+            <!-- 7j Claude Direct -->
             <div class="p-2.5 rounded-xl bg-slate-950/70 border border-white/5 space-y-1.5">
               <div class="flex items-center justify-between text-[11px]">
                 <span class="text-slate-400 font-semibold">Semaine 7j</span>
@@ -288,7 +294,7 @@
   </div>
 
   <script>
-    const CACHE_KEY = 'agent_tracking_live_quota_cache_v4';
+    const CACHE_KEY = 'agent_tracking_live_quota_cache_v5';
     const LOCAL_API = 'http://127.0.0.1:8787/api/quota';
     const GITHUB_RAW_JSON = 'https://raw.githubusercontent.com/Mrthomaslef/allinone/main/gemini-ultra/quota-live.json';
 
@@ -468,6 +474,10 @@
       document.getElementById('period-7d').textContent = `${formatTokens(b7d.activeTokens)} • ${formatEur(b7d.apiCostEur)}`;
 
       // Gemini
+      const gemPlan = data.subscription?.planName || 'Google AI Ultra';
+      const gemPlanEl = document.getElementById('gem-plan-badge');
+      if (gemPlanEl) gemPlanEl.textContent = gemPlan;
+
       const gemTok = gemModel.activeTokens ?? Math.round(totTokens * 0.96);
       const gemUsd = gemModel.apiCostUsd ?? (totUsd * 0.91);
       const gemEur = gemModel.apiCostEur ?? (gemUsd * 0.92);
@@ -481,6 +491,12 @@
       document.getElementById('gem-wk-bar').style.width = `${Math.max(2, ww.remainingPercent)}%`;
 
       // Claude
+      const claudePlan = data.claudeSubscription?.planName || 'Claude Max (5x)';
+      const claudePlanEl = document.getElementById('claude-plan-badge');
+      if (claudePlanEl) claudePlanEl.textContent = claudePlan;
+      const claudeDirectTitleEl = document.getElementById('claude-direct-title');
+      if (claudeDirectTitleEl) claudeDirectTitleEl.textContent = `${claudePlan} Direct (Anthropic CLI)`;
+
       const claudeTok = claudeModel.activeTokens ?? Math.max(0, totTokens - gemTok);
       const claudeUsd = claudeModel.apiCostUsd ?? Math.max(0, totUsd - gemUsd);
       const claudeEur = claudeModel.apiCostEur ?? (claudeUsd * 0.92);
@@ -509,7 +525,7 @@
       document.getElementById('tp-wk-rem').textContent = `${tpWkRemDisplay}%`;
       document.getElementById('tp-wk-bar').style.width = `${tpWkExhausted ? 0 : Math.max(2, tpw.remainingPercent)}%`;
 
-      // Claude Pro Direct
+      // Claude Max Direct
       document.getElementById('claude-5h-rem').textContent = `${Math.round(c5.remainingPercent)}%`;
       document.getElementById('claude-5h-bar').style.width = `${Math.max(2, c5.remainingPercent)}%`;
 
