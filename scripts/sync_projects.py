@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "pokemon-play-it": {
+        "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
+        "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
+        "category": "games-family",
+        "emoji": "🃏",
+        "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
+        "logoUrl": "pokemon-play-it/assets/icon.svg?v=1",
+    },
     "uncensored": {
         "title": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI",
         "subtitle": "Client API Venice AI & OpenRouter pour grands modèles Abliterated 306B+ (DeepSeek V4.1 Flash 1017, Qwen 3.8, GLM 5.3, Dolphin) · Studio Red-Team & Comparateur",
@@ -601,6 +609,22 @@ def main():
                 "logoUrl": "uncensored/assets/icon.svg?v=1",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/uncensored",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "pokemon-play-it" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "pokemon-play-it",
+                "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
+                "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
+                "category": "games-family",
+                "emoji": "🃏",
+                "logoUrl": "pokemon-play-it/assets/icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/pokemon-play-it",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
