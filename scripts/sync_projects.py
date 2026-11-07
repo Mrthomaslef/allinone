@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "carte-et-abonnement": {
+        "title": "Pass Zoo de Vincennes & MNHN — Billets & Abonnements",
+        "subtitle": "Portefeuille mobile hors-ligne des 2 Pass Annuels SOLO (Parc Zoologique de Paris, Jardin des Plantes, Grande Galerie, Musée de l'Homme) · QR Codes & PDF",
+        "category": "daily-tools",
+        "emoji": "🦒",
+        "prodUrl": "https://mrthomaslef.github.io/carte-et-abonnement/",
+        "logoUrl": "assets/carte-et-abonnement-icon.svg?v=1",
+    },
     "pdf-master": {
         "title": "PDF Master — Lecteur & Éditeur Ultra-Fluide",
         "subtitle": "Lecteur & éditeur PDF sans fioritures (Texte, Signature, Surligneur, Tampons, Rotation, Fusion) · 100% local Mobile & Ordi",
