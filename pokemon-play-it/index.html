@@ -1661,6 +1661,27 @@
     <!-- ONGLET 1 UNIFIÉ : DUEL IA (PARTIE RAPIDE) + TUTORIEL REPLIABLE  -->
     <!-- =============================================================== -->
     <div id="viewTuto" class="hidden w-full space-y-2.5">
+      <!-- ACCÈS DIRECT AU MODE AVENTURE (LIGUE TOURNOIS 2000) -->
+      <div onclick="switchMenuTab('adventure')" class="cursor-pointer w-full p-2.5 rounded-2xl tcg-card-panel flex items-center justify-between gap-2.5 active:scale-[0.99] transition">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+          <div class="flex -space-x-2 shrink-0">
+            <img src="assets/trainers/hanae.jpg" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+            <img src="assets/trainers/kai.jpg" alt="Kaï" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+            <img src="assets/trainers/axel.jpg" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
+          </div>
+          <div class="min-w-0 flex-1 text-left">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="font-black text-slate-900 text-xs truncate">Mode Aventure · Ligue 2000</span>
+              <span id="soloAdvProgressBadge" class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 shrink-0">0/6 Champions</span>
+            </div>
+            <p class="text-slate-500 text-[10.5px] leading-tight mt-0.5 truncate">
+              Affronte 6 Champions manga avec de vrais decks de tournois 2000
+            </p>
+          </div>
+        </div>
+        <button type="button" class="btn-gold px-3 py-1.5 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Défier →</button>
+      </div>
+
       <!-- BLOC 1 REPLIÉ PAR DÉFAUT : TUTORIEL GUIDÉ AVEC JULIETTE -->
       <details id="tutoGuideFold" class="w-full rounded-2xl tcg-card-panel group overflow-hidden transition-all">
         <summary class="cursor-pointer list-none px-3 py-2.5 flex items-center justify-between gap-2.5 select-none">
@@ -2047,7 +2068,7 @@
       </div>
 
       <!-- 3. Barre de mission -->
-      <div class="w-full">
+      <div class="w-full space-y-2">
         <div class="hub-tile rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2">
           <div class="min-w-0">
             <div id="hubMissionTitle" class="text-[11.5px] font-black text-slate-900 truncate">Ouvre tes boosters gratuits</div>
@@ -2057,6 +2078,25 @@
             <span id="hubMissionBadge" class="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10.5px] font-black">Prêt</span>
             <button onclick="switchMenuTab('tuto')" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide">Jouer</button>
           </div>
+        </div>
+
+        <!-- 3b. Tuile Mode Aventure · Ligue Tournois 2000 -->
+        <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
+          <div class="flex items-center gap-2.5 min-w-0 flex-1">
+            <div class="flex -space-x-2 shrink-0">
+              <img src="assets/trainers/hanae.jpg" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+              <img src="assets/trainers/ryo.jpg" alt="Ryo" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+              <img src="assets/trainers/axel.jpg" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[12px] font-black text-slate-900 truncate">Mode Aventure · Ligue 2000</span>
+                <span id="hubAdvBadge" class="px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 text-[9.5px] font-extrabold shrink-0">0/6</span>
+              </div>
+              <div class="text-[10px] font-semibold text-slate-500 truncate">6 Champions Manga · Vrais decks de tournois 2000</div>
+            </div>
+          </div>
+          <button type="button" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Aventure</button>
         </div>
       </div>
 
@@ -2083,15 +2123,22 @@
       </details>
     </div>
 
+    <!-- VUE : MODE AVENTURE · LIGUE TOURNOIS 2000 (rendue par renderAdventureView) -->
+    <div id="viewAdventure" class="hidden w-full space-y-2.5"></div>
+
     <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
     <div id="viewDecks" class="hidden w-full space-y-2.5"></div>
 
-    <!-- BARRE DE NAVIGATION FIXÉE EN BAS (4 ICÔNES SEULES — STYLE TCG POCKET BLANC ÉPURÉ) -->
+    <!-- BARRE DE NAVIGATION FIXÉE EN BAS (5 ICÔNES SEULES — STYLE TCG POCKET BLANC ÉPURÉ) -->
     <nav id="bottomModeNav" aria-label="Navigation principale" class="fixed bottom-0 inset-x-0 z-40 bg-white/92 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-8px_28px_rgba(15,23,42,0.08)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
-      <div class="max-w-md mx-auto px-4 pt-1.5 grid grid-cols-4 gap-2">
+      <div class="max-w-md mx-auto px-3 pt-1.5 grid grid-cols-5 gap-1.5">
         <button id="tabBtnBooster" onclick="switchMenuTab('booster')" aria-label="Accueil" title="Accueil" class="nav-ico">
           <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
           <span class="nav-ico-badge"><span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-500 text-white text-[10px] font-black leading-tight">3</span></span>
+        </button>
+        <button id="tabBtnAdventure" onclick="switchMenuTab('adventure')" aria-label="Mode Aventure · Ligue 2000" title="Mode Aventure · Ligue 2000" class="nav-ico">
+          <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          <span class="nav-ico-badge"><span id="navAdvBadge" class="px-1.5 py-0.2 rounded-full bg-sky-500 text-white text-[9.5px] font-black leading-tight">0/6</span></span>
         </button>
         <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" aria-label="Jouer contre l'IA" title="Jouer contre l'IA" class="nav-ico is-active">
           <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4"/><circle cx="12" cy="3.2" r="1.2"/><circle cx="9" cy="13.5" r="1.3" fill="currentColor"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor"/><path d="M9.5 17h5"/><path d="M2 13v2M22 13v2"/></svg>
@@ -16364,6 +16411,37 @@
         ['onix', 2], ['hitmonlee', 1], ['hitmonchan', 2],
         ['fighting-energy', 24],
         ['base1-91', 4], ['base1-94', 4], ['base1-95', 2], ['base1-93', 2], ['base2-64', 4]
+      ],
+      // --- 6 DECKS HISTORIQUES DE TOURNOIS OFFICIELS (1999–2000 BASE–JUNGLE–FOSSILE) ---
+      ADV_1_VENUSAUR: [
+        ['base1-44', 4], ['base1-30', 3], ['base1-15', 3], ['base1-48', 3], ['base2-34', 3], ['base2-5', 3], ['base2-10', 1], ['base3-3', 1],
+        ['base1-88', 3], ['base1-85', 3], ['base1-81', 3], ['base1-77', 3], ['base1-74', 2], ['base1-71', 2], ['base1-84', 2], ['base1-93', 2], ['base1-79', 2], ['base1-75', 1],
+        ['base1-99', 14], ['base1-96', 2]
+      ],
+      ADV_2_ARCANINE: [
+        ['base3-53', 4], ['base1-67', 4], ['base1-21', 4], ['base1-28', 3], ['base1-23', 3], ['base3-33', 1],
+        ['base1-88', 4], ['base1-91', 4], ['base1-71', 4], ['base1-74', 4], ['base1-75', 3], ['base1-95', 2], ['base1-77', 2], ['base1-83', 2], ['base1-80', 2], ['base1-92', 2], ['base1-84', 1], ['base1-93', 1],
+        ['base1-101', 6], ['base1-96', 4]
+      ],
+      ADV_3_RAINDANCE: [
+        ['base1-63', 4], ['base1-42', 1], ['base1-2', 3], ['base3-2', 4], ['base3-10', 2],
+        ['base1-88', 4], ['base1-91', 4], ['base1-71', 4], ['base1-76', 4], ['base1-74', 3], ['base1-81', 3], ['base1-79', 2], ['base1-77', 2], ['base1-93', 2], ['base1-83', 1],
+        ['base1-102', 17]
+      ],
+      ADV_4_WIGGLYTUFF: [
+        ['base2-54', 3], ['base2-16', 2], ['base3-39', 4], ['base2-10', 4], ['base3-48', 1], ['base3-13', 1],
+        ['base1-88', 4], ['base1-91', 4], ['base1-81', 4], ['base1-84', 3], ['base1-74', 3], ['base1-92', 3], ['base1-79', 2], ['base1-93', 2], ['base1-75', 2], ['base1-71', 1], ['base1-95', 1],
+        ['base1-98', 12], ['base1-96', 4]
+      ],
+      ADV_5_DAMAGESWAP: [
+        ['base1-43', 4], ['base1-32', 3], ['base1-1', 3], ['base2-5', 3], ['base1-3', 2], ['base2-6', 2], ['base2-10', 2], ['base3-56', 2],
+        ['base1-71', 4], ['base1-74', 4], ['base1-88', 3], ['base1-81', 2], ['base1-85', 2], ['base1-77', 2], ['base1-93', 2], ['base1-78', 1], ['base1-75', 1], ['base1-76', 1],
+        ['base1-101', 9], ['base1-99', 4], ['base1-96', 4]
+      ],
+      ADV_6_HAYMAKER: [
+        ['base1-7', 4], ['base1-20', 4], ['base2-10', 3], ['base3-39', 2],
+        ['base1-88', 4], ['base1-91', 4], ['base1-92', 4], ['base1-79', 3], ['base1-84', 3], ['base1-93', 3], ['base1-74', 3], ['base1-78', 3], ['base1-71', 2], ['base1-81', 2],
+        ['base1-97', 7], ['base1-100', 5], ['base1-96', 4]
       ]
     };
 
@@ -16636,8 +16714,292 @@ const TYPE_EMOJI = {
       COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Demi Combat', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-white via-amber-50/85 to-stone-50/90', border: 'border-amber-200/90' },
       EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Demi Eau', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-white via-sky-50/85 to-cyan-50/90', border: 'border-sky-200/90' },
       FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Demi Feu', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-white via-red-50/85 to-orange-50/90', border: 'border-red-200/90' },
-      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Demi Xtra', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-white via-purple-50/85 to-indigo-50/90', border: 'border-purple-200/90' }
+      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Demi Xtra', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-white via-purple-50/85 to-indigo-50/90', border: 'border-purple-200/90' },
+      // --- 6 DECKS HISTORIQUES DE TOURNOIS OFFICIELS (1999–2000) ---
+      ADV_1_VENUSAUR: { key: 'ADV_1_VENUSAUR', tournament: true, name: 'Tournoi 2000 · Venusaur Energy Trans', short: 'Venusaur 2000', cards: 60, prizes: 6, star: 'Florizarre (100 PV)', desc: 'Florizarre (Transfert d\'Énergie), Dodrio, Kangourex, Centre Pokémon', img: 'https://assets.tcgdex.net/fr/base/base1/15/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/34/high.webp', grad: 'from-white via-emerald-50/85 to-teal-50/90', border: 'border-emerald-300/90' },
+      ADV_2_ARCANINE: { key: 'ADV_2_ARCANINE', tournament: true, name: 'Tournoi 2000 · Arcanine / Electrode Buzzap', short: 'Arcanin Buzzap', cards: 60, prizes: 6, star: 'Arcanin (100 PV)', desc: 'Psykokwak (Migraine), Électrode (Buzzap), Arcanin (Bélier 80)', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/21/high.webp', grad: 'from-white via-orange-50/85 to-amber-50/90', border: 'border-orange-300/90' },
+      ADV_3_RAINDANCE: { key: 'ADV_3_RAINDANCE', tournament: true, name: 'STS 2000 · Rain Dance (J. Viray)', short: 'Rain Dance 2000', cards: 60, prizes: 6, star: 'Tortank (100 PV)', desc: 'Tortank (Danse de la pluie), Artikodin Fossile, Lokhlass, Éleveur', img: 'https://assets.tcgdex.net/fr/base/base1/2/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/2/high.webp', grad: 'from-white via-sky-50/85 to-blue-50/90', border: 'border-sky-300/90' },
+      ADV_4_WIGGLYTUFF: { key: 'ADV_4_WIGGLYTUFF', tournament: true, name: 'TMB / STS 2000 · Do the Wave (T. Yoneda)', short: 'Do the Wave', cards: 60, prizes: 6, star: 'Grodoudou (80 PV)', desc: 'Grodoudou (Faire la Vague 60), Magmar Fossile, Insécateur, Grotadmorv', img: 'https://assets.tcgdex.net/fr/base/base2/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/39/high.webp', grad: 'from-white via-pink-50/85 to-rose-50/90', border: 'border-pink-300/90' },
+      ADV_5_DAMAGESWAP: { key: 'ADV_5_DAMAGESWAP', tournament: true, name: 'Tournoi 2000 · Alakazam Damage Swap', short: 'Damage Swap', cards: 60, prizes: 6, star: 'Alakazam (80 PV)', desc: 'Alakazam (Transfert de dégâts), M. Mime (Mur invisible), Leveinard, Rappel', img: 'https://assets.tcgdex.net/fr/base/base1/1/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/6/high.webp', grad: 'from-white via-purple-50/85 to-fuchsia-50/90', border: 'border-purple-300/90' },
+      ADV_6_HAYMAKER: { key: 'ADV_6_HAYMAKER', tournament: true, name: 'STS 2000 · Haymaker Champion (A. Marshall)', short: 'Haymaker 2000', cards: 60, prizes: 6, star: 'Tygnon (70 PV)', desc: 'Tygnon, Élektek, Insécateur, Magmar Fossile, 7 Suppressions d\'Énergie', img: 'https://assets.tcgdex.net/fr/base/base1/7/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/20/high.webp', grad: 'from-white via-amber-50/85 to-red-50/90', border: 'border-amber-400/90' }
     };
+
+    // =======================================================================
+    // 2B. MODE AVENTURE · LIGUE TOURNOIS 2000 (6 CHAMPIONS MANGA HIGGSFIELD)
+    //     Vraies listes historiques 1999–2000 (Base + Jungle + Fossile)
+    // =======================================================================
+    const ADVENTURE_TRAINERS = [
+      {
+        id: 'hanae',
+        rank: 1,
+        stars: '★☆☆☆☆',
+        difficultyLabel: 'Palier 1 · Entrée de Ligue',
+        name: 'Hanaé',
+        title: 'La Botaniste Tactique',
+        badgeName: 'Badge Bourgeon 2000',
+        badgeIcon: '🌿',
+        avatar: 'assets/trainers/hanae.jpg',
+        deckKey: 'ADV_1_VENUSAUR',
+        deckArchetype: 'Venusaur / Dodrio (Energy Trans)',
+        tourneyCitation: 'Archétype officiel Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
+        realPlayer: 'Métagame Tournois WOTC 1999–2000',
+        playmat: 'playmat-jungle',
+        rewardCoins: 150,
+        rewardFreePacks: 1,
+        accentBadge: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+        keyCards: ['base1-15', 'base2-34', 'base2-5', 'base1-85'],
+        personality: 'Calme, érudite et souriante. Elle manipule le flux d\'Énergie Plante comme un jardin vivant et soigne ses Pokémon au moment où tu crois les mettre K.O.',
+        strategyNote: 'Son Florizarre déplace librement ses Énergies Plante avec Transfert d\'Énergie avant de lancer Centre Pokémon pour tout soigner sans perdre d\'Énergie !',
+        quotes: {
+          intro: 'Bienvenue dans ma serre de tournoi ! Avec le Transfert d\'Énergie de mon Florizarre, pas une seule feuille ne fanera.',
+          turn: [
+            'Chaque Énergie Plante circule là où la nature en a besoin…',
+            'Tu vois mes marqueurs de dégâts ? Un petit tour au Centre Pokémon et tout disparaît !',
+            'Dodrio allège la retraite de toute mon équipe, impossible de nous piéger.'
+          ],
+          trainerPlay: 'La patience du jardinier : je réorganise mes ressources !',
+          koPlayer: 'La nature reprend ses droits ! Une Récompense de plus pour mon herbier.',
+          koSelf: 'Oh ! Tu as réussi à percer ma canopée… Impressionnant !',
+          win: 'Une floraison parfaite ! Reviens me défier quand tu auras affûté ta stratégie.',
+          lose: 'Magnifique duel ! Tu mérites le Badge Bourgeon 2000 et ma liste officielle Venusaur Energy Trans.'
+        }
+      },
+      {
+        id: 'ryo',
+        rank: 2,
+        stars: '★★☆☆☆',
+        difficultyLabel: 'Palier 2 · Challenger Explosif',
+        name: 'Ryo',
+        title: 'L\'Éclair Écarlate',
+        badgeName: 'Badge Volcan 2000',
+        badgeIcon: '🔥',
+        avatar: 'assets/trainers/ryo.jpg',
+        deckKey: 'ADV_2_ARCANINE',
+        deckArchetype: 'Psyduck / Arcanine / Electrode (Buzzap)',
+        tourneyCitation: 'Archétype de tournoi Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
+        realPlayer: 'Circuit Super Trainer Showdown 1999–2000',
+        playmat: 'playmat-fossil',
+        rewardCoins: 200,
+        rewardFreePacks: 1,
+        accentBadge: 'bg-orange-100 text-orange-900 border-orange-300',
+        keyCards: ['base1-23', 'base1-21', 'base3-53', 'base1-80'],
+        personality: 'Impulsif, chambreur et survolté. Il adore bloquer tes cartes Dresseur avec Psykokwak pendant qu\'il prépare le sacrifice explosif d\'Électrode.',
+        strategyNote: 'Psykokwak bloque tes cartes Dresseur dès le tour 1 avec Migraine (1 Énergie), puis Électrode utilise Buzzap pour devenir 2 Énergies Feu sur Arcanin !',
+        quotes: {
+          intro: 'Prêt à avoir mal au crâne ? Mon Psykokwak bloque tes Dresseurs pendant que mon Arcanin chauffe à blanc !',
+          turn: [
+            'Migraine activée ! Range tes Léo et tes Professeur Chen, ils ne te serviront à rien !',
+            'Quand mon Électrode déclenche Buzzap, mon Arcanin frappe à 80 dégâts d\'un coup !',
+            'Un Défenseur sur Arcanin et mon Bélier écrase tout sans sentir le recul !'
+          ],
+          trainerPlay: 'À pleine vitesse ! Je brûle tout mon deck pour trouver la pièce manquante !',
+          koPlayer: 'BOUM ! 80 dégâts de plein fouet, personne ne résiste à Arcanin !',
+          koSelf: 'Tss… Ce n\'était qu\'une étincelle, la vraie déflagration arrive !',
+          win: 'Trop lent ! Sans tes cartes Dresseur, tu ne pouvais pas suivre mon rythme !',
+          lose: 'Quoi ?! Tu as encaissé le Buzzap d\'Électrode et le Bélier d\'Arcanin ?! Prends mon deck, tu l\'as gagné !'
+        }
+      },
+      {
+        id: 'kai',
+        rank: 3,
+        stars: '★★★☆☆',
+        difficultyLabel: 'Palier 3 · Champion West Coast',
+        name: 'Kaï',
+        title: 'Le Prodige du Queen Mary',
+        badgeName: 'Badge Déluge 2000',
+        badgeIcon: '🌊',
+        avatar: 'assets/trainers/kai.jpg',
+        deckKey: 'ADV_3_RAINDANCE',
+        deckArchetype: 'Rain Dance (Blastoise / Articuno / Lapras)',
+        tourneyCitation: '1re Place Super Trainer Showdown West Coast (Juillet 2000, Queen Mary, Long Beach CA)',
+        realPlayer: 'Joseph Viray (Champion STS West Coast 2000)',
+        playmat: 'playmat-night',
+        rewardCoins: 250,
+        rewardFreePacks: 1,
+        accentBadge: 'bg-sky-100 text-sky-900 border-sky-300',
+        keyCards: ['base1-2', 'base3-2', 'base1-76', 'base1-88'],
+        personality: 'Sang-froid absolu, casque autour du cou et regard calculateur. Dès que Tortank touche le terrain au tour 2, il déclenche une averse d\'Énergies Eau.',
+        strategyNote: 'Utilise 4 Éleveur de Pokémon pour poser Tortank dès le tour 2 sans passer par Carabaffe, puis attache toutes ses Énergies Eau d\'un seul coup avec Danse de la pluie !',
+        quotes: {
+          intro: 'Sur le paquebot Queen Mary en juillet 2000, ce deck Rain Dance a tout balayé. Voyons si tu sais nager contre le déluge.',
+          turn: [
+            'Éleveur de Pokémon + Tortank : la Danse de la pluie commence maintenant.',
+            'Une, deux, trois Énergies Eau en un seul tour… L\'Hydrocanon est chargé à 60 dégâts.',
+            'Artikodin Fossile gèle le Banc adverse pendant que Tortank contrôle l\'océan.'
+          ],
+          trainerPlay: 'Je vide ma main avec Professeur Chen pour alimenter la Danse de la pluie !',
+          koPlayer: 'Emporté par la vague ! C\'est la puissance brute du Rain Dance de l\'an 2000.',
+          koSelf: 'Pas mal… mais tant qu\'il reste de l\'Eau dans ma défausse, Sauvegarde d\'Énergie relance la marée.',
+          win: 'Submergé en quelques tours. Personne n\'arrête Tortank une fois la pluie lancée.',
+          lose: 'Incroyable… Tu as survécu à la Danse de la pluie de Long Beach ! Le Badge Déluge 2000 est à toi.'
+        }
+      },
+      {
+        id: 'takuya',
+        rank: 4,
+        stars: '★★★★☆',
+        difficultyLabel: 'Palier 4 · Champion d\'Honolulu',
+        name: 'Takuya',
+        title: 'Le Stratège d\'Honolulu',
+        badgeName: 'Badge Vague 2000',
+        badgeIcon: '🌺',
+        avatar: 'assets/trainers/takuya.jpg',
+        deckKey: 'ADV_4_WIGGLYTUFF',
+        deckArchetype: 'Do the Wave (Wigglytuff / Magmar / Scyther / Muk)',
+        tourneyCitation: 'Champion Tropical Mega Battle (Honolulu) & Finaliste STS West Coast (Juillet 2000)',
+        realPlayer: 'Takuya Yoneda (Champion TMB) & William Lieu (Finaliste STS 2000)',
+        playmat: 'playmat-jungle',
+        rewardCoins: 300,
+        rewardFreePacks: 1,
+        accentBadge: 'bg-pink-100 text-pink-900 border-pink-300',
+        keyCards: ['base2-16', 'base3-39', 'base2-10', 'base3-13'],
+        personality: 'Charismatique, souriant mais redoutable. Inspiré du champion japonais du Tropical Mega Battle d\'Honolulu, il transforme un Banc plein en rouleau compresseur.',
+        strategyNote: 'Remplit ses 5 places de Banc et attache une Double Énergie Incolore à Grodoudou pour infliger 60 dégâts dès le tour 2 avec Faire la Vague, tout en bloquant les Pouvoirs avec Grotadmorv !',
+        quotes: {
+          intro: 'Aloha ! À Honolulu comme à Long Beach, « Faire la Vague » de Grodoudou a surpris les meilleurs joueurs du monde !',
+          turn: [
+            'Banc complet : 5 Pokémon en soutien = 60 dégâts pour Grodoudou à chaque tour !',
+            'Le Gaz Toxique de mon Grotadmorv coupe tous les Pouvoirs Pokémon du plateau !',
+            'Magmar Fossile et Insécateur tiennent la ligne pendant que Rondoudou se prépare.'
+          ],
+          trainerPlay: 'Un bon champion ne laisse jamais son Banc vide !',
+          koPlayer: '60 dégâts + PlusPower ! Voilà pourquoi Grodoudou est une terreur des tournois 2000 !',
+          koSelf: 'Haha, bien joué ! Mais mon Banc est encore plein, la vague suivante arrive !',
+          win: 'La vague d\'Honolulu a tout emporté ! C\'était un super match !',
+          lose: 'Sublime ! Tu as brisé ma vague avec un sang-froid de champion mondial. Prends mon deck Do the Wave !'
+        }
+      },
+      {
+        id: 'soren',
+        rank: 5,
+        stars: '★★★★★',
+        difficultyLabel: 'Palier 5 · Maître du Contrôle',
+        name: 'Soren',
+        title: 'Le Marionnettiste Psy',
+        badgeName: 'Badge Illusion 2000',
+        badgeIcon: '🔮',
+        avatar: 'assets/trainers/soren.jpg',
+        deckKey: 'ADV_5_DAMAGESWAP',
+        deckArchetype: 'Damage Swap Stall (Alakazam / Mr. Mime / Chansey)',
+        tourneyCitation: 'Archétype de contrôle Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
+        realPlayer: 'Maîtres du Contrôle WOTC 1999–2000',
+        playmat: 'playmat-mewtwo',
+        rewardCoins: 350,
+        rewardFreePacks: 1,
+        accentBadge: 'bg-purple-100 text-purple-900 border-purple-300',
+        keyCards: ['base1-1', 'base2-6', 'base1-3', 'base1-78'],
+        personality: 'Théâtral, énigmatique et calculateur. Pour lui, tes attaques ne sont que des pions qu\'il déplace à sa guise avant de les effacer avec Rappel.',
+        strategyNote: 'M. Mime bloque toute attaque de 30 dégâts ou plus avec son Mur Invisible, tandis qu\'Alakazam transfère tous les marqueurs de dégâts vers Leveinard (120 PV) avant de le reprendre en main avec Rappel !',
+        quotes: {
+          intro: 'Frappe aussi fort que tu veux… Tant qu\'Alakazam et M. Mime sont sur mon terrain, tes dégâts ne m\'appartiennent jamais vraiment.',
+          turn: [
+            'Transfert de dégâts : je déplace la douleur sur Leveinard… puis Rappel efface tout !',
+            'Plus de 30 dégâts ? Le Mur Invisible de M. Mime les réduit au néant.',
+            'Chaque tour qui passe rapproche ton deck de l\'épuisement.'
+          ],
+          trainerPlay: 'Un coup de théâtre ! Mes dégâts disparaissent comme par magie.',
+          koPlayer: 'Échec et mat psychique. Ton attaque s\'est retournée contre toi.',
+          koSelf: 'Intéressant… Tu as trouvé une faille dans mon illusion.',
+          win: 'Tu t\'es épuisé contre mes miroirs. Le contrôle absolu triomphe toujours.',
+          lose: 'Fascinant… Tu as réussi à percer le Mur Invisible et le Transfert de dégâts ! Seul Axel peut encore t\'arrêter.'
+        }
+      },
+      {
+        id: 'axel',
+        rank: 6,
+        stars: '👑★★★★★',
+        difficultyLabel: 'BOSS FINAL · Grand Champion 2000',
+        name: 'Axel',
+        title: 'Le Roi du Haymaker',
+        badgeName: 'Couronne Haymaker 2000',
+        badgeIcon: '👑',
+        avatar: 'assets/trainers/axel.jpg',
+        deckKey: 'ADV_6_HAYMAKER',
+        deckArchetype: 'Haymaker (Hitmonchan / Electabuzz / Scyther / Magmar)',
+        tourneyCitation: '1re Place 15+ Super Trainer Showdown West Coast (Juillet 2000) & Archive Jason Klaczynski',
+        realPlayer: 'Andrew Marshall (Champion 15+ STS 2000) & Jason Klaczynski (3× Champion du Monde)',
+        playmat: 'playmat-night',
+        rewardCoins: 500,
+        rewardFreePacks: 2,
+        accentBadge: 'bg-amber-100 text-amber-950 border-amber-400',
+        keyCards: ['base1-7', 'base1-20', 'base2-10', 'base1-79'],
+        personality: 'Rival ultime au sommet de la Ligue 2000. Il joue le légendaire Haymaker : zéro évolution, vitesse foudroyante, privation totale d\'Énergie et K.O. mathématiques au PlusPower.',
+        strategyNote: '4 Tygnon, 4 Élektek, 3 Insécateur, 2 Magmar Fossile + 4 Suppression d\'Énergie, 3 Double Suppression d\'Énergie, 3 PlusPower et 3 Rafale de vent. Le deck n°1 incontesté de l\'an 2000 !',
+        quotes: {
+          intro: 'Alors c\'est toi qui as battu les 5 Champions ? Voici le vrai roi de l\'an 2000 : le Haymaker de tournoi. Zéro évolution, 100% efficacité.',
+          turn: [
+            'Suppression d\'Énergie + Double Suppression d\'Énergie : tu n\'attaqueras pas ce tour-ci !',
+            'Jab de Tygnon, Éclair d\'Élektek, PlusPower : chaque point de dégât est calculé au millimètre.',
+            'Rafale de vent ! Je vais chercher ton Pokémon le plus fragile directement sur ton Banc !'
+          ],
+          trainerPlay: 'C\'est comme ça qu\'on joue au Championnat du Monde 2000 !',
+          koPlayer: 'K.O. net et sans bavure ! Le Haymaker ne pardonne aucune erreur de tempo.',
+          koSelf: 'Bien joué ! Mais chacun de mes Pokémon de Base a 70 PV et frappe dès le premier tour !',
+          win: 'Voilà pourquoi le Haymaker a régné sans partage sur l\'année 2000. Reviens quand tu voudras ta revanche !',
+          lose: 'INCROYABLE ! Tu as vaincu le Haymaker officiel de juillet 2000 ! Tu es le nouveau Grand Maître de la Ligue 2000 !'
+        }
+      }
+    ];
+
+    const PROFILE_ADV_BASE = 'ppi_v2_adventure_save';
+    let adventureSave = { unlockedRank: 1, defeated: {}, selectedDeck: 'V2_FEU' };
+
+    function loadAdventureSaveFromStorage() {
+      adventureSave = { unlockedRank: 1, defeated: {}, selectedDeck: 'V2_FEU' };
+      try {
+        const raw = localStorage.getItem(profileStorageKey(PROFILE_ADV_BASE));
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') {
+            adventureSave.unlockedRank = Math.max(1, Math.min(ADVENTURE_TRAINERS.length, parseInt(parsed.unlockedRank, 10) || 1));
+            adventureSave.defeated = (parsed.defeated && typeof parsed.defeated === 'object') ? parsed.defeated : {};
+            if (parsed.selectedDeck && typeof parsed.selectedDeck === 'string') {
+              adventureSave.selectedDeck = parsed.selectedDeck;
+            }
+          }
+        }
+      } catch (_) {}
+      // Recalculer le rang débloqué selon les champions déjà battus
+      let maxDefeatedRank = 0;
+      ADVENTURE_TRAINERS.forEach((t) => {
+        if ((adventureSave.defeated[t.id] || 0) > 0 && t.rank > maxDefeatedRank) maxDefeatedRank = t.rank;
+      });
+      if (maxDefeatedRank + 1 > adventureSave.unlockedRank) {
+        adventureSave.unlockedRank = Math.min(ADVENTURE_TRAINERS.length, maxDefeatedRank + 1);
+      }
+      updateAdventureBadgesUi();
+    }
+
+    function saveAdventureData() {
+      try {
+        localStorage.setItem(profileStorageKey(PROFILE_ADV_BASE), JSON.stringify(adventureSave));
+      } catch (_) {}
+      updateAdventureBadgesUi();
+    }
+
+    function getDefeatedAdvCount() {
+      return ADVENTURE_TRAINERS.filter((t) => (adventureSave.defeated[t.id] || 0) > 0).length;
+    }
+
+    function getUnlockedTournamentDeckKeys() {
+      return ADVENTURE_TRAINERS
+        .filter((t) => (adventureSave.defeated[t.id] || 0) > 0)
+        .map((t) => t.deckKey);
+    }
+
+    function updateAdventureBadgesUi() {
+      const done = getDefeatedAdvCount();
+      const total = ADVENTURE_TRAINERS.length;
+      const navB = document.getElementById('navAdvBadge');
+      if (navB) {
+        navB.textContent = `${done}/${total}`;
+        navB.className = `px-1.5 py-0.2 rounded-full ${done >= total ? 'bg-amber-400 text-slate-950' : 'bg-sky-500 text-white'} text-[9.5px] font-black leading-tight`;
+      }
+      const soloB = document.getElementById('soloAdvProgressBadge');
+      if (soloB) soloB.textContent = `${done}/${total} Champions`;
+      const hubB = document.getElementById('hubAdvBadge');
+      if (hubB) hubB.textContent = `${done}/${total}`;
+    }
 
     // Un deck est jouable s'il existe, contient au moins 1 Pokémon de Base et (deck perso) respecte les règles
     function deckKeyPlayable(k) {
@@ -16652,11 +17014,14 @@ const TYPE_EMOJI = {
 
     function switchMenuTab(tab) {
       const isSolo = tab === 'tuto' || tab === 'quick' || tab === 'solo';
+      const isAdv = tab === 'adventure';
       const isMulti = tab === 'multi';
       const isBooster = tab === 'booster';
       const isDecks = tab === 'decks';
       const vd = document.getElementById('viewDecks');
       if (vd) vd.classList.toggle('hidden', !isDecks);
+      const va = document.getElementById('viewAdventure');
+      if (va) va.classList.toggle('hidden', !isAdv);
       const vt = document.getElementById('viewTuto');
       if (vt) vt.classList.toggle('hidden', !isSolo);
       const vq = document.getElementById('viewQuick');
@@ -16676,10 +17041,12 @@ const TYPE_EMOJI = {
       };
       setNav('tabBtnTuto', isSolo);
       setNav('tabBtnQuick', isSolo);
+      setNav('tabBtnAdventure', isAdv);
       setNav('tabBtnMulti', isMulti, 'nav-ico-multi');
       setNav('tabBtnBooster', isBooster);
       setNav('tabBtnDecks', isDecks);
       if (isDecks && typeof renderDecksView === 'function') renderDecksView();
+      if (isAdv && typeof renderAdventureView === 'function') renderAdventureView();
 
       if (isSolo) renderQuickSetup();
       if (isMulti) {
@@ -16690,6 +17057,305 @@ const TYPE_EMOJI = {
         sendMultiPresence(true);
       }
       if (isBooster && typeof updateBoosterStatsUi === 'function') updateBoosterStatsUi();
+    }
+
+    function selectAdvPlayerDeck(key) {
+      if (!deckKeyPlayable(key)) return;
+      adventureSave.selectedDeck = key;
+      saveAdventureData();
+      renderAdventureView();
+    }
+
+    function openAdvDeckInspector(trainerId) {
+      const tr = ADVENTURE_TRAINERS.find((t) => t.id === trainerId);
+      if (!tr) return;
+      const recipe = HALF_DECKS[tr.deckKey] || [];
+      const isDefeated = (adventureSave.defeated[tr.id] || 0) > 0;
+      const expanded = [];
+      let pkmCount = 0, trnCount = 0, nrgCount = 0;
+      recipe.forEach(([cid, count]) => {
+        const c = CARDS_DB[cid];
+        if (!c) return;
+        if (c.category === 'Pokémon') pkmCount += count;
+        else if (c.category === 'Dresseur') trnCount += count;
+        else nrgCount += count;
+        expanded.push({ card: c, count });
+      });
+
+      openPickerModal(
+        `📜 ${tr.deckArchetype} (60 cartes)`,
+        `${tr.name} · ${tr.tourneyCitation}`,
+        [],
+        () => {},
+        true
+      );
+      const grid = document.getElementById('pickerGrid');
+      grid.className = 'flex flex-col gap-2.5 overflow-y-auto p-1 max-h-[70dvh]';
+      const renderGroup = (title, items) => `
+        <div class="rounded-xl bg-slate-900/90 border border-white/15 p-2.5 space-y-2">
+          <div class="text-[11px] font-black uppercase tracking-wider text-amber-300">${title}</div>
+          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            ${items.map(({ card, count }) => `
+              <div onclick="showStickyPreview('${card.img}')" class="cursor-pointer rounded-lg bg-slate-800/90 border border-white/15 hover:border-amber-400 p-1 flex flex-col items-center relative transition active:scale-95">
+                <div class="relative w-full aspect-[63/88] rounded overflow-hidden">
+                  <img src="${card.img}" alt="${card.name}" loading="lazy" class="w-full h-full object-cover" />
+                  <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-slate-950/90 border border-amber-300/60 text-amber-300 font-mono font-black text-[10px]">×${count}</span>
+                </div>
+                <span class="text-[10px] font-bold text-white mt-1 truncate w-full text-center">${card.name}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      const pkms = expanded.filter((x) => x.card.category === 'Pokémon');
+      const trns = expanded.filter((x) => x.card.category === 'Dresseur');
+      const nrgs = expanded.filter((x) => x.card.category === 'Énergie');
+      grid.innerHTML = `
+        <div class="rounded-xl bg-slate-800/90 border border-sky-400/40 p-2.5 flex items-center gap-2.5 text-left">
+          <img src="${tr.avatar}" alt="${tr.name}" class="w-12 h-12 rounded-xl object-cover border-2 border-amber-300 shrink-0" />
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-black text-white">${tr.name} — « ${tr.title} »</div>
+            <div class="text-[10.5px] font-bold text-sky-300">${tr.realPlayer}</div>
+            <div class="text-[10px] text-slate-300 mt-0.5">${pkmCount} Pokémon · ${trnCount} Dresseurs · ${nrgCount} Énergies (60 cartes vérifiées)</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="closePickerModal(); startAdventureMatch('${tr.id}')" ${tr.rank <= adventureSave.unlockedRank ? '' : 'disabled'} class="flex-1 py-2.5 px-3 rounded-xl font-black text-xs uppercase ${tr.rank <= adventureSave.unlockedRank ? 'bg-yellow-400 text-slate-950 shadow' : 'bg-white/10 text-slate-400'}">
+            ${tr.rank <= adventureSave.unlockedRank ? `⚔️ Défier ${tr.name}` : `🔒 Bats d'abord le Palier ${tr.rank - 1}`}
+          </button>
+          ${isDefeated ? `
+            <button onclick="closePickerModal(); selectAdvPlayerDeck('${tr.deckKey}')" class="flex-1 py-2.5 px-3 rounded-xl font-black text-xs uppercase bg-emerald-400 text-slate-950 shadow">
+              ✓ Jouer avec ce Deck 2000
+            </button>
+          ` : `
+            <span class="px-3 py-2 rounded-xl bg-white/10 border border-white/15 text-[10.5px] font-bold text-amber-200 flex items-center">
+              🏆 Bats ${tr.name} pour débloquer son deck !
+            </span>
+          `}
+        </div>
+        ${renderGroup(`🐾 Pokémon (${pkmCount})`, pkms)}
+        ${renderGroup(`🎒 Cartes Dresseur (${trnCount})`, trns)}
+        ${renderGroup(`⚡ Énergies (${nrgCount})`, nrgs)}
+      `;
+    }
+
+    function startAdventureMatch(trainerId) {
+      const tr = ADVENTURE_TRAINERS.find((t) => t.id === trainerId);
+      if (!tr) return;
+      if (tr.rank > adventureSave.unlockedRank) {
+        const prev = ADVENTURE_TRAINERS.find((t) => t.rank === tr.rank - 1);
+        showGameToast(`🔒 Bats d'abord <strong>${prev ? prev.name : 'le dresseur précédent'}</strong> pour débloquer ${tr.name} !`);
+        return;
+      }
+      if (!deckKeyPlayable(adventureSave.selectedDeck)) {
+        adventureSave.selectedDeck = 'V2_FEU';
+      }
+      startMatch(adventureSave.selectedDeck, tr.deckKey, 'adventure', tr.id);
+    }
+
+    function renderAdventureView() {
+      const box = document.getElementById('viewAdventure');
+      if (!box) return;
+      if (!deckKeyPlayable(adventureSave.selectedDeck)) {
+        adventureSave.selectedDeck = 'V2_FEU';
+      }
+      const defeatedCount = getDefeatedAdvCount();
+      const totalCount = ADVENTURE_TRAINERS.length;
+      const pct = Math.round((defeatedCount / totalCount) * 100);
+
+      const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
+      const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
+      const customKeys = typeof getCustomDeckKeys === 'function' ? getCustomDeckKeys(true) : [];
+      const unlockedTourneyKeys = getUnlockedTournamentDeckKeys();
+
+      const renderDeckPill = (k) => {
+        const d = DECK_META[k];
+        if (!d) return '';
+        const sel = adventureSave.selectedDeck === k;
+        const isHalf = d.cards === 30;
+        const isTourney = !!d.tournament;
+        return `
+          <button onclick="selectAdvPlayerDeck('${k}')" class="p-1.5 rounded-xl border ${sel ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-300 shadow-sm scale-[1.01]' : 'bg-slate-50/90 hover:bg-white border-slate-200/90'} flex flex-col items-center gap-1 transition active:scale-95">
+            <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-slate-900">
+              <img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
+              <span class="absolute bottom-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded ${isTourney ? 'bg-amber-400 text-slate-950' : isHalf ? 'bg-amber-300 text-slate-950' : 'bg-indigo-600 text-white'}">${isTourney ? '2000' : isHalf ? '30c' : '60c'}</span>
+              ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-sky-500 text-white text-[10px] font-black flex items-center justify-center shadow">✓</span>' : ''}
+            </div>
+            <span class="text-[10.5px] font-black ${sel ? 'text-sky-950' : 'text-slate-900'} w-full text-center leading-tight truncate">${d.short}</span>
+          </button>
+        `;
+      };
+
+      const curDeckMeta = DECK_META[adventureSave.selectedDeck] || DECK_META.V2_FEU;
+
+      const trainerCardsHtml = ADVENTURE_TRAINERS.map((tr) => {
+        const wins = adventureSave.defeated[tr.id] || 0;
+        const isDefeated = wins > 0;
+        const isUnlocked = tr.rank <= adventureSave.unlockedRank;
+        const isCurrentTarget = tr.rank === adventureSave.unlockedRank && !isDefeated;
+        const keyCardObjs = tr.keyCards.map((cid) => CARDS_DB[cid]).filter(Boolean);
+
+        return `
+          <div class="rounded-2xl tcg-card-panel p-3 space-y-2.5 transition ${isCurrentTarget ? 'ring-2 ring-sky-400/80 shadow-md' : ''} ${!isUnlocked ? 'opacity-80' : ''}">
+            <div class="flex items-start gap-3">
+              <!-- Portrait Anime Manga Higgsfield -->
+              <div onclick="openAdvDeckInspector('${tr.id}')" class="cursor-pointer relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 ${isDefeated ? 'border-emerald-400' : isUnlocked ? 'border-sky-400' : 'border-slate-300'} shadow-md shrink-0 bg-slate-900 group">
+                <img src="${tr.avatar}" alt="${tr.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${!isUnlocked ? 'grayscale-[45%]' : ''}" />
+                <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-slate-950/85 text-white font-black text-[9px] tracking-wide">#${tr.rank}</span>
+                ${isDefeated ? `<span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-black text-[9px] shadow">${tr.badgeIcon} Vaincu</span>` : ''}
+              </div>
+
+              <!-- Infos Dresseur & Deck Historique 2000 -->
+              <div class="min-w-0 flex-1 space-y-1">
+                <div class="flex items-center justify-between gap-1.5 flex-wrap">
+                  <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${tr.accentBadge}">${tr.difficultyLabel}</span>
+                  <span class="text-[11px] font-black text-amber-500 tracking-tight" title="Difficulté">${tr.stars}</span>
+                </div>
+                <div class="flex items-baseline gap-1.5 flex-wrap">
+                  <h3 class="text-sm sm:text-base font-black text-slate-900 leading-tight">${tr.name}</h3>
+                  <span class="text-[11px] font-bold text-slate-500">· « ${tr.title} »</span>
+                </div>
+                <div class="text-[11px] font-extrabold text-sky-800 leading-snug">
+                  🏆 Deck : <span class="underline decoration-sky-300">${tr.deckArchetype}</span> (60c)
+                </div>
+                <div class="text-[10px] font-semibold text-slate-500 leading-tight">
+                  📜 Source vérifiée : <strong class="text-slate-700">${tr.realPlayer}</strong> — <em>${tr.tourneyCitation}</em>
+                </div>
+              </div>
+            </div>
+
+            <!-- Personnalité & Stratégie + Cartes Clés -->
+            <div class="rounded-xl bg-slate-50/90 border border-slate-200/80 p-2.5 space-y-2">
+              <p class="text-[11px] text-slate-700 italic leading-snug">
+                « ${tr.quotes.intro} »
+              </p>
+              <div class="text-[10.5px] text-slate-600 leading-snug">
+                <strong class="text-slate-900">Tactique 2000 :</strong> ${tr.strategyNote}
+              </div>
+
+              <!-- Aperçu des 4 cartes phares + Récompenses -->
+              <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/70 flex-wrap">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-slate-400 mr-0.5">Cartes clés :</span>
+                  ${keyCardObjs.map((c) => `
+                    <button onclick="showStickyPreview('${c.img}')" class="w-8 aspect-[63/88] rounded overflow-hidden border border-slate-300 shadow-sm hover:scale-110 transition bg-slate-900" title="${c.name}">
+                      <img src="${c.img}" alt="${c.name}" loading="lazy" class="w-full h-full object-cover" />
+                    </button>
+                  `).join('')}
+                </div>
+                <div class="flex items-center gap-1 text-[10px] font-extrabold ${isDefeated ? 'text-emerald-700' : 'text-amber-700'}">
+                  ${isDefeated
+                    ? `<span>✅ Deck débloqué · ${wins} victoire${wins > 1 ? 's' : ''} (+100 🪙/revanche)</span>`
+                    : `<span>🎁 1re victoire : +${tr.rewardCoins} 🪙 + ${tr.rewardFreePacks} Booster + Deck 2000</span>`
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="grid grid-cols-[auto_1fr] gap-2">
+              <button onclick="openAdvDeckInspector('${tr.id}')" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 border border-slate-200/90 text-[11px] font-extrabold text-slate-700 transition active:scale-95">
+                📜 Voir les 60 cartes
+              </button>
+              ${isUnlocked ? `
+                <button onclick="startAdventureMatch('${tr.id}')" class="btn-gold py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider shadow flex items-center justify-center gap-1.5 active:scale-[0.99] transition">
+                  <span>⚔️ ${isDefeated ? `Revanche contre ${tr.name}` : `Défier ${tr.name}`}</span>
+                </button>
+              ` : `
+                <button disabled class="py-2.5 px-4 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 text-xs font-extrabold uppercase tracking-wide flex items-center justify-center gap-1.5">
+                  <span>🔒 Bats d'abord ${ADVENTURE_TRAINERS[tr.rank - 2]?.name || 'le palier précédent'}</span>
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      box.innerHTML = `
+        <!-- En-tête Mode Aventure · Ligue Tournois 2000 -->
+        <div class="w-full p-3.5 rounded-2xl tcg-card-panel space-y-2.5">
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+              <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-sky-100 border border-sky-300 text-sky-900 text-[10px] font-black uppercase tracking-wider">
+                🏆 Archives Officielles WOTC 1999–2000
+              </div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 leading-tight mt-1">
+                Mode Aventure · Ligue 2000
+              </h2>
+              <p class="text-[11px] text-slate-600 leading-snug mt-0.5">
+                Affronte 6 Dresseurs de plus en plus redoutables équipés des <strong>vrais decks de tournois de l'an 2000</strong> (Queen Mary STS 2000, Tropical Mega Battle Honolulu, PTCG Archive). Chaque champion battu débloque son <strong>deck de tournoi 60 cartes</strong> !
+              </p>
+            </div>
+            <div class="shrink-0 text-right">
+              <div class="text-xs font-black text-slate-900">${defeatedCount} / ${totalCount}</div>
+              <div class="text-[10px] font-bold text-slate-500">Champions</div>
+            </div>
+          </div>
+
+          <!-- Barre de progression + Badges gagnés -->
+          <div class="space-y-1.5">
+            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400 transition-all duration-500" style="width:${pct}%"></div>
+            </div>
+            <div class="grid grid-cols-6 gap-1 pt-0.5">
+              ${ADVENTURE_TRAINERS.map((t) => {
+                const won = (adventureSave.defeated[t.id] || 0) > 0;
+                return `
+                  <div onclick="openAdvDeckInspector('${t.id}')" class="cursor-pointer rounded-xl px-1 py-1 border text-center transition ${won ? 'bg-emerald-50 border-emerald-300 text-emerald-900 shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-400'}">
+                    <div class="text-xs leading-none">${won ? t.badgeIcon : '🔒'}</div>
+                    <div class="text-[9px] font-extrabold truncate mt-0.5">${t.name}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- Sélecteur repliable du Deck du Joueur pour l'Aventure -->
+        <details class="w-full rounded-2xl tcg-card-panel group overflow-hidden">
+          <summary class="cursor-pointer list-none px-3 py-2.5 flex items-center justify-between gap-2.5 select-none">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="${curDeckMeta.img}" alt="${curDeckMeta.name}" class="w-9 aspect-[63/88] rounded-md object-cover border-2 border-sky-400 shrink-0 shadow-sm" />
+              <div class="min-w-0">
+                <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-sky-700">Ton Deck pour l'Aventure</div>
+                <div class="text-xs font-black text-slate-900 truncate">${curDeckMeta.name}</div>
+                <div class="text-[10px] font-semibold text-slate-500 truncate">${curDeckMeta.cards} cartes · ${curDeckMeta.prizes} Récompenses</div>
+              </div>
+            </div>
+            <span class="shrink-0 px-2.5 py-1 rounded-xl bg-slate-100 group-hover:bg-sky-50 border border-slate-200 text-[10px] font-extrabold text-slate-700 flex items-center gap-1">
+              <span>Changer de Deck</span>
+              <span class="text-slate-400 group-open:rotate-180 inline-block transition-transform">▼</span>
+            </span>
+          </summary>
+          <div class="px-3 pb-3 pt-2 border-t border-slate-200/80 bg-slate-50/60 space-y-2.5">
+            ${unlockedTourneyKeys.length ? `
+              <div class="space-y-1">
+                <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">🏆 Decks de Tournois 2000 Débloqués (${unlockedTourneyKeys.length}/6)</div>
+                <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${unlockedTourneyKeys.map(renderDeckPill).join('')}</div>
+              </div>
+            ` : ''}
+            ${customKeys.length ? `
+              <div class="space-y-1">
+                <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">✨ Mes Decks Perso (${customKeys.length})</div>
+                <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderDeckPill).join('')}</div>
+              </div>
+            ` : ''}
+            <div class="space-y-1">
+              <div class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">Decks Complets · 60 cartes (6 Prix · Recommandé)</div>
+              <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderDeckPill).join('')}</div>
+            </div>
+            <div class="space-y-1">
+              <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">Demi-Decks Rapides · 30 cartes (3 Prix)</div>
+              <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderDeckPill).join('')}</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Liste des 6 Champions de la Ligue 2000 -->
+        <div class="space-y-2.5">
+          ${trainerCardsHtml}
+        </div>
+      `;
     }
 
     function selectQuickPlayerDeck(key) {
@@ -16710,17 +17376,19 @@ const TYPE_EMOJI = {
 
       const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
       const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
+      const unlockedTourneyKeys = typeof getUnlockedTournamentDeckKeys === 'function' ? getUnlockedTournamentDeckKeys() : [];
 
       const renderPlayerCard = (k) => {
         const d = DECK_META[k];
         const sel = quickPlayerDeck === k;
         const isHalf = d.cards === 30;
+        const isTourney = !!d.tournament;
         const starLabel = (d.star || '').split(' (')[0];
         return `
           <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl border ${sel ? 'bg-amber-50/95 border-amber-400 ring-2 ring-amber-400 shadow-md scale-[1.01]' : 'bg-slate-50/90 hover:bg-white border-slate-200/90 hover:border-slate-300'} flex flex-col items-center gap-1 transition active:scale-95">
             <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-slate-900">
               <img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span class="absolute bottom-0.5 left-0.5 text-[9px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-600 text-white'}">${isHalf ? '30c' : '60c'}</span>
+              <span class="absolute bottom-0.5 left-0.5 text-[9px] font-black uppercase px-1 rounded ${isTourney ? 'bg-amber-400 text-slate-950' : isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-600 text-white'}">${isTourney ? '2000' : isHalf ? '30c' : '60c'}</span>
               ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black flex items-center justify-center shadow">✓</span>' : ''}
             </div>
             <span class="text-[11px] font-black ${sel ? 'text-amber-900' : 'text-slate-900'} w-full text-center leading-tight truncate">${d.short}</span>
@@ -16741,6 +17409,13 @@ const TYPE_EMOJI = {
             ${customKeys.length ? 'Mes Decks (' + customKeys.length + ')' : '+ Créer un deck'}
           </button>
         </div>
+        ${unlockedTourneyKeys.length ? `
+        <div class="space-y-1">
+          <div class="flex items-center justify-between px-0.5">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">🏆 Decks Champions Tournois 2000 (${unlockedTourneyKeys.length}/6)</span>
+          </div>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${unlockedTourneyKeys.map(renderPlayerCard).join('')}</div>
+        </div>` : ''}
         ${customKeys.length ? `
         <div class="space-y-1">
           <div class="flex items-center justify-between px-0.5">
@@ -16814,7 +17489,7 @@ const TYPE_EMOJI = {
     renderQuickSetup();
 
     function startQuickMatch() {
-      const keys = Object.keys(DECK_META).filter((k) => !k.startsWith('CUSTOM_'));
+      const keys = Object.keys(DECK_META).filter((k) => !k.startsWith('CUSTOM_') && !k.startsWith('ADV_'));
       const aiKey = quickAiDeck === 'RANDOM'
         ? keys[Math.floor(Math.random() * keys.length)]
         : quickAiDeck;
@@ -16846,7 +17521,8 @@ const TYPE_EMOJI = {
     function profileHasData(name) {
       try {
         return localStorage.getItem(profileStorageKey(PROFILE_BOOSTER_BASE, name)) !== null
-          || localStorage.getItem(profileStorageKey(PROFILE_DECKS_BASE, name)) !== null;
+          || localStorage.getItem(profileStorageKey(PROFILE_DECKS_BASE, name)) !== null
+          || localStorage.getItem(profileStorageKey(PROFILE_ADV_BASE, name)) !== null;
       } catch (_) { return false; }
     }
     function readProfileSummary(name) {
@@ -16867,7 +17543,7 @@ const TYPE_EMOJI = {
     }
     function moveProfileData(fromName, toName, keepSource = false) {
       try {
-        [PROFILE_BOOSTER_BASE, PROFILE_DECKS_BASE].forEach((base) => {
+        [PROFILE_BOOSTER_BASE, PROFILE_DECKS_BASE, PROFILE_ADV_BASE].forEach((base) => {
           const fromK = profileStorageKey(base, fromName);
           const toK = profileStorageKey(base, toName);
           if (fromK === toK) return;
@@ -16881,6 +17557,7 @@ const TYPE_EMOJI = {
     }
     // Migration : l'ancienne sauvegarde (sans pseudo) est rattachée au pseudo déjà enregistré
     if (playerPseudo && !profileHasData(playerPseudo)) moveProfileData('', playerPseudo);
+    loadAdventureSaveFromStorage();
 
     function updatePseudoUi() {
       const label = playerPseudo || 'Dresseur';
@@ -16958,9 +17635,11 @@ const TYPE_EMOJI = {
     function reloadPlayerProfileData() {
       if (typeof loadBoosterSaveFromStorage === 'function') loadBoosterSaveFromStorage();
       if (typeof loadCustomDecksFromStorage === 'function') loadCustomDecksFromStorage();
+      if (typeof loadAdventureSaveFromStorage === 'function') loadAdventureSaveFromStorage();
       if (typeof registerCustomDecks === 'function') registerCustomDecks();
       if (typeof updateBoosterStatsUi === 'function') updateBoosterStatsUi();
       if (typeof renderDecksView === 'function') renderDecksView();
+      if (typeof renderAdventureView === 'function') renderAdventureView();
       if (typeof renderQuickSetup === 'function') renderQuickSetup();
     }
 
@@ -18088,19 +18767,25 @@ const TYPE_EMOJI = {
     }
 
     // -----------------------------------------------------------------------
-    // 4. DÉMARRAGE D'UNE PARTIE (TUTORIEL JULIETTE OU PARTIE RAPIDE)
+    // 4. DÉMARRAGE D'UNE PARTIE (TUTORIEL JULIETTE, PARTIE RAPIDE OU MODE AVENTURE)
     // -----------------------------------------------------------------------
-    function startMatch(playerDeckKey, customAiDeckKey = null, mode = 'tutorial') {
+    function startMatch(playerDeckKey, customAiDeckKey = null, mode = 'tutorial', advTrainerId = null) {
       const v2AiMap = {
         COMBAT: 'EAU', EAU: 'COMBAT', FEU: 'EAU', XTRA: 'COMBAT',
         V2_PLANTE: 'V2_FEU', V2_FEU: 'V2_EAU', V2_EAU: 'V2_ELECTRIK',
-        V2_ELECTRIK: 'V2_COMBAT', V2_PSY: 'V2_PLANTE', V2_COMBAT: 'V2_PSY'
+        V2_ELECTRIK: 'V2_COMBAT', V2_PSY: 'V2_PLANTE', V2_COMBAT: 'V2_PSY',
+        ADV_1_VENUSAUR: 'ADV_2_ARCANINE', ADV_2_ARCANINE: 'ADV_3_RAINDANCE',
+        ADV_3_RAINDANCE: 'ADV_4_WIGGLYTUFF', ADV_4_WIGGLYTUFF: 'ADV_5_DAMAGESWAP',
+        ADV_5_DAMAGESWAP: 'ADV_6_HAYMAKER', ADV_6_HAYMAKER: 'ADV_3_RAINDANCE'
       };
       if (!deckKeyPlayable(playerDeckKey)) {
         showGameToast('⚠️ Ce deck n\'est pas jouable (il faut un deck valide avec au moins 1 Pokémon de Base).');
         return;
       }
-      let aiDeckKey = customAiDeckKey || v2AiMap[playerDeckKey] || 'COMBAT';
+      const advTrainer = mode === 'adventure' && advTrainerId
+        ? ADVENTURE_TRAINERS.find((t) => t.id === advTrainerId) || null
+        : null;
+      let aiDeckKey = (advTrainer ? advTrainer.deckKey : customAiDeckKey) || v2AiMap[playerDeckKey] || 'COMBAT';
       if (!deckKeyPlayable(aiDeckKey)) aiDeckKey = 'COMBAT';
 
       const pInit = drawStartingHandAndPrizes(playerDeckKey);
@@ -18108,7 +18793,8 @@ const TYPE_EMOJI = {
 
       game = {
         epoch: ++matchEpoch,
-        mode, // 'tutorial' | 'quick'
+        mode, // 'tutorial' | 'quick' | 'adventure'
+        advTrainer,
         turnNumber: 1,
         activePlayer: 'player', // 'player' or 'ai'
         energyAttachedThisTurn: false,
@@ -18136,17 +18822,26 @@ const TYPE_EMOJI = {
 
       // L'IA place automatiquement son meilleur Pokémon de Base en Actif et les autres sur son Banc
       const aiBasics = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
-      aiBasics.sort((a, b) => (b.hp || 0) - (a.hp || 0));
+      // En mode Aventure, prioriser un attaquant rapide ou tank (Élektek, Tygnon, Insécateur, Leveinard, Caninos, Carapuce)
+      aiBasics.sort((a, b) => {
+        const aScore = (a.hp || 0) + ((a.attacks || []).some((atk) => atk.cost.length === 1) ? 25 : 0) - ((a.retreat || 0) * 5);
+        const bScore = (b.hp || 0) + ((b.attacks || []).some((atk) => atk.cost.length === 1) ? 25 : 0) - ((b.retreat || 0) * 5);
+        return bScore - aScore;
+      });
       const aiStarter = aiBasics[0];
       game.ai.hand = game.ai.hand.filter((c) => c.uid !== aiStarter.uid);
       game.ai.active = aiStarter;
 
-      aiBasics.slice(1, 4).forEach((b) => {
+      aiBasics.slice(1, 5).forEach((b) => {
         if (game.ai.bench.length < 5) {
           game.ai.hand = game.ai.hand.filter((c) => c.uid !== b.uid);
           game.ai.bench.push(b);
         }
       });
+
+      if (advTrainer && advTrainer.playmat) {
+        changePlaymat(advTrainer.playmat);
+      }
 
       fx.handSeen.clear(); fx.aiHandSeen.clear(); fx.dealFrom.clear(); fx.prevHp.clear(); fx.prevDmg.clear();
       setJulietteMood('happy');
@@ -18156,12 +18851,19 @@ const TYPE_EMOJI = {
       document.getElementById('gameScreen').classList.remove('hidden');
 
       const isQuick = mode === 'quick';
+      const isAdv = mode === 'adventure' && !!advTrainer;
       document.getElementById('julietteBubble').classList.toggle('hidden', isQuick);
       document.getElementById('aiHeaderAvatar').classList.toggle('hidden', isQuick);
-      document.getElementById('aiHeaderName').textContent = isQuick ? '⚔️ Adversaire IA' : 'Juliette';
+      document.getElementById('aiHeaderName').textContent = isAdv
+        ? `${advTrainer.badgeIcon} ${advTrainer.name}`
+        : (isQuick ? '⚔️ Adversaire IA' : 'Juliette');
       document.getElementById('aiDeckLabel').textContent = DECK_META[aiDeckKey]?.short || aiDeckKey;
 
-      if (!isQuick) {
+      if (isAdv) {
+        sayJuliette(
+          `<strong>${advTrainer.name} (${advTrainer.title}) :</strong> « ${advTrainer.quotes.intro} » <em>(${advTrainer.name} envoie ${game.ai.active.name} !)</em>`
+        );
+      } else if (!isQuick) {
         sayJuliette(
           `J'envoie ${game.ai.active.name} ! Touche un Pokémon de Base dans ta main en bas pour le choisir comme Pokémon Actif.`
         );
@@ -18171,6 +18873,7 @@ const TYPE_EMOJI = {
 
     function confirmQuitMatch() {
       const wasMulti = !!(game && game.mode === 'multi');
+      const wasAdv = !!(game && game.mode === 'adventure');
       if (wasMulti && !game.gameOver && !mpApplyingRemote) {
         sendMultiPacket('MP_GAME_OVER', {
           matchId: game.matchId,
@@ -18182,7 +18885,9 @@ const TYPE_EMOJI = {
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('menuScreen').classList.remove('hidden');
       game = null;
+      setJulietteMood('happy');
       if (wasMulti) renderMultiSetup();
+      if (wasAdv) renderAdventureView();
     }
 
     // =======================================================================
@@ -18267,8 +18972,14 @@ const TYPE_EMOJI = {
     function setJulietteMood(mood) {
       const changed = mood !== julietteMood;
       julietteMood = mood;
+      const advTrainer = game && game.mode === 'adventure' ? game.advTrainer : null;
       document.querySelectorAll('.juliette-avatar').forEach((el) => {
-        el.innerHTML = julietteSVG(mood);
+        const isBattleAvatar = el.id === 'aiHeaderAvatar' || el.closest('#julietteBubble');
+        if (advTrainer && isBattleAvatar) {
+          el.innerHTML = `<img src="${advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-full h-full object-cover object-top rounded-full" />`;
+        } else {
+          el.innerHTML = julietteSVG(mood);
+        }
         if (changed) { el.classList.remove('mood-pop'); void el.offsetWidth; el.classList.add('mood-pop'); }
       });
     }
@@ -20753,7 +21464,7 @@ const TYPE_EMOJI = {
     };
 
     function oppOf(o) { return o === 'player' ? 'ai' : 'player'; }
-    function oppLabel() { return game.mode === 'multi' ? (game.oppPseudo || 'L\'adversaire') : game.mode === 'quick' ? 'L\'IA' : 'Juliette'; }
+    function oppLabel() { return game.mode === 'multi' ? (game.oppPseudo || 'L\'adversaire') : (game.mode === 'adventure' && game.advTrainer ? game.advTrainer.name : (game.mode === 'quick' ? 'L\'IA' : 'Juliette')); }
     function allInPlay(o) { const s = game[o]; return [s.active, ...s.bench].filter(Boolean); }
     function bothInPlay() { return [...allInPlay('player'), ...allInPlay('ai')]; }
     function ownerOf(p) { return allInPlay('player').includes(p) ? 'player' : 'ai'; }
@@ -21649,20 +22360,31 @@ const TYPE_EMOJI = {
       renderBoard();
     }
 
-    // Pouvoirs utilisés automatiquement par l'IA (Danse de la pluie, Soins, Transfert d'Énergie)
+    // Pouvoirs utilisés automatiquement par l'IA (Danse de la pluie, Soins, Transfert d'Énergie, Transfert de dégâts, Buzzap)
     async function aiUsePowers() {
       const side = game.ai;
       for (const p of allInPlay('ai')) {
         if (!game.ai.active) return;
-        if (powerActive(p, 'rain_dance') && effType(side.active) === 'Eau') {
+        // 1. Danse de la pluie (Tortank) : attache les Énergies Eau de la main aux Pokémon Eau (Actif puis Banc)
+        if (powerActive(p, 'rain_dance')) {
           let n = 0;
-          while (side.hand.some((c) => c.category === 'Énergie' && c.energyType === 'Eau') && n < 3) {
-            const e = side.hand.find((c) => c.category === 'Énergie' && c.energyType === 'Eau');
-            side.hand.splice(side.hand.indexOf(e), 1);
-            side.active.energies.push(e); fx.attached.add(e.uid); n++;
+          const waterTargets = [side.active, ...side.bench].filter((x) => x && effType(x) === 'Eau');
+          for (const wt of waterTargets) {
+            const maxNeed = Math.max(...(wt.attacks || []).map((a) => a.cost.length), 3) + 1;
+            while (side.hand.some((c) => c.category === 'Énergie' && c.energyType === 'Eau') && wt.energies.length < maxNeed && n < 5) {
+              const e = side.hand.find((c) => c.category === 'Énergie' && c.energyType === 'Eau');
+              side.hand.splice(side.hand.indexOf(e), 1);
+              wt.energies.push(e); fx.attached.add(e.uid); n++;
+            }
           }
-          if (n) { sayJuliette(`🌧️ Danse de la pluie : ${n} Énergie(s) Eau attachée(s) à ${side.active.name} !`); renderBoard(); await wait(600); }
+          if (n) {
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            sayJuliette(`🌧️ Danse de la pluie : ${oppLabel()} attache ${n} Énergie(s) Eau supplémentaires !${q}`);
+            renderBoard();
+            await wait(600);
+          }
         }
+        // 2. Soins (Rafflésia)
         if (powerActive(p, 'heal') && p.powerTurn !== (game.halfTurn || 0)) {
           const hurt = allInPlay('ai').filter((x) => x.damage > 0).sort((a, b) => b.damage - a.damage)[0];
           if (hurt) {
@@ -21670,16 +22392,66 @@ const TYPE_EMOJI = {
             if (await flipCoinAnimated(`🌸 Soins (${oppLabel()})`)) { hurt.damage -= 10; sayJuliette(`🌸 ${hurt.name} récupère 10 PV.`); renderBoard(); }
           }
         }
-        if (powerActive(p, 'energy_trans') && side.active !== p) {
+        // 3. Transfert d'Énergie (Florizarre) : concentre les Énergies Plante sur l'Actif pour Lance-Soleil / Méga-Sangsue
+        if (powerActive(p, 'energy_trans')) {
           const a = side.active;
           const best = (a.attacks || []).slice(-1)[0];
+          let moved = 0;
           while (best && !canPayAttackCost(a, best.cost)) {
             const src = allInPlay('ai').find((x) => x !== a && x.energies.some((e) => e.energyType === 'Plante'));
             if (!src) break;
             const [e] = src.energies.splice(src.energies.findIndex((x) => x.energyType === 'Plante'), 1);
-            a.energies.push(e); fx.attached.add(e.uid);
+            a.energies.push(e); fx.attached.add(e.uid); moved++;
           }
-          renderBoard();
+          if (moved) {
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            sayJuliette(`🌿 Transfert d'Énergie : ${oppLabel()} déplace ${moved} Énergie(s) Plante vers ${a.name} !${q}`);
+            renderBoard();
+            await wait(550);
+          }
+        }
+        // 4. Transfert de dégâts (Alakazam) : déplace les dégâts du Pokémon Actif vers Leveinard / Kangourex / Pokémon à hauts PV sur le Banc
+        if (powerActive(p, 'damage_swap') && side.active && side.active.damage > 0) {
+          let moved = 0;
+          while (side.active.damage > 0) {
+            const sinks = side.bench
+              .filter((b) => b && (effHp(b) - b.damage) >= 30 && b.id !== 'abra')
+              .sort((a, b) => (effHp(b) - b.damage) - (effHp(a) - a.damage));
+            const dst = sinks[0];
+            if (!dst || dst.damage + 10 >= effHp(dst)) break;
+            side.active.damage -= 10;
+            dst.damage += 10;
+            moved += 10;
+          }
+          if (moved > 0) {
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            sayJuliette(`🔮 Transfert de dégâts : ${oppLabel()} transfère ${moved} dégâts de ${side.active.name} vers son Banc !${q}`);
+            renderBoard();
+            await wait(600);
+          }
+        }
+        // 5. Buzzap (Électrode Set de Base) : se sacrifie pour fournir 2 Énergies Feu à Arcanin / Caninos si l'adversaire a > 1 Récompense
+        if (powerActive(p, 'buzzap') && game.player.prizes.length > 1 && allInPlay('ai').length > 1) {
+          const target = [side.active, ...side.bench].find((x) => x && x !== p && (x.id === 'arcanine' || x.id === 'growlithe') && energyUnits(x).length < 4);
+          if (target) {
+            const wasActive = side.active === p;
+            if (wasActive) side.active = null; else side.bench.splice(side.bench.indexOf(p), 1);
+            side.discard.push(...p.energies, ...(p.evoStack || []));
+            p.energies = []; p.evoStack = undefined; p.damage = 0; clearConditions(p);
+            const eType = target.type || 'Feu';
+            target.energies.push({ uid: uidCounter++, id: 'buzzap-' + p.uid, name: `${p.name} (Buzzap ${eType})`, category: 'Énergie', energyType: eType, buzzap: true, img: p.img, fromCard: p });
+            if (game.player.prizes.length) {
+              const pr = game.player.prizes.pop();
+              fx.dealFrom.set(pr.uid, 'prize');
+              game.player.hand.push(pr);
+            }
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            sayJuliette(`💥 Buzzap ! ${p.name} se sacrifie et devient 2 Énergies ${eType} sur ${target.name} !${q}`);
+            renderBoard();
+            if (wasActive) await promoteAfterRemoval('ai');
+            await wait(650);
+            return;
+          }
         }
       }
     }
@@ -21767,7 +22539,7 @@ const TYPE_EMOJI = {
         victimSide.active = victimSide.bench.shift();
         fx.placed.add(victimSide.active.uid);
         playPokemonCry(victimSide.active.dex);
-        sayJuliette(`${game.mode === 'multi' ? (game.oppPseudo || 'Adversaire') + ' envoie' : 'J\'envoie'} ${victimSide.active.name} en Pokémon Actif !`, game.mode === 'multi');
+        sayJuliette(`${game.mode === 'multi' ? (game.oppPseudo || 'Adversaire') + ' envoie' : (game.advTrainer ? `${game.advTrainer.name} envoie` : 'J\'envoie')} ${victimSide.active.name} en Pokémon Actif !`, game.mode === 'multi');
         renderBoard();
       } else {
         await new Promise((resolve) => {
@@ -21802,7 +22574,7 @@ const TYPE_EMOJI = {
     }
 
     // -----------------------------------------------------------------------
-    // 9. GESTION DES TOURS & IA DE JULIETTE
+    // 9. GESTION DES TOURS & IA DE TOURNOI 2000 / JULIETTE
     // -----------------------------------------------------------------------
     async function endPlayerTurn(fromAttack = false) {
       if (!game || game.gameOver || game.endingTurn) return;
@@ -21845,7 +22617,10 @@ const TYPE_EMOJI = {
         return;
       }
 
-      showBanner(game.mode === 'quick' ? 'TOUR DE L\'IA' : 'TOUR DE JULIETTE');
+      const bannerLabel = game.mode === 'adventure' && game.advTrainer
+        ? `TOUR DE ${game.advTrainer.name.toUpperCase()}`
+        : (game.mode === 'quick' ? 'TOUR DE L\'IA' : 'TOUR DE JULIETTE');
+      showBanner(bannerLabel);
       // (ep : jeton de partie capturé plus haut)
       setTimeout(() => { if (matchAlive(ep)) runJulietteTurn(); }, 1300);
     }
@@ -21858,7 +22633,7 @@ const TYPE_EMOJI = {
       try {
       setJulietteMood('focus');
 
-      // 1. Pioche obligatoire de Juliette
+      // 1. Pioche obligatoire
       if (game.ai.deck.length === 0) {
         endMatch('player', `${oppLabel()} n'a plus de cartes à piocher dans son deck !`);
         return;
@@ -21872,103 +22647,333 @@ const TYPE_EMOJI = {
       if (!alive()) return;
       const aiTrainersOk = !game.ai.noTrainersTurns;
 
-      // 2. Poser des Pokémon de Base sur le Banc
-      const basics = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
-      for (const b of basics) {
-        if (game.ai.bench.length < 5) {
-          game.ai.hand = game.ai.hand.filter((c) => c.uid !== b.uid);
-          game.ai.bench.push(freshInPlay(b));
-          fx.placed.add(b.uid); sfx('place');
-          sayJuliette(`${oppLabel()} pose ${b.name} sur son Banc.`);
+      // Helper : poser les Pokémon de Base et faire évoluer (appelable avant et après pioche Prof. Chen / Léo)
+      const aiDeployAndEvolve = async () => {
+        // Poser des Pokémon de Base sur le Banc
+        const basics = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
+        for (const b of basics) {
+          if (game.ai.bench.length < 5) {
+            game.ai.hand = game.ai.hand.filter((c) => c.uid !== b.uid);
+            game.ai.bench.push(freshInPlay(b));
+            fx.placed.add(b.uid); sfx('place');
+            sayJuliette(`${oppLabel()} pose ${b.name} sur son Banc.`);
+            renderBoard();
+            await wait(500); if (!alive()) return;
+          }
+        }
+        if (prehistoricLock()) return;
+
+        // Éleveur de Pokémon (pokemon-breeder) : évolue directement Base -> Niveau 2 (Carapuce->Tortank, Bulbizarre->Florizarre, Abra->Alakazam)
+        if (aiTrainersOk) {
+          const breederIdx = game.ai.hand.findIndex((c) => c.id === 'pokemon-breeder' || c.setId === 'base1-76');
+          const stage2Cards = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Niveau 2');
+          if (breederIdx !== -1 && stage2Cards.length > 0) {
+            for (const s2 of stage2Cards) {
+              const mid = Object.values(CARDS_DB).find((c) => c.name === s2.evolvesFrom);
+              const basicName = mid ? mid.evolvesFrom : null;
+              if (!basicName) continue;
+              let targetZone = null, targetIdx = 0;
+              if (game.ai.active && game.ai.active.stage === 'Base' && game.ai.active.name === basicName && game.ai.active.turnsInPlay >= 1 && !game.ai.active.evolvedThisTurn) {
+                targetZone = 'active';
+              } else {
+                const bi = game.ai.bench.findIndex((b) => b.stage === 'Base' && b.name === basicName && b.turnsInPlay >= 1 && !b.evolvedThisTurn);
+                if (bi !== -1) { targetZone = 'bench'; targetIdx = bi; }
+              }
+              if (targetZone) {
+                const [breeder] = game.ai.hand.splice(game.ai.hand.indexOf(game.ai.hand[breederIdx]), 1);
+                game.ai.discard.push(breeder);
+                game.ai.hand = game.ai.hand.filter((c) => c.uid !== s2.uid);
+                evolvePokemon('ai', targetZone, targetIdx, s2);
+                sayJuliette(`🧬 ${oppLabel()} joue Éleveur de Pokémon et fait évoluer directement en ${s2.name} !`);
+                renderBoard();
+                await wait(650); if (!alive()) return;
+                break;
+              }
+            }
+          }
+        }
+
+        // Évolutions classiques (Niveau 1 et Niveau 2)
+        const evos = game.ai.hand.filter((c) => c.category === 'Pokémon' && (c.stage === 'Niveau 1' || c.stage === 'Niveau 2'));
+        for (const evo of evos) {
+          if (game.ai.active && game.ai.active.name === evo.evolvesFrom && game.ai.active.turnsInPlay >= 1 && !game.ai.active.evolvedThisTurn) {
+            game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
+            evolvePokemon('ai', 'active', 0, evo);
+            renderBoard();
+            await wait(550); if (!alive()) return;
+          } else {
+            const bIdx = game.ai.bench.findIndex((b) => b.name === evo.evolvesFrom && b.turnsInPlay >= 1 && !b.evolvedThisTurn);
+            if (bIdx !== -1) {
+              game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
+              evolvePokemon('ai', 'bench', bIdx, evo);
+              renderBoard();
+              await wait(550); if (!alive()) return;
+            }
+          }
+        }
+      };
+
+      // 2 & 3. Déploiement initial + Évolutions
+      await aiDeployAndEvolve(); if (!alive()) return;
+
+      // 4. Cartes Dresseur de Tournoi 2000 (Léo, Marchand de Pokémon, Recherche informatique, Professeur Chen, Sauvegarde d'Énergie, Suppression, Rafale de vent, PlusPower, Défenseur, Centre Pokémon, Rappel...)
+      if (aiTrainersOk) {
+        // 4a. Léo (pioche 2 cartes) — jusqu'à 2 par tour
+        for (let k = 0; k < 2; k++) {
+          const leoIdx = game.ai.hand.findIndex((c) => c.id === 'bill' || c.setId === 'base1-91');
+          if (leoIdx !== -1 && game.ai.deck.length >= 2) {
+            const [leo] = game.ai.hand.splice(leoIdx, 1);
+            game.ai.discard.push(leo);
+            game.ai.hand.push(...game.ai.deck.splice(0, 2));
+            sayJuliette(`${oppLabel()} utilise Léo et pioche 2 cartes !`);
+            renderBoard();
+            await wait(550); if (!alive()) return;
+            await aiDeployAndEvolve(); if (!alive()) return;
+          }
+        }
+
+        // 4b. Marchand de Pokémon (pokemon-trader) : échange un Pokémon inutile de la main contre une évolution ou un Pokémon de Base du deck
+        const traderIdx = game.ai.hand.findIndex((c) => c.id === 'pokemon-trader' || c.setId === 'base1-77');
+        if (traderIdx !== -1 && game.ai.deck.some((c) => c.category === 'Pokémon')) {
+          const inPlayNames = allInPlay('ai').map((p) => p.name);
+          const wantedInDeck = game.ai.deck.find((c) => c.category === 'Pokémon' && (inPlayNames.includes(c.evolvesFrom) || (c.stage === 'Base' && game.ai.bench.length < 3)));
+          const spareInHand = game.ai.hand.find((c) => c.category === 'Pokémon' && (!c.evolvesFrom || !inPlayNames.includes(c.evolvesFrom)));
+          if (wantedInDeck && spareInHand) {
+            const [tr] = game.ai.hand.splice(traderIdx, 1);
+            game.ai.discard.push(tr);
+            game.ai.hand = game.ai.hand.filter((c) => c.uid !== spareInHand.uid);
+            game.ai.deck = game.ai.deck.filter((c) => c.uid !== wantedInDeck.uid);
+            game.ai.deck.push(spareInHand);
+            game.ai.deck = shuffle(game.ai.deck);
+            game.ai.hand.push(wantedInDeck);
+            sayJuliette(`🤝 ${oppLabel()} utilise Marchand de Pokémon et cherche ${wantedInDeck.name} !`);
+            renderBoard();
+            await wait(550); if (!alive()) return;
+            await aiDeployAndEvolve(); if (!alive()) return;
+          }
+        }
+
+        // 4c. Recherche informatique (computer-search) : défausse 2 cartes pour chercher la carte clé (Tortank, Florizarre, Alakazam, Grodoudou, Double Énergie Incolore, Prof. Chen)
+        const csIdx = game.ai.hand.findIndex((c) => c.id === 'computer-search' || c.setId === 'base1-71');
+        if (csIdx !== -1 && game.ai.hand.length >= 4 && game.ai.deck.length >= 3) {
+          const inPlayNames = allInPlay('ai').map((p) => p.name);
+          const targetCard =
+            game.ai.deck.find((c) => c.category === 'Pokémon' && inPlayNames.includes(c.evolvesFrom)) ||
+            (!game.ai.hand.some((c) => c.category === 'Énergie') && game.ai.deck.find((c) => c.category === 'Énergie')) ||
+            game.ai.deck.find((c) => c.id === 'professor-oak' || c.id === 'bill');
+          if (targetCard) {
+            const [cs] = game.ai.hand.splice(csIdx, 1);
+            game.ai.discard.push(cs);
+            // Défausser les 2 dernières cartes non-essentielles
+            for (let d = 0; d < 2 && game.ai.hand.length > 0; d++) {
+              game.ai.discard.push(game.ai.hand.pop());
+            }
+            game.ai.deck = game.ai.deck.filter((c) => c.uid !== targetCard.uid);
+            game.ai.deck = shuffle(game.ai.deck);
+            game.ai.hand.push(targetCard);
+            sayJuliette(`💻 ${oppLabel()} utilise Recherche informatique pour récupérer une carte clé !`);
+            renderBoard();
+            await wait(550); if (!alive()) return;
+            await aiDeployAndEvolve(); if (!alive()) return;
+          }
+        }
+
+        // 4d. Professeur Chen (professor-oak) : si la main est petite (<= 3 cartes) et le deck a assez de cartes (>= 10)
+        const oakIdx = game.ai.hand.findIndex((c) => c.id === 'professor-oak' || c.setId === 'base1-88');
+        if (oakIdx !== -1 && game.ai.hand.length <= 3 && game.ai.deck.length >= 10) {
+          const [oak] = game.ai.hand.splice(oakIdx, 1);
+          game.ai.discard.push(oak, ...game.ai.hand.splice(0, game.ai.hand.length));
+          game.ai.hand.push(...game.ai.deck.splice(0, 7));
+          const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+          sayJuliette(`🎓 ${oppLabel()} joue Professeur Chen et pioche 7 nouvelles cartes !${q}`);
+          renderBoard();
+          await wait(650); if (!alive()) return;
+          await aiDeployAndEvolve(); if (!alive()) return;
+        }
+
+        // 4e. Sauvegarde d'Énergie (energy-retrieval) : récupère jusqu'à 2 Énergies de base de la défausse
+        const eretIdx = game.ai.hand.findIndex((c) => c.id === 'energy-retrieval' || c.setId === 'base1-81');
+        const discardBasicEnergies = game.ai.discard.filter((c) => c.category === 'Énergie' && c.id !== 'colorless-energy');
+        if (eretIdx !== -1 && discardBasicEnergies.length >= 1 && game.ai.hand.length >= 2) {
+          const [eret] = game.ai.hand.splice(eretIdx, 1);
+          game.ai.discard.push(eret);
+          const taken = discardBasicEnergies.slice(-2);
+          const uids = new Set(taken.map((c) => c.uid));
+          game.ai.discard = game.ai.discard.filter((c) => !uids.has(c.uid));
+          game.ai.hand.push(...taken);
+          sayJuliette(`⚡ ${oppLabel()} joue Sauvegarde d'Énergie et récupère ${taken.length} Énergie(s) !`);
+          renderBoard();
+          await wait(550); if (!alive()) return;
+        }
+
+        // 4f. Recherche d'Énergie (energy-search)
+        const esIdx = game.ai.hand.findIndex((c) => c.id === 'energy-search' || c.setId === 'base3-59');
+        if (esIdx !== -1 && !game.ai.hand.some((c) => c.category === 'Énergie') && game.ai.deck.some((c) => c.category === 'Énergie')) {
+          const [es] = game.ai.hand.splice(esIdx, 1);
+          game.ai.discard.push(es);
+          const eFound = game.ai.deck.find((c) => c.category === 'Énergie');
+          game.ai.deck = shuffle(game.ai.deck.filter((c) => c.uid !== eFound.uid));
+          game.ai.hand.push(eFound);
+          sayJuliette(`🔍 ${oppLabel()} utilise Recherche d'Énergie et ajoute ${eFound.name} à sa main !`);
+          renderBoard();
+          await wait(500); if (!alive()) return;
+        }
+
+        // 4g. Potion / Super Potion / Centre Pokémon / Rappel
+        const potIdx = game.ai.hand.findIndex((c) => c.id === 'potion' || c.setId === 'base1-94');
+        if (potIdx !== -1 && game.ai.active && game.ai.active.damage >= 20) {
+          const [pot] = game.ai.hand.splice(potIdx, 1);
+          game.ai.discard.push(pot);
+          game.ai.active.damage = Math.max(0, game.ai.active.damage - 20);
+          sayJuliette(`💊 ${oppLabel()} utilise Potion et soigne ${game.ai.active.name} de 20 PV !`);
+          renderBoard();
+          await wait(550); if (!alive()) return;
+        }
+
+        // Centre Pokémon : si des Pokémon blessés n'ont pas d'Énergie (ou après Transfert d'Énergie / Transfert de dégâts vers Leveinard sans énergie)
+        const pcIdx = game.ai.hand.findIndex((c) => c.id === 'pokemon-center' || c.setId === 'base1-85');
+        const hurtNoEnergy = allInPlay('ai').filter((p) => p.damage >= 30 && p.energies.length === 0);
+        if (pcIdx !== -1 && hurtNoEnergy.length > 0 && (!game.ai.active.damage || game.ai.active.energies.length <= 1)) {
+          const [pc] = game.ai.hand.splice(pcIdx, 1);
+          game.ai.discard.push(pc);
+          allInPlay('ai').filter((p) => p.damage > 0).forEach((p) => {
+            p.damage = 0;
+            game.ai.discard.push(...p.energies.splice(0, p.energies.length));
+          });
+          sayJuliette(`🏥 ${oppLabel()} joue Centre Pokémon et soigne intégralement son équipe !`);
+          renderBoard();
+          await wait(600); if (!alive()) return;
+        }
+
+        // Rappel (scoop-up) : sauve un Pokémon très blessé (dégâts >= PV - 30) si le Banc n'est pas vide
+        const scoopIdx = game.ai.hand.findIndex((c) => c.id === 'scoop-up' || c.setId === 'base1-78');
+        if (scoopIdx !== -1 && game.ai.bench.length > 0) {
+          const critical = allInPlay('ai').find((p) => p.damage >= effHp(p) - 20 && p.damage >= 50);
+          if (critical) {
+            const [sc] = game.ai.hand.splice(scoopIdx, 1);
+            game.ai.discard.push(sc);
+            const wasActive = game.ai.active === critical;
+            if (wasActive) game.ai.active = null; else game.ai.bench.splice(game.ai.bench.indexOf(critical), 1);
+            const stack = critical.evoStack || [];
+            const clean = (c) => ({ ...c, damage: 0, energies: [], evoStack: undefined, fxList: [], special: null, poison: 0, turnsInPlay: 0, evolvedThisTurn: false });
+            const eCards = critical.energies.splice(0);
+            const basic = stack.length ? stack[0] : critical;
+            game.ai.hand.push(clean(basic));
+            game.ai.discard.push(...stack.slice(1), ...(stack.length ? [clean(critical)] : []), ...eCards);
+            sayJuliette(`🌪️ ${oppLabel()} joue Rappel et reprend ${basic.name} en main avant qu'il ne soit K.O. !`);
+            renderBoard();
+            if (wasActive) await promoteAfterRemoval('ai');
+            await wait(600); if (!alive()) return;
+            await aiDeployAndEvolve(); if (!alive()) return;
+          }
+        }
+
+        // 4h. Suppression d'Énergie & Double Suppression d'Énergie
+        const erIdx = game.ai.hand.findIndex((c) => c.id === 'energy-removal' || c.setId === 'base1-92');
+        if (erIdx !== -1 && game.player.active && game.player.active.energies.length > 0) {
+          const [er] = game.ai.hand.splice(erIdx, 1);
+          game.ai.discard.push(er);
+          // Prioriser la Double Énergie Incolore du joueur si présente
+          let remIdx = game.player.active.energies.findIndex((e) => e.id === 'colorless-energy');
+          if (remIdx === -1) remIdx = game.player.active.energies.length - 1;
+          const [removed] = game.player.active.energies.splice(remIdx, 1);
+          if (removed) game.player.discard.push(removed);
+          sayJuliette(`⚡ ${oppLabel()} utilise Suppression d'Énergie sur ton ${game.player.active.name} !`);
+          renderBoard();
+          await wait(550); if (!alive()) return;
+        }
+
+        const serIdx = game.ai.hand.findIndex((c) => c.id === 'super-energy-removal' || c.setId === 'base1-79');
+        const aiDonor = game.ai.bench.find((b) => b.energies.length > 0) || (game.ai.active && game.ai.active.energies.length > 2 ? game.ai.active : null);
+        if (serIdx !== -1 && aiDonor && game.player.active && game.player.active.energies.length >= 2) {
+          const [ser] = game.ai.hand.splice(serIdx, 1);
+          game.ai.discard.push(ser);
+          const sac = aiDonor.energies.pop();
+          if (sac) game.ai.discard.push(sac);
+          for (let k = 0; k < 2 && game.player.active.energies.length > 0; k++) {
+            game.player.discard.push(game.player.active.energies.pop());
+          }
+          const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+          sayJuliette(`⚡ ${oppLabel()} joue Double Suppression d'Énergie et prive ${game.player.active.name} de 2 Énergies !${q}`);
+          renderBoard();
+          await wait(650); if (!alive()) return;
+        }
+
+        // 4i. Guérison Totale
+        const fhIdx = game.ai.hand.findIndex((c) => c.id === 'full-heal');
+        if (fhIdx !== -1 && game.ai.active && (game.ai.active.special || game.ai.active.poison)) {
+          const [fh] = game.ai.hand.splice(fhIdx, 1);
+          game.ai.discard.push(fh);
+          game.ai.active.special = null; game.ai.active.poison = 0;
+          sayJuliette(`💚 ${oppLabel()} utilise Guérison Totale sur ${game.ai.active.name} !`);
+          renderBoard();
+          await wait(550); if (!alive()) return;
+        }
+
+        // 4j. Défenseur (defender) : protège Arcanin (avant Bélier) ou le Pokémon Actif
+        const defIdx = game.ai.hand.findIndex((c) => c.id === 'defender' || c.setId === 'base1-80');
+        if (defIdx !== -1 && game.ai.active) {
+          const [defCard] = game.ai.hand.splice(defIdx, 1);
+          game.ai.discard.push(defCard);
+          addFx(game.ai.active, 'trainerDefender', 2, { uid: defCard.uid });
+          sayJuliette(`🛡️ ${oppLabel()} attache Défenseur à ${game.ai.active.name} (-20 dégâts subis) !`);
+          renderBoard();
+          await wait(500); if (!alive()) return;
+        }
+      }
+
+      // 5. Attacher 1 Énergie intelligemment (Double Énergie Incolore sur Grodoudou/Leveinard/Insécateur/Dracolosse, ou Énergie du type requis)
+      if (game.ai.active) {
+        let energyIdx = -1;
+        // Prioriser Double Énergie Incolore si un Pokémon en a besoin
+        const dceIdx = game.ai.hand.findIndex((c) => c.id === 'colorless-energy');
+        const actType = effType(game.ai.active);
+        const typeEIdx = game.ai.hand.findIndex((c) => c.category === 'Énergie' && c.energyType === actType);
+        if (typeEIdx !== -1 && energyUnits(game.ai.active).filter((t) => t === actType).length < 2) {
+          energyIdx = typeEIdx;
+        } else if (dceIdx !== -1) {
+          energyIdx = dceIdx;
+        } else {
+          energyIdx = game.ai.hand.findIndex((c) => c.category === 'Énergie');
+        }
+
+        if (energyIdx !== -1) {
+          const [eCard] = game.ai.hand.splice(energyIdx, 1);
+          const maxNeeded = Math.max(...(game.ai.active.attacks || []).map((a) => a.cost.length), 1);
+          if (energyUnits(game.ai.active).length < maxNeeded || game.ai.bench.length === 0) {
+            game.ai.active.energies.push(eCard);
+            fx.attached.add(eCard.uid); sfx('place');
+            sayJuliette(`${oppLabel()} attache ${eCard.name} à ${game.ai.active.name}.`);
+          } else {
+            // Attacher au meilleur Pokémon du Banc qui a encore besoin d'Énergie
+            const benchTarget = game.ai.bench.find((b) => energyUnits(b).length < Math.max(...(b.attacks || []).map((a) => a.cost.length), 2)) || game.ai.bench[0];
+            benchTarget.energies.push(eCard);
+            fx.attached.add(eCard.uid); sfx('place');
+            sayJuliette(`${oppLabel()} attache ${eCard.name} à ${benchTarget.name} sur son Banc.`);
+          }
           renderBoard();
           await wait(550); if (!alive()) return;
         }
       }
 
-      // 3. Évolutions possibles pour Juliette (Niveau 1 et Niveau 2)
-      const evos = game.ai.hand.filter((c) => c.category === 'Pokémon' && (c.stage === 'Niveau 1' || c.stage === 'Niveau 2'));
-      for (const evo of evos) {
-        if (prehistoricLock()) break;
-        if (game.ai.active && game.ai.active.name === evo.evolvesFrom && game.ai.active.turnsInPlay >= 1 && !game.ai.active.evolvedThisTurn) {
-          game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
-          evolvePokemon('ai', 'active', 0, evo);
-          renderBoard();
-          await wait(600); if (!alive()) return;
-        } else {
-          const bIdx = game.ai.bench.findIndex((b) => b.name === evo.evolvesFrom && b.turnsInPlay >= 1 && !b.evolvedThisTurn);
-          if (bIdx !== -1) {
-            game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
-            evolvePokemon('ai', 'bench', bIdx, evo);
-            renderBoard();
-            await wait(600); if (!alive()) return;
-          }
-        }
-      }
-
-      // 4. Jouer Léo, Potion ou Suppression d'Énergie si en main
-      const leoIdx = game.ai.hand.findIndex((c) => c.id === 'bill' || c.setId === 'base1-91');
-      if (aiTrainersOk && leoIdx !== -1 && game.ai.deck.length >= 2) {
-        const [leo] = game.ai.hand.splice(leoIdx, 1);
-        game.ai.discard.push(leo);
-        game.ai.hand.push(...game.ai.deck.splice(0, 2));
-        sayJuliette(`${oppLabel()} utilise la carte Dresseur Léo et pioche 2 cartes !`);
-        renderBoard();
-        await wait(600); if (!alive()) return;
-      }
-
-      const potIdx = game.ai.hand.findIndex((c) => c.id === 'potion' || c.setId === 'base1-94');
-      if (aiTrainersOk && potIdx !== -1 && game.ai.active && game.ai.active.damage >= 20) {
-        const [pot] = game.ai.hand.splice(potIdx, 1);
-        game.ai.discard.push(pot);
-        game.ai.active.damage = Math.max(0, game.ai.active.damage - 20);
-        sayJuliette(`${oppLabel()} utilise Potion et soigne ${game.ai.active.name} de 20 PV !`);
-        renderBoard();
-        await wait(600); if (!alive()) return;
-      }
-
-      const erIdx = game.ai.hand.findIndex((c) => c.id === 'energy-removal' || c.setId === 'base1-92');
-      if (aiTrainersOk && erIdx !== -1 && game.player.active && game.player.active.energies.length > 0) {
-        const [er] = game.ai.hand.splice(erIdx, 1);
-        game.ai.discard.push(er);
-        const removed = game.player.active.energies.pop();
-        if (removed) game.player.discard.push(removed);
-        sayJuliette(`${oppLabel()} utilise Suppression d'Énergie sur ton ${game.player.active.name} !`);
-        renderBoard();
-        await wait(600); if (!alive()) return;
-      }
-
-      const fhIdx = game.ai.hand.findIndex((c) => c.id === 'full-heal');
-      if (aiTrainersOk && fhIdx !== -1 && game.ai.active && (game.ai.active.special || game.ai.active.poison)) {
-        const [fh] = game.ai.hand.splice(fhIdx, 1);
-        game.ai.discard.push(fh);
-        game.ai.active.special = null; game.ai.active.poison = 0;
-        sayJuliette(`${oppLabel()} utilise Guérison Totale sur ${game.ai.active.name} !`);
-        renderBoard();
-        await wait(600); if (!alive()) return;
-      }
-
-      // 5. Attacher 1 Énergie
-      const energyIdx = game.ai.hand.findIndex((c) => c.category === 'Énergie');
-      if (energyIdx !== -1 && game.ai.active) {
-        const [eCard] = game.ai.hand.splice(energyIdx, 1);
-        const maxNeeded = Math.max(...(game.ai.active.attacks || []).map((a) => a.cost.length), 1);
-        if (game.ai.active.energies.length < maxNeeded || game.ai.bench.length === 0) {
-          game.ai.active.energies.push(eCard);
-          fx.attached.add(eCard.uid); sfx('place');
-          sayJuliette(`${oppLabel()} attache ${eCard.name} à ${game.ai.active.name}.`);
-        } else {
-          game.ai.bench[0].energies.push(eCard);
-          fx.attached.add(eCard.uid); sfx('place');
-          sayJuliette(`${oppLabel()} attache ${eCard.name} à ${game.ai.bench[0].name} sur son Banc.`);
-        }
-        renderBoard();
-        await wait(600); if (!alive()) return;
-      }
-
-      // 5b. Pouvoirs Pokémon de l'IA
+      // 5b. Pouvoirs Pokémon de l'IA (Danse de la pluie, Transfert d'Énergie, Transfert de dégâts, Buzzap, Soins)
       await aiUsePowers(); if (!alive()) return;
 
-      // 5c. Retraite si l'Actif est Endormi/Paralysé n'est pas possible ; si Confus et une retraite est payable, l'IA change de Pokémon
+      // 5c. Transfert (switch) ou Retraite stratégique si l'Actif ne peut pas attaquer mais qu'un Pokémon du Banc est prêt
+      if (aiTrainersOk && game.ai.active && game.ai.bench.length > 0) {
+        const activeCanAtk = effAttacks(game.ai.active).some((_, i) => attackUsable('ai', i).ok);
+        const readyBenchIdx = game.ai.bench.findIndex((b) => !b.special && (b.attacks || []).some((a) => canPayAttackCost(b, a.cost)));
+        const swIdx = game.ai.hand.findIndex((c) => c.id === 'switch' || c.setId === 'base1-95');
+        if (!activeCanAtk && readyBenchIdx !== -1 && swIdx !== -1) {
+          const [sw] = game.ai.hand.splice(swIdx, 1);
+          game.ai.discard.push(sw);
+          swapActive('ai', readyBenchIdx);
+          sayJuliette(`🔄 ${oppLabel()} joue Transfert et envoie ${game.ai.active.name} au combat !`);
+          renderBoard();
+          await wait(550); if (!alive()) return;
+        }
+      }
+
       const aiAct = game.ai.active;
       if (aiAct && aiAct.special === 'confused' && game.ai.bench.length && !hasFx(aiAct, 'cantRetreat') && !isToken(aiAct) && energyUnits(aiAct).length >= effRetreat(aiAct) && effRetreat(aiAct) <= 1) {
         const cost = effRetreat(aiAct);
@@ -21983,7 +22988,38 @@ const TYPE_EMOJI = {
         await wait(500); if (!alive()) return;
       }
 
-      // 6. Choisir la meilleure attaque utilisable (états spéciaux, Amnésie, conditions…)
+      // 5d. Rafale de vent (gust-of-wind) & PlusPower juste avant d'attaquer
+      if (aiTrainersOk && game.ai.active) {
+        const attacks = effAttacks(game.ai.active);
+        const canAtkNow = attacks.some((_, i) => attackUsable('ai', i).ok);
+        if (canAtkNow) {
+          // Rafale de vent : cible un Pokémon faible ou blessé sur le Banc du joueur
+          const gustIdx = game.ai.hand.findIndex((c) => c.id === 'gust-of-wind' || c.setId === 'base1-93');
+          if (gustIdx !== -1 && game.player.bench.length > 0) {
+            const vulnerableIdx = game.player.bench.findIndex((b) => (effHp(b) - b.damage) <= 40 || effWeak(b) === effType(game.ai.active));
+            if (vulnerableIdx !== -1) {
+              const [gust] = game.ai.hand.splice(gustIdx, 1);
+              game.ai.discard.push(gust);
+              swapActive('player', vulnerableIdx);
+              sayJuliette(`🌪️ ${oppLabel()} utilise Rafale de vent et attire ton ${game.player.active.name} en Pokémon Actif !`);
+              renderBoard();
+              await wait(600); if (!alive()) return;
+            }
+          }
+          // PlusPower : ajoute +10 dégâts à l'attaque de ce tour
+          const ppIdx = game.ai.hand.findIndex((c) => c.id === 'pluspower' || c.setId === 'base1-84');
+          if (ppIdx !== -1) {
+            const [pp] = game.ai.hand.splice(ppIdx, 1);
+            game.ai.discard.push(pp);
+            game.ai.active.plusPower = (game.ai.active.plusPower || 0) + 10;
+            sayJuliette(`💥 ${oppLabel()} joue PlusPower (+10 dégâts pour ${game.ai.active.name} ce tour-ci) !`);
+            renderBoard();
+            await wait(500); if (!alive()) return;
+          }
+        }
+      }
+
+      // 6. Choisir la meilleure attaque utilisable
       if (game.ai.active) {
         const attacks = effAttacks(game.ai.active);
         let bestIdx = -1;
@@ -21998,14 +23034,12 @@ const TYPE_EMOJI = {
           if (!alive()) return;
         } else {
           const why = game.ai.active.special ? `est ${SPECIAL_META[game.ai.active.special].label}` : 'ne peut pas attaquer';
-          sayJuliette(`Mon ${game.ai.active.name} ${why} ce tour-ci. À toi de jouer !`);
+          sayJuliette(`${game.advTrainer ? `${game.advTrainer.name} : « Mon ${game.ai.active.name} ${why} ce tour-ci… À toi ! »` : `Mon ${game.ai.active.name} ${why} ce tour-ci. À toi de jouer !`}`);
         }
       }
 
       await pokemonCheckup('ai');
       if (!alive()) return;
-      // Ancienneté des Pokémon de l'IA : incrémentée en FIN de tour (comme pour le joueur),
-      // sinon un Pokémon posé à la mise en place pourrait évoluer dès le 1er tour de l'IA.
       [game.ai.active, ...game.ai.bench].forEach((b) => { if (b) { b.turnsInPlay += 1; b.evolvedThisTurn = false; } });
       startPlayerTurn();
       } finally {
@@ -22045,40 +23079,86 @@ const TYPE_EMOJI = {
         });
       }
       const isWin = winner === 'player';
-      let earnedCoinsNow = false;
+      const advTrainer = game.mode === 'adventure' ? game.advTrainer : null;
+      let earnedCoinsAmount = WIN_REWARD_COINS;
+      let earnedFreePacks = 0;
+      let firstTimeAdvWin = false;
+      let unlockedNextTrainer = null;
+
       if (isWin && !game.rewardGranted) {
         game.rewardGranted = true;
-        earnedCoinsNow = true;
-        boosterSave.coins = (boosterSave.coins || 0) + WIN_REWARD_COINS;
-        saveBoosterData();
+        if (advTrainer) {
+          const prevWins = adventureSave.defeated[advTrainer.id] || 0;
+          firstTimeAdvWin = prevWins === 0;
+          adventureSave.defeated[advTrainer.id] = prevWins + 1;
+          if (!adventureSave.unlockedDecks.includes(advTrainer.deckKey)) {
+            adventureSave.unlockedDecks.push(advTrainer.deckKey);
+          }
+          if (advTrainer.rank >= (adventureSave.unlockedRank || 1) && advTrainer.rank < ADVENTURE_TRAINERS.length) {
+            adventureSave.unlockedRank = advTrainer.rank + 1;
+            unlockedNextTrainer = ADVENTURE_TRAINERS.find((t) => t.rank === advTrainer.rank + 1) || null;
+          }
+          saveAdventureData();
+          earnedCoinsAmount = firstTimeAdvWin ? advTrainer.rewardCoins : 100;
+          earnedFreePacks = firstTimeAdvWin ? (advTrainer.rewardFreePacks || 0) : 0;
+          boosterSave.coins = (boosterSave.coins || 0) + earnedCoinsAmount;
+          if (earnedFreePacks > 0) {
+            boosterSave.freePacks = (boosterSave.freePacks || 0) + earnedFreePacks;
+          }
+          saveBoosterData();
+        } else {
+          boosterSave.coins = (boosterSave.coins || 0) + WIN_REWARD_COINS;
+          saveBoosterData();
+        }
         sfx('coin');
       }
       game.gameOver = true;
       setJulietteMood(isWin ? 'surprised' : 'happy');
+      if (advTrainer) {
+        sayJuliette(`<strong>${advTrainer.name} :</strong> « ${isWin ? advTrainer.quotes.lose : advTrainer.quotes.win} »`);
+      }
       renderBoard();
-      const oppLabel = game.mode === 'multi' ? (game.oppPseudo || 'ton adversaire') : game.mode === 'quick' ? 'l\'IA' : 'Juliette';
+      const oppName = game.mode === 'multi'
+        ? (game.oppPseudo || 'ton adversaire')
+        : (advTrainer ? `${advTrainer.name} (${advTrainer.title})` : (game.mode === 'quick' ? 'l\'IA' : 'Juliette'));
       const isMultiMatch = game.mode === 'multi';
       const usedDeckKey = game.player.deckKey;
       const usedAiDeckKey = game.ai.deckKey;
       const usedMode = game.mode;
       const usedDeckLabel = DECK_META[usedDeckKey]?.short || usedDeckKey;
+
       setTimeout(() => {
         openPickerModal(
-          isWin ? `🏆 VICTOIRE ! Tu as battu ${oppLabel} !` : `💫 ${oppLabel} remporte la partie !`,
-          `${reason} Veux-tu rejouer une partie ?`,
+          isWin ? `🏆 VICTOIRE ! Tu as battu ${oppName} !` : `💫 ${oppName} remporte la partie !`,
+          advTrainer
+            ? `« ${isWin ? advTrainer.quotes.lose : advTrainer.quotes.win} » — ${reason}`
+            : `${reason} Veux-tu rejouer une partie ?`,
           [],
           () => {},
           true
         );
         const grid = document.getElementById('pickerGrid');
         grid.className = 'flex flex-col gap-2';
+
+        const advUnlockHtml = (advTrainer && isWin && firstTimeAdvWin) ? `
+          <div class="w-full p-2.5 rounded-xl bg-sky-50 border border-sky-300 flex items-center gap-2.5 text-left shadow-sm">
+            <img src="${advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-11 h-11 rounded-xl object-cover object-top border border-sky-400 shrink-0" />
+            <div class="min-w-0 flex-1">
+              <div class="text-[10.5px] font-black text-sky-700 uppercase tracking-wide">${advTrainer.badgeIcon} ${dbEsc(advTrainer.badgeName)} remporté !</div>
+              <div class="text-[11px] font-extrabold text-slate-800 truncate">Deck débloqué : ${dbEsc(advTrainer.deckName)}</div>
+              <div class="text-[10px] font-semibold text-slate-600">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Grand Maître 2000 !'}</div>
+            </div>
+          </div>
+        ` : '';
+
         const winBannerHtml = isWin ? `
+          ${advUnlockHtml}
           <div class="w-full p-2.5 rounded-xl bg-gradient-to-r from-amber-500/25 via-yellow-400/20 to-amber-500/25 border border-yellow-400/60 flex items-center justify-between gap-2 mb-1 shadow-lg">
             <div class="flex items-center gap-2 text-left min-w-0">
               <span class="text-xl leading-none shrink-0">🪙</span>
               <div class="min-w-0">
-                <div class="text-xs font-black text-yellow-300 uppercase tracking-wide">+${WIN_REWARD_COINS} Pièces gagnées !</div>
-                <div class="text-[10.5px] font-bold text-amber-100/90 truncate">Solde : ${boosterSave.coins} 🪙 (1 Booster = ${BOOSTER_COST_COINS} 🪙)</div>
+                <div class="text-xs font-black text-amber-800 uppercase tracking-wide">+${earnedCoinsAmount} Pièces${earnedFreePacks ? ` + ${earnedFreePacks} Booster(s)` : ''} !</div>
+                <div class="text-[10.5px] font-bold text-slate-700 truncate">Solde : ${boosterSave.coins} 🪙 (1 Booster = ${BOOSTER_COST_COINS} 🪙)</div>
               </div>
             </div>
             <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('booster');" class="px-2.5 py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-[10.5px] uppercase tracking-wide shrink-0 shadow active:scale-95 transition">
@@ -22086,14 +23166,31 @@ const TYPE_EMOJI = {
             </button>
           </div>
         ` : '';
+
         if (isMultiMatch) {
           grid.innerHTML = `
             ${winBannerHtml}
             <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); clickMultiGo();" class="w-full py-3 rounded-xl font-extrabold text-xs bg-cyan-400 text-slate-950">
               🚀 Revanche Multijoueur (GO avec ${DECK_META[usedDeckKey]?.short || usedDeckKey})
             </button>
-            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); switchMultiSubPage('deck');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
+            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); switchMultiSubPage('deck');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 border border-slate-300">
               🃏 Changer de Deck (Page Deck &amp; Prêt)
+            </button>
+          `;
+        } else if (advTrainer) {
+          const nextTrainer = ADVENTURE_TRAINERS.find((t) => t.rank === advTrainer.rank + 1 && t.rank <= (adventureSave.unlockedRank || 1));
+          grid.innerHTML = `
+            ${winBannerHtml}
+            ${isWin && nextTrainer ? `
+              <button onclick="closePickerModal(); adventureSelectedTrainerId='${nextTrainer.id}'; saveAdventureData(); startAdventureMatch('${nextTrainer.id}');" class="w-full py-3 rounded-xl font-extrabold text-xs btn-gold shadow-md">
+                ⚔️ Défier le Rang ${nextTrainer.rank} : ${dbEsc(nextTrainer.name)} (${dbEsc(nextTrainer.deckArchetype)})
+              </button>
+            ` : ''}
+            <button onclick="closePickerModal(); startAdventureMatch('${advTrainer.id}')" class="w-full py-2.5 rounded-xl font-extrabold text-xs bg-amber-400 hover:bg-amber-300 text-slate-950">
+              🔄 Revanche contre ${dbEsc(advTrainer.name)} (${dbEsc(usedDeckLabel)})
+            </button>
+            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('adventure');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 border border-slate-300">
+              🏆 Retour à la Ligue 2000 (Mode Aventure)
             </button>
           `;
         } else {
@@ -22102,7 +23199,7 @@ const TYPE_EMOJI = {
             <button onclick="closePickerModal(); startMatch('${usedDeckKey}', '${usedAiDeckKey}', '${usedMode}')" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
               🔄 Rejouer avec le Deck ${dbEsc(usedDeckLabel)}
             </button>
-            <button onclick="closePickerModal(); confirmQuitMatch()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
+            <button onclick="closePickerModal(); confirmQuitMatch()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 border border-slate-300">
               🏠 Choisir un autre Deck
             </button>
           `;
