@@ -19,7 +19,7 @@ KNOWN_METADATA = {
         "category": "games-family",
         "emoji": "🃏",
         "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
-        "logoUrl": "pokemon-play-it/assets/icon.svg?v=6",
+        "logoUrl": "pokemon-play-it/assets/icon.svg?v=7",
     },
     "uncensored": {
         "title": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI",
@@ -622,7 +622,7 @@ def main():
                 "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
                 "category": "games-family",
                 "emoji": "🃏",
-                "logoUrl": "pokemon-play-it/assets/icon.svg?v=6",
+                "logoUrl": "pokemon-play-it/assets/icon.svg?v=7",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/pokemon-play-it",
                 "pushedAt": output[0]["pushedAt"] if output else None,

@@ -16500,6 +16500,7 @@ const TYPE_EMOJI = {
         mpApplyingRemote = true;
         game.ai = msg.actorSide;
         game.player = msg.targetSide;
+        game.halfTurn = (game.halfTurn || 0) + 1;
         renderBoard();
         mpApplyingRemote = false;
         startPlayerTurn();
@@ -16801,8 +16802,10 @@ const TYPE_EMOJI = {
       if (!pkm) {
         return `<div class="pkm-stack"><div class="slot-empty">${isActive ? 'Actif' : ''}</div></div>`;
       }
-      const remHp = Math.max(0, pkm.hp - pkm.damage);
-      const hpPct = Math.max(0, Math.min(100, Math.round((remHp / pkm.hp) * 100)));
+      const maxHp = game ? effHp(pkm) : pkm.hp;
+      const remHp = Math.max(0, maxHp - pkm.damage);
+      const hpPct = Math.max(0, Math.min(100, Math.round((remHp / maxHp) * 100)));
+      const badges = game ? statusBadges(pkm) : '';
       const prevPct = fx.prevHp.has(pkm.uid) ? fx.prevHp.get(pkm.uid) : hpPct;
       const hpColor = hpPct > 50 ? 'bg-emerald-400' : hpPct > 25 ? 'bg-amber-400' : 'bg-red-500';
       const dmgChanged = pkm.damage > 0 && (fx.prevDmg.get(pkm.uid) || 0) !== pkm.damage;
@@ -16819,6 +16822,8 @@ const TYPE_EMOJI = {
           <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="tcg tilt cursor-pointer bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
             <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" draggable="false" />
             ${renderDamageTokens(pkm)}
+            ${badges ? `<div class="absolute top-0.5 left-0.5 px-1 rounded-md bg-black/75 text-[10px] leading-4 pointer-events-none" style="z-index:5">${badges}</div>` : ''}
+            ${pkm.special === 'asleep' || pkm.special === 'paralyzed' ? '<div class="absolute inset-0 rounded-[6px] bg-indigo-900/30 pointer-events-none"></div>' : ''}
             <div class="absolute inset-x-1 bottom-1 h-1 bg-black/70 rounded-full overflow-hidden">
               <div class="hp-fill ${hpColor} h-full" data-to="${hpPct}" style="width:${prevPct}%"></div>
             </div>
@@ -16866,7 +16871,13 @@ const TYPE_EMOJI = {
 
     function canPlayTrainerCard(card) {
       if (!game || !game.player.active || game.activePlayer !== 'player' || game.gameOver) return false;
+      if (game.player.noTrainersTurns) return false; // Migraine (Psykokwak)
       const tid = card.id, sid = card.setId;
+      if (tid === 'full-heal') return !!(game.player.active.special || game.player.active.poison);
+      if (tid === 'maintenance') return game.player.hand.length >= 3;
+      if (tid === 'devolution-spray') return allInPlay('player').some((p) => (p.evoStack || []).length > 0);
+      if (tid === 'pokemon-breeder') return !prehistoricLock();
+      if (tid === 'scoop-up' || sid === 'base1-78') return game.player.bench.length > 0;
       if (tid === 'potion' || sid === 'base1-94') {
         return [game.player.active, ...game.player.bench].some((p) => p && p.damage > 0);
       }
@@ -16921,7 +16932,8 @@ const TYPE_EMOJI = {
       } else if (card.category === 'Pokémon' && (card.stage === 'Niveau 1' || card.stage === 'Niveau 2')) {
         playable = dropTargetsFor(card).length > 0; badge = '⬆ Évol.';
       } else if (card.category === 'Énergie') {
-        playable = !!game.player.active && !game.energyAttachedThisTurn; badge = game.energyAttachedThisTurn ? '1/1' : '+ ⚡';
+        const rain = !!game.player.active && game.energyAttachedThisTurn && allInPlay('player').some((p) => rainDanceFor(card, p));
+        playable = !!game.player.active && (!game.energyAttachedThisTurn || rain); badge = rain ? '🌧️ Pluie' : game.energyAttachedThisTurn ? '1/1' : '+ ⚡';
       } else if (card.category === 'Dresseur') {
         playable = canPlayTrainerCard(card); badge = '✨ Jouer';
       }
@@ -17065,7 +17077,7 @@ const TYPE_EMOJI = {
     // ACTIONS PARTAGÉES (modal ET glisser-déposer)
     // =======================================================================
     function evoReady(p, card) {
-      return p && p.name === card.evolvesFrom && p.turnsInPlay >= 1 && !p.evolvedThisTurn;
+      return p && p.name === card.evolvesFrom && p.turnsInPlay >= 1 && !p.evolvedThisTurn && !prehistoricLock();
     }
 
     function actPlayBasic(card, target) {
@@ -17084,11 +17096,18 @@ const TYPE_EMOJI = {
       sfx('place');
     }
 
+    function rainDanceFor(card, ref) {
+      return card.category === 'Énergie' && card.energyType === 'Eau' && effType(ref) === 'Eau'
+        && !game.attackedThisTurn && allInPlay('player').some((p) => powerActive(p, 'rain_dance'));
+    }
     function actAttachEnergy(card, ref) {
       const i = game.player.hand.indexOf(card);
-      if (i < 0 || game.energyAttachedThisTurn) return;
+      if (i < 0) return;
+      const rain = rainDanceFor(card, ref);
+      if (game.energyAttachedThisTurn && !rain) return;
       game.player.hand.splice(i, 1);
       ref.energies.push(card);
+      if (rain) { fx.attached.add(card.uid); sfx('place'); sayJuliette(`🌧️ Danse de la pluie : Énergie Eau attachée à ${ref.name} (sans compter dans ton Énergie du tour) !`); return; }
       game.energyAttachedThisTurn = true;
       fx.attached.add(card.uid);
       sfx('place');
@@ -17121,10 +17140,10 @@ const TYPE_EMOJI = {
       } else if (card.category === 'Pokémon' && (card.stage === 'Niveau 1' || card.stage === 'Niveau 2')) {
         if (evoReady(P.active, card)) t.push({ sel: '#playerActiveSlot', act: () => actEvolve(card, 'active', 0) });
         P.bench.forEach((b, i) => { if (evoReady(b, card)) t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actEvolve(card, 'bench', i) }); });
-      } else if (card.category === 'Énergie' && P.active && !game.energyAttachedThisTurn) {
-        t.push({ sel: '#playerActiveSlot', act: () => actAttachEnergy(card, P.active) });
-        P.bench.forEach((b, i) => t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actAttachEnergy(card, b) }));
-      } else if (card.category === 'Dresseur' && P.active) {
+      } else if (card.category === 'Énergie' && P.active) {
+        if (!game.energyAttachedThisTurn || rainDanceFor(card, P.active)) t.push({ sel: '#playerActiveSlot', act: () => actAttachEnergy(card, P.active) });
+        P.bench.forEach((b, i) => { if (!game.energyAttachedThisTurn || rainDanceFor(card, b)) t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actAttachEnergy(card, b) }); });
+      } else if (card.category === 'Dresseur' && P.active && canPlayTrainerCard(card)) {
         t.push({ sel: '#playMat', wide: true, act: () => playTrainerCard(game.player.hand.indexOf(card)) });
       }
       return t;
@@ -17133,6 +17152,8 @@ const TYPE_EMOJI = {
     function whyNotPlayable(card) {
       if (!game.player.active && card.category !== 'Pokémon') return 'Pose d\'abord un Pokémon de Base comme Pokémon Actif !';
       if (card.category === 'Énergie' && game.energyAttachedThisTurn) return 'Une seule Énergie par tour !';
+      if (card.category === 'Dresseur' && game.player.noTrainersTurns) return 'Migraine : aucune carte Dresseur ce tour-ci !';
+      if ((card.stage === 'Niveau 1' || card.stage === 'Niveau 2') && prehistoricLock()) return 'Pouvoir préhistorique de Ptéra : aucune Évolution possible !';
       if ((card.stage === 'Niveau 1' || card.stage === 'Niveau 2')) return `Il faut un ${card.evolvesFrom} en jeu depuis au moins 1 tour pour évoluer.`;
       if (card.stage === 'Base') return 'Ton Banc est plein (5 Pokémon maximum).';
       return 'Cette carte ne peut pas être jouée maintenant.';
@@ -17639,21 +17660,6 @@ const TYPE_EMOJI = {
       ], { duration: 700, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' }).finished;
     }
 
-    function canPayAttackCost(pkm, costArray) {
-      if (!pkm) return false;
-      const available = pkm.energies.map((e) => e.energyType);
-      const reqSpecific = costArray.filter((c) => c !== 'Incolore');
-      const reqColorless = costArray.filter((c) => c === 'Incolore').length;
-
-      const pool = [...available];
-      for (const req of reqSpecific) {
-        const idx = pool.indexOf(req);
-        if (idx === -1) return false;
-        pool.splice(idx, 1);
-      }
-      return pool.length >= reqColorless;
-    }
-
     function renderAttackStrip() {
       const container = document.getElementById('attackButtonsContainer');
       const endBtn = document.getElementById('endTurnBtn');
@@ -17687,15 +17693,17 @@ const TYPE_EMOJI = {
       retBtn.disabled = false;
       endBtn.classList.toggle('ready', game.mode !== 'quick'
         && !game.player.hand.some((c) => handBadge(c).playable)
-        && !(game.player.active.attacks || []).some((a) => canPayAttackCost(game.player.active, a.cost)));
+        && !effAttacks(game.player.active).some((a, i) => attackUsable('player', i).ok));
 
       const active = game.player.active;
-      container.innerHTML = (active.attacks || []).map((atk, i) => {
-        const payable = canPayAttackCost(active, atk.cost);
+      container.innerHTML = effAttacks(active).map((atk, i) => {
+        const use = attackUsable('player', i);
+        const payable = use.ok;
         const costIcons = atk.cost.map((c) => TYPE_EMOJI[c] || '⭐').join('');
         return `
           <button
             onclick="executePlayerAttack(${i})"
+            title="${use.reason}"
             ${payable ? '' : 'disabled'}
             class="w-full max-w-[150px] ml-auto px-2 h-8 rounded-full text-[10.5px] font-extrabold flex items-center gap-1 ${
               payable
@@ -17720,14 +17728,26 @@ const TYPE_EMOJI = {
       if (!target) return;
 
       const modal = document.getElementById('cardModal');
-      document.getElementById('modalCardTitle').textContent = `${target.name} (${target.hp - target.damage}/${target.hp} PV)`;
+      document.getElementById('modalCardTitle').textContent = `${target.name} (${Math.max(0, effHp(target) - target.damage)}/${effHp(target)} PV)`;
       document.getElementById('modalCardImg').src = target.img;
 
       const eList = target.energies.map((e) => `${TYPE_EMOJI[e.energyType]} ${e.name}`).join(', ') || 'Aucune énergie attachée';
-      const atkDesc = (target.attacks || []).map((a) => `• <strong>${a.name} (${a.damage})</strong> : ${a.text}`).join('<br/>');
+      const atkDesc = effAttacks(target).map((a) => `• <strong>${a.name} (${a.damage})</strong> : ${a.text || ''}`).join('<br/>');
+      const conds = [];
+      if (target.special) conds.push(`${SPECIAL_META[target.special].emoji} ${SPECIAL_META[target.special].label}`);
+      if (target.poison) conds.push(`☠️ Empoisonné (${target.poison}/tour)`);
+      const fxLabels = { protectDmg: '🛡️ Dégâts prévenus', protectAll: '🛡️ Protégé de tout', le30: '🛡️ Prévient ≤30', minus20: '🛡️ −20 dégâts', trainerDefender: '🛡️ Défenseur −20', smokescreen: '🌫️ Brouillard (pièce pour attaquer)', cantRetreat: '⛓️ Ne peut pas battre en retraite', amnesia: '❓ Amnésie', destinyBond: '👻 Prélèvement du Destin', swordsDance: '⚔️ Danse-lames', cantAttack: '🚫 Ne peut pas attaquer', bond: '🛡️ Dégâts réduits' };
+      (target.fxList || []).forEach((f) => conds.push(fxLabels[f.k] + (f.atk ? ` (${f.atk})` : '')));
+      if (target.typeOverride) conds.push(`🦋 Type : ${target.typeOverride}`);
+      if (target.weaknessOverride) conds.push(`Faiblesse modifiée : ${target.weaknessOverride}`);
+      if (target.resistanceOverride) conds.push(`Résistance modifiée : ${target.resistanceOverride}`);
+      const pw = target.power ? `<div class="mt-1.5 pt-1.5 border-t border-white/10">✨ <strong>Pouvoir Pokémon : ${target.power.name}</strong>${powerActive(target, target.power.id) ? '' : ' <span class="text-red-300">(bloqué)</span>'} — ${target.power.text}</div>` : '';
+      const w = effWeak(target), r = effRes(target);
       document.getElementById('modalCardDetails').innerHTML = `
+        ${conds.length ? `<div class="mb-1 font-bold text-amber-300">${conds.join(' · ')}</div>` : ''}
         <div><strong>Énergies :</strong> ${eList}</div>
-        <div><strong>Faiblesse :</strong> ${target.weakness ? TYPE_EMOJI[target.weakness] + ' ×2' : 'Aucune'} · <strong>Résistance :</strong> ${target.resistance ? TYPE_EMOJI[target.resistance] + ' -30' : 'Aucune'} · <strong>Retraite :</strong> ${target.retreat || 0} ⚡</div>
+        <div><strong>Faiblesse :</strong> ${w ? TYPE_EMOJI[w] + ' ×2' : 'Aucune'} · <strong>Résistance :</strong> ${r ? TYPE_EMOJI[r] + ' -30' : 'Aucune'} · <strong>Retraite :</strong> ${isToken(target) ? '—' : effRetreat(target)} ⚡</div>
+        ${pw}
         <div class="mt-1.5 pt-1.5 border-t border-white/10">${atkDesc}</div>
       `;
 
@@ -17735,15 +17755,23 @@ const TYPE_EMOJI = {
       actionsEl.innerHTML = '';
 
       if (owner === 'player' && zone === 'active' && game.activePlayer === 'player' && !(game.mode === 'multi' && game.setupPhase)) {
-        (target.attacks || []).forEach((atk, i) => {
-          const ok = canPayAttackCost(target, atk.cost);
+        effAttacks(target).forEach((atk, i) => {
+          const use = attackUsable('player', i);
+          const ok = use.ok;
           const btn = document.createElement('button');
           btn.className = `w-full py-2 rounded-xl text-xs font-bold ${ok ? 'bg-red-600 text-white' : 'bg-slate-800 text-slate-500'}`;
-          btn.textContent = `⚔️ Attaquer : ${atk.name} (${atk.damage} dégâts)`;
+          btn.textContent = `⚔️ Attaquer : ${atk.name} (${atk.damage} dégâts)${ok ? '' : ' — ' + use.reason}`;
           btn.disabled = !ok;
           btn.onclick = () => { closeCardModal(); executePlayerAttack(i); };
           actionsEl.appendChild(btn);
         });
+      }
+      if (owner === 'player' && game.activePlayer === 'player' && !(game.mode === 'multi' && game.setupPhase) && (target.power && !target.power.passive || isToken(target)) && powerUsableNow('player', target)) {
+        const btn = document.createElement('button');
+        btn.className = 'w-full py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950';
+        btn.textContent = isToken(target) ? `🗑️ Défausser ${target.name}` : `✨ Utiliser le Pouvoir : ${target.power.name}`;
+        btn.onclick = () => usePlayerPower(zone, index);
+        actionsEl.appendChild(btn);
       }
 
       modal.classList.remove('hidden');
@@ -17874,6 +17902,9 @@ const TYPE_EMOJI = {
       evoCard.energies = [...basePkm.energies];
       evoCard.turnsInPlay = basePkm.turnsInPlay;
       evoCard.evolvedThisTurn = true;
+      evoCard.usedOnce = basePkm.usedOnce;
+      evoCard.evoStack = [...(basePkm.evoStack || []), { ...basePkm, energies: [], damage: 0, evoStack: undefined, fxList: [], special: null, poison: 0 }];
+      clearConditions(evoCard); // Évoluer guérit des états spéciaux et annule les effets d'attaque
 
       if (zone === 'active') {
         side.active = evoCard;
@@ -18069,10 +18100,7 @@ const TYPE_EMOJI = {
           game.ai.bench,
           (chosenIdx) => {
             consumeTrainerCard(card);
-            const oldActive = game.ai.active;
-            game.ai.active = game.ai.bench[chosenIdx];
-            game.ai.bench[chosenIdx] = oldActive;
-            playPokemonCry(game.ai.active.dex);
+            swapActive('ai', chosenIdx);
             sayJuliette(`🌪️ Rafale de vent : ${game.ai.active.name} passe en Pokémon Actif adverse !`, true);
             renderBoard();
           }
@@ -18092,10 +18120,7 @@ const TYPE_EMOJI = {
           game.player.bench,
           (chosenIdx) => {
             consumeTrainerCard(card);
-            const oldActive = game.player.active;
-            game.player.active = game.player.bench[chosenIdx];
-            game.player.bench[chosenIdx] = oldActive;
-            playPokemonCry(game.player.active.dex);
+            swapActive('player', chosenIdx);
             sayJuliette(`🔄 Transfert : ${game.player.active.name} passe en Pokémon Actif sans coût de retraite !`, true);
             renderBoard();
           }
@@ -18172,7 +18197,7 @@ const TYPE_EMOJI = {
         const myPkms = [game.player.active, ...game.player.bench].filter(Boolean);
         if (myPkms.length === 1) {
           consumeTrainerCard(card);
-          myPkms[0].defender = (myPkms[0].defender || 0) + 20;
+          addFx(myPkms[0], 'trainerDefender', 2, { uid: card.uid });
           sayJuliette(`🛡️ Défenseur attaché à ${myPkms[0].name} (-20 dégâts subis) !`, true);
           renderBoard();
           return;
@@ -18183,7 +18208,7 @@ const TYPE_EMOJI = {
           myPkms,
           (chosenIdx) => {
             consumeTrainerCard(card);
-            myPkms[chosenIdx].defender = (myPkms[chosenIdx].defender || 0) + 20;
+            addFx(myPkms[chosenIdx], 'trainerDefender', 2, { uid: card.uid });
             sayJuliette(`🛡️ Défenseur attaché à ${myPkms[chosenIdx].name} (-20 dégâts subis) !`, true);
             renderBoard();
           }
@@ -18318,9 +18343,13 @@ const TYPE_EMOJI = {
             const allTargets = [
               { label: 'active', idx: 0, pkm: game.player.active },
               ...game.player.bench.map((b, i) => ({ label: 'bench', idx: i, pkm: b }))
-            ].filter((t) => t.pkm && (t.pkm.stage === 'Base' || t.pkm.stage === 'Niveau 1') && t.pkm.turnsInPlay >= 1);
+            ].filter((t) => {
+              const mid = Object.values(CARDS_DB).find((c) => c.name === s2.evolvesFrom);
+              const basicName = mid ? mid.evolvesFrom : null;
+              return t.pkm && t.pkm.stage === 'Base' && t.pkm.name === basicName && t.pkm.turnsInPlay >= 1 && !t.pkm.evolvedThisTurn;
+            });
             if (!allTargets.length) {
-              sayJuliette('Aucun Pokémon en jeu depuis au moins 1 tour ne peut évoluer.', true);
+              sayJuliette(`Il faut le Pokémon de Base de ${s2.name} en jeu depuis au moins 1 tour.`, true);
               return;
             }
             consumeTrainerCard(card);
@@ -18397,6 +18426,9 @@ const TYPE_EMOJI = {
           hp: 10,
           type: 'Incolore',
           retreat: 0,
+          noRetreat: true,
+          weakness: null,
+          resistance: null,
           attacks: [],
           damage: 0,
           energies: [],
@@ -18456,33 +18488,36 @@ const TYPE_EMOJI = {
         return;
       }
 
-      // 24. M. Fuji (base3-58 / mr-fuji) & Rappel (base1-78 / scoop-up) : Reprenez/mélangez un Pokémon du Banc
+      // 24. M. Fuji (base3-58) : mélange 1 Pokémon du Banc dans le deck · Rappel (base1-78) : reprend le Pokémon de Base en main
       if (tid === 'mr-fuji' || sid === 'base3-58' || tid === 'scoop-up' || sid === 'base1-78') {
+        const isFuji = tid === 'mr-fuji' || sid === 'base3-58';
         if (game.player.bench.length === 0) {
           sayJuliette('Tu n\'as aucun Pokémon sur ton Banc !', true);
           return;
         }
-        openPickerModal(
-          `✨ ${card.name}`,
-          'Choisis un Pokémon de ton Banc à retirer du combat :',
-          game.player.bench,
-          (chosenIdx) => {
-            consumeTrainerCard(card);
-            const [removedPkm] = game.player.bench.splice(chosenIdx, 1);
-            removedPkm.damage = 0;
-            const eCards = removedPkm.energies.splice(0, removedPkm.energies.length);
-            if (tid === 'mr-fuji' || sid === 'base3-58') {
-              game.player.deck.push(removedPkm, ...eCards);
-              game.player.deck = shuffle(game.player.deck);
-              sayJuliette(`👴 M. Fuji : ${removedPkm.name} et ses cartes sont mélangés dans ton deck !`, true);
-            } else {
-              game.player.hand.push(removedPkm);
-              game.player.discard.push(...eCards);
-              sayJuliette(`🌪️ Rappel : ${removedPkm.name} revient dans ta main !`, true);
-            }
-            renderBoard();
-          }
-        );
+        const pool = isFuji ? [...game.player.bench] : [game.player.active, ...game.player.bench];
+        const chosenIdx = await pickAsync(`✨ ${card.name}`, isFuji ? 'Choisis un Pokémon de ton Banc à mélanger dans ton deck :' : 'Choisis un de tes Pokémon à reprendre en main :', pool);
+        if (chosenIdx === null) return;
+        const target = pool[chosenIdx];
+        consumeTrainerCard(card);
+        const wasActive = game.player.active === target;
+        if (wasActive) game.player.active = null; else game.player.bench.splice(game.player.bench.indexOf(target), 1);
+        const stack = target.evoStack || [];
+        const clean = (c) => ({ ...c, damage: 0, energies: [], evoStack: undefined, fxList: [], special: null, poison: 0, turnsInPlay: 0, evolvedThisTurn: false });
+        const eCards = target.energies.splice(0);
+        if (isFuji) {
+          game.player.deck.push(...stack.map(clean), clean(target), ...eCards);
+          game.player.deck = shuffle(game.player.deck);
+          sayJuliette(`👴 M. Fuji : ${target.name} et ses cartes sont mélangés dans ton deck !`, true);
+        } else {
+          const basic = stack.length ? stack[0] : target;
+          game.player.hand.push(clean(basic));
+          game.player.discard.push(...stack.slice(1), ...(stack.length ? [clean(target)] : []), ...eCards);
+          sayJuliette(`🌪️ Rappel : ${basic.name} revient dans ta main !`, true);
+        }
+        renderBoard();
+        if (wasActive) await promoteAfterRemoval('player');
+        renderBoard();
         return;
       }
 
@@ -18515,56 +18550,117 @@ const TYPE_EMOJI = {
         return;
       }
 
-      // 27. Autres cartes Dresseur (Guérison Totale, Entretien, Fillette, Vaporisateur rétrograde) : Effet tactique universel (+soin / pioche)
-      consumeTrainerCard(card);
-      if (game.player.active && game.player.active.damage > 0) {
-        const healed = Math.min(20, game.player.active.damage);
-        game.player.active.damage = Math.max(0, game.player.active.damage - 20);
-        sayJuliette(`✨ ${card.name} : ${game.player.active.name} est soigné de ${healed} PV !`, true);
-      } else if (game.player.deck.length > 0) {
-        const drawn = game.player.deck.shift();
-        game.player.hand.push(drawn);
-        sayJuliette(`✨ ${card.name} activée : tu pioches ${drawn.name} !`, true);
-      } else {
-        sayJuliette(`✨ ${card.name} activée !`, true);
+      // 27. Guérison Totale (base1-82) : l'Actif n'est plus Endormi, Confus, Paralysé ou Empoisonné
+      if (tid === 'full-heal') {
+        const act = game.player.active;
+        consumeTrainerCard(card);
+        act.special = null; act.poison = 0; act.paraTurns = 0;
+        sayJuliette(`💚 Guérison Totale : ${act.name} est guéri de tous ses états spéciaux !`, true);
+        renderBoard();
+        return;
       }
-      renderBoard();
+
+      // 28. Entretien (base1-83) : mélangez 2 autres cartes de votre main dans le deck, piochez 1 carte
+      if (tid === 'maintenance') {
+        const others = game.player.hand.filter((c) => c !== card);
+        if (others.length < 2) { sayJuliette('Il te faut 2 autres cartes en main pour Entretien.', true); return; }
+        const i1 = await pickAsync('🔧 Entretien', 'Carte 1/2 à mélanger dans ton deck :', others);
+        if (i1 === null) return;
+        const c1 = others.splice(i1, 1)[0];
+        const i2 = await pickAsync('🔧 Entretien', 'Carte 2/2 à mélanger dans ton deck :', others, false);
+        const c2 = others[i2 ?? 0];
+        consumeTrainerCard(card);
+        game.player.hand = game.player.hand.filter((c) => c !== c1 && c !== c2);
+        game.player.deck = shuffle([...game.player.deck, c1, c2]);
+        const drawn = game.player.deck.shift();
+        if (drawn) game.player.hand.push(drawn);
+        sayJuliette(`🔧 Entretien : ${c1.name} et ${c2.name} mélangés, tu pioches ${drawn ? drawn.name : 'rien'}.`, true);
+        renderBoard();
+        return;
+      }
+
+      // 29. Fillette (base1-75) : chaque joueur mélange les cartes Dresseur de sa main dans son deck
+      if (tid === 'lass') {
+        consumeTrainerCard(card);
+        let total = 0;
+        for (const o of ['player', 'ai']) {
+          const tr = game[o].hand.filter((c) => c.category === 'Dresseur');
+          total += tr.length;
+          game[o].hand = game[o].hand.filter((c) => c.category !== 'Dresseur');
+          game[o].deck = shuffle([...game[o].deck, ...tr]);
+        }
+        sayJuliette(`👧 Fillette : ${total} carte(s) Dresseur mélangée(s) dans les decks !`, true);
+        renderBoard();
+        return;
+      }
+
+      // 30. Vaporisateur rétrograde (base1-72) : fait régresser un de vos Pokémon évolués
+      if (tid === 'devolution-spray') {
+        const evolved = allInPlay('player').filter((p) => (p.evoStack || []).length > 0);
+        const i = await pickAsync('🧴 Vaporisateur rétrograde', 'Quel Pokémon faire régresser ?', evolved);
+        if (i === null) return;
+        const p = evolved[i];
+        let steps = 1;
+        if (p.evoStack.length >= 2) {
+          const opts = [textOption(`→ ${p.evoStack[p.evoStack.length - 1].name}`, p.evoStack[p.evoStack.length - 1].img), textOption(`→ ${p.evoStack[0].name}`, p.evoStack[0].img)];
+          steps = ((await pickAsync('🧴 Vaporisateur rétrograde', 'Jusqu\'à quel stade ?', opts, false)) ?? 0) + 1;
+        }
+        consumeTrainerCard(card);
+        let cur = p;
+        const discarded = [];
+        for (let k = 0; k < steps; k++) {
+          const prev = cur.evoStack[cur.evoStack.length - 1];
+          const down = { ...prev, damage: cur.damage, energies: cur.energies, turnsInPlay: cur.turnsInPlay, evolvedThisTurn: false, evoStack: cur.evoStack.slice(0, -1), usedOnce: cur.usedOnce };
+          discarded.push({ ...cur, energies: [], damage: 0, evoStack: undefined });
+          cur = down;
+        }
+        clearConditions(cur);
+        if (game.player.active === p) game.player.active = cur; else game.player.bench[game.player.bench.indexOf(p)] = cur;
+        game.player.discard.push(...discarded);
+        sayJuliette(`🧴 ${p.name} régresse en ${cur.name} !`, true);
+        renderBoard();
+        await resolveKOs('player');
+        return;
+      }
+
+      sayJuliette(`${card.name} ne peut pas être jouée maintenant.`, true);
     }
 
     // -----------------------------------------------------------------------
     // 8. RETRAITE, COMBAT, PILE OU FACE & RÉCOMPENSES
     // -----------------------------------------------------------------------
     function openRetreatModal() {
-      if (!game || game.activePlayer !== 'player' || !game.player.active) return;
-      if (game.retreatedThisTurn) {
-        sayJuliette('Tu as déjà battu en retraite une fois ce tour-ci.');
-        return;
-      }
-      if (game.player.bench.length === 0) {
-        sayJuliette('Tu n\'as aucun Pokémon sur ton Banc pour battre en retraite !');
-        return;
-      }
-      const cost = game.player.active.retreat || 0;
-      if (game.player.active.energies.length < cost) {
-        sayJuliette(`Il faut ${cost} Énergie(s) attachée(s) à ${game.player.active.name} pour battre en retraite.`);
-        return;
-      }
+      if (!game || game.activePlayer !== 'player' || !game.player.active || game.gameOver) return;
+      const act = game.player.active;
+      if (game.retreatedThisTurn) { sayJuliette('Tu as déjà battu en retraite une fois ce tour-ci.', true); return; }
+      if (game.player.bench.length === 0) { sayJuliette('Tu n\'as aucun Pokémon sur ton Banc pour battre en retraite !', true); return; }
+      if (isToken(act)) { sayJuliette(`${act.name} ne peut pas battre en retraite (défausse-le depuis sa fiche).`, true); return; }
+      if (act.special === 'asleep' || act.special === 'paralyzed') { sayJuliette(`${act.name} est ${SPECIAL_META[act.special].label} : impossible de battre en retraite !`, true); return; }
+      if (hasFx(act, 'cantRetreat')) { sayJuliette(`${act.name} ne peut pas battre en retraite ce tour-ci !`, true); return; }
+      const cost = effRetreat(act);
+      if (energyUnits(act).length < cost) { sayJuliette(`Il faut ${cost} Énergie(s) attachée(s) à ${act.name} pour battre en retraite.`, true); return; }
 
       openPickerModal(
         `🔄 Retraite (Coût : ${cost} Énergie)`,
-        `Choisis quel Pokémon de ton Banc remplace ${game.player.active.name} :`,
+        `Choisis quel Pokémon de ton Banc remplace ${act.name} :`,
         game.player.bench,
-        (chosenIdx) => {
-          for (let i = 0; i < cost; i++) {
-            const discarded = game.player.active.energies.pop();
-            if (discarded) game.player.discard.push(discarded);
+        async (chosenIdx) => {
+          // Payer le coût (Double Énergie Incolore = 2)
+          let paid = 0;
+          while (paid < cost && act.energies.length) {
+            let i = act.energies.findIndex((e) => e.id !== 'colorless-energy' && !e.buzzap);
+            if (cost - paid >= 2 || i === -1) { const j = act.energies.findIndex((e) => e.id === 'colorless-energy' || e.buzzap); if (j !== -1 && (cost - paid >= 2 || i === -1)) i = j; }
+            const [e] = act.energies.splice(i, 1);
+            game.player.discard.push(e);
+            paid += (e.id === 'colorless-energy' || e.buzzap) ? 2 : 1;
           }
-          const oldActive = game.player.active;
-          game.player.active = game.player.bench[chosenIdx];
-          game.player.bench[chosenIdx] = oldActive;
           game.retreatedThisTurn = true;
-          playPokemonCry(game.player.active.dex);
-          sayJuliette(`${oldActive.name} bat en retraite ! ${game.player.active.name} entre en jeu !`);
+          if (act.special === 'confused') {
+            const ok = await flipCoinAnimated(`💫 ${act.name} est Confus — Retraite ?`);
+            if (!ok) { sayJuliette(`💫 ${act.name} est Confus : la retraite échoue (Énergies défaussées) !`, true); renderBoard(); return; }
+          }
+          swapActive('player', chosenIdx);
+          sayJuliette(`${act.name} bat en retraite ! ${game.player.active.name} entre en jeu !`);
           renderBoard();
         }
       );
@@ -18619,116 +18715,933 @@ const TYPE_EMOJI = {
       });
     }
 
-    async function executeAttack(attackerOwner, attackIndex) {
-      const atkSide = game[attackerOwner];
-      const defOwner = attackerOwner === 'player' ? 'ai' : 'player';
-      const defSide = game[defOwner];
+    // =======================================================================
+    // 8B. MOTEUR DE RÈGLES OFFICIELLES 1999 (Set de Base / Jungle / Fossile)
+    //     États spéciaux, effets d'attaque, Pouvoirs Pokémon, Pokémon Checkup
+    // =======================================================================
+    const ENERGY_CODE = { W: 'Eau', R: 'Feu', P: 'Psy', G: 'Plante', L: 'Électrique', F: 'Combat', C: 'Incolore' };
+    const PLAY_TYPES = ['Plante', 'Feu', 'Eau', 'Électrique', 'Psy', 'Combat'];
+    const ENERGY_TPL_ID = { Plante: 'grass-energy', Feu: 'fire-energy', Eau: 'water-energy', 'Électrique': 'lightning-energy', Psy: 'psychic-energy', Combat: 'fighting-energy', Incolore: 'colorless-energy' };
+    const SPECIAL_META = {
+      asleep: { emoji: '💤', label: 'Endormi' },
+      confused: { emoji: '💫', label: 'Confus' },
+      paralyzed: { emoji: '⚡', label: 'Paralysé' }
+    };
 
+    function oppOf(o) { return o === 'player' ? 'ai' : 'player'; }
+    function oppLabel() { return game.mode === 'multi' ? (game.oppPseudo || 'L\'adversaire') : game.mode === 'quick' ? 'L\'IA' : 'Juliette'; }
+    function allInPlay(o) { const s = game[o]; return [s.active, ...s.bench].filter(Boolean); }
+    function bothInPlay() { return [...allInPlay('player'), ...allInPlay('ai')]; }
+    function ownerOf(p) { return allInPlay('player').includes(p) ? 'player' : 'ai'; }
+    function isToken(p) { return !!p && (p.id === 'clefairy-doll' || p.id === 'mysterious-fossil'); }
+    function cardBackImg() { return 'data:image/svg+xml;utf8,' + encodeURIComponent(CARD_BACK_SVG); }
+    function typeOption(t) { const tpl = CARDS_DB[ENERGY_TPL_ID[t]]; return { name: t, img: tpl ? tpl.img : cardBackImg(), _type: t }; }
+    function textOption(name, img) { return { name, img: img || cardBackImg() }; }
+
+    // ---------- Pouvoirs Pokémon ----------
+    function toxicGasActive(except) {
+      return bothInPlay().some((p) => p !== except && p.power && p.power.id === 'toxic_gas' && !p.special);
+    }
+    function powerActive(p, id) {
+      if (!p || !p.power || p.power.id !== id) return false;
+      if (p.special) return false; // Endormi / Confus / Paralysé bloquent les Pouvoirs
+      if (id !== 'toxic_gas' && toxicGasActive(p)) return false;
+      return true;
+    }
+    function prehistoricLock() { return bothInPlay().some((p) => powerActive(p, 'prehistoric_power')); }
+
+    // ---------- Caractéristiques effectives (Métamorph, Aéromite, Porygon) ----------
+    function dittoCopy(p) {
+      if (!game || !p || !powerActive(p, 'transform')) return null;
+      const o = ownerOf(p);
+      if (game[o].active !== p) return null;
+      const d = game[oppOf(o)].active;
+      return d && !(d.power && d.power.id === 'transform') ? d : null;
+    }
+    function effType(p) { if (!p) return null; if (p.typeOverride) return p.typeOverride; const d = dittoCopy(p); return d ? (d.typeOverride || d.type) : p.type; }
+    function effHp(p) { const d = dittoCopy(p); return d ? d.hp : p.hp; }
+    function effAttacks(p) { if (!p) return []; const d = dittoCopy(p); return (d ? d.attacks : p.attacks) || []; }
+    function effWeak(p) { const d = dittoCopy(p); if (d) return d.weakness; return p.weaknessOverride !== undefined && p.weaknessOverride !== null ? p.weaknessOverride : p.weakness; }
+    function effRes(p) { const d = dittoCopy(p); if (d) return d.resistance; return p.resistanceOverride || p.resistance; }
+    function effRetreat(p) {
+      const d = dittoCopy(p);
+      let r = d ? (d.retreat || 0) : (p.retreat || 0);
+      const o = ownerOf(p);
+      r -= game[o].bench.filter((b) => powerActive(b, 'retreat_aid')).length;
+      return Math.max(0, r);
+    }
+
+    // ---------- Énergies (Double Énergie Incolore = 2, Combustion d'Énergie, Buzzap) ----------
+    function energyUnits(p) {
+      if (!p) return [];
+      const any = !!dittoCopy(p);
+      const burn = powerActive(p, 'energy_burn');
+      const out = [];
+      for (const e of p.energies) {
+        const isDce = e.id === 'colorless-energy';
+        const n = (isDce || e.buzzap) ? 2 : 1;
+        let t = isDce ? 'Incolore' : e.energyType;
+        if (burn) t = 'Feu';
+        if (any) t = 'Any';
+        for (let i = 0; i < n; i++) out.push(t);
+      }
+      return out;
+    }
+    function canPayAttackCost(pkm, costArray) {
+      if (!pkm) return false;
+      const pool = energyUnits(pkm);
+      for (const req of costArray.filter((c) => c !== 'Incolore')) {
+        let idx = pool.indexOf(req);
+        if (idx === -1) idx = pool.indexOf('Any');
+        if (idx === -1) return false;
+        pool.splice(idx, 1);
+      }
+      return pool.length >= costArray.filter((c) => c === 'Incolore').length;
+    }
+    function energyCardProvides(p, e, type) {
+      if (type === 'any') return true;
+      if (dittoCopy(p) || powerActive(p, 'energy_burn') && type === 'Feu') return true;
+      return e.id !== 'colorless-energy' && e.energyType === type;
+    }
+    function discardEnergyCards(owner, p, type, n) {
+      const out = [];
+      for (let k = 0; k < n; k++) {
+        let idx = -1;
+        // on garde la Double Énergie Incolore en priorité si on peut
+        for (let i = p.energies.length - 1; i >= 0; i--) {
+          if (energyCardProvides(p, p.energies[i], type)) { idx = i; if (p.energies[i].id !== 'colorless-energy') break; }
+        }
+        if (idx === -1) break;
+        const [e] = p.energies.splice(idx, 1);
+        game[owner].discard.push(e);
+        out.push(e);
+      }
+      return out;
+    }
+
+    // ---------- États spéciaux & effets temporaires ----------
+    function hasFx(p, k, pred) { return !!p && (p.fxList || []).some((f) => f.k === k && (!pred || pred(f))); }
+    function addFx(p, k, turns, extra = {}) {
+      p.fxList = (p.fxList || []).filter((f) => !(f.k === k && f.uid === extra.uid && f.atk === extra.atk));
+      p.fxList.push({ k, turns, ...extra });
+    }
+    function canBeAffected(p) { return !!p && !isToken(p) && !powerActive(p, 'thick_skinned'); }
+    function applySpecial(p, kind, log) {
+      if (!p) return;
+      if (!canBeAffected(p)) { log.push(`${p.name} est immunisé contre les états spéciaux`); return; }
+      if (kind === 'poison' || kind === 'toxic') {
+        p.poison = kind === 'toxic' ? 20 : Math.max(p.poison || 0, 10);
+        log.push(`☠️ ${p.name} est Empoisonné${kind === 'toxic' ? ' (20/tour)' : ''}`);
+        return;
+      }
+      p.special = kind; // Endormi / Confus / Paralysé se remplacent
+      p.paraTurns = kind === 'paralyzed' ? 2 : 0;
+      log.push(`${SPECIAL_META[kind].emoji} ${p.name} est ${SPECIAL_META[kind].label}`);
+    }
+    function clearConditions(p) {
+      if (!p) return;
+      p.special = null; p.poison = 0; p.paraTurns = 0; p.fxList = [];
+      p.weaknessOverride = null; p.resistanceOverride = null; p.typeOverride = null;
+      p.lastHit = null;
+    }
+    function swapActive(owner, benchIdx) {
+      const side = game[owner];
+      const old = side.active;
+      side.active = side.bench[benchIdx];
+      if (old) { clearConditions(old); side.bench[benchIdx] = old; } else side.bench.splice(benchIdx, 1);
+      if (side.active) { fx.placed.add(side.active.uid); playPokemonCry(side.active.dex); }
+    }
+    function statusBadges(p) {
+      const b = [];
+      if (p.special) b.push(SPECIAL_META[p.special].emoji);
+      if (p.poison) b.push(p.poison >= 20 ? '☠️☠️' : '☠️');
+      if (hasFx(p, 'protectDmg') || hasFx(p, 'protectAll') || hasFx(p, 'le30') || hasFx(p, 'minus20') || hasFx(p, 'trainerDefender')) b.push('🛡️');
+      if (hasFx(p, 'smokescreen')) b.push('🌫️');
+      if (hasFx(p, 'cantRetreat')) b.push('⛓️');
+      if (hasFx(p, 'amnesia')) b.push('❓');
+      if (hasFx(p, 'destinyBond')) b.push('👻');
+      if (p.plusPower) b.push('💥');
+      return b.join('');
+    }
+
+    // ---------- Sélecteurs asynchrones ----------
+    function pickAsync(title, subtitle, list, allowClose = true) {
+      return new Promise((resolve) => {
+        if (!list.length) { resolve(null); return; }
+        const closeBtn = document.getElementById('pickerCloseBtn');
+        closeBtn.onclick = () => { closePickerModal(); closeBtn.onclick = closePickerModal; resolve(null); };
+        openPickerModal(title, subtitle, list, (idx) => { closeBtn.onclick = closePickerModal; resolve(idx); }, allowClose);
+      });
+    }
+    // Le joueur humain choisit si c'est son camp (local) ; sinon l'IA/le client choisit automatiquement
+    async function chooseFrom(chooser, title, subtitle, list, autoPick, allowClose = false) {
+      if (!list.length) return null;
+      if (chooser === 'player') return pickAsync(title, subtitle, list, allowClose);
+      return autoPick ? autoPick(list) : 0;
+    }
+    const pickWeakest = (list) => list.reduce((bi, p, i, a) => ((p.hp - p.damage) < (a[bi].hp - a[bi].damage) ? i : bi), 0);
+    const pickStrongest = (list) => list.reduce((bi, p, i, a) => ((p.energies.length * 100 + p.hp - p.damage) > (a[bi].energies.length * 100 + a[bi].hp - a[bi].damage) ? i : bi), 0);
+
+    // ---------- Analyse du texte officiel des attaques ----------
+    const SPEC_CACHE = new WeakMap();
+    function attackSpec(atk, user) {
+      if (SPEC_CACHE.has(atk)) return SPEC_CACHE.get(atk);
+      const raw = atk.text || '';
+      const t = raw.replace(/\s+/g, ' ').trim();
+      const userType = (user && user.type) || 'Incolore';
+      const s = { coin: false };
+      const num = (w) => ({ un: 1, une: 1, deux: 2, trois: 3, quatre: 4 }[w] || parseInt(w, 10));
+      let m;
+
+      if ((m = t.match(/Lancez (\d+|deux|trois|quatre) pièces\. Cette attaque inflige (\d+) dégâts multipliés par le nombre de faces/i))) s.coins = { n: num(m[1]), per: +m[2] };
+      else if ((m = t.match(/nombre de pièces égal au nombre d'Énergies attachées .* inflige (\d+) dégâts multipliés/i))) s.coins = { n: 'energies', per: +m[1] };
+      else if ((m = t.match(/jusqu'à ce que ce soit pile\. Cette attaque inflige (\d+) dégâts multipliés/i))) s.coins = { n: 'untilTails', per: +m[1] };
+      else if (/Lancez une pièce/i.test(t)) s.coin = true;
+
+      if ((m = t.match(/si c'est face, cette attaque inflige \d+ dégâts plus (\d+) dégâts supplémentaires/i))) s.headsPlus = +m[1];
+      if ((m = t.match(/pile[^.]*?s'inflige (\d+) (?:points de )?dégâts/i))) s.tailsSelf = +m[1];
+      if (/pile, cette attaque est sans effet|pile, cette attaque n'a aucun effet/i.test(t)) s.tailsFail = true;
+      if (/pile, cette attaque n'inflige aucun dégât/i.test(t)) s.tailsNoDamage = true;
+      if (/vous ne pouvez plus utiliser cette attaque/i.test(t)) s.onceOnly = true;
+
+      // États spéciaux infligés au Défenseur
+      const ST = { endormi: 'asleep', confus: 'confused', 'paralysé': 'paralyzed', 'empoisonné': 'poison' };
+      if (/Il subit maintenant 20 dégâts Poison/i.test(t)) s.status = { always: ['toxic'] };
+      else if ((m = t.match(/face, le Pokémon Défenseur est maintenant (Endormi|Confus|Paralysé|Empoisonné)(?: et (Endormi|Confus|Paralysé|Empoisonné))?/i))) {
+        s.status = { heads: [ST[m[1].toLowerCase()], m[2] ? ST[m[2].toLowerCase()] : null].filter(Boolean) };
+        const t2 = t.match(/pile, il est maintenant (Endormi|Confus|Paralysé|Empoisonné)/i);
+        if (t2) s.status.tails = [ST[t2[1].toLowerCase()]];
+      } else if ((m = t.match(/Pokémon Défenseur (?:et \S+ sont maintenant tous deux|est maintenant) (Endormi|Confus|Paralysé|Empoisonné)/i))) s.status = { always: [ST[m[1].toLowerCase()]] };
+      if (/tous deux Confus/i.test(t)) s.selfConfused = 'always';
+      else if (/pile, (?!il )\S+ est maintenant Confus/i.test(t)) s.selfConfused = 'tails';
+      else if (/(?:^|\. )(?!Le Pokémon)[^.]*\S+ est maintenant Confus \(après résolution/i.test(t)) s.selfConfused = 'always';
+
+      // Auto-dégâts fixes (phrases sans « pile »)
+      for (const sent of t.split(/\.\s/)) {
+        if (/s'inflige/.test(sent) && !/pile/i.test(sent) && (m = sent.match(/s'inflige (\d+) (?:points de )?dégâts/))) s.selfDamage = +m[1];
+      }
+
+      // Dégâts sur les Bancs
+      if ((m = t.match(/(\d+) dégâts à (?:chaque|chacun des) Pokémon (?:sur le|du) Banc de chaque joueur/i))) s.benchAll = +m[1];
+      if ((m = t.match(/(\d+) dégâts à chacun des Pokémon sur votre propre Banc/i))) s.benchOwn = +m[1];
+      if (/face, cette attaque inflige 10 dégâts à chacun des Pokémon du Banc de votre adversaire/i.test(t)) s.blizzard = 10;
+      if (/du même type que le Pokémon Défenseur qui sont sur un Banc/i.test(t)) s.chain = 10;
+      if ((m = t.match(/choisissez l'un d'eux[ ;]+(?:et )?cette attaque lui inflige (\d+) dégâts/i))) s.snipe = +m[1];
+      if (/Choisissez 3 Pokémon du Banc de votre adversaire/i.test(t)) s.gigashock = 10;
+      if (/Pour chacun des Pokémon du Banc de votre adversaire, lancez une pièce/i.test(t)) { s.thunderstorm = 20; s.coin = false; delete s.selfDamage; }
+
+      // Modificateurs de dégâts
+      if ((m = t.match(/plus 10 dégâts supplémentaires pour chaque (?:carte )?Énergie\s*(\{(\w)\})?\s*attachée à .* en plus du coût/i))) s.extraEnergy = { type: m[2] ? ENERGY_CODE[m[2]] : userType, max: 20 };
+      if (/pour chaque carte Énergie attachée au Pokémon Défenseur/i.test(t)) s.perDefEnergy = 10;
+      if (/pour chaque marqueur de dégâts sur le Pokémon Défenseur/i.test(t)) s.perDefCounter = 10;
+      if (/plus 10 dégâts supplémentaires pour chaque marqueur de dégâts (?:placé )?sur (?!le Pokémon)/i.test(t)) s.perSelfCounter = 10;
+      if (/moins 10 dégâts pour chaque marqueur/i.test(t)) s.minusSelfCounter = 10;
+      if (/multipliés par le nombre de marqueurs de dégâts sur/i.test(t)) s.selfCountersMult = 10;
+      if (/moitié de ses PV restants/i.test(t)) s.halfHp = true;
+      if ((m = t.match(/plus (\d+) dégâts supplémentaires pour chaque Nidoking/i))) s.perNidoking = +m[1];
+      if (/pour chacun des Pokémon de votre Banc/i.test(t)) s.perOwnBench = 10;
+      if (/Ne pas appliquer la Faiblesse et la Résistance à cette attaque/i.test(t)) s.noWR = true;
+      if (/Pendant votre prochain tour, l'attaque Tranche/i.test(t)) s.swordsDance = true;
+
+      // Coûts de défausse d'Énergie
+      if (/Défaussez toutes les cartes Énergie attachées/i.test(t)) s.discardAll = true;
+      else if ((m = raw.match(/Défaussez (\d) cartes? Énergies?(\s*)(\{(\w)\})?\s*attachées? à/i))) {
+        s.discard = { n: +m[1], type: m[4] ? ENERGY_CODE[m[4]] : (m[2].length >= 2 ? userType : 'any') };
+      }
+      if (/autant de cartes Énergies .* que vous le désirez/i.test(t)) s.wildfire = userType;
+
+      // Protections pour le prochain tour adverse
+      if (/prévenez tous les dégâts infligés à \S+ pendant le prochain tour/i.test(t)) s.protect = 'protectDmg';
+      if (/prévenez tous les effets (?:ou attaques|d'attaques), y compris les dégâts/i.test(t)) s.protect = 'protectAll';
+      if (/30 dégâts ou moins sont infligés à/i.test(t)) s.protect = 'le30';
+      if (/Tous les dégâts infligés à \S+ par des attaques .* réduits de 20/i.test(t)) s.protect = 'minus20';
+      if ((m = t.match(/Si le Pokémon Défenseur attaque \S+ pendant .* réduits de (\d+)/i))) s.bond = +m[1];
+      if (/ne peut pas attaquer \S+ pendant le prochain tour/i.test(t)) s.tailWag = true;
+
+      // Restrictions infligées au Défenseur
+      if (/Si le Pokémon Défenseur essaie d'attaquer/i.test(t)) { s.smokescreen = true; delete s.tailsFail; }
+      if (/ne peut pas battre en retraite pendant le prochain tour/i.test(t)) s.cantRetreat = true;
+      if (/Ce Pokémon ne peut pas utiliser cette attaque/i.test(t)) s.amnesia = true;
+      if (/ne peut pas jouer de carte Dresseur/i.test(t)) s.headache = true;
+      if (/mettez ce Pokémon K\.O\./i.test(t)) s.destinyBond = true;
+
+      // Soins
+      if (/Retirez tous les marqueurs de dégâts sur/i.test(t)) s.healAll = true;
+      if (/vous pouvez retirer 1 marqueur de dégâts de/i.test(t)) s.leech = 10;
+      if (/égal à la moitié des dégâts infligés/i.test(t)) s.drain = 0.5;
+      else if (/marqueurs de dégâts égal (?:aux|au nombre de) dégâts infligés/i.test(t)) s.drain = 1;
+      if (/retirez un marqueur de dégâts de/i.test(t)) { s.healOneHeads = 10; s.reqSelfDamage = true; }
+
+      // Énergies du Défenseur
+      if (/Si des cartes Énergies? sont attachées au Pokémon/i.test(t)) s.discardDefEnergy = true;
+
+      // Échanges / renvoi
+      if (/il (?:ou elle )?choisit l'(?:1|un) d'eux et l'échange/i.test(t)) s.whirlwind = /face et si votre adversaire/i.test(t) ? 'heads' : 'always';
+      if (/choisissez (?:1|l'un) d'(?:entre )?eux et échangez-le/i.test(t)) s.lure = true;
+      if (/Échangez \S+ avec 1 des Pokémon de votre Banc/i.test(t)) s.teleport = true;
+      if (/renvoyez le Pokémon Défenseur et toutes les cartes/i.test(t)) s.hurricane = true;
+
+      // Pioche / recherche
+      if (/^Piochez une carte/i.test(t)) s.draw = 1;
+      if (/Si c'est face, piochez une carte/i.test(t)) s.drawHeads = 1;
+      if ((m = raw.match(/Cherchez dans votre deck (?:un|une carte) Pokémon(\s*)(?:de base|\S+ de base)(?: appelé (.+?))? et placez-l[ae] sur votre Banc/i))) {
+        s.callFamily = { names: m[2] ? m[2].split(/\s+(?:or|ou)\s+/).map((x) => x.trim()) : null, type: m[1].length >= 2 ? userType : null };
+      }
+      if (/que si le Pokémon Défenseur est Endormi/i.test(t)) s.reqDefAsleep = true;
+      if (/Métronome copie cette attaque/i.test(t)) s.metronome = true;
+      if (/a été attaqué (?:pendant|durant) le tour précédent/i.test(t)) s.mirror = true;
+      if (/Faiblesse, vous pouvez la changer/i.test(t)) s.conv1 = true;
+      if (/Changez la Résistance de/i.test(t)) s.conv2 = true;
+      if (/Regardez jusqu'à 3 cartes du dessus du deck/i.test(t)) s.prophecy = true;
+      if (/jusqu'à 2 cartes Énergie de votre pile de défausse dans votre main/i.test(t)) s.recallEnergy = 2;
+      if (/carte Dresseur depuis votre pile de défausse vers votre main/i.test(t)) s.scavenge = true;
+
+      SPEC_CACHE.set(atk, s);
+      return s;
+    }
+
+    // Une attaque est-elle utilisable maintenant ? { ok, reason }
+    function attackUsable(owner, idx) {
+      const p = game[owner].active;
+      if (!p) return { ok: false, reason: 'Aucun Pokémon Actif' };
+      const atk = effAttacks(p)[idx];
+      if (!atk) return { ok: false, reason: '' };
+      if (p.special === 'asleep') return { ok: false, reason: `${p.name} est Endormi` };
+      if (p.special === 'paralyzed') return { ok: false, reason: `${p.name} est Paralysé` };
+      if (!canPayAttackCost(p, atk.cost)) return { ok: false, reason: 'Énergie insuffisante' };
+      const def = game[oppOf(owner)].active;
+      const s = attackSpec(atk, p);
+      if (hasFx(p, 'amnesia', (f) => f.atk === atk.name)) return { ok: false, reason: 'Bloquée par Amnésie' };
+      if (def && hasFx(p, 'cantAttack', (f) => f.uid === def.uid)) return { ok: false, reason: `Ne peut pas attaquer ${def.name}` };
+      if (s.onceOnly && p.usedOnce && p.usedOnce[atk.name]) return { ok: false, reason: 'Déjà utilisée' };
+      if (s.reqDefAsleep && (!def || def.special !== 'asleep')) return { ok: false, reason: 'Le Défenseur doit être Endormi' };
+      if (s.reqSelfDamage && !p.damage) return { ok: false, reason: 'Aucun marqueur de dégâts' };
+      if (s.callFamily && game[owner].bench.length >= 5) return { ok: false, reason: 'Banc plein' };
+      if (s.discard && p.energies.filter((e) => energyCardProvides(p, e, s.discard.type)).length < s.discard.n) return { ok: false, reason: 'Énergie à défausser manquante' };
+      return { ok: true, reason: '' };
+    }
+
+    // Dégâts finaux sur le Pokémon Actif défenseur (Faiblesse, Résistance, protections, Pouvoirs)
+    function computeFinalDamage(attacker, defender, base, spec, log) {
+      let d = base;
+      if (d <= 0) return 0;
+      if (attacker.plusPower) { d += attacker.plusPower; log.push(`PlusPower +${attacker.plusPower}`); }
+      if (!spec.noWR) {
+        const at = effType(attacker);
+        if (effWeak(defender) && effWeak(defender) === at) { d *= 2; log.push('Faiblesse ×2'); }
+        if (effRes(defender) && effRes(defender) === at) { d = Math.max(0, d - 30); log.push('Résistance −30'); }
+      }
+      const tdef = (defender.fxList || []).filter((f) => f.k === 'trainerDefender').length;
+      if (tdef) { d = Math.max(0, d - 20 * tdef); log.push(`Défenseur −${20 * tdef}`); }
+      if (hasFx(defender, 'minus20')) { d = Math.max(0, d - 20); log.push('Lilliput −20'); }
+      (defender.fxList || []).filter((f) => f.k === 'bond' && f.uid === attacker.uid).forEach((f) => { d = Math.max(0, d - f.n); log.push(`−${f.n}`); });
+      if (hasFx(defender, 'protectDmg')) { d = 0; log.push('dégâts prévenus'); }
+      if (d > 0 && d <= 30 && hasFx(defender, 'le30')) { d = 0; log.push('Armure : dégâts prévenus'); }
+      d = powerDamageFilter(defender, d, log);
+      return d;
+    }
+    function powerDamageFilter(p, d, log) {
+      if (d >= 30 && powerActive(p, 'invisible_wall')) { log.push(`Mur invisible de ${p.name}`); return 0; }
+      if (d > 0 && powerActive(p, 'kabuto_armor')) { const h = Math.floor(d / 20) * 10; log.push(`Armure de Kabuto ${d}→${h}`); return h; }
+      return d;
+    }
+    function hitBench(p, n, log) {
+      const d = powerDamageFilter(p, n, log);
+      if (d > 0) p.damage += d;
+    }
+
+    async function promoteAfterRemoval(owner, title) {
+      const side = game[owner];
+      if (side.active || game.gameOver) return;
+      if (!side.bench.length) {
+        endMatch(oppOf(owner), `${owner === 'player' ? 'Tu n\'as' : `${oppLabel()} n'a`} plus aucun Pokémon en jeu !`);
+        return;
+      }
+      const idx = await chooseFrom(owner, title || '🔁 Nouveau Pokémon Actif', 'Choisis quel Pokémon de ton Banc devient Actif :', side.bench, pickStrongest, false);
+      side.active = side.bench.splice(idx ?? 0, 1)[0];
+      fx.placed.add(side.active.uid);
+      playPokemonCry(side.active.dex);
+      renderBoard();
+    }
+
+    async function knockOutBenched(owner, idx) {
+      const side = game[owner], win = oppOf(owner);
+      const [p] = side.bench.splice(idx, 1);
+      side.discard.push(...(p.evoStack || []), p, ...p.energies);
+      p.energies = [];
+      let msg = `💥 ${p.name} (Banc) est K.O. !`;
+      if (!isToken(p) && game[win].prizes.length) {
+        const prize = game[win].prizes.pop();
+        fx.dealFrom.set(prize.uid, 'prize');
+        game[win].hand.push(prize);
+        msg += win === 'player' ? ` Tu prends 1 Récompense (${prize.name}) !` : ` ${oppLabel()} prend 1 Récompense.`;
+      }
+      sayJuliette(msg, true);
+      renderBoard();
+      await wait(550);
+      if (game[win].prizes.length === 0) endMatch(win, 'Toutes les cartes Récompense ont été remportées !');
+    }
+
+    // Résout tous les K.O. (Banc puis Actifs) — le camp adverse de l'attaquant d'abord
+    async function resolveKOs(attackerOwner) {
+      if (!game || game.gameOver) return;
+      const order = attackerOwner ? [oppOf(attackerOwner), attackerOwner] : ['player', 'ai'];
+      for (const o of order) {
+        for (let i = game[o].bench.length - 1; i >= 0; i--) {
+          const b = game[o].bench[i];
+          if (b && b.damage >= effHp(b)) { await knockOutBenched(o, i); if (game.gameOver) return; }
+        }
+      }
+      for (const o of order) {
+        const a = game[o].active;
+        if (a && a.damage >= effHp(a)) { await handleKnockOut(o, oppOf(o)); if (!game || game.gameOver) return; }
+      }
+    }
+
+    // Pokémon Checkup (entre deux tours) : Poison, Sommeil, fin de Paralysie, expiration des effets
+    async function pokemonCheckup(endingOwner) {
+      if (!game || game.gameOver) return;
+      const log = [];
+      for (const o of ['player', 'ai']) {
+        const p = game[o].active;
+        if (p && p.poison) { p.damage += p.poison; log.push(`☠️ ${p.name} subit ${p.poison} dégâts de Poison`); }
+      }
+      if (log.length) { sayJuliette(log.join(' · '), true); renderBoard(); await wait(700); }
+      for (const o of ['player', 'ai']) {
+        const p = game[o].active;
+        if (p && p.special === 'asleep' && p.damage < effHp(p)) {
+          const awake = await flipCoinAnimated(`💤 ${p.name} se réveille ?`);
+          if (awake) { p.special = null; sayJuliette(`${p.name} se réveille !`, true); }
+          else sayJuliette(`${p.name} dort toujours…`, true);
+        }
+      }
+      for (const p of bothInPlay()) {
+        if (p.special === 'paralyzed') { p.paraTurns = (p.paraTurns || 1) - 1; if (p.paraTurns <= 0) { p.special = null; } }
+        p.fxList = (p.fxList || []).map((f) => ({ ...f, turns: f.turns - 1 })).filter((f) => f.turns > 0);
+        p.typeOverride = null;
+        p.plusPower = 0;
+      }
+      for (const o of ['player', 'ai']) if (game[o].noTrainersTurns) game[o].noTrainersTurns -= 1;
+      game.halfTurn = (game.halfTurn || 0) + 1;
+      renderBoard();
+      await resolveKOs(null);
+    }
+
+    // ---------- RÉSOLUTION COMPLÈTE D'UNE ATTAQUE ----------
+    async function executeAttack(attackerOwner, attackIndex) {
+      const defOwner = oppOf(attackerOwner);
+      const atkSide = game[attackerOwner];
+      const defSide = game[defOwner];
       const attacker = atkSide.active;
       const defender = defSide.active;
-      const attack = attacker.attacks[attackIndex];
-
+      if (!attacker || !defender) return;
+      let attack = effAttacks(attacker)[attackIndex];
+      if (!attack) return;
+      let spec = attackSpec(attack, dittoCopy(attacker) || attacker);
+      const usable = attackUsable(attackerOwner, attackIndex);
+      if (!usable.ok) { sayJuliette(`${attack.name} impossible : ${usable.reason}.`, true); return; }
+      game.attackedThisTurn = true;
       playPokemonCry(attacker.dex);
+      const log = [];
 
-      let baseDamage = attack.damage || 0;
-      let extraLog = '';
-
-      // Effets spéciaux d'attaque du Set de Base / Jungle
-      if (attack.effect === 'karate_chop') {
-        const counters = Math.floor(attacker.damage / 10);
-        baseDamage = Math.max(0, 50 - counters * 10);
-      } else if (attack.effect === 'fury_attack_2coins') {
-        const c1 = await flipCoinAnimated(`${attacker.name} — Furie (Pièce 1/2)`);
-        const c2 = await flipCoinAnimated(`${attacker.name} — Furie (Pièce 2/2)`);
-        const heads = (c1 ? 1 : 0) + (c2 ? 1 : 0);
-        baseDamage = heads * 10;
-        extraLog = ` (${heads}/2 Faces)`;
-      } else if (attack.effect === 'pay_day') {
-        const heads = await flipCoinAnimated(`${attacker.name} — Jackpot`);
-        if (heads && atkSide.deck.length > 0) {
-          atkSide.hand.push(atkSide.deck.shift());
-          extraLog = ' (Face : +1 carte piochée !)';
-        } else {
-          extraLog = ' (Pile)';
-        }
-      } else if (attack.effect === 'discard_fire_1') {
-        const fireIdx = attacker.energies.findIndex((e) => e.energyType === 'Feu');
-        if (fireIdx !== -1) {
-          const [removed] = attacker.energies.splice(fireIdx, 1);
-          atkSide.discard.push(removed);
-        } else if (attacker.energies.length > 0) {
-          atkSide.discard.push(attacker.energies.pop());
-        }
-        extraLog = ' (1 Énergie Feu défaussée)';
-      }
-
-      // Bonus PlusPower (+10 par PlusPower attaché ce tour)
-      if (baseDamage > 0 && attacker.plusPower) {
-        baseDamage += attacker.plusPower;
-        extraLog += ` [PlusPower +${attacker.plusPower}]`;
-        attacker.plusPower = 0;
-      }
-
-      // Calcul Faiblesse (×2) et Résistance (-30)
-      let finalDamage = baseDamage;
-      if (finalDamage > 0) {
-        if (defender.weakness === attacker.type) {
-          finalDamage *= 2;
-          extraLog += ' [Faiblesse ×2 !]';
-        }
-        if (defender.resistance === attacker.type) {
-          finalDamage = Math.max(0, finalDamage - 30);
-          extraLog += ' [Résistance -30]';
-        }
-        if (defender.defender) {
-          finalDamage = Math.max(0, finalDamage - defender.defender);
-          extraLog += ` [Défenseur -${defender.defender}]`;
-          defender.defender = 0;
+      // 1. Confusion : pile = 20 dégâts à lui-même, l'attaque échoue
+      if (attacker.special === 'confused') {
+        const ok = await flipCoinAnimated(`💫 ${attacker.name} est Confus…`);
+        if (!ok) {
+          attacker.damage += 20;
+          sayJuliette(`💫 ${attacker.name} est Confus et se blesse : 20 dégâts !`, true);
+          renderBoard(); await wait(650);
+          await resolveKOs(attackerOwner);
+          return;
         }
       }
 
-      defender.damage += finalDamage;
+      // 2. Coûts obligatoires (défausse d'Énergie, attaque unique)
+      const payCosts = (sp) => {
+        if (sp.discardAll) { atkSide.discard.push(...attacker.energies.splice(0)); log.push('toutes les Énergies défaussées'); }
+        if (sp.discard) { const d = discardEnergyCards(attackerOwner, attacker, sp.discard.type, sp.discard.n); if (d.length) log.push(`${d.length} Énergie(s) défaussée(s)`); }
+        if (sp.onceOnly) attacker.usedOnce = { ...(attacker.usedOnce || {}), [attack.name]: true };
+      };
+      payCosts(spec);
 
-      // Dégâts de recul (Machopeur Sacrifice 20 / Arcanin Bélier 30)
-      if (attack.effect === 'recoil_20') {
-        attacker.damage += 20;
-        extraLog += ` (${attacker.name} subit 20 dégâts de recul)`;
-      } else if (attack.effect === 'recoil_30') {
-        attacker.damage += 30;
-        extraLog += ` (${attacker.name} subit 30 dégâts de recul)`;
+      // 3. Brouillard / Jet de Sable
+      if (hasFx(attacker, 'smokescreen')) {
+        const ok = await flipCoinAnimated(`🌫️ ${attacker.name} — l'attaque passe ?`);
+        if (!ok) { sayJuliette(`🌫️ ${attack.name} échoue (Pile) !`, true); renderBoard(); return; }
       }
+
+      // 4. Métronome (copie une attaque du Défenseur, sans son coût)
+      if (spec.metronome) {
+        const atks = effAttacks(defender);
+        if (!atks.length) { sayJuliette('Métronome : le Défenseur n\'a aucune attaque à copier.', true); return; }
+        const opts = atks.map((a) => textOption(`${a.name} (${a.damage})`, defender.img));
+        const i = await chooseFrom(attackerOwner, '🎵 Métronome', `Quelle attaque de ${defender.name} copier ?`, opts, (l) => atks.reduce((bi, a, k) => (a.damage > atks[bi].damage ? k : bi), 0));
+        attack = atks[i ?? 0];
+        spec = { ...attackSpec(attack, defender), discard: null, discardAll: false, onceOnly: false };
+        log.push(`copie ${attack.name}`);
+      }
+
+      // 5. Pièces
+      let heads = null;
+      if (spec.coin) heads = await flipCoinAnimated(`${attacker.name} — ${attack.name}`);
+
+      let dmg = attack.damage || 0;
+      let fail = false;
+      if (spec.coins) {
+        let n = spec.coins.n === 'energies' ? attacker.energies.length : spec.coins.n;
+        let h = 0;
+        if (spec.coins.n === 'untilTails') { let k = 1; while (await flipCoinAnimated(`${attack.name} — Pièce ${k++}`)) h++; n = h + 1; }
+        else for (let k = 1; k <= n; k++) if (await flipCoinAnimated(`${attack.name} — Pièce ${k}/${n}`)) h++;
+        dmg = spec.coins.per * h;
+        log.push(`${h}/${n} Face`);
+      }
+      if (spec.headsPlus && heads) dmg += spec.headsPlus;
+      if (spec.extraEnergy) {
+        const units = energyUnits(attacker);
+        const typeUnits = units.filter((u) => u === spec.extraEnergy.type || u === 'Any').length;
+        const costType = attack.cost.filter((c) => c === spec.extraEnergy.type).length;
+        const extra = Math.max(0, Math.min(units.length - attack.cost.length, typeUnits - costType));
+        dmg += Math.min(spec.extraEnergy.max, extra * 10);
+      }
+      if (spec.perDefEnergy) dmg += 10 * defender.energies.length;
+      if (spec.perDefCounter) dmg += defender.damage;
+      if (spec.perSelfCounter) dmg += attacker.damage;
+      if (spec.minusSelfCounter) dmg = Math.max(0, dmg - attacker.damage);
+      if (spec.selfCountersMult) dmg = attacker.damage;
+      if (spec.halfHp) dmg = Math.ceil((effHp(defender) - defender.damage) / 20) * 10;
+      if (spec.perNidoking) dmg += spec.perNidoking * allInPlay(attackerOwner).filter((p) => p.name === 'Nidoking').length;
+      if (spec.perOwnBench) dmg += 10 * atkSide.bench.length;
+      if (attack.name === 'Tranche' && hasFx(attacker, 'swordsDance')) { dmg = 60; log.push('Danse-lames'); }
+      if (spec.tailsNoDamage && heads === false) dmg = 0;
+      if (spec.tailsFail && heads === false) fail = true;
+      let mirrorHit = null;
+      if (spec.mirror) {
+        const lh = attacker.lastHit;
+        if (lh && lh.halfTurn === (game.halfTurn || 0) - 1) mirrorHit = lh;
+        else fail = true;
+      }
+
+      // 6. Protection totale du Défenseur (Bouclier, Hâte) / Transparence de Spectrum
+      let defImmune = hasFx(defender, 'protectAll');
+      if (!fail && !defImmune && powerActive(defender, 'transparency')) {
+        defImmune = await flipCoinAnimated(`👻 Transparence de ${defender.name}`);
+        if (defImmune) log.push('Transparence !');
+      }
+      if (defImmune && !fail) log.push(`${defender.name} est protégé`);
+
+      // 7. Échange avant dégâts (Leurre / Attraction)
+      if (!fail && spec.lure && defSide.bench.length && !defImmune) {
+        const i = await chooseFrom(attackerOwner, '🎣 Leurre', 'Quel Pokémon du Banc adverse attirer ?', defSide.bench, pickWeakest);
+        swapActive(defOwner, i ?? 0);
+        log.push(`${defSide.active.name} est attiré au combat`);
+      }
+
+      // 8. Dégâts principaux
+      let finalDamage = 0;
+      const target = defSide.active;
+      if (!fail && !defImmune) {
+        if (mirrorHit) finalDamage = mirrorHit.dmg;
+        else finalDamage = computeFinalDamage(attacker, target, dmg, spec, log);
+        target.damage += finalDamage;
+        target.lastHit = { halfTurn: game.halfTurn || 0, dmg: finalDamage };
+        if (finalDamage > 0 && powerActive(target, 'strikes_back')) { attacker.damage += 10; log.push(`Riposte : ${attacker.name} subit 10`); }
+      }
+      attacker.plusPower = 0;
 
       if (game && game.mode === 'multi' && attackerOwner === 'player') {
         sendMultiPacket('MP_ATTACK_ANIM', {
-          matchId: game.matchId,
-          attackIndex,
-          atkName: attack.name,
-          attackerName: attacker.name,
-          defenderName: defender.name,
-          finalDamage,
-          atkType: attacker.type,
-          extraLog,
-          actorSide: cloneSide(game.player),
-          targetSide: cloneSide(game.ai)
+          matchId: game.matchId, attackIndex, atkName: attack.name, attackerName: attacker.name,
+          defenderName: target.name, finalDamage, atkType: effType(attacker),
+          extraLog: log.length ? ` (${log.join(' · ')})` : '',
+          actorSide: cloneSide(game.player), targetSide: cloneSide(game.ai)
         });
       }
+      await animateAttack(attackerOwner, defOwner, finalDamage, effType(attacker));
 
-      // Animation : la carte attaquante fonce sur la cible, impact, chiffres de dégâts
-      await animateAttack(attackerOwner, defOwner, finalDamage, attacker.type);
-
-      sayJuliette(`${attacker.name} utilise <strong>${attack.name}</strong> : ${finalDamage} dégâts sur ${defender.name}${extraLog} !`, game.mode === 'multi');
-      renderBoard();
-
-      await wait(650);
-
-      // Vérifier K.O. du défenseur
-      if (defender.damage >= defender.hp) {
-        await handleKnockOut(defOwner, attackerOwner);
+      // 9. Effets sur le Défenseur
+      const effLog = [];
+      if (fail) effLog.push('l\'attaque est sans effet');
+      if (!fail && !defImmune) {
+        const st = spec.status || {};
+        const kinds = [...(st.always || []), ...(heads === true ? st.heads || [] : []), ...(heads === false ? st.tails || [] : [])];
+        if (mirrorHit && mirrorHit.statuses) kinds.push(...mirrorHit.statuses);
+        kinds.forEach((k) => applySpecial(target, k, effLog));
+        target.lastHit.statuses = kinds;
+        if (spec.discardDefEnergy && target.energies.length) {
+          const opts = target.energies.map((e) => ({ name: e.name, img: e.img }));
+          const i = await chooseFrom(attackerOwner, '🌀 Défausser une Énergie', `Quelle Énergie de ${target.name} défausser ?`, opts, () => target.energies.findIndex((e) => e.id === 'colorless-energy') >= 0 ? target.energies.findIndex((e) => e.id === 'colorless-energy') : 0);
+          const [e] = target.energies.splice(i ?? 0, 1);
+          defSide.discard.push(e);
+          effLog.push(`${e.name} de ${target.name} défaussée`);
+        }
+        if (spec.smokescreen) addFx(target, 'smokescreen', 2);
+        if (spec.cantRetreat && heads) { addFx(target, 'cantRetreat', 2); effLog.push(`${target.name} ne peut pas battre en retraite`); }
+        if (spec.headache) { defSide.noTrainersTurns = 2; effLog.push('aucune carte Dresseur au prochain tour adverse'); }
+        if (spec.amnesia && effAttacks(target).length) {
+          const atks = effAttacks(target);
+          const i = await chooseFrom(attackerOwner, '❓ Amnésie', `Quelle attaque de ${target.name} bloquer ?`, atks.map((a) => textOption(`${a.name} (${a.damage})`, target.img)), () => atks.reduce((bi, a, k) => (a.damage > atks[bi].damage ? k : bi), 0));
+          addFx(target, 'amnesia', 2, { atk: atks[i ?? 0].name });
+          effLog.push(`${atks[i ?? 0].name} est bloquée`);
+        }
+        if (spec.tailWag && heads) { addFx(target, 'cantAttack', 2, { uid: attacker.uid }); effLog.push(`${target.name} ne peut pas attaquer ${attacker.name}`); }
+        if (spec.conv1 && effWeak(target)) {
+          const opts = PLAY_TYPES.map(typeOption);
+          const i = await chooseFrom(attackerOwner, '🔄 Adaptation 1', `Nouvelle Faiblesse de ${target.name} :`, opts, () => Math.max(0, PLAY_TYPES.indexOf(effType(attacker))));
+          target.weaknessOverride = PLAY_TYPES[i ?? 0];
+          effLog.push(`Faiblesse de ${target.name} → ${target.weaknessOverride}`);
+        }
+      }
+      if (!fail) {
+        // Effets sur l'attaquant
+        if (spec.protect && (!spec.coin || heads)) { addFx(attacker, spec.protect, 2); effLog.push(`🛡️ ${attacker.name} est protégé au prochain tour`); }
+        if (spec.bond) addFx(target, 'bond', 2, { uid: attacker.uid, n: spec.bond });
+        if (spec.destinyBond) { addFx(attacker, 'destinyBond', 2); effLog.push('👻 Prélèvement du Destin actif'); }
+        if (spec.swordsDance) { addFx(attacker, 'swordsDance', 3); effLog.push('Tranche infligera 60 au prochain tour'); }
+        if (spec.conv2) {
+          const opts = PLAY_TYPES.map(typeOption);
+          const i = await chooseFrom(attackerOwner, '🔄 Adaptation 2', `Nouvelle Résistance de ${attacker.name} :`, opts, () => Math.max(0, PLAY_TYPES.indexOf(effType(target))));
+          attacker.resistanceOverride = PLAY_TYPES[i ?? 0];
+          effLog.push(`Résistance de ${attacker.name} → ${attacker.resistanceOverride}`);
+        }
+        if (spec.healAll) { attacker.damage = 0; effLog.push(`${attacker.name} est entièrement soigné`); }
+        if (spec.leech && finalDamage > 0 && attacker.damage > 0) { attacker.damage = Math.max(0, attacker.damage - spec.leech); effLog.push(`${attacker.name} récupère 10 PV`); }
+        if (spec.drain && finalDamage > 0) {
+          const heal = spec.drain === 1 ? finalDamage : Math.round(finalDamage / 20) * 10;
+          const healed = Math.min(attacker.damage, heal);
+          attacker.damage -= healed;
+          if (healed) effLog.push(`${attacker.name} récupère ${healed} PV`);
+        }
+        if (spec.healOneHeads && heads) { attacker.damage = Math.max(0, attacker.damage - 10); effLog.push(`${attacker.name} récupère 10 PV`); }
+        if (spec.draw || (spec.drawHeads && heads)) {
+          if (atkSide.deck.length) { atkSide.hand.push(atkSide.deck.shift()); effLog.push('1 carte piochée'); }
+        }
+        if (spec.callFamily && atkSide.bench.length < 5) {
+          const cf = spec.callFamily;
+          const cands = atkSide.deck.filter((c) => c.category === 'Pokémon' && c.stage === 'Base' && (!cf.names || cf.names.includes(c.name)) && (!cf.type || c.type === cf.type));
+          if (cands.length) {
+            const i = await chooseFrom(attackerOwner, `📣 ${attack.name}`, 'Choisis le Pokémon de Base à placer sur ton Banc :', cands, pickStrongest);
+            const c = cands[i ?? 0];
+            atkSide.deck = shuffle(atkSide.deck.filter((x) => x.uid !== c.uid));
+            atkSide.bench.push(c); fx.placed.add(c.uid);
+            effLog.push(`${c.name} rejoint le Banc`);
+          } else { atkSide.deck = shuffle(atkSide.deck); effLog.push('aucun Pokémon trouvé'); }
+        }
+        if (spec.recallEnergy) {
+          for (let k = 0; k < spec.recallEnergy; k++) {
+            const en = atkSide.discard.filter((c) => c.category === 'Énergie');
+            if (!en.length) break;
+            const i = await chooseFrom(attackerOwner, '♻️ Conversion d\'Énergie', `Énergie ${k + 1}/2 à reprendre en main :`, en, () => 0, true);
+            if (i === null) break;
+            atkSide.discard = atkSide.discard.filter((c) => c.uid !== en[i].uid);
+            atkSide.hand.push(en[i]);
+            effLog.push(`${en[i].name} reprise en main`);
+          }
+        }
+        if (spec.scavenge) {
+          const tr = atkSide.discard.filter((c) => c.category === 'Dresseur');
+          if (tr.length) {
+            const i = await chooseFrom(attackerOwner, '🔍 Farfouille', 'Carte Dresseur à reprendre :', tr, () => 0);
+            atkSide.discard = atkSide.discard.filter((c) => c.uid !== tr[i ?? 0].uid);
+            atkSide.hand.push(tr[i ?? 0]);
+            effLog.push(`${tr[i ?? 0].name} reprise en main`);
+          }
+        }
+        if (spec.wildfire) {
+          const max = attacker.energies.filter((e) => energyCardProvides(attacker, e, spec.wildfire)).length;
+          let n = max;
+          if (attackerOwner === 'player' && max > 0) {
+            const opts = Array.from({ length: max + 1 }, (_, k) => typeOption(spec.wildfire)).map((o, k) => ({ ...o, name: `${k} Énergie(s)` }));
+            n = (await pickAsync('🔥 Feu sauvage', 'Combien d\'Énergies Feu défausser ?', opts, false)) ?? 0;
+          }
+          discardEnergyCards(attackerOwner, attacker, spec.wildfire, n);
+          const milled = defSide.deck.splice(0, n);
+          defSide.discard.push(...milled);
+          effLog.push(`${n} carte(s) du deck adverse défaussée(s)`);
+        }
+        if (spec.prophecy && attackerOwner === 'player') {
+          const w = await pickAsync('🔮 Prophétie', 'Quel deck regarder ?', [textOption('Ton deck'), textOption('Deck adverse')], false);
+          const deck = w === 1 ? defSide.deck : atkSide.deck;
+          const top = deck.splice(0, Math.min(3, deck.length));
+          const ordered = [];
+          while (top.length) {
+            const i = top.length === 1 ? 0 : await pickAsync('🔮 Prophétie', `Choisis la carte n°${ordered.length + 1} (sur le dessus) :`, top, false);
+            ordered.push(top.splice(i ?? 0, 1)[0]);
+          }
+          deck.unshift(...ordered);
+          effLog.push('cartes du dessus réarrangées');
+        }
       }
 
-      // Vérifier K.O. par recul de l'attaquant
-      if (!game.gameOver && attacker.damage >= attacker.hp) {
-        await handleKnockOut(attackerOwner, defOwner);
+      // 10. Dégâts sur les Bancs (pas de Faiblesse/Résistance)
+      if (!fail) {
+        if (spec.benchAll) { [...atkSide.bench, ...defSide.bench].forEach((b) => hitBench(b, spec.benchAll, effLog)); effLog.push(`${spec.benchAll} dégâts à tous les Bancs`); }
+        if (spec.benchOwn) { atkSide.bench.forEach((b) => hitBench(b, spec.benchOwn, effLog)); effLog.push(`${spec.benchOwn} dégâts à ton propre Banc`); }
+        if (spec.blizzard) { (heads ? defSide.bench : atkSide.bench).forEach((b) => hitBench(b, spec.blizzard, effLog)); effLog.push(heads ? 'Banc adverse touché' : 'propre Banc touché'); }
+        if (spec.chain && effType(target) !== 'Incolore' && !defImmune) {
+          [...atkSide.bench, ...defSide.bench].filter((b) => effType(b) === effType(target)).forEach((b) => hitBench(b, spec.chain, effLog));
+        }
+        if (spec.snipe && defSide.bench.length) {
+          const i = await chooseFrom(attackerOwner, `🎯 ${attack.name}`, `Quel Pokémon du Banc adverse subit ${spec.snipe} dégâts ?`, defSide.bench, pickWeakest);
+          const b = defSide.bench[i ?? 0]; hitBench(b, spec.snipe, effLog); effLog.push(`${b.name} (Banc) subit ${spec.snipe}`);
+        }
+        if (spec.gigashock && defSide.bench.length) {
+          let targets = [...defSide.bench];
+          if (targets.length > 3) {
+            const chosen = [];
+            for (let k = 0; k < 3; k++) {
+              const i = await chooseFrom(attackerOwner, '⚡ Éléctrochok', `Cible ${k + 1}/3 :`, targets, pickWeakest);
+              chosen.push(targets.splice(i ?? 0, 1)[0]);
+            }
+            targets = chosen;
+          }
+          targets.forEach((b) => hitBench(b, spec.gigashock, effLog));
+          effLog.push(`${targets.length} Pokémon du Banc adverse touchés`);
+        }
+        if (spec.thunderstorm) {
+          let tails = 0;
+          for (const b of [...defSide.bench]) {
+            if (await flipCoinAnimated(`⛈️ Orage → ${b.name}`)) hitBench(b, spec.thunderstorm, effLog); else tails++;
+          }
+          if (tails) { attacker.damage += 10 * tails; effLog.push(`${attacker.name} subit ${10 * tails}`); }
+        }
+        if (spec.selfDamage) attacker.damage += spec.selfDamage;
+        if (spec.tailsSelf && heads === false) attacker.damage += spec.tailsSelf;
+        if (spec.selfConfused === 'always' || (spec.selfConfused === 'tails' && heads === false)) applySpecial(attacker, 'confused', effLog);
+        if (spec.selfDamage || (spec.tailsSelf && heads === false)) effLog.push(`${attacker.name} s'inflige ${(spec.selfDamage || 0) + (heads === false ? spec.tailsSelf || 0 : 0)} dégâts`);
+      }
+
+      const allLog = [...log, ...effLog];
+      sayJuliette(`${attacker.name} utilise <strong>${attack.name}</strong> : ${finalDamage} dégâts sur ${target.name}${allLog.length ? ` (${allLog.join(' · ')})` : ''} !`, true);
+      renderBoard();
+      await wait(650);
+
+      // 11. Prélèvement du Destin
+      if (target.damage >= effHp(target) && finalDamage > 0 && hasFx(target, 'destinyBond')) {
+        attacker.damage = Math.max(attacker.damage, effHp(attacker));
+        sayJuliette(`👻 Prélèvement du Destin : ${attacker.name} est aussi mis K.O. !`, true);
+      }
+
+      // 12. Échanges après dégâts (Cyclone, Défonce, Raid terrifiant, Téléport, Ouragan)
+      if (!fail && !defImmune && target === defSide.active && target.damage < effHp(target)) {
+        if (spec.whirlwind && (spec.whirlwind === 'always' || heads) && defSide.bench.length) {
+          const i = await chooseFrom(defOwner, '🌪️ Cyclone', 'Choisis le Pokémon de ton Banc qui remplace ton Actif :', defSide.bench, pickStrongest);
+          swapActive(defOwner, i ?? 0);
+          sayJuliette(`🌪️ ${defSide.active.name} est envoyé au combat !`, true);
+        }
+        if (spec.hurricane) {
+          defSide.hand.push(...(target.evoStack || []).map((c) => ({ ...c, damage: 0, energies: [] })), { ...target, damage: 0, energies: [], evoStack: undefined, fxList: [], special: null, poison: 0 }, ...target.energies);
+          defSide.active = null;
+          sayJuliette(`🌪️ Ouragan : ${target.name} retourne dans la main de ${defOwner === 'player' ? 'ton camp' : oppLabel()} !`, true);
+          renderBoard();
+          await promoteAfterRemoval(defOwner);
+        }
+      }
+      if (!fail && spec.teleport && atkSide.bench.length && attacker === atkSide.active) {
+        const i = await chooseFrom(attackerOwner, '✨ Téléport', 'Avec quel Pokémon du Banc échanger ?', atkSide.bench, pickStrongest);
+        swapActive(attackerOwner, i ?? 0);
+      }
+      renderBoard();
+
+      // 13. K.O. (Banc + Actifs, y compris dégâts de recul)
+      await resolveKOs(attackerOwner);
+    }
+
+    // ---------- POUVOIRS POKÉMON ACTIVABLES (joueur) ----------
+    function powerUsableNow(owner, p) {
+      if (!game || game.gameOver || game.activePlayer !== owner || game.attackedThisTurn) return false;
+      if (!p || !p.power || p.power.passive) return isToken(p);
+      if (!powerActive(p, p.power.id)) return false;
+      if (p.power.oncePerTurn && p.powerTurn === (game.halfTurn || 0)) return false;
+      const side = game[owner];
+      switch (p.power.id) {
+        case 'damage_swap': return allInPlay(owner).some((x) => x.damage > 0) && allInPlay(owner).length > 1;
+        case 'energy_trans': return allInPlay(owner).some((x) => x.energies.some((e) => e.energyType === 'Plante')) && allInPlay(owner).length > 1;
+        case 'rain_dance': return side.hand.some((c) => c.category === 'Énergie' && c.energyType === 'Eau') && allInPlay(owner).some((x) => effType(x) === 'Eau');
+        case 'buzzap': return allInPlay(owner).length > 1;
+        case 'step_in': return side.bench.includes(p);
+        case 'curse': return allInPlay(oppOf(owner)).some((x) => x.damage > 0) && allInPlay(oppOf(owner)).length > 1;
+        case 'strange_behavior': return allInPlay(owner).some((x) => x !== p && x.damage > 0) && p.damage + 10 < effHp(p);
+        case 'cowardice': return p.turnsInPlay >= 1 && (side.active !== p || side.bench.length > 0);
+        default: return true;
+      }
+    }
+
+    async function usePlayerPower(zone, index) {
+      const owner = 'player';
+      const side = game.player, opp = game.ai;
+      const p = zone === 'active' ? side.active : side.bench[index];
+      if (!p || !powerUsableNow(owner, p)) return;
+      closeCardModal();
+      const mine = allInPlay(owner);
+      const say = (t) => sayJuliette(`✨ ${p.power ? p.power.name : p.name} : ${t}`, true);
+
+      if (isToken(p)) {
+        if (side.active === p && !side.bench.length) { sayJuliette('Impossible : tu n\'aurais plus de Pokémon Actif.', true); return; }
+        if (side.active === p) side.active = null; else side.bench.splice(side.bench.indexOf(p), 1);
+        side.discard.push({ ...p, category: 'Dresseur' }, ...p.energies);
+        sayJuliette(`🗑️ ${p.name} est défaussé.`, true);
+        renderBoard();
+        await promoteAfterRemoval(owner);
+        renderBoard();
+        return;
+      }
+
+      switch (p.power.id) {
+        case 'damage_swap':
+        case 'strange_behavior': {
+          const srcs = mine.filter((x) => x.damage > 0 && (p.power.id === 'damage_swap' || x !== p));
+          const si = await pickAsync(`✨ ${p.power.name}`, 'Pokémon d\'où retirer 1 marqueur (10) :', srcs);
+          if (si === null) return;
+          const src = srcs[si];
+          let dst = p;
+          if (p.power.id === 'damage_swap') {
+            const dsts = mine.filter((x) => x !== src && x.damage + 10 < effHp(x));
+            const di = await pickAsync(`✨ ${p.power.name}`, 'Pokémon qui reçoit le marqueur :', dsts);
+            if (di === null) return;
+            dst = dsts[di];
+          } else if (p.damage + 10 >= effHp(p)) return;
+          src.damage -= 10; dst.damage += 10;
+          say(`1 marqueur déplacé de ${src.name} vers ${dst.name}.`);
+          break;
+        }
+        case 'energy_trans': {
+          const srcs = mine.filter((x) => x.energies.some((e) => e.energyType === 'Plante'));
+          const si = await pickAsync('✨ Transfert d\'Énergie', 'Pokémon d\'où retirer 1 Énergie Plante :', srcs);
+          if (si === null) return;
+          const dsts = mine.filter((x) => x !== srcs[si]);
+          const di = await pickAsync('✨ Transfert d\'Énergie', 'Pokémon qui la reçoit :', dsts);
+          if (di === null) return;
+          const ei = srcs[si].energies.findIndex((e) => e.energyType === 'Plante');
+          const [e] = srcs[si].energies.splice(ei, 1);
+          dsts[di].energies.push(e); fx.attached.add(e.uid);
+          say(`Énergie Plante déplacée vers ${dsts[di].name}.`);
+          break;
+        }
+        case 'rain_dance': {
+          const waters = side.hand.filter((c) => c.category === 'Énergie' && c.energyType === 'Eau');
+          const dsts = mine.filter((x) => effType(x) === 'Eau');
+          const di = await pickAsync('🌧️ Danse de la pluie', 'Attacher 1 Énergie Eau (en plus de ton Énergie du tour) à :', dsts);
+          if (di === null) return;
+          const e = waters[0];
+          side.hand.splice(side.hand.indexOf(e), 1);
+          dsts[di].energies.push(e); fx.attached.add(e.uid); sfx('place');
+          say(`Énergie Eau attachée à ${dsts[di].name}.`);
+          break;
+        }
+        case 'buzzap': {
+          const dsts = mine.filter((x) => x !== p);
+          const di = await pickAsync('💥 Buzzap', `${p.name} se met K.O. et devient 2 Énergies pour :`, dsts);
+          if (di === null) return;
+          const ti = await pickAsync('💥 Buzzap', 'Type d\'Énergie fourni :', PLAY_TYPES.map(typeOption), false);
+          const type = PLAY_TYPES[ti ?? 0];
+          const wasActive = side.active === p;
+          if (wasActive) side.active = null; else side.bench.splice(side.bench.indexOf(p), 1);
+          side.discard.push(...p.energies, ...(p.evoStack || []));
+          dsts[di].energies.push({ uid: uidCounter++, id: 'buzzap-' + p.uid, name: `${p.name} (Buzzap ${type})`, category: 'Énergie', energyType: type, buzzap: true, img: p.img });
+          if (opp.prizes.length) { const pr = opp.prizes.pop(); opp.hand.push(pr); }
+          say(`${p.name} est K.O. et fournit 2 Énergies ${type} à ${dsts[di].name} (${oppLabel()} prend 1 Récompense).`);
+          renderBoard();
+          if (opp.prizes.length === 0) { endMatch('ai', 'Toutes les cartes Récompense ont été remportées !'); return; }
+          if (wasActive) await promoteAfterRemoval(owner);
+          break;
+        }
+        case 'shift': {
+          const types = [...new Set(bothInPlay().map((x) => effType(x)).filter((t) => t && t !== 'Incolore' && t !== effType(p)))];
+          if (!types.length) { say('aucun autre type disponible.'); return; }
+          const ti = await pickAsync('🦋 Changement', `Nouveau type de ${p.name} pour ce tour :`, types.map(typeOption));
+          if (ti === null) return;
+          p.typeOverride = types[ti]; p.powerTurn = game.halfTurn || 0;
+          say(`${p.name} est de type ${types[ti]} jusqu'à la fin du tour.`);
+          break;
+        }
+        case 'heal': {
+          p.powerTurn = game.halfTurn || 0;
+          const ok = await flipCoinAnimated('🌸 Soins');
+          const dmgd = mine.filter((x) => x.damage > 0);
+          if (ok && dmgd.length) {
+            const i = dmgd.length === 1 ? 0 : await pickAsync('🌸 Soins', 'Retirer 1 marqueur de :', dmgd, false);
+            dmgd[i ?? 0].damage -= 10;
+            say(`${dmgd[i ?? 0].name} récupère 10 PV.`);
+          } else say(ok ? 'aucun Pokémon blessé.' : 'Pile, rien ne se passe.');
+          break;
+        }
+        case 'peek': {
+          p.powerTurn = game.halfTurn || 0;
+          const opts = [textOption('Dessus de ton deck'), textOption('Dessus du deck adverse'), textOption('Carte de la main adverse'), textOption('Une de tes Récompenses')];
+          const i = await pickAsync('👀 Espionnage', 'Que veux-tu regarder ?', opts);
+          const pool = [side.deck[0], opp.deck[0], opp.hand[Math.floor(Math.random() * opp.hand.length)], side.prizes[Math.floor(Math.random() * side.prizes.length)]];
+          const c = i === null ? null : pool[i];
+          if (c) await pickAsync('👀 Espionnage', 'Carte révélée :', [c]);
+          break;
+        }
+        case 'step_in': {
+          p.powerTurn = game.halfTurn || 0;
+          swapActive(owner, side.bench.indexOf(p));
+          say(`${p.name} passe en Pokémon Actif gratuitement !`);
+          break;
+        }
+        case 'curse': {
+          const om = allInPlay('ai');
+          const srcs = om.filter((x) => x.damage > 0);
+          const si = await pickAsync('👻 Malédiction', 'Pokémon adverse d\'où retirer 1 marqueur :', srcs);
+          if (si === null) return;
+          const dsts = om.filter((x) => x !== srcs[si]);
+          const di = await pickAsync('👻 Malédiction', 'Pokémon adverse qui reçoit le marqueur :', dsts);
+          if (di === null) return;
+          srcs[si].damage -= 10; dsts[di].damage += 10; p.powerTurn = game.halfTurn || 0;
+          say(`1 marqueur déplacé de ${srcs[si].name} vers ${dsts[di].name}.`);
+          renderBoard();
+          await resolveKOs('player');
+          break;
+        }
+        case 'cowardice': {
+          const wasActive = side.active === p;
+          if (wasActive) side.active = null; else side.bench.splice(side.bench.indexOf(p), 1);
+          side.discard.push(...p.energies);
+          clearConditions(p);
+          side.hand.push({ ...p, damage: 0, energies: [], turnsInPlay: 0 });
+          say(`${p.name} retourne dans ta main.`);
+          renderBoard();
+          if (wasActive) await promoteAfterRemoval(owner);
+          break;
+        }
+        default: return;
+      }
+      renderBoard();
+    }
+
+    // Pouvoirs utilisés automatiquement par l'IA (Danse de la pluie, Soins, Transfert d'Énergie)
+    async function aiUsePowers() {
+      const side = game.ai;
+      for (const p of allInPlay('ai')) {
+        if (!game.ai.active) return;
+        if (powerActive(p, 'rain_dance') && effType(side.active) === 'Eau') {
+          let n = 0;
+          while (side.hand.some((c) => c.category === 'Énergie' && c.energyType === 'Eau') && n < 3) {
+            const e = side.hand.find((c) => c.category === 'Énergie' && c.energyType === 'Eau');
+            side.hand.splice(side.hand.indexOf(e), 1);
+            side.active.energies.push(e); fx.attached.add(e.uid); n++;
+          }
+          if (n) { sayJuliette(`🌧️ Danse de la pluie : ${n} Énergie(s) Eau attachée(s) à ${side.active.name} !`); renderBoard(); await wait(600); }
+        }
+        if (powerActive(p, 'heal') && p.powerTurn !== (game.halfTurn || 0)) {
+          const hurt = allInPlay('ai').filter((x) => x.damage > 0).sort((a, b) => b.damage - a.damage)[0];
+          if (hurt) {
+            p.powerTurn = game.halfTurn || 0;
+            if (await flipCoinAnimated(`🌸 Soins (${oppLabel()})`)) { hurt.damage -= 10; sayJuliette(`🌸 ${hurt.name} récupère 10 PV.`); renderBoard(); }
+          }
+        }
+        if (powerActive(p, 'energy_trans') && side.active !== p) {
+          const a = side.active;
+          const best = (a.attacks || []).slice(-1)[0];
+          while (best && !canPayAttackCost(a, best.cost)) {
+            const src = allInPlay('ai').find((x) => x !== a && x.energies.some((e) => e.energyType === 'Plante'));
+            if (!src) break;
+            const [e] = src.energies.splice(src.energies.findIndex((x) => x.energyType === 'Plante'), 1);
+            a.energies.push(e); fx.attached.add(e.uid);
+          }
+          renderBoard();
+        }
       }
     }
 
@@ -18739,11 +19652,15 @@ const TYPE_EMOJI = {
       setJulietteMood(victimOwner === 'ai' ? 'surprised' : 'happy');
       await animateKO(victimOwner);
 
-      victimSide.discard.push(koPkm, ...koPkm.energies);
+      victimSide.discard.push(...(koPkm.evoStack || []), koPkm, ...koPkm.energies);
+      koPkm.energies = [];
+      clearConditions(koPkm);
       victimSide.active = null;
 
-      // Récompense
-      if (winnerSide.prizes.length > 0) {
+      // Récompense (Peluche Mélofée / Mystérieux Fossile ne comptent pas comme Pokémon K.O.)
+      if (isToken(koPkm)) {
+        sayJuliette(`${koPkm.name} est détruit (aucune Récompense).`, true);
+      } else if (winnerSide.prizes.length > 0) {
         const prize = winnerSide.prizes.pop();
         fx.dealFrom.set(prize.uid, 'prize');
         winnerSide.hand.push(prize);
@@ -18831,7 +19748,9 @@ const TYPE_EMOJI = {
     }
 
     async function executePlayerAttack(attackIndex) {
-      if (!game || game.activePlayer !== 'player' || !game.player.active) return;
+      if (!game || game.activePlayer !== 'player' || !game.player.active || game.attackedThisTurn || game.endingTurn) return;
+      const use = attackUsable('player', attackIndex);
+      if (!use.ok) { sayJuliette(`Attaque impossible : ${use.reason}.`, true); return; }
       await executeAttack('player', attackIndex);
       if (!game.gameOver) {
         endPlayerTurn();
@@ -18841,12 +19760,19 @@ const TYPE_EMOJI = {
     // -----------------------------------------------------------------------
     // 9. GESTION DES TOURS & IA DE JULIETTE
     // -----------------------------------------------------------------------
-    function endPlayerTurn() {
-      if (!game || game.gameOver) return;
+    async function endPlayerTurn() {
+      if (!game || game.gameOver || game.endingTurn) return;
       if (!game.player.active) {
         sayJuliette('Tu dois d\'abord choisir ton Pokémon Actif dans ta main !', true);
         return;
       }
+      if (game.activePlayer !== 'player') return;
+      game.endingTurn = true;
+      // Pokémon Checkup entre les tours (Poison, Sommeil, Paralysie, fin des effets)
+      await pokemonCheckup('player');
+      if (!game || game.gameOver) return;
+      game.endingTurn = false;
+      if (!game.player.active) return;
 
       // Incrémenter l'ancienneté des Pokémon du joueur
       game.player.active.turnsInPlay += 1;
@@ -18859,6 +19785,7 @@ const TYPE_EMOJI = {
       game.activePlayer = 'ai';
       game.energyAttachedThisTurn = false;
       game.retreatedThisTurn = false;
+      game.attackedThisTurn = false;
       renderBoard();
 
       if (game.mode === 'multi') {
@@ -18896,6 +19823,11 @@ const TYPE_EMOJI = {
         b.evolvedThisTurn = false;
       });
 
+      game.attackedThisTurn = false;
+      if (!game.ai.active) await promoteAfterRemoval('ai');
+      if (!game || game.gameOver) return;
+      const aiTrainersOk = !game.ai.noTrainersTurns;
+
       // 2. Poser des Pokémon de Base sur le Banc
       const basics = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
       for (const b of basics) {
@@ -18912,6 +19844,7 @@ const TYPE_EMOJI = {
       // 3. Évolutions possibles pour Juliette (Niveau 1 et Niveau 2)
       const evos = game.ai.hand.filter((c) => c.category === 'Pokémon' && (c.stage === 'Niveau 1' || c.stage === 'Niveau 2'));
       for (const evo of evos) {
+        if (prehistoricLock()) break;
         if (game.ai.active && game.ai.active.name === evo.evolvesFrom && game.ai.active.turnsInPlay >= 1 && !game.ai.active.evolvedThisTurn) {
           game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
           evolvePokemon('ai', 'active', 0, evo);
@@ -18930,7 +19863,7 @@ const TYPE_EMOJI = {
 
       // 4. Jouer Léo, Potion ou Suppression d'Énergie si en main
       const leoIdx = game.ai.hand.findIndex((c) => c.id === 'bill' || c.setId === 'base1-91');
-      if (leoIdx !== -1 && game.ai.deck.length >= 2) {
+      if (aiTrainersOk && leoIdx !== -1 && game.ai.deck.length >= 2) {
         const [leo] = game.ai.hand.splice(leoIdx, 1);
         game.ai.discard.push(leo);
         game.ai.hand.push(...game.ai.deck.splice(0, 2));
@@ -18940,7 +19873,7 @@ const TYPE_EMOJI = {
       }
 
       const potIdx = game.ai.hand.findIndex((c) => c.id === 'potion' || c.setId === 'base1-94');
-      if (potIdx !== -1 && game.ai.active && game.ai.active.damage >= 20) {
+      if (aiTrainersOk && potIdx !== -1 && game.ai.active && game.ai.active.damage >= 20) {
         const [pot] = game.ai.hand.splice(potIdx, 1);
         game.ai.discard.push(pot);
         game.ai.active.damage = Math.max(0, game.ai.active.damage - 20);
@@ -18950,7 +19883,7 @@ const TYPE_EMOJI = {
       }
 
       const erIdx = game.ai.hand.findIndex((c) => c.id === 'energy-removal' || c.setId === 'base1-92');
-      if (erIdx !== -1 && game.player.active && game.player.active.energies.length > 0) {
+      if (aiTrainersOk && erIdx !== -1 && game.player.active && game.player.active.energies.length > 0) {
         const [er] = game.ai.hand.splice(erIdx, 1);
         game.ai.discard.push(er);
         const removed = game.player.active.energies.pop();
@@ -18958,6 +19891,16 @@ const TYPE_EMOJI = {
         sayJuliette(`Juliette utilise Suppression d'Énergie sur ton ${game.player.active.name} !`);
         renderBoard();
         await new Promise((r) => setTimeout(r, 600));
+      }
+
+      const fhIdx = game.ai.hand.findIndex((c) => c.id === 'full-heal');
+      if (aiTrainersOk && fhIdx !== -1 && game.ai.active && (game.ai.active.special || game.ai.active.poison)) {
+        const [fh] = game.ai.hand.splice(fhIdx, 1);
+        game.ai.discard.push(fh);
+        game.ai.active.special = null; game.ai.active.poison = 0;
+        sayJuliette(`${oppLabel()} utilise Guérison Totale sur ${game.ai.active.name} !`);
+        renderBoard();
+        await wait(600);
       }
 
       // 5. Attacher 1 Énergie
@@ -18978,12 +19921,28 @@ const TYPE_EMOJI = {
         await new Promise((r) => setTimeout(r, 600));
       }
 
-      // 6. Choisir la meilleure attaque payable
+      // 5b. Pouvoirs Pokémon de l'IA
+      await aiUsePowers();
+
+      // 5c. Retraite si l'Actif est Endormi/Paralysé n'est pas possible ; si Confus et une retraite est payable, l'IA change de Pokémon
+      const aiAct = game.ai.active;
+      if (aiAct && aiAct.special === 'confused' && game.ai.bench.length && !hasFx(aiAct, 'cantRetreat') && !isToken(aiAct) && energyUnits(aiAct).length >= effRetreat(aiAct) && effRetreat(aiAct) <= 1) {
+        const cost = effRetreat(aiAct);
+        for (let k = 0; k < cost; k++) game.ai.discard.push(aiAct.energies.pop());
+        if (await flipCoinAnimated(`💫 ${aiAct.name} (Confus) tente une retraite`)) {
+          swapActive('ai', pickStrongest(game.ai.bench));
+          sayJuliette(`${oppLabel()} fait battre en retraite ${aiAct.name} !`);
+        }
+        renderBoard();
+        await wait(500);
+      }
+
+      // 6. Choisir la meilleure attaque utilisable (états spéciaux, Amnésie, conditions…)
       if (game.ai.active) {
-        const attacks = game.ai.active.attacks || [];
+        const attacks = effAttacks(game.ai.active);
         let bestIdx = -1;
         for (let i = attacks.length - 1; i >= 0; i--) {
-          if (canPayAttackCost(game.ai.active, attacks[i].cost)) {
+          if (attackUsable('ai', i).ok) {
             bestIdx = i;
             break;
           }
@@ -18991,10 +19950,14 @@ const TYPE_EMOJI = {
         if (bestIdx !== -1) {
           await executeAttack('ai', bestIdx);
         } else {
-          sayJuliette(`Mon ${game.ai.active.name} n'a pas encore assez d'Énergie pour attaquer. À toi de jouer !`);
+          const why = game.ai.active.special ? `est ${SPECIAL_META[game.ai.active.special].label}` : 'ne peut pas attaquer';
+          sayJuliette(`Mon ${game.ai.active.name} ${why} ce tour-ci. À toi de jouer !`);
         }
       }
 
+      if (game && !game.gameOver) {
+        await pokemonCheckup('ai');
+      }
       if (game && !game.gameOver) {
         startPlayerTurn();
       }
@@ -19006,6 +19969,8 @@ const TYPE_EMOJI = {
       setJulietteMood('happy');
       game.energyAttachedThisTurn = false;
       game.retreatedThisTurn = false;
+      game.attackedThisTurn = false;
+      game.endingTurn = false;
 
       if (game.player.deck.length === 0) {
         endMatch('ai', 'Tu n\'as plus aucune carte à piocher dans ton deck !');
