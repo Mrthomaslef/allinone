@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '4e2f942-1794170776';
+      var BUILD = 'b22685d-1794170982';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -1964,20 +1964,12 @@
         <button type="button" class="btn-gold px-3 py-1.5 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Mode Aventure</button>
       </div>
 
-      <!-- BLOC 1 REPLIÉ PAR DÉFAUT : TUTORIEL GUIDÉ AVEC JULIETTE -->
+      <!-- BLOC 1 REPLIÉ PAR DÉFAUT : TUTORIEL AVEC JULIETTE -->
       <details id="tutoGuideFold" class="w-full rounded-2xl tcg-card-panel group overflow-hidden transition-all">
-        <summary class="cursor-pointer list-none px-3 py-2.5 flex items-center justify-between gap-2.5 select-none">
+        <summary class="cursor-pointer list-none p-2.5 flex items-center justify-between gap-2.5 select-none">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <span class="juliette-avatar w-8 h-8 shadow-sm ring-2 ring-amber-400/70 shrink-0"></span>
-            <div class="min-w-0 flex-1 text-left">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="font-black text-slate-900 text-xs truncate">Tutoriel Guidé · Juliette</span>
-                <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 shrink-0">Débutant · 30c</span>
-              </div>
-              <p class="text-slate-500 text-[10.5px] leading-tight mt-0.5 truncate">
-                Apprendre à jouer pas à pas (4 demi-decks officiels 1999)
-              </p>
-            </div>
+            <span class="font-black text-slate-900 text-xs truncate">Tutoriel · Juliette</span>
           </div>
           <span class="shrink-0 px-2.5 py-1 rounded-xl bg-slate-100 group-hover:bg-amber-50 border border-slate-200/90 text-[10px] font-extrabold text-slate-700 flex items-center gap-1 transition">
             <span class="group-open:hidden">Déplier</span>
@@ -1988,7 +1980,7 @@
 
         <div class="px-3 pb-3 pt-2 border-t border-slate-200/80 bg-slate-50/60 space-y-2">
           <p class="text-slate-600 text-[10.5px] leading-snug">
-            Touche un demi-deck 1999 : Juliette te conseille coup par coup pendant toute la partie.
+            Choisis un demi-deck : Juliette te guide coup par coup.
           </p>
           <!-- 4 Demi-Decks Officiels en ligne compacte -->
           <div class="grid grid-cols-4 gap-1.5">
@@ -25415,7 +25407,7 @@ const TYPE_EMOJI = {
           ⚔️ Lancer un Duel IA (+${WIN_REWARD_COINS} 🪙 par victoire)
         </button>
         <button onclick="closePickerModal(); closeBoosterOpenModal(); switchMenuTab('tuto');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
-          🎓 Jouer en mode Guidé avec Juliette (+${WIN_REWARD_COINS} 🪙 par victoire)
+          🎓 Tutoriel · Juliette (+${WIN_REWARD_COINS} 🪙)
         </button>
       `;
     }
