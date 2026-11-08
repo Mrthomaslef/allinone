@@ -2,13 +2,13 @@
   {
     "id": "pokemon-play-it",
     "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
-    "subtitle": "JCC Pokémon 1999 sur mobile · 228 cartes FR, Boosters, Création de Deck (mode auto 30/60 cartes, Énergies illimitées), Duel IA, Multijoueur guidé (code ami) & Tutoriel Juliette",
+    "subtitle": "JCC Pokémon 1999 sur mobile · 228 cartes FR, Boosters, Création de Deck (mode auto 30/60 cartes, Énergies illimitées), Duel IA, Multijoueur & Tutoriel Juliette",
     "category": "games-family",
     "emoji": "🃏",
     "logoUrl": "pokemon-play-it/assets/icon.svg?v=8",
     "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/pokemon-play-it",
-    "pushedAt": "2026-11-08T12:00:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "uncensored",
@@ -19,7 +19,7 @@
     "logoUrl": "uncensored/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/uncensored",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "gestion-anticoagulant",
@@ -30,7 +30,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "film-et-serie",
@@ -41,7 +41,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "torrent",
@@ -52,7 +52,7 @@
     "logoUrl": "torrent/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/torrent",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "patrimoine-os",
@@ -63,7 +63,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "gemini-ultra",
@@ -74,7 +74,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "second-brain-voice",
@@ -85,7 +85,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "stats-youtube",
@@ -96,7 +96,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -107,7 +107,7 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "mapp-store",
@@ -118,7 +118,7 @@
     "logoUrl": "https://mrthomaslef.github.io/mapp-store/apple-touch-icon.png?v=mapp1",
     "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
     "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
-    "pushedAt": "2026-11-08T10:08:00Z"
+    "pushedAt": "2026-11-08T10:46:00Z"
   },
   {
     "id": "m4-gaming",
