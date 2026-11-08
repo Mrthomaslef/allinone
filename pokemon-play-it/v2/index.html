@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'b22685d-1794170982';
+      var BUILD = 'f1c507b-1794171125';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -1951,19 +1951,6 @@
     <!-- ONGLET 1 UNIFIÉ : DUEL IA (PARTIE RAPIDE) + TUTORIEL REPLIABLE  -->
     <!-- =============================================================== -->
     <div id="viewTuto" class="hidden w-full space-y-2.5">
-      <!-- ACCÈS DIRECT AU MODE AVENTURE -->
-      <div onclick="switchMenuTab('adventure')" class="cursor-pointer w-full p-2.5 rounded-2xl tcg-card-panel flex items-center justify-between gap-2.5 active:scale-[0.99] transition">
-        <div class="flex items-center gap-2.5 min-w-0 flex-1">
-          <div class="flex -space-x-2 shrink-0">
-            <img src="assets/trainers/hanae.png" style="background:#e0f2fe;object-position:top" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-            <img src="assets/trainers/kai.png" style="background:#e0f2fe;object-position:top" alt="Kaï" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-            <img src="assets/trainers/axel.png" style="background:#e0f2fe;object-position:top" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
-          </div>
-          <span class="font-black text-slate-900 text-xs truncate">Mode Aventure</span>
-        </div>
-        <button type="button" class="btn-gold px-3 py-1.5 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Mode Aventure</button>
-      </div>
-
       <!-- BLOC 1 REPLIÉ PAR DÉFAUT : TUTORIEL AVEC JULIETTE -->
       <details id="tutoGuideFold" class="w-full rounded-2xl tcg-card-panel group overflow-hidden transition-all">
         <summary class="cursor-pointer list-none p-2.5 flex items-center justify-between gap-2.5 select-none">
@@ -2262,9 +2249,6 @@
             <span id="hubActiveSetBadge" class="text-[10.5px] font-black px-2 py-0.5 rounded-lg bg-amber-100 border border-amber-300 text-amber-900 truncate">Set de Base · 102 cartes</span>
             <span id="boosterTotalOpenedBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 shrink-0">0 pack</span>
           </div>
-          <button id="hubChangeSetBtn" onclick="cycleHubBoosterSet()" class="hub-pill px-2.5 py-1 rounded-xl text-[11px] font-black text-slate-800 border border-slate-200 hover:border-amber-400 active:scale-95 transition flex items-center gap-1 shrink-0" title="Changer d'extension (Set de Base · Jungle · Fossile)">
-            <span>Changer de set</span>
-          </button>
         </div>
 
         <div id="hubPacksGrid" class="grid grid-cols-3 gap-2.5 sm:gap-3.5 items-end py-1">
@@ -2367,7 +2351,7 @@
             </div>
             <span class="text-[12px] font-black text-slate-900 truncate">Mode Aventure</span>
           </div>
-          <button type="button" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Mode Aventure</button>
+          <span class="text-amber-600 font-black text-sm px-1 shrink-0" aria-hidden="true">›</span>
         </div>
       </div>
 
@@ -18346,11 +18330,7 @@ const TYPE_EMOJI = {
             <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-amber-400/90 text-slate-950">Tournois 2000 · 60c</span>
           </div>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${unlockedTourneyKeys.map(renderPlayerCard).join('')}</div>
-        </div>` : `
-        <div onclick="switchMenuTab('adventure')" class="cursor-pointer p-2 rounded-xl bg-amber-50/70 hover:bg-amber-50 border border-dashed border-amber-300 flex items-center justify-between gap-2 transition active:scale-[0.99]">
-          <span class="text-[10.5px] font-bold text-amber-900 leading-snug">🏆 Bats les Champions du <b>Mode Aventure</b> pour récupérer leurs Decks officiels <b>60c</b> !</span>
-          <span class="shrink-0 text-[10px] font-black text-amber-800 underline">Défier →</span>
-        </div>`}
+        </div>` : ''}
         ${customKeys.length ? `
         <div class="space-y-1">
           <div class="flex items-center justify-between px-0.5">
