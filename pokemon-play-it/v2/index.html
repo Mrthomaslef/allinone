@@ -117,7 +117,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'af2f133-1794174783';
+      var BUILD = '4a7bb22-1794175432';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -2726,14 +2726,16 @@
     </div>
   </div>
 
-  <!-- MODAL : CONFIRMATION NOUVELLE PARTIE (efface la partie sauvegardée) -->
+  <!-- MODAL : CONFIRMATION NOUVELLE PARTIE (reprendre ou recommencer) -->
   <div id="newMatchConfirm" class="fixed inset-0 z-[700] hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4" style="touch-action:manipulation" onclick="if(event.target===this)closeNewMatchConfirm()">
     <div class="bg-slate-900 border border-amber-400/70 rounded-2xl p-4 max-w-xs w-full shadow-2xl text-center space-y-3">
-      <p class="text-sm font-extrabold text-amber-200 leading-snug">⚠️ Une partie est en cours : en lancer une nouvelle l'effacera.</p>
+      <p class="text-sm font-extrabold text-amber-200 leading-snug">⚠️ Une partie est en cours : veux-tu la reprendre ou recommencer ?</p>
+      <p id="newMatchConfirmInfo" class="text-[11px] font-bold text-slate-300 truncate"></p>
       <div class="grid grid-cols-2 gap-2">
-        <button onclick="closeNewMatchConfirm()" class="py-2.5 rounded-xl bg-white/15 border border-white/25 text-white font-extrabold text-xs active:scale-95 transition">Annuler</button>
-        <button onclick="confirmNewMatch()" class="py-2.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs uppercase active:scale-95 transition">Nouvelle partie</button>
+        <button onclick="closeNewMatchConfirm(); resumeSavedMatch()" class="py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-xs uppercase shadow-md border border-emerald-300 active:scale-95 transition">▶️ Reprendre</button>
+        <button onclick="confirmNewMatch()" class="py-2.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs uppercase active:scale-95 transition">🔄 Recommencer</button>
       </div>
+      <button onclick="closeNewMatchConfirm()" class="w-full py-2 rounded-xl bg-white/10 border border-white/20 text-white/80 font-extrabold text-xs active:scale-95 transition">Annuler</button>
     </div>
   </div>
 
@@ -18034,7 +18036,7 @@ const TYPE_EMOJI = {
       `;
     }
 
-    function startAdventureMatch(trainerId) {
+    function startAdventureMatch(trainerId, force = false) {
       const tr = ADVENTURE_TRAINERS.find((t) => t.id === trainerId);
       if (!tr) return;
       if (advTier(tr) !== 'gym' && !isAdvLeagueOpen()) {
@@ -18046,7 +18048,7 @@ const TYPE_EMOJI = {
         showGameToast(`🔒 Bats d'abord <strong>${prev ? prev.name : 'le dresseur précédent'}</strong> pour débloquer ${tr.name} !`);
         return;
       }
-      if (askBeforeNewMatch(() => startAdventureMatch(trainerId))) return;
+      if (!force && askBeforeNewMatch(() => startAdventureMatch(trainerId, true))) return;
       if (!deckKeyPlayable(adventureSave.selectedDeck)) {
         adventureSave.selectedDeck = 'V2_FEU';
       }
@@ -18244,6 +18246,8 @@ const TYPE_EMOJI = {
       const d = seg(nItems - 1);
       const doneIdx = Math.min(nItems - 1, visibleTrainers.filter((t) => (adventureSave.defeated[t.id] || 0) > 0).length);
       const dDone = seg(doneIdx);
+      const savedMatch = (typeof loadSavedMatch === 'function') ? loadSavedMatch() : null;
+      const savedAdvTrainerId = (savedMatch && savedMatch.game && savedMatch.game.mode === 'adventure') ? savedMatch.game.advTrainerId : null;
 
       const nodes = items.map((it, i) => ({ it, i })).reverse().map(({ it, i }) => {
         if (it.gate) {
@@ -18262,20 +18266,23 @@ const TYPE_EMOJI = {
         const isDefeated = (adventureSave.defeated[tr.id] || 0) > 0;
         const isUnlocked = tr.rank <= adventureSave.unlockedRank;
         const isCurrent = isUnlocked && !isDefeated;
-        const state = isDefeated ? 'done' : isCurrent ? 'current' : 'locked';
+        const hasSavedHere = savedAdvTrainerId === tr.id;
+        const state = hasSavedHere ? 'current' : (isDefeated ? 'done' : isCurrent ? 'current' : 'locked');
         const isBoss = tier === 'champion';
         return `
           <div class="adv-row">
-            <button type="button" onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node no-accent ${state} tier-${tier}" style="left:${xOf(i)}%" aria-label="${tr.name}">
+            <button type="button" ${hasSavedHere ? 'data-adv-saved="1"' : ''} onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node no-accent ${state} tier-${tier}" style="left:${xOf(i)}%" aria-label="${tr.name}">
               <span class="adv-disc" style="background: radial-gradient(circle at 50% 35%, #fff 0%, ${tr.color} 75%); ${isBoss ? 'width:96px;height:96px;' : ''}">
                 <img class="adv-cut" src="${tr.cutout}" alt="" loading="lazy" draggable="false" />
                 ${isDefeated ? `<span class="adv-medal" title="${tr.badgeName}">${advBadgeSvg(tr, 34, true)}</span>` : ''}
                 ${!isUnlocked ? `<span class="adv-chip lock">${ADV_ICON_LOCK}</span>` : ''}
-                ${isCurrent ? `<span class="adv-chip fight">${ADV_ICON_FIGHT}</span>` : ''}
+                ${(isCurrent || hasSavedHere) ? `<span class="adv-chip fight">${ADV_ICON_FIGHT}</span>` : ''}
                 ${isBoss ? `<span class="adv-crown">${ADV_ICON_CROWN}</span>` : ''}
               </span>
               <span class="adv-name">${advBadgeSvg(tr, 17, isDefeated)}${tr.name}</span>
-              ${tier === 'gym' ? `<span class="adv-stars">${tr.stars}</span>` : `<span class="adv-sub ${tier === 'elite' ? 'elite' : 'champ'}">${tier === 'elite' ? 'Conseil des 4' : 'Maître'}</span>`}
+              ${hasSavedHere
+                ? `<span class="adv-sub" style="background:linear-gradient(180deg,#10b981,#059669);border-color:#a7f3d0">▶️ En cours</span>`
+                : (tier === 'gym' ? `<span class="adv-stars">${tr.stars}</span>` : `<span class="adv-sub ${tier === 'elite' ? 'elite' : 'champ'}">${tier === 'elite' ? 'Conseil des 4' : 'Maître'}</span>`)}
             </button>
           </div>
         `;
@@ -18316,7 +18323,7 @@ const TYPE_EMOJI = {
           ${nodes}
         </div>
       `;
-      const cur = box.querySelector('.adv-node.current');
+      const cur = box.querySelector('[data-adv-saved="1"]') || box.querySelector('.adv-node.current');
       if (cur) requestAnimationFrame(() => { try { cur.scrollIntoView({ block: 'center', behavior: 'instant' }); } catch (_) { try { cur.scrollIntoView({ block: 'center' }); } catch (__) {} } });
     }
 
@@ -18328,6 +18335,11 @@ const TYPE_EMOJI = {
       const isDefeated = (adventureSave.defeated[tr.id] || 0) > 0;
       const isUnlocked = tr.rank <= adventureSave.unlockedRank;
       const prev = ADVENTURE_TRAINERS.find((t) => t.rank === tr.rank - 1);
+      const saved = (typeof loadSavedMatch === 'function') ? loadSavedMatch() : null;
+      const isSavedHere = !!(saved && saved.game && saved.game.mode === 'adventure' && saved.game.advTrainerId === tr.id);
+      const savedStatus = isSavedHere
+        ? `⏸️ Tour ${saved.game.turnNumber || 1} · Prix ${saved.game.player.prizes.length}/${saved.game.ai.prizes.length}`
+        : (isDefeated ? '✓ Battu' : `🎁 +${tr.rewardCoins} 🪙`);
       const el = document.createElement('div');
       el.id = 'advSheet';
       el.style.setProperty('--adv-c', tr.color);
@@ -18346,14 +18358,22 @@ const TYPE_EMOJI = {
           <div class="px-4 pt-3 space-y-2.5">
             <div class="flex items-center justify-between gap-2 text-[12px] font-extrabold text-slate-700">
               <span class="truncate">🃏 ${tr.deckArchetype}</span>
-              <span class="shrink-0 ${isDefeated ? 'text-emerald-600' : 'text-amber-600'}">${isDefeated ? '✓ Battu' : `🎁 +${tr.rewardCoins} 🪙`}</span>
+              <span class="shrink-0 ${(isDefeated || isSavedHere) ? 'text-emerald-600' : 'text-amber-600'}">${savedStatus}</span>
             </div>
-            <div class="grid grid-cols-[auto_1fr] gap-2">
-              <button onclick="closeAdvTrainerSheet(); openAdvDeckInspector('${tr.id}')" class="px-3.5 py-3 rounded-xl bg-slate-100 border border-slate-200 text-[12px] font-extrabold text-slate-700 active:scale-95 transition">📜 Deck</button>
-              ${isUnlocked
-                ? `<button onclick="closeAdvTrainerSheet(); startAdventureMatch('${tr.id}')" class="btn-gold py-3 rounded-xl text-sm font-black uppercase tracking-wider active:scale-[.98] transition">⚔️ ${isDefeated ? 'Revanche' : 'Combattre'}</button>`
-                : `<button disabled class="py-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 text-xs font-extrabold">🔒 Bats d'abord ${prev ? prev.name : ''}</button>`}
-            </div>
+            ${isSavedHere ? `
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="closeAdvTrainerSheet(); resumeSavedMatch()" class="py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider shadow-md border border-emerald-300 active:scale-[.98] transition">▶️ Reprendre</button>
+                <button onclick="closeAdvTrainerSheet(); startAdventureMatch('${tr.id}', true)" class="btn-gold py-3 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider active:scale-[.98] transition">🔄 Recommencer</button>
+              </div>
+              <button onclick="closeAdvTrainerSheet(); openAdvDeckInspector('${tr.id}')" class="w-full py-2 rounded-xl bg-slate-100 border border-slate-200 text-[12px] font-extrabold text-slate-700 active:scale-95 transition">📜 Voir le deck</button>
+            ` : `
+              <div class="grid grid-cols-[auto_1fr] gap-2">
+                <button onclick="closeAdvTrainerSheet(); openAdvDeckInspector('${tr.id}')" class="px-3.5 py-3 rounded-xl bg-slate-100 border border-slate-200 text-[12px] font-extrabold text-slate-700 active:scale-95 transition">📜 Deck</button>
+                ${isUnlocked
+                  ? `<button onclick="closeAdvTrainerSheet(); startAdventureMatch('${tr.id}')" class="btn-gold py-3 rounded-xl text-sm font-black uppercase tracking-wider active:scale-[.98] transition">⚔️ ${isDefeated ? 'Revanche' : 'Combattre'}</button>`
+                  : `<button disabled class="py-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 text-xs font-extrabold">🔒 Bats d'abord ${prev ? prev.name : ''}</button>`}
+              </div>
+            `}
           </div>
         </div>
       `;
@@ -20096,6 +20116,7 @@ const TYPE_EMOJI = {
       clearSavedMatch(); // nouvelle partie : l'ancienne sauvegarde est effacée
       fx.placed.add(game.ai.active.uid); game.ai.bench.forEach((b) => fx.placed.add(b.uid));
       enterSoloBattleUi(false);
+      writeMatchSave();
     }
 
     // Affiche l'écran de combat pour la partie solo contenue dans `game` (nouvelle ou reprise).
@@ -20181,7 +20202,7 @@ const TYPE_EMOJI = {
     function scheduleMatchSave() {
       if (!game || game.mode === 'multi') return;
       clearTimeout(matchSaveTimer);
-      matchSaveTimer = setTimeout(writeMatchSave, 400);
+      matchSaveTimer = setTimeout(writeMatchSave, 150);
     }
     function flushMatchSave() { clearTimeout(matchSaveTimer); writeMatchSave(); }
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushMatchSave(); });
@@ -20197,10 +20218,13 @@ const TYPE_EMOJI = {
     function renderResumeCard() {
       const el = document.getElementById('resumeMatchCard');
       if (!el) return;
+      const va = document.getElementById('viewAdventure');
+      const inAdvTab = !!(va && !va.classList.contains('hidden'));
       const d = (game && !game.gameOver) ? null : loadSavedMatch();
-      el.classList.toggle('hidden', !d);
-      el.classList.toggle('flex', !!d);
-      if (d) document.getElementById('resumeMatchInfo').textContent = savedMatchLabel(d);
+      const show = !!(d && !(inAdvTab && d.game && d.game.mode === 'adventure'));
+      el.classList.toggle('hidden', !show);
+      el.classList.toggle('flex', show);
+      if (show) document.getElementById('resumeMatchInfo').textContent = savedMatchLabel(d);
     }
     function resumeSavedMatch() {
       const d = loadSavedMatch();
@@ -20224,8 +20248,11 @@ const TYPE_EMOJI = {
 
     // Phrase courte avant d'écraser une partie sauvegardée. Renvoie true si on attend la réponse.
     function askBeforeNewMatch(startFn) {
-      if (!hasSavedMatch()) return false;
+      const d = loadSavedMatch();
+      if (!d) return false;
       pendingNewMatch = startFn;
+      const infoEl = document.getElementById('newMatchConfirmInfo');
+      if (infoEl) infoEl.textContent = savedMatchLabel(d);
       const m = document.getElementById('newMatchConfirm');
       m.classList.remove('hidden'); m.classList.add('flex');
       return true;
@@ -20244,6 +20271,8 @@ const TYPE_EMOJI = {
 
     function confirmQuitMatch() {
       stopBattleStartTheme();
+      const intro = document.getElementById('advIntro');
+      if (intro) intro.remove();
       const wasMulti = !!(game && game.mode === 'multi');
       const wasAdv = !!(game && game.mode === 'adventure');
       if (wasMulti && !game.gameOver && !mpApplyingRemote) {
@@ -24653,6 +24682,7 @@ const TYPE_EMOJI = {
       if (!game || game.activePlayer !== 'player' || !game.player.active || playerBusy()) return;
       const use = attackUsable('player', attackIndex);
       if (!use.ok) { sayJuliette(`Attaque impossible : ${use.reason}.`, true); return; }
+      flushMatchSave();
       const ep = game.epoch;
       const attackRun = executeAttack('player', attackIndex);
       renderAttackStrip(); // grise immédiatement « Fin du tour », « Retraite » et les attaques
@@ -24673,6 +24703,7 @@ const TYPE_EMOJI = {
         return;
       }
       if (game.activePlayer !== 'player') return;
+      if (!fromAttack) flushMatchSave();
       game.endingTurn = true;
       renderAttackStrip();
       const ep = game.epoch;
@@ -25131,6 +25162,7 @@ const TYPE_EMOJI = {
       await pokemonCheckup('ai');
       if (!alive()) return;
       [game.ai.active, ...game.ai.bench].forEach((b) => { if (b) { b.turnsInPlay += 1; b.evolvedThisTurn = false; } });
+      game.aiTurnRunning = false;
       startPlayerTurn();
       } finally {
         if (game && game.epoch === ep) game.aiTurnRunning = false;
@@ -25145,6 +25177,7 @@ const TYPE_EMOJI = {
       game.retreatedThisTurn = false;
       game.attackedThisTurn = false;
       game.endingTurn = false;
+      game.aiTurnRunning = false;
 
       if (game.player.deck.length === 0) {
         endMatch('ai', 'Tu n\'as plus aucune carte à piocher dans ton deck !');
@@ -25155,6 +25188,7 @@ const TYPE_EMOJI = {
       sayJuliette(`Début du tour ${game.turnNumber} : tu pioches <strong>${drawn.name}</strong> !`, game.mode === 'multi');
       advSay('playerTurn');
       renderBoard();
+      writeMatchSave();
       showBanner('À TOI !');
     }
 
