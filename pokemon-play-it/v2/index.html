@@ -492,19 +492,53 @@
 
     /* Révélation 3D des 5 cartes */
     .reveal-stage {
-      perspective: 1200px;
+      perspective: 1300px;
       position: relative;
-      width: min(72vw, 260px);
+      width: min(66vw, 260px);
       aspect-ratio: 63 / 88;
       touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .pack-card-3d {
       position: absolute;
       inset: 0;
       border-radius: 14px;
       transform-style: preserve-3d;
-      transition: transform 0.52s cubic-bezier(0.2, 0.9, 0.25, 1.18), opacity 0.36s ease, box-shadow 0.35s ease;
+      transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.25, 1.12), opacity 0.4s ease;
       cursor: pointer;
+      will-change: transform;
+      touch-action: none;
+    }
+    .pack-card-3d.dragging { transition: none; }
+    .pack-card-3d.tilting { transition: transform 0.12s ease-out; }
+    .pack-card-flipper {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      transform-style: preserve-3d;
+    }
+    .pack-card-3d.flipped .pack-card-flipper {
+      transform: rotateY(180deg);
+      animation: packCardFlipLift 0.72s cubic-bezier(0.25, 0.85, 0.3, 1.04) both;
+    }
+    @keyframes packCardFlipLift {
+      0%   { transform: rotateY(0deg) translateZ(0) scale(1); }
+      45%  { transform: rotateY(105deg) translateZ(70px) scale(1.14); }
+      80%  { transform: rotateY(188deg) translateZ(10px) scale(1.03); }
+      100% { transform: rotateY(180deg) translateZ(0) scale(1); }
+    }
+    .pack-card-3d.charging .pack-card-flipper {
+      animation: packCardCharge 0.62s ease-in-out both;
+    }
+    @keyframes packCardCharge {
+      0%, 100% { transform: rotateZ(0) scale(1); }
+      15% { transform: rotateZ(-2.5deg) scale(1.02); }
+      30% { transform: rotateZ(2.5deg) scale(1.03); }
+      45% { transform: rotateZ(-3deg) scale(1.04); }
+      60% { transform: rotateZ(3deg) scale(1.05); }
+      75% { transform: rotateZ(-1.5deg) scale(1.06); }
+      90% { transform: rotateZ(0deg) scale(1.07); }
     }
     .pack-card-3d .card-face {
       position: absolute;
@@ -517,20 +551,63 @@
     .pack-card-3d .card-face-back {
       background: var(--card-back) center / cover no-repeat;
       box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85);
+      transform: rotateY(0deg) translateZ(0.5px);
     }
     .pack-card-3d .card-face-front {
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) translateZ(0.5px);
       background: #0f172a;
     }
-    .pack-card-3d.flipped {
-      transform: rotateY(180deg) scale(1.04);
+    .pack-card-3d .card-face-front img { pointer-events: none; -webkit-user-drag: none; }
+    /* Indice de rareté sur le dos avant retournement */
+    .hint-rare .card-face-back { animation: hintPulseRare 1.3s ease-in-out infinite; }
+    .hint-holo .card-face-back { animation: hintPulseHolo 1.1s ease-in-out infinite; }
+    @keyframes hintPulseRare {
+      0%, 100% { box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85), 0 0 14px rgba(250,204,21,0.35); }
+      50% { box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85), 0 0 34px rgba(250,204,21,0.8); }
     }
-    .pack-card-3d.dismissed {
-      transform: translate(135%, -18%) rotateY(180deg) rotateZ(18deg) scale(0.75) !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
+    @keyframes hintPulseHolo {
+      0%, 100% { box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85), 0 0 18px rgba(244,114,182,0.5), 0 0 8px rgba(250,204,21,0.5); }
+      50% { box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85), 0 0 48px rgba(244,114,182,0.95), 0 0 26px rgba(56,189,248,0.8); }
     }
-    /* Halos de rareté sur la carte révélée */
+    /* Flash lumineux à la révélation */
+    .reveal-flash {
+      position: absolute;
+      inset: -40%;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 40;
+      opacity: 0;
+    }
+    .reveal-flash.go-rare {
+      background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(250,204,21,0.55) 30%, transparent 62%);
+      animation: revealFlash 0.7s ease-out;
+    }
+    .reveal-flash.go-holo {
+      background: radial-gradient(circle, #fff 0%, rgba(244,114,182,0.7) 28%, rgba(56,189,248,0.45) 45%, transparent 66%);
+      animation: revealFlash 0.95s ease-out;
+    }
+    @keyframes revealFlash {
+      0% { opacity: 0; transform: scale(0.4); }
+      25% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.5); }
+    }
+    .booster-dot {
+      width: 10px; height: 10px; border-radius: 99px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      transition: all 0.3s cubic-bezier(0.2, 1.4, 0.3, 1);
+    }
+    .booster-dot.current { transform: scale(1.35); border-color: #fde047; box-shadow: 0 0 10px rgba(250,204,21,0.7); }
+    .booster-dot.r-common { background: #cbd5e1; }
+    .booster-dot.r-uncommon { background: #34d399; }
+    .booster-dot.r-rare { background: #facc15; box-shadow: 0 0 8px rgba(250,204,21,0.8); }
+    .booster-dot.r-holo { background: linear-gradient(135deg, #f472b6, #facc15, #38bdf8); box-shadow: 0 0 10px rgba(244,114,182,0.9); }
+    @keyframes cardInfoPop {
+      0% { transform: translateY(8px) scale(0.92); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .card-info-pop { animation: cardInfoPop 0.38s cubic-bezier(0.2, 1.3, 0.3, 1) both; }
+    /* Halos de rareté sur la carte révélée (appliqués sur la face avant) */
     .rarity-glow-common {
       box-shadow: 0 20px 38px -10px rgba(0,0,0,0.85), 0 0 0 1.5px rgba(226,232,240,0.35);
     }
@@ -627,6 +704,10 @@
 
     <!-- En-tête Héroïque -->
     <div class="w-full text-center relative pt-1">
+      <button onclick="openAudioModal()" id="audioBtnMenu" class="absolute right-0 top-0 glass-pill px-2.5 py-1.5 rounded-xl text-xs font-extrabold text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1.5 shadow-lg active:scale-95 z-20" title="Réglage du Son & Volume">
+        <span id="audioBtnMenuIcon">🔊</span>
+        <span id="audioBtnMenuLabel" class="text-[10.5px] font-mono">Son</span>
+      </button>
       <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 via-yellow-400/25 to-amber-500/20 border border-yellow-400/45 text-yellow-200 text-[10.5px] font-extrabold tracking-widest uppercase shadow-lg">
         <span>✨</span> Wizards of the Coast · Édition Française 1999
       </div>
@@ -1172,15 +1253,15 @@
   <!-- =================================================================== -->
   <!-- MODAL PLEIN ÉCRAN : OUVERTURE SATISFAISANTE DE BOOSTER (5 CARTES)   -->
   <!-- =================================================================== -->
-  <div id="boosterOpenModal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-between p-4 overflow-y-auto">
+  <div id="boosterOpenModal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-between p-4 overflow-y-auto overflow-x-hidden" style="overscroll-behavior:contain">
     <!-- Barre supérieure -->
-    <div class="w-full max-w-xl flex items-center justify-between z-20">
-      <div class="flex items-center gap-2">
-        <span id="boosterSetBadge" class="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Set de Base · 1999</span>
-        <span id="boosterStepPill" class="text-xs font-mono font-bold text-slate-300">5 cartes</span>
+    <div class="w-full max-w-xl flex items-center justify-between gap-2 z-20 shrink-0">
+      <div class="flex items-center gap-2 min-w-0">
+        <span id="boosterSetBadge" class="text-[11px] font-black uppercase tracking-wider whitespace-nowrap truncate px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Set de Base · 1999</span>
+        <span id="boosterStepPill" class="text-xs font-mono font-bold text-slate-300 whitespace-nowrap">5 cartes</span>
       </div>
       <div class="flex items-center gap-2">
-        <button id="boosterSkipBtn" onclick="revealAllBoosterCards()" class="hidden glass-pill px-3 py-1.5 rounded-xl text-xs font-bold text-amber-200 hover:text-white">
+        <button id="boosterSkipBtn" onclick="revealAllBoosterCards()" class="hidden glass-pill px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap text-amber-200 hover:text-white">
           ⏩ Tout révéler
         </button>
         <button onclick="closeBoosterOpenModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center">✕</button>
@@ -1188,10 +1269,10 @@
     </div>
 
     <!-- Zone centrale dynamique (Sachet 3D -> Pile de 5 cartes -> Récapitulatif) -->
-    <div id="boosterStageContainer" class="flex-1 w-full max-w-2xl flex flex-col items-center justify-center relative my-2 min-h-[410px]"></div>
+    <div id="boosterStageContainer" class="w-full max-w-2xl flex flex-col items-center relative my-2 min-h-[410px]" style="flex:1 0 auto; justify-content:safe center"></div>
 
     <!-- Pied de modale (instructions ou boutons d'action) -->
-    <div id="boosterFooterZone" class="w-full max-w-xl flex flex-col items-center gap-2 z-20 pb-1"></div>
+    <div id="boosterFooterZone" class="w-full max-w-xl flex flex-col items-center gap-2 z-20 pb-1 shrink-0"></div>
   </div>
 
   <!-- =================================================================== -->
@@ -18044,6 +18125,7 @@ const TYPE_EMOJI = {
     function launchBoosterPack(setKey = 'base') {
       const meta = BOOSTER_SETS[setKey] || BOOSTER_SETS.base;
       const packData = generateBoosterPack(meta.key);
+      packData.cards.forEach(c => { const im = new Image(); im.src = c.img; });
       activeBooster = {
         meta,
         ...packData,
@@ -18235,58 +18317,153 @@ const TYPE_EMOJI = {
       const stage = document.getElementById('boosterStageContainer');
       const skipBtn = document.getElementById('boosterSkipBtn');
       if (skipBtn) skipBtn.classList.remove('hidden');
+      activeBooster.busy = false;
 
       stage.innerHTML = `
         <div id="boosterGodRays" class="god-rays hidden"></div>
-        ${isGodPack ? `<div class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 via-yellow-400 to-cyan-400 text-slate-950 font-black text-xs uppercase tracking-widest shadow-lg animate-bounce">🌟 GOD PACK 1999 (5 HOLO !) 🌟</div>` : ''}
-        <div class="reveal-stage my-2" id="boosterRevealStage">
+        ${isGodPack ? `<div class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 via-yellow-400 to-cyan-400 text-slate-950 font-black text-xs uppercase tracking-widest shadow-lg animate-bounce z-10">🌟 GOD PACK 1999 (5 HOLO !) 🌟</div>` : ''}
+        <div id="boosterDots" class="flex items-center gap-2 mb-3 z-10">
+          ${cards.map((_, idx) => `<span class="booster-dot" id="boosterDot-${idx}"></span>`).join('')}
+        </div>
+        <div class="reveal-stage my-1" id="boosterRevealStage">
+          <div id="boosterRevealFlash" class="reveal-flash"></div>
           ${cards.map((c, idx) => {
-            const offset = idx * 3;
             const isHolo = c.rarity === 'holo';
+            const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
             return `
-              <div class="pack-card-3d" id="packCard3d-${idx}" data-cidx="${idx}"
-                   style="z-index:${20 - idx}; transform: translateY(${offset}px) scale(${1 - idx * 0.022});">
-                <!-- Dos de carte -->
-                <div class="card-face card-face-back border border-white/20"></div>
-                <!-- Face avant de la carte -->
-                <div class="card-face card-face-front">
-                  <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover rounded-[14px]" draggable="false" />
-                  ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
-                  ${c.isNew ? '<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-lg">NOUVEAU !</span>' : ''}
+              <div class="pack-card-3d" id="packCard3d-${idx}" data-cidx="${idx}" style="z-index:${20 - idx}; opacity:0;">
+                <div class="pack-card-flipper">
+                  <div class="card-face card-face-back border border-white/20"></div>
+                  <div class="card-face card-face-front ${rMeta.glowCls}">
+                    <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover rounded-[14px]" draggable="false" />
+                    ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
+                    ${c.isNew ? '<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-lg">NOUVEAU !</span>' : ''}
+                  </div>
                 </div>
               </div>
             `;
           }).join('')}
         </div>
-        <div id="boosterCurrentCardInfo" class="min-h-[64px] flex flex-col items-center justify-center text-center mt-3 z-10"></div>
+        <div id="boosterCurrentCardInfo" class="min-h-[70px] flex flex-col items-center justify-center text-center mt-4 z-10"></div>
       `;
 
-      // Écouteurs d'interaction sur la pile de 5 cartes (clic, toucher ou swipe)
-      const revStage = document.getElementById('boosterRevealStage');
-      let pStart = null;
-      revStage.addEventListener('pointerdown', (e) => {
-        pStart = { x: e.clientX, y: e.clientY };
+      // Distribution animée de la pile (les cartes sortent du sachet une à une)
+      cards.forEach((_, idx) => {
+        const el = document.getElementById(`packCard3d-${idx}`);
+        if (!el) return;
+        el.style.transition = 'none';
+        el.style.transform = 'translateY(160px) scale(0.8)';
+        setTimeout(() => {
+          el.style.transition = '';
+          el.style.opacity = '1';
+          layoutBoosterStack();
+        }, 40 + idx * 70);
       });
+
+      const revStage = document.getElementById('boosterRevealStage');
+      let drag = null;
+
+      const topCardEl = () => activeBooster && document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
+
+      revStage.addEventListener('pointerdown', (e) => {
+        if (!activeBooster || activeBooster.phase !== 'revealing' || activeBooster.busy) return;
+        const el = topCardEl();
+        if (!el) return;
+        drag = { x: e.clientX, y: e.clientY, t: performance.now(), dx: 0, dy: 0, moved: false };
+        try { revStage.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+
       revStage.addEventListener('pointermove', (e) => {
-        if (!activeBooster || activeBooster.phase !== 'revealing' || !activeBooster.currentFlipped) return;
-        const topEl = document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
-        if (!topEl) return;
+        if (!activeBooster || activeBooster.phase !== 'revealing') return;
+        const el = topCardEl();
+        if (!el) return;
         const r = revStage.getBoundingClientRect();
         const px = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
         const py = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
-        topEl.style.setProperty('--hx', `${px * 100}%`);
-        topEl.style.setProperty('--hy', `${py * 100}%`);
-        const tiltY = 180 + (px - 0.5) * 22;
-        const tiltX = (0.5 - py) * 18;
-        topEl.style.transform = `rotateY(${tiltY}deg) rotateX(${tiltX}deg) scale(1.05)`;
-      });
-      revStage.addEventListener('pointerup', (e) => {
-        if (!pStart) return;
-        pStart = null;
-        advanceBoosterCardStep();
+
+        if (drag && activeBooster.currentFlipped && !activeBooster.busy) {
+          drag.dx = e.clientX - drag.x;
+          drag.dy = e.clientY - drag.y;
+          if (Math.hypot(drag.dx, drag.dy) > 8) drag.moved = true;
+          if (drag.moved) {
+            el.classList.add('dragging');
+            el.classList.remove('tilting');
+            el.style.transform = `translate(${drag.dx}px, ${drag.dy * 0.4}px) rotate(${drag.dx * 0.06}deg)`;
+          }
+          return;
+        }
+        if (drag) {
+          drag.dx = e.clientX - drag.x;
+          drag.dy = e.clientY - drag.y;
+          if (Math.hypot(drag.dx, drag.dy) > 8) drag.moved = true;
+        }
+        // Inclinaison 3D pour admirer le reflet (souris / doigt)
+        if (activeBooster.currentFlipped && !activeBooster.busy) {
+          el.style.setProperty('--hx', `${px * 100}%`);
+          el.style.setProperty('--hy', `${py * 100}%`);
+          el.classList.add('tilting');
+          el.style.transform = `rotateY(${(px - 0.5) * 24}deg) rotateX(${(0.5 - py) * 20}deg) scale(1.04)`;
+        }
       });
 
-      updateBoosterStackVisuals();
+      revStage.addEventListener('pointerleave', () => {
+        if (drag || !activeBooster || !activeBooster.currentFlipped || activeBooster.busy) return;
+        const el = topCardEl();
+        if (el) { el.classList.remove('tilting'); el.style.transform = 'translate(0,0) scale(1)'; }
+      });
+
+      const endDrag = (e, cancelled) => {
+        if (!drag || !activeBooster) { drag = null; return; }
+        const d = drag;
+        drag = null;
+        const el = topCardEl();
+        if (el) el.classList.remove('dragging');
+        if (cancelled) { if (el && activeBooster.currentFlipped) el.style.transform = 'translate(0,0) scale(1)'; return; }
+
+        if (!activeBooster.currentFlipped) {
+          // Tap ou petit swipe sur le dos -> retourner
+          advanceBoosterCardStep();
+          return;
+        }
+        const dt = Math.max(1, performance.now() - d.t);
+        const speed = Math.abs(d.dx) / dt;
+        if (!d.moved) {
+          advanceBoosterCardStep(1);
+        } else if (Math.abs(d.dx) > 70 || speed > 0.55) {
+          advanceBoosterCardStep(d.dx >= 0 ? 1 : -1);
+        } else if (el) {
+          el.style.transform = 'translate(0,0) scale(1)'; // retour élastique
+        }
+      };
+      revStage.addEventListener('pointerup', (e) => endDrag(e, false));
+      revStage.addEventListener('pointercancel', (e) => endDrag(e, true));
+
+      setTimeout(() => updateBoosterStackVisuals(), 40 + cards.length * 70);
+    }
+
+    // Positionne la pile restante : légère cascade + éventail
+    function layoutBoosterStack() {
+      if (!activeBooster) return;
+      const { cards, currentIdx } = activeBooster;
+      cards.forEach((_, idx) => {
+        const el = document.getElementById(`packCard3d-${idx}`);
+        if (!el || idx < currentIdx || el.classList.contains('dismissed-fly')) return;
+        if (el.style.opacity !== '1') return;
+        const depth = idx - currentIdx;
+        const rot = depth === 0 ? 0 : (depth % 2 ? -1 : 1) * (1.2 + depth * 0.6);
+        el.style.transform = `translateY(${depth * 5}px) rotate(${rot}deg) scale(${1 - depth * 0.03})`;
+      });
+    }
+
+    function updateBoosterDots() {
+      if (!activeBooster) return;
+      const { cards, currentIdx, currentFlipped } = activeBooster;
+      cards.forEach((c, idx) => {
+        const dot = document.getElementById(`boosterDot-${idx}`);
+        if (!dot) return;
+        const revealed = idx < currentIdx || (idx === currentIdx && currentFlipped);
+        dot.className = `booster-dot${idx === currentIdx ? ' current' : ''}${revealed ? ` r-${c.rarity}` : ''}`;
+      });
     }
 
     function updateBoosterStackVisuals() {
@@ -18302,115 +18479,159 @@ const TYPE_EMOJI = {
       const raysEl = document.getElementById('boosterGodRays');
       const infoEl = document.getElementById('boosterCurrentCardInfo');
       const footer = document.getElementById('boosterFooterZone');
+      updateBoosterDots();
 
       if (!currentFlipped) {
-        // Avant retournement : halo d'indice sur les cartes rares/holo (surtout cartes 4 & 5)
+        // Avant retournement : indice lumineux pulsé sur les cartes rares/holo
         if (topEl) {
-          if (card.rarity === 'holo') {
-            topEl.style.boxShadow = '0 0 36px rgba(244,114,182,0.75), 0 0 18px rgba(250,204,21,0.8)';
-          } else if (card.rarity === 'rare') {
-            topEl.style.boxShadow = '0 0 26px rgba(250,204,21,0.55)';
-          }
+          topEl.classList.toggle('hint-holo', card.rarity === 'holo');
+          topEl.classList.toggle('hint-rare', card.rarity === 'rare');
         }
-        if (raysEl) raysEl.classList.toggle('hidden', card.rarity !== 'holo');
+        if (raysEl) raysEl.classList.add('hidden');
         if (infoEl) {
           const slotHint = currentIdx === 4
-            ? '🔥 Carte 5/5 (Slot Climax Rare / Holo !)'
+            ? '🔥 Dernière carte · Slot Rare / Holo !'
             : currentIdx === 3
-            ? '✨ Carte 4/5 (Slot Peu Commune / Surprise)'
+            ? '✨ Carte 4/5 · Slot Surprise'
             : `Carte ${currentIdx + 1}/5`;
           infoEl.innerHTML = `
-            <div class="text-xs font-extrabold text-amber-200">${slotHint}</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">Touche la carte pour la retourner !</div>
+            <div class="card-info-pop">
+              <div class="text-sm font-extrabold text-amber-200">${slotHint}</div>
+              <div class="text-[11px] text-slate-400 mt-0.5">Touche la carte pour la retourner</div>
+            </div>
           `;
         }
         if (footer) {
           footer.innerHTML = `
-            <button onclick="advanceBoosterCardStep()" class="btn-gold px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg">
-              🔄 Retourner la carte (${currentIdx + 1}/5)
+            <button onclick="advanceBoosterCardStep()" class="btn-gold px-6 py-3 rounded-xl text-sm font-black uppercase tracking-wider shadow-lg active:scale-95 transition" style="touch-action:manipulation">
+              🔄 Retourner (${currentIdx + 1}/5)
             </button>
           `;
         }
       } else {
-        // Carte retournée !
-        if (topEl) {
-          topEl.classList.add('flipped', rMeta.glowCls);
-        }
+        if (topEl) topEl.classList.remove('hint-holo', 'hint-rare');
         if (raysEl) raysEl.classList.toggle('hidden', card.rarity !== 'holo' && card.rarity !== 'rare');
 
         if (infoEl) {
           infoEl.innerHTML = `
-            <div class="flex items-center justify-center gap-2 flex-wrap">
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-black border ${rMeta.badgeCls}">
-                ${rMeta.symbol} ${rMeta.label}
-              </span>
-              <span class="font-black text-base text-white">${card.name}</span>
-              <span class="text-[11px] font-mono text-slate-300">(×${card.ownedAfter})</span>
-            </div>
-            <div class="text-[11px] text-slate-300 mt-1">
-              ${card.Idx === 4 ? '' : ' incline la carte pour admirer le reflet · touche pour continuer'}
+            <div class="card-info-pop">
+              <div class="flex items-center justify-center gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-black border ${rMeta.badgeCls}">
+                  ${rMeta.symbol} ${rMeta.label}
+                </span>
+                <span class="font-black text-base text-white">${card.name}</span>
+                <span class="text-[11px] font-mono text-slate-300">(×${card.ownedAfter})</span>
+              </div>
+              <div class="text-[11px] text-slate-400 mt-1">
+                ${card.rarity === 'holo' ? 'Incline la carte pour admirer le reflet · ' : ''}Glisse ou touche pour continuer
+              </div>
             </div>
           `;
         }
         if (footer) {
           const isLast = currentIdx >= cards.length - 1;
           footer.innerHTML = `
-            <button onclick="advanceBoosterCardStep()" class="btn-gold px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg">
-              ${isLast ? '🎉 Voir le récapitulatif des 5 cartes ▶' : `Carte suivante (${currentIdx + 2}/5) ▶`}
+            <button onclick="advanceBoosterCardStep(1)" class="btn-gold px-6 py-3 rounded-xl text-sm font-black uppercase tracking-wider shadow-lg active:scale-95 transition" style="touch-action:manipulation">
+              ${isLast ? '🎉 Voir mes 5 cartes ▶' : `Carte suivante (${currentIdx + 2}/5) ▶`}
             </button>
           `;
         }
       }
     }
 
-    function advanceBoosterCardStep() {
-      if (!activeBooster || activeBooster.phase !== 'revealing') return;
+    function flashBoosterReveal(kind) {
+      const fl = document.getElementById('boosterRevealFlash');
+      if (!fl) return;
+      fl.className = 'reveal-flash';
+      void fl.offsetWidth; // relance l'animation
+      fl.classList.add(kind === 'holo' ? 'go-holo' : 'go-rare');
+    }
+
+    function advanceBoosterCardStep(dir = 1) {
+      if (!activeBooster || activeBooster.phase !== 'revealing' || activeBooster.busy) return;
       const { cards, currentIdx, currentFlipped } = activeBooster;
       const card = cards[currentIdx];
       if (!card) return;
+      const topEl = document.getElementById(`packCard3d-${currentIdx}`);
 
       if (!currentFlipped) {
-        // 1. Retourner la carte courante avec effets adaptés à sa rareté
-        activeBooster.currentFlipped = true;
-        const stageEl = document.getElementById('boosterRevealStage');
-        const r = stageEl ? stageEl.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
+        activeBooster.busy = true;
+        const isSpecial = card.rarity === 'holo' || card.rarity === 'rare';
 
-        sfx('cardFlip');
-        if (card.rarity === 'holo') {
-          sfx('holo');
-          buzz([35, 50, 45, 70]);
-          spawnBoosterSparks(cx, cy, 38, true);
-          if (card.dex) playPokemonCry(card.dex);
-        } else if (card.rarity === 'rare') {
-          sfx('rare');
-          buzz([25, 30, 25]);
-          spawnBoosterSparks(cx, cy, 22, false);
-          if (card.dex) playPokemonCry(card.dex);
-        } else if (card.rarity === 'uncommon') {
-          sfx('uncommon');
-          buzz(16);
-          if (card.dex) playPokemonCry(card.dex);
+        const doFlip = () => {
+          if (!activeBooster) return;
+          activeBooster.currentFlipped = true;
+          const stageEl = document.getElementById('boosterRevealStage');
+          const r = stageEl ? stageEl.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+
+          if (topEl) {
+            topEl.classList.remove('charging', 'hint-holo', 'hint-rare', 'tilting');
+            topEl.style.transform = 'translate(0,0) scale(1)';
+            topEl.classList.add('flipped');
+          }
+          sfx('cardFlip');
+
+          // Les effets éclatent quand la face apparaît (mi-rotation)
+          setTimeout(() => {
+            if (!activeBooster) return;
+            if (card.rarity === 'holo') {
+              sfx('holo');
+              buzz([35, 50, 45, 70]);
+              flashBoosterReveal('holo');
+              spawnBoosterSparks(cx, cy, 42, true);
+              if (card.dex) playPokemonCry(card.dex);
+            } else if (card.rarity === 'rare') {
+              sfx('rare');
+              buzz([25, 30, 25]);
+              flashBoosterReveal('rare');
+              spawnBoosterSparks(cx, cy, 24, false);
+              if (card.dex) playPokemonCry(card.dex);
+            } else if (card.rarity === 'uncommon') {
+              sfx('uncommon');
+              buzz(16);
+              spawnBoosterSparks(cx, cy, 8, false);
+              if (card.dex) playPokemonCry(card.dex);
+            } else {
+              buzz(8);
+            }
+            updateBoosterStackVisuals();
+          }, 300);
+          setTimeout(() => { if (activeBooster) activeBooster.busy = false; }, 620);
+        };
+
+        if (isSpecial && topEl) {
+          // Suspense : la carte tremble avant de se retourner
+          topEl.classList.remove('hint-holo', 'hint-rare');
+          topEl.classList.add('charging');
+          buzz([10, 40, 10, 40, 10]);
+          setTimeout(doFlip, card.rarity === 'holo' ? 620 : 420);
         } else {
-          buzz(8);
+          doFlip();
         }
-        updateBoosterStackVisuals();
       } else {
-        // 2. Passer à la carte suivante ou à l'écran récapitulatif
-        const topEl = document.getElementById(`packCard3d-${currentIdx}`);
-        if (topEl) topEl.classList.add('dismissed');
+        // Carte suivante : la carte révélée s'envole dans le sens du swipe
+        activeBooster.busy = true;
+        if (topEl) {
+          topEl.classList.remove('dragging', 'tilting');
+          topEl.classList.add('dismissed-fly');
+          topEl.style.transition = 'transform 0.42s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.38s ease';
+          topEl.style.transform = `translate(${dir * 160}%, -14%) rotate(${dir * 24}deg) scale(0.8)`;
+          topEl.style.opacity = '0';
+          topEl.style.pointerEvents = 'none';
+        }
         sfx('swoosh');
+        buzz(6);
 
         if (currentIdx + 1 < cards.length) {
           activeBooster.currentIdx += 1;
           activeBooster.currentFlipped = false;
-          // Remettre la nouvelle carte du dessus à l'échelle 1
-          const nextEl = document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
-          if (nextEl) nextEl.style.transform = 'translateY(0px) scale(1)';
+          layoutBoosterStack();
           updateBoosterStackVisuals();
+          setTimeout(() => { if (activeBooster) activeBooster.busy = false; }, 260);
         } else {
-          setTimeout(() => renderBoosterSummaryStage(), 260);
+          setTimeout(() => renderBoosterSummaryStage(), 320);
         }
       }
     }
@@ -18428,7 +18649,7 @@ const TYPE_EMOJI = {
       activeBooster.phase = 'summary';
       const { meta, cards, isGodPack } = activeBooster;
 
-      document.getElementById('boosterStepPill').textContent = `Récapitulatif · 5 Cartes obtenues`;
+      document.getElementById('boosterStepPill').textContent = `Récap · 5 cartes`;
       document.getElementById('boosterSkipBtn').classList.add('hidden');
 
       const stage = document.getElementById('boosterStageContainer');
@@ -18446,14 +18667,14 @@ const TYPE_EMOJI = {
             <div class="text-[11px] text-slate-300 mt-0.5">Touche une carte pour l'examiner en HD</div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 w-full max-w-2xl z-10 px-1">
+          <div class="flex flex-wrap justify-center gap-2 w-full max-w-2xl z-10 px-1">
             ${cards.map((c, idx) => {
               const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
               const isHolo = c.rarity === 'holo';
               return `
                 <div onclick="showPreview({img:'${c.img}'}, 'touch'); previewSticky=true;"
                      style="animation-delay:${idx * 85}ms"
-                     class="summary-card-in cursor-pointer rounded-xl p-1.5 bg-slate-900/95 border ${isHolo ? 'border-yellow-300 ring-2 ring-pink-400/70' : c.rarity === 'rare' ? 'border-yellow-400/80' : c.rarity === 'uncommon' ? 'border-emerald-400/60' : 'border-white/15'} flex flex-col items-center relative group hover:scale-105 transition">
+                     class="summary-card-in cursor-pointer rounded-xl p-1 sm:p-1.5 w-[31%] sm:w-[18.5%] bg-slate-900/95 border ${isHolo ? 'border-yellow-300 ring-2 ring-pink-400/70' : c.rarity === 'rare' ? 'border-yellow-400/80' : c.rarity === 'uncommon' ? 'border-emerald-400/60' : 'border-white/15'} flex flex-col items-center relative group hover:scale-105 transition">
                   <div class="relative w-full aspect-[63/88] rounded-lg overflow-hidden">
                     <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover" />
                     ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
