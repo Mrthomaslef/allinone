@@ -409,8 +409,8 @@
     .hub-pack-art { width: 82%; flex: 1 1 auto; min-height: 0; margin: 6% 0 4%; object-fit: cover; object-position: center 22%; border-radius: 6px; border: 2px solid var(--pkA); box-shadow: 0 6px 14px rgba(0,0,0,0.45); }
     .hub-pack-sub { font-size: 9px; font-weight: 800; color: rgba(255,255,255,0.8); margin-bottom: 5%; }
     .hub-pack-cta { max-width: 100%; padding: 3px 7px; border-radius: 999px; font-size: 9.5px; font-weight: 900; line-height: 1.15; color: #0f172a; background: linear-gradient(90deg, #fde047, #f59e0b); box-shadow: 0 3px 10px rgba(250,204,21,0.35); text-align: center; }
-    .hub-pip { font-size: 13px; line-height: 1; transition: opacity .2s, filter .2s; }
-    .hub-pip:not(.on) { opacity: .3; filter: grayscale(1); }
+    .hub-pip { width: 8px; height: 8px; border-radius: 999px; background: #22d3ee; box-shadow: 0 0 8px rgba(34,211,238,0.75); transition: opacity .2s, background .2s; display: inline-block; }
+    .hub-pip:not(.on) { opacity: .3; background: #64748b; box-shadow: none; }
     .hub-tile { background: linear-gradient(160deg, rgba(30,41,59,0.92), rgba(15,23,42,0.9)); border: 1px solid rgba(255,255,255,0.13); box-shadow: 0 10px 26px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08); touch-action: manipulation; }
     .hub-tag { padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 900; box-shadow: 0 4px 12px rgba(0,0,0,0.35); white-space: nowrap; max-width: calc(100% - 8px); overflow: hidden; text-overflow: ellipsis; }
     .hub-mission-btn { width: 58px; height: 58px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: #052e16; background: radial-gradient(circle at 35% 30%, #6ee7b7, #10b981 70%); border: 3px solid rgba(255,255,255,0.75); box-shadow: 0 8px 20px rgba(16,185,129,0.45); touch-action: manipulation; transition: transform .15s; }
@@ -968,16 +968,12 @@
     <!-- En-tête Héroïque compact -->
     <div class="w-full text-center relative pt-0.5">
       <div class="menu-topbar flex items-center justify-between gap-2">
-      <button onclick="openPseudoModal(false)" id="pseudoBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-2.5 py-1 rounded-xl text-xs font-extrabold text-cyan-200 border border-cyan-400/40 hover:border-cyan-300 transition flex items-center gap-1 shadow-lg active:scale-95 z-20 max-w-[130px]" title="Modifier mon pseudo de Dresseur">
-        <span>🧢</span>
+      <button onclick="openPseudoModal(false)" id="pseudoBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-3 py-1 rounded-xl text-xs font-extrabold text-cyan-200 border border-cyan-400/40 hover:border-cyan-300 transition flex items-center gap-1.5 shadow-lg active:scale-95 z-20 max-w-[140px]" title="Modifier mon pseudo de Dresseur">
         <span id="menuPseudoLabel" class="text-[11px] font-bold truncate">Dresseur</span>
-        <span class="text-[10.5px] text-cyan-300/80">✎</span>
       </button>
       <span class="menu-edition text-[10px] font-extrabold tracking-[.18em] uppercase text-yellow-200/80 truncate">Édition FR · 1999</span>
-      <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-2.5 py-1 rounded-xl text-xs font-extrabold text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1 shadow-lg active:scale-95 z-20" title="Réglages (Son & Thème)">
-        <span id="audioBtnMenuIcon">🔊</span>
-        <span>🎨</span>
-        <span id="audioBtnMenuLabel" class="text-[11px] font-bold">Réglages</span>
+      <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 w-[38px] h-[38px] rounded-xl text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition grid place-items-center shadow-lg active:scale-95 z-20" title="Réglages (Son & Thème)" aria-label="Réglages">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
       </div>
       <div id="menuHeroTitle" class="hidden">
@@ -1001,7 +997,7 @@
           <div class="min-w-0 flex-1 text-left">
             <div class="flex items-center justify-between gap-1.5">
               <div class="flex items-center gap-1.5 min-w-0">
-                <span class="font-black text-yellow-300 text-xs truncate">🎓 Tutoriel Guidé · Juliette</span>
+                <span class="font-black text-yellow-300 text-xs truncate">Tutoriel Guidé · Juliette</span>
               </div>
               <span class="text-[10px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-yellow-400/15 text-yellow-200 border border-yellow-400/30 shrink-0">30c · 1 clic</span>
             </div>
@@ -1016,7 +1012,7 @@
           <button onclick="startMatch('COMBAT', 'EAU', 'tutorial')" class="deck-card p-1.5 rounded-xl bg-gradient-to-br from-amber-950/90 via-stone-900/90 to-slate-950/95 border border-amber-500/45 hover:border-amber-300 flex flex-col items-center text-center gap-1 group active:scale-95 transition">
             <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow">
               <img src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="Machopeur" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-amber-400 text-slate-950">▶ Tuto</span>
+              <span class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-amber-400 text-slate-950">Tuto</span>
             </div>
             <div class="text-[11px] font-black text-white group-hover:text-yellow-300 leading-tight truncate w-full">Combat</div>
             <div class="text-[9.5px] text-amber-200/85 leading-none truncate w-full">Machopeur</div>
@@ -1025,7 +1021,7 @@
           <button onclick="startMatch('EAU', 'COMBAT', 'tutorial')" class="deck-card p-1.5 rounded-xl bg-gradient-to-br from-sky-950/90 via-slate-900/90 to-slate-950/95 border border-sky-400/45 hover:border-sky-300 flex flex-col items-center text-center gap-1 group active:scale-95 transition">
             <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow">
               <img src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="Poissoroy" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-sky-300 text-slate-950">▶ Tuto</span>
+              <span class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-sky-300 text-slate-950">Tuto</span>
             </div>
             <div class="text-[11px] font-black text-white group-hover:text-yellow-300 leading-tight truncate w-full">Eau</div>
             <div class="text-[9.5px] text-sky-200/85 leading-none truncate w-full">Poissoroy</div>
@@ -1034,7 +1030,7 @@
           <button onclick="startMatch('FEU', 'COMBAT', 'tutorial')" id="btnDeckFeu" class="deck-card p-1.5 rounded-xl bg-gradient-to-br from-red-950/90 via-stone-900/90 to-slate-950/95 border border-red-500/45 hover:border-red-300 flex flex-col items-center text-center gap-1 group active:scale-95 transition">
             <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow">
               <img src="https://assets.tcgdex.net/fr/base/base1/24/high.webp" alt="Reptincel" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span id="badgeFeu" class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-red-400 text-slate-950">▶ Tuto</span>
+              <span id="badgeFeu" class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-red-400 text-slate-950">Tuto</span>
             </div>
             <div class="text-[11px] font-black text-white group-hover:text-yellow-300 leading-tight truncate w-full">Feu</div>
             <div class="text-[9.5px] text-red-200/85 leading-none truncate w-full">Reptincel</div>
@@ -1043,7 +1039,7 @@
           <button onclick="startMatch('XTRA', 'COMBAT', 'tutorial')" id="btnDeckXtra" class="deck-card p-1.5 rounded-xl bg-gradient-to-br from-purple-950/90 via-slate-900/90 to-slate-950/95 border border-purple-400/45 hover:border-purple-300 flex flex-col items-center text-center gap-1 group active:scale-95 transition">
             <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow">
               <img src="https://assets.tcgdex.net/fr/base/base1/23/high.webp" alt="Arcanin" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span id="badgeXtra" class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-purple-300 text-slate-950">▶ Tuto</span>
+              <span id="badgeXtra" class="absolute bottom-0.5 right-0.5 text-[9px] font-black px-1 rounded bg-purple-300 text-slate-950">Tuto</span>
             </div>
             <div class="text-[11px] font-black text-white group-hover:text-yellow-300 leading-tight truncate w-full">Xtra</div>
             <div class="text-[9.5px] text-purple-200/85 leading-none truncate w-full">Arcanin</div>
@@ -1058,7 +1054,7 @@
           <div class="flex items-center gap-2 min-w-0 flex-1">
             <img id="quickSummaryPlayerImg" src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="" class="w-8 aspect-[63/88] rounded object-cover border border-yellow-400/70 shrink-0" />
             <div class="min-w-0">
-              <div class="text-[10px] font-bold uppercase text-yellow-300">⚔️ Partie Rapide · Toi</div>
+              <div class="text-[10px] font-bold uppercase text-yellow-300">Partie Rapide · Toi</div>
               <div id="quickSummaryPlayerName" class="text-xs font-black text-white leading-tight truncate">Dracaufeu</div>
             </div>
           </div>
@@ -1073,8 +1069,8 @@
             <img id="quickSummaryAiImg" src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="" class="w-8 aspect-[63/88] rounded object-cover border border-rose-400/70 shrink-0" />
           </div>
 
-          <button onclick="startQuickMatch()" class="btn-gold px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wide shrink-0 shadow-lg">
-            ⚔️ Jouer
+          <button onclick="startQuickMatch()" class="btn-gold px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wide shrink-0 shadow-lg">
+            Jouer
           </button>
         </div>
 
@@ -1094,8 +1090,8 @@
       <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-slate-950/95 border border-cyan-400/45 shadow-xl">
         <div class="flex items-start justify-between gap-2">
           <div class="min-w-0">
-            <h2 class="text-sm font-black text-white leading-tight">🌐 Jouer contre un ami</h2>
-            <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">Chacun sur son téléphone ou ordinateur, en direct. Suis les 4 étapes ci-dessous 👇</p>
+            <h2 class="text-sm font-black text-white leading-tight">Jouer contre un ami</h2>
+            <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">Chacun sur son téléphone ou ordinateur, en direct. Suis les 4 étapes ci-dessous.</p>
           </div>
           <span id="multiNetPill" class="shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 border border-white/15 text-[10px] font-bold text-slate-200">
             <span id="multiNetDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
@@ -1112,7 +1108,7 @@
           <div class="text-[11px] text-slate-400 leading-snug">C'est le nom que ton ami verra.</div>
           <div id="multiMyPseudo" class="text-sm font-black text-white truncate mt-0.5">Dresseur</div>
         </div>
-        <button onclick="openPseudoModal(false)" class="shrink-0 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-cyan-200 transition active:scale-95">✏️ Modifier</button>
+        <button onclick="openPseudoModal(false)" class="shrink-0 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-cyan-200 transition active:scale-95">Modifier</button>
       </div>
 
       <!-- ÉTAPE 2 : RETROUVER SON AMI AVEC UN CODE -->
@@ -1133,17 +1129,17 @@
         </div>
 
         <!-- Deux choix clairs (repliés une fois l'ami connecté) -->
-        <button id="multiChangeCodeBtn" onclick="multiShowRoomChoices = true; renderMultiSetup();" class="hidden w-full py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10.5px] font-bold text-slate-300 transition active:scale-95">🔁 Changer de code / inviter quelqu'un d'autre</button>
+        <button id="multiChangeCodeBtn" onclick="multiShowRoomChoices = true; renderMultiSetup();" class="hidden w-full py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10.5px] font-bold text-slate-300 transition active:scale-95">Changer de code / inviter quelqu'un d'autre</button>
         <div id="multiRoomChoices" class="grid grid-cols-2 gap-2">
           <div class="rounded-xl bg-white/5 border border-emerald-400/30 p-2 space-y-1.5 flex flex-col">
-            <div class="text-[10.5px] font-black text-emerald-300">🅰️ Je crée la partie</div>
-            <button onclick="createPrivateMultiRoom()" class="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-white transition active:scale-95">🎲 Nouveau code</button>
-            <button onclick="shareMultiRoomLink()" id="multiShareBtn" class="w-full py-2 rounded-lg bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-400/50 text-[11px] font-extrabold text-emerald-100 transition active:scale-95">📲 Envoyer à mon ami</button>
+            <div class="text-[10.5px] font-black text-emerald-300">Je crée la partie</div>
+            <button onclick="createPrivateMultiRoom()" class="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-white transition active:scale-95">Nouveau code</button>
+            <button onclick="shareMultiRoomLink()" id="multiShareBtn" class="w-full py-2 rounded-lg bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-400/50 text-[11px] font-extrabold text-emerald-100 transition active:scale-95">Envoyer à mon ami</button>
           </div>
           <div class="rounded-xl bg-white/5 border border-cyan-400/30 p-2 space-y-1.5 flex flex-col">
-            <div class="text-[10.5px] font-black text-cyan-300">🅱️ J'ai reçu un code</div>
+            <div class="text-[10.5px] font-black text-cyan-300">J'ai reçu un code</div>
             <input id="multiJoinInput" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" maxlength="8" placeholder="EX : PIKA42" onkeydown="if(event.key==='Enter'){joinMultiRoomFromInput();}" class="w-full px-2 py-2 rounded-lg bg-slate-950 border border-white/20 text-center font-mono font-black tracking-widest text-white text-[16px] uppercase placeholder:text-slate-600 placeholder:text-[11px] focus:outline-none focus:border-cyan-400" />
-            <button onclick="joinMultiRoomFromInput()" class="w-full py-2 rounded-lg bg-cyan-500/25 hover:bg-cyan-500/35 border border-cyan-400/50 text-[11px] font-extrabold text-cyan-100 transition active:scale-95">➡️ Rejoindre</button>
+            <button onclick="joinMultiRoomFromInput()" class="w-full py-2 rounded-lg bg-cyan-500/25 hover:bg-cyan-500/35 border border-cyan-400/50 text-[11px] font-extrabold text-cyan-100 transition active:scale-95">Rejoindre</button>
           </div>
         </div>
 
@@ -1151,7 +1147,7 @@
         <div id="multiOppBox" class="rounded-xl p-2.5 flex items-center gap-2.5 bg-slate-950/70 border border-white/10">
           <img id="multiOppDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-rose-400/60 shrink-0 shadow opacity-40 grayscale" />
           <div class="min-w-0 flex-1">
-            <div id="multiOppPseudo" class="text-xs font-black text-amber-300 truncate">⏳ En attente de ton ami…</div>
+            <div id="multiOppPseudo" class="text-xs font-black text-amber-300 truncate">En attente de ton ami…</div>
             <div id="multiOppStatusSub" class="text-[10.5px] text-slate-400 leading-snug">Ton ami doit ouvrir le jeu, aller dans l'onglet Multi et entrer le même code.</div>
           </div>
         </div>
@@ -1200,7 +1196,7 @@
         </div>
 
         <button id="multiGoBtn" onclick="clickMultiGo()" class="w-full btn-gold py-3.5 rounded-xl text-sm font-black uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 active:scale-98 transition">
-          <span id="multiGoBtnLabel">✋ Je suis prêt !</span>
+          <span id="multiGoBtnLabel">Je suis prêt !</span>
         </button>
         <div id="multiStatusBanner" class="text-[11px] text-center font-semibold text-cyan-200/90 leading-snug"></div>
       </div>
@@ -1208,16 +1204,16 @@
       <!-- AIDE DÉBUTANT -->
       <details class="w-full rounded-2xl bg-slate-900/70 border border-white/10 p-3 text-[11px] text-slate-300 group">
         <summary class="cursor-pointer font-black text-cyan-200 list-none flex items-center justify-between">
-          <span>❓ Comment ça marche ? (aide)</span><span class="text-slate-500 group-open:rotate-180 transition">▼</span>
+          <span>Comment ça marche ? (aide)</span><span class="text-slate-500 group-open:rotate-180 transition">▼</span>
         </summary>
         <ol class="mt-2 space-y-1.5 list-decimal pl-4 leading-snug">
-          <li><strong>Joueur A</strong> appuie sur <em>🎲 Nouveau code</em> puis <em>📲 Envoyer à mon ami</em> (SMS, WhatsApp…).</li>
-          <li><strong>Joueur B</strong> ouvre le lien reçu (le code se remplit tout seul) ou tape le code dans <em>🅱️ J'ai reçu un code</em>.</li>
-          <li>Quand l'ami apparaît en <span class="text-emerald-300 font-bold">vert ✅</span>, vous êtes connectés.</li>
-          <li>Chacun choisit son deck, puis appuie sur <em>✋ Je suis prêt</em>. Le duel se lance automatiquement.</li>
+          <li><strong>Joueur A</strong> appuie sur <em>Nouveau code</em> puis <em>Envoyer à mon ami</em> (SMS, WhatsApp…).</li>
+          <li><strong>Joueur B</strong> ouvre le lien reçu (le code se remplit tout seul) ou tape le code dans <em>J'ai reçu un code</em>.</li>
+          <li>Quand l'ami apparaît en <span class="text-emerald-300 font-bold">vert</span>, vous êtes connectés.</li>
+          <li>Chacun choisit son deck, puis appuie sur <em>Je suis prêt</em>. Le duel se lance automatiquement.</li>
           <li>Pendant la partie, chacun joue <strong>à son tour</strong> : le bandeau indique à qui c'est de jouer.</li>
         </ol>
-        <p class="mt-2 text-slate-400 leading-snug">💡 Ton ami n'apparaît pas ? Vérifiez que le code est <strong>identique</strong>, que vous avez Internet, et gardez l'onglet Multi ouvert sur les deux appareils.</p>
+        <p class="mt-2 text-slate-400 leading-snug">Ton ami n'apparaît pas ? Vérifiez que le code est <strong>identique</strong>, que vous avez Internet, et gardez l'onglet Multi ouvert sur les deux appareils.</p>
       </details>
     </div>
 
@@ -1225,40 +1221,14 @@
     <!-- ONGLET ACCUEIL : BOOSTERS 1999 (mise en page « hub » mobile)    -->
     <!-- =============================================================== -->
     <div id="viewBooster" class="w-full space-y-3">
-      <!-- 1. Barre profil : vitrine · avatar/niveau · raccourcis -->
-      <div class="hub-topbar grid grid-cols-[1fr_auto_1fr] items-center gap-2 w-full">
-        <button onclick="openCollectionModal('all')" class="hub-pill justify-self-start flex items-center gap-1.5 pl-1.5 pr-2 py-1.5 rounded-2xl active:scale-95 transition" title="Ma vitrine · Galerie Collection">
-          <span id="hubShowcase" class="flex items-center gap-1">
-            <span class="hub-mini-card grid place-items-center text-[10px] text-slate-500">?</span>
-            <span class="hub-mini-card grid place-items-center text-[10px] text-slate-500">?</span>
-          </span>
-          <span class="text-base leading-none">📖</span>
-          <span class="text-slate-400 text-xs font-black">›</span>
-        </button>
-
-        <button onclick="openPseudoModal(false)" class="flex flex-col items-center active:scale-95 transition" title="Mon profil de Dresseur">
-          <span id="hubAvatarRing" class="hub-avatar-ring" style="--pct:0">
-            <span class="hub-avatar"><span class="hub-ball"></span></span>
-          </span>
-          <span id="hubLevelLabel" class="mt-0.5 text-[11px] font-black text-slate-200 tracking-wide">Niv. 1</span>
-        </button>
-
-        <div class="justify-self-end flex items-center gap-1.5">
-          <button onclick="document.getElementById('boosterRatesBox').open = true; document.getElementById('boosterRatesBox').scrollIntoView({behavior:'smooth', block:'center'})" class="hub-icon-btn" title="Taux de rareté">📊</button>
-          <button onclick="switchMenuTab('decks')" class="hub-icon-btn" title="Mes decks">🛠️</button>
-          <button onclick="switchMenuTab('multi')" class="hub-icon-btn relative" title="Jouer avec un ami">🌐</button>
-        </div>
-      </div>
-
-      <!-- 2. Grand panneau : les 3 illustrations de booster du set actif côte à côte -->
+      <!-- 1. Grand panneau : les 3 illustrations de booster du set actif côte à côte -->
       <div id="hubPackPanel" class="hub-pack-panel relative w-full rounded-[28px] px-2.5 sm:px-4 pt-10 pb-8 transition-colors duration-300">
         <div class="absolute top-2.5 left-3 right-2.5 flex items-center justify-between gap-1.5">
           <div class="flex items-center gap-1.5 min-w-0">
-            <span id="hubActiveSetBadge" class="text-[10.5px] font-black px-2 py-0.5 rounded-lg bg-yellow-400/20 border border-yellow-400/50 text-yellow-200 truncate">⚡ Set de Base · 102 cartes</span>
-            <span id="boosterTotalOpenedBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg bg-black/35 border border-white/10 text-amber-200 shrink-0">📦 0 pack</span>
+            <span id="hubActiveSetBadge" class="text-[10.5px] font-black px-2 py-0.5 rounded-lg bg-yellow-400/20 border border-yellow-400/50 text-yellow-200 truncate">Set de Base · 102 cartes</span>
+            <span id="boosterTotalOpenedBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg bg-black/35 border border-white/10 text-amber-200 shrink-0">0 pack</span>
           </div>
           <button id="hubChangeSetBtn" onclick="cycleHubBoosterSet()" class="hub-pill px-2.5 py-1 rounded-xl text-[11px] font-black text-yellow-200 border border-yellow-400/50 hover:border-yellow-300 active:scale-95 transition flex items-center gap-1 shrink-0" title="Changer d'extension (Set de Base · Jungle · Fossile)">
-            <span>🔄</span>
             <span>Changer de set</span>
           </button>
         </div>
@@ -1269,60 +1239,58 @@
             <span class="hub-pack holo-wrap">
               <img src="assets/boosters/base-tortank.jpg" alt="Booster Tortank" class="w-full h-full object-cover" />
             </span>
-            <span class="text-[11px] font-black text-white leading-tight">💧 Tortank</span>
-            <span class="hub-pack-cta">🎁 Gratuit</span>
+            <span class="text-[11px] font-black text-white leading-tight">Tortank</span>
+            <span class="hub-pack-cta">Gratuit</span>
           </button>
           <!-- Illustration 2 : Dracaufeu -->
           <button onclick="launchBoosterPack('base', 'dracaufeu')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap ring-2 ring-yellow-300/75 shadow-[0_0_20px_rgba(250,204,21,0.45)]">
               <img src="assets/boosters/base-dracaufeu.jpg" alt="Booster Dracaufeu" class="w-full h-full object-cover" />
             </span>
-            <span class="text-[11px] font-black text-yellow-200 leading-tight">🔥 Dracaufeu</span>
-            <span class="hub-pack-cta">🎁 Gratuit</span>
+            <span class="text-[11px] font-black text-yellow-200 leading-tight">Dracaufeu</span>
+            <span class="hub-pack-cta">Gratuit</span>
           </button>
           <!-- Illustration 3 : Florizarre -->
           <button onclick="launchBoosterPack('base', 'florizarre')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
               <img src="assets/boosters/base-florizarre.jpg" alt="Booster Florizarre" class="w-full h-full object-cover" />
             </span>
-            <span class="text-[11px] font-black text-white leading-tight">🌿 Florizarre</span>
-            <span class="hub-pack-cta">🎁 Gratuit</span>
+            <span class="text-[11px] font-black text-white leading-tight">Florizarre</span>
+            <span class="hub-pack-cta">Gratuit</span>
           </button>
         </div>
 
         <!-- Sélecteur direct d'extension (Set de Base · Jungle · Fossile) -->
         <div class="mt-2.5 grid grid-cols-3 gap-1.5">
           <button id="hubSetBtn-base" onclick="selectHubBoosterSet('base')" class="py-1 px-2 rounded-xl text-[10.5px] font-black border transition bg-yellow-400/25 text-yellow-200 border-yellow-400/80 shadow flex items-center justify-center gap-1 active:scale-95">
-            <span>⚡</span><span>Set de Base</span>
+            <span>Set de Base</span>
           </button>
           <button id="hubSetBtn-jungle" onclick="selectHubBoosterSet('jungle')" class="py-1 px-2 rounded-xl text-[10.5px] font-black border transition bg-white/5 text-slate-200 border-white/15 hover:border-emerald-300/60 flex items-center justify-center gap-1 active:scale-95">
-            <span>🌿</span><span>Jungle</span>
+            <span>Jungle</span>
           </button>
           <button id="hubSetBtn-fossil" onclick="selectHubBoosterSet('fossil')" class="py-1 px-2 rounded-xl text-[10.5px] font-black border transition bg-white/5 text-slate-200 border-white/15 hover:border-amber-300/60 flex items-center justify-center gap-1 active:scale-95">
-            <span>🪨</span><span>Fossile</span>
+            <span>Fossile</span>
           </button>
         </div>
 
-        <!-- Jauge des boosters gratuits + sablier -->
+        <!-- Jauge des boosters gratuits + recharge -->
         <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-          <div class="hub-pill flex items-center gap-1 px-3 py-1.5 rounded-full">
-            <span id="hubFreePips" class="flex items-center gap-1">
-              <span class="hub-pip on">🎁</span><span class="hub-pip on">🎁</span><span class="hub-pip on">🎁</span>
+          <div class="hub-pill flex items-center gap-1.5 px-3 py-1.5 rounded-full">
+            <span id="hubFreePips" class="flex items-center gap-1.5">
+              <span class="hub-pip on"></span><span class="hub-pip on"></span><span class="hub-pip on"></span>
             </span>
             <span id="boosterFreeCountBadge" class="ml-1 px-2 py-0.5 rounded-lg bg-cyan-400 text-slate-950 font-black text-[10.5px] whitespace-nowrap">MAX.</span>
           </div>
           <div class="hub-pill flex items-center gap-1 px-2.5 py-1.5 rounded-full" title="Recharge des boosters gratuits">
-            <span class="text-sm leading-none">⏳</span>
             <span id="hubCountdown" class="text-[11px] font-mono font-black text-slate-200">—</span>
           </div>
         </div>
       </div>
 
-      <!-- 3. Deux tuiles : Collection · Trésor -->
+      <!-- 2. Deux tuiles : Collection · Trésor -->
       <div class="grid grid-cols-2 gap-2.5 pt-3">
-        <div onclick="openCollectionModal('all')" class="hub-tile cursor-pointer relative rounded-2xl pt-7 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
-          <span id="boosterHoloCountBadge" class="hub-tag absolute -top-2 left-1.5 bg-pink-500/90 text-white">✨ 0 Holo</span>
-          <span class="text-3xl leading-none drop-shadow">📖</span>
+        <div onclick="openCollectionModal('all')" class="hub-tile cursor-pointer relative rounded-2xl pt-6 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
+          <span id="boosterHoloCountBadge" class="hub-tag absolute -top-2 left-1.5 bg-pink-500/90 text-white">0 Holo</span>
           <span class="text-[13px] font-black text-white">Collection</span>
           <span id="boosterColCountText" class="text-[10.5px] font-mono font-bold text-emerald-300">0 / 228 (0%)</span>
           <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -1335,34 +1303,32 @@
           </div>
         </div>
 
-        <div onclick="switchMenuTab('tuto')" class="hub-tile cursor-pointer relative rounded-2xl pt-7 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
-          <span class="hub-tag absolute -top-2 right-1.5 bg-slate-100 text-slate-900">🏆 Victoire = +100 🪙</span>
-          <span class="text-3xl leading-none drop-shadow">🪙</span>
+        <div onclick="switchMenuTab('tuto')" class="hub-tile cursor-pointer relative rounded-2xl pt-6 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
+          <span class="hub-tag absolute -top-2 right-1.5 bg-slate-100 text-slate-900">Victoire = +100 pts</span>
           <span class="text-[13px] font-black text-white">Trésor</span>
-          <span id="boosterCoinsBadge" class="px-2.5 py-0.5 rounded-lg bg-yellow-400 text-slate-950 font-black text-xs shadow">0 🪙</span>
-          <span class="text-[10px] font-semibold text-amber-100/80 text-center leading-tight">1 booster = 100 🪙<br>⚔️ Joue pour en gagner</span>
+          <span id="boosterCoinsBadge" class="px-2.5 py-0.5 rounded-lg bg-yellow-400 text-slate-950 font-black text-xs shadow">0 pièce</span>
+          <span class="text-[10px] font-semibold text-amber-100/80 text-center leading-tight">1 booster = 100 pièces<br>Joue pour en gagner</span>
         </div>
       </div>
 
-      <!-- 4. Barre de mission -->
-      <div class="relative w-full pr-14">
-        <div class="hub-tile rounded-2xl py-2 px-3 flex items-center justify-between gap-2 min-h-[54px]">
+      <!-- 3. Barre de mission -->
+      <div class="w-full">
+        <div class="hub-tile rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2">
           <div class="min-w-0">
             <div id="hubMissionTitle" class="text-[11.5px] font-black text-slate-100 truncate">Ouvre tes boosters gratuits</div>
             <div id="boosterFreeStatusSub" class="text-[10.5px] font-semibold text-cyan-200/90 truncate">3 gratuits disponibles chaque heure</div>
           </div>
-          <span id="hubMissionBadge" class="shrink-0 px-2.5 py-1 rounded-full bg-emerald-400 text-slate-950 text-[10.5px] font-black">✔ Prêt !</span>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span id="hubMissionBadge" class="px-2.5 py-1 rounded-full bg-emerald-400 text-slate-950 text-[10.5px] font-black">Prêt</span>
+            <button onclick="switchMenuTab('tuto')" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide">Jouer</button>
+          </div>
         </div>
-        <button onclick="switchMenuTab('tuto')" class="hub-mission-btn absolute right-0 top-1/2 -translate-y-1/2" title="Jouer contre l'IA pour gagner des pièces">
-          <span class="text-xl leading-none">⚔️</span>
-          <span class="text-[9px] font-black uppercase">Jouer</span>
-        </button>
       </div>
 
-      <!-- 5. Taux de rareté (repliable) -->
+      <!-- 4. Taux de rareté (repliable) -->
       <details id="boosterRatesBox" class="w-full p-3 rounded-2xl bg-slate-900/80 border border-white/10 text-xs group">
         <summary class="cursor-pointer list-none flex items-center justify-between gap-2">
-          <span class="font-black text-yellow-300 uppercase tracking-wider text-[11px]">📊 Taux de rareté (5 cartes)</span>
+          <span class="font-black text-yellow-300 uppercase tracking-wider text-[11px]">Taux de rareté (5 cartes)</span>
           <span class="text-[10px] font-mono text-pink-300 font-bold">God Pack 0,5 % <span class="text-slate-500 group-open:rotate-180 inline-block transition">▼</span></span>
         </summary>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] mt-2">
@@ -1372,11 +1338,11 @@
           </div>
           <div class="p-2 rounded-xl bg-black/40 border border-emerald-400/25">
             <div class="font-bold text-emerald-300">Carte 4 (Slot Surprise)</div>
-            <div class="text-slate-300 text-[10px] mt-0.5">◆ <strong class="text-emerald-200">85 % Peu Commune</strong> · ★ 12 % Rare · ✨ 3 % Holo</div>
+            <div class="text-slate-300 text-[10px] mt-0.5">◆ <strong class="text-emerald-200">85 % Peu Commune</strong> · ★ 12 % Rare · 3 % Holo</div>
           </div>
           <div class="p-2 rounded-xl bg-gradient-to-br from-amber-500/15 to-pink-500/15 border border-yellow-400/40">
             <div class="font-bold text-yellow-300">Carte 5 (Slot Climax)</div>
-            <div class="text-slate-200 text-[10px] mt-0.5">✨ <strong class="text-pink-300">33,3 % Rare Holo</strong> · ★ <strong class="text-yellow-200">46,7 % Rare</strong> · ◆ 20 % Peu Com.</div>
+            <div class="text-slate-200 text-[10px] mt-0.5"><strong class="text-pink-300">33,3 % Rare Holo</strong> · ★ <strong class="text-yellow-200">46,7 % Rare</strong> · ◆ 20 % Peu Com.</div>
           </div>
         </div>
       </details>
@@ -1388,22 +1354,18 @@
     <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS (4 ONGLETS COMPACTS) -->
     <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
       <div class="max-w-lg mx-auto px-2.5 pt-1.5 grid grid-cols-4 gap-1.5">
-        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
-          <span class="text-base sm:text-sm leading-none">🏠</span>
+        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
           <span>Accueil</span>
           <span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black leading-tight">3</span>
         </button>
-        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
-          <span class="text-base sm:text-sm leading-none">⚔️</span>
+        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
           <span>Jouer IA</span>
         </button>
-        <button id="tabBtnMulti" onclick="switchMenuTab('multi')" class="relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95">
-          <span class="text-base sm:text-sm leading-none">🌐</span>
+        <button id="tabBtnMulti" onclick="switchMenuTab('multi')" class="relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95">
           <span>Multi</span>
           <span id="multiNavDot" class="hidden absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-slate-950 animate-ping"></span>
         </button>
-        <button id="tabBtnDecks" onclick="switchMenuTab('decks')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95">
-          <span class="text-base sm:text-sm leading-none">🛠️</span>
+        <button id="tabBtnDecks" onclick="switchMenuTab('decks')" class="py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95">
           <span>Decks</span>
         </button>
       </div>
@@ -1426,8 +1388,8 @@
       </div>
       <div id="turnPhaseBadge" class="phase-badge text-[11px] font-extrabold px-2.5 py-1 rounded-xl bg-yellow-400/15 border border-yellow-400/35 text-yellow-300 text-right">Préparation</div>
       <div class="flex items-center gap-1 shrink-0">
-        <button onclick="openAudioModal()" id="audioBtnGame" class="w-10 h-10 justify-center rounded-xl bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/35 text-xs font-bold text-yellow-200 shrink-0 transition flex items-center gap-1" title="Réglages (Son & Thème)">
-          <span id="audioBtnGameIcon">🔊</span>
+        <button onclick="openAudioModal()" id="audioBtnGame" class="w-10 h-10 grid place-items-center rounded-xl bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/35 text-yellow-200 shrink-0 transition" title="Réglages (Son & Thème)" aria-label="Réglages">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
       </div>
     </header>
@@ -1571,7 +1533,7 @@
   <div id="academyModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl p-5 max-w-md w-full shadow-2xl max-h-[88dvh] flex flex-col overflow-hidden">
       <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
-        <h3 class="text-base font-extrabold text-yellow-300">📖 Galerie 1999</h3>
+        <h3 class="text-base font-extrabold text-yellow-300">Galerie 1999</h3>
         <button onclick="document.getElementById('academyModal').classList.add('hidden')" class="x-close text-slate-400 hover:text-white">✕</button>
       </div>
       <div id="academyContent" class="space-y-3 text-xs flex-1 min-h-0 overflow-y-auto overscroll-contain"></div>
@@ -1585,7 +1547,7 @@
     <div class="bg-slate-900/95 border border-yellow-400/40 rounded-2xl p-4 max-w-xs w-full shadow-2xl space-y-3.5 max-h-[85dvh] overflow-y-auto overscroll-contain">
       <div class="flex items-center justify-between pb-2 border-b border-white/10">
         <h3 class="text-sm font-extrabold text-yellow-300 flex items-center gap-1.5">
-          <span>⚙️</span><span>Réglages · Son &amp; Thème</span>
+          <span>Réglages · Son &amp; Thème</span>
         </h3>
         <button onclick="closeAudioModal()" class="x-close w-6 h-6 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white flex items-center justify-center text-xs" aria-label="Fermer">✕</button>
       </div>
@@ -1594,34 +1556,30 @@
       <div class="bg-black/35 border border-white/10 rounded-xl p-3 space-y-2">
         <div class="flex items-center justify-between gap-2">
           <div>
-            <div class="text-xs font-extrabold text-white flex items-center gap-1.5">🎨 Thème / Tapis de jeu</div>
+            <div class="text-xs font-extrabold text-white">Thème / Tapis de jeu</div>
             <div class="text-[10px] text-slate-400">Ambiance visuelle du plateau 1999</div>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-1.5" id="playmatButtonsGrid">
-          <button type="button" data-playmat="playmat-night" onclick="changePlaymat('playmat-night')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
-            <span class="text-sm leading-none">🌙</span>
+          <button type="button" data-playmat="playmat-night" onclick="changePlaymat('playmat-night')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Bleu Nuit</span>
               <span class="block text-[9px] text-slate-400 leading-tight truncate">Pikachu · Ectoplasma</span>
             </span>
           </button>
-          <button type="button" data-playmat="playmat-jungle" onclick="changePlaymat('playmat-jungle')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
-            <span class="text-sm leading-none">🌿</span>
+          <button type="button" data-playmat="playmat-jungle" onclick="changePlaymat('playmat-jungle')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Jungle</span>
               <span class="block text-[9px] text-slate-400 leading-tight truncate">Insécateur · Rafflesia</span>
             </span>
           </button>
-          <button type="button" data-playmat="playmat-fossil" onclick="changePlaymat('playmat-fossil')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
-            <span class="text-sm leading-none">🦖</span>
+          <button type="button" data-playmat="playmat-fossil" onclick="changePlaymat('playmat-fossil')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Fossile</span>
               <span class="block text-[9px] text-slate-400 leading-tight truncate">Ptéra Préhistorique</span>
             </span>
           </button>
-          <button type="button" data-playmat="playmat-mewtwo" onclick="changePlaymat('playmat-mewtwo')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
-            <span class="text-sm leading-none">🔮</span>
+          <button type="button" data-playmat="playmat-mewtwo" onclick="changePlaymat('playmat-mewtwo')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Mewtwo Rouge</span>
               <span class="block text-[9px] text-slate-400 leading-tight truncate">Base Set 2</span>
@@ -1629,10 +1587,10 @@
           </button>
         </div>
         <select id="playmatSelect" onchange="changePlaymat(this.value)" class="sr-only" aria-label="Thème du tapis de jeu">
-          <option value="playmat-night">🌙 Bleu Nuit (Pikachu / Ectoplasma)</option>
-          <option value="playmat-jungle">🌿 Jungle (Insécateur / Rafflesia)</option>
-          <option value="playmat-fossil">🦖 Fossile (Ptéra)</option>
-          <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
+          <option value="playmat-night">Bleu Nuit (Pikachu / Ectoplasma)</option>
+          <option value="playmat-jungle">Jungle (Insécateur / Rafflesia)</option>
+          <option value="playmat-fossil">Fossile (Ptéra)</option>
+          <option value="playmat-mewtwo">Base Set 2 (Mewtwo Rouge)</option>
         </select>
       </div>
 
@@ -1640,13 +1598,12 @@
       <div class="bg-black/35 border border-white/10 rounded-xl p-3 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <div>
-            <div class="text-xs font-extrabold text-white flex items-center gap-1.5">🎵 Musique 8-Bit</div>
+            <div class="text-xs font-extrabold text-white">Musique 8-Bit</div>
             <div class="text-[10px] text-slate-400">Bande-son Game Boy TCG</div>
           </div>
           <button id="bgmModalToggleBtn" onclick="toggleBgm()" class="px-2.5 py-1 rounded-lg text-[11px] font-extrabold border transition">ON</button>
         </div>
         <div class="flex items-center gap-2.5">
-          <span class="text-xs text-slate-400">🔈</span>
           <input id="bgmVolumeSlider" type="range" min="0" max="100" value="35" oninput="setBgmVolume(this.value)" class="w-full accent-yellow-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg" />
           <span id="bgmVolumeLabel" class="text-[11px] font-bold text-yellow-300 w-9 text-right">35%</span>
         </div>
@@ -1656,13 +1613,12 @@
       <div class="bg-black/35 border border-white/10 rounded-xl p-3 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <div>
-            <div class="text-xs font-extrabold text-white flex items-center gap-1.5">⚡ Cris 1G &amp; Effets</div>
+            <div class="text-xs font-extrabold text-white">Cris 1G &amp; Effets</div>
             <div class="text-[10px] text-slate-400">Cris Pokémon &amp; bruits de cartes</div>
           </div>
           <button id="sfxModalToggleBtn" onclick="toggleSound()" class="px-2.5 py-1 rounded-lg text-[11px] font-extrabold border transition">ON</button>
         </div>
         <div class="flex items-center gap-2.5">
-          <span class="text-xs text-slate-400">🔈</span>
           <input id="sfxVolumeSlider" type="range" min="0" max="100" value="80" oninput="setSfxVolume(this.value)" class="w-full accent-yellow-400 cursor-pointer h-1.5 bg-slate-700 rounded-lg" />
           <span id="sfxVolumeLabel" class="text-[11px] font-bold text-yellow-300 w-9 text-right">80%</span>
         </div>
@@ -1671,10 +1627,10 @@
       <!-- Actions rapides -->
       <div class="flex items-center justify-between gap-2 pt-1">
         <button onclick="sfx('holo')" class="flex-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl py-2 text-[11px] font-bold text-slate-200 transition">
-          🔔 Tester le son
+          Tester le son
         </button>
         <button id="muteAllModalBtn" onclick="toggleMuteAll()" class="flex-1 bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/30 rounded-xl py-2 text-[11px] font-bold text-rose-200 transition">
-          🔇 Tout couper
+          Tout couper
         </button>
       </div>
     </div>
@@ -1688,7 +1644,7 @@
       <div class="flex items-start justify-between gap-2">
         <div>
           <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-[10px] font-extrabold uppercase tracking-wider mb-1">
-            <span>🧢</span> Carte de Dresseur 1999
+            Carte de Dresseur 1999
           </div>
           <h3 class="font-black text-base text-white">Quel est ton pseudo de joueur ?</h3>
           <p class="text-[11px] text-slate-300 mt-0.5">Tes cartes obtenues, tes pièces et tes decks sont liés à ce pseudo · utilisé aussi en Multijoueur.</p>
@@ -1725,7 +1681,7 @@
       </div>
 
       <button onclick="savePlayerPseudo()" class="w-full btn-gold py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg active:scale-95 transition">
-        ✅ Enregistrer mon Pseudo &amp; Continuer
+        Enregistrer mon Pseudo &amp; Continuer
       </button>
     </div>
   </div>
@@ -1741,9 +1697,9 @@
         <span id="boosterStepPill" class="text-xs font-mono font-bold text-slate-300 whitespace-nowrap truncate min-w-0">5 cartes</span>
       </div>
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <span id="boosterModalWalletPill" class="px-2.5 py-1 rounded-xl bg-black/50 border border-yellow-400/35 text-[11px] font-extrabold text-yellow-200 whitespace-nowrap">🎁 3/3 · 🪙 0</span>
+        <span id="boosterModalWalletPill" class="px-2.5 py-1 rounded-xl bg-black/50 border border-yellow-400/35 text-[11px] font-extrabold text-yellow-200 whitespace-nowrap">3/3 · 0 pt</span>
         <button id="boosterSkipBtn" onclick="revealAllBoosterCards()" class="hidden glass-pill px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap text-amber-200 hover:text-white">
-          ⏩ Tout révéler
+          Tout révéler
         </button>
         <button onclick="closeBoosterOpenModal()" class="x-close w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center">✕</button>
       </div>
@@ -15717,15 +15673,10 @@ const TYPE_EMOJI = {
       const avgPct = Math.round(((bgmEnabled ? bgmVolumePct : 0) + (soundEnabled ? sfxVolumePct : 0)) / 2);
       const icon = !anyActive ? '🔇' : (avgPct < 45 ? '🔉' : '🔊');
 
-      const menuIcon = document.getElementById('audioBtnMenuIcon');
-      const menuLabel = document.getElementById('audioBtnMenuLabel');
       const menuBtn = document.getElementById('audioBtnMenu');
-      const gameIcon = document.getElementById('audioBtnGameIcon');
       const gameBtn = document.getElementById('audioBtnGame');
 
-      if (menuIcon) menuIcon.textContent = icon;
-      if (menuLabel) menuLabel.textContent = 'Réglages';
-      if (gameIcon) gameIcon.textContent = icon;
+      if (menuBtn) menuBtn.classList.toggle('opacity-60', !anyActive);
       if (gameBtn) gameBtn.classList.toggle('opacity-60', !anyActive);
 
       const bgmToggle = document.getElementById('bgmModalToggleBtn');
@@ -15759,7 +15710,7 @@ const TYPE_EMOJI = {
 
       const muteAllBtn = document.getElementById('muteAllModalBtn');
       if (muteAllBtn) {
-        muteAllBtn.textContent = anyActive ? '🔇 Tout couper' : '🔊 Tout activer';
+        muteAllBtn.textContent = anyActive ? 'Tout couper' : 'Tout activer';
       }
     }
 
@@ -15883,7 +15834,7 @@ const TYPE_EMOJI = {
       if (sel && sel.value !== cls) sel.value = cls;
       document.querySelectorAll('.playmat-opt-btn').forEach((btn) => {
         const active = btn.getAttribute('data-playmat') === cls;
-        btn.className = `playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 active:scale-95 ${
+        btn.className = `playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 active:scale-95 ${
           active
             ? 'bg-yellow-400/20 border-yellow-400 text-yellow-200 ring-1 ring-yellow-400/60 shadow'
             : 'bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50'
@@ -15963,11 +15914,11 @@ const TYPE_EMOJI = {
       const hero = document.getElementById('menuHeroTitle');
       if (hero) hero.classList.toggle('hidden', isBooster);
 
-      const activeCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
-      const activeMultiCls = 'relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg ring-2 ring-cyan-200/80 active:scale-95';
-      const idleCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95';
-      const idleMultiCls = 'relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95';
-      const idleBoosterCls = 'relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95';
+      const activeCls = 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
+      const activeMultiCls = 'relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg ring-2 ring-cyan-200/80 active:scale-95';
+      const idleCls = 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95';
+      const idleMultiCls = 'relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95';
+      const idleBoosterCls = 'relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95';
 
       const bTuto = document.getElementById('tabBtnTuto');
       if (bTuto) bTuto.className = isSolo ? activeCls : idleCls;
@@ -16035,12 +15986,12 @@ const TYPE_EMOJI = {
         ${customKeys.length ? `
         <div class="space-y-1">
           <div class="flex items-center justify-between px-1">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">🛠️ Mes Decks perso</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">Mes Decks perso</span>
             <button onclick="switchMenuTab('decks')" class="text-[10px] font-bold text-emerald-200 underline underline-offset-2">Modifier</button>
           </div>
           <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderPlayerCard).join('')}</div>
         </div>` : `
-        <button onclick="switchMenuTab('decks')" class="w-full px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-dashed border-emerald-400/40 text-[10.5px] font-extrabold text-emerald-200 text-left">🛠️ Crée ton propre deck avec tes boosters →</button>`}
+        <button onclick="switchMenuTab('decks')" class="w-full px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-dashed border-emerald-400/40 text-[10.5px] font-extrabold text-emerald-200 text-left">Crée ton propre deck avec tes boosters →</button>`}
         <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderPlayerCard).join('')}</div>
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderPlayerCard).join('')}</div>
       `;
@@ -16054,7 +16005,7 @@ const TYPE_EMOJI = {
           <button onclick="selectQuickAiDeck('${k}')" class="p-1 rounded-xl bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400 bg-rose-500/20 shadow-lg scale-[1.02]' : 'border-white/15 hover:border-white/35 opacity-85 hover:opacity-100'} flex flex-col items-center gap-0.5 transition">
             <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow flex items-center justify-center bg-gradient-to-br from-rose-500/20 to-purple-600/20">
               ${isRand
-                ? `<span class="text-base">🎲</span>`
+                ? `<span class="text-sm font-black text-rose-200">?</span>`
                 : `<img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
                    <span class="absolute bottom-0.5 left-0.5 text-[9px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-rose-500/90 text-white'}">${isHalf ? '30c' : '60c'}</span>`
               }
@@ -16067,7 +16018,7 @@ const TYPE_EMOJI = {
       aGrid.innerHTML = `
         <div class="flex items-center justify-between px-1">
           <h2 class="text-[11px] font-black tracking-wider uppercase text-rose-300">2. Deck de l'IA</h2>
-          <button onclick="selectQuickAiDeck('RANDOM')" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold border transition ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-300 shadow' : 'bg-white/10 text-rose-200 border-white/15 hover:bg-white/20'}">🎲 IA Aléatoire</button>
+          <button onclick="selectQuickAiDeck('RANDOM')" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold border transition ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-300 shadow' : 'bg-white/10 text-rose-200 border-white/15 hover:bg-white/20'}">IA Aléatoire</button>
         </div>
         <div class="grid grid-cols-5 sm:grid-cols-6 gap-1.5">${[...halfKeys, ...fullKeys].map(renderAiCard).join('')}</div>
       `;
@@ -16078,7 +16029,7 @@ const TYPE_EMOJI = {
 
       if (quickAiDeck === 'RANDOM') {
         document.getElementById('quickSummaryAiImg').src = pMeta.subImg;
-        document.getElementById('quickSummaryAiName').textContent = '🎲 Aléatoire';
+        document.getElementById('quickSummaryAiName').textContent = 'Aléatoire';
       } else {
         const aMeta = DECK_META[quickAiDeck];
         document.getElementById('quickSummaryAiImg').src = aMeta.img;
@@ -16629,7 +16580,7 @@ const TYPE_EMOJI = {
       const roomHint = document.getElementById('multiRoomHint');
       if (roomHint) {
         roomHint.innerHTML = multiRoomCode === 'ARENE'
-          ? '⚠️ Code public : n\'importe qui peut entrer. Appuie sur <strong>🎲 Nouveau code</strong> pour jouer seulement avec ton ami.'
+          ? 'Code public : n\'importe qui peut entrer. Appuie sur <strong>Nouveau code</strong> pour jouer seulement avec ton ami.'
           : '<span class="text-slate-400">Donne ce code à ton ami (ou envoie-lui le lien).</span>';
       }
 
@@ -16675,8 +16626,8 @@ const TYPE_EMOJI = {
       const lobbyNextLbl = document.getElementById('multiLobbyNextLabel');
       if (lobbyNextLbl) {
         lobbyNextLbl.textContent = hasPeer
-          ? `🃏 Choisir mon Deck contre ${peerName} →`
-          : '🃏 Continuer → Choisir mon Deck';
+          ? `Choisir mon Deck contre ${peerName} →`
+          : 'Continuer → Choisir mon Deck';
       }
 
       // Récap Toi (Page 2)
@@ -16686,7 +16637,7 @@ const TYPE_EMOJI = {
       if (myImg) myImg.src = myMeta.img;
       if (myName) myName.textContent = `${myMeta.short} (${myMeta.cards}c)`;
       if (myReadyBadge) {
-        myReadyBadge.textContent = multiMyReady ? '✅ Prêt' : 'Pas encore prêt';
+        myReadyBadge.textContent = multiMyReady ? 'Prêt' : 'Pas encore prêt';
         myReadyBadge.className = 'text-[10.5px] font-black ' + (multiMyReady ? 'text-emerald-300' : 'text-slate-400');
       }
 
@@ -16702,10 +16653,10 @@ const TYPE_EMOJI = {
       if (hasPeer) {
         if (oppBox) oppBox.className = 'rounded-xl p-2.5 flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-400/50';
         if (oppPseudoEl) {
-          oppPseudoEl.textContent = `✅ ${peerName} est dans le salon !`;
+          oppPseudoEl.textContent = `${peerName} est dans le salon !`;
           oppPseudoEl.className = 'text-xs font-black text-emerald-300 truncate';
         }
-        if (oppSubEl) oppSubEl.textContent = multiPeer.ready ? `Prêt à jouer avec ${oppMeta.short} 🔥` : `Choisit son deck… (${oppMeta.short} pour l'instant)`;
+        if (oppSubEl) oppSubEl.textContent = multiPeer.ready ? `Prêt à jouer avec ${oppMeta.short}` : `Choisit son deck… (${oppMeta.short} pour l'instant)`;
         if (oppDeckImgEl) {
           oppDeckImgEl.src = oppMeta.img;
           oppDeckImgEl.classList.remove('opacity-40', 'grayscale');
@@ -16716,17 +16667,17 @@ const TYPE_EMOJI = {
         }
         if (oppDeckNameEl) oppDeckNameEl.textContent = `${peerName} · ${oppMeta.short}`;
         if (oppReadyBadge) {
-          oppReadyBadge.textContent = multiPeer.ready ? '✅ Prêt' : '⏳ Choisit…';
+          oppReadyBadge.textContent = multiPeer.ready ? 'Prêt' : 'Choisit…';
           oppReadyBadge.className = 'text-[10.5px] font-black ' + (multiPeer.ready ? 'text-emerald-300' : 'text-amber-300');
         }
         if (deckPagePeerPill) {
-          deckPagePeerPill.textContent = multiPeer.ready ? `🔥 ${peerName} est prêt !` : `🟢 ${peerName} connecté`;
+          deckPagePeerPill.textContent = multiPeer.ready ? `${peerName} est prêt !` : `${peerName} connecté`;
           deckPagePeerPill.className = 'text-[10.5px] font-extrabold ' + (multiPeer.ready ? 'text-emerald-300' : 'text-cyan-200');
         }
       } else {
         if (oppBox) oppBox.className = 'rounded-xl p-2.5 flex items-center gap-2.5 bg-slate-950/70 border border-white/10';
         if (oppPseudoEl) {
-          oppPseudoEl.textContent = '⏳ En attente de ton ami…';
+          oppPseudoEl.textContent = 'En attente de ton ami…';
           oppPseudoEl.className = 'text-xs font-black text-amber-300 truncate';
         }
         if (oppSubEl) oppSubEl.innerHTML = `Ton ami doit ouvrir le jeu, aller dans l'onglet <strong>Multi</strong> et entrer le code <strong class="font-mono text-white">${multiRoomCode}</strong>.`;
@@ -16738,7 +16689,7 @@ const TYPE_EMOJI = {
           oppReadyBadge.className = 'text-[10.5px] font-black text-slate-500';
         }
         if (deckPagePeerPill) {
-          deckPagePeerPill.textContent = '⏳ En attente d\'un ami';
+          deckPagePeerPill.textContent = 'En attente d\'un ami';
           deckPagePeerPill.className = 'text-[10.5px] font-extrabold text-amber-300';
         }
       }
@@ -16748,10 +16699,10 @@ const TYPE_EMOJI = {
       const goBtn = document.getElementById('multiGoBtn');
       const statusBanner = document.getElementById('multiStatusBanner');
       if (goBtnLabel) {
-        if (multiMyReady && hasPeer && multiPeer.ready) goBtnLabel.textContent = '⚔️ Lancement du duel…';
-        else if (multiMyReady) goBtnLabel.textContent = '↩️ Annuler (je ne suis plus prêt)';
-        else if (hasPeer && multiPeer.ready) goBtnLabel.textContent = `✋ Je suis prêt — affronter ${peerName} !`;
-        else goBtnLabel.textContent = '✋ Je suis prêt !';
+        if (multiMyReady && hasPeer && multiPeer.ready) goBtnLabel.textContent = 'Lancement du duel…';
+        else if (multiMyReady) goBtnLabel.textContent = 'Annuler (je ne suis plus prêt)';
+        else if (hasPeer && multiPeer.ready) goBtnLabel.textContent = `Je suis prêt — affronter ${peerName} !`;
+        else goBtnLabel.textContent = 'Je suis prêt !';
       }
       if (goBtn) {
         goBtn.classList.toggle('btn-gold', !multiMyReady);
@@ -16762,12 +16713,12 @@ const TYPE_EMOJI = {
       }
       if (statusBanner) {
         let msg;
-        if (!playerPseudo) msg = '👉 Commence par choisir ton nom de dresseur dans le Salon.';
-        else if (multiMyReady && !hasPeer) msg = `⏳ Tu es prêt ! En attente que ton ami rejoigne le salon <strong class="font-mono">${multiRoomCode}</strong>…`;
-        else if (multiMyReady && !multiPeer.ready) msg = `⏳ Tu es prêt ! On attend que <strong>${peerName}</strong> appuie sur « Je suis prêt »…`;
-        else if (multiMyReady) msg = '⚔️ Vous êtes prêts tous les deux, le duel démarre !';
-        else if (hasPeer && multiPeer.ready) msg = `🔥 <strong>${peerName}</strong> t'attend ! Appuie sur « Je suis prêt » pour lancer le duel.`;
-        else if (hasPeer) msg = `🟢 Connecté avec <strong>${peerName}</strong>. Choisissez vos decks puis appuyez sur « Je suis prêt ».`;
+        if (!playerPseudo) msg = 'Commence par choisir ton nom de dresseur dans le Salon.';
+        else if (multiMyReady && !hasPeer) msg = `Tu es prêt ! En attente que ton ami rejoigne le salon <strong class="font-mono">${multiRoomCode}</strong>…`;
+        else if (multiMyReady && !multiPeer.ready) msg = `Tu es prêt ! On attend que <strong>${peerName}</strong> appuie sur « Je suis prêt »…`;
+        else if (multiMyReady) msg = 'Vous êtes prêts tous les deux, le duel démarre !';
+        else if (hasPeer && multiPeer.ready) msg = `<strong>${peerName}</strong> t'attend ! Appuie sur « Je suis prêt » pour lancer le duel.`;
+        else if (hasPeer) msg = `Connecté avec <strong>${peerName}</strong>. Choisissez vos decks puis appuyez sur « Je suis prêt ».`;
         else msg = 'Tu peux déjà choisir ton deck et appuyer sur « Je suis prêt » : le duel démarrera dès que ton ami sera prêt.';
         statusBanner.innerHTML = msg;
       }
@@ -21507,7 +21458,7 @@ const TYPE_EMOJI = {
         cssVars: '--pk1:#78350f;--pk2:#b45309;--pk3:#291509;--pkA:#fbbf24',
         name: 'Extension Fossile (1999)',
         short: 'Fossile',
-        subtitle: 'Ptéra · Artikodin · Dracolosse',
+        subtitle: 'Ptéra · Lokhlass · Électhor',
         total: 62,
         bgGrad: 'linear-gradient(155deg, #78350f 0%, #b45309 42%, #291509 100%)',
         panelBg: 'linear-gradient(160deg, rgba(146,64,14,0.65) 0%, rgba(217,119,6,0.35) 38%, rgba(15,23,42,0.88) 72%)',
@@ -21516,9 +21467,9 @@ const TYPE_EMOJI = {
         accent: '#fbbf24',
         glow: 'rgba(251, 191, 36, 0.55)',
         packArtworks: [
-          { key: 'ptera', label: 'Ptéra', icon: '🪨', cardImg: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', heroOrder: [0, 1, 2] },
-          { key: 'artikodin', label: 'Artikodin', icon: '❄️', cardImg: 'https://assets.tcgdex.net/fr/base/base3/2/high.webp', heroOrder: [1, 0, 2], featured: true },
-          { key: 'dracolosse', label: 'Dracolosse', icon: '🐉', cardImg: 'https://assets.tcgdex.net/fr/base/base3/4/high.webp', heroOrder: [2, 0, 1] }
+          { key: 'ptera', label: 'Ptéra', icon: '🪨', img: 'assets/boosters/fossil-ptera.jpg' },
+          { key: 'lokhlass', label: 'Lokhlass', icon: '🌊', img: 'assets/boosters/fossil-lokhlass.jpg', featured: true },
+          { key: 'electhor', label: 'Électhor', icon: '⚡', img: 'assets/boosters/fossil-electhor.jpg' }
         ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base3/1/high.webp',
@@ -21667,28 +21618,28 @@ const TYPE_EMOJI = {
 
       const coinsBadge = document.getElementById('boosterCoinsBadge');
       if (coinsBadge) {
-        coinsBadge.textContent = `${coins} 🪙`;
+        coinsBadge.textContent = `${coins} pièces`;
       }
 
       const modalWallet = document.getElementById('boosterModalWalletPill');
       if (modalWallet) {
-        modalWallet.textContent = `🎁 ${freeCount}/${MAX_FREE_BOOSTERS}${countdown ? ` (${countdown})` : ''} · 🪙 ${coins}`;
+        modalWallet.textContent = `Gratuits ${freeCount}/${MAX_FREE_BOOSTERS}${countdown ? ` (${countdown})` : ''} · ${coins} pièces`;
       }
 
       const summaryReplayBtn = document.getElementById('boosterSummaryReplayBtnLabel');
       if (summaryReplayBtn && activeBooster && activeBooster.meta) {
         summaryReplayBtn.textContent = freeCount > 0
-          ? `🎁 Ouvrir un autre ${activeBooster.meta.short} (Gratuit · ${freeCount}/${MAX_FREE_BOOSTERS})`
+          ? `Ouvrir un autre ${activeBooster.meta.short} (Gratuit · ${freeCount}/${MAX_FREE_BOOSTERS})`
           : canBuyWithCoins
-          ? `🪙 Ouvrir un autre ${activeBooster.meta.short} (${BOOSTER_COST_COINS} pièces)`
-          : `🔒 ${BOOSTER_COST_COINS} 🪙 requis (ou ⏱️ ${countdown})`;
+          ? `Ouvrir un autre ${activeBooster.meta.short} (${BOOSTER_COST_COINS} pièces)`
+          : `${BOOSTER_COST_COINS} pièces requis (ou ${countdown})`;
       }
 
       const totalBadge = document.getElementById('boosterTotalOpenedBadge');
-      if (totalBadge) totalBadge.textContent = `📦 ${boosterSave.packsOpened} pack${boosterSave.packsOpened > 1 ? 's' : ''}`;
+      if (totalBadge) totalBadge.textContent = `${boosterSave.packsOpened} pack${boosterSave.packsOpened > 1 ? 's' : ''}`;
 
       const holoBadge = document.getElementById('boosterHoloCountBadge');
-      if (holoBadge) holoBadge.textContent = `✨ ${boosterSave.holosPulled} Holo`;
+      if (holoBadge) holoBadge.textContent = `${boosterSave.holosPulled} Holo`;
 
       const countTxt = document.getElementById('boosterColCountText');
       if (countTxt) countTxt.textContent = `${ownedUnique} / ${ALL_UNIQUE_CARDS.length} · ${pct}%`;
@@ -21719,7 +21670,7 @@ const TYPE_EMOJI = {
       const canBuyWithCoins = coins >= BOOSTER_COST_COINS;
       const countdown = getBoosterNextResetLabel();
       return {
-        text: freeCount > 0 ? '🎁 Gratuit' : canBuyWithCoins ? `🪙 ${BOOSTER_COST_COINS}` : `🔒 ${countdown || '60:00'}`,
+        text: freeCount > 0 ? 'Gratuit' : canBuyWithCoins ? `${BOOSTER_COST_COINS} pièces` : `${countdown || '60:00'}`,
         opacity: (freeCount > 0 || canBuyWithCoins) ? '1' : '0.6'
       };
     }
@@ -21734,7 +21685,7 @@ const TYPE_EMOJI = {
 
       const activeBadge = document.getElementById('hubActiveSetBadge');
       if (activeBadge) {
-        activeBadge.textContent = `${meta.icon} ${meta.short} · ${meta.total} cartes`;
+        activeBadge.textContent = `${meta.short} · ${meta.total} cartes`;
         activeBadge.className = `text-[10.5px] font-black px-2 py-0.5 rounded-lg border truncate ${meta.badgeCls}`;
       }
 
@@ -21776,7 +21727,7 @@ const TYPE_EMOJI = {
           return `
             <button onclick="launchBoosterPack('${meta.key}', '${art.key}')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
               ${packVisual}
-              <span class="text-[11px] font-black ${labelCls} leading-tight">${art.icon} ${art.label}</span>
+              <span class="text-[11px] font-black ${labelCls} leading-tight">${art.label}</span>
               <span class="hub-pack-cta" style="opacity:${cta.opacity}">${cta.text}</span>
             </button>
           `;
@@ -21810,7 +21761,7 @@ const TYPE_EMOJI = {
 
       const pips = document.getElementById('hubFreePips');
       if (pips) pips.innerHTML = Array.from({ length: MAX_FREE_BOOSTERS }, (_, i) =>
-        `<span class="hub-pip${i < freeCount ? ' on' : ''}">🎁</span>`).join('');
+        `<span class="hub-pip${i < freeCount ? ' on' : ''}"></span>`).join('');
       const freeBadge = document.getElementById('boosterFreeCountBadge');
       if (freeBadge) {
         freeBadge.textContent = freeCount >= MAX_FREE_BOOSTERS ? 'MAX.' : `${freeCount}/${MAX_FREE_BOOSTERS}`;
@@ -21827,15 +21778,15 @@ const TYPE_EMOJI = {
       if (mTitle && mBadge) {
         if (freeCount > 0) {
           mTitle.textContent = `Ouvre tes boosters gratuits (${freeCount}/${MAX_FREE_BOOSTERS})`;
-          mBadge.textContent = '✔ Prêt !';
+          mBadge.textContent = 'Prêt';
           mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-emerald-400 text-slate-950 text-[10.5px] font-black';
         } else if (canBuyWithCoins) {
-          mTitle.textContent = `Tu as ${coins} 🪙 : achète un booster !`;
-          mBadge.textContent = `🪙 ${Math.floor(coins / BOOSTER_COST_COINS)}`;
+          mTitle.textContent = `Tu as ${coins} pièces : achète un booster !`;
+          mBadge.textContent = `${Math.floor(coins / BOOSTER_COST_COINS)} disp.`;
           mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-yellow-400 text-slate-950 text-[10.5px] font-black';
         } else {
-          mTitle.textContent = 'Gagne un duel : +100 🪙';
-          mBadge.textContent = `⏳ ${countdown || '60:00'}`;
+          mTitle.textContent = 'Gagne un duel : +100 pièces';
+          mBadge.textContent = `${countdown || '60:00'}`;
           mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-slate-700 text-slate-200 text-[10.5px] font-black font-mono';
         }
       }
@@ -22073,7 +22024,7 @@ const TYPE_EMOJI = {
     let selectedBoosterArtBySet = {
       base: 'dracaufeu',
       jungle: 'pyroli',
-      fossil: 'artikodin'
+      fossil: 'lokhlass'
     };
 
     function selectBaseBoosterArt(artKey) {
@@ -23930,7 +23881,6 @@ const TYPE_EMOJI = {
       box.innerHTML = `
         <div class="rounded-2xl bg-gradient-to-br from-indigo-950/90 via-slate-900/90 to-slate-950/95 border border-yellow-400/35 p-3.5 space-y-3 shadow-xl">
           <div class="flex items-start gap-3">
-            <div class="text-3xl leading-none">🛠️</div>
             <div class="flex-1 min-w-0">
               <h2 class="text-base font-black text-yellow-300 leading-tight">Création de Deck</h2>
               <p class="text-[12px] text-slate-300 leading-snug mt-0.5">Construis ton deck avec les cartes de tes boosters. Les <b class="text-yellow-200">Énergies de base sont illimitées</b> ∞.</p>
@@ -23944,18 +23894,18 @@ const TYPE_EMOJI = {
           ${ownedBasics === 0 ? `
             <div class="rounded-xl bg-amber-500/15 border border-amber-400/40 p-3 text-[12.5px] text-amber-100 leading-snug">
               Tu n'as encore aucun <b>Pokémon de Base</b>. Ouvre des boosters pour obtenir des cartes, puis reviens ici !
-              <button onclick="switchMenuTab('booster')" class="mt-2 w-full btn-gold py-2.5 rounded-xl text-xs font-black uppercase">✨ Ouvrir des boosters</button>
+              <button onclick="switchMenuTab('booster')" class="mt-2 w-full btn-gold py-2.5 rounded-xl text-xs font-black uppercase">Ouvrir des boosters</button>
             </div>` : `
             <div class="grid grid-cols-2 gap-2">
-              <button onclick="openAutoDeckSheet('new')" class="min-h-[56px] rounded-xl btn-gold text-sm font-black flex flex-col items-center justify-center leading-tight shadow-lg">✨ Deck auto<span class="text-[10.5px] font-bold opacity-80">en 1 clic</span></button>
-              <button onclick="createEmptyDeck()" class="min-h-[56px] rounded-xl bg-white/10 border border-white/20 text-sm font-black text-white flex flex-col items-center justify-center leading-tight active:scale-95">＋ Nouveau<span class="text-[10.5px] font-bold text-slate-300">à la main</span></button>
+              <button onclick="openAutoDeckSheet('new')" class="min-h-[56px] rounded-xl btn-gold text-sm font-black flex flex-col items-center justify-center leading-tight shadow-lg">Deck auto<span class="text-[10.5px] font-bold opacity-80">en 1 clic</span></button>
+              <button onclick="createEmptyDeck()" class="min-h-[56px] rounded-xl bg-white/10 border border-white/20 text-sm font-black text-white flex flex-col items-center justify-center leading-tight active:scale-95">+ Nouveau<span class="text-[10.5px] font-bold text-slate-300">à la main</span></button>
             </div>`}
         </div>
         <div class="flex items-center justify-between px-1 pt-1">
           <h3 class="text-[12px] font-black tracking-wider uppercase text-yellow-300">Mes decks (${customDecks.length})</h3>
           ${customDecks.length ? '<span class="text-[11px] font-semibold text-slate-400">Touchez pour modifier</span>' : ''}
         </div>
-        <div class="space-y-2">${deckRows || `<div class="rounded-xl border border-dashed border-white/20 p-4 text-center text-[12.5px] text-slate-400">Aucun deck pour l'instant.${ownedBasics ? '<br>Essaie <b class="text-yellow-200">✨ Deck auto</b> : il choisit tes meilleures cartes.' : ''}</div>`}</div>
+        <div class="space-y-2">${deckRows || `<div class="rounded-xl border border-dashed border-white/20 p-4 text-center text-[12.5px] text-slate-400">Aucun deck pour l'instant.${ownedBasics ? '<br>Essaie <b class="text-yellow-200">Deck auto</b> : il choisit tes meilleures cartes.' : ''}</div>`}</div>
       `;
     }
 
