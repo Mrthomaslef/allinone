@@ -787,66 +787,44 @@
     </div>
 
     <!-- =============================================================== -->
-    <!-- ONGLET 2 : PARTIE RAPIDE (CHOIX DE TON DECK + DECK IA, SANS AIDE) -->
+    <!-- ONGLET 2 : PARTIE RAPIDE (CHOIX DE TON DECK + DECK IA, CONCIS)  -->
     <!-- =============================================================== -->
-    <div id="viewQuick" class="hidden w-full space-y-3">
-      <!-- Résumé Face-à-Face & Bouton Lancer -->
-      <div class="w-full p-3 rounded-2xl bg-gradient-to-r from-slate-900/95 via-indigo-950/85 to-slate-900/95 border border-yellow-400/40 shadow-2xl flex flex-col gap-2.5">
-        <div class="flex items-center justify-between gap-2">
-          <!-- Ton Deck choisi -->
-          <div class="flex items-center gap-2 min-w-0 flex-1">
-            <img id="quickSummaryPlayerImg" src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="" class="w-10 aspect-[63/88] rounded object-cover shadow-md border border-yellow-400/60 shrink-0" />
-            <div class="min-w-0">
-              <div class="text-[9px] font-black uppercase tracking-wider text-yellow-300">Ton Deck</div>
-              <div id="quickSummaryPlayerName" class="text-xs font-black text-white truncate">Deck Dracaufeu</div>
-              <div id="quickSummaryPlayerSub" class="text-[10px] text-slate-300 truncate">60 cartes · 6 Prix</div>
-            </div>
-          </div>
-
-          <div class="px-2 py-1 rounded-full bg-white/10 text-[10px] font-black text-amber-300 shrink-0">⚡ VS ⚡</div>
-
-          <!-- Deck IA choisi -->
-          <div class="flex items-center justify-end gap-2 min-w-0 flex-1 text-right">
-            <div class="min-w-0">
-              <div class="text-[9px] font-black uppercase tracking-wider text-rose-300">Deck de l'IA</div>
-              <div id="quickSummaryAiName" class="text-xs font-black text-white truncate">Deck Tortank &amp; Fossile</div>
-              <div id="quickSummaryAiSub" class="text-[10px] text-slate-300 truncate">60 cartes · Sans aide</div>
-            </div>
-            <img id="quickSummaryAiImg" src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="" class="w-10 aspect-[63/88] rounded object-cover shadow-md border border-rose-400/60 shrink-0" />
+    <div id="viewQuick" class="hidden w-full space-y-2.5">
+      <!-- Barre Face-à-Face compacte + Bouton Jouer -->
+      <div class="w-full p-2.5 rounded-2xl bg-slate-900/95 border border-yellow-400/40 shadow-xl flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0 flex-1">
+          <img id="quickSummaryPlayerImg" src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="" class="w-8 aspect-[63/88] rounded object-cover border border-yellow-400/70 shrink-0" />
+          <div class="min-w-0">
+            <div class="text-[9px] font-bold uppercase text-yellow-300">Toi</div>
+            <div id="quickSummaryPlayerName" class="text-xs font-black text-white truncate">Dracaufeu</div>
           </div>
         </div>
 
-        <button onclick="startQuickMatch()" class="btn-gold w-full py-2.5 rounded-xl text-xs sm:text-sm font-black tracking-wide uppercase flex items-center justify-center gap-2 shadow-lg">
-          <span>⚔️</span> Lancer la Partie Rapide (Sans recommandation)
+        <span class="text-[10px] font-black text-amber-300 px-1.5 py-0.5 rounded bg-white/10 shrink-0">VS</span>
+
+        <div class="flex items-center gap-2 min-w-0 flex-1 justify-end text-right">
+          <div class="min-w-0">
+            <div class="text-[9px] font-bold uppercase text-rose-300">IA</div>
+            <div id="quickSummaryAiName" class="text-xs font-black text-white truncate">Tortank</div>
+          </div>
+          <img id="quickSummaryAiImg" src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="" class="w-8 aspect-[63/88] rounded object-cover border border-rose-400/70 shrink-0" />
+        </div>
+
+        <button onclick="startQuickMatch()" class="btn-gold px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wide shrink-0 shadow-lg">
+          ⚔️ Jouer
         </button>
       </div>
 
-      <!-- ÉTAPE 1 : CHOISIS TON DECK -->
-      <div class="w-full space-y-2">
-        <div class="flex items-center justify-between px-1">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
-            <h2 class="text-xs font-black tracking-wider uppercase text-yellow-200">
-              1. Choisis TON Deck
-            </h2>
-          </div>
-          <span class="text-[10px] font-mono text-slate-300">Touche une carte phare</span>
-        </div>
-        <div id="quickPlayerGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+      <!-- 1. TON DECK -->
+      <div class="w-full space-y-1">
+        <h2 class="text-[11px] font-black tracking-wider uppercase text-yellow-300 px-1">1. Ton Deck</h2>
+        <div id="quickPlayerGrid" class="grid grid-cols-5 gap-1.5"></div>
       </div>
 
-      <!-- ÉTAPE 2 : CHOISIS LE DECK DE L'IA -->
-      <div class="w-full space-y-2 pt-1">
-        <div class="flex items-center justify-between px-1">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_#fb7185]"></span>
-            <h2 class="text-xs font-black tracking-wider uppercase text-rose-200">
-              2. Choisis le Deck de l'IA
-            </h2>
-          </div>
-          <span class="text-[10px] font-mono text-slate-300">Adversaire sans coaching</span>
-        </div>
-        <div id="quickAiGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+      <!-- 2. DECK DE L'IA -->
+      <div class="w-full space-y-1">
+        <h2 class="text-[11px] font-black tracking-wider uppercase text-rose-300 px-1">2. Deck IA</h2>
+        <div id="quickAiGrid" class="grid grid-cols-6 gap-1.5"></div>
       </div>
     </div>
 
@@ -15233,10 +15211,10 @@ const TYPE_EMOJI = {
       V2_ELECTRIK: { key: 'V2_ELECTRIK', name: 'Deck Électhor & Raichu', short: 'Électhor', cards: 60, prizes: 6, star: 'Électhor (90 PV)', desc: 'Pikachu → Raichu, Électhor, Voltali', img: 'https://assets.tcgdex.net/fr/base/base1/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/14/high.webp', grad: 'from-yellow-950/90 via-amber-950/85 to-slate-950/95', border: 'border-yellow-400/50' },
       V2_PSY: { key: 'V2_PSY', name: 'Deck Mewtwo & Alakazam', short: 'Mewtwo', cards: 60, prizes: 6, star: 'Mewtwo (60 PV)', desc: 'Abra → Alakazam, Mewtwo, Ectoplasma', img: 'https://assets.tcgdex.net/fr/base/base1/10/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/1/high.webp', grad: 'from-fuchsia-950/90 via-purple-950/85 to-slate-950/95', border: 'border-fuchsia-400/45' },
       V2_COMBAT: { key: 'V2_COMBAT', name: 'Deck Mackogneur', short: 'Mackogneur', cards: 60, prizes: 6, star: 'Mackogneur (100 PV)', desc: 'Machoc → Mackogneur, Grolem, Ptéra', img: 'https://assets.tcgdex.net/fr/base/base1/8/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', grad: 'from-stone-900/95 via-amber-950/85 to-slate-950/95', border: 'border-amber-500/45' },
-      COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Combat (30c)', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-amber-950/90 via-stone-900/90 to-slate-950/95', border: 'border-amber-500/45' },
-      EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Eau (30c)', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-sky-950/90 via-slate-900/90 to-slate-950/95', border: 'border-sky-400/45' },
-      FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Feu (30c)', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-red-950/90 via-stone-900/90 to-slate-950/95', border: 'border-red-500/45' },
-      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Arcanin (30c)', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-purple-950/90 via-slate-900/90 to-slate-950/95', border: 'border-purple-400/45' }
+      COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Machopeur', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-amber-950/90 via-stone-900/90 to-slate-950/95', border: 'border-amber-500/45' },
+      EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Poissoroy', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-sky-950/90 via-slate-900/90 to-slate-950/95', border: 'border-sky-400/45' },
+      FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Reptincel', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-red-950/90 via-stone-900/90 to-slate-950/95', border: 'border-red-500/45' },
+      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Arcanin', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-purple-950/90 via-slate-900/90 to-slate-950/95', border: 'border-purple-400/45' }
     };
 
     let quickPlayerDeck = 'V2_FEU';
@@ -15283,62 +15261,47 @@ const TYPE_EMOJI = {
         const d = DECK_META[k];
         const sel = quickPlayerDeck === k;
         return `
-          <button onclick="selectQuickPlayerDeck('${k}')" class="deck-card p-2.5 bg-gradient-to-br ${d.grad} border ${sel ? 'border-yellow-300 ring-2 ring-yellow-400/90' : d.border} text-left flex items-center gap-2.5 group">
-            <div class="deck-fan" style="width:62px;height:80px">
-              <img src="${d.subImg}" alt="" loading="lazy" class="fan-sub" style="width:46px" />
-              <div class="holo-wrap">
-                <img src="${d.img}" alt="${d.name}" loading="lazy" class="fan-main" style="width:52px" />
-              </div>
+          <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl bg-slate-900/90 border ${sel ? 'border-yellow-300 ring-2 ring-yellow-400 bg-yellow-500/15' : 'border-white/10 hover:border-white/30 opacity-80 hover:opacity-100'} flex flex-col items-center gap-1 transition">
+            <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow">
+              <img src="${d.img}" alt="${d.short}" loading="lazy" class="w-full h-full object-cover" />
+              <span class="absolute top-0.5 right-0.5 text-[8px] font-mono font-bold px-1 rounded bg-black/75 text-white">${d.cards}c</span>
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-1">
-                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-200">${d.cards} cartes · ${d.prizes} Prix</span>
-                ${sel ? '<span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-yellow-400 text-slate-950">✓ TON DECK</span>' : ''}
-              </div>
-              <div class="font-black text-sm text-white mt-1 truncate">${d.name}</div>
-              <div class="text-[10.5px] font-semibold text-yellow-200/90 truncate">${d.star}</div>
-              <div class="text-[10px] text-slate-300/80 truncate">${d.desc}</div>
-            </div>
+            <span class="text-[10px] font-extrabold ${sel ? 'text-yellow-300' : 'text-slate-200'} truncate w-full text-center">${d.short}</span>
           </button>
         `;
       }).join('');
 
       const aiOptions = [
-        { key: 'RANDOM', name: 'Deck Aléatoire', short: 'Aléatoire', cards: '30/60', img: 'https://assets.tcgdex.net/fr/base/base1/10/high.webp' },
+        { key: 'RANDOM', short: 'Aléatoire', cards: '?', img: '' },
         ...keys.map((k) => DECK_META[k])
       ];
       aGrid.innerHTML = aiOptions.map((d) => {
         const sel = quickAiDeck === d.key;
         const isRand = d.key === 'RANDOM';
         return `
-          <button onclick="selectQuickAiDeck('${d.key}')" class="deck-card p-2 bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400/90 bg-rose-950/40' : 'border-white/15 hover:border-white/35'} text-left flex items-center gap-2">
-            ${isRand
-              ? `<div class="w-9 aspect-[63/88] rounded bg-gradient-to-br from-rose-500/30 to-purple-600/30 border border-rose-400/50 flex items-center justify-center text-base shrink-0">🎲</div>`
-              : `<img src="${d.img}" alt="${d.name}" loading="lazy" class="w-9 aspect-[63/88] rounded object-cover shadow shrink-0" />`
-            }
-            <div class="min-w-0 flex-1">
-              <div class="font-extrabold text-[11px] text-white truncate">${d.short || d.name}</div>
-              <div class="text-[9.5px] text-slate-300 truncate">${isRand ? 'Surprise IA' : `${d.cards} cartes`}</div>
-              ${sel ? '<div class="text-[8.5px] font-black text-rose-300 uppercase mt-0.5">✓ Choisi</div>' : ''}
+          <button onclick="selectQuickAiDeck('${d.key}')" class="p-1.5 rounded-xl bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400 bg-rose-500/15' : 'border-white/10 hover:border-white/30 opacity-80 hover:opacity-100'} flex flex-col items-center gap-1 transition">
+            <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow flex items-center justify-center bg-gradient-to-br from-rose-500/20 to-purple-600/20">
+              ${isRand
+                ? `<span class="text-xl">🎲</span>`
+                : `<img src="${d.img}" alt="${d.short}" loading="lazy" class="w-full h-full object-cover" /><span class="absolute top-0.5 right-0.5 text-[8px] font-mono font-bold px-1 rounded bg-black/75 text-white">${d.cards}c</span>`
+              }
             </div>
+            <span class="text-[10px] font-extrabold ${sel ? 'text-rose-300' : 'text-slate-200'} truncate w-full text-center">${d.short}</span>
           </button>
         `;
       }).join('');
 
       const pMeta = DECK_META[quickPlayerDeck];
       document.getElementById('quickSummaryPlayerImg').src = pMeta.img;
-      document.getElementById('quickSummaryPlayerName').textContent = pMeta.name;
-      document.getElementById('quickSummaryPlayerSub').textContent = `${pMeta.cards} cartes · ${pMeta.prizes} Prix`;
+      document.getElementById('quickSummaryPlayerName').textContent = `${pMeta.short} (${pMeta.cards}c)`;
 
       if (quickAiDeck === 'RANDOM') {
         document.getElementById('quickSummaryAiImg').src = pMeta.subImg;
-        document.getElementById('quickSummaryAiName').textContent = '🎲 Deck Aléatoire';
-        document.getElementById('quickSummaryAiSub').textContent = 'Tiré au sort · Sans aide';
+        document.getElementById('quickSummaryAiName').textContent = '🎲 Aléatoire';
       } else {
         const aMeta = DECK_META[quickAiDeck];
         document.getElementById('quickSummaryAiImg').src = aMeta.img;
-        document.getElementById('quickSummaryAiName').textContent = aMeta.name;
-        document.getElementById('quickSummaryAiSub').textContent = `${aMeta.cards} cartes · Sans aide`;
+        document.getElementById('quickSummaryAiName').textContent = `${aMeta.short} (${aMeta.cards}c)`;
       }
     }
 
@@ -15890,6 +15853,32 @@ const TYPE_EMOJI = {
         if (kind === 'ko') { tone(t0, 0.6, 420, 60, 0.25, 'triangle'); }
         if (kind === 'coin') { tone(t0, 0.5, 2637, 2600, 0.12); tone(t0, 0.35, 3951, 3900, 0.06); tone(t0 + 0.09, 0.4, 2637, 2600, 0.07); }
         if (kind === 'turn') { tone(t0, 0.12, 660, 660, 0.12, 'triangle'); tone(t0 + 0.12, 0.2, 990, 990, 0.12, 'triangle'); }
+        if (kind === 'tearTick') { noise(t0, 0.035, 3800, 1.4, 0.16); }
+        if (kind === 'rip') {
+          noise(t0, 0.32, 2200, 0.55, 0.42);
+          noise(t0 + 0.06, 0.28, 4200, 0.8, 0.35);
+          tone(t0 + 0.12, 0.35, 440, 880, 0.14, 'triangle');
+          tone(t0 + 0.2, 0.45, 659, 1318, 0.12, 'sine');
+        }
+        if (kind === 'cardFlip') {
+          noise(t0, 0.11, 2400, 0.7, 0.24);
+          tone(t0, 0.12, 330, 520, 0.1, 'triangle');
+        }
+        if (kind === 'uncommon') {
+          tone(t0, 0.18, 523.25, 523.25, 0.14, 'triangle');
+          tone(t0 + 0.09, 0.28, 659.25, 659.25, 0.15, 'triangle');
+        }
+        if (kind === 'rare') {
+          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+            tone(t0 + i * 0.075, 0.38, f, f * 1.01, 0.16, 'triangle');
+          });
+        }
+        if (kind === 'holo') {
+          [523.25, 659.25, 783.99, 1046.5, 1318.5, 1567.98].forEach((f, i) => {
+            tone(t0 + i * 0.065, 0.65, f, f * 1.005, 0.18, 'triangle');
+            tone(t0 + i * 0.065 + 0.02, 0.55, f * 1.5, f * 1.5, 0.08, 'sine');
+          });
+        }
       } catch (_) {}
     }
     const buzz = (ms) => { try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {} };
@@ -17172,26 +17161,744 @@ const TYPE_EMOJI = {
     ];
 
     
-    const ALL_UNIQUE_CARDS = Object.values(CARDS_DB).filter((c, i, a) => a.findIndex(x => x.setId === c.setId) === i);
-    function openCollectionModal(filterSet = 'all') {
+    // =======================================================================
+    // 11. SYSTÈME DE RARETÉ WOTC 1999, COLLECTION & OUVERTURE DE BOOSTERS (5 CARTES)
+    // =======================================================================
+    function getCardRarity(card) {
+      const parts = (card.setId || '').split('-');
+      const num = parseInt(parts[1], 10) || 99;
+      if (card.set === 'base') {
+        if (num >= 1 && num <= 16) return 'holo';
+        if ((num >= 17 && num <= 22) || (num >= 70 && num <= 79)) return 'rare';
+        if ((num >= 23 && num <= 42) || (num >= 80 && num <= 90) || num === 96) return 'uncommon';
+        return 'common';
+      }
+      if (card.set === 'jungle') {
+        if (num >= 1 && num <= 16) return 'holo';
+        if (num >= 17 && num <= 32) return 'rare';
+        if (num >= 33 && num <= 48) return 'uncommon';
+        return 'common';
+      }
+      if (card.set === 'fossil') {
+        if (num >= 1 && num <= 15) return 'holo';
+        if (num >= 16 && num <= 30) return 'rare';
+        if ((num >= 31 && num <= 45) || num === 58) return 'uncommon';
+        return 'common';
+      }
+      return 'common';
+    }
+
+    const RARITY_META = {
+      common:   { id: 'common',   symbol: '●', label: 'Commune',     short: '● Com.',  badgeCls: 'bg-slate-700/90 text-slate-200 border-slate-400/40', glowCls: 'rarity-glow-common' },
+      uncommon: { id: 'uncommon', symbol: '◆', label: 'Peu Commune', short: '◆ Peu C.', badgeCls: 'bg-emerald-500/25 text-emerald-200 border-emerald-400/50', glowCls: 'rarity-glow-uncommon' },
+      rare:     { id: 'rare',     symbol: '★', label: 'Rare',        short: '★ Rare',   badgeCls: 'bg-amber-500/30 text-yellow-200 border-yellow-400/70', glowCls: 'rarity-glow-rare' },
+      holo:     { id: 'holo',     symbol: '✨', label: 'Rare Holo',   short: '✨ Holo',  badgeCls: 'bg-gradient-to-r from-pink-500/40 via-amber-400/40 to-cyan-400/40 text-white border-yellow-300', glowCls: 'rarity-glow-holo' }
+    };
+
+    const BOOSTER_SETS = {
+      base: {
+        key: 'base',
+        name: 'Set de Base (1999)',
+        short: 'Set de Base',
+        subtitle: 'Dracaufeu · Tortank · Florizarre',
+        total: 102,
+        bgGrad: 'linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 38%, #0f172a 100%)',
+        accent: '#facc15',
+        glow: 'rgba(250, 204, 21, 0.55)',
+        heroImgs: [
+          'https://assets.tcgdex.net/fr/base/base1/4/high.webp',
+          'https://assets.tcgdex.net/fr/base/base1/2/high.webp',
+          'https://assets.tcgdex.net/fr/base/base1/15/high.webp'
+        ]
+      },
+      jungle: {
+        key: 'jungle',
+        name: 'Extension Jungle (1999)',
+        short: 'Jungle',
+        subtitle: 'Insécateur · Pyroli · Ronflex',
+        total: 64,
+        bgGrad: 'linear-gradient(155deg, #065f46 0%, #15803d 42%, #052e16 100%)',
+        accent: '#4ade80',
+        glow: 'rgba(74, 222, 128, 0.55)',
+        heroImgs: [
+          'https://assets.tcgdex.net/fr/base/base2/10/high.webp',
+          'https://assets.tcgdex.net/fr/base/base2/3/high.webp',
+          'https://assets.tcgdex.net/fr/base/base2/11/high.webp'
+        ]
+      },
+      fossil: {
+        key: 'fossil',
+        name: 'Extension Fossile (1999)',
+        short: 'Fossile',
+        subtitle: 'Ptéra · Artikodin · Dracolosse',
+        total: 62,
+        bgGrad: 'linear-gradient(155deg, #78350f 0%, #b45309 42%, #291509 100%)',
+        accent: '#fbbf24',
+        glow: 'rgba(251, 191, 36, 0.55)',
+        heroImgs: [
+          'https://assets.tcgdex.net/fr/base/base3/1/high.webp',
+          'https://assets.tcgdex.net/fr/base/base3/2/high.webp',
+          'https://assets.tcgdex.net/fr/base/base3/4/high.webp'
+        ]
+      }
+    };
+
+    const ALL_UNIQUE_CARDS = Object.values(CARDS_DB)
+      .filter((c, i, a) => a.findIndex(x => x.setId === c.setId) === i)
+      .map(c => ({ ...c, rarity: getCardRarity(c) }));
+
+    // Sauvegarde persistante de la collection & des boosters ouverts
+    let boosterSave = { counts: {}, packsOpened: 0, holosPulled: 0 };
+    try {
+      const raw = localStorage.getItem('ppi_v2_booster_save');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          boosterSave.counts = parsed.counts || {};
+          boosterSave.packsOpened = parsed.packsOpened || 0;
+          boosterSave.holosPulled = parsed.holosPulled || 0;
+        }
+      }
+    } catch (_) {}
+
+    function saveBoosterData() {
+      try {
+        localStorage.setItem('ppi_v2_booster_save', JSON.stringify(boosterSave));
+      } catch (_) {}
+      updateBoosterStatsUi();
+    }
+
+    function updateBoosterStatsUi() {
+      const ownedUnique = ALL_UNIQUE_CARDS.filter(c => (boosterSave.counts[c.setId] || 0) > 0).length;
+      const pct = Math.round((ownedUnique / ALL_UNIQUE_CARDS.length) * 100);
+
+      const menuProg = document.getElementById('menuColProgress');
+      if (menuProg) menuProg.textContent = `${ownedUnique}/${ALL_UNIQUE_CARDS.length}`;
+
+      const totalBadge = document.getElementById('boosterTotalOpenedBadge');
+      if (totalBadge) totalBadge.textContent = `📦 ${boosterSave.packsOpened} pack${boosterSave.packsOpened > 1 ? 's' : ''} ouvert${boosterSave.packsOpened > 1 ? 's' : ''}`;
+
+      const holoBadge = document.getElementById('boosterHoloCountBadge');
+      if (holoBadge) holoBadge.textContent = `✨ ${boosterSave.holosPulled} Holo`;
+
+      const countTxt = document.getElementById('boosterColCountText');
+      if (countTxt) countTxt.textContent = `${ownedUnique} / ${ALL_UNIQUE_CARDS.length} cartes (${pct}%)`;
+
+      const bar = document.getElementById('boosterColBar');
+      if (bar) bar.style.width = `${pct}%`;
+
+      ['base', 'jungle', 'fossil'].forEach(s => {
+        const totalS = ALL_UNIQUE_CARDS.filter(c => c.set === s).length;
+        const ownedS = ALL_UNIQUE_CARDS.filter(c => c.set === s && (boosterSave.counts[c.setId] || 0) > 0).length;
+        const elId = s === 'base' ? 'colStatBase' : s === 'jungle' ? 'colStatJungle' : 'colStatFossil';
+        const el = document.getElementById(elId);
+        if (el) el.textContent = `${ownedS}/${totalS}`;
+      });
+    }
+    updateBoosterStatsUi();
+
+    function pickRandomDistinct(pool, count, excludeSetIds = new Set()) {
+      const candidates = pool.filter(c => !excludeSetIds.has(c.setId));
+      const shuffled = shuffle(candidates.length >= count ? candidates : pool);
+      const picked = [];
+      for (const c of shuffled) {
+        if (picked.length >= count) break;
+        if (!excludeSetIds.has(c.setId)) {
+          picked.push(c);
+          excludeSetIds.add(c.setId);
+        }
+      }
+      while (picked.length < count && shuffled.length > 0) {
+        picked.push(shuffled[picked.length % shuffled.length]);
+      }
+      return picked;
+    }
+
+    function generateBoosterPack(setKey) {
+      const setCards = ALL_UNIQUE_CARDS.filter(c => c.set === setKey);
+      // Prioriser les Pokémon & Dresseurs dans les communes (les énergies de base restent possibles mais rares)
+      const nonEnergyCommons = setCards.filter(c => c.rarity === 'common' && c.category !== 'Énergie');
+      const allCommons = setCards.filter(c => c.rarity === 'common');
+      const commonsPool = nonEnergyCommons.length >= 5 ? nonEnergyCommons : allCommons;
+      const uncommonsPool = setCards.filter(c => c.rarity === 'uncommon');
+      const raresPool = setCards.filter(c => c.rarity === 'rare');
+      const holosPool = setCards.filter(c => c.rarity === 'holo');
+
+      const used = new Set();
+      const isGodPack = Math.random() < 0.005; // 0.5% God Pack (5 Holo !)
+      let rawCards = [];
+
+      if (isGodPack) {
+        rawCards = pickRandomDistinct(holosPool, 5, used);
+      } else {
+        // Cartes 1, 2, 3 : 100 % Communes (sans doublon)
+        const c123 = pickRandomDistinct(commonsPool, 3, used);
+
+        // Carte 4 (Slot Surprise) : 85 % Peu Commune, 12 % Rare, 3 % Rare Holo
+        const r4 = Math.random();
+        const pool4 = r4 < 0.03 ? holosPool : r4 < 0.15 ? raresPool : uncommonsPool;
+        const [c4] = pickRandomDistinct(pool4, 1, used);
+
+        // Carte 5 (Slot Climax) : 33.3 % Rare Holo (1 pack sur 3), 46.7 % Rare, 20 % Peu Commune
+        const r5 = Math.random();
+        const pool5 = r5 < 0.3334 ? holosPool : r5 < 0.8000 ? raresPool : uncommonsPool;
+        const [c5] = pickRandomDistinct(pool5, 1, used);
+
+        rawCards = [...c123, c4, c5];
+      }
+
+      // Enregistrer immédiatement dans la collection & marquer les NOUVELLES cartes
+      boosterSave.packsOpened += 1;
+      const packCards = rawCards.map((c, idx) => {
+        const prevCount = boosterSave.counts[c.setId] || 0;
+        boosterSave.counts[c.setId] = prevCount + 1;
+        if (c.rarity === 'holo') boosterSave.holosPulled += 1;
+        return {
+          ...c,
+          slotIndex: idx + 1,
+          isNew: prevCount === 0,
+          ownedAfter: prevCount + 1
+        };
+      });
+      saveBoosterData();
+      return { setKey, isGodPack, cards: packCards };
+    }
+
+    // État de l'ouverture en cours
+    let activeBooster = null;
+
+    function openBoosterModal(setKey = 'base') {
+      launchBoosterPack(setKey);
+    }
+
+    function closeBoosterOpenModal() {
+      document.getElementById('boosterOpenModal').classList.add('hidden');
+      activeBooster = null;
+      updateBoosterStatsUi();
+    }
+
+    function spawnBoosterSparks(cx, cy, count = 20, rainbow = false) {
+      const palette = rainbow
+        ? ['#fde047', '#f472b6', '#38bdf8', '#4ade80', '#c084fc', '#ffffff']
+        : ['#fde047', '#fbbf24', '#f59e0b', '#ffffff'];
+      for (let i = 0; i < count; i++) {
+        const sp = document.createElement('div');
+        sp.className = 'spark';
+        const size = 5 + Math.random() * 6;
+        sp.style.width = `${size}px`;
+        sp.style.height = `${size}px`;
+        sp.style.background = palette[i % palette.length];
+        sp.style.boxShadow = `0 0 10px ${palette[i % palette.length]}`;
+        sp.style.left = `${cx}px`;
+        sp.style.top = `${cy}px`;
+        sp.style.zIndex = '99';
+        document.body.appendChild(sp);
+        const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+        const dist = 55 + Math.random() * 115;
+        sp.animate([
+          { transform: 'translate(-50%, -50%) scale(1.2)', opacity: 1 },
+          { transform: `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px) scale(0.1)`, opacity: 0 }
+        ], { duration: 620 + Math.random() * 350, easing: 'cubic-bezier(.1,.85,.25,1)' }).finished.then(() => sp.remove());
+      }
+    }
+
+    function launchBoosterPack(setKey = 'base') {
+      const meta = BOOSTER_SETS[setKey] || BOOSTER_SETS.base;
+      const packData = generateBoosterPack(meta.key);
+      activeBooster = {
+        meta,
+        ...packData,
+        phase: 'sealed', // 'sealed' | 'revealing' | 'summary'
+        currentIdx: 0,
+        currentFlipped: false,
+        tearProgress: 0
+      };
+
+      const modal = document.getElementById('boosterOpenModal');
+      document.getElementById('boosterSetBadge').textContent = `${meta.name}`;
+      document.getElementById('boosterStepPill').textContent = `Sachet scellé · 5 Cartes`;
+      document.getElementById('boosterSkipBtn').classList.add('hidden');
+      modal.classList.remove('hidden');
+
+      renderSealedBoosterStage();
+    }
+
+    function renderSealedBoosterStage() {
+      if (!activeBooster) return;
+      const { meta } = activeBooster;
+      const stage = document.getElementById('boosterStageContainer');
+      const footer = document.getElementById('boosterFooterZone');
+
+      stage.innerHTML = `
+        <div class="flex flex-col items-center justify-center gap-4">
+          <div class="booster-pack-wrap relative flex items-center justify-center" id="foilPackWrap">
+            <!-- Ligne de découpe glissable (Swipe ou Clic) -->
+            <div id="tearGuideLine" class="tear-guide-line" title="Glisse ou touche pour déchirer le booster">
+              <div class="tear-dashes">
+                <div id="tearProgressFill" class="tear-progress-fill"></div>
+              </div>
+              <span id="tearScissorIcon" class="absolute -left-2 text-lg drop-shadow-[0_0_8px_#facc15] transition-transform">✂️</span>
+            </div>
+
+            <div id="foilPackEl" class="booster-foil overflow-hidden flex flex-col justify-between border-2 border-white/30" style="background:${meta.bgGrad}; --pack-glow:${meta.glow}">
+              <!-- Partie haute détachable (languette aluminium) -->
+              <div id="boosterTopStrip" class="booster-top-strip border-b border-dashed border-yellow-300/70" style="background:${meta.bgGrad}">
+                <div class="booster-crimp w-full"></div>
+                <div class="px-3 py-1.5 flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-yellow-200">
+                  <span>Wizards 1999</span>
+                  <span>5 Cartes FR</span>
+                </div>
+              </div>
+
+              <!-- Corps du sachet -->
+              <div class="mt-14 px-3 flex-1 flex flex-col items-center justify-between pb-2 relative z-10">
+                <div class="text-center">
+                  <div class="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-black/45 text-yellow-300 border border-yellow-400/40 inline-block">
+                    JCC Pokémon · Édition 1999
+                  </div>
+                  <div class="font-black text-lg text-white tracking-tight drop-shadow mt-1">${meta.short.toUpperCase()}</div>
+                  <div class="text-[9.5px] text-slate-200/90 font-semibold">${meta.subtitle}</div>
+                </div>
+
+                <!-- Éventail des 3 cartes phares sur le sachet -->
+                <div class="relative w-36 h-36 flex items-center justify-center my-1">
+                  <img src="${meta.heroImgs[1]}" alt="" class="w-20 aspect-[63/88] rounded-md object-cover shadow-lg border border-white/30 absolute -left-1 top-3 -rotate-12" />
+                  <img src="${meta.heroImgs[2]}" alt="" class="w-20 aspect-[63/88] rounded-md object-cover shadow-lg border border-white/30 absolute -right-1 top-3 rotate-12" />
+                  <img src="${meta.heroImgs[0]}" alt="" class="w-24 aspect-[63/88] rounded-lg object-cover shadow-2xl border-2 border-yellow-300 relative z-10" />
+                </div>
+
+                <div class="w-full text-center">
+                  <span class="text-[9px] font-mono font-bold px-2.5 py-0.5 rounded bg-black/50 text-amber-200 border border-white/15">
+                    5 CARTES DE COLLECTION
+                  </span>
+                </div>
+              </div>
+
+              <!-- Soudure basse aluminium -->
+              <div class="booster-crimp w-full"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      footer.innerHTML = `
+        <div class="text-center space-y-2">
+          <div class="text-xs sm:text-sm font-extrabold text-yellow-300 animate-pulse">
+            👉 Glisse sur les pointillés dorés (ou touche le sachet) pour déchirer !
+          </div>
+          <div class="flex items-center justify-center gap-2">
+            <button onclick="completeBoosterRip()" class="btn-gold px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg">
+              ✂️ Déchirer le Booster
+            </button>
+          </div>
+        </div>
+      `;
+
+      initBoosterTearInteraction();
+    }
+
+    function initBoosterTearInteraction() {
+      const wrap = document.getElementById('foilPackWrap');
+      const packEl = document.getElementById('foilPackEl');
+      const fillEl = document.getElementById('tearProgressFill');
+      const scissorEl = document.getElementById('tearScissorIcon');
+      if (!wrap || !packEl) return;
+
+      let tearing = false;
+      let startX = 0;
+      let lastTickPct = 0;
+
+      const updateProgress = (clientX, clientY) => {
+        const rect = packEl.getBoundingClientRect();
+        const relX = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        const pct = Math.round(relX * 100);
+        if (pct > activeBooster.tearProgress) {
+          activeBooster.tearProgress = pct;
+          if (fillEl) fillEl.style.width = `${pct}%`;
+          if (scissorEl) scissorEl.style.left = `calc(${pct}% - 8px)`;
+          if (pct - lastTickPct >= 14) {
+            lastTickPct = pct;
+            sfx('tearTick');
+            buzz(6);
+            spawnBoosterSparks(clientX, rect.top + 52, 3, false);
+          }
+        }
+        if (activeBooster.tearProgress >= 82) {
+          tearing = false;
+          completeBoosterRip();
+        }
+      };
+
+      wrap.addEventListener('pointerdown', (e) => {
+        if (!activeBooster || activeBooster.phase !== 'sealed') return;
+        tearing = true;
+        startX = e.clientX;
+        try { wrap.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+
+      wrap.addEventListener('pointermove', (e) => {
+        if (!activeBooster || activeBooster.phase !== 'sealed') return;
+        const rect = packEl.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        packEl.style.transform = `rotateY(${px * 20}deg) rotateX(${-py * 16}deg) scale(1.03)`;
+        if (tearing && Math.abs(e.clientX - startX) > 8) {
+          updateProgress(e.clientX, e.clientY);
+        }
+      });
+
+      const finishPointer = (e) => {
+        if (!tearing || !activeBooster || activeBooster.phase !== 'sealed') return;
+        tearing = false;
+        // Si simple clic/tap rapide ou découpe déjà bien entamée -> ouvrir !
+        if (Math.abs(e.clientX - startX) < 14 || activeBooster.tearProgress >= 35) {
+          completeBoosterRip();
+        }
+      };
+      wrap.addEventListener('pointerup', finishPointer);
+      wrap.addEventListener('pointercancel', () => { tearing = false; });
+    }
+
+    function completeBoosterRip() {
+      if (!activeBooster || activeBooster.phase !== 'sealed') return;
+      activeBooster.phase = 'ripping';
+
+      const topStrip = document.getElementById('boosterTopStrip');
+      const packEl = document.getElementById('foilPackEl');
+      const guide = document.getElementById('tearGuideLine');
+      const fillEl = document.getElementById('tearProgressFill');
+
+      if (fillEl) fillEl.style.width = '100%';
+      if (guide) guide.style.opacity = '0';
+      if (topStrip) topStrip.classList.add('ripped');
+
+      const rect = packEl ? packEl.getBoundingClientRect() : { left: innerWidth / 2 - 100, top: innerHeight / 2 - 150, width: 200, height: 300 };
+      sfx('rip');
+      buzz([25, 45, 30]);
+      spawnBoosterSparks(rect.left + rect.width / 2, rect.top + 55, 28, activeBooster.isGodPack);
+
+      setTimeout(() => {
+        if (packEl) packEl.classList.add('booster-body-opened');
+      }, 160);
+
+      setTimeout(() => {
+        if (!activeBooster) return;
+        activeBooster.phase = 'revealing';
+        activeBooster.currentIdx = 0;
+        activeBooster.currentFlipped = false;
+        renderBoosterCardStackStage();
+      }, 680);
+    }
+
+    function renderBoosterCardStackStage() {
+      if (!activeBooster) return;
+      const { cards, isGodPack } = activeBooster;
+      const stage = document.getElementById('boosterStageContainer');
+      const skipBtn = document.getElementById('boosterSkipBtn');
+      if (skipBtn) skipBtn.classList.remove('hidden');
+
+      stage.innerHTML = `
+        <div id="boosterGodRays" class="god-rays hidden"></div>
+        ${isGodPack ? `<div class="mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 via-yellow-400 to-cyan-400 text-slate-950 font-black text-xs uppercase tracking-widest shadow-lg animate-bounce">🌟 GOD PACK 1999 (5 HOLO !) 🌟</div>` : ''}
+        <div class="reveal-stage my-2" id="boosterRevealStage">
+          ${cards.map((c, idx) => {
+            const offset = idx * 3;
+            const isHolo = c.rarity === 'holo';
+            return `
+              <div class="pack-card-3d" id="packCard3d-${idx}" data-cidx="${idx}"
+                   style="z-index:${20 - idx}; transform: translateY(${offset}px) scale(${1 - idx * 0.022});">
+                <!-- Dos de carte -->
+                <div class="card-face card-face-back border border-white/20"></div>
+                <!-- Face avant de la carte -->
+                <div class="card-face card-face-front">
+                  <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover rounded-[14px]" draggable="false" />
+                  ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
+                  ${c.isNew ? '<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-lg">NOUVEAU !</span>' : ''}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div id="boosterCurrentCardInfo" class="min-h-[64px] flex flex-col items-center justify-center text-center mt-3 z-10"></div>
+      `;
+
+      // Écouteurs d'interaction sur la pile de 5 cartes (clic, toucher ou swipe)
+      const revStage = document.getElementById('boosterRevealStage');
+      let pStart = null;
+      revStage.addEventListener('pointerdown', (e) => {
+        pStart = { x: e.clientX, y: e.clientY };
+      });
+      revStage.addEventListener('pointermove', (e) => {
+        if (!activeBooster || activeBooster.phase !== 'revealing' || !activeBooster.currentFlipped) return;
+        const topEl = document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
+        if (!topEl) return;
+        const r = revStage.getBoundingClientRect();
+        const px = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+        const py = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+        topEl.style.setProperty('--hx', `${px * 100}%`);
+        topEl.style.setProperty('--hy', `${py * 100}%`);
+        const tiltY = 180 + (px - 0.5) * 22;
+        const tiltX = (0.5 - py) * 18;
+        topEl.style.transform = `rotateY(${tiltY}deg) rotateX(${tiltX}deg) scale(1.05)`;
+      });
+      revStage.addEventListener('pointerup', (e) => {
+        if (!pStart) return;
+        pStart = null;
+        advanceBoosterCardStep();
+      });
+
+      updateBoosterStackVisuals();
+    }
+
+    function updateBoosterStackVisuals() {
+      if (!activeBooster || activeBooster.phase !== 'revealing') return;
+      const { cards, currentIdx, currentFlipped } = activeBooster;
+      const card = cards[currentIdx];
+      if (!card) return;
+
+      const rMeta = RARITY_META[card.rarity] || RARITY_META.common;
+      document.getElementById('boosterStepPill').textContent = `Carte ${currentIdx + 1} / ${cards.length}`;
+
+      const topEl = document.getElementById(`packCard3d-${currentIdx}`);
+      const raysEl = document.getElementById('boosterGodRays');
+      const infoEl = document.getElementById('boosterCurrentCardInfo');
+      const footer = document.getElementById('boosterFooterZone');
+
+      if (!currentFlipped) {
+        // Avant retournement : halo d'indice sur les cartes rares/holo (surtout cartes 4 & 5)
+        if (topEl) {
+          if (card.rarity === 'holo') {
+            topEl.style.boxShadow = '0 0 36px rgba(244,114,182,0.75), 0 0 18px rgba(250,204,21,0.8)';
+          } else if (card.rarity === 'rare') {
+            topEl.style.boxShadow = '0 0 26px rgba(250,204,21,0.55)';
+          }
+        }
+        if (raysEl) raysEl.classList.toggle('hidden', card.rarity !== 'holo');
+        if (infoEl) {
+          const slotHint = currentIdx === 4
+            ? '🔥 Carte 5/5 (Slot Climax Rare / Holo !)'
+            : currentIdx === 3
+            ? '✨ Carte 4/5 (Slot Peu Commune / Surprise)'
+            : `Carte ${currentIdx + 1}/5`;
+          infoEl.innerHTML = `
+            <div class="text-xs font-extrabold text-amber-200">${slotHint}</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Touche la carte pour la retourner !</div>
+          `;
+        }
+        if (footer) {
+          footer.innerHTML = `
+            <button onclick="advanceBoosterCardStep()" class="btn-gold px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg">
+              🔄 Retourner la carte (${currentIdx + 1}/5)
+            </button>
+          `;
+        }
+      } else {
+        // Carte retournée !
+        if (topEl) {
+          topEl.classList.add('flipped', rMeta.glowCls);
+        }
+        if (raysEl) raysEl.classList.toggle('hidden', card.rarity !== 'holo' && card.rarity !== 'rare');
+
+        if (infoEl) {
+          infoEl.innerHTML = `
+            <div class="flex items-center justify-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-black border ${rMeta.badgeCls}">
+                ${rMeta.symbol} ${rMeta.label}
+              </span>
+              <span class="font-black text-base text-white">${card.name}</span>
+              <span class="text-[11px] font-mono text-slate-300">(×${card.ownedAfter})</span>
+            </div>
+            <div class="text-[11px] text-slate-300 mt-1">
+              ${card.Idx === 4 ? '' : ' incline la carte pour admirer le reflet · touche pour continuer'}
+            </div>
+          `;
+        }
+        if (footer) {
+          const isLast = currentIdx >= cards.length - 1;
+          footer.innerHTML = `
+            <button onclick="advanceBoosterCardStep()" class="btn-gold px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg">
+              ${isLast ? '🎉 Voir le récapitulatif des 5 cartes ▶' : `Carte suivante (${currentIdx + 2}/5) ▶`}
+            </button>
+          `;
+        }
+      }
+    }
+
+    function advanceBoosterCardStep() {
+      if (!activeBooster || activeBooster.phase !== 'revealing') return;
+      const { cards, currentIdx, currentFlipped } = activeBooster;
+      const card = cards[currentIdx];
+      if (!card) return;
+
+      if (!currentFlipped) {
+        // 1. Retourner la carte courante avec effets adaptés à sa rareté
+        activeBooster.currentFlipped = true;
+        const stageEl = document.getElementById('boosterRevealStage');
+        const r = stageEl ? stageEl.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+
+        sfx('cardFlip');
+        if (card.rarity === 'holo') {
+          sfx('holo');
+          buzz([35, 50, 45, 70]);
+          spawnBoosterSparks(cx, cy, 38, true);
+          if (card.dex) playPokemonCry(card.dex);
+        } else if (card.rarity === 'rare') {
+          sfx('rare');
+          buzz([25, 30, 25]);
+          spawnBoosterSparks(cx, cy, 22, false);
+          if (card.dex) playPokemonCry(card.dex);
+        } else if (card.rarity === 'uncommon') {
+          sfx('uncommon');
+          buzz(16);
+          if (card.dex) playPokemonCry(card.dex);
+        } else {
+          buzz(8);
+        }
+        updateBoosterStackVisuals();
+      } else {
+        // 2. Passer à la carte suivante ou à l'écran récapitulatif
+        const topEl = document.getElementById(`packCard3d-${currentIdx}`);
+        if (topEl) topEl.classList.add('dismissed');
+        sfx('swoosh');
+
+        if (currentIdx + 1 < cards.length) {
+          activeBooster.currentIdx += 1;
+          activeBooster.currentFlipped = false;
+          // Remettre la nouvelle carte du dessus à l'échelle 1
+          const nextEl = document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
+          if (nextEl) nextEl.style.transform = 'translateY(0px) scale(1)';
+          updateBoosterStackVisuals();
+        } else {
+          setTimeout(() => renderBoosterSummaryStage(), 260);
+        }
+      }
+    }
+
+    function revealAllBoosterCards() {
+      if (!activeBooster) return;
+      const hasHolo = activeBooster.cards.some(c => c.rarity === 'holo');
+      if (hasHolo) sfx('holo'); else sfx('rare');
+      buzz(25);
+      renderBoosterSummaryStage();
+    }
+
+    function renderBoosterSummaryStage() {
+      if (!activeBooster) return;
+      activeBooster.phase = 'summary';
+      const { meta, cards, isGodPack } = activeBooster;
+
+      document.getElementById('boosterStepPill').textContent = `Récapitulatif · 5 Cartes obtenues`;
+      document.getElementById('boosterSkipBtn').classList.add('hidden');
+
+      const stage = document.getElementById('boosterStageContainer');
+      const footer = document.getElementById('boosterFooterZone');
+
+      const hasHolo = cards.some(c => c.rarity === 'holo');
+
+      stage.innerHTML = `
+        <div class="w-full flex flex-col items-center gap-3 relative">
+          ${hasHolo ? '<div class="god-rays"></div>' : ''}
+          <div class="text-center z-10">
+            <div class="text-xs font-black uppercase tracking-widest text-yellow-300">
+              ${isGodPack ? '🌟 GOD PACK LÉGENDAIRE ! 🌟' : hasHolo ? '✨ TIRAGE HOLOGRAPHIQUE ! ✨' : '🎉 Booster ouvert !'}
+            </div>
+            <div class="text-[11px] text-slate-300 mt-0.5">Touche une carte pour l'examiner en HD</div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 w-full max-w-2xl z-10 px-1">
+            ${cards.map((c, idx) => {
+              const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
+              const isHolo = c.rarity === 'holo';
+              return `
+                <div onclick="showPreview({img:'${c.img}'}, 'touch'); previewSticky=true;"
+                     style="animation-delay:${idx * 85}ms"
+                     class="summary-card-in cursor-pointer rounded-xl p-1.5 bg-slate-900/95 border ${isHolo ? 'border-yellow-300 ring-2 ring-pink-400/70' : c.rarity === 'rare' ? 'border-yellow-400/80' : c.rarity === 'uncommon' ? 'border-emerald-400/60' : 'border-white/15'} flex flex-col items-center relative group hover:scale-105 transition">
+                  <div class="relative w-full aspect-[63/88] rounded-lg overflow-hidden">
+                    <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover" />
+                    ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
+                    ${c.isNew ? '<span class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-emerald-400 text-slate-950 font-black text-[8.5px] uppercase shadow">NOUVEAU</span>' : ''}
+                    <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/80 text-white font-mono font-bold text-[9px]">×${c.ownedAfter}</span>
+                  </div>
+                  <div class="mt-1.5 w-full flex items-center justify-between gap-1 px-0.5">
+                    <span class="text-[10px] font-extrabold text-white truncate">${c.name}</span>
+                    <span class="text-[9px] font-black px-1.5 py-0.5 rounded border shrink-0 ${rMeta.badgeCls}">${rMeta.symbol}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+
+      footer.innerHTML = `
+        <div class="flex flex-wrap items-center justify-center gap-2.5 w-full">
+          <button onclick="launchBoosterPack('${meta.key}')" class="btn-gold px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wide shadow-lg flex items-center gap-1.5">
+            <span>📦</span> Ouvrir un autre Booster ${meta.short}
+          </button>
+          <button onclick="closeBoosterOpenModal(); switchMenuTab('booster');" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-slate-200 hover:text-white">
+            🔄 Changer d'extension
+          </button>
+          <button onclick="closeBoosterOpenModal(); openCollectionModal('${meta.key}');" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:text-emerald-200">
+            📖 Voir ma Galerie
+          </button>
+        </div>
+      `;
+    }
+
+    let currentColFilterSet = 'all';
+    let currentColFilterRarity = 'all';
+
+    function openCollectionModal(filterSet = currentColFilterSet, filterRarity = currentColFilterRarity) {
+      currentColFilterSet = filterSet;
+      currentColFilterRarity = filterRarity;
       const box = document.getElementById('academyContent');
       const modalTitle = document.querySelector('#academyModal h3');
-      if (modalTitle) modalTitle.textContent = `📖 Collection Complète (${ALL_UNIQUE_CARDS.length} Cartes FR 1999)`;
-      const filtered = filterSet === 'all' ? ALL_UNIQUE_CARDS : ALL_UNIQUE_CARDS.filter(c => c.set === filterSet);
+      const ownedTotal = ALL_UNIQUE_CARDS.filter(c => (boosterSave.counts[c.setId] || 0) > 0).length;
+      if (modalTitle) modalTitle.textContent = `📖 Galerie 1999 (${ownedTotal}/${ALL_UNIQUE_CARDS.length} débloquées · ${ALL_UNIQUE_CARDS.length} Cartes HD)`;
+
+      const filtered = ALL_UNIQUE_CARDS.filter(c => {
+        if (filterSet !== 'all' && c.set !== filterSet) return false;
+        if (filterRarity === 'owned' && !(boosterSave.counts[c.setId] > 0)) return false;
+        if (filterRarity !== 'all' && filterRarity !== 'owned' && c.rarity !== filterRarity) return false;
+        return true;
+      });
+
       box.innerHTML = `
-        <div class="flex gap-1.5 mb-3 flex-wrap">
-          <button onclick="openCollectionModal('all')" class="px-2.5 py-1 rounded-lg text-xs font-bold ${filterSet==='all'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Toutes (${ALL_UNIQUE_CARDS.length})</button>
-          <button onclick="openCollectionModal('base')" class="px-2.5 py-1 rounded-lg text-xs font-bold ${filterSet==='base'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Set de Base (102)</button>
-          <button onclick="openCollectionModal('jungle')" class="px-2.5 py-1 rounded-lg text-xs font-bold ${filterSet==='jungle'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Jungle (64)</button>
-          <button onclick="openCollectionModal('fossil')" class="px-2.5 py-1 rounded-lg text-xs font-bold ${filterSet==='fossil'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Fossile (62)</button>
+        <div class="flex gap-1.5 mb-2 flex-wrap">
+          <button onclick="openCollectionModal('all', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='all'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Toutes (228)</button>
+          <button onclick="openCollectionModal('base', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='base'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Set de Base (102)</button>
+          <button onclick="openCollectionModal('jungle', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='jungle'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Jungle (64)</button>
+          <button onclick="openCollectionModal('fossil', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='fossil'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Fossile (62)</button>
         </div>
-        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[65dvh] overflow-y-auto p-1">
-          ${filtered.map(c => `
-            <div onclick="showPreview({img:'${c.img}'}, 'touch'); previewSticky=true;" class="cursor-pointer rounded-lg bg-slate-800/90 border border-white/15 hover:border-yellow-400 p-1 flex flex-col items-center">
-              <img src="${c.img}" loading="lazy" alt="${c.name}" class="w-full rounded object-contain aspect-[63/88]" />
-              <div class="text-[10px] font-bold text-white mt-1 truncate w-full text-center">${c.name}</div>
-            </div>
-          `).join('')}
+        <div class="flex gap-1.5 mb-3 flex-wrap">
+          <button onclick="openCollectionModal('${filterSet}', 'all')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='all'?'bg-amber-300 text-slate-950':'bg-white/5 text-slate-300'}">Toutes raretés</button>
+          <button onclick="openCollectionModal('${filterSet}', 'owned')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='owned'?'bg-emerald-400 text-slate-950':'bg-white/5 text-emerald-300'}">Obtenues (${ownedTotal})</button>
+          <button onclick="openCollectionModal('${filterSet}', 'holo')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='holo'?'bg-pink-400 text-slate-950':'bg-white/5 text-pink-300'}">✨ Holo (47)</button>
+          <button onclick="openCollectionModal('${filterSet}', 'rare')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='rare'?'bg-yellow-400 text-slate-950':'bg-white/5 text-yellow-200'}">★ Rare</button>
+          <button onclick="openCollectionModal('${filterSet}', 'uncommon')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='uncommon'?'bg-emerald-400 text-slate-950':'bg-white/5 text-emerald-200'}">◆ Peu Com.</button>
+          <button onclick="openCollectionModal('${filterSet}', 'common')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='common'?'bg-slate-300 text-slate-950':'bg-white/5 text-slate-300'}">● Commune</button>
+        </div>
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[60dvh] overflow-y-auto p-1">
+          ${filtered.map(c => {
+            const count = boosterSave.counts[c.setId] || 0;
+            const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
+            const isHolo = c.rarity === 'holo';
+            return `
+              <div onclick="showPreview({img:'${c.img}'}, 'touch'); previewSticky=true;" class="cursor-pointer rounded-lg bg-slate-800/90 border ${count > 0 ? (isHolo ? 'border-pink-400/80' : 'border-yellow-400/50') : 'border-white/10 opacity-80'} hover:border-yellow-400 p-1 flex flex-col items-center relative">
+                <div class="relative w-full aspect-[63/88] rounded overflow-hidden">
+                  <img src="${c.img}" loading="lazy" alt="${c.name}" class="w-full h-full object-contain" />
+                  ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
+                  ${count > 0 ? `<span class="absolute bottom-1 right-1 px-1.5 py-0.2 rounded bg-emerald-500 text-slate-950 font-mono font-black text-[9px] shadow">×${count}</span>` : ''}
+                </div>
+                <div class="w-full flex items-center justify-between gap-1 mt-1 px-0.5">
+                  <span class="text-[10px] font-bold text-white truncate">${c.name}</span>
+                  <span class="text-[9px] font-black text-yellow-300 shrink-0" title="${rMeta.label}">${rMeta.symbol}</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       `;
       document.getElementById('academyModal').classList.remove('hidden');
