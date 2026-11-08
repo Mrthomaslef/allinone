@@ -117,7 +117,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'cb72abb-1794173581';
+      var BUILD = '890ea65-1794173760';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -188,15 +188,21 @@
       color: #f8fafc;
     }
     @media all and (display-mode: standalone), all and (display-mode: fullscreen) {
-      html, body {
+      html {
         height: 100vh !important;
         min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
       }
+      body {
+        height: 100dvh !important;
+        min-height: 100dvh !important;
+        max-height: 100dvh !important;
+      }
     }
-    html.ios-standalone, html.ios-standalone body {
+    html.ios-standalone {
       height: 100vh !important;
       min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
     }
+    html.ios-standalone body,
     html.ios-standalone body.in-battle,
     body.in-battle {
       height: 100dvh !important;
@@ -312,8 +318,11 @@
     /* Mode application (PWA plein écran) : respecter encoche / barre d'état sans bande vide en bas */
     body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
     #menuScreen {
-      padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
-      padding-bottom: calc(4.75rem + min(12px, env(safe-area-inset-bottom, 0px))) !important;
+      min-height: 0;
+      -webkit-overflow-scrolling: touch;
+      padding-top: calc(0.5rem + env(safe-area-inset-top, 0px)) !important;
+      padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px)) !important;
+      scroll-padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
     }
     #cardModal, #coinModal, #pickerModal, #academyModal, #boosterOpenModal, #pseudoModal {
       padding-top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
@@ -2421,9 +2430,9 @@
     <!-- =============================================================== -->
     <!-- ONGLET ACCUEIL : BOOSTERS 1999 (mise en page « hub » mobile)    -->
     <!-- =============================================================== -->
-    <div id="viewBooster" class="w-full space-y-3">
+    <div id="viewBooster" class="w-full space-y-2.5">
       <!-- 1. Grand panneau : les 3 illustrations de booster du set actif côte à côte -->
-      <div id="hubPackPanel" class="hub-pack-panel relative w-full rounded-[28px] px-2.5 sm:px-4 pt-10 pb-8 transition-colors duration-300">
+      <div id="hubPackPanel" class="hub-pack-panel relative w-full rounded-[28px] px-2.5 sm:px-4 pt-9 pb-6 transition-colors duration-300">
         <div class="absolute top-2.5 left-3 right-2.5 flex items-center justify-between gap-1.5">
           <div class="flex items-center gap-1.5 min-w-0">
             <span id="hubActiveSetBadge" class="text-[10.5px] font-black px-2 py-0.5 rounded-lg bg-amber-100 border border-amber-300 text-amber-900 truncate">Set de Base · 102 cartes</span>
@@ -2431,7 +2440,7 @@
           </div>
         </div>
 
-        <div id="hubPacksGrid" class="grid grid-cols-3 gap-2.5 sm:gap-3.5 items-end py-1">
+        <div id="hubPacksGrid" class="max-w-[336px] sm:max-w-[368px] mx-auto grid grid-cols-3 gap-2.5 sm:gap-3.5 items-end py-0.5">
           <!-- Illustration 1 : Tortank -->
           <button onclick="launchBoosterPack('base', 'tortank')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
@@ -2465,7 +2474,7 @@
         </div>
 
         <!-- Sélecteur direct d'extension (Set de Base · Jungle · Fossile) -->
-        <div class="mt-2.5 grid grid-cols-3 gap-1.5">
+        <div class="mt-2 grid grid-cols-3 gap-1.5">
           <button id="hubSetBtn-base" onclick="selectHubBoosterSet('base')" class="py-1 px-2 rounded-xl text-[10.5px] font-black border transition bg-amber-100 text-amber-900 border-amber-400 shadow-sm flex items-center justify-center gap-1 active:scale-95">
             <span>Set de Base</span>
           </button>
@@ -2478,22 +2487,22 @@
         </div>
 
         <!-- Jauge des boosters gratuits + recharge -->
-        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-          <div class="hub-pill flex items-center gap-1.5 px-3 py-1.5 rounded-full">
+        <div class="absolute -bottom-3.5 left-1/2 -translate-x-1/2 flex items-center gap-2">
+          <div class="hub-pill flex items-center gap-1.5 px-3 py-1 rounded-full">
             <span id="hubFreePips" class="flex items-center gap-1.5">
               <span class="hub-pip on"></span><span class="hub-pip on"></span><span class="hub-pip on"></span>
             </span>
             <span id="boosterFreeCountBadge" class="ml-1 px-2 py-0.5 rounded-lg bg-sky-500 text-white font-black text-[10.5px] whitespace-nowrap">MAX.</span>
           </div>
-          <div class="hub-pill flex items-center gap-1 px-2.5 py-1.5 rounded-full" title="Recharge des boosters gratuits">
+          <div class="hub-pill flex items-center gap-1 px-2.5 py-1 rounded-full" title="Recharge des boosters gratuits">
             <span id="hubCountdown" class="text-[11px] font-mono font-black text-slate-700">—</span>
           </div>
         </div>
       </div>
 
       <!-- 2. Tuile Collection -->
-      <div class="pt-3">
-        <div onclick="openCollectionModal('all')" class="hub-tile cursor-pointer relative rounded-2xl pt-6 pb-2.5 px-3 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
+      <div class="pt-2.5">
+        <div onclick="openCollectionModal('all')" class="hub-tile cursor-pointer relative rounded-2xl pt-4 pb-2 px-3 flex flex-col items-center gap-1 active:scale-[.98] transition">
           <span id="boosterHoloCountBadge" class="hub-tag absolute -top-2 left-1.5 bg-pink-500 text-white">0 Holo</span>
           <span class="text-[13px] font-black text-slate-900">Collection</span>
           <span id="boosterColCountText" class="text-[10.5px] font-mono font-bold text-emerald-700">0 / 228 (0%)</span>
@@ -2510,7 +2519,7 @@
 
       <!-- 3. Tuile Mode Aventure -->
       <div class="w-full space-y-2">
-        <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
+        <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <div class="flex -space-x-2 shrink-0">
               <img src="assets/trainers/hanae.webp" style="background:#e0f2fe;object-position:top" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
@@ -2524,23 +2533,23 @@
       </div>
 
       <!-- 4. Taux de rareté (repliable) -->
-      <details id="boosterRatesBox" class="w-full p-3 rounded-2xl tcg-card-panel text-xs group">
+      <details id="boosterRatesBox" ontoggle="if(this.open){setTimeout(()=>{const m=document.getElementById('menuScreen');if(m)m.scrollTo({top:m.scrollHeight,behavior:'smooth'});},40)}" class="w-full px-3 py-2.5 rounded-2xl tcg-card-panel text-xs group">
         <summary class="cursor-pointer list-none flex items-center justify-between gap-2">
           <span class="font-black text-slate-800 uppercase tracking-wider text-[11px]">Taux de rareté (5 cartes)</span>
           <span class="text-[10px] font-mono text-pink-600 font-bold">God Pack 0,5 % <span class="text-slate-400 group-open:rotate-180 inline-block transition">▼</span></span>
         </summary>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] mt-2">
-          <div class="p-2 rounded-xl bg-slate-50 border border-slate-200">
-            <div class="font-bold text-slate-800">Cartes 1, 2 &amp; 3</div>
-            <div class="text-slate-500 text-[10px] mt-0.5">● <strong class="text-slate-900">100 % Commune</strong> (sans doublon dans le pack)</div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 text-[11px] mt-2">
+          <div class="px-2.5 py-1.5 sm:p-2 rounded-xl bg-slate-50 border border-slate-200 flex sm:block items-baseline justify-between gap-2">
+            <div class="font-bold text-slate-800 shrink-0">Cartes 1, 2 &amp; 3</div>
+            <div class="text-slate-500 text-[10px] sm:mt-0.5 text-right sm:text-left">● <strong class="text-slate-900">100 % Commune</strong> (sans doublon)</div>
           </div>
-          <div class="p-2 rounded-xl bg-emerald-50/60 border border-emerald-200">
-            <div class="font-bold text-emerald-800">Carte 4 (Slot Surprise)</div>
-            <div class="text-slate-600 text-[10px] mt-0.5">◆ <strong class="text-emerald-700">85 % Peu Commune</strong> · ★ 12 % Rare · 3 % Holo</div>
+          <div class="px-2.5 py-1.5 sm:p-2 rounded-xl bg-emerald-50/60 border border-emerald-200 flex sm:block items-baseline justify-between gap-2">
+            <div class="font-bold text-emerald-800 shrink-0">Carte 4 (Surprise)</div>
+            <div class="text-slate-600 text-[10px] sm:mt-0.5 text-right sm:text-left">◆ <strong class="text-emerald-700">85 % Peu Com.</strong> · ★ 12 % Rare · 3 % Holo</div>
           </div>
-          <div class="p-2 rounded-xl bg-gradient-to-br from-amber-50 to-pink-50 border border-amber-200">
-            <div class="font-bold text-amber-900">Carte 5 (Slot Climax)</div>
-            <div class="text-slate-600 text-[10px] mt-0.5"><strong class="text-pink-600">33,3 % Rare Holo</strong> · ★ <strong class="text-amber-700">46,7 % Rare</strong> · ◆ 20 % Peu Com.</div>
+          <div class="px-2.5 py-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-amber-50 to-pink-50 border border-amber-200 flex sm:block items-baseline justify-between gap-2">
+            <div class="font-bold text-amber-900 shrink-0">Carte 5 (Climax)</div>
+            <div class="text-slate-600 text-[10px] sm:mt-0.5 text-right sm:text-left"><strong class="text-pink-600">33,3 % Holo</strong> · ★ <strong class="text-amber-700">46,7 % Rare</strong> · ◆ 20 %</div>
           </div>
         </div>
       </details>
