@@ -15,11 +15,11 @@ GITHUB_USERNAME = "Mrthomaslef"
 KNOWN_METADATA = {
     "pokemon-play-it": {
         "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
-        "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
+        "subtitle": "JCC Pokémon 1999 sur mobile · 228 cartes FR, Boosters, Création de Deck (mode auto 30/60 cartes, Énergies illimitées), Duel IA, Multijoueur & Tutoriel Juliette",
         "category": "games-family",
         "emoji": "🃏",
         "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
-        "logoUrl": "pokemon-play-it/assets/icon.svg?v=7",
+        "logoUrl": "pokemon-play-it/assets/icon.svg?v=8",
     },
     "uncensored": {
         "title": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI",
@@ -619,10 +619,10 @@ def main():
             {
                 "id": "pokemon-play-it",
                 "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
-                "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
+                "subtitle": "JCC Pokémon 1999 sur mobile · 228 cartes FR, Boosters, Création de Deck (mode auto 30/60 cartes, Énergies illimitées), Duel IA, Multijoueur & Tutoriel Juliette",
                 "category": "games-family",
                 "emoji": "🃏",
-                "logoUrl": "pokemon-play-it/assets/icon.svg?v=7",
+                "logoUrl": "pokemon-play-it/assets/icon.svg?v=8",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/pokemon-play-it",
                 "pushedAt": output[0]["pushedAt"] if output else None,

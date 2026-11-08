@@ -22142,7 +22142,9 @@ const TYPE_EMOJI = {
       showGameToast(html);
       const t = document.getElementById('gameToast');
       const ed = document.getElementById('deckEditor');
-      if (t) t.style.top = ed && !ed.classList.contains('hidden') ? 'calc(100% - 150px - env(safe-area-inset-bottom))' : '13%';
+      if (!t) return;
+      if (ed && !ed.classList.contains('hidden')) t.style.setProperty('top', 'calc(100% - 150px - env(safe-area-inset-bottom))', 'important');
+      else t.style.removeProperty('top');
     }
 
     // ---------- Vue liste (onglet « Decks » du menu)
@@ -22205,7 +22207,12 @@ const TYPE_EMOJI = {
       `;
     }
 
-    function createEmptyDeck(size = 60) {
+    function createEmptyDeck(size) {
+      if (!size) {
+        const owned = dbOwnedMap();
+        const pokeCopies = Object.keys(owned).filter((id) => DB_CARD[id].category === 'Pokémon').reduce((n, id) => n + Math.min(4, owned[id]), 0);
+        size = pokeCopies >= 16 ? 60 : 30;
+      }
       const d = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name: `Mon deck ${customDecks.length + 1}`, size, cards: {}, energy: {} };
       saveCustomDeck(d);
       openDeckEditor(d.id, 'add');
@@ -22382,9 +22389,9 @@ const TYPE_EMOJI = {
           </div>
         </div>
         <div class="flex gap-1 rounded-xl bg-white/5 p-1">
-          <button onclick="dbSetTab('deck')" class="db-tab ${dbTab === 'deck' ? 'on' : ''}">🃏 Mon deck</button>
-          <button onclick="dbSetTab('add')" class="db-tab ${dbTab === 'add' ? 'on' : ''}">＋ Ajouter</button>
-          <button onclick="dbSetTab('stats')" class="db-tab ${dbTab === 'stats' ? 'on' : ''}">📊 Conseils${a.tips.length ? ` <span class="ml-0.5 px-1.5 rounded-full bg-amber-400 text-slate-950 text-[10px]">${a.tips.length}</span>` : ''}</button>
+          <button onclick="dbSetTab('deck')" class="db-tab whitespace-nowrap ${dbTab === 'deck' ? 'on' : ''}">🃏 Mon deck</button>
+          <button onclick="dbSetTab('add')" class="db-tab whitespace-nowrap ${dbTab === 'add' ? 'on' : ''}">＋ Ajouter</button>
+          <button onclick="dbSetTab('stats')" class="db-tab relative whitespace-nowrap ${dbTab === 'stats' ? 'on' : ''}">💡 Conseils${a.tips.length ? `<span class="absolute -top-1 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-slate-950 text-[10.5px] leading-[18px]">${a.tips.length}</span>` : ''}</button>
         </div>`;
     }
 
