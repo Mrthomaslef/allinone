@@ -800,16 +800,10 @@
       </div>
 
       <!-- 1. TON DECK -->
-      <div class="w-full space-y-1">
-        <h2 class="text-[11px] font-black tracking-wider uppercase text-yellow-300 px-1">1. Ton Deck</h2>
-        <div id="quickPlayerGrid" class="grid grid-cols-5 gap-1.5"></div>
-      </div>
+      <div class="w-full space-y-2" id="quickPlayerGrid"></div>
 
       <!-- 2. DECK DE L'IA -->
-      <div class="w-full space-y-1">
-        <h2 class="text-[11px] font-black tracking-wider uppercase text-rose-300 px-1">2. Deck IA</h2>
-        <div id="quickAiGrid" class="grid grid-cols-6 gap-1.5"></div>
-      </div>
+      <div class="w-full space-y-2 pt-1" id="quickAiGrid"></div>
     </div>
 
     <!-- =============================================================== -->
@@ -15213,14 +15207,14 @@ const TYPE_EMOJI = {
       V2_ELECTRIK: { key: 'V2_ELECTRIK', name: 'Deck Électhor & Raichu', short: 'Électhor', cards: 60, prizes: 6, star: 'Électhor (90 PV)', desc: 'Pikachu → Raichu, Électhor, Voltali', img: 'https://assets.tcgdex.net/fr/base/base1/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/14/high.webp', grad: 'from-yellow-950/90 via-amber-950/85 to-slate-950/95', border: 'border-yellow-400/50' },
       V2_PSY: { key: 'V2_PSY', name: 'Deck Mewtwo & Alakazam', short: 'Mewtwo', cards: 60, prizes: 6, star: 'Mewtwo (60 PV)', desc: 'Abra → Alakazam, Mewtwo, Ectoplasma', img: 'https://assets.tcgdex.net/fr/base/base1/10/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/1/high.webp', grad: 'from-fuchsia-950/90 via-purple-950/85 to-slate-950/95', border: 'border-fuchsia-400/45' },
       V2_COMBAT: { key: 'V2_COMBAT', name: 'Deck Mackogneur', short: 'Mackogneur', cards: 60, prizes: 6, star: 'Mackogneur (100 PV)', desc: 'Machoc → Mackogneur, Grolem, Ptéra', img: 'https://assets.tcgdex.net/fr/base/base1/8/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', grad: 'from-stone-900/95 via-amber-950/85 to-slate-950/95', border: 'border-amber-500/45' },
-      COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Machopeur', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-amber-950/90 via-stone-900/90 to-slate-950/95', border: 'border-amber-500/45' },
-      EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Poissoroy', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-sky-950/90 via-slate-900/90 to-slate-950/95', border: 'border-sky-400/45' },
-      FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Reptincel', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-red-950/90 via-stone-900/90 to-slate-950/95', border: 'border-red-500/45' },
-      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Arcanin', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-purple-950/90 via-slate-900/90 to-slate-950/95', border: 'border-purple-400/45' }
+      COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Demi Combat', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-amber-950/90 via-stone-900/90 to-slate-950/95', border: 'border-amber-500/45' },
+      EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Demi Eau', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-sky-950/90 via-slate-900/90 to-slate-950/95', border: 'border-sky-400/45' },
+      FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Demi Feu', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-red-950/90 via-stone-900/90 to-slate-950/95', border: 'border-red-500/45' },
+      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Demi Xtra', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-purple-950/90 via-slate-900/90 to-slate-950/95', border: 'border-purple-400/45' }
     };
 
-    let quickPlayerDeck = 'V2_FEU';
-    let quickAiDeck = 'V2_EAU';
+    let quickPlayerDeck = 'COMBAT';
+    let quickAiDeck = 'EAU';
 
     function switchMenuTab(tab) {
       const isTuto = tab === 'tuto';
@@ -15259,40 +15253,78 @@ const TYPE_EMOJI = {
       const aGrid = document.getElementById('quickAiGrid');
       if (!pGrid || !aGrid) return;
 
-      const keys = Object.keys(DECK_META);
-      pGrid.innerHTML = keys.map((k) => {
+      const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
+      const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
+
+      const renderPlayerCard = (k) => {
         const d = DECK_META[k];
         const sel = quickPlayerDeck === k;
+        const isHalf = d.cards === 30;
         return `
-          <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl bg-slate-900/90 border ${sel ? 'border-yellow-300 ring-2 ring-yellow-400 bg-yellow-500/15' : 'border-white/10 hover:border-white/30 opacity-80 hover:opacity-100'} flex flex-col items-center gap-1 transition">
+          <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl bg-gradient-to-br ${d.grad} border ${sel ? 'border-yellow-300 ring-2 ring-yellow-400 shadow-lg scale-[1.02]' : d.border + ' opacity-85 hover:opacity-100'} flex flex-col items-center gap-1 transition">
             <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow">
-              <img src="${d.img}" alt="${d.short}" loading="lazy" class="w-full h-full object-cover" />
-              <span class="absolute top-0.5 right-0.5 text-[8px] font-mono font-bold px-1 rounded bg-black/75 text-white">${d.cards}c</span>
+              <img src="${d.img}" alt="${d.name}" loading="lazy" class="w-full h-full object-cover" />
+              <span class="absolute top-0.5 left-0.5 text-[7.5px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-500/90 text-white'}">${isHalf ? 'Demi' : '60c'}</span>
+              <span class="absolute bottom-0.5 right-0.5 text-[7.5px] font-mono font-bold px-1 rounded bg-black/80 text-yellow-200">${d.prizes}🏆</span>
             </div>
-            <span class="text-[10px] font-extrabold ${sel ? 'text-yellow-300' : 'text-slate-200'} truncate w-full text-center">${d.short}</span>
+            <span class="text-[10px] font-extrabold ${sel ? 'text-yellow-300' : 'text-white'} truncate w-full text-center leading-tight">${d.short}</span>
+            <span class="text-[8.5px] text-slate-300 truncate w-full text-center -mt-0.5">${d.star.split(' ')[0]}</span>
           </button>
         `;
-      }).join('');
+      };
 
-      const aiOptions = [
-        { key: 'RANDOM', short: 'Aléatoire', cards: '?', img: '' },
-        ...keys.map((k) => DECK_META[k])
-      ];
-      aGrid.innerHTML = aiOptions.map((d) => {
-        const sel = quickAiDeck === d.key;
-        const isRand = d.key === 'RANDOM';
+      pGrid.innerHTML = `
+        <div class="flex items-center justify-between px-1">
+          <h2 class="text-[11px] font-black tracking-wider uppercase text-yellow-300">1. Choisis Ton Deck</h2>
+          <span class="text-[9.5px] font-mono text-slate-300">Demi-Deck (30c) ou Complet (60c)</span>
+        </div>
+        <div class="space-y-1">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-300">💿 4 Demi-Decks Officiels 1999 (30 cartes · 3 Prix)</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderPlayerCard).join('')}</div>
+        </div>
+        <div class="space-y-1 pt-0.5">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-cyan-300">🔥 6 Decks Complets V2 (60 cartes · 6 Prix)</span>
+          </div>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderPlayerCard).join('')}</div>
+        </div>
+      `;
+
+      const renderAiCard = (k) => {
+        const isRand = k === 'RANDOM';
+        const d = isRand ? { key: 'RANDOM', short: 'Aléatoire', cards: '30/60', prizes: '?', star: 'Surprise' } : DECK_META[k];
+        const sel = quickAiDeck === k;
+        const isHalf = d.cards === 30;
         return `
-          <button onclick="selectQuickAiDeck('${d.key}')" class="p-1.5 rounded-xl bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400 bg-rose-500/15' : 'border-white/10 hover:border-white/30 opacity-80 hover:opacity-100'} flex flex-col items-center gap-1 transition">
+          <button onclick="selectQuickAiDeck('${k}')" class="p-1.5 rounded-xl bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400 bg-rose-500/20 shadow-lg scale-[1.02]' : 'border-white/15 hover:border-white/35 opacity-85 hover:opacity-100'} flex flex-col items-center gap-1 transition">
             <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow flex items-center justify-center bg-gradient-to-br from-rose-500/20 to-purple-600/20">
               ${isRand
                 ? `<span class="text-xl">🎲</span>`
-                : `<img src="${d.img}" alt="${d.short}" loading="lazy" class="w-full h-full object-cover" /><span class="absolute top-0.5 right-0.5 text-[8px] font-mono font-bold px-1 rounded bg-black/75 text-white">${d.cards}c</span>`
+                : `<img src="${d.img}" alt="${d.name}" loading="lazy" class="w-full h-full object-cover" />
+                   <span class="absolute top-0.5 left-0.5 text-[7.5px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-rose-500/90 text-white'}">${isHalf ? 'Demi' : '60c'}</span>`
               }
             </div>
-            <span class="text-[10px] font-extrabold ${sel ? 'text-rose-300' : 'text-slate-200'} truncate w-full text-center">${d.short}</span>
+            <span class="text-[9.5px] font-extrabold ${sel ? 'text-rose-300' : 'text-slate-200'} truncate w-full text-center leading-tight">${d.short}</span>
           </button>
         `;
-      }).join('');
+      };
+
+      aGrid.innerHTML = `
+        <div class="flex items-center justify-between px-1">
+          <h2 class="text-[11px] font-black tracking-wider uppercase text-rose-300">2. Choisis le Deck de l'IA</h2>
+          <button onclick="selectQuickAiDeck('RANDOM')" class="px-2 py-0.5 rounded-full text-[9.5px] font-extrabold border transition ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-300 shadow' : 'bg-white/10 text-rose-200 border-white/15 hover:bg-white/20'}">🎲 IA Aléatoire</button>
+        </div>
+        <div class="space-y-1">
+          <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-300/90 px-1 block">💿 Demi-Decks IA (30 cartes · 3 Prix)</span>
+          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderAiCard).join('')}</div>
+        </div>
+        <div class="space-y-1 pt-0.5">
+          <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-rose-300/90 px-1 block">🔥 Decks Complets IA (60 cartes · 6 Prix)</span>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderAiCard).join('')}</div>
+        </div>
+      `;
 
       const pMeta = DECK_META[quickPlayerDeck];
       document.getElementById('quickSummaryPlayerImg').src = pMeta.img;
@@ -15307,6 +15339,7 @@ const TYPE_EMOJI = {
         document.getElementById('quickSummaryAiName').textContent = `${aMeta.short} (${aMeta.cards}c)`;
       }
     }
+    renderQuickSetup();
 
     function startQuickMatch() {
       const keys = Object.keys(DECK_META);
@@ -18444,55 +18477,88 @@ const TYPE_EMOJI = {
     let currentColFilterRarity = 'all';
 
     function openCollectionModal(filterSet = currentColFilterSet, filterRarity = currentColFilterRarity) {
+      if (filterRarity === 'owned') filterRarity = 'all';
       currentColFilterSet = filterSet;
       currentColFilterRarity = filterRarity;
       const box = document.getElementById('academyContent');
       const modalTitle = document.querySelector('#academyModal h3');
-      const ownedTotal = ALL_UNIQUE_CARDS.filter(c => (boosterSave.counts[c.setId] || 0) > 0).length;
-      if (modalTitle) modalTitle.textContent = `📖 Galerie 1999 (${ownedTotal}/${ALL_UNIQUE_CARDS.length} débloquées · ${ALL_UNIQUE_CARDS.length} Cartes HD)`;
 
-      const filtered = ALL_UNIQUE_CARDS.filter(c => {
-        if (filterSet !== 'all' && c.set !== filterSet) return false;
-        if (filterRarity === 'owned' && !(boosterSave.counts[c.setId] > 0)) return false;
-        if (filterRarity !== 'all' && filterRarity !== 'owned' && c.rarity !== filterRarity) return false;
+      const setOrder = { base: 1, jungle: 2, fossil: 3 };
+      const ownedCards = ALL_UNIQUE_CARDS
+        .filter(c => (boosterSave.counts[c.setId] || 0) > 0)
+        .sort((a, b) => {
+          const sa = setOrder[a.set] || 9, sb = setOrder[b.set] || 9;
+          if (sa !== sb) return sa - sb;
+          const na = parseInt((a.setId || '').split('-')[1], 10) || 999;
+          const nb = parseInt((b.setId || '').split('-')[1], 10) || 999;
+          return na - nb;
+        });
+
+      const ownedTotal = ownedCards.length;
+      const ownedBase = ownedCards.filter(c => c.set === 'base').length;
+      const ownedJungle = ownedCards.filter(c => c.set === 'jungle').length;
+      const ownedFossil = ownedCards.filter(c => c.set === 'fossil').length;
+
+      if (modalTitle) modalTitle.textContent = `📖 Galerie 1999 (${ownedTotal}/${ALL_UNIQUE_CARDS.length} possédées)`;
+
+      const setFilteredOwned = ownedCards.filter(c => filterSet === 'all' || c.set === filterSet);
+      const ownedHolo = setFilteredOwned.filter(c => c.rarity === 'holo').length;
+      const ownedRare = setFilteredOwned.filter(c => c.rarity === 'rare').length;
+      const ownedUncommon = setFilteredOwned.filter(c => c.rarity === 'uncommon').length;
+      const ownedCommon = setFilteredOwned.filter(c => c.rarity === 'common').length;
+
+      const filtered = setFilteredOwned.filter(c => {
+        if (filterRarity !== 'all' && c.rarity !== filterRarity) return false;
         return true;
       });
 
       box.innerHTML = `
         <div class="flex gap-1.5 mb-2 flex-wrap">
-          <button onclick="openCollectionModal('all', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='all'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Toutes (228)</button>
-          <button onclick="openCollectionModal('base', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='base'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Set de Base (102)</button>
-          <button onclick="openCollectionModal('jungle', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='jungle'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Jungle (64)</button>
-          <button onclick="openCollectionModal('fossil', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='fossil'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Fossile (62)</button>
+          <button onclick="openCollectionModal('all', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='all'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Toutes (${ownedTotal}/228)</button>
+          <button onclick="openCollectionModal('base', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='base'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Set de Base (${ownedBase}/102)</button>
+          <button onclick="openCollectionModal('jungle', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='jungle'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Jungle (${ownedJungle}/64)</button>
+          <button onclick="openCollectionModal('fossil', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='fossil'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Fossile (${ownedFossil}/62)</button>
         </div>
         <div class="flex gap-1.5 mb-3 flex-wrap">
-          <button onclick="openCollectionModal('${filterSet}', 'all')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='all'?'bg-amber-300 text-slate-950':'bg-white/5 text-slate-300'}">Toutes raretés</button>
-          <button onclick="openCollectionModal('${filterSet}', 'owned')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='owned'?'bg-emerald-400 text-slate-950':'bg-white/5 text-emerald-300'}">Obtenues (${ownedTotal})</button>
-          <button onclick="openCollectionModal('${filterSet}', 'holo')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='holo'?'bg-pink-400 text-slate-950':'bg-white/5 text-pink-300'}">✨ Holo (47)</button>
-          <button onclick="openCollectionModal('${filterSet}', 'rare')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='rare'?'bg-yellow-400 text-slate-950':'bg-white/5 text-yellow-200'}">★ Rare</button>
-          <button onclick="openCollectionModal('${filterSet}', 'uncommon')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='uncommon'?'bg-emerald-400 text-slate-950':'bg-white/5 text-emerald-200'}">◆ Peu Com.</button>
-          <button onclick="openCollectionModal('${filterSet}', 'common')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='common'?'bg-slate-300 text-slate-950':'bg-white/5 text-slate-300'}">● Commune</button>
+          <button onclick="openCollectionModal('${filterSet}', 'all')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='all'?'bg-amber-300 text-slate-950':'bg-white/5 text-slate-300'}">Toutes raretés (${setFilteredOwned.length})</button>
+          <button onclick="openCollectionModal('${filterSet}', 'holo')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='holo'?'bg-pink-400 text-slate-950':'bg-white/5 text-pink-300'}">✨ Holo (${ownedHolo})</button>
+          <button onclick="openCollectionModal('${filterSet}', 'rare')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='rare'?'bg-yellow-400 text-slate-950':'bg-white/5 text-yellow-200'}">★ Rare (${ownedRare})</button>
+          <button onclick="openCollectionModal('${filterSet}', 'uncommon')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='uncommon'?'bg-emerald-400 text-slate-950':'bg-white/5 text-emerald-200'}">◆ Peu Com. (${ownedUncommon})</button>
+          <button onclick="openCollectionModal('${filterSet}', 'common')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='common'?'bg-slate-300 text-slate-950':'bg-white/5 text-slate-300'}">● Commune (${ownedCommon})</button>
         </div>
-        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[60dvh] overflow-y-auto p-1">
-          ${filtered.map(c => {
-            const count = boosterSave.counts[c.setId] || 0;
-            const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
-            const isHolo = c.rarity === 'holo';
-            return `
-              <div onclick="showPreview({img:'${c.img}'}, 'touch'); previewSticky=true;" class="cursor-pointer rounded-lg bg-slate-800/90 border ${count > 0 ? (isHolo ? 'border-pink-400/80' : 'border-yellow-400/50') : 'border-white/10 opacity-80'} hover:border-yellow-400 p-1 flex flex-col items-center relative">
-                <div class="relative w-full aspect-[63/88] rounded overflow-hidden">
-                  <img src="${c.img}" loading="lazy" alt="${c.name}" class="w-full h-full object-contain" />
-                  ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
-                  ${count > 0 ? `<span class="absolute bottom-1 right-1 px-1.5 py-0.2 rounded bg-emerald-500 text-slate-950 font-mono font-black text-[9px] shadow">×${count}</span>` : ''}
+        ${filtered.length === 0 ? `
+          <div class="py-10 px-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col items-center justify-center text-center gap-3">
+            <div class="text-3xl">📦</div>
+            <div class="text-sm font-extrabold text-yellow-200">Aucune carte possédée dans cette catégorie</div>
+            <p class="text-[11px] text-slate-300 max-w-xs">
+              La galerie n'affiche que les cartes que tu as déjà débloquées. Ouvre des Boosters 1999 pour agrandir ta collection !
+            </p>
+            <button onclick="document.getElementById('academyModal').classList.add('hidden'); switchMenuTab('booster');" class="btn-gold px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-1">
+              ✨ Ouvrir des Boosters
+            </button>
+          </div>
+        ` : `
+          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[60dvh] overflow-y-auto p-1">
+            ${filtered.map(c => {
+              const count = boosterSave.counts[c.setId] || 0;
+              const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
+              const isHolo = c.rarity === 'holo';
+              return `
+                <div onclick="showPreview({img:'${c.img}'}, 'touch'); previewSticky=true;" class="cursor-pointer rounded-lg bg-slate-800/90 border ${isHolo ? 'border-pink-400/80' : 'border-yellow-400/50'} hover:border-yellow-400 p-1 flex flex-col items-center relative">
+                  <div class="relative w-full aspect-[63/88] rounded overflow-hidden">
+                    <img src="${c.img}" loading="lazy" alt="${c.name}" class="w-full h-full object-contain" />
+                    ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
+                    <span class="absolute bottom-1 right-1 px-1.5 py-0.2 rounded bg-emerald-500 text-slate-950 font-mono font-black text-[9px] shadow">×${count}</span>
+                  </div>
+                  <div class="w-full flex items-center justify-between gap-1 mt-1 px-0.5">
+                    <span class="text-[10px] font-bold text-white truncate">${c.name}</span>
+                    <span class="text-[9px] font-black text-yellow-300 shrink-0" title="${rMeta.label}">${rMeta.symbol}</span>
+                  </div>
                 </div>
-                <div class="w-full flex items-center justify-between gap-1 mt-1 px-0.5">
-                  <span class="text-[10px] font-bold text-white truncate">${c.name}</span>
-                  <span class="text-[9px] font-black text-yellow-300 shrink-0" title="${rMeta.label}">${rMeta.symbol}</span>
-                </div>
-              </div>
-            `;
-          }).join('')}
-        </div>
+              `;
+            }).join('')}
+          </div>
+        `}
       `;
       document.getElementById('academyModal').classList.remove('hidden');
     }

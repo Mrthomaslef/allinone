@@ -3,8 +3,48 @@ import { CARDS } from './cards.js';
 export const DECKS = {
   player: [
     {
+      id: 'half-fighting',
+      name: '💿 Demi-Deck Combat (30c · 3 Prix)',
+      description: 'Machoc, Machopeur, Taupiqueur, Doduo, Miaouss (Officiel CD-ROM 1999)',
+      prizes: 3,
+      list: {
+        'machop': 3, 'machoke': 2, 'diglett': 3, 'doduo': 2, 'meowth': 2,
+        'energy-removal': 2, 'pokedex': 1, 'switch': 1, 'fighting-energy': 14
+      }
+    },
+    {
+      id: 'half-water',
+      name: '💿 Demi-Deck Eau (30c · 3 Prix)',
+      description: 'Poissirène, Poissoroy, Stari, Otaria, Minidraco (Officiel CD-ROM 1999)',
+      prizes: 3,
+      list: {
+        'goldeen': 4, 'seaking': 2, 'staryu': 3, 'seel': 2, 'dratini': 1,
+        'poke-ball': 2, 'bill': 1, 'gust-of-wind': 1, 'water-energy': 14
+      }
+    },
+    {
+      id: 'half-fire',
+      name: '💿 Demi-Deck Feu (30c · 3 Prix)',
+      description: 'Salamèche, Reptincel, Ponyta, Caninos, Léo (Code "FIRE" 1999)',
+      prizes: 3,
+      list: {
+        'charmander': 4, 'charmeleon': 2, 'ponyta': 3, 'growlithe': 2,
+        'bill': 1, 'energy-removal': 1, 'gust-of-wind': 1, 'switch': 2, 'fire-energy': 14
+      }
+    },
+    {
+      id: 'half-xtra',
+      name: '💿 Demi-Deck Xtra Arcanin (30c · 3 Prix)',
+      description: 'Arcanin (100 PV), Magmar, Caninos, Salamèche, Potion (Code "FIRE" 1999)',
+      prizes: 3,
+      list: {
+        'charmander': 2, 'growlithe': 4, 'arcanine': 2, 'ponyta': 2, 'magmar': 1, 'dratini': 1,
+        'bill': 1, 'energy-removal': 1, 'potion': 1, 'switch': 1, 'fire-energy': 14
+      }
+    },
+    {
       id: 'theme-grass',
-      name: 'Deck Plante (Débutant)',
+      name: 'Deck Plante (Débutant · 60c)',
       description: 'Évolution Bulbizarre → Florizarre, soignes, énergies Plante',
       list: {
         'bulbasaur': 4, 'ivysaur': 3, 'venusaur': 2,
@@ -88,6 +128,42 @@ export const DECKS = {
   ],
 
   ai: [
+    {
+      id: 'ai-half-fighting',
+      name: 'IA Demi-Deck Combat (30c)',
+      prizes: 3,
+      list: {
+        'machop': 3, 'machoke': 2, 'diglett': 3, 'doduo': 2, 'meowth': 2,
+        'energy-removal': 2, 'pokedex': 1, 'switch': 1, 'fighting-energy': 14
+      }
+    },
+    {
+      id: 'ai-half-water',
+      name: 'IA Demi-Deck Eau (30c)',
+      prizes: 3,
+      list: {
+        'goldeen': 4, 'seaking': 2, 'staryu': 3, 'seel': 2, 'dratini': 1,
+        'poke-ball': 2, 'bill': 1, 'gust-of-wind': 1, 'water-energy': 14
+      }
+    },
+    {
+      id: 'ai-half-fire',
+      name: 'IA Demi-Deck Feu (30c)',
+      prizes: 3,
+      list: {
+        'charmander': 4, 'charmeleon': 2, 'ponyta': 3, 'growlithe': 2,
+        'bill': 1, 'energy-removal': 1, 'gust-of-wind': 1, 'switch': 2, 'fire-energy': 14
+      }
+    },
+    {
+      id: 'ai-half-xtra',
+      name: 'IA Demi-Deck Xtra Arcanin (30c)',
+      prizes: 3,
+      list: {
+        'charmander': 2, 'growlithe': 4, 'arcanine': 2, 'ponyta': 2, 'magmar': 1, 'dratini': 1,
+        'bill': 1, 'energy-removal': 1, 'potion': 1, 'switch': 1, 'fire-energy': 14
+      }
+    },
     {
       id: 'ai-grass',
       name: 'IA Plante',

@@ -88,7 +88,12 @@ class App {
         <div style="width:100%;max-width:320px;background:rgba(255,255,255,0.04);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);text-align:left">
           <label style="font-size:11px;color:#ffcb05;font-weight:700;display:block;margin-bottom:4px">Votre Deck Actif :</label>
           <select id="select-player-deck" style="width:100%;padding:8px;border-radius:6px;background:#131829;color:#fff;border:1px solid #3b4cca;font-size:13px;font-weight:600">
-            ${DECKS.player.map(d => `<option value="${d.id}" ${d.id === currentDeck.id ? 'selected' : ''}>${d.name}</option>`).join('')}
+            <optgroup label="💿 Demi-Decks Officiels 1999 (30 cartes · 3 Prix)">
+              ${DECKS.player.filter(d => d.prizes === 3).map(d => `<option value="${d.id}" ${d.id === currentDeck.id ? 'selected' : ''}>${d.name}</option>`).join('')}
+            </optgroup>
+            <optgroup label="🔥 Decks Complets (60 cartes · 6 Prix)">
+              ${DECKS.player.filter(d => d.prizes !== 3).map(d => `<option value="${d.id}" ${d.id === currentDeck.id ? 'selected' : ''}>${d.name}</option>`).join('')}
+            </optgroup>
           </select>
           <div style="font-size:11px;color:#89a;margin-top:4px" id="deck-desc">${currentDeck.description || ''}</div>
         </div>
@@ -125,8 +130,14 @@ class App {
   startGame(mode) {
     this.currentScreen = 'game';
     const playerDeckId = this.saveData.decks.player || DECKS.player[0].id;
-    const aiPool = DECKS.ai.filter(d => d.id !== 'tutorial-1');
-    const opponentDeckId = mode === 'tutorial' ? 'tutorial-1' : aiPool[Math.floor(Math.random() * aiPool.length)].id;
+    const playerDeckDef = DECKS.player.find(d => d.id === playerDeckId) || DECKS.player[0];
+    const isHalf = playerDeckDef.prizes === 3;
+    const aiPool = DECKS.ai.filter(d => d.id !== 'tutorial-1' && (isHalf ? d.prizes === 3 : d.prizes !== 3));
+    const opponentDeckId = mode === 'tutorial' ? 'tutorial-1' : (aiPool[Math.floor(Math.random() * aiPool.length)] || DECKS.ai[0]).id;
+
+    this.playerPrizeCount = playerDeckDef.prizes || 6;
+    const oppDeckDef = DECKS.ai.find(d => d.id === opponentDeckId);
+    this.oppPrizeCount = oppDeckDef?.prizes || (mode === 'tutorial' ? 3 : this.playerPrizeCount);
 
     this.state = new GameState(
       this.buildDeck(playerDeckId),
@@ -177,7 +188,7 @@ class App {
       <div class="playmat" id="playmat">
         <!-- Opponent zones -->
         <div class="zone-row" data-zone="opponent-prizes" aria-label="Prix adversaire">
-          ${[...Array(6)].map(() => `<div class="zone-slot"><div class="zone-label">Prix</div></div>`).join('')}
+          ${[...Array(this.oppPrizeCount || 6)].map(() => `<div class="zone-slot"><div class="zone-label">Prix</div></div>`).join('')}
         </div>
         <div class="zone-row" data-zone="opponent-bench" aria-label="Banc adversaire">
           ${[...Array(5)].map(() => `<div class="zone-slot"><div class="zone-label">Banc Adv.</div></div>`).join('')}
@@ -209,7 +220,7 @@ class App {
           ${[...Array(5)].map(() => `<div class="zone-slot"><div class="zone-label">Banc</div></div>`).join('')}
         </div>
         <div class="zone-row" data-zone="player-prizes" aria-label="Vos prix">
-          ${[...Array(6)].map(() => `<div class="zone-slot"><div class="zone-label">Prix</div></div>`).join('')}
+          ${[...Array(this.playerPrizeCount || 6)].map(() => `<div class="zone-slot"><div class="zone-label">Prix</div></div>`).join('')}
         </div>
       </div>
       <div class="hand" id="hand" role="list" aria-label="Votre main" data-zone="player-hand"></div>
@@ -252,8 +263,8 @@ class App {
   setupInitialDraw() {
     this.drawGuaranteedHand(this.state.player);
     this.drawGuaranteedHand(this.state.opponent);
-    this.state.player.setupPrizes(6);
-    this.state.opponent.setupPrizes(6);
+    this.state.player.setupPrizes(this.playerPrizeCount || 6);
+    this.state.opponent.setupPrizes(this.oppPrizeCount || 6);
 
     // L'IA place automatiquement son premier Pokémon Actif et son Banc au départ
     const oppBasics = [...this.state.opponent.hand].filter(c => c && c.type === 'Pokemon' && c.stage === 'Basic');
