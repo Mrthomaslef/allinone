@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '93e24d7-1794169947';
+      var BUILD = 'b4e2e6a-1794170004';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -2273,27 +2273,20 @@
         </div>
       </div>
 
-      <!-- 2. Deux tuiles : Collection · Trésor -->
-      <div class="grid grid-cols-2 gap-2.5 pt-3">
-        <div onclick="openCollectionModal('all')" class="hub-tile cursor-pointer relative rounded-2xl pt-6 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
+      <!-- 2. Tuile Collection -->
+      <div class="pt-3">
+        <div onclick="openCollectionModal('all')" class="hub-tile cursor-pointer relative rounded-2xl pt-6 pb-2.5 px-3 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
           <span id="boosterHoloCountBadge" class="hub-tag absolute -top-2 left-1.5 bg-pink-500 text-white">0 Holo</span>
           <span class="text-[13px] font-black text-slate-900">Collection</span>
           <span id="boosterColCountText" class="text-[10.5px] font-mono font-bold text-emerald-700">0 / 228 (0%)</span>
           <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
             <div id="boosterColBar" class="h-full bg-gradient-to-r from-emerald-400 via-amber-400 to-pink-500 transition-all duration-500" style="width: 0%"></div>
           </div>
-          <div class="grid grid-cols-3 gap-1 w-full text-[9.5px] font-mono text-slate-600 text-center">
+          <div class="grid grid-cols-3 gap-1.5 w-full text-[9.5px] font-mono text-slate-600 text-center">
             <span onclick="event.stopPropagation(); openCollectionModal('base')" class="bg-slate-100 border border-slate-200/80 rounded-md py-0.5">B <strong id="colStatBase" class="text-amber-700">0/102</strong></span>
             <span onclick="event.stopPropagation(); openCollectionModal('jungle')" class="bg-slate-100 border border-slate-200/80 rounded-md py-0.5">J <strong id="colStatJungle" class="text-emerald-700">0/64</strong></span>
             <span onclick="event.stopPropagation(); openCollectionModal('fossil')" class="bg-slate-100 border border-slate-200/80 rounded-md py-0.5">F <strong id="colStatFossil" class="text-orange-700">0/62</strong></span>
           </div>
-        </div>
-
-        <div onclick="switchMenuTab('tuto')" class="hub-tile cursor-pointer relative rounded-2xl pt-6 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
-          <span class="hub-tag absolute -top-2 right-1.5 bg-slate-800 text-white">Victoire = +100 pts</span>
-          <span class="text-[13px] font-black text-slate-900">Trésor</span>
-          <span id="boosterCoinsBadge" class="px-2.5 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-xs shadow-sm">0 pièce</span>
-          <span class="text-[10px] font-semibold text-slate-500 text-center leading-tight">1 booster = 100 pièces<br>Joue pour en gagner</span>
         </div>
       </div>
 
