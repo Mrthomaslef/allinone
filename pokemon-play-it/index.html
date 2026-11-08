@@ -15867,28 +15867,31 @@ const TYPE_EMOJI = {
     let quickAiDeck = 'EAU';
 
     function switchMenuTab(tab) {
-      const isTuto = tab === 'tuto';
-      const isQuick = tab === 'quick';
+      const isSolo = tab === 'tuto' || tab === 'quick' || tab === 'solo';
       const isMulti = tab === 'multi';
       const isBooster = tab === 'booster';
       const isDecks = tab === 'decks';
       const vd = document.getElementById('viewDecks');
       if (vd) vd.classList.toggle('hidden', !isDecks);
-      document.getElementById('viewTuto').classList.toggle('hidden', !isTuto);
-      document.getElementById('viewQuick').classList.toggle('hidden', !isQuick);
+      const vt = document.getElementById('viewTuto');
+      if (vt) vt.classList.toggle('hidden', !isSolo);
+      const vq = document.getElementById('viewQuick');
+      if (vq) vq.classList.remove('hidden');
       const vm = document.getElementById('viewMulti');
       if (vm) vm.classList.toggle('hidden', !isMulti);
       const vb = document.getElementById('viewBooster');
       if (vb) vb.classList.toggle('hidden', !isBooster);
 
-      const activeCls = 'py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
-      const activeMultiCls = 'relative py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg ring-2 ring-cyan-200/80 active:scale-95';
-      const idleCls = 'py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95';
-      const idleMultiCls = 'relative py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95';
-      const idleBoosterCls = 'py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95';
+      const activeCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
+      const activeMultiCls = 'relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg ring-2 ring-cyan-200/80 active:scale-95';
+      const idleCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95';
+      const idleMultiCls = 'relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95';
+      const idleBoosterCls = 'relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95';
 
-      document.getElementById('tabBtnTuto').className = isTuto ? activeCls : idleCls;
-      document.getElementById('tabBtnQuick').className = isQuick ? activeCls : idleCls;
+      const bTuto = document.getElementById('tabBtnTuto');
+      if (bTuto) bTuto.className = isSolo ? activeCls : idleCls;
+      const bQuick = document.getElementById('tabBtnQuick');
+      if (bQuick) bQuick.className = isSolo ? activeCls : idleCls;
       const bMulti = document.getElementById('tabBtnMulti');
       if (bMulti) bMulti.className = isMulti ? activeMultiCls : idleMultiCls;
       const bBoost = document.getElementById('tabBtnBooster');
@@ -15897,7 +15900,7 @@ const TYPE_EMOJI = {
       if (bDecks) bDecks.className = isDecks ? activeCls : idleCls;
       if (isDecks && typeof renderDecksView === 'function') renderDecksView();
 
-      if (isQuick) renderQuickSetup();
+      if (isSolo) renderQuickSetup();
       if (isMulti) {
         if (!playerPseudo) openPseudoModal(true);
         ensureMultiRealtimeConnected();
@@ -15931,12 +15934,12 @@ const TYPE_EMOJI = {
         const sel = quickPlayerDeck === k;
         const isHalf = d.cards === 30;
         return `
-          <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl bg-gradient-to-br ${d.grad} border ${sel ? 'border-yellow-300 ring-2 ring-yellow-400 shadow-lg scale-[1.02]' : d.border + ' opacity-85 hover:opacity-100'} flex flex-col items-center gap-1 transition">
-            <div class="relative w-full ${isHalf ? 'aspect-[63/88]' : 'aspect-[4/3]'} rounded-md overflow-hidden shadow">
+          <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl bg-gradient-to-br ${d.grad} border ${sel ? 'border-yellow-300 ring-2 ring-yellow-400 shadow-lg scale-[1.02]' : d.border + ' opacity-85 hover:opacity-100'} flex flex-col items-center gap-0.5 transition">
+            <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow">
               <img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span class="absolute bottom-0.5 left-0.5 text-[10.5px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-500/90 text-white'}">${isHalf ? '30c' : '60c'}</span>
+              <span class="absolute bottom-0.5 left-0.5 text-[9.5px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-500/90 text-white'}">${isHalf ? '30c' : '60c'}</span>
             </div>
-            <span class="text-[11px] font-extrabold ${sel ? 'text-yellow-300' : 'text-white'} w-full text-center leading-tight line-clamp-2">${d.short}</span>
+            <span class="text-[10.5px] font-extrabold ${sel ? 'text-yellow-300' : 'text-white'} w-full text-center leading-tight truncate">${d.short}</span>
           </button>
         `;
       };
@@ -15945,30 +15948,20 @@ const TYPE_EMOJI = {
       if (!DECK_META[quickPlayerDeck]) quickPlayerDeck = 'COMBAT';
       pGrid.innerHTML = `
         <div class="flex items-center justify-between px-1">
-          <h2 class="text-[11px] font-black tracking-wider uppercase text-yellow-300">1. Choisis Ton Deck</h2>
-          <span class="text-[10.5px] font-mono text-slate-300">Demi-Deck (30c) ou Complet (60c)</span>
+          <h2 class="text-[11px] font-black tracking-wider uppercase text-yellow-300">1. Ton Deck (Partie Rapide)</h2>
+          <span class="text-[10px] font-mono text-slate-400">30c (3 Prix) · 60c (6 Prix)</span>
         </div>
         ${customKeys.length ? `
         <div class="space-y-1">
           <div class="flex items-center justify-between px-1">
-            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-emerald-300">🛠️ Mes Decks (ma collection)</span>
-            <button onclick="switchMenuTab('decks')" class="text-[10.5px] font-bold text-emerald-200 underline underline-offset-2">Modifier</button>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">🛠️ Mes Decks perso</span>
+            <button onclick="switchMenuTab('decks')" class="text-[10px] font-bold text-emerald-200 underline underline-offset-2">Modifier</button>
           </div>
           <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderPlayerCard).join('')}</div>
         </div>` : `
-        <button onclick="switchMenuTab('decks')" class="w-full px-3 py-2 rounded-xl bg-emerald-500/10 border border-dashed border-emerald-400/40 text-[11px] font-extrabold text-emerald-200 text-left">🛠️ Crée ton propre deck avec les cartes de tes boosters →</button>`}
-        <div class="space-y-1">
-          <div class="flex items-center justify-between px-1">
-            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-amber-300">📀 4 Demi-Decks Officiels 1999 (30 cartes · 3 Prix)</span>
-          </div>
-          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderPlayerCard).join('')}</div>
-        </div>
-        <div class="space-y-1 pt-0.5">
-          <div class="flex items-center justify-between px-1">
-            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-cyan-300">🔥 6 Decks Complets V2 (60 cartes · 6 Prix)</span>
-          </div>
-          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderPlayerCard).join('')}</div>
-        </div>
+        <button onclick="switchMenuTab('decks')" class="w-full px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-dashed border-emerald-400/40 text-[10.5px] font-extrabold text-emerald-200 text-left">🛠️ Crée ton propre deck avec tes boosters →</button>`}
+        <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderPlayerCard).join('')}</div>
+        <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderPlayerCard).join('')}</div>
       `;
 
       const renderAiCard = (k) => {
@@ -15977,32 +15970,25 @@ const TYPE_EMOJI = {
         const sel = quickAiDeck === k;
         const isHalf = d.cards === 30;
         return `
-          <button onclick="selectQuickAiDeck('${k}')" class="p-1.5 rounded-xl bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400 bg-rose-500/20 shadow-lg scale-[1.02]' : 'border-white/15 hover:border-white/35 opacity-85 hover:opacity-100'} flex flex-col items-center gap-1 transition">
-            <div class="relative w-full ${!isRand && isHalf ? 'aspect-[63/88]' : 'aspect-[4/3]'} rounded-md overflow-hidden shadow flex items-center justify-center bg-gradient-to-br from-rose-500/20 to-purple-600/20">
+          <button onclick="selectQuickAiDeck('${k}')" class="p-1 rounded-xl bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400 bg-rose-500/20 shadow-lg scale-[1.02]' : 'border-white/15 hover:border-white/35 opacity-85 hover:opacity-100'} flex flex-col items-center gap-0.5 transition">
+            <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow flex items-center justify-center bg-gradient-to-br from-rose-500/20 to-purple-600/20">
               ${isRand
-                ? `<span class="text-xl">🎲</span>`
+                ? `<span class="text-base">🎲</span>`
                 : `<img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
-                   <span class="absolute bottom-0.5 left-0.5 text-[10.5px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-rose-500/90 text-white'}">${isHalf ? '30c' : '60c'}</span>`
+                   <span class="absolute bottom-0.5 left-0.5 text-[9px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-rose-500/90 text-white'}">${isHalf ? '30c' : '60c'}</span>`
               }
             </div>
-            <span class="text-[11px] font-extrabold ${sel ? 'text-rose-300' : 'text-slate-200'} w-full text-center leading-tight line-clamp-2">${d.short}</span>
+            <span class="text-[10px] font-extrabold ${sel ? 'text-rose-300' : 'text-slate-200'} w-full text-center leading-tight truncate">${d.short}</span>
           </button>
         `;
       };
 
       aGrid.innerHTML = `
         <div class="flex items-center justify-between px-1">
-          <h2 class="text-[11px] font-black tracking-wider uppercase text-rose-300">2. Choisis le Deck de l'IA</h2>
-          <button onclick="selectQuickAiDeck('RANDOM')" class="px-2 py-0.5 rounded-full text-[10.5px] font-extrabold border transition ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-300 shadow' : 'bg-white/10 text-rose-200 border-white/15 hover:bg-white/20'}">🎲 IA Aléatoire</button>
+          <h2 class="text-[11px] font-black tracking-wider uppercase text-rose-300">2. Deck de l'IA</h2>
+          <button onclick="selectQuickAiDeck('RANDOM')" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold border transition ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-300 shadow' : 'bg-white/10 text-rose-200 border-white/15 hover:bg-white/20'}">🎲 IA Aléatoire</button>
         </div>
-        <div class="space-y-1">
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-amber-300/90 px-1 block">📀 Demi-Decks IA (30 cartes · 3 Prix)</span>
-          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderAiCard).join('')}</div>
-        </div>
-        <div class="space-y-1 pt-0.5">
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-rose-300/90 px-1 block">🔥 Decks Complets IA (60 cartes · 6 Prix)</span>
-          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderAiCard).join('')}</div>
-        </div>
+        <div class="grid grid-cols-5 sm:grid-cols-6 gap-1.5">${[...halfKeys, ...fullKeys].map(renderAiCard).join('')}</div>
       `;
 
       const pMeta = DECK_META[quickPlayerDeck];
@@ -16214,6 +16200,9 @@ const TYPE_EMOJI = {
     let mpApplyingRemote = false;
     let mpLastToastText = '';
     let mpPendingPromoResolve = null;
+    let mpLocalPromoResolve = null;
+    let mpPromoPickerOpen = false;
+    let mpIncomingChain = Promise.resolve();
 
     const MP_BROKERS = [
       'wss://broker.hivemq.com:8884/mqtt',
@@ -16821,7 +16810,145 @@ const TYPE_EMOJI = {
       }
     }
 
-    async function handleIncomingMultiRaw(raw) {
+    function applyRemotePlayerSide(incomingPlayerSide) {
+      if (!incomingPlayerSide) return;
+      // Si un paquet MP_STATE_SYNC en transit arrive avec active=null alors que le joueur local
+      // vient déjà de promouvoir un Pokémon de son Banc en Actif, on préserve la promotion locale.
+      if (
+        !incomingPlayerSide.active &&
+        game &&
+        game.player &&
+        game.player.active &&
+        !game.setupPhase &&
+        Array.isArray(incomingPlayerSide.bench) &&
+        incomingPlayerSide.bench.some((b) => b && b.uid === game.player.active.uid)
+      ) {
+        const promotedUid = game.player.active.uid;
+        const promotedCard = incomingPlayerSide.bench.find((b) => b && b.uid === promotedUid) || game.player.active;
+        game.player = {
+          ...incomingPlayerSide,
+          active: promotedCard,
+          bench: incomingPlayerSide.bench.filter((b) => b && b.uid !== promotedUid)
+        };
+        return;
+      }
+      game.player = incomingPlayerSide;
+      if (game.player.active && mpPromoPickerOpen) {
+        mpPromoPickerOpen = false;
+        closePickerModal();
+        if (mpLocalPromoResolve) {
+          const r = mpLocalPromoResolve;
+          mpLocalPromoResolve = null;
+          r(0);
+        }
+      }
+    }
+
+    function promotePlayerBenchToActive(chosenIdx = 0) {
+      if (!game || game.gameOver || !game.player) return false;
+      if (game.player.active || !game.player.bench.length) return false;
+      const idx = (typeof chosenIdx === 'number' && chosenIdx >= 0 && chosenIdx < game.player.bench.length) ? chosenIdx : 0;
+      const [promoted] = game.player.bench.splice(idx, 1);
+      if (!promoted) return false;
+      clearConditions(promoted);
+      game.player.active = promoted;
+      fx.placed.add(promoted.uid);
+      playPokemonCry(promoted.dex);
+      sfx('place');
+      buzz(16);
+      mpPromoPickerOpen = false;
+      hidePreview();
+      closeCardModal();
+      closePickerModal();
+
+      if (game.mode === 'multi') {
+        const prev = mpApplyingRemote;
+        mpApplyingRemote = true;
+        try {
+          renderBoard();
+        } finally {
+          mpApplyingRemote = prev;
+        }
+        sendMultiPacket('MP_PROMOTE_CHOICE', {
+          matchId: game.matchId,
+          chosenIdx: idx,
+          chosenUid: promoted.uid,
+          side: cloneSide(game.player)
+        });
+        if (game.activePlayer === 'player' && !game.setupPhase) {
+          broadcastMultiBoardSync();
+        }
+      } else {
+        renderBoard();
+      }
+
+      sayJuliette(`⚔️ <strong>${promoted.name}</strong> monte au combat en Pokémon Actif !`, game.mode === 'multi');
+
+      if (mpLocalPromoResolve) {
+        const r = mpLocalPromoResolve;
+        mpLocalPromoResolve = null;
+        r(idx);
+      }
+      return true;
+    }
+
+    function openBenchPromoModal(title = '💥 Ton Pokémon Actif est K.O. !', subtitle = 'Choisis quel Pokémon de ton Banc monte au combat :') {
+      if (!game || game.gameOver || game.player.active || !game.player.bench.length) {
+        return Promise.resolve(null);
+      }
+      hidePreview();
+      closeCardModal();
+      return new Promise((resolve) => {
+        mpLocalPromoResolve = resolve;
+        mpPromoPickerOpen = true;
+        openPickerModal(
+          title,
+          subtitle,
+          game.player.bench,
+          (chosenIdx) => {
+            promotePlayerBenchToActive(chosenIdx);
+          },
+          false
+        );
+      });
+    }
+
+    async function requestRemoteBenchPromo() {
+      if (!game || game.mode !== 'multi' || game.gameOver || game.ai.active || !game.ai.bench.length) return false;
+      showGameToast(`⏳ En attente du choix de Pokémon Actif de <strong>${game.oppPseudo || 'l\'adversaire'}</strong>…`);
+      sendMultiPacket('MP_REQUEST_PROMO', {
+        matchId: game.matchId,
+        actorSide: cloneSide(game.player),
+        targetSide: cloneSide(game.ai)
+      });
+      const promoReply = await new Promise((resolve) => {
+        mpPendingPromoResolve = resolve;
+        setTimeout(() => {
+          if (mpPendingPromoResolve === resolve) {
+            mpPendingPromoResolve = null;
+            resolve(null);
+          }
+        }, 22000);
+      });
+      if (promoReply && promoReply.side && promoReply.side.active) {
+        const prev = mpApplyingRemote;
+        mpApplyingRemote = true;
+        try {
+          game.ai = promoReply.side;
+          fx.placed.add(game.ai.active.uid);
+          playPokemonCry(game.ai.active.dex);
+          showGameToast(`⚔️ <strong>${game.oppPseudo || 'Adversaire'}</strong> envoie <strong>${game.ai.active.name}</strong> au combat !`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = prev;
+        }
+        return true;
+      }
+      if (game.ai.active) return true;
+      return false;
+    }
+
+    function handleIncomingMultiRaw(raw) {
       let msg;
       try {
         msg = typeof raw === 'string' ? JSON.parse(raw) : raw;
@@ -16869,9 +16996,47 @@ const TYPE_EMOJI = {
         return;
       }
 
+      // Résolution immédiate hors file d'attente pour débloquer l'attaquant en attente du choix de Banc
+      if (msg.type === 'MP_PROMOTE_CHOICE') {
+        if (mpPendingPromoResolve) {
+          const r = mpPendingPromoResolve;
+          mpPendingPromoResolve = null;
+          r(msg);
+          return;
+        }
+        if (game && game.mode === 'multi' && msg.side) {
+          const prev = mpApplyingRemote;
+          mpApplyingRemote = true;
+          try {
+            const hadActive = !!game.ai.active;
+            game.ai = msg.side;
+            if (!hadActive && game.ai.active) {
+              fx.placed.add(game.ai.active.uid);
+              playPokemonCry(game.ai.active.dex);
+            }
+            renderBoard();
+          } finally {
+            mpApplyingRemote = prev;
+          }
+        }
+        return;
+      }
+
+      mpIncomingChain = mpIncomingChain
+        .then(() => processIncomingMultiPacket(msg))
+        .catch((err) => {
+          console.error('Multi packet error:', err);
+          mpApplyingRemote = false;
+        });
+    }
+
+    async function processIncomingMultiPacket(msg) {
       if (msg.type === 'MP_MATCH_START') {
         if (multiLastMatchId === msg.matchId) return;
         multiLastMatchId = msg.matchId;
+        mpPendingPromoResolve = null;
+        mpLocalPromoResolve = null;
+        mpPromoPickerOpen = false;
         startMultiMatchFromPayload(msg);
         return;
       }
@@ -16880,115 +17045,117 @@ const TYPE_EMOJI = {
 
       if (msg.type === 'MP_SETUP_UPDATE') {
         mpApplyingRemote = true;
-        const hadActive = !!game.ai.active;
-        game.ai = msg.side;
-        if (!hadActive && game.ai.active) {
-          fx.placed.add(game.ai.active.uid);
-          playPokemonCry(game.ai.active.dex);
+        try {
+          const hadActive = !!game.ai.active;
+          game.ai = msg.side;
+          if (!hadActive && game.ai.active) {
+            fx.placed.add(game.ai.active.uid);
+            playPokemonCry(game.ai.active.dex);
+          }
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
         }
-        renderBoard();
-        mpApplyingRemote = false;
         checkMultiSetupComplete();
         return;
       }
 
       if (msg.type === 'MP_STATE_SYNC') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        if (msg.toast) showGameToast(`🌐 ${game.oppPseudo} : ${msg.toast}`);
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          if (msg.toast) showGameToast(`🌐 ${game.oppPseudo} : ${msg.toast}`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_COIN_FLIP') {
-        flipCoinAnimated(`${game.oppPseudo} · ${msg.label}`, msg.isHeads);
+        await flipCoinAnimated(`${game.oppPseudo} · ${msg.label}`, msg.isHeads);
         return;
       }
 
       if (msg.type === 'MP_ATTACK_ANIM') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
-        await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
-        showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
+          await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
+          showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_KO_ANIM') {
         mpApplyingRemote = true;
-        const localVictim = msg.victimIsActor ? 'ai' : 'player';
-        await animateKO(localVictim);
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          const localVictim = msg.victimIsActor ? 'ai' : 'player';
+          await animateKO(localVictim);
+          game.ai = msg.actorSide;
+          game.player = msg.targetSide;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_REQUEST_PROMO') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        renderBoard();
-        mpApplyingRemote = false;
-        if (game.player.bench.length > 0) {
-          openPickerModal(
-            '💥 Ton Pokémon Actif est K.O. !',
-            'Choisis quel Pokémon de ton Banc monte au combat :',
-            game.player.bench,
-            (chosenIdx) => {
-              mpApplyingRemote = true;
-              game.player.active = game.player.bench.splice(chosenIdx, 1)[0];
-              fx.placed.add(game.player.active.uid);
-              playPokemonCry(game.player.active.dex);
-              renderBoard();
-              mpApplyingRemote = false;
-              sendMultiPacket('MP_PROMOTE_CHOICE', {
-                matchId: game.matchId,
-                chosenIdx,
-                side: cloneSide(game.player)
-              });
-            },
-            false
-          );
+        try {
+          game.ai = msg.actorSide;
+          game.player = msg.targetSide;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
         }
-        return;
-      }
-
-      if (msg.type === 'MP_PROMOTE_CHOICE') {
-        if (mpPendingPromoResolve) {
-          const r = mpPendingPromoResolve;
-          mpPendingPromoResolve = null;
-          r(msg);
+        if (!game.player.active && game.player.bench.length > 0 && !game.gameOver) {
+          openBenchPromoModal(
+            '💥 Ton Pokémon Actif est K.O. !',
+            'Choisis quel Pokémon de ton Banc monte au combat :'
+          );
         }
         return;
       }
 
       if (msg.type === 'MP_END_TURN') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        game.halfTurn = (game.halfTurn || 0) + 1;
-        renderBoard();
-        mpApplyingRemote = false;
-        startPlayerTurn();
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          game.halfTurn = (game.halfTurn || 0) + 1;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
+        if (!game.player.active && game.player.bench.length > 0 && !game.gameOver) {
+          await openBenchPromoModal();
+        }
+        if (game && !game.gameOver) {
+          startPlayerTurn();
+        }
         return;
       }
 
       if (msg.type === 'MP_GAME_OVER') {
         if (game.gameOver) return;
         mpApplyingRemote = true;
-        if (msg.actorSide && msg.targetSide) {
-          game.ai = msg.actorSide;
-          game.player = msg.targetSide;
+        try {
+          if (msg.actorSide && msg.targetSide) {
+            game.ai = msg.actorSide;
+            game.player = msg.targetSide;
+          }
+          endMatch(msg.winnerIsActor ? 'ai' : 'player', msg.reason);
+        } finally {
+          mpApplyingRemote = false;
         }
-        endMatch(msg.winnerIsActor ? 'ai' : 'player', msg.reason);
-        mpApplyingRemote = false;
         return;
       }
     }

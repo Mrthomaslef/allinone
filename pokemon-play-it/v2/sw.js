@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ppi-mobile-v18';
+const CACHE_NAME = 'ppi-mobile-v19';
 const ASSETS = [
   '/', '/index.html', '/manifest.json',
   '/src/main.js', '/src/engine/GameState.js', '/src/engine/RulesEngine.js',
