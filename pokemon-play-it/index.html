@@ -1261,6 +1261,10 @@
 
     /* Boutons d'attaque 2 lignes */
     .atk-btn { text-align: left; }
+    .atk-dmg.atk-dmg-up { background: linear-gradient(135deg, #f59e0b, #dc2626); box-shadow: 0 0 0 2px #fde047, 0 0 10px rgba(253,224,71,.65); }
+    .atk-dmg.atk-dmg-down { background: #475569; }
+    .atk-dmg.atk-dmg-pop { animation: atkDmgPop .55s cubic-bezier(.2,1.6,.4,1); }
+    @keyframes atkDmgPop { 0% { transform: scale(1); } 40% { transform: scale(1.45) rotate(-6deg); } 100% { transform: scale(1); } }
     .atk-dmg { font: 900 14px/1 'Nunito', sans-serif; font-variant-numeric: tabular-nums; padding: 2px 6px; border-radius: 8px; background: rgba(185,28,28,.92); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,.3); }
 
     /* Fin du tour : vrai bouton principal */
@@ -21329,6 +21333,61 @@ const TYPE_EMOJI = {
       ], { duration: 700, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' }).finished;
     }
 
+    // Dégâts réels prévus sur les boutons d'attaque : mêmes règles que la résolution de l'attaque
+    // (Énergies en plus du coût, Énergies/marqueurs du Défenseur, Banc, PlusPower, Faiblesse/Résistance, protections…)
+    const atkDmgShown = new Map();
+    function attackDamagePreview(owner, atk) {
+      if (!game || !atk) return null;
+      const attacker = game[owner] && game[owner].active;
+      if (!attacker) return null;
+      const defender = (game[owner === 'player' ? 'ai' : 'player'] || {}).active || null;
+      const spec = attackSpec(atk, attacker);
+      if (spec.metronome || spec.mirror) return null;
+      const printed = atk.damage || 0;
+      const log = [];
+      if (spec.coins) {
+        const n = spec.coins.n === 'energies' ? attacker.energies.length : spec.coins.n;
+        return { printed, final: printed, coinLabel: spec.coins.n === 'untilTails' ? `${spec.coins.per}×?` : `${spec.coins.per}×${n}`, log };
+      }
+      let dmg = printed;
+      if (spec.extraEnergy) {
+        const units = energyUnits(attacker);
+        const typeUnits = units.filter((u) => u === spec.extraEnergy.type || u === 'Any').length;
+        const costType = atk.cost.filter((c) => c === spec.extraEnergy.type).length;
+        const extra = Math.max(0, Math.min(units.length - atk.cost.length, typeUnits - costType));
+        const bonus = Math.min(spec.extraEnergy.max, extra * 10);
+        if (bonus) { dmg += bonus; log.push(`+${bonus} Énergies en plus`); }
+      }
+      if (spec.perDefEnergy && defender && defender.energies.length) { dmg += 10 * defender.energies.length; log.push(`+${10 * defender.energies.length} Énergies du Défenseur`); }
+      if (spec.perDefCounter && defender && defender.damage) { dmg += defender.damage; log.push(`+${defender.damage} marqueurs du Défenseur`); }
+      if (spec.perSelfCounter && attacker.damage) { dmg += attacker.damage; log.push(`+${attacker.damage} marqueurs`); }
+      if (spec.minusSelfCounter && attacker.damage) { dmg = Math.max(0, dmg - attacker.damage); log.push(`−${attacker.damage} marqueurs`); }
+      if (spec.selfCountersMult) dmg = attacker.damage;
+      if (spec.halfHp && defender) dmg = Math.ceil((effHp(defender) - defender.damage) / 20) * 10;
+      if (spec.perNidoking) { const k = allInPlay(owner).filter((p) => p.name === 'Nidoking').length; if (k) { dmg += spec.perNidoking * k; log.push(`+${spec.perNidoking * k} Nidoking`); } }
+      if (spec.perOwnBench && game[owner].bench.length) { dmg += 10 * game[owner].bench.length; log.push(`+${10 * game[owner].bench.length} Banc`); }
+      if (atk.name === 'Tranche' && hasFx(attacker, 'swordsDance')) { dmg = 60; log.push('Danse-lames'); }
+      let final = dmg;
+      if (dmg > 0) {
+        if (defender) final = computeFinalDamage(attacker, defender, dmg, spec, log);
+        else if (attacker.plusPower) { final = dmg + attacker.plusPower; log.push(`PlusPower +${attacker.plusPower}`); }
+      }
+      return { printed, final, headsPlus: spec.headsPlus || 0, log };
+    }
+    function attackDmgBadge(owner, atk, i, dim) {
+      const pv = attackDamagePreview(owner, atk);
+      if (!pv) return atk && atk.damage ? `<span class="atk-dmg ${dim ? 'opacity-60' : ''}">${atk.damage}</span>` : '';
+      if (pv.coinLabel) return `<span class="atk-dmg ${dim ? 'opacity-60' : ''}">${pv.coinLabel}</span>`;
+      if (!pv.printed && !pv.final) return '';
+      const changed = pv.final !== pv.printed;
+      const key = `${owner}:${game[owner].active.uid}:${i}`;
+      const prev = atkDmgShown.get(key);
+      atkDmgShown.set(key, pv.final);
+      const pop = prev !== undefined && prev !== pv.final;
+      const why = changed ? `Dégâts imprimés : ${pv.printed} · ${pv.log.join(' · ')}` : '';
+      return `<span class="atk-dmg ${changed ? (pv.final > pv.printed ? 'atk-dmg-up' : 'atk-dmg-down') : ''} ${pop ? 'atk-dmg-pop' : ''} ${dim ? 'opacity-60' : ''}" title="${why}">${pv.final}${pv.headsPlus ? '+' : ''}</span>`;
+    }
+
     function renderAttackStrip() {
       const container = document.getElementById('attackButtonsContainer');
       const endBtn = document.getElementById('endTurnBtn');
@@ -21395,7 +21454,7 @@ const TYPE_EMOJI = {
           >
             <span class="flex items-center justify-between gap-1">
               <span class="flex items-center -space-x-0.5">${costIcons}</span>
-              ${atk.damage ? `<span class="atk-dmg ${payable ? '' : 'opacity-60'}">${atk.damage}</span>` : ''}
+              ${attackDmgBadge('player', atk, i, !payable)}
             </span>
             <span class="text-[11.5px] font-black leading-tight text-left line-clamp-2">${atk.name}</span>
           </button>
@@ -21456,7 +21515,7 @@ const TYPE_EMOJI = {
           const ok = use.ok;
           const btn = document.createElement('button');
           btn.className = `atk-btn w-full min-h-[44px] px-3 py-2 rounded-xl flex items-center justify-between gap-2 ${ok ? 'btn-token' : 'bg-slate-800 text-slate-500 border border-white/10'}`;
-          btn.innerHTML = `<span class="flex items-center gap-2 min-w-0"><span class="flex -space-x-0.5 shrink-0">${(atk.cost || []).map((c) => energyOrb(c, 16)).join('')}</span><span class="min-w-0"><span class="block text-[13px] font-black truncate">${atk.name}</span>${ok ? '' : `<span class="block text-[11px] font-semibold opacity-80 truncate">${use.reason || ''}</span>`}</span></span>${atk.damage ? `<span class="atk-dmg">${atk.damage}</span>` : ''}`;
+          btn.innerHTML = `<span class="flex items-center gap-2 min-w-0"><span class="flex -space-x-0.5 shrink-0">${(atk.cost || []).map((c) => energyOrb(c, 16)).join('')}</span><span class="min-w-0"><span class="block text-[13px] font-black truncate">${atk.name}</span>${ok ? '' : `<span class="block text-[11px] font-semibold opacity-80 truncate">${use.reason || ''}</span>`}</span></span>${attackDmgBadge('player', atk, i, false)}`;
           btn.disabled = !ok;
           btn.onclick = () => { closeCardModal(); executePlayerAttack(i); };
           actionsEl.appendChild(btn);
@@ -24437,9 +24496,7 @@ const TYPE_EMOJI = {
 
       const menuFreeBadge = document.getElementById('menuFreeBoostersBadge');
       if (menuFreeBadge) {
-        menuFreeBadge.textContent = freeCount > 0
-          ? `${freeCount}/${MAX_FREE_BOOSTERS} gratuit${freeCount > 1 ? 's' : ''}${countdown ? ` · ⏱️${countdown}` : ''}`
-          : `0/${MAX_FREE_BOOSTERS} · ⏱️ ${countdown || '60:00'}`;
+        menuFreeBadge.textContent = `${freeCount}/${MAX_FREE_BOOSTERS} gratuit${freeCount > 1 ? 's' : ''}`;
       }
 
       const navBadge = document.getElementById('navBoosterBadge');
@@ -24448,7 +24505,7 @@ const TYPE_EMOJI = {
           navBadge.textContent = `${totalOpenableNow}`;
           navBadge.className = `px-1.5 py-0.2 rounded-full ${freeCount > 0 ? 'bg-emerald-400 text-slate-950' : 'bg-amber-400 text-slate-950'} text-[10px] font-black leading-tight`;
         } else {
-          navBadge.textContent = countdown || '0';
+          navBadge.textContent = '0';
           navBadge.className = 'px-1.5 py-0.2 rounded-full bg-slate-200 text-slate-600 text-[9.5px] font-bold leading-tight';
         }
       }
@@ -24465,7 +24522,7 @@ const TYPE_EMOJI = {
       if (freeSub) {
         freeSub.textContent = freeCount >= MAX_FREE_BOOSTERS
           ? '✅ 3 boosters gratuits prêts à ouvrir !'
-          : `⏱️ Recharge (3/3) dans ${countdown}`;
+          : '3 boosters gratuits rechargés chaque heure';
       }
 
       const coinsBadge = document.getElementById('boosterCoinsBadge');
@@ -24475,7 +24532,7 @@ const TYPE_EMOJI = {
 
       const modalWallet = document.getElementById('boosterModalWalletPill');
       if (modalWallet) {
-        modalWallet.textContent = `Gratuits ${freeCount}/${MAX_FREE_BOOSTERS}${countdown ? ` (${countdown})` : ''} · ${coins} pièces`;
+        modalWallet.textContent = `Gratuits ${freeCount}/${MAX_FREE_BOOSTERS} · ${coins} pièces`;
       }
 
       const summaryReplayBtn = document.getElementById('boosterSummaryReplayBtnLabel');
@@ -24484,7 +24541,7 @@ const TYPE_EMOJI = {
           ? `Ouvrir un autre ${activeBooster.meta.short} (Gratuit · ${freeCount}/${MAX_FREE_BOOSTERS})`
           : canBuyWithCoins
           ? `Ouvrir un autre ${activeBooster.meta.short} (${BOOSTER_COST_COINS} pièces)`
-          : `${BOOSTER_COST_COINS} pièces requis (ou ${countdown})`;
+          : `${BOOSTER_COST_COINS} pièces requis`;
       }
 
       const totalBadge = document.getElementById('boosterTotalOpenedBadge');
@@ -24520,9 +24577,8 @@ const TYPE_EMOJI = {
       const freeCount = boosterSave.freeBoosters;
       const coins = boosterSave.coins || 0;
       const canBuyWithCoins = coins >= BOOSTER_COST_COINS;
-      const countdown = getBoosterNextResetLabel();
       return {
-        text: freeCount > 0 ? 'Gratuit' : canBuyWithCoins ? `${BOOSTER_COST_COINS} pièces` : `${countdown || '60:00'}`,
+        text: freeCount > 0 ? 'Gratuit' : `${BOOSTER_COST_COINS} pièces`,
         opacity: (freeCount > 0 || canBuyWithCoins) ? '1' : '0.6'
       };
     }
@@ -24729,8 +24785,8 @@ const TYPE_EMOJI = {
           mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 text-[10.5px] font-black';
         } else {
           mTitle.textContent = 'Gagne un duel : +100 pièces';
-          mBadge.textContent = `${countdown || '60:00'}`;
-          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-[10.5px] font-black font-mono';
+          mBadge.textContent = '+100 🪙';
+          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-[10.5px] font-black';
         }
       }
 
@@ -26233,12 +26289,11 @@ const TYPE_EMOJI = {
       syncFreeBoostersClock();
       const freeLeft = boosterSave.freeBoosters;
       const canBuy = (boosterSave.coins || 0) >= BOOSTER_COST_COINS;
-      const nextCountdown = getBoosterNextResetLabel() || '60:00';
       const replayLabel = freeLeft > 0
         ? `🎁 Ouvrir un autre ${meta.short} (Gratuit · ${freeLeft}/${MAX_FREE_BOOSTERS})`
         : canBuy
         ? `🪙 Ouvrir un autre ${meta.short} (${BOOSTER_COST_COINS} pièces)`
-        : `🔒 ${BOOSTER_COST_COINS} 🪙 requis (ou ⏱️ ${nextCountdown})`;
+        : `🔒 ${BOOSTER_COST_COINS} 🪙 requis`;
 
       footer.innerHTML = `
         <div class="flex flex-wrap items-center justify-center gap-2.5 w-full">
