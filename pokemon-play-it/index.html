@@ -44,7 +44,7 @@
     /* Mode application (PWA plein écran) : respecter encoche / barre d'état / home indicator */
     body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
     #menuScreen { padding-top: calc(1rem + env(safe-area-inset-top)) !important; padding-bottom: calc(6rem + env(safe-area-inset-bottom)) !important; }
-    #cardModal, #coinModal, #pickerModal, #academyModal, #boosterOpenModal {
+    #cardModal, #coinModal, #pickerModal, #academyModal, #boosterOpenModal, #pseudoModal {
       padding-top: calc(1rem + env(safe-area-inset-top)) !important;
       padding-bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
     }
@@ -704,6 +704,11 @@
 
     <!-- En-tête Héroïque -->
     <div class="w-full text-center relative pt-1">
+      <button onclick="openPseudoModal(false)" id="pseudoBtnMenu" class="absolute left-0 top-0 glass-pill px-2.5 py-1.5 rounded-xl text-xs font-extrabold text-cyan-200 border border-cyan-400/40 hover:border-cyan-300 transition flex items-center gap-1 shadow-lg active:scale-95 z-20 max-w-[130px]" title="Modifier mon pseudo de Dresseur">
+        <span>🧢</span>
+        <span id="menuPseudoLabel" class="text-[10.5px] font-bold truncate">Dresseur</span>
+        <span class="text-[9px] text-cyan-300/80">✎</span>
+      </button>
       <button onclick="openAudioModal()" id="audioBtnMenu" class="absolute right-0 top-0 glass-pill px-2.5 py-1.5 rounded-xl text-xs font-extrabold text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1.5 shadow-lg active:scale-95 z-20" title="Réglage du Son & Volume">
         <span id="audioBtnMenuIcon">🔊</span>
         <span id="audioBtnMenuLabel" class="text-[10.5px] font-mono">Son</span>
@@ -901,6 +906,77 @@
     </div>
 
     <!-- =============================================================== -->
+    <!-- ONGLET MULTI : MODE MULTIJOUEUR TEMPS RÉEL (SALON + DECK + GO)  -->
+    <!-- =============================================================== -->
+    <div id="viewMulti" class="hidden w-full space-y-2.5">
+      <!-- Carte Salon & Face-à-Face Temps Réel -->
+      <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-slate-950/95 border border-cyan-400/45 shadow-xl space-y-2.5">
+        <!-- Ligne Salon & Statut Réseau -->
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span id="multiNetDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            <span class="text-[10.5px] font-black uppercase tracking-wider text-cyan-300">Salon :</span>
+            <span id="multiRoomBadge" class="px-2 py-0.5 rounded-lg bg-cyan-500/20 border border-cyan-400/50 text-xs font-mono font-black text-white tracking-widest">ARENE</span>
+            <button onclick="promptMultiRoomCode()" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[10px] font-bold text-slate-200 transition active:scale-95" title="Changer de code de salon">
+              🔑 Code
+            </button>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="openPseudoModal(false)" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[10px] font-bold text-cyan-200 transition active:scale-95">
+              🧢 Pseudo
+            </button>
+            <button onclick="shareMultiRoomLink()" id="multiShareBtn" class="px-2.5 py-0.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/45 text-[10px] font-extrabold text-emerald-200 transition active:scale-95">
+              📲 Inviter
+            </button>
+          </div>
+        </div>
+
+        <!-- Face-à-Face : Toi vs Adversaire Connecté + Bouton GO -->
+        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-white/15 flex items-center justify-between gap-2">
+          <!-- Joueur Local -->
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <img id="multiMyDeckImg" src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-cyan-400/80 shrink-0 shadow" />
+            <div class="min-w-0">
+              <div class="flex items-center gap-1">
+                <span id="multiMyPseudo" class="text-xs font-black text-cyan-200 truncate">Dresseur</span>
+                <span id="multiMyReadyBadge" class="hidden px-1.5 py-0.2 rounded bg-emerald-400 text-slate-950 text-[8.5px] font-black uppercase">PRÊT</span>
+              </div>
+              <div id="multiMyDeckName" class="text-[10.5px] font-bold text-white truncate">Demi Combat (30c)</div>
+              <div class="text-[9px] text-slate-400">Ton Deck choisi</div>
+            </div>
+          </div>
+
+          <span class="text-[10px] font-black text-amber-300 px-1.5 py-0.5 rounded bg-white/10 shrink-0">VS</span>
+
+          <!-- Adversaire Temps Réel -->
+          <div class="flex items-center gap-2 min-w-0 flex-1 justify-end text-right">
+            <div class="min-w-0">
+              <div class="flex items-center justify-end gap-1">
+                <span id="multiOppReadyBadge" class="hidden px-1.5 py-0.2 rounded bg-emerald-400 text-slate-950 text-[8.5px] font-black uppercase">PRÊT</span>
+                <span id="multiOppPseudo" class="text-xs font-black text-rose-300 truncate">En attente…</span>
+              </div>
+              <div id="multiOppDeckName" class="text-[10.5px] font-bold text-slate-300 truncate">Connexion salon…</div>
+              <div id="multiOppStatusSub" class="text-[9px] text-slate-400 truncate">Même salon = duel direct</div>
+            </div>
+            <img id="multiOppDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-rose-400/60 shrink-0 shadow opacity-50" />
+          </div>
+        </div>
+
+        <!-- Bouton Principal GO ! -->
+        <button id="multiGoBtn" onclick="clickMultiGo()" class="w-full btn-gold py-3 rounded-xl text-sm font-black uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 active:scale-98 transition">
+          <span>🚀</span>
+          <span id="multiGoBtnLabel">GO ! Lancer le Duel Multijoueur</span>
+        </button>
+        <div id="multiStatusBanner" class="text-[10.5px] text-center font-semibold text-cyan-200/90">
+          Choisis le deck que tu souhaites utiliser ci-dessous puis appuie sur <strong>GO !</strong>
+        </div>
+      </div>
+
+      <!-- Grille de Sélection du Deck Multijoueur -->
+      <div class="w-full space-y-2" id="multiDeckGrid"></div>
+    </div>
+
+    <!-- =============================================================== -->
     <!-- ONGLET 3 : OUVERTURE DE BOOSTERS 1999 (5 CARTES · TAUX ADAPTÉS) -->
     <!-- =============================================================== -->
     <div id="viewBooster" class="hidden w-full space-y-3.5">
@@ -1056,18 +1132,23 @@
 
     <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS -->
     <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(8px, env(safe-area-inset-bottom))">
-      <div class="max-w-lg mx-auto px-3 pt-2 grid grid-cols-3 gap-2">
-        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
+      <div class="max-w-lg mx-auto px-2.5 pt-2 grid grid-cols-4 gap-1.5">
+        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
           <span class="text-base sm:text-sm leading-none">🎓</span>
           <span>Tutoriel</span>
         </button>
-        <button id="tabBtnQuick" onclick="switchMenuTab('quick')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95">
+        <button id="tabBtnQuick" onclick="switchMenuTab('quick')" class="py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95">
           <span class="text-base sm:text-sm leading-none">⚔️</span>
-          <span>Duel Rapide</span>
+          <span>Duel IA</span>
         </button>
-        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
+        <button id="tabBtnMulti" onclick="switchMenuTab('multi')" class="relative py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95">
+          <span class="text-base sm:text-sm leading-none">🌐</span>
+          <span>Multi</span>
+          <span id="multiNavDot" class="hidden absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-slate-950 animate-ping"></span>
+        </button>
+        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
           <span class="text-base sm:text-sm leading-none">✨</span>
-          <span>Boosters (5c)</span>
+          <span>Boosters</span>
         </button>
       </div>
     </nav>
@@ -1296,6 +1377,50 @@
           🔇 Tout couper
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- MODAL PSEUDO DU DRESSEUR (DEMANDÉ À LA 1ʳᵉ CONNEXION + MULTI)       -->
+  <!-- =================================================================== -->
+  <div id="pseudoModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 border-2 border-cyan-400/60 rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+      <div class="flex items-start justify-between gap-2">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-[10px] font-extrabold uppercase tracking-wider mb-1">
+            <span>🧢</span> Carte de Dresseur 1999
+          </div>
+          <h3 class="font-black text-base text-white">Quel est ton pseudo de joueur ?</h3>
+          <p class="text-[11px] text-slate-300 mt-0.5">Demandé à ta première connexion · utilisé pour tes duels en mode Multijoueur.</p>
+        </div>
+        <button id="pseudoModalCloseBtn" onclick="closePseudoModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center shrink-0">✕</button>
+      </div>
+
+      <div class="space-y-2">
+        <label for="pseudoInput" class="block text-[11px] font-extrabold uppercase tracking-wider text-yellow-300">Ton Pseudo de Dresseur</label>
+        <input
+          id="pseudoInput"
+          type="text"
+          maxlength="16"
+          autocomplete="nickname"
+          placeholder="Ex : Sacha, Ondine, Red..."
+          style="font-size:16px"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();savePlayerPseudo();}"
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-cyan-400/50 focus:border-yellow-400 focus:outline-none text-white font-extrabold placeholder:text-slate-500"
+        />
+        <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+          <span class="text-[10px] text-slate-400 font-semibold">Idées :</span>
+          <button type="button" onclick="fillPseudoSuggestion('Sacha')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/15 text-[10px] font-bold text-slate-200">Sacha</button>
+          <button type="button" onclick="fillPseudoSuggestion('Ondine')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/15 text-[10px] font-bold text-slate-200">Ondine</button>
+          <button type="button" onclick="fillPseudoSuggestion('Pierre')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/15 text-[10px] font-bold text-slate-200">Pierre</button>
+          <button type="button" onclick="fillPseudoSuggestion('Red')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/15 text-[10px] font-bold text-slate-200">Red</button>
+          <button type="button" onclick="fillPseudoSuggestion('Blue')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/15 text-[10px] font-bold text-slate-200">Blue</button>
+        </div>
+      </div>
+
+      <button onclick="savePlayerPseudo()" class="w-full btn-gold py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg active:scale-95 transition">
+        ✅ Enregistrer mon Pseudo &amp; Continuer
+      </button>
     </div>
   </div>
 
@@ -15472,22 +15597,35 @@ const TYPE_EMOJI = {
     function switchMenuTab(tab) {
       const isTuto = tab === 'tuto';
       const isQuick = tab === 'quick';
+      const isMulti = tab === 'multi';
       const isBooster = tab === 'booster';
       document.getElementById('viewTuto').classList.toggle('hidden', !isTuto);
       document.getElementById('viewQuick').classList.toggle('hidden', !isQuick);
+      const vm = document.getElementById('viewMulti');
+      if (vm) vm.classList.toggle('hidden', !isMulti);
       const vb = document.getElementById('viewBooster');
       if (vb) vb.classList.toggle('hidden', !isBooster);
 
-      const activeCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
-      const idleCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95';
-      const idleBoosterCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95';
+      const activeCls = 'py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
+      const activeMultiCls = 'relative py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg ring-2 ring-cyan-200/80 active:scale-95';
+      const idleCls = 'py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95';
+      const idleMultiCls = 'relative py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-cyan-400/30 text-cyan-300 hover:text-cyan-100 hover:bg-white/10 active:scale-95';
+      const idleBoosterCls = 'py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95';
 
       document.getElementById('tabBtnTuto').className = isTuto ? activeCls : idleCls;
       document.getElementById('tabBtnQuick').className = isQuick ? activeCls : idleCls;
+      const bMulti = document.getElementById('tabBtnMulti');
+      if (bMulti) bMulti.className = isMulti ? activeMultiCls : idleMultiCls;
       const bBoost = document.getElementById('tabBtnBooster');
       if (bBoost) bBoost.className = isBooster ? activeCls : idleBoosterCls;
 
       if (isQuick) renderQuickSetup();
+      if (isMulti) {
+        if (!playerPseudo) openPseudoModal(true);
+        ensureMultiRealtimeConnected();
+        renderMultiSetup();
+        sendMultiPresence(true);
+      }
       if (isBooster && typeof updateBoosterStatsUi === 'function') updateBoosterStatsUi();
     }
 
@@ -15533,7 +15671,7 @@ const TYPE_EMOJI = {
         </div>
         <div class="space-y-1">
           <div class="flex items-center justify-between px-1">
-            <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-300">💿 4 Demi-Decks Officiels 1999 (30 cartes · 3 Prix)</span>
+            <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-300">📀 4 Demi-Decks Officiels 1999 (30 cartes · 3 Prix)</span>
           </div>
           <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderPlayerCard).join('')}</div>
         </div>
@@ -15570,7 +15708,7 @@ const TYPE_EMOJI = {
           <button onclick="selectQuickAiDeck('RANDOM')" class="px-2 py-0.5 rounded-full text-[9.5px] font-extrabold border transition ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-300 shadow' : 'bg-white/10 text-rose-200 border-white/15 hover:bg-white/20'}">🎲 IA Aléatoire</button>
         </div>
         <div class="space-y-1">
-          <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-300/90 px-1 block">💿 Demi-Decks IA (30 cartes · 3 Prix)</span>
+          <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-300/90 px-1 block">📀 Demi-Decks IA (30 cartes · 3 Prix)</span>
           <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderAiCard).join('')}</div>
         </div>
         <div class="space-y-1 pt-0.5">
@@ -15601,6 +15739,798 @@ const TYPE_EMOJI = {
         : quickAiDeck;
       startMatch(quickPlayerDeck, aiKey, 'quick');
     }
+
+    // =======================================================================
+    // 3B. PSEUDO PREMIÈRE CONNEXION & MODE MULTIJOUEUR TEMPS RÉEL (MQTT + BC)
+    // =======================================================================
+    const PSEUDO_STORAGE_KEY = 'ppi_v2_player_pseudo';
+    let playerPseudo = '';
+    try {
+      playerPseudo = (localStorage.getItem(PSEUDO_STORAGE_KEY) || '').trim();
+    } catch (_) {}
+
+    function updatePseudoUi() {
+      const label = playerPseudo || 'Dresseur';
+      const menuLbl = document.getElementById('menuPseudoLabel');
+      if (menuLbl) menuLbl.textContent = label;
+      const multiLbl = document.getElementById('multiMyPseudo');
+      if (multiLbl) multiLbl.textContent = label;
+    }
+    updatePseudoUi();
+
+    function openPseudoModal(isFirstVisit = false) {
+      const modal = document.getElementById('pseudoModal');
+      const input = document.getElementById('pseudoInput');
+      const closeBtn = document.getElementById('pseudoModalCloseBtn');
+      if (!modal || !input) return;
+      input.value = playerPseudo || '';
+      if (closeBtn) closeBtn.style.display = (isFirstVisit && !playerPseudo) ? 'none' : 'flex';
+      modal.classList.remove('hidden');
+      setTimeout(() => { try { input.focus(); input.select(); } catch (_) {} }, 60);
+    }
+
+    function closePseudoModal() {
+      const modal = document.getElementById('pseudoModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function fillPseudoSuggestion(name) {
+      const input = document.getElementById('pseudoInput');
+      if (input) {
+        input.value = name;
+        try { input.focus(); } catch (_) {}
+      }
+    }
+
+    function savePlayerPseudo() {
+      const input = document.getElementById('pseudoInput');
+      let val = (input ? input.value : '').trim().slice(0, 16);
+      if (!val) val = playerPseudo || 'Sacha';
+      playerPseudo = val;
+      try { localStorage.setItem(PSEUDO_STORAGE_KEY, playerPseudo); } catch (_) {}
+      updatePseudoUi();
+      closePseudoModal();
+      sfx('uncommon');
+      renderMultiSetup();
+      sendMultiPresence(true);
+    }
+
+    // --- État Salon & Transport Temps Réel Multijoueur ---
+    const mpClientId = 'p_' + Math.random().toString(36).slice(2, 10) + '_' + Date.now().toString(36).slice(-4);
+    let multiRoomCode = 'ARENE';
+    try {
+      const urlRoom = new URLSearchParams(location.search).get('room');
+      const savedRoom = localStorage.getItem('ppi_v2_multi_room');
+      multiRoomCode = ((urlRoom || savedRoom || 'ARENE').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8)) || 'ARENE';
+    } catch (_) {}
+
+    let multiPlayerDeck = 'COMBAT';
+    try {
+      const savedDeck = localStorage.getItem('ppi_v2_multi_deck');
+      if (savedDeck && DECK_META[savedDeck]) multiPlayerDeck = savedDeck;
+    } catch (_) {}
+
+    let multiMyReady = false;
+    let multiPeer = null; // { clientId, pseudo, deckKey, ready, lastSeen }
+    let multiMatchStarting = false;
+    let multiLastMatchId = null;
+    let mpApplyingRemote = false;
+    let mpLastToastText = '';
+    let mpPendingPromoResolve = null;
+
+    const MP_BROKERS = [
+      'wss://broker.hivemq.com:8884/mqtt',
+      'wss://broker.emqx.io:8084/mqtt'
+    ];
+    let mpSockets = [];
+    let mpBroadcastChannel = null;
+    let mpHeartbeatTimer = null;
+    let mpConnectedCount = 0;
+    const mpSeenMsgIds = new Set();
+
+    function getMultiTopic() {
+      return `pokemon-play-it/v2/room/${multiRoomCode}`;
+    }
+
+    // Encodeur / Décodeur binaire MQTT v3.1.1 sur WebSocket (zéro dépendance)
+    function mpEncodeUtf8(str) {
+      return new TextEncoder().encode(str);
+    }
+    function mpDecodeUtf8(bytes) {
+      return new TextDecoder().decode(bytes);
+    }
+    function mpEncodeRemLen(len) {
+      const out = [];
+      do {
+        let digit = len % 128;
+        len = Math.floor(len / 128);
+        if (len > 0) digit |= 0x80;
+        out.push(digit);
+      } while (len > 0);
+      return out;
+    }
+    function mpBuildConnectPacket(cid) {
+      const proto = mpEncodeUtf8('MQTT');
+      const cidBytes = mpEncodeUtf8(cid);
+      const varHeader = [0x00, proto.length, ...proto, 0x04, 0x02, 0x00, 0x3c];
+      const payload = [cidBytes.length >> 8, cidBytes.length & 0xff, ...cidBytes];
+      const rem = varHeader.length + payload.length;
+      return new Uint8Array([0x10, ...mpEncodeRemLen(rem), ...varHeader, ...payload]);
+    }
+    function mpBuildSubscribePacket(topic, pid = 1) {
+      const tBytes = mpEncodeUtf8(topic);
+      const varHeader = [pid >> 8, pid & 0xff];
+      const payload = [tBytes.length >> 8, tBytes.length & 0xff, ...tBytes, 0x00];
+      const rem = varHeader.length + payload.length;
+      return new Uint8Array([0x82, ...mpEncodeRemLen(rem), ...varHeader, ...payload]);
+    }
+    function mpBuildPublishPacket(topic, jsonStr) {
+      const tBytes = mpEncodeUtf8(topic);
+      const pBytes = mpEncodeUtf8(jsonStr);
+      const rem = 2 + tBytes.length + pBytes.length;
+      const pkt = new Uint8Array(1 + mpEncodeRemLen(rem).length + rem);
+      let pos = 0;
+      pkt[pos++] = 0x30;
+      for (const b of mpEncodeRemLen(rem)) pkt[pos++] = b;
+      pkt[pos++] = tBytes.length >> 8;
+      pkt[pos++] = tBytes.length & 0xff;
+      pkt.set(tBytes, pos); pos += tBytes.length;
+      pkt.set(pBytes, pos);
+      return pkt;
+    }
+    function mpParsePublishPackets(buf) {
+      const results = [];
+      let offset = 0;
+      while (offset < buf.length) {
+        const type = buf[offset] >> 4;
+        let multiplier = 1, remLen = 0, pos = offset + 1;
+        while (pos < buf.length) {
+          const b = buf[pos++];
+          remLen += (b & 0x7f) * multiplier;
+          if ((b & 0x80) === 0) break;
+          multiplier *= 128;
+        }
+        const pktEnd = pos + remLen;
+        if (pktEnd > buf.length) break;
+        if (type === 3 && pos + 2 <= pktEnd) {
+          const tLen = (buf[pos] << 8) | buf[pos + 1];
+          const pStart = pos + 2 + tLen;
+          if (pStart <= pktEnd) {
+            results.push(mpDecodeUtf8(buf.subarray(pStart, pktEnd)));
+          }
+        }
+        offset = pktEnd;
+      }
+      return results;
+    }
+
+    function updateMultiNetIndicator() {
+      const dot = document.getElementById('multiNetDot');
+      if (dot) {
+        dot.className = mpConnectedCount > 0
+          ? 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0'
+          : 'w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0';
+      }
+      const navDot = document.getElementById('multiNavDot');
+      if (navDot) {
+        const hasPeer = !!(multiPeer && (Date.now() - multiPeer.lastSeen < 15000));
+        navDot.classList.toggle('hidden', !hasPeer);
+      }
+    }
+
+    function ensureMultiRealtimeConnected() {
+      if (!mpBroadcastChannel && typeof BroadcastChannel !== 'undefined') {
+        try {
+          mpBroadcastChannel = new BroadcastChannel('ppi_multi_v1');
+          mpBroadcastChannel.onmessage = (ev) => {
+            if (ev && ev.data) handleIncomingMultiRaw(ev.data);
+          };
+        } catch (_) {}
+      }
+
+      if (mpSockets.length === 0 && typeof WebSocket !== 'undefined') {
+        MP_BROKERS.forEach((url, idx) => {
+          connectSingleMqttBroker(url, idx);
+        });
+      }
+
+      if (!mpHeartbeatTimer) {
+        mpHeartbeatTimer = setInterval(() => {
+          if (multiPeer && Date.now() - multiPeer.lastSeen > 14000) {
+            multiPeer = null;
+            updateMultiNetIndicator();
+            renderMultiSetup();
+          }
+          const multiVisible = !document.getElementById('viewMulti')?.classList.contains('hidden');
+          const inMultiGame = !!(game && game.mode === 'multi');
+          if (multiVisible || inMultiGame) {
+            sendMultiPresence(false);
+          }
+        }, 3200);
+      }
+    }
+
+    function connectSingleMqttBroker(url, idx) {
+      let ws;
+      try {
+        ws = new WebSocket(url, 'mqtt');
+        ws.binaryType = 'arraybuffer';
+      } catch (_) {
+        return;
+      }
+      const entry = { ws, ready: false, pingTimer: null, url };
+      mpSockets[idx] = entry;
+
+      ws.onopen = () => {
+        try {
+          ws.send(mpBuildConnectPacket(`${mpClientId}_${idx}`));
+        } catch (_) {}
+      };
+      ws.onmessage = (ev) => {
+        const buf = new Uint8Array(ev.data);
+        if (!buf.length) return;
+        const packetType = buf[0] >> 4;
+        if (packetType === 2) { // CONNACK
+          entry.ready = true;
+          mpConnectedCount = mpSockets.filter((s) => s && s.ready).length;
+          updateMultiNetIndicator();
+          try {
+            ws.send(mpBuildSubscribePacket(getMultiTopic(), 1));
+          } catch (_) {}
+          sendMultiPresence(true);
+          clearInterval(entry.pingTimer);
+          entry.pingTimer = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+              try { ws.send(new Uint8Array([0xc0, 0x00])); } catch (_) {}
+            }
+          }, 25000);
+        } else if (packetType === 3) { // PUBLISH
+          const payloads = mpParsePublishPackets(buf);
+          payloads.forEach((raw) => handleIncomingMultiRaw(raw));
+        }
+      };
+      ws.onclose = () => {
+        entry.ready = false;
+        clearInterval(entry.pingTimer);
+        mpConnectedCount = mpSockets.filter((s) => s && s.ready).length;
+        updateMultiNetIndicator();
+        setTimeout(() => connectSingleMqttBroker(url, idx), 4000);
+      };
+      ws.onerror = () => {};
+    }
+
+    function subscribeCurrentMultiRoom() {
+      const topic = getMultiTopic();
+      mpSockets.forEach((s) => {
+        if (s && s.ready && s.ws.readyState === WebSocket.OPEN) {
+          try { s.ws.send(mpBuildSubscribePacket(topic, 2)); } catch (_) {}
+        }
+      });
+    }
+
+    function sendMultiPacket(type, data = {}) {
+      ensureMultiRealtimeConnected();
+      const msg = {
+        ...data,
+        type,
+        room: multiRoomCode,
+        senderId: mpClientId,
+        pseudo: playerPseudo || 'Dresseur',
+        msgId: mpClientId + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7)
+      };
+      mpSeenMsgIds.add(msg.msgId);
+      const raw = JSON.stringify(msg);
+      if (mpBroadcastChannel) {
+        try { mpBroadcastChannel.postMessage(raw); } catch (_) {}
+      }
+      const pkt = mpBuildPublishPacket(getMultiTopic(), raw);
+      mpSockets.forEach((s) => {
+        if (s && s.ready && s.ws.readyState === WebSocket.OPEN) {
+          try { s.ws.send(pkt); } catch (_) {}
+        }
+      });
+    }
+
+    function sendMultiPresence(wantReply = false) {
+      sendMultiPacket('MP_PRESENCE', {
+        deckKey: multiPlayerDeck,
+        ready: multiMyReady,
+        wantReply: !!wantReply
+      });
+    }
+
+    function selectMultiDeck(key) {
+      if (!DECK_META[key]) return;
+      multiPlayerDeck = key;
+      try { localStorage.setItem('ppi_v2_multi_deck', key); } catch (_) {}
+      sfx('pick');
+      renderMultiSetup();
+      sendMultiPresence(false);
+    }
+
+    function promptMultiRoomCode() {
+      const code = prompt('Entre le code du Salon Multijoueur (ex: ARENE, DUEL1, SACHA) :', multiRoomCode);
+      if (!code) return;
+      const clean = code.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8) || 'ARENE';
+      multiRoomCode = clean;
+      try { localStorage.setItem('ppi_v2_multi_room', multiRoomCode); } catch (_) {}
+      multiPeer = null;
+      multiMyReady = false;
+      subscribeCurrentMultiRoom();
+      renderMultiSetup();
+      sendMultiPresence(true);
+    }
+
+    function shareMultiRoomLink() {
+      const shareUrl = `${location.origin}${location.pathname}?room=${encodeURIComponent(multiRoomCode)}`;
+      if (navigator.share) {
+        navigator.share({
+          title: 'Pokémon : À toi de jouer ! — Duel Multijoueur',
+          text: `Rejoins mon salon "${multiRoomCode}" contre ${playerPseudo || 'Dresseur'} !`,
+          url: shareUrl
+        }).catch(() => {});
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          const btn = document.getElementById('multiShareBtn');
+          if (btn) {
+            const old = btn.innerHTML;
+            btn.innerHTML = '✅ Lien copié !';
+            setTimeout(() => { btn.innerHTML = old; }, 2000);
+          }
+        }).catch(() => {});
+      }
+    }
+
+    function renderMultiSetup() {
+      updatePseudoUi();
+      const roomEl = document.getElementById('multiRoomBadge');
+      if (roomEl) roomEl.textContent = multiRoomCode;
+
+      const myMeta = DECK_META[multiPlayerDeck] || DECK_META.COMBAT;
+      const myImg = document.getElementById('multiMyDeckImg');
+      const myName = document.getElementById('multiMyDeckName');
+      const myReadyBadge = document.getElementById('multiMyReadyBadge');
+      if (myImg) myImg.src = myMeta.img;
+      if (myName) myName.textContent = `${myMeta.short} (${myMeta.cards}c)`;
+      if (myReadyBadge) myReadyBadge.classList.toggle('hidden', !multiMyReady);
+
+      const oppPseudoEl = document.getElementById('multiOppPseudo');
+      const oppDeckNameEl = document.getElementById('multiOppDeckName');
+      const oppDeckImgEl = document.getElementById('multiOppDeckImg');
+      const oppReadyBadge = document.getElementById('multiOppReadyBadge');
+      const oppSubEl = document.getElementById('multiOppStatusSub');
+      const goBtnLabel = document.getElementById('multiGoBtnLabel');
+      const statusBanner = document.getElementById('multiStatusBanner');
+
+      const hasPeer = !!(multiPeer && (Date.now() - multiPeer.lastSeen < 15000));
+      if (hasPeer) {
+        const oppMeta = DECK_META[multiPeer.deckKey] || DECK_META.EAU;
+        if (oppPseudoEl) {
+          oppPseudoEl.textContent = multiPeer.pseudo || 'Adversaire';
+          oppPseudoEl.className = 'text-xs font-black text-emerald-300 truncate';
+        }
+        if (oppDeckNameEl) oppDeckNameEl.textContent = `${oppMeta.short} (${oppMeta.cards}c)`;
+        if (oppDeckImgEl) {
+          oppDeckImgEl.src = oppMeta.img;
+          oppDeckImgEl.classList.remove('opacity-50');
+        }
+        if (oppReadyBadge) oppReadyBadge.classList.toggle('hidden', !multiPeer.ready);
+        if (oppSubEl) oppSubEl.textContent = multiPeer.ready ? '🔥 Prêt à lancer !' : 'En train de choisir son deck…';
+      } else {
+        if (oppPseudoEl) {
+          oppPseudoEl.textContent = 'En attente…';
+          oppPseudoEl.className = 'text-xs font-black text-rose-300 truncate';
+        }
+        if (oppDeckNameEl) oppDeckNameEl.textContent = `Salon ${multiRoomCode}`;
+        if (oppDeckImgEl) oppDeckImgEl.classList.add('opacity-50');
+        if (oppReadyBadge) oppReadyBadge.classList.add('hidden');
+        if (oppSubEl) oppSubEl.textContent = 'Ouvre le jeu sur le 2e appareil';
+      }
+
+      if (goBtnLabel) {
+        if (multiMyReady && hasPeer && multiPeer.ready) {
+          goBtnLabel.textContent = '⚔️ LANCEMENT DU DUEL…';
+        } else if (multiMyReady) {
+          goBtnLabel.textContent = hasPeer
+            ? `⏳ PRÊT ! En attente du GO de ${multiPeer.pseudo}…`
+            : `⏳ PRÊT ! En attente d'un adversaire dans ${multiRoomCode}…`;
+        } else if (hasPeer && multiPeer.ready) {
+          goBtnLabel.textContent = `🚀 GO ! Rejoindre ${multiPeer.pseudo} maintenant !`;
+        } else {
+          goBtnLabel.textContent = `🚀 GO ! Jouer avec ${myMeta.short}`;
+        }
+      }
+
+      if (statusBanner) {
+        if (hasPeer && multiPeer.ready && !multiMyReady) {
+          statusBanner.innerHTML = `🔥 <strong>${multiPeer.pseudo}</strong> est prêt avec <strong>${(DECK_META[multiPeer.deckKey] || DECK_META.EAU).short}</strong> ! Appuie sur <strong>GO !</strong>`;
+        } else if (hasPeer) {
+          statusBanner.innerHTML = `🟢 Connecté avec <strong>${multiPeer.pseudo}</strong> · Choisissez chacun votre deck et appuyez sur <strong>GO !</strong>`;
+        } else {
+          statusBanner.innerHTML = `Choisis ton deck et appuie sur <strong>GO !</strong> (le 2e joueur rejoint automatiquement le salon <strong>${multiRoomCode}</strong>).`;
+        }
+      }
+
+      const grid = document.getElementById('multiDeckGrid');
+      if (!grid) return;
+      const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
+      const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
+
+      const renderMultiCard = (k) => {
+        const d = DECK_META[k];
+        const sel = multiPlayerDeck === k;
+        const isHalf = d.cards === 30;
+        return `
+          <button onclick="selectMultiDeck('${k}')" class="p-1.5 rounded-xl bg-gradient-to-br ${d.grad} border ${sel ? 'border-cyan-300 ring-2 ring-cyan-400 shadow-lg scale-[1.02]' : d.border + ' opacity-85 hover:opacity-100'} flex flex-col items-center gap-1 transition">
+            <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow">
+              <img src="${d.img}" alt="${d.name}" loading="lazy" class="w-full h-full object-cover" />
+              <span class="absolute top-0.5 left-0.5 text-[7.5px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-500/90 text-white'}">${isHalf ? 'Demi' : '60c'}</span>
+              <span class="absolute bottom-0.5 right-0.5 text-[7.5px] font-mono font-bold px-1 rounded bg-black/80 text-yellow-200">${d.prizes}🏆</span>
+            </div>
+            <span class="text-[10px] font-extrabold ${sel ? 'text-cyan-300' : 'text-white'} truncate w-full text-center leading-tight">${d.short}</span>
+            <span class="text-[8.5px] text-slate-300 truncate w-full text-center -mt-0.5">${d.star.split(' ')[0]}</span>
+          </button>
+        `;
+      };
+
+      grid.innerHTML = `
+        <div class="flex items-center justify-between px-1">
+          <h2 class="text-[11px] font-black tracking-wider uppercase text-cyan-300">Choisis le Deck que tu souhaites utiliser</h2>
+          <span class="text-[9.5px] font-mono text-slate-300">Demi-Deck (30c) ou Complet (60c)</span>
+        </div>
+        <div class="space-y-1">
+          <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-300 px-1 block">📀 4 Demi-Decks Officiels 1999 (30 cartes · 3 Prix)</span>
+          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderMultiCard).join('')}</div>
+        </div>
+        <div class="space-y-1 pt-0.5">
+          <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-cyan-300 px-1 block">🔥 6 Decks Complets V2 (60 cartes · 6 Prix)</span>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderMultiCard).join('')}</div>
+        </div>
+      `;
+    }
+
+    function clickMultiGo() {
+      if (!playerPseudo) {
+        openPseudoModal(true);
+        return;
+      }
+      ensureMultiRealtimeConnected();
+      multiMyReady = !multiMyReady;
+      if (multiMyReady) {
+        sfx('holo');
+        buzz(20);
+      } else {
+        sfx('pick');
+      }
+      renderMultiSetup();
+      sendMultiPresence(true);
+
+      if (multiMyReady && multiPeer && multiPeer.ready && (Date.now() - multiPeer.lastSeen < 15000)) {
+        triggerMultiMatchStart();
+      }
+    }
+
+    function drawMultiDeckWithOffset(deckKey, startUid) {
+      const savedCounter = uidCounter;
+      uidCounter = startUid;
+      const init = drawStartingHandAndPrizes(deckKey);
+      uidCounter = Math.max(savedCounter, uidCounter);
+      return init;
+    }
+
+    function triggerMultiMatchStart() {
+      if (multiMatchStarting || !multiPeer) return;
+      multiMatchStarting = true;
+      const matchId = 'mp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+      multiLastMatchId = matchId;
+
+      const hostInit = drawMultiDeckWithOffset(multiPlayerDeck, 10000);
+      const guestInit = drawMultiDeckWithOffset(multiPeer.deckKey || 'EAU', 20000);
+      const firstPlayerId = Math.random() < 0.5 ? mpClientId : multiPeer.clientId;
+
+      const payload = {
+        matchId,
+        hostId: mpClientId,
+        hostPseudo: playerPseudo || 'Dresseur',
+        hostDeckKey: multiPlayerDeck,
+        hostInit,
+        guestId: multiPeer.clientId,
+        guestPseudo: multiPeer.pseudo || 'Adversaire',
+        guestDeckKey: multiPeer.deckKey || 'EAU',
+        guestInit,
+        firstPlayerId
+      };
+
+      sendMultiPacket('MP_MATCH_START', payload);
+      startMultiMatchFromPayload(payload);
+    }
+
+    function startMultiMatchFromPayload(p) {
+      multiMatchStarting = false;
+      multiMyReady = false;
+      if (multiPeer) multiPeer.ready = false;
+
+      const isHost = p.hostId === mpClientId;
+      const myInit = isHost ? p.hostInit : p.guestInit;
+      const oppInit = isHost ? p.guestInit : p.hostInit;
+      const myDeckKey = isHost ? p.hostDeckKey : p.guestDeckKey;
+      const oppDeckKey = isHost ? p.guestDeckKey : p.hostDeckKey;
+      const oppPseudo = isHost ? p.guestPseudo : p.hostPseudo;
+      const iStartFirst = p.firstPlayerId === mpClientId;
+
+      game = {
+        mode: 'multi',
+        matchId: p.matchId,
+        isHost,
+        oppPseudo: oppPseudo || 'Adversaire',
+        setupPhase: true,
+        turnNumber: 1,
+        activePlayer: iStartFirst ? 'player' : 'ai',
+        energyAttachedThisTurn: false,
+        retreatedThisTurn: false,
+        gameOver: false,
+        player: {
+          deckKey: myDeckKey,
+          deck: myInit.deck,
+          hand: myInit.hand,
+          prizes: myInit.prizes,
+          active: null,
+          bench: [],
+          discard: []
+        },
+        ai: {
+          deckKey: oppDeckKey,
+          deck: oppInit.deck,
+          hand: oppInit.hand,
+          prizes: oppInit.prizes,
+          active: null,
+          bench: [],
+          discard: []
+        }
+      };
+
+      fx.handSeen.clear(); fx.prevHp.clear(); fx.prevDmg.clear();
+      document.getElementById('menuScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+
+      document.getElementById('julietteBubble').classList.add('hidden');
+      document.getElementById('aiHeaderAvatar').classList.add('hidden');
+      document.getElementById('aiHeaderName').textContent = `🌐 ${game.oppPseudo}`;
+      document.getElementById('aiDeckLabel').textContent = DECK_META[oppDeckKey]?.short || oppDeckKey;
+
+      mpApplyingRemote = true;
+      renderBoard();
+      mpApplyingRemote = false;
+
+      showGameToast(`⚔️ Duel contre <strong>${game.oppPseudo}</strong> ! Choisis ton Pokémon Actif dans ta main.`);
+    }
+
+    function cloneSide(side) {
+      return JSON.parse(JSON.stringify(side));
+    }
+
+    function checkMultiSetupComplete() {
+      if (!game || game.mode !== 'multi' || !game.setupPhase) return;
+      if (game.player.active && game.ai.active) {
+        game.setupPhase = false;
+        mpApplyingRemote = true;
+        renderBoard();
+        mpApplyingRemote = false;
+        if (game.activePlayer === 'player') {
+          sfx('turn');
+          showBanner('À TOI DE COMMENCER !');
+          showGameToast(`🎲 Tu commences le Tour 1 contre <strong>${game.oppPseudo}</strong> !`);
+        } else {
+          showBanner(`TOUR DE ${game.oppPseudo.toUpperCase()}`);
+          showGameToast(`⏳ <strong>${game.oppPseudo}</strong> commence le Tour 1 !`);
+        }
+      }
+    }
+
+    function broadcastMultiBoardSync() {
+      if (!game || game.mode !== 'multi' || mpApplyingRemote) return;
+      if (game.setupPhase) {
+        sendMultiPacket('MP_SETUP_UPDATE', {
+          matchId: game.matchId,
+          side: cloneSide(game.player)
+        });
+        checkMultiSetupComplete();
+      } else if (game.activePlayer === 'player') {
+        sendMultiPacket('MP_STATE_SYNC', {
+          matchId: game.matchId,
+          actorSide: cloneSide(game.player),
+          targetSide: cloneSide(game.ai),
+          toast: mpLastToastText
+        });
+        mpLastToastText = '';
+      }
+    }
+
+    async function handleIncomingMultiRaw(raw) {
+      let msg;
+      try {
+        msg = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      } catch (_) {
+        return;
+      }
+      if (!msg || msg.room !== multiRoomCode || msg.senderId === mpClientId) return;
+      if (msg.msgId) {
+        if (mpSeenMsgIds.has(msg.msgId)) return;
+        mpSeenMsgIds.add(msg.msgId);
+        if (mpSeenMsgIds.size > 600) {
+          const first = mpSeenMsgIds.values().next().value;
+          mpSeenMsgIds.delete(first);
+        }
+      }
+
+      if (msg.type === 'MP_PRESENCE') {
+        multiPeer = {
+          clientId: msg.senderId,
+          pseudo: msg.pseudo || 'Dresseur',
+          deckKey: msg.deckKey || 'COMBAT',
+          ready: !!msg.ready,
+          lastSeen: Date.now()
+        };
+        updateMultiNetIndicator();
+        renderMultiSetup();
+        if (msg.wantReply) {
+          sendMultiPresence(false);
+        }
+        if (multiMyReady && multiPeer.ready && !multiMatchStarting && (!game || game.mode !== 'multi')) {
+          if (mpClientId < multiPeer.clientId) {
+            setTimeout(() => {
+              if (multiMyReady && multiPeer && multiPeer.ready && (!game || game.mode !== 'multi')) {
+                triggerMultiMatchStart();
+              }
+            }, 90);
+          } else {
+            setTimeout(() => {
+              if (multiMyReady && multiPeer && multiPeer.ready && (!game || game.mode !== 'multi')) {
+                triggerMultiMatchStart();
+              }
+            }, 550);
+          }
+        }
+        return;
+      }
+
+      if (msg.type === 'MP_MATCH_START') {
+        if (multiLastMatchId === msg.matchId) return;
+        multiLastMatchId = msg.matchId;
+        startMultiMatchFromPayload(msg);
+        return;
+      }
+
+      if (!game || game.mode !== 'multi') return;
+
+      if (msg.type === 'MP_SETUP_UPDATE') {
+        mpApplyingRemote = true;
+        const hadActive = !!game.ai.active;
+        game.ai = msg.side;
+        if (!hadActive && game.ai.active) {
+          fx.placed.add(game.ai.active.uid);
+          playPokemonCry(game.ai.active.dex);
+        }
+        renderBoard();
+        mpApplyingRemote = false;
+        checkMultiSetupComplete();
+        return;
+      }
+
+      if (msg.type === 'MP_STATE_SYNC') {
+        mpApplyingRemote = true;
+        game.ai = msg.actorSide;
+        game.player = msg.targetSide;
+        if (msg.toast) showGameToast(`🌐 ${game.oppPseudo} : ${msg.toast}`);
+        renderBoard();
+        mpApplyingRemote = false;
+        return;
+      }
+
+      if (msg.type === 'MP_COIN_FLIP') {
+        flipCoinAnimated(`${game.oppPseudo} · ${msg.label}`, msg.isHeads);
+        return;
+      }
+
+      if (msg.type === 'MP_ATTACK_ANIM') {
+        mpApplyingRemote = true;
+        game.ai = msg.actorSide;
+        game.player = msg.targetSide;
+        if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
+        await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
+        showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
+        renderBoard();
+        mpApplyingRemote = false;
+        return;
+      }
+
+      if (msg.type === 'MP_KO_ANIM') {
+        mpApplyingRemote = true;
+        const localVictim = msg.victimIsActor ? 'ai' : 'player';
+        await animateKO(localVictim);
+        game.ai = msg.actorSide;
+        game.player = msg.targetSide;
+        renderBoard();
+        mpApplyingRemote = false;
+        return;
+      }
+
+      if (msg.type === 'MP_REQUEST_PROMO') {
+        mpApplyingRemote = true;
+        game.ai = msg.actorSide;
+        game.player = msg.targetSide;
+        renderBoard();
+        mpApplyingRemote = false;
+        if (game.player.bench.length > 0) {
+          openPickerModal(
+            '💥 Ton Pokémon Actif est K.O. !',
+            'Choisis quel Pokémon de ton Banc monte au combat :',
+            game.player.bench,
+            (chosenIdx) => {
+              mpApplyingRemote = true;
+              game.player.active = game.player.bench.splice(chosenIdx, 1)[0];
+              fx.placed.add(game.player.active.uid);
+              playPokemonCry(game.player.active.dex);
+              renderBoard();
+              mpApplyingRemote = false;
+              sendMultiPacket('MP_PROMOTE_CHOICE', {
+                matchId: game.matchId,
+                chosenIdx,
+                side: cloneSide(game.player)
+              });
+            },
+            false
+          );
+        }
+        return;
+      }
+
+      if (msg.type === 'MP_PROMOTE_CHOICE') {
+        if (mpPendingPromoResolve) {
+          const r = mpPendingPromoResolve;
+          mpPendingPromoResolve = null;
+          r(msg);
+        }
+        return;
+      }
+
+      if (msg.type === 'MP_END_TURN') {
+        mpApplyingRemote = true;
+        game.ai = msg.actorSide;
+        game.player = msg.targetSide;
+        renderBoard();
+        mpApplyingRemote = false;
+        startPlayerTurn();
+        return;
+      }
+
+      if (msg.type === 'MP_GAME_OVER') {
+        if (game.gameOver) return;
+        mpApplyingRemote = true;
+        if (msg.actorSide && msg.targetSide) {
+          game.ai = msg.actorSide;
+          game.player = msg.targetSide;
+        }
+        endMatch(msg.winnerIsActor ? 'ai' : 'player', msg.reason);
+        mpApplyingRemote = false;
+        return;
+      }
+    }
+
+    // Demander le pseudo dès la 1re connexion + ouverture auto de l'onglet Multi si ?room= dans l'URL
+    setTimeout(() => {
+      ensureMultiRealtimeConnected();
+      renderMultiSetup();
+      const hasUrlRoom = new URLSearchParams(location.search).has('room');
+      if (hasUrlRoom) {
+        switchMenuTab('multi');
+      }
+      if (!playerPseudo) {
+        openPseudoModal(true);
+      }
+    }, 120);
 
     function drawStartingHandAndPrizes(deckKey) {
       const prizeCount = DECK_META[deckKey]?.prizes || (deckKey.startsWith('V2_') ? 6 : 3);
@@ -15691,6 +16621,13 @@ const TYPE_EMOJI = {
     }
 
     function confirmQuitMatch() {
+      if (game && game.mode === 'multi' && !game.gameOver && !mpApplyingRemote) {
+        sendMultiPacket('MP_GAME_OVER', {
+          matchId: game.matchId,
+          winnerIsActor: false,
+          reason: `${playerPseudo || 'Ton adversaire'} a quitté le duel.`
+        });
+      }
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('menuScreen').classList.remove('hidden');
       game = null;
@@ -15825,6 +16762,11 @@ const TYPE_EMOJI = {
     }
 
     function sayJuliette(text, forceToast = false) {
+      if (game && game.mode === 'multi') {
+        mpLastToastText = text;
+        if (forceToast) showGameToast(text);
+        return;
+      }
       if (game && game.mode === 'quick') {
         if (forceToast) showGameToast(text);
         return;
@@ -15964,6 +16906,14 @@ const TYPE_EMOJI = {
 
     function handBadge(card) {
       if (game && game.mode === 'quick') return { badge: '', playable: false };
+      if (game && game.mode === 'multi' && game.setupPhase) {
+        if (card.category === 'Pokémon' && card.stage === 'Base' && !game.gameOver) {
+          const playable = !game.player.active || game.player.bench.length < 5;
+          const badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
+          return { badge, playable };
+        }
+        return { badge: '', playable: false };
+      }
       let badge = '', playable = false;
       if (card.category === 'Pokémon' && card.stage === 'Base') {
         playable = !game.player.active || game.player.bench.length < 5;
@@ -16045,9 +16995,11 @@ const TYPE_EMOJI = {
 
       document.getElementById('turnPhaseBadge').textContent = !game.player.active
         ? 'Choisis ton Actif'
-        : game.activePlayer === 'player'
-          ? `Tour ${game.turnNumber} · À TOI`
-          : `Tour ${game.turnNumber} · Juliette…`;
+        : (game.mode === 'multi' && game.setupPhase && !game.ai.active)
+          ? `Attente ${game.oppPseudo || 'Adversaire'}…`
+          : game.activePlayer === 'player'
+            ? `Tour ${game.turnNumber} · À TOI`
+            : `Tour ${game.turnNumber} · ${game.mode === 'multi' ? (game.oppPseudo || 'Adversaire') : game.mode === 'quick' ? 'IA' : 'Juliette'}…`;
 
       document.getElementById('aiActiveSlot').innerHTML = renderPokemonSlot(game.ai.active, 'ai', 'active');
       document.getElementById('playerActiveSlot').innerHTML = renderPokemonSlot(game.player.active, 'player', 'active');
@@ -16077,6 +17029,10 @@ const TYPE_EMOJI = {
         });
       });
       fx.placed.clear(); fx.evolved.clear(); fx.attached.clear();
+
+      if (game && game.mode === 'multi' && !mpApplyingRemote) {
+        broadcastMultiBoardSync();
+      }
     }
 
     window.addEventListener('resize', () => { if (game) renderBoard(); });
@@ -16148,6 +17104,15 @@ const TYPE_EMOJI = {
 
     function dropTargetsFor(card) {
       const P = game.player, t = [];
+      if (game.mode === 'multi' && game.setupPhase) {
+        if (card.category === 'Pokémon' && card.stage === 'Base') {
+          if (!P.active) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
+          else if (P.bench.length < 5) {
+            for (let i = P.bench.length; i < 5; i++) t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actPlayBasic(card, 'bench') });
+          }
+        }
+        return t;
+      }
       if (card.category === 'Pokémon' && card.stage === 'Base') {
         if (!P.active) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
         else if (P.bench.length < 5) {
@@ -16327,7 +17292,8 @@ const TYPE_EMOJI = {
           clearTimeout(drag.lp);
           if (drag.preview) { hidePreview(); drag.preview = false; }
           setHandFocus(null);
-          if (game.activePlayer !== 'player' || game.gameOver) return;
+          const canDragNow = game.activePlayer === 'player' || (game.mode === 'multi' && game.setupPhase);
+          if (!canDragNow || game.gameOver) return;
           startDrag();
         }
         drag.vx = e.clientX - drag.x;
@@ -16693,8 +17659,23 @@ const TYPE_EMOJI = {
       const endBtn = document.getElementById('endTurnBtn');
       const retBtn = document.getElementById('retreatBtn');
 
+      if (game && game.mode === 'multi' && game.setupPhase) {
+        const msg = !game.player.active
+          ? 'Choisis ton Pokémon Actif !'
+          : `⏳ Attente Actif de ${game.oppPseudo || 'l\'adversaire'}…`;
+        container.innerHTML = `<span class="text-[10px] text-cyan-200/80 font-mono text-right">${msg}</span>`;
+        endBtn.disabled = true;
+        retBtn.disabled = true;
+        endBtn.classList.remove('ready');
+        return;
+      }
+
       if (!game || !game.player.active || game.activePlayer !== 'player') {
-        const waitLabel = game?.mode === 'quick' ? 'Tour adverse...' : 'Juliette réfléchit...';
+        const waitLabel = game?.mode === 'multi'
+          ? `Tour de ${game.oppPseudo || 'l\'adversaire'}...`
+          : game?.mode === 'quick'
+            ? 'Tour adverse...'
+            : 'Juliette réfléchit...';
         container.innerHTML = `<span class="text-[10px] text-white/50 font-mono text-right">${!game?.player.active ? (game?.mode === 'quick' ? '' : 'Pose d\'abord un Pokémon de Base !') : waitLabel}</span>`;
         endBtn.disabled = true;
         retBtn.disabled = true;
@@ -16753,7 +17734,7 @@ const TYPE_EMOJI = {
       const actionsEl = document.getElementById('modalCardActions');
       actionsEl.innerHTML = '';
 
-      if (owner === 'player' && zone === 'active' && game.activePlayer === 'player') {
+      if (owner === 'player' && zone === 'active' && game.activePlayer === 'player' && !(game.mode === 'multi' && game.setupPhase)) {
         (target.attacks || []).forEach((atk, i) => {
           const ok = canPayAttackCost(target, atk.cost);
           const btn = document.createElement('button');
@@ -16769,7 +17750,9 @@ const TYPE_EMOJI = {
     }
 
     function openHandCardModal(handIndex) {
-      if (!game || game.activePlayer !== 'player') return;
+      if (!game) return;
+      const isMultiSetup = game.mode === 'multi' && game.setupPhase;
+      if (game.activePlayer !== 'player' && !isMultiSetup) return;
       const card = game.player.hand[handIndex];
       if (!card) return;
 
@@ -16805,6 +17788,11 @@ const TYPE_EMOJI = {
           btn.onclick = () => { closeCardModal(); actPlayBasic(card, 'bench'); renderBoard(); };
           actionsEl.appendChild(btn);
         }
+      }
+
+      if (isMultiSetup) {
+        modal.classList.remove('hidden');
+        return;
       }
 
       // CAS 2 : Pokémon Niveau 1 (Évolution)
@@ -17582,9 +18570,16 @@ const TYPE_EMOJI = {
       );
     }
 
-    function flipCoinAnimated(label = 'Lancer de Pièce') {
+    function flipCoinAnimated(label = 'Lancer de Pièce', forcedOutcome = null) {
       return new Promise((resolve) => {
-        const isHeads = Math.random() < 0.5;
+        const isHeads = typeof forcedOutcome === 'boolean' ? forcedOutcome : (Math.random() < 0.5);
+        if (game && game.mode === 'multi' && forcedOutcome === null && !mpApplyingRemote) {
+          sendMultiPacket('MP_COIN_FLIP', {
+            matchId: game.matchId,
+            label,
+            isHeads
+          });
+        }
         const modal = document.getElementById('coinModal');
         const visual = document.getElementById('coinVisual');
         const resText = document.getElementById('coinResultText');
@@ -17703,10 +18698,25 @@ const TYPE_EMOJI = {
         extraLog += ` (${attacker.name} subit 30 dégâts de recul)`;
       }
 
+      if (game && game.mode === 'multi' && attackerOwner === 'player') {
+        sendMultiPacket('MP_ATTACK_ANIM', {
+          matchId: game.matchId,
+          attackIndex,
+          atkName: attack.name,
+          attackerName: attacker.name,
+          defenderName: defender.name,
+          finalDamage,
+          atkType: attacker.type,
+          extraLog,
+          actorSide: cloneSide(game.player),
+          targetSide: cloneSide(game.ai)
+        });
+      }
+
       // Animation : la carte attaquante fonce sur la cible, impact, chiffres de dégâts
       await animateAttack(attackerOwner, defOwner, finalDamage, attacker.type);
 
-      sayJuliette(`${attacker.name} utilise <strong>${attack.name}</strong> : ${finalDamage} dégâts sur ${defender.name}${extraLog} !`);
+      sayJuliette(`${attacker.name} utilise <strong>${attack.name}</strong> : ${finalDamage} dégâts sur ${defender.name}${extraLog} !`, game.mode === 'multi');
       renderBoard();
 
       await wait(650);
@@ -17738,29 +18748,68 @@ const TYPE_EMOJI = {
         fx.dealFrom.set(prize.uid, 'prize');
         winnerSide.hand.push(prize);
         sayJuliette(
-          `${koPkm.name} est K.O. ! ${winnerOwner === 'player' ? `Tu récupères 1 carte Récompense (${prize.name}) !` : 'Je récupère 1 carte Récompense !'}`
+          `${koPkm.name} est K.O. ! ${winnerOwner === 'player' ? `Tu récupères 1 carte Récompense (${prize.name}) !` : `${game.mode === 'multi' ? (game.oppPseudo || 'L\'adversaire') : 'Juliette'} récupère 1 carte Récompense !`}`,
+          game.mode === 'multi'
         );
+      }
+
+      if (game.mode === 'multi') {
+        sendMultiPacket('MP_KO_ANIM', {
+          matchId: game.matchId,
+          victimIsActor: victimOwner === 'player',
+          actorSide: cloneSide(game.player),
+          targetSide: cloneSide(game.ai)
+        });
       }
 
       renderBoard();
 
       // Conditions de victoire
       if (winnerSide.prizes.length === 0) {
-        endMatch(winnerOwner, 'Toutes les 3 cartes Récompense ont été remportées !');
+        endMatch(winnerOwner, 'Toutes les cartes Récompense ont été remportées !');
         return;
       }
       if (victimSide.bench.length === 0) {
-        endMatch(winnerOwner, `${victimOwner === 'player' ? 'Tu n\'as' : 'Juliette n\'a'} plus aucun Pokémon sur le Banc !`);
+        const oppName = game.mode === 'multi' ? (game.oppPseudo || 'Ton adversaire') : 'Juliette';
+        endMatch(winnerOwner, `${victimOwner === 'player' ? 'Tu n\'as' : `${oppName} n'a`} plus aucun Pokémon sur le Banc !`);
         return;
       }
 
       // Promotion d'un Pokémon du Banc
       if (victimOwner === 'ai') {
+        if (game.mode === 'multi' && victimSide.bench.length > 1) {
+          showGameToast(`⏳ En attente du choix de Pokémon Actif de <strong>${game.oppPseudo}</strong>…`);
+          sendMultiPacket('MP_REQUEST_PROMO', {
+            matchId: game.matchId,
+            actorSide: cloneSide(game.player),
+            targetSide: cloneSide(game.ai)
+          });
+          const promoReply = await new Promise((resolve) => {
+            mpPendingPromoResolve = resolve;
+            setTimeout(() => {
+              if (mpPendingPromoResolve === resolve) {
+                mpPendingPromoResolve = null;
+                resolve(null);
+              }
+            }, 22000);
+          });
+          if (promoReply && promoReply.side) {
+            mpApplyingRemote = true;
+            game.ai = promoReply.side;
+            if (game.ai.active) {
+              fx.placed.add(game.ai.active.uid);
+              playPokemonCry(game.ai.active.dex);
+            }
+            renderBoard();
+            mpApplyingRemote = false;
+            return;
+          }
+        }
         victimSide.bench.sort((a, b) => b.energies.length - a.energies.length || (b.hp - b.damage) - (a.hp - a.damage));
         victimSide.active = victimSide.bench.shift();
         fx.placed.add(victimSide.active.uid);
         playPokemonCry(victimSide.active.dex);
-        sayJuliette(`J'envoie ${victimSide.active.name} en Pokémon Actif !`);
+        sayJuliette(`${game.mode === 'multi' ? (game.oppPseudo || 'Adversaire') + ' envoie' : 'J\'envoie'} ${victimSide.active.name} en Pokémon Actif !`, game.mode === 'multi');
         renderBoard();
       } else {
         await new Promise((resolve) => {
@@ -17795,7 +18844,7 @@ const TYPE_EMOJI = {
     function endPlayerTurn() {
       if (!game || game.gameOver) return;
       if (!game.player.active) {
-        sayJuliette('Tu dois d\'abord choisir ton Pokémon Actif dans ta main !');
+        sayJuliette('Tu dois d\'abord choisir ton Pokémon Actif dans ta main !', true);
         return;
       }
 
@@ -17811,13 +18860,23 @@ const TYPE_EMOJI = {
       game.energyAttachedThisTurn = false;
       game.retreatedThisTurn = false;
       renderBoard();
-      showBanner('TOUR DE JULIETTE');
 
+      if (game.mode === 'multi') {
+        sendMultiPacket('MP_END_TURN', {
+          matchId: game.matchId,
+          actorSide: cloneSide(game.player),
+          targetSide: cloneSide(game.ai)
+        });
+        showBanner(`TOUR DE ${(game.oppPseudo || 'L\'ADVERSAIRE').toUpperCase()}`);
+        return;
+      }
+
+      showBanner(game.mode === 'quick' ? 'TOUR DE L\'IA' : 'TOUR DE JULIETTE');
       setTimeout(runJulietteTurn, 1300);
     }
 
     async function runJulietteTurn() {
-      if (!game || game.gameOver) return;
+      if (!game || game.gameOver || game.mode === 'multi') return;
       setJulietteMood('focus');
 
       // 1. Pioche obligatoire de Juliette
@@ -17954,18 +19013,31 @@ const TYPE_EMOJI = {
       }
       const drawn = game.player.deck.shift();
       game.player.hand.push(drawn);
-      sayJuliette(`Début du tour ${game.turnNumber} : tu pioches <strong>${drawn.name}</strong> !`);
+      sayJuliette(`Début du tour ${game.turnNumber} : tu pioches <strong>${drawn.name}</strong> !`, game.mode === 'multi');
       renderBoard();
       showBanner('À TOI !');
     }
 
     function endMatch(winner, reason) {
+      if (!game) return;
+      if (game.mode === 'multi' && !mpApplyingRemote && !game.gameOver) {
+        sendMultiPacket('MP_GAME_OVER', {
+          matchId: game.matchId,
+          winnerIsActor: winner === 'player',
+          reason,
+          actorSide: cloneSide(game.player),
+          targetSide: cloneSide(game.ai)
+        });
+      }
       game.gameOver = true;
       setJulietteMood(winner === 'player' ? 'surprised' : 'happy');
       renderBoard();
+      const oppLabel = game.mode === 'multi' ? (game.oppPseudo || 'ton adversaire') : game.mode === 'quick' ? 'l\'IA' : 'Juliette';
+      const isMultiMatch = game.mode === 'multi';
+      const usedDeckKey = game.player.deckKey;
       setTimeout(() => {
         openPickerModal(
-          winner === 'player' ? '🏆 VICTOIRE ! Tu as battu Juliette !' : '💫 Juliette remporte la partie !',
+          winner === 'player' ? `🏆 VICTOIRE ! Tu as battu ${oppLabel} !` : `💫 ${oppLabel} remporte la partie !`,
           `${reason} Veux-tu rejouer une partie ?`,
           [],
           () => {},
@@ -17973,14 +19045,25 @@ const TYPE_EMOJI = {
         );
         const grid = document.getElementById('pickerGrid');
         grid.className = 'flex flex-col gap-2';
-        grid.innerHTML = `
-          <button onclick="closePickerModal(); startMatch('${game.player.deckKey}')" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
-            🔄 Rejouer avec le Deck ${game.player.deckKey}
-          </button>
-          <button onclick="closePickerModal(); confirmQuitMatch()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
-            🏠 Choisir un autre Demi-Deck
-          </button>
-        `;
+        if (isMultiMatch) {
+          grid.innerHTML = `
+            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); clickMultiGo();" class="w-full py-3 rounded-xl font-extrabold text-xs bg-cyan-400 text-slate-950">
+              🚀 Revanche Multijoueur (GO avec ${DECK_META[usedDeckKey]?.short || usedDeckKey})
+            </button>
+            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
+              🌐 Changer de Deck au Salon Multijoueur
+            </button>
+          `;
+        } else {
+          grid.innerHTML = `
+            <button onclick="closePickerModal(); startMatch('${usedDeckKey}')" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
+              🔄 Rejouer avec le Deck ${usedDeckKey}
+            </button>
+            <button onclick="closePickerModal(); confirmQuitMatch()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
+              🏠 Choisir un autre Deck
+            </button>
+          `;
+        }
       }, 400);
     }
 
