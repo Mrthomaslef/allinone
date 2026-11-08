@@ -387,6 +387,34 @@
         radial-gradient(circle at 82% 28%, rgba(56, 189, 248, 0.12), transparent 45%),
         radial-gradient(circle at 50% 88%, rgba(239, 68, 68, 0.12), transparent 50%);
     }
+    /* ===== Accueil Boosters (hub mobile) ===== */
+    .hub-pill { background: rgba(15,23,42,0.78); border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 6px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08); backdrop-filter: blur(10px); }
+    .hub-mini-card { width: 22px; height: 31px; border-radius: 4px; overflow: hidden; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); }
+    .hub-mini-card img { width: 100%; height: 100%; object-fit: cover; }
+    .hub-icon-btn { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 14px; font-size: 17px; background: rgba(15,23,42,0.78); border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 6px 16px rgba(0,0,0,0.35); transition: transform .15s; touch-action: manipulation; }
+    .hub-icon-btn:active { transform: scale(.92); }
+    .hub-avatar-ring { --pct: 0; display: grid; place-items: center; width: 66px; height: 66px; border-radius: 50%; padding: 4px;
+      background: conic-gradient(#38bdf8 calc(var(--pct) * 1%), rgba(255,255,255,0.12) 0); box-shadow: 0 8px 22px rgba(0,0,0,0.5); }
+    .hub-avatar { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #334155, #0f172a); border: 2px solid rgba(255,255,255,0.18); }
+    .hub-ball { width: 34px; height: 34px; border-radius: 50%; position: relative; background: linear-gradient(#ef4444 0 46%, #0f172a 46% 54%, #f8fafc 54%); box-shadow: inset -3px -4px 6px rgba(0,0,0,0.35); }
+    .hub-ball::after { content: ''; position: absolute; left: 50%; top: 50%; width: 11px; height: 11px; transform: translate(-50%,-50%); border-radius: 50%; background: #f8fafc; border: 3px solid #0f172a; }
+    .hub-pack-panel { background: linear-gradient(160deg, rgba(139,92,246,0.55) 0%, rgba(168,85,247,0.35) 38%, rgba(15,23,42,0.85) 70%); border: 1px solid rgba(196,181,253,0.35); box-shadow: 0 18px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12); }
+    .hub-pack-btn { touch-action: manipulation; min-width: 0; }
+    .hub-pack { position: relative; display: block; width: 100%; aspect-ratio: 11 / 20; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 24px rgba(0,0,0,0.55); transition: transform .25s ease; }
+    .hub-pack-btn:hover .hub-pack, .hub-pack-btn:focus-visible .hub-pack { transform: translateY(-4px) scale(1.03); }
+    .hub-pack-btn:active .hub-pack { transform: scale(.97); }
+    .hub-pack-css { display: flex; flex-direction: column; align-items: center; background: linear-gradient(165deg, var(--pk1) 0%, var(--pk2) 45%, var(--pk3) 100%); }
+    .hub-pack-crimp { width: 100%; height: 7%; flex: none; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0 3px, rgba(0,0,0,0.15) 3px 6px); }
+    .hub-pack-logo { margin-top: 7%; font-weight: 900; font-size: clamp(10px, 3.4vw, 15px); letter-spacing: .06em; color: #fff; text-shadow: 0 2px 0 var(--pk3), 0 0 10px var(--pkA); }
+    .hub-pack-art { width: 82%; flex: 1 1 auto; min-height: 0; margin: 6% 0 4%; object-fit: cover; object-position: center 22%; border-radius: 6px; border: 2px solid var(--pkA); box-shadow: 0 6px 14px rgba(0,0,0,0.45); }
+    .hub-pack-sub { font-size: 9px; font-weight: 800; color: rgba(255,255,255,0.8); margin-bottom: 5%; }
+    .hub-pack-cta { max-width: 100%; padding: 3px 7px; border-radius: 999px; font-size: 9.5px; font-weight: 900; line-height: 1.15; color: #0f172a; background: linear-gradient(90deg, #fde047, #f59e0b); box-shadow: 0 3px 10px rgba(250,204,21,0.35); text-align: center; }
+    .hub-pip { font-size: 13px; line-height: 1; transition: opacity .2s, filter .2s; }
+    .hub-pip:not(.on) { opacity: .3; filter: grayscale(1); }
+    .hub-tile { background: linear-gradient(160deg, rgba(30,41,59,0.92), rgba(15,23,42,0.9)); border: 1px solid rgba(255,255,255,0.13); box-shadow: 0 10px 26px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08); touch-action: manipulation; }
+    .hub-tag { padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 900; box-shadow: 0 4px 12px rgba(0,0,0,0.35); white-space: nowrap; max-width: calc(100% - 8px); overflow: hidden; text-overflow: ellipsis; }
+    .hub-mission-btn { width: 58px; height: 58px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: #052e16; background: radial-gradient(circle at 35% 30%, #6ee7b7, #10b981 70%); border: 3px solid rgba(255,255,255,0.75); box-shadow: 0 8px 20px rgba(16,185,129,0.45); touch-action: manipulation; transition: transform .15s; }
+    .hub-mission-btn:active { transform: translateY(-50%) scale(.92) !important; }
     .deck-card {
       position: relative;
       overflow: hidden;
@@ -952,18 +980,20 @@
         <span id="audioBtnMenuLabel" class="text-[11px] font-bold">Réglages</span>
       </button>
       </div>
+      <div id="menuHeroTitle" class="hidden">
       <h1 class="mt-1.5 text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-b from-white via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(250,204,21,0.35)]">
         POKÉMON : À TOI DE JOUER !
       </h1>
       <p class="text-[11px] text-slate-300/90 font-medium">
         Set de Base · Jungle · Fossile — <span class="text-yellow-300 font-bold">228 Cartes Officielles FR HD</span>
       </p>
+      </div>
     </div>
 
     <!-- =============================================================== -->
     <!-- ONGLET 1 UNIFIÉ : TUTORIEL GUIDÉ + PARTIE RAPIDE (DUEL IA)      -->
     <!-- =============================================================== -->
-    <div id="viewTuto" class="w-full space-y-2.5">
+    <div id="viewTuto" class="hidden w-full space-y-2.5">
       <!-- BLOC 1 COMPACT : TUTORIEL GUIDÉ AVEC JULIETTE (4 DEMI-DECKS EN 1 CLIC) -->
       <div class="w-full p-2.5 rounded-2xl bg-gradient-to-r from-slate-900/95 via-slate-900/85 to-slate-900/95 border border-yellow-400/35 shadow-xl space-y-2 relative overflow-hidden">
         <div class="flex items-center gap-2.5">
@@ -1192,160 +1222,150 @@
     </div>
 
     <!-- =============================================================== -->
-    <!-- ONGLET 3 : OUVERTURE DE BOOSTERS 1999 (5 CARTES · TAUX ADAPTÉS) -->
+    <!-- ONGLET ACCUEIL : BOOSTERS 1999 (mise en page « hub » mobile)    -->
     <!-- =============================================================== -->
-    <div id="viewBooster" class="hidden w-full space-y-3.5">
-      <!-- En-tête Statut de Collection & Taux de Drop -->
-      <div class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/90 via-purple-950/85 to-slate-900/95 border border-yellow-400/50 shadow-2xl flex flex-col gap-2.5">
-        <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div class="flex items-center gap-2.5">
-            <div class="w-10 h-10 rounded-xl bg-yellow-400/20 border border-yellow-400/50 flex items-center justify-center text-xl shadow-inner">✨</div>
-            <div>
-              <div class="text-xs font-black uppercase tracking-wider text-yellow-300">Ouverture de Boosters WotC 1999</div>
-              <div class="text-[11px] text-slate-200 font-semibold">5 Cartes par Pack · Vrais numéros &amp; raretés d'époque</div>
-            </div>
+    <div id="viewBooster" class="w-full space-y-3">
+      <!-- 1. Barre profil : vitrine · avatar/niveau · raccourcis -->
+      <div class="hub-topbar grid grid-cols-[1fr_auto_1fr] items-center gap-2 w-full">
+        <button onclick="openCollectionModal('all')" class="hub-pill justify-self-start flex items-center gap-1.5 pl-1.5 pr-2 py-1.5 rounded-2xl active:scale-95 transition" title="Ma vitrine · Galerie Collection">
+          <span id="hubShowcase" class="flex items-center gap-1">
+            <span class="hub-mini-card grid place-items-center text-[10px] text-slate-500">?</span>
+            <span class="hub-mini-card grid place-items-center text-[10px] text-slate-500">?</span>
+          </span>
+          <span class="text-base leading-none">📖</span>
+          <span class="text-slate-400 text-xs font-black">›</span>
+        </button>
+
+        <button onclick="openPseudoModal(false)" class="flex flex-col items-center active:scale-95 transition" title="Mon profil de Dresseur">
+          <span id="hubAvatarRing" class="hub-avatar-ring" style="--pct:0">
+            <span class="hub-avatar"><span class="hub-ball"></span></span>
+          </span>
+          <span id="hubLevelLabel" class="mt-0.5 text-[11px] font-black text-slate-200 tracking-wide">Niv. 1</span>
+        </button>
+
+        <div class="justify-self-end flex items-center gap-1.5">
+          <button onclick="document.getElementById('boosterRatesBox').open = true; document.getElementById('boosterRatesBox').scrollIntoView({behavior:'smooth', block:'center'})" class="hub-icon-btn" title="Taux de rareté">📊</button>
+          <button onclick="switchMenuTab('decks')" class="hub-icon-btn" title="Mes decks">🛠️</button>
+          <button onclick="switchMenuTab('multi')" class="hub-icon-btn relative" title="Jouer avec un ami">🌐</button>
+        </div>
+      </div>
+
+      <!-- 2. Grand panneau : les 3 illustrations de booster du set actif côte à côte -->
+      <div id="hubPackPanel" class="hub-pack-panel relative w-full rounded-[28px] px-2.5 sm:px-4 pt-10 pb-8 transition-colors duration-300">
+        <div class="absolute top-2.5 left-3 right-2.5 flex items-center justify-between gap-1.5">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span id="hubActiveSetBadge" class="text-[10.5px] font-black px-2 py-0.5 rounded-lg bg-yellow-400/20 border border-yellow-400/50 text-yellow-200 truncate">⚡ Set de Base · 102 cartes</span>
+            <span id="boosterTotalOpenedBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg bg-black/35 border border-white/10 text-amber-200 shrink-0">📦 0 pack</span>
           </div>
-          <div class="flex items-center gap-2">
-            <span id="boosterTotalOpenedBadge" class="text-[10.5px] font-mono font-bold px-2.5 py-1 rounded-lg bg-black/45 border border-white/15 text-amber-300">📦 0 pack ouvert</span>
-            <span id="boosterHoloCountBadge" class="text-[10.5px] font-mono font-bold px-2.5 py-1 rounded-lg bg-pink-500/20 border border-pink-400/40 text-pink-200">✨ 0 Holo</span>
-          </div>
+          <button id="hubChangeSetBtn" onclick="cycleHubBoosterSet()" class="hub-pill px-2.5 py-1 rounded-xl text-[11px] font-black text-yellow-200 border border-yellow-400/50 hover:border-yellow-300 active:scale-95 transition flex items-center gap-1 shrink-0" title="Changer d'extension (Set de Base · Jungle · Fossile)">
+            <span>🔄</span>
+            <span>Changer de set</span>
+          </button>
         </div>
 
-        <!-- Barre Économie : 3 Boosters Gratuits / Heure & Pièces (100 🪙 / Victoire, 100 🪙 / Booster) -->
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <div class="p-2.5 rounded-xl bg-cyan-950/60 border border-cyan-400/40 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40 flex items-center justify-center text-base shrink-0">🎁</span>
-              <div class="min-w-0">
-                <div class="text-[11px] font-black text-cyan-200 uppercase tracking-wide">Boosters Gratuits / Heure</div>
-                <div id="boosterFreeStatusSub" class="text-[10.5px] font-semibold text-cyan-100/85 truncate">3 gratuits disponibles chaque heure</div>
-              </div>
-            </div>
-            <span id="boosterFreeCountBadge" class="px-2.5 py-1 rounded-lg bg-cyan-400 text-slate-950 font-black text-xs whitespace-nowrap shrink-0 shadow">3 / 3</span>
-          </div>
-
-          <div class="p-2.5 rounded-xl bg-amber-950/60 border border-yellow-400/45 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="w-8 h-8 rounded-lg bg-yellow-400/20 border border-yellow-400/45 flex items-center justify-center text-base shrink-0">🪙</span>
-              <div class="min-w-0">
-                <div class="text-[11px] font-black text-yellow-300 uppercase tracking-wide">Trésor du Dresseur</div>
-                <div class="text-[10.5px] font-semibold text-amber-100/85 truncate">🏆 Victoire = +100 🪙 · Booster = 100 🪙</div>
-              </div>
-            </div>
-            <span id="boosterCoinsBadge" class="px-2.5 py-1 rounded-lg bg-yellow-400 text-slate-950 font-black text-xs whitespace-nowrap shrink-0 shadow">0 🪙</span>
-          </div>
+        <div id="hubPacksGrid" class="grid grid-cols-3 gap-2 sm:gap-3 items-end">
+          <!-- Illustration 1 : Tortank -->
+          <button onclick="launchBoosterPack('base', 'tortank')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
+            <span class="hub-pack holo-wrap">
+              <img src="assets/boosters/base-tortank.jpg" alt="Booster Tortank" class="w-full h-full object-cover" />
+            </span>
+            <span class="text-[11px] font-black text-white leading-tight">💧 Tortank</span>
+            <span class="hub-pack-cta">🎁 Gratuit</span>
+          </button>
+          <!-- Illustration 2 : Dracaufeu -->
+          <button onclick="launchBoosterPack('base', 'dracaufeu')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
+            <span class="hub-pack holo-wrap ring-2 ring-yellow-300/75 shadow-[0_0_20px_rgba(250,204,21,0.45)]">
+              <img src="assets/boosters/base-dracaufeu.jpg" alt="Booster Dracaufeu" class="w-full h-full object-cover" />
+            </span>
+            <span class="text-[11px] font-black text-yellow-200 leading-tight">🔥 Dracaufeu</span>
+            <span class="hub-pack-cta">🎁 Gratuit</span>
+          </button>
+          <!-- Illustration 3 : Florizarre -->
+          <button onclick="launchBoosterPack('base', 'florizarre')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
+            <span class="hub-pack holo-wrap">
+              <img src="assets/boosters/base-florizarre.jpg" alt="Booster Florizarre" class="w-full h-full object-cover" />
+            </span>
+            <span class="text-[11px] font-black text-white leading-tight">🌿 Florizarre</span>
+            <span class="hub-pack-cta">🎁 Gratuit</span>
+          </button>
         </div>
 
-        <!-- Jauge de progression des 228 cartes -->
-        <div onclick="openCollectionModal('all')" class="cursor-pointer w-full bg-black/40 hover:bg-black/55 p-2.5 rounded-xl border border-white/10 hover:border-emerald-400/50 transition space-y-1.5" title="Ouvrir la Galerie Collection 1999">
-          <div class="flex items-center justify-between text-[11px] font-bold">
-            <span class="text-slate-200 flex items-center gap-1.5">📖 Galerie Collection 1999 <span class="text-[10px] text-emerald-300 font-extrabold underline">Voir →</span></span>
-            <span id="boosterColCountText" class="font-mono text-emerald-300">0 / 228 cartes (0%)</span>
+        <!-- Sélecteur direct d'extension (Set de Base · Jungle · Fossile) -->
+        <div class="mt-2.5 grid grid-cols-3 gap-1.5">
+          <button id="hubSetBtn-base" onclick="selectHubBoosterSet('base')" class="py-1 px-2 rounded-xl text-[10.5px] font-black border transition bg-yellow-400/25 text-yellow-200 border-yellow-400/80 shadow flex items-center justify-center gap-1 active:scale-95">
+            <span>⚡</span><span>Set de Base</span>
+          </button>
+          <button id="hubSetBtn-jungle" onclick="selectHubBoosterSet('jungle')" class="py-1 px-2 rounded-xl text-[10.5px] font-black border transition bg-white/5 text-slate-200 border-white/15 hover:border-emerald-300/60 flex items-center justify-center gap-1 active:scale-95">
+            <span>🌿</span><span>Jungle</span>
+          </button>
+          <button id="hubSetBtn-fossil" onclick="selectHubBoosterSet('fossil')" class="py-1 px-2 rounded-xl text-[10.5px] font-black border transition bg-white/5 text-slate-200 border-white/15 hover:border-amber-300/60 flex items-center justify-center gap-1 active:scale-95">
+            <span>🪨</span><span>Fossile</span>
+          </button>
+        </div>
+
+        <!-- Jauge des boosters gratuits + sablier -->
+        <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+          <div class="hub-pill flex items-center gap-1 px-3 py-1.5 rounded-full">
+            <span id="hubFreePips" class="flex items-center gap-1">
+              <span class="hub-pip on">🎁</span><span class="hub-pip on">🎁</span><span class="hub-pip on">🎁</span>
+            </span>
+            <span id="boosterFreeCountBadge" class="ml-1 px-2 py-0.5 rounded-lg bg-cyan-400 text-slate-950 font-black text-[10.5px] whitespace-nowrap">MAX.</span>
           </div>
-          <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div class="hub-pill flex items-center gap-1 px-2.5 py-1.5 rounded-full" title="Recharge des boosters gratuits">
+            <span class="text-sm leading-none">⏳</span>
+            <span id="hubCountdown" class="text-[11px] font-mono font-black text-slate-200">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Deux tuiles : Collection · Trésor -->
+      <div class="grid grid-cols-2 gap-2.5 pt-3">
+        <div onclick="openCollectionModal('all')" class="hub-tile cursor-pointer relative rounded-2xl pt-7 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
+          <span id="boosterHoloCountBadge" class="hub-tag absolute -top-2 left-1.5 bg-pink-500/90 text-white">✨ 0 Holo</span>
+          <span class="text-3xl leading-none drop-shadow">📖</span>
+          <span class="text-[13px] font-black text-white">Collection</span>
+          <span id="boosterColCountText" class="text-[10.5px] font-mono font-bold text-emerald-300">0 / 228 (0%)</span>
+          <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
             <div id="boosterColBar" class="h-full bg-gradient-to-r from-emerald-400 via-yellow-400 to-pink-500 transition-all duration-500" style="width: 0%"></div>
           </div>
-          <div class="grid grid-cols-3 gap-1.5 pt-1 text-[10px] font-mono text-slate-300 text-center">
-            <div onclick="event.stopPropagation(); openCollectionModal('base')" class="bg-white/5 hover:bg-white/15 rounded-lg py-1 border border-white/5 transition">Base : <strong id="colStatBase" class="text-yellow-300">0/102</strong></div>
-            <div onclick="event.stopPropagation(); openCollectionModal('jungle')" class="bg-white/5 hover:bg-white/15 rounded-lg py-1 border border-white/5 transition">Jungle : <strong id="colStatJungle" class="text-emerald-300">0/64</strong></div>
-            <div onclick="event.stopPropagation(); openCollectionModal('fossil')" class="bg-white/5 hover:bg-white/15 rounded-lg py-1 border border-white/5 transition">Fossile : <strong id="colStatFossil" class="text-amber-300">0/62</strong></div>
+          <div class="grid grid-cols-3 gap-1 w-full text-[9.5px] font-mono text-slate-300 text-center">
+            <span onclick="event.stopPropagation(); openCollectionModal('base')" class="bg-white/5 rounded-md py-0.5">B <strong id="colStatBase" class="text-yellow-300">0/102</strong></span>
+            <span onclick="event.stopPropagation(); openCollectionModal('jungle')" class="bg-white/5 rounded-md py-0.5">J <strong id="colStatJungle" class="text-emerald-300">0/64</strong></span>
+            <span onclick="event.stopPropagation(); openCollectionModal('fossil')" class="bg-white/5 rounded-md py-0.5">F <strong id="colStatFossil" class="text-amber-300">0/62</strong></span>
           </div>
+        </div>
+
+        <div onclick="switchMenuTab('tuto')" class="hub-tile cursor-pointer relative rounded-2xl pt-7 pb-2.5 px-2.5 flex flex-col items-center gap-1.5 active:scale-[.98] transition">
+          <span class="hub-tag absolute -top-2 right-1.5 bg-slate-100 text-slate-900">🏆 Victoire = +100 🪙</span>
+          <span class="text-3xl leading-none drop-shadow">🪙</span>
+          <span class="text-[13px] font-black text-white">Trésor</span>
+          <span id="boosterCoinsBadge" class="px-2.5 py-0.5 rounded-lg bg-yellow-400 text-slate-950 font-black text-xs shadow">0 🪙</span>
+          <span class="text-[10px] font-semibold text-amber-100/80 text-center leading-tight">1 booster = 100 🪙<br>⚔️ Joue pour en gagner</span>
         </div>
       </div>
 
-      <!-- SÉLECTION DES 3 BOOSTERS OFFICIELS 1999 -->
-      <div class="w-full space-y-2">
-        <div class="flex items-center justify-between px-1">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
-            <h2 class="text-xs font-black tracking-wider uppercase text-yellow-200">
-              Choisis ton booster
-            </h2>
+      <!-- 4. Barre de mission -->
+      <div class="relative w-full pr-14">
+        <div class="hub-tile rounded-2xl py-2 px-3 flex items-center justify-between gap-2 min-h-[54px]">
+          <div class="min-w-0">
+            <div id="hubMissionTitle" class="text-[11.5px] font-black text-slate-100 truncate">Ouvre tes boosters gratuits</div>
+            <div id="boosterFreeStatusSub" class="text-[10.5px] font-semibold text-cyan-200/90 truncate">3 gratuits disponibles chaque heure</div>
           </div>
-          <span class="text-[10.5px] text-amber-200 font-bold whitespace-nowrap shrink-0">🎁 3 gratuits/h · 🪙 100</span>
+          <span id="hubMissionBadge" class="shrink-0 px-2.5 py-1 rounded-full bg-emerald-400 text-slate-950 text-[10.5px] font-black">✔ Prêt !</span>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <!-- Booster Set de Base (1999) -->
-          <button onclick="launchBoosterPack('base')" class="deck-card p-3.5 bg-gradient-to-b from-blue-950/95 via-indigo-950/90 to-slate-950 border border-yellow-400/55 hover:border-yellow-300 flex flex-col items-center text-center gap-2 group">
-            <div class="flex items-center justify-between w-full">
-              <span class="text-[10.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-yellow-400/20 text-yellow-200 border border-yellow-400/40">102 Cartes</span>
-              <span class="text-[10.5px] font-mono text-sky-300 font-bold">16 Holo ✨</span>
-            </div>
-            <div class="relative my-1 flex items-center justify-center" style="width:136px;height:118px">
-              <img id="baseBoosterFanLeft" src="assets/boosters/base-tortank.jpg" alt="Booster Tortank" loading="lazy" class="rounded-md shadow-lg border border-white/30 object-cover transition-all duration-300 group-hover:-translate-x-1 group-hover:-rotate-15" style="width:58px;height:102px;position:absolute;left:4px;top:10px;transform:rotate(-13deg)" />
-              <img id="baseBoosterFanRight" src="assets/boosters/base-florizarre.jpg" alt="Booster Florizarre" loading="lazy" class="rounded-md shadow-lg border border-white/30 object-cover transition-all duration-300 group-hover:translate-x-1 group-hover:rotate-15" style="width:58px;height:102px;position:absolute;right:4px;top:10px;transform:rotate(13deg)" />
-              <div class="holo-wrap relative z-10 rounded-lg shadow-2xl border-2 border-yellow-300/90 overflow-hidden transition-transform duration-300 group-hover:scale-105" style="width:66px;height:114px">
-                <img id="baseBoosterFanCenter" src="assets/boosters/base-dracaufeu.jpg" alt="Booster Dracaufeu" loading="lazy" class="w-full h-full object-cover" />
-              </div>
-            </div>
-            <div>
-              <div class="font-black text-base text-white group-hover:text-yellow-300 transition">Booster Set de Base</div>
-              <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">3 illustrations Édition 1 FR</div>
-            </div>
-            <div class="flex items-center justify-center gap-1 w-full" onclick="event.stopPropagation()">
-              <span id="baseArtBtn-tortank" onclick="selectBaseBoosterArt('tortank')" class="cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-white/5 text-sky-200 border-white/15 hover:border-sky-300">💧 Tortank</span>
-              <span id="baseArtBtn-dracaufeu" onclick="selectBaseBoosterArt('dracaufeu')" class="cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-yellow-400/25 text-yellow-200 border-yellow-400/70 shadow">🔥 Dracaufeu</span>
-              <span id="baseArtBtn-florizarre" onclick="selectBaseBoosterArt('florizarre')" class="cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-white/5 text-emerald-200 border-white/15 hover:border-emerald-300">🌿 Florizarre</span>
-            </div>
-            <span id="boosterBtnCta-base" class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
-              🎁 Ouvrir GRATUIT (3/3)
-            </span>
-          </button>
-
-          <!-- Booster Jungle (1999) -->
-          <button onclick="launchBoosterPack('jungle')" class="deck-card p-3.5 bg-gradient-to-b from-emerald-950/95 via-green-950/90 to-slate-950 border border-emerald-400/55 hover:border-emerald-300 flex flex-col items-center text-center gap-2.5 group">
-            <div class="flex items-center justify-between w-full">
-              <span class="text-[10.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 border border-emerald-400/40">64 Cartes</span>
-              <span class="text-[10.5px] font-mono text-emerald-300 font-bold">16 Holo ✨</span>
-            </div>
-            <div class="deck-fan my-1" style="width:94px;height:112px">
-              <img src="https://assets.tcgdex.net/fr/base/base2/3/high.webp" alt="Pyroli" loading="lazy" class="fan-sub" style="width:66px;left:2px" />
-              <div class="holo-wrap">
-                <img src="https://assets.tcgdex.net/fr/base/base2/10/high.webp" alt="Insécateur" loading="lazy" class="fan-main" style="width:74px;margin-left:16px" />
-              </div>
-            </div>
-            <div>
-              <div class="font-black text-base text-white group-hover:text-emerald-300 transition">Booster Jungle</div>
-              <div class="text-[10.5px] text-emerald-200/90 font-semibold mt-0.5">Insécateur · Pyroli · Ronflex</div>
-              <p class="text-[10px] text-slate-300/80 mt-0.5">Voltali, Aquali, Kangourex, Mélodelfe</p>
-            </div>
-            <span id="boosterBtnCta-jungle" class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
-              🎁 Ouvrir GRATUIT (3/3)
-            </span>
-          </button>
-
-          <!-- Booster Fossile (1999) -->
-          <button onclick="launchBoosterPack('fossil')" class="deck-card p-3.5 bg-gradient-to-b from-amber-950/95 via-stone-900/90 to-slate-950 border border-amber-500/55 hover:border-amber-300 flex flex-col items-center text-center gap-2.5 group">
-            <div class="flex items-center justify-between w-full">
-              <span class="text-[10.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/40">62 Cartes</span>
-              <span class="text-[10.5px] font-mono text-amber-300 font-bold">15 Holo ✨</span>
-            </div>
-            <div class="deck-fan my-1" style="width:94px;height:112px">
-              <img src="https://assets.tcgdex.net/fr/base/base3/2/high.webp" alt="Artikodin" loading="lazy" class="fan-sub" style="width:66px;left:2px" />
-              <div class="holo-wrap">
-                <img src="https://assets.tcgdex.net/fr/base/base3/1/high.webp" alt="Ptéra" loading="lazy" class="fan-main" style="width:74px;margin-left:16px" />
-              </div>
-            </div>
-            <div>
-              <div class="font-black text-base text-white group-hover:text-amber-300 transition">Booster Fossile</div>
-              <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">Ptéra · Artikodin · Dracolosse</div>
-              <p class="text-[10px] text-slate-300/80 mt-0.5">Ectoplasma, Lokhlass, Sulfura, Kabutops</p>
-            </div>
-            <span id="boosterBtnCta-fossil" class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
-              🎁 Ouvrir GRATUIT (3/3)
-            </span>
-          </button>
-        </div>
+        <button onclick="switchMenuTab('tuto')" class="hub-mission-btn absolute right-0 top-1/2 -translate-y-1/2" title="Jouer contre l'IA pour gagner des pièces">
+          <span class="text-xl leading-none">⚔️</span>
+          <span class="text-[9px] font-black uppercase">Jouer</span>
+        </button>
       </div>
 
-      <!-- TABLEAU TRANSPARENT DES TAUX DE RARETÉ ADAPTÉS (5 CARTES / PACK) -->
-      <div class="w-full p-3 rounded-2xl bg-slate-900/90 border border-white/15 text-xs space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="font-black text-yellow-300 uppercase tracking-wider text-[11px]">📊 Taux de Rareté Adaptés (Pack de 5 Cartes)</span>
-          <span class="text-[10px] font-mono text-pink-300 font-bold">✨ God Pack (5 Holo) : 0,5 %</span>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+      <!-- 5. Taux de rareté (repliable) -->
+      <details id="boosterRatesBox" class="w-full p-3 rounded-2xl bg-slate-900/80 border border-white/10 text-xs group">
+        <summary class="cursor-pointer list-none flex items-center justify-between gap-2">
+          <span class="font-black text-yellow-300 uppercase tracking-wider text-[11px]">📊 Taux de rareté (5 cartes)</span>
+          <span class="text-[10px] font-mono text-pink-300 font-bold">God Pack 0,5 % <span class="text-slate-500 group-open:rotate-180 inline-block transition">▼</span></span>
+        </summary>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] mt-2">
           <div class="p-2 rounded-xl bg-black/40 border border-white/10">
             <div class="font-bold text-slate-200">Cartes 1, 2 &amp; 3</div>
             <div class="text-slate-400 text-[10px] mt-0.5">● <strong class="text-white">100 % Commune</strong> (sans doublon dans le pack)</div>
@@ -1359,7 +1379,7 @@
             <div class="text-slate-200 text-[10px] mt-0.5">✨ <strong class="text-pink-300">33,3 % Rare Holo</strong> · ★ <strong class="text-yellow-200">46,7 % Rare</strong> · ◆ 20 % Peu Com.</div>
           </div>
         </div>
-      </div>
+      </details>
     </div>
 
     <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
@@ -1368,6 +1388,11 @@
     <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS (4 ONGLETS COMPACTS) -->
     <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
       <div class="max-w-lg mx-auto px-2.5 pt-1.5 grid grid-cols-4 gap-1.5">
+        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
+          <span class="text-base sm:text-sm leading-none">🏠</span>
+          <span>Accueil</span>
+          <span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black leading-tight">3</span>
+        </button>
         <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
           <span class="text-base sm:text-sm leading-none">⚔️</span>
           <span>Jouer IA</span>
@@ -1376,11 +1401,6 @@
           <span class="text-base sm:text-sm leading-none">🌐</span>
           <span>Multi</span>
           <span id="multiNavDot" class="hidden absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-slate-950 animate-ping"></span>
-        </button>
-        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
-          <span class="text-base sm:text-sm leading-none">✨</span>
-          <span>Boosters</span>
-          <span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black leading-tight">3</span>
         </button>
         <button id="tabBtnDecks" onclick="switchMenuTab('decks')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95">
           <span class="text-base sm:text-sm leading-none">🛠️</span>
@@ -15940,6 +15960,8 @@ const TYPE_EMOJI = {
       if (vm) vm.classList.toggle('hidden', !isMulti);
       const vb = document.getElementById('viewBooster');
       if (vb) vb.classList.toggle('hidden', !isBooster);
+      const hero = document.getElementById('menuHeroTitle');
+      if (hero) hero.classList.toggle('hidden', isBooster);
 
       const activeCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
       const activeMultiCls = 'relative py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg ring-2 ring-cyan-200/80 active:scale-95';
@@ -16140,6 +16162,8 @@ const TYPE_EMOJI = {
       if (menuLbl) menuLbl.textContent = label;
       const multiLbl = document.getElementById('multiMyPseudo');
       if (multiLbl) multiLbl.textContent = label;
+      const multiDeckPseudo = document.getElementById('multiMyDeckPseudo');
+      if (multiDeckPseudo) multiDeckPseudo.textContent = label;
     }
     updatePseudoUi();
 
@@ -16251,6 +16275,7 @@ const TYPE_EMOJI = {
       if (savedDeck && DECK_META[savedDeck]) multiPlayerDeck = savedDeck;
     } catch (_) {}
 
+    let multiSubPage = 'lobby'; // 'lobby' (Page 1 : Rejoindre salon) | 'deck' (Page 2 : Choix du deck & Prêt)
     let multiMyReady = false;
     let multiShowRoomChoices = false;
     let multiPeer = null; // { clientId, pseudo, deckKey, ready, lastSeen }
@@ -16262,6 +16287,20 @@ const TYPE_EMOJI = {
     let mpLocalPromoResolve = null;
     let mpPromoPickerOpen = false;
     let mpIncomingChain = Promise.resolve();
+
+    function switchMultiSubPage(page) {
+      multiSubPage = page === 'deck' ? 'deck' : 'lobby';
+      if (multiSubPage === 'lobby' && multiMyReady) {
+        multiMyReady = false;
+        sendMultiPresence(false);
+      }
+      sfx('pick');
+      renderMultiSetup();
+      const menuEl = document.getElementById('menuScreen');
+      if (menuEl) {
+        try { menuEl.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { menuEl.scrollTop = 0; }
+      }
+    }
 
     const MP_BROKERS = [
       'wss://broker.hivemq.com:8884/mqtt',
@@ -16499,13 +16538,14 @@ const TYPE_EMOJI = {
       return String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
     }
 
-    function joinMultiRoom(code) {
+    function joinMultiRoom(code, goDeckPage = false) {
       const clean = sanitizeMultiCode(code);
       if (!clean) return false;
       multiRoomCode = clean;
       try { localStorage.setItem('ppi_v2_multi_room', multiRoomCode); } catch (_) {}
       multiPeer = null;
       multiMyReady = false;
+      if (goDeckPage) multiSubPage = 'deck';
       ensureMultiRealtimeConnected();
       subscribeCurrentMultiRoom();
       sfx('pick');
@@ -16527,19 +16567,19 @@ const TYPE_EMOJI = {
       }
       input.value = '';
       input.blur();
-      joinMultiRoom(clean);
+      joinMultiRoom(clean, true);
     }
 
     function createPrivateMultiRoom() {
       const words = ['PIKA', 'SALA', 'BULBI', 'CARA', 'EVOLI', 'MEW', 'RONFL', 'TAUPI', 'ABRA', 'PSY'];
       const w = words[Math.floor(Math.random() * words.length)];
       const n = String(Math.floor(10 + Math.random() * 90));
-      joinMultiRoom(w + n);
+      joinMultiRoom(w + n, false);
     }
 
     function promptMultiRoomCode() {
       const code = prompt('Entre le code donné par ton ami (ex : PIKA42) :', multiRoomCode);
-      if (code) joinMultiRoom(code);
+      if (code) joinMultiRoom(code, true);
     }
 
     function shareMultiRoomLink() {
@@ -16566,8 +16606,26 @@ const TYPE_EMOJI = {
 
     function renderMultiSetup() {
       updatePseudoUi();
+      if (!deckKeyPlayable(multiPlayerDeck)) multiPlayerDeck = 'COMBAT';
+
+      // Bascule entre Page 1 (Salon) et Page 2 (Deck & Prêt)
+      const isDeckPage = multiSubPage === 'deck';
+      const pageLobby = document.getElementById('multiPageLobby');
+      const pageDeck = document.getElementById('multiPageDeck');
+      if (pageLobby) pageLobby.classList.toggle('hidden', isDeckPage);
+      if (pageDeck) pageDeck.classList.toggle('hidden', !isDeckPage);
+
+      const tabLobby = document.getElementById('multiTabBtnLobby');
+      const tabDeck = document.getElementById('multiTabBtnDeck');
+      const activeSubTabCls = 'py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow';
+      const idleSubTabCls = 'py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:bg-white/5';
+      if (tabLobby) tabLobby.className = !isDeckPage ? activeSubTabCls : idleSubTabCls;
+      if (tabDeck) tabDeck.className = isDeckPage ? activeSubTabCls : idleSubTabCls;
+
       const roomEl = document.getElementById('multiRoomBadge');
       if (roomEl) roomEl.textContent = multiRoomCode;
+      const deckPageRoomEl = document.getElementById('multiDeckPageRoomBadge');
+      if (deckPageRoomEl) deckPageRoomEl.textContent = multiRoomCode;
       const roomHint = document.getElementById('multiRoomHint');
       if (roomHint) {
         roomHint.innerHTML = multiRoomCode === 'ARENE'
@@ -16586,40 +16644,65 @@ const TYPE_EMOJI = {
       if (choicesEl) choicesEl.classList.toggle('hidden', collapse);
       if (changeBtn) changeBtn.classList.toggle('hidden', !collapse);
 
-      // Étapes : numéro → ✅ quand faite, halo sur l'étape en cours
+      // Badges de progression sur les 2 onglets
+      const s1Badge = document.getElementById('multiStep1Badge');
+      const s2Badge = document.getElementById('multiStep2Badge');
+      if (s1Badge) {
+        s1Badge.textContent = hasPeer ? '✓' : '1';
+        s1Badge.className = 'w-4 h-4 rounded-full text-[10px] font-black inline-flex items-center justify-center '
+          + (hasPeer ? 'bg-emerald-400 text-slate-950' : (!isDeckPage ? 'bg-slate-950/25 text-slate-950' : 'bg-white/15 text-slate-200'));
+      }
+      if (s2Badge) {
+        s2Badge.textContent = multiMyReady ? '✓' : '2';
+        s2Badge.className = 'w-4 h-4 rounded-full text-[10px] font-black inline-flex items-center justify-center '
+          + (multiMyReady ? 'bg-emerald-400 text-slate-950' : (isDeckPage ? 'bg-slate-950/25 text-slate-950' : 'bg-white/15 text-slate-200'));
+      }
+
+      // Étapes internes : numéro → ✓ quand faite, halo sur l'étape en cours
       const stepDone = [!!playerPseudo, hasPeer, true, multiMyReady];
       const current = stepDone.findIndex((d) => !d);
+      const stepLabels = ['1', '2', '1', '2'];
       [1, 2, 3, 4].forEach((n, i) => {
         const el = document.getElementById('multiStep' + n + 'Num');
         if (!el) return;
         const done = stepDone[i];
-        el.textContent = done ? '✓' : String(n);
+        el.textContent = done ? '✓' : stepLabels[i];
         el.classList.toggle('mp-done', done);
         el.classList.toggle('mp-current', i === current);
       });
 
-      // Récap Toi
+      // Bouton d'action sur la Page 1 (Continuer vers Choix du Deck)
+      const lobbyNextLbl = document.getElementById('multiLobbyNextLabel');
+      if (lobbyNextLbl) {
+        lobbyNextLbl.textContent = hasPeer
+          ? `🃏 Choisir mon Deck contre ${peerName} →`
+          : '🃏 Continuer → Choisir mon Deck';
+      }
+
+      // Récap Toi (Page 2)
       const myImg = document.getElementById('multiMyDeckImg');
       const myName = document.getElementById('multiMyDeckName');
       const myReadyBadge = document.getElementById('multiMyReadyBadge');
       if (myImg) myImg.src = myMeta.img;
-      if (myName) myName.textContent = myMeta.short;
+      if (myName) myName.textContent = `${myMeta.short} (${myMeta.cards}c)`;
       if (myReadyBadge) {
         myReadyBadge.textContent = multiMyReady ? '✅ Prêt' : 'Pas encore prêt';
         myReadyBadge.className = 'text-[10.5px] font-black ' + (multiMyReady ? 'text-emerald-300' : 'text-slate-400');
       }
 
-      // Ami : boîte de l'étape 2 + récap étape 4
+      // Ami : boîte de la Page 1 + bandeau & récap de la Page 2
       const oppBox = document.getElementById('multiOppBox');
       const oppPseudoEl = document.getElementById('multiOppPseudo');
       const oppSubEl = document.getElementById('multiOppStatusSub');
       const oppDeckImgEl = document.getElementById('multiOppDeckImg');
+      const oppRecapImgEl = document.getElementById('multiOppRecapDeckImg');
       const oppDeckNameEl = document.getElementById('multiOppDeckName');
       const oppReadyBadge = document.getElementById('multiOppReadyBadge');
+      const deckPagePeerPill = document.getElementById('multiDeckPagePeerPill');
       if (hasPeer) {
         if (oppBox) oppBox.className = 'rounded-xl p-2.5 flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-400/50';
         if (oppPseudoEl) {
-          oppPseudoEl.textContent = `✅ ${peerName} est là !`;
+          oppPseudoEl.textContent = `✅ ${peerName} est dans le salon !`;
           oppPseudoEl.className = 'text-xs font-black text-emerald-300 truncate';
         }
         if (oppSubEl) oppSubEl.textContent = multiPeer.ready ? `Prêt à jouer avec ${oppMeta.short} 🔥` : `Choisit son deck… (${oppMeta.short} pour l'instant)`;
@@ -16627,10 +16710,18 @@ const TYPE_EMOJI = {
           oppDeckImgEl.src = oppMeta.img;
           oppDeckImgEl.classList.remove('opacity-40', 'grayscale');
         }
+        if (oppRecapImgEl) {
+          oppRecapImgEl.src = oppMeta.img;
+          oppRecapImgEl.classList.remove('opacity-40', 'grayscale');
+        }
         if (oppDeckNameEl) oppDeckNameEl.textContent = `${peerName} · ${oppMeta.short}`;
         if (oppReadyBadge) {
           oppReadyBadge.textContent = multiPeer.ready ? '✅ Prêt' : '⏳ Choisit…';
           oppReadyBadge.className = 'text-[10.5px] font-black ' + (multiPeer.ready ? 'text-emerald-300' : 'text-amber-300');
+        }
+        if (deckPagePeerPill) {
+          deckPagePeerPill.textContent = multiPeer.ready ? `🔥 ${peerName} est prêt !` : `🟢 ${peerName} connecté`;
+          deckPagePeerPill.className = 'text-[10.5px] font-extrabold ' + (multiPeer.ready ? 'text-emerald-300' : 'text-cyan-200');
         }
       } else {
         if (oppBox) oppBox.className = 'rounded-xl p-2.5 flex items-center gap-2.5 bg-slate-950/70 border border-white/10';
@@ -16640,14 +16731,19 @@ const TYPE_EMOJI = {
         }
         if (oppSubEl) oppSubEl.innerHTML = `Ton ami doit ouvrir le jeu, aller dans l'onglet <strong>Multi</strong> et entrer le code <strong class="font-mono text-white">${multiRoomCode}</strong>.`;
         if (oppDeckImgEl) oppDeckImgEl.classList.add('opacity-40', 'grayscale');
+        if (oppRecapImgEl) oppRecapImgEl.classList.add('opacity-40', 'grayscale');
         if (oppDeckNameEl) oppDeckNameEl.textContent = '—';
         if (oppReadyBadge) {
           oppReadyBadge.textContent = 'Pas encore là';
           oppReadyBadge.className = 'text-[10.5px] font-black text-slate-500';
         }
+        if (deckPagePeerPill) {
+          deckPagePeerPill.textContent = '⏳ En attente d\'un ami';
+          deckPagePeerPill.className = 'text-[10.5px] font-extrabold text-amber-300';
+        }
       }
 
-      // Bouton principal + phrase d'explication
+      // Bouton Prêt + phrase d'explication (Page 2)
       const goBtnLabel = document.getElementById('multiGoBtnLabel');
       const goBtn = document.getElementById('multiGoBtn');
       const statusBanner = document.getElementById('multiStatusBanner');
@@ -16666,13 +16762,13 @@ const TYPE_EMOJI = {
       }
       if (statusBanner) {
         let msg;
-        if (!playerPseudo) msg = '👉 Commence par choisir ton nom de dresseur (étape 1).';
-        else if (multiMyReady && !hasPeer) msg = `⏳ Tu es prêt ! On attend que ton ami rejoigne le code <strong class="font-mono">${multiRoomCode}</strong>…`;
+        if (!playerPseudo) msg = '👉 Commence par choisir ton nom de dresseur dans le Salon.';
+        else if (multiMyReady && !hasPeer) msg = `⏳ Tu es prêt ! En attente que ton ami rejoigne le salon <strong class="font-mono">${multiRoomCode}</strong>…`;
         else if (multiMyReady && !multiPeer.ready) msg = `⏳ Tu es prêt ! On attend que <strong>${peerName}</strong> appuie sur « Je suis prêt »…`;
         else if (multiMyReady) msg = '⚔️ Vous êtes prêts tous les deux, le duel démarre !';
-        else if (hasPeer && multiPeer.ready) msg = `🔥 <strong>${peerName}</strong> t'attend ! Appuie sur le bouton pour commencer.`;
-        else if (hasPeer) msg = `🟢 Tu es connecté avec <strong>${peerName}</strong>. Choisissez vos decks puis appuyez chacun sur « Je suis prêt ».`;
-        else msg = 'Tu peux déjà appuyer sur « Je suis prêt » : le duel démarrera dès que ton ami sera prêt aussi.';
+        else if (hasPeer && multiPeer.ready) msg = `🔥 <strong>${peerName}</strong> t'attend ! Appuie sur « Je suis prêt » pour lancer le duel.`;
+        else if (hasPeer) msg = `🟢 Connecté avec <strong>${peerName}</strong>. Choisissez vos decks puis appuyez sur « Je suis prêt ».`;
+        else msg = 'Tu peux déjà choisir ton deck et appuyer sur « Je suis prêt » : le duel démarrera dès que ton ami sera prêt.';
         statusBanner.innerHTML = msg;
       }
 
@@ -16680,9 +16776,11 @@ const TYPE_EMOJI = {
       if (!grid) return;
       const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
       const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
+      const customKeys = typeof getCustomDeckKeys === 'function' ? getCustomDeckKeys(true) : [];
 
       const renderMultiCard = (k) => {
         const d = DECK_META[k];
+        if (!d) return '';
         const sel = multiPlayerDeck === k;
         const isHalf = d.cards === 30;
         return `
@@ -16700,6 +16798,14 @@ const TYPE_EMOJI = {
       };
 
       grid.innerHTML = `
+        ${customKeys.length ? `
+        <div class="space-y-1">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-emerald-300">🛠️ Mes Decks perso</span>
+            <button onclick="switchMenuTab('decks')" class="text-[10px] font-bold text-emerald-200 underline underline-offset-2">Modifier</button>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderMultiCard).join('')}</div>
+        </div>` : ''}
         <div class="space-y-1">
           <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-amber-300 px-1 block">⭐ Conseillé pour débuter · Demi-Decks (30 cartes, parties courtes)</span>
           <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderMultiCard).join('')}</div>
@@ -16717,6 +16823,7 @@ const TYPE_EMOJI = {
         openPseudoModal(true);
         return;
       }
+      multiSubPage = 'deck';
       ensureMultiRealtimeConnected();
       multiMyReady = !multiMyReady;
       if (multiMyReady) {
@@ -17335,7 +17442,8 @@ const TYPE_EMOJI = {
     }
 
     function confirmQuitMatch() {
-      if (game && game.mode === 'multi' && !game.gameOver && !mpApplyingRemote) {
+      const wasMulti = !!(game && game.mode === 'multi');
+      if (wasMulti && !game.gameOver && !mpApplyingRemote) {
         sendMultiPacket('MP_GAME_OVER', {
           matchId: game.matchId,
           winnerIsActor: false,
@@ -17345,6 +17453,7 @@ const TYPE_EMOJI = {
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('menuScreen').classList.remove('hidden');
       game = null;
+      if (wasMulti) renderMultiSetup();
     }
 
     // =======================================================================
@@ -18458,12 +18567,15 @@ const TYPE_EMOJI = {
       d.hc.classList.add('dragging-src');
       sfx('pick'); buzz(6);
 
-      d.targets = dropTargetsFor(d.card).map((t) => ({ ...t, el: document.querySelector(t.sel) })).filter((t) => t.el);
+      const rawTargets = d.fromBench
+        ? [{ sel: '#playerActiveSlot', act: () => promotePlayerBenchToActive(d.idx) }]
+        : dropTargetsFor(d.card);
+      d.targets = rawTargets.map((t) => ({ ...t, el: document.querySelector(t.sel) })).filter((t) => t.el);
       d.targets.forEach((t) => {
         if (t.wide) document.getElementById('matDropHint').classList.add('show');
         else t.el.classList.add('drop-ok');
       });
-      if (!d.targets.length) sayJuliette(whyNotPlayable(d.card));
+      if (!d.targets.length && !d.fromBench) sayJuliette(whyNotPlayable(d.card));
 
       const loop = () => {
         if (!drag || drag !== d || !d.ghost) return;
@@ -18475,6 +18587,56 @@ const TYPE_EMOJI = {
         d.raf = requestAnimationFrame(loop);
       };
       loop();
+    }
+
+    function initBenchDrag() {
+      const benchRow = document.getElementById('playerBenchRow');
+      if (!benchRow) return;
+
+      benchRow.addEventListener('pointerdown', (e) => {
+        if (!game || game.gameOver || game.player.active || !game.player.bench.length) return;
+        const slotEl = e.target.closest ? e.target.closest('[data-slot]') : null;
+        if (!slotEl) return;
+        const idx = +slotEl.dataset.slot;
+        const card = game.player.bench[idx];
+        const tcgEl = slotEl.querySelector('.tcg');
+        if (!card || !tcgEl) return;
+        try { benchRow.setPointerCapture(e.pointerId); } catch (_) {}
+        hidePreview();
+        drag = {
+          hc: tcgEl, idx, card, fromBench: true,
+          pid: e.pointerId, pType: e.pointerType,
+          x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY,
+          started: false, preview: false, scrubbed: false, rot: 0, vx: 0, targets: [], hot: null,
+          lp: null
+        };
+      });
+
+      benchRow.addEventListener('pointermove', (e) => {
+        if (!drag || !drag.fromBench || e.pointerId !== drag.pid) return;
+        const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+        if (!drag.started) {
+          if (Math.hypot(dx, dy) < 10) return;
+          if (!game || game.gameOver || game.player.active) { drag = null; return; }
+          hidePreview();
+          startDrag();
+        }
+        drag.vx = e.clientX - drag.x;
+        drag.x = e.clientX; drag.y = e.clientY;
+        updateHot();
+      });
+
+      const finish = (e, cancelled) => {
+        if (!drag || !drag.fromBench || e.pointerId !== drag.pid) return;
+        const d = drag;
+        if (d.started) {
+          endDrag(cancelled);
+          return;
+        }
+        drag = null;
+      };
+      benchRow.addEventListener('pointerup', (e) => finish(e, false));
+      benchRow.addEventListener('pointercancel', (e) => finish(e, true));
     }
 
     function hitTarget(x, y) {
@@ -18583,6 +18745,7 @@ const TYPE_EMOJI = {
         if (e.pointerType === 'mouse') return;
         const inHand = e.target.closest ? e.target.closest('#playerHandRow') : null;
         if (inHand) return;
+        if (game && !game.player.active && e.target.closest && e.target.closest('#playerBenchRow')) return;
         const el = e.target.closest ? e.target.closest('.tilt') : null;
         if (!el) {
           if (previewSticky) { hidePreview(); setHandFocus(null); }
@@ -18774,6 +18937,18 @@ const TYPE_EMOJI = {
         return;
       }
 
+      if (game && !game.gameOver && !game.player.active && game.player.bench.length > 0) {
+        container.innerHTML = `
+          <button onclick="openBenchPromoModal()" class="atk-btn w-full max-w-[168px] ml-auto px-2.5 py-2 min-h-[44px] rounded-xl btn-token flex items-center justify-center gap-1.5 font-black text-[11px] animate-pulse">
+            ⚔️ Choisir sur le Banc
+          </button>
+        `;
+        endBtn.disabled = true;
+        retBtn.disabled = true;
+        endBtn.classList.remove('ready');
+        return;
+      }
+
       if (!game || !game.player.active || game.activePlayer !== 'player') {
         const waitLabel = game?.mode === 'multi'
           ? `Tour de ${game.oppPseudo || 'l\'adversaire'}...`
@@ -18825,6 +19000,7 @@ const TYPE_EMOJI = {
     // -----------------------------------------------------------------------
     function inspectBoardPokemon(owner, zone, index) {
       if (!game) return;
+      hidePreview();
       const target = zone === 'active' ? game[owner].active : game[owner].bench[index];
       if (!target) return;
 
@@ -18855,6 +19031,17 @@ const TYPE_EMOJI = {
       const actionsEl = document.getElementById('modalCardActions');
       actionsEl.innerHTML = '';
 
+      if (owner === 'player' && zone === 'bench' && !game.player.active && !game.gameOver) {
+        const promoBtn = document.createElement('button');
+        promoBtn.className = 'w-full min-h-[44px] px-3 py-2.5 rounded-xl text-[13px] font-black bg-gradient-to-r from-emerald-400 to-teal-500 text-slate-950 shadow-lg';
+        promoBtn.textContent = `⚔️ Envoyer ${target.name} au combat (Pokémon Actif)`;
+        promoBtn.onclick = () => {
+          closeCardModal();
+          promotePlayerBenchToActive(index);
+        };
+        actionsEl.appendChild(promoBtn);
+      }
+
       if (owner === 'player' && zone === 'active' && game.activePlayer === 'player' && !(game.mode === 'multi' && game.setupPhase)) {
         effAttacks(target).forEach((atk, i) => {
           const use = attackUsable('player', i);
@@ -18880,6 +19067,7 @@ const TYPE_EMOJI = {
 
     function openHandCardModal(handIndex) {
       if (!game) return;
+      hidePreview();
       const isMultiSetup = game.mode === 'multi' && game.setupPhase;
       if (game.activePlayer !== 'player' && !isMultiSetup) return;
       if (!isMultiSetup && playerBusy()) return;
@@ -18905,7 +19093,7 @@ const TYPE_EMOJI = {
 
       // CAS 1 : Pokémon de Base
       if (card.category === 'Pokémon' && card.stage === 'Base') {
-        if (!game.player.active) {
+        if (!game.player.active && game.player.bench.length === 0) {
           const btn = document.createElement('button');
           btn.className = 'w-full py-2.5 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950';
           btn.textContent = `👑 Choisir ${card.name} comme Pokémon Actif`;
@@ -21175,8 +21363,8 @@ const TYPE_EMOJI = {
             <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); clickMultiGo();" class="w-full py-3 rounded-xl font-extrabold text-xs bg-cyan-400 text-slate-950">
               🚀 Revanche Multijoueur (GO avec ${DECK_META[usedDeckKey]?.short || usedDeckKey})
             </button>
-            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
-              🌐 Changer de Deck au Salon Multijoueur
+            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); switchMultiSubPage('deck');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
+              🃏 Changer de Deck (Page Deck &amp; Prêt)
             </button>
           `;
         } else {
@@ -21264,16 +21452,20 @@ const TYPE_EMOJI = {
     const BOOSTER_SETS = {
       base: {
         key: 'base',
+        icon: '⚡',
         name: 'Set de Base (1999)',
         short: 'Set de Base',
         subtitle: 'Dracaufeu · Tortank · Florizarre',
         total: 102,
         bgGrad: 'linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 38%, #0f172a 100%)',
+        panelBg: 'linear-gradient(160deg, rgba(139,92,246,0.55) 0%, rgba(168,85,247,0.35) 38%, rgba(15,23,42,0.85) 70%)',
+        panelBorder: 'rgba(196,181,253,0.38)',
+        badgeCls: 'bg-yellow-400/20 border-yellow-400/55 text-yellow-200',
         accent: '#facc15',
         glow: 'rgba(250, 204, 21, 0.55)',
         packArtworks: [
           { key: 'tortank', label: 'Tortank', icon: '💧', img: 'assets/boosters/base-tortank.jpg' },
-          { key: 'dracaufeu', label: 'Dracaufeu', icon: '🔥', img: 'assets/boosters/base-dracaufeu.jpg' },
+          { key: 'dracaufeu', label: 'Dracaufeu', icon: '🔥', img: 'assets/boosters/base-dracaufeu.jpg', featured: true },
           { key: 'florizarre', label: 'Florizarre', icon: '🌿', img: 'assets/boosters/base-florizarre.jpg' }
         ],
         heroImgs: [
@@ -21284,13 +21476,24 @@ const TYPE_EMOJI = {
       },
       jungle: {
         key: 'jungle',
+        icon: '🌿',
+        logo: 'JUNGLE',
+        cssVars: '--pk1:#065f46;--pk2:#16a34a;--pk3:#052e16;--pkA:#4ade80',
         name: 'Extension Jungle (1999)',
         short: 'Jungle',
         subtitle: 'Insécateur · Pyroli · Ronflex',
         total: 64,
         bgGrad: 'linear-gradient(155deg, #065f46 0%, #15803d 42%, #052e16 100%)',
+        panelBg: 'linear-gradient(160deg, rgba(6,95,70,0.65) 0%, rgba(22,163,74,0.35) 38%, rgba(15,23,42,0.88) 72%)',
+        panelBorder: 'rgba(74,222,128,0.4)',
+        badgeCls: 'bg-emerald-500/20 border-emerald-400/55 text-emerald-200',
         accent: '#4ade80',
         glow: 'rgba(74, 222, 128, 0.55)',
+        packArtworks: [
+          { key: 'insecateur', label: 'Insécateur', icon: '🌿', cardImg: 'https://assets.tcgdex.net/fr/base/base2/10/high.webp', heroOrder: [0, 1, 2] },
+          { key: 'pyroli', label: 'Pyroli', icon: '🔥', cardImg: 'https://assets.tcgdex.net/fr/base/base2/3/high.webp', heroOrder: [1, 0, 2], featured: true },
+          { key: 'ronflex', label: 'Ronflex', icon: '💤', cardImg: 'https://assets.tcgdex.net/fr/base/base2/11/high.webp', heroOrder: [2, 0, 1] }
+        ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base2/10/high.webp',
           'https://assets.tcgdex.net/fr/base/base2/3/high.webp',
@@ -21299,13 +21502,24 @@ const TYPE_EMOJI = {
       },
       fossil: {
         key: 'fossil',
+        icon: '🪨',
+        logo: 'FOSSILE',
+        cssVars: '--pk1:#78350f;--pk2:#b45309;--pk3:#291509;--pkA:#fbbf24',
         name: 'Extension Fossile (1999)',
         short: 'Fossile',
         subtitle: 'Ptéra · Artikodin · Dracolosse',
         total: 62,
         bgGrad: 'linear-gradient(155deg, #78350f 0%, #b45309 42%, #291509 100%)',
+        panelBg: 'linear-gradient(160deg, rgba(146,64,14,0.65) 0%, rgba(217,119,6,0.35) 38%, rgba(15,23,42,0.88) 72%)',
+        panelBorder: 'rgba(251,191,36,0.4)',
+        badgeCls: 'bg-amber-500/20 border-amber-400/55 text-amber-200',
         accent: '#fbbf24',
         glow: 'rgba(251, 191, 36, 0.55)',
+        packArtworks: [
+          { key: 'ptera', label: 'Ptéra', icon: '🪨', cardImg: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', heroOrder: [0, 1, 2] },
+          { key: 'artikodin', label: 'Artikodin', icon: '❄️', cardImg: 'https://assets.tcgdex.net/fr/base/base3/2/high.webp', heroOrder: [1, 0, 2], featured: true },
+          { key: 'dracolosse', label: 'Dracolosse', icon: '🐉', cardImg: 'https://assets.tcgdex.net/fr/base/base3/4/high.webp', heroOrder: [2, 0, 1] }
+        ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base3/1/high.webp',
           'https://assets.tcgdex.net/fr/base/base3/2/high.webp',
@@ -21461,20 +21675,6 @@ const TYPE_EMOJI = {
         modalWallet.textContent = `🎁 ${freeCount}/${MAX_FREE_BOOSTERS}${countdown ? ` (${countdown})` : ''} · 🪙 ${coins}`;
       }
 
-      const ctaText = freeCount > 0
-        ? `🎁 Ouvrir GRATUIT (${freeCount}/${MAX_FREE_BOOSTERS})`
-        : canBuyWithCoins
-        ? `🪙 Ouvrir (${BOOSTER_COST_COINS} pièces)`
-        : `🔒 ${BOOSTER_COST_COINS} 🪙 (ou ⏱️ ${countdown || '60:00'})`;
-
-      ['base', 'jungle', 'fossil'].forEach(s => {
-        const ctaEl = document.getElementById(`boosterBtnCta-${s}`);
-        if (ctaEl) {
-          ctaEl.textContent = ctaText;
-          ctaEl.style.opacity = (freeCount > 0 || canBuyWithCoins) ? '1' : '0.72';
-        }
-      });
-
       const summaryReplayBtn = document.getElementById('boosterSummaryReplayBtnLabel');
       if (summaryReplayBtn && activeBooster && activeBooster.meta) {
         summaryReplayBtn.textContent = freeCount > 0
@@ -21485,13 +21685,13 @@ const TYPE_EMOJI = {
       }
 
       const totalBadge = document.getElementById('boosterTotalOpenedBadge');
-      if (totalBadge) totalBadge.textContent = `📦 ${boosterSave.packsOpened} pack${boosterSave.packsOpened > 1 ? 's' : ''} ouvert${boosterSave.packsOpened > 1 ? 's' : ''}`;
+      if (totalBadge) totalBadge.textContent = `📦 ${boosterSave.packsOpened} pack${boosterSave.packsOpened > 1 ? 's' : ''}`;
 
       const holoBadge = document.getElementById('boosterHoloCountBadge');
       if (holoBadge) holoBadge.textContent = `✨ ${boosterSave.holosPulled} Holo`;
 
       const countTxt = document.getElementById('boosterColCountText');
-      if (countTxt) countTxt.textContent = `${ownedUnique} / ${ALL_UNIQUE_CARDS.length} cartes (${pct}%)`;
+      if (countTxt) countTxt.textContent = `${ownedUnique} / ${ALL_UNIQUE_CARDS.length} · ${pct}%`;
 
       const bar = document.getElementById('boosterColBar');
       if (bar) bar.style.width = `${pct}%`;
@@ -21503,6 +21703,159 @@ const TYPE_EMOJI = {
         const el = document.getElementById(elId);
         if (el) el.textContent = `${ownedS}/${totalS}`;
       });
+
+      updateBoosterHomeHub({ ownedUnique, pct, freeCount, coins, countdown, canBuyWithCoins });
+    }
+
+    // Accueil Boosters : sélection du set actif, affichage des 3 illustrations de boosters côte à côte
+    var activeHubSetKey = 'base';
+    var renderedHubSetKey = '';
+    var hubShowcaseSig = '';
+
+    function getHubBoosterCtaState() {
+      syncFreeBoostersClock();
+      const freeCount = boosterSave.freeBoosters;
+      const coins = boosterSave.coins || 0;
+      const canBuyWithCoins = coins >= BOOSTER_COST_COINS;
+      const countdown = getBoosterNextResetLabel();
+      return {
+        text: freeCount > 0 ? '🎁 Gratuit' : canBuyWithCoins ? `🪙 ${BOOSTER_COST_COINS}` : `🔒 ${countdown || '60:00'}`,
+        opacity: (freeCount > 0 || canBuyWithCoins) ? '1' : '0.6'
+      };
+    }
+
+    function renderHubBoosterPacks(forceRender = false) {
+      const meta = BOOSTER_SETS[activeHubSetKey] || BOOSTER_SETS.base;
+      const panel = document.getElementById('hubPackPanel');
+      if (panel) {
+        panel.style.background = meta.panelBg;
+        panel.style.borderColor = meta.panelBorder;
+      }
+
+      const activeBadge = document.getElementById('hubActiveSetBadge');
+      if (activeBadge) {
+        activeBadge.textContent = `${meta.icon} ${meta.short} · ${meta.total} cartes`;
+        activeBadge.className = `text-[10.5px] font-black px-2 py-0.5 rounded-lg border truncate ${meta.badgeCls}`;
+      }
+
+      ['base', 'jungle', 'fossil'].forEach(k => {
+        const btn = document.getElementById(`hubSetBtn-${k}`);
+        if (!btn) return;
+        const isCurrent = k === meta.key;
+        const activeStyle = k === 'jungle'
+          ? 'bg-emerald-500/25 text-emerald-200 border-emerald-400/80 shadow'
+          : k === 'fossil'
+          ? 'bg-amber-500/25 text-amber-200 border-amber-400/80 shadow'
+          : 'bg-yellow-400/25 text-yellow-200 border-yellow-400/80 shadow';
+        btn.className = `py-1 px-2 rounded-xl text-[10.5px] font-black border transition flex items-center justify-center gap-1 active:scale-95 ${
+          isCurrent ? activeStyle : 'bg-white/5 text-slate-200 border-white/15 hover:border-white/35'
+        }`;
+      });
+
+      const cta = getHubBoosterCtaState();
+      const grid = document.getElementById('hubPacksGrid');
+      if (grid && (forceRender || renderedHubSetKey !== meta.key)) {
+        renderedHubSetKey = meta.key;
+        const arts = meta.packArtworks || [];
+        grid.innerHTML = arts.map(art => {
+          const highlightRing = art.featured
+            ? 'ring-2 ring-yellow-300/75 shadow-[0_0_20px_rgba(250,204,21,0.45)]'
+            : '';
+          const labelCls = art.featured ? 'text-yellow-200' : 'text-white';
+          const packVisual = art.img
+            ? `<span class="hub-pack holo-wrap ${highlightRing}">
+                <img src="${art.img}" alt="Booster ${art.label}" class="w-full h-full object-cover" />
+              </span>`
+            : `<span class="hub-pack hub-pack-css holo-wrap ${highlightRing}" style="${meta.cssVars}">
+                <span class="hub-pack-crimp"></span>
+                <span class="hub-pack-logo">${meta.logo}</span>
+                <img src="${art.cardImg}" alt="${art.label}" loading="lazy" class="hub-pack-art" />
+                <span class="hub-pack-sub">${meta.total} cartes · 1999</span>
+                <span class="hub-pack-crimp bottom"></span>
+              </span>`;
+          return `
+            <button onclick="launchBoosterPack('${meta.key}', '${art.key}')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
+              ${packVisual}
+              <span class="text-[11px] font-black ${labelCls} leading-tight">${art.icon} ${art.label}</span>
+              <span class="hub-pack-cta" style="opacity:${cta.opacity}">${cta.text}</span>
+            </button>
+          `;
+        }).join('');
+      } else if (grid) {
+        grid.querySelectorAll('.hub-pack-cta').forEach(ctaEl => {
+          ctaEl.textContent = cta.text;
+          ctaEl.style.opacity = cta.opacity;
+        });
+      }
+    }
+
+    function selectHubBoosterSet(setKey, playSfx = true) {
+      if (!BOOSTER_SETS[setKey]) return;
+      activeHubSetKey = setKey;
+      if (playSfx && typeof sfx === 'function') sfx('click');
+      renderHubBoosterPacks(true);
+    }
+
+    function cycleHubBoosterSet() {
+      const order = ['base', 'jungle', 'fossil'];
+      const nextIdx = (order.indexOf(activeHubSetKey) + 1) % order.length;
+      selectHubBoosterSet(order[nextIdx], true);
+    }
+
+    function updateBoosterHomeHub({ ownedUnique, pct, freeCount, coins, countdown, canBuyWithCoins }) {
+      const ring = document.getElementById('hubAvatarRing');
+      if (ring) ring.style.setProperty('--pct', String(pct));
+      const lvl = document.getElementById('hubLevelLabel');
+      if (lvl) lvl.textContent = `Niv. ${1 + Math.floor((boosterSave.packsOpened || 0) / 5)}`;
+
+      const pips = document.getElementById('hubFreePips');
+      if (pips) pips.innerHTML = Array.from({ length: MAX_FREE_BOOSTERS }, (_, i) =>
+        `<span class="hub-pip${i < freeCount ? ' on' : ''}">🎁</span>`).join('');
+      const freeBadge = document.getElementById('boosterFreeCountBadge');
+      if (freeBadge) {
+        freeBadge.textContent = freeCount >= MAX_FREE_BOOSTERS ? 'MAX.' : `${freeCount}/${MAX_FREE_BOOSTERS}`;
+        freeBadge.className = `ml-1 px-2 py-0.5 rounded-lg font-black text-[10.5px] whitespace-nowrap ${
+          freeCount > 0 ? 'bg-cyan-400 text-slate-950' : 'bg-slate-700 text-slate-300'}`;
+      }
+      const cd = document.getElementById('hubCountdown');
+      if (cd) cd.textContent = countdown || 'Plein';
+
+      renderHubBoosterPacks(false);
+
+      const mTitle = document.getElementById('hubMissionTitle');
+      const mBadge = document.getElementById('hubMissionBadge');
+      if (mTitle && mBadge) {
+        if (freeCount > 0) {
+          mTitle.textContent = `Ouvre tes boosters gratuits (${freeCount}/${MAX_FREE_BOOSTERS})`;
+          mBadge.textContent = '✔ Prêt !';
+          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-emerald-400 text-slate-950 text-[10.5px] font-black';
+        } else if (canBuyWithCoins) {
+          mTitle.textContent = `Tu as ${coins} 🪙 : achète un booster !`;
+          mBadge.textContent = `🪙 ${Math.floor(coins / BOOSTER_COST_COINS)}`;
+          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-yellow-400 text-slate-950 text-[10.5px] font-black';
+        } else {
+          mTitle.textContent = 'Gagne un duel : +100 🪙';
+          mBadge.textContent = `⏳ ${countdown || '60:00'}`;
+          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-slate-700 text-slate-200 text-[10.5px] font-black font-mono';
+        }
+      }
+
+      const show = document.getElementById('hubShowcase');
+      if (show) {
+        const rank = { holo: 4, rare: 3, uncommon: 2, common: 1 };
+        const best = ALL_UNIQUE_CARDS
+          .filter(c => (boosterSave.counts[c.setId] || 0) > 0)
+          .sort((a, b) => (rank[b.rarity] || 0) - (rank[a.rarity] || 0) || (b.hp || 0) - (a.hp || 0))
+          .slice(0, 2);
+        const sig = best.map(c => c.setId).join('|');
+        if (sig !== hubShowcaseSig || !show.dataset.ready) {
+          hubShowcaseSig = sig;
+          show.dataset.ready = '1';
+          show.innerHTML = [0, 1].map(i => best[i]
+            ? `<span class="hub-mini-card"><img src="${best[i].img}" alt="${best[i].name}" loading="lazy" /></span>`
+            : '<span class="hub-mini-card grid place-items-center text-[10px] text-slate-500">?</span>').join('');
+        }
+      }
     }
     updateBoosterStatsUi();
     setInterval(() => {
@@ -21717,42 +22070,22 @@ const TYPE_EMOJI = {
       `;
     }
 
-    let selectedBaseBoosterArtKey = 'dracaufeu';
-    function selectBaseBoosterArt(artKey) {
-      const arts = BOOSTER_SETS.base.packArtworks || [];
-      const found = arts.find(a => a.key === artKey);
-      if (!found) return;
-      selectedBaseBoosterArtKey = found.key;
-      const order = found.key === 'tortank'
-        ? ['dracaufeu', 'tortank', 'florizarre']
-        : found.key === 'florizarre'
-        ? ['tortank', 'florizarre', 'dracaufeu']
-        : ['tortank', 'dracaufeu', 'florizarre'];
-      const byKey = Object.fromEntries(arts.map(a => [a.key, a]));
-      const leftEl = document.getElementById('baseBoosterFanLeft');
-      const centerEl = document.getElementById('baseBoosterFanCenter');
-      const rightEl = document.getElementById('baseBoosterFanRight');
-      if (leftEl && byKey[order[0]]) { leftEl.src = byKey[order[0]].img; leftEl.alt = `Booster ${byKey[order[0]].label}`; }
-      if (centerEl && byKey[order[1]]) { centerEl.src = byKey[order[1]].img; centerEl.alt = `Booster ${byKey[order[1]].label}`; }
-      if (rightEl && byKey[order[2]]) { rightEl.src = byKey[order[2]].img; rightEl.alt = `Booster ${byKey[order[2]].label}`; }
+    let selectedBoosterArtBySet = {
+      base: 'dracaufeu',
+      jungle: 'pyroli',
+      fossil: 'artikodin'
+    };
 
-      arts.forEach(a => {
-        const btn = document.getElementById(`baseArtBtn-${a.key}`);
-        if (!btn) return;
-        const active = a.key === selectedBaseBoosterArtKey;
-        btn.className = active
-          ? 'cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-yellow-400/25 text-yellow-200 border-yellow-400/70 shadow'
-          : 'cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-white/5 text-slate-200 border-white/15 hover:border-yellow-300/60';
-      });
+    function selectBaseBoosterArt(artKey) {
+      selectedBoosterArtBySet.base = artKey;
     }
 
     function switchActiveBoosterArt(artKey) {
       if (!activeBooster || activeBooster.phase !== 'sealed' || !activeBooster.meta.packArtworks) return;
       const found = activeBooster.meta.packArtworks.find(a => a.key === artKey);
       if (!found) return;
-      selectedBaseBoosterArtKey = found.key;
+      selectedBoosterArtBySet[activeBooster.meta.key] = found.key;
       activeBooster.packArt = found;
-      selectBaseBoosterArt(found.key);
       document.getElementById('boosterSetBadge').textContent = `${activeBooster.meta.short} · ${found.label}`;
       renderSealedBoosterStage();
     }
@@ -21782,10 +22115,13 @@ const TYPE_EMOJI = {
       const meta = BOOSTER_SETS[setKey] || BOOSTER_SETS.base;
       let packArt = null;
       if (meta.packArtworks && meta.packArtworks.length) {
-        const wantedKey = artKey || selectedBaseBoosterArtKey;
+        const wantedKey = artKey || selectedBoosterArtBySet[meta.key];
         packArt = meta.packArtworks.find(a => a.key === wantedKey) || meta.packArtworks[0];
-        const im = new Image();
-        im.src = packArt.img;
+        selectedBoosterArtBySet[meta.key] = packArt.key;
+        if (packArt.img) {
+          const im = new Image();
+          im.src = packArt.img;
+        }
       }
       const packData = generateBoosterPack(meta.key);
       packData.cards.forEach(c => { const im = new Image(); im.src = c.img; });
@@ -21819,10 +22155,15 @@ const TYPE_EMOJI = {
       const stage = document.getElementById('boosterStageContainer');
       const footer = document.getElementById('boosterFooterZone');
 
-      const topStripBg = packArt
+      const hasFullPackImg = Boolean(packArt && packArt.img);
+      const orderedHeroes = (packArt && Array.isArray(packArt.heroOrder))
+        ? packArt.heroOrder.map(i => meta.heroImgs[i] || meta.heroImgs[0])
+        : meta.heroImgs;
+
+      const topStripBg = hasFullPackImg
         ? `background-image: url('${packArt.img}'); background-size: 264px 405px; background-position: 0px 0px; background-repeat: no-repeat;`
         : `background: ${meta.bgGrad};`;
-      const mainBodyBg = packArt
+      const mainBodyBg = hasFullPackImg
         ? `background-image: url('${packArt.img}'); background-size: 264px 405px; background-position: 0px -66px; background-repeat: no-repeat;`
         : `background: ${meta.bgGrad};`;
 
@@ -21857,7 +22198,7 @@ const TYPE_EMOJI = {
               <div id="packLeftPeeledStrip"
                    style="clip-path: inset(0 100% 0 0); transform-origin: 5% 100%; opacity: 0; will-change: transform, clip-path; ${topStripBg}"
                    class="absolute top-0 inset-x-0 h-[68px] z-40 rounded-t-2xl overflow-hidden shadow-[0_16px_28px_rgba(0,0,0,0.68)] pointer-events-none border-t border-x border-white/40">
-                ${packArt ? `
+                ${hasFullPackImg ? `
                   <div class="absolute inset-0 bg-gradient-to-t from-white/25 via-transparent to-white/15"></div>
                 ` : `
                   <div class="booster-crimp w-full border-b border-white/50"></div>
@@ -21873,7 +22214,7 @@ const TYPE_EMOJI = {
               <div id="packRightUncutStrip"
                    style="clip-path: inset(0 0 0 0); will-change: clip-path; ${topStripBg}"
                    class="absolute top-0 inset-x-0 h-[68px] z-30 rounded-t-2xl overflow-hidden pointer-events-none border-t-2 border-x-2 border-white/30">
-                ${packArt ? `
+                ${hasFullPackImg ? `
                   <div class="absolute inset-0 booster-metallic-sheen opacity-50"></div>
                 ` : `
                   <div class="booster-crimp w-full border-b border-white/40"></div>
@@ -21917,7 +22258,7 @@ const TYPE_EMOJI = {
                      style="background-position: 50% 50%;"
                      class="absolute inset-0 booster-metallic-sheen pointer-events-none z-20 opacity-65"></div>
 
-                ${packArt ? '' : `
+                ${hasFullPackImg ? '' : `
                   <!-- Trame foil micro-points -->
                   <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:16px_16px] pointer-events-none"></div>
 
@@ -21930,7 +22271,7 @@ const TYPE_EMOJI = {
                       ${meta.short}
                     </div>
                     <div class="text-[10px] text-white/90 font-semibold mt-0.5 leading-snug">
-                      ${meta.subtitle}
+                      ${packArt ? `${packArt.icon} Illustration ${packArt.label}` : meta.subtitle}
                     </div>
                   </div>
 
@@ -21938,9 +22279,9 @@ const TYPE_EMOJI = {
                   <div class="relative z-10 my-auto flex flex-col items-center">
                     <div class="relative w-36 h-36 rounded-full p-1 bg-gradient-to-tr from-amber-300 via-white to-pink-400 shadow-[0_0_32px_rgba(251,191,36,0.45)] flex items-center justify-center">
                       <div class="w-full h-full rounded-full bg-slate-950/85 border-2 border-slate-950 flex items-center justify-center relative overflow-visible">
-                        <img src="${meta.heroImgs[1]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -left-2 top-3 -rotate-12" />
-                        <img src="${meta.heroImgs[2]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -right-2 top-3 rotate-12" />
-                        <img src="${meta.heroImgs[0]}" alt="" class="w-[82px] aspect-[63/88] rounded-lg object-cover shadow-2xl border-2 border-yellow-300 relative z-10" />
+                        <img src="${orderedHeroes[1]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -left-2 top-3 -rotate-12" />
+                        <img src="${orderedHeroes[2]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -right-2 top-3 rotate-12" />
+                        <img src="${orderedHeroes[0]}" alt="" class="w-[82px] aspect-[63/88] rounded-lg object-cover shadow-2xl border-2 border-yellow-300 relative z-10" />
                       </div>
                     </div>
                     <div class="-mt-2.5 mx-auto w-max px-3 py-0.5 rounded-full bg-slate-950/92 border border-amber-400/65 text-amber-300 font-black text-[10.5px] tracking-wider uppercase shadow-lg relative z-20">
@@ -22898,7 +23239,7 @@ const TYPE_EMOJI = {
           <button onclick="launchBoosterPack('${meta.key}')" class="btn-gold px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wide shadow-lg flex items-center gap-1.5">
             <span id="boosterSummaryReplayBtnLabel">${replayLabel}</span>
           </button>
-          <button onclick="closeBoosterOpenModal(); switchMenuTab('booster');" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-slate-200 hover:text-white">
+          <button onclick="closeBoosterOpenModal(); switchMenuTab('booster'); cycleHubBoosterSet();" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-slate-200 hover:text-white">
             🔄 Changer d'extension
           </button>
           <button onclick="closeBoosterOpenModal(); openCollectionModal('${meta.key}');" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:text-emerald-200">
@@ -24172,6 +24513,8 @@ const TYPE_EMOJI = {
     } catch (_) {}
     if (typeof renderQuickSetup === 'function') renderQuickSetup();
     renderDecksView();
+    // Page d'accueil = onglet Boosters
+    if (!new URLSearchParams(location.search).has('room')) switchMenuTab('booster');
   </script>
 </body>
 </html>
