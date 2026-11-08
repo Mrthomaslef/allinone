@@ -359,7 +359,7 @@
       position: fixed; font: 900 28px/1 'Nunito', sans-serif; color: #fff; pointer-events: none; z-index: 89;
       -webkit-text-stroke: 2px #7f1d1d; text-shadow: 0 4px 10px rgba(0,0,0,.7);
     }
-    .spark { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 88; }
+    .spark { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 88; will-change: transform, opacity; }
 
     /* Boutons « jetons » naturels */
     .btn-token {
@@ -567,7 +567,10 @@
       user-select: none;
       touch-action: none;
     }
+    .tear-pill-idle { transform: translateX(-50%) scale(1); }
+    .tear-pill-active { transform: translateX(-50%) scale(1.22); }
     .booster-foil {
+      will-change: transform;
       position: relative;
       width: 264px;
       height: 405px;
@@ -591,6 +594,7 @@
       z-index: 95;
       pointer-events: none;
       opacity: 0;
+      will-change: transform, opacity;
       animation: milScreenFlashAnim 0.44s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     @keyframes milScreenFlashAnim {
@@ -628,6 +632,7 @@
       border-radius: 16px;
       transform-style: preserve-3d;
       transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
     }
     .pack-card-3d.flipped .pack-card-flipper {
       transform: rotateY(180deg);
@@ -17648,7 +17653,7 @@ const TYPE_EMOJI = {
 
     function sfxTearStep(progress) {
       const now = performance.now();
-      if (now - lastTearCrinkleTime < 32) return;
+      if (now - lastTearCrinkleTime < 45) return;
       lastTearCrinkleTime = now;
       buzz(6);
       const c = getAudioCtx();
@@ -17656,15 +17661,19 @@ const TYPE_EMOJI = {
       try {
         const t = c.currentTime;
         const sfxScale = Math.max(0.02, sfxVolumePct / 100);
-        // 1. Crisp metallic foil tear grain (milTCG)
-        const bufferSize = Math.floor(c.sampleRate * 0.05);
-        const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+        // 1. Crisp metallic foil tear grain (milTCG) — buffer de bruit généré une seule fois
+        if (!sfxTearStep._buf || sfxTearStep._buf.sampleRate !== c.sampleRate) {
+          const bufferSize = Math.floor(c.sampleRate * 0.05);
+          const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+          }
+          sfxTearStep._buf = buffer;
         }
         const noise = c.createBufferSource();
-        noise.buffer = buffer;
+        noise.buffer = sfxTearStep._buf;
+        noise.playbackRate.setValueAtTime(0.9 + Math.random() * 0.25, t);
         const filter = c.createBiquadFilter();
         filter.type = 'bandpass';
         filter.frequency.setValueAtTime(1400 + progress * 3400, t);
@@ -21234,12 +21243,12 @@ const TYPE_EMOJI = {
           <div class="booster-pack-wrap relative w-[274px] h-[418px] flex items-center justify-center" id="foilPackWrap">
             <!-- Halo de rareté ambiant derrière le booster (milTCG) -->
             <div id="packAmbientHalo"
-                 style="opacity: 0.2; transform: scale(0.86); background: radial-gradient(circle, ${seamGlowHex} 0%, transparent 68%);"
-                 class="absolute w-72 h-72 rounded-full pointer-events-none blur-2xl transition-all duration-200 z-0"></div>
+                 style="opacity: 0.2; transform: translateZ(0) scale(0.86); will-change: transform, opacity; background: radial-gradient(circle, ${seamGlowHex} 0%, transparent 68%);"
+                 class="absolute w-72 h-72 rounded-full pointer-events-none blur-2xl z-0"></div>
 
             <!-- Pile de cartes montante à l'intérieur du sachet (visible quand le haut se déchire et au burst !) -->
             <div id="packInnerCardStack"
-                 style="opacity: 0; transform: translateY(38px) scale(0.84); transition: all 480ms cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 45px ${seamGlowHex};"
+                 style="opacity: 0; transform: translate3d(0, 40px, 0) scale(0.84); transition: none; will-change: transform, opacity; box-shadow: 0 0 45px ${seamGlowHex};"
                  class="absolute z-10 w-[220px] h-[308px] rounded-2xl bg-gradient-to-br from-amber-300 via-yellow-500 to-amber-700 p-[5px] pointer-events-none">
               <div class="w-full h-full rounded-[12px] overflow-hidden relative border border-amber-200/60" style="background: var(--card-back) center / cover no-repeat;">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/15"></div>
@@ -21250,15 +21259,15 @@ const TYPE_EMOJI = {
             <div id="foilPackEl" class="booster-foil relative z-20 select-none touch-none cursor-grab active:cursor-grabbing">
               <!-- Rayons divins volumétriques jaillissant de la couture déchirée -->
               <div id="packSeamGodRays"
-                   style="width: 0%; opacity: 0;"
-                   class="absolute top-[10px] left-0 h-[66px] z-20 pointer-events-none overflow-hidden">
+                   style="transform: scaleX(0); transform-origin: 0 50%; opacity: 0; will-change: transform, opacity;"
+                   class="absolute top-[10px] inset-x-0 h-[66px] z-20 pointer-events-none overflow-hidden">
                 <div style="background: conic-gradient(from 180deg at 50% 100%, transparent 0deg, ${seamGlowHex} 35deg, #ffffff 55deg, ${seamGlowHex} 75deg, transparent 110deg);"
                      class="w-full h-full blur-md opacity-95 animate-pulse"></div>
               </div>
 
               <!-- Languette gauche DÉJÀ DÉCOLLÉE (se courbe et se soulève en 3D en temps réel !) -->
               <div id="packLeftPeeledStrip"
-                   style="clip-path: polygon(0 0, 0% 0, 0% 100%, 0 100%); transform-origin: 5% 100%; opacity: 0; background: ${meta.bgGrad};"
+                   style="clip-path: inset(0 100% 0 0); transform-origin: 5% 100%; opacity: 0; will-change: transform, clip-path; background: ${meta.bgGrad};"
                    class="absolute top-0 inset-x-0 h-[68px] z-40 rounded-t-2xl overflow-hidden shadow-[0_16px_28px_rgba(0,0,0,0.68)] pointer-events-none border-t border-x border-white/40">
                 <div class="booster-crimp w-full border-b border-white/50"></div>
                 <div class="w-full h-[52px] relative flex items-center justify-between px-3.5">
@@ -21270,7 +21279,7 @@ const TYPE_EMOJI = {
 
               <!-- Languette droite NON COUPÉE (reste attachée jusqu'au passage du doigt) -->
               <div id="packRightUncutStrip"
-                   style="clip-path: polygon(0% 0, 100% 0, 100% 100%, 0% 100%); background: ${meta.bgGrad};"
+                   style="clip-path: inset(0 0 0 0); will-change: clip-path; background: ${meta.bgGrad};"
                    class="absolute top-0 inset-x-0 h-[68px] z-30 rounded-t-2xl overflow-hidden pointer-events-none border-t-2 border-x-2 border-white/30">
                 <div class="booster-crimp w-full border-b border-white/40"></div>
                 <div class="w-full h-[52px] relative flex items-center justify-between px-3.5">
@@ -21288,21 +21297,24 @@ const TYPE_EMOJI = {
 
                   <!-- Traînée d'énergie incandescente -->
                   <div id="tearProgressFill"
-                       style="width: 0%; background-color: #ffffff; box-shadow: 0 0 12px #ffffff, 0 0 25px ${seamGlowHex}, 0 0 45px ${seamGlowHex};"
-                       class="absolute left-4 h-2 rounded-full transition-none"></div>
+                       style="transform: scaleX(0); transform-origin: 0 50%; will-change: transform; background-color: #ffffff; box-shadow: 0 0 12px #ffffff, 0 0 25px ${seamGlowHex}, 0 0 45px ${seamGlowHex};"
+                       class="absolute left-4 right-4 h-2 rounded-full"></div>
 
-                  <!-- Cible tactile lumineuse (GLISSER ➔ / %) -->
-                  <div id="tearHandlePill"
-                       style="left: 8%; box-shadow: 0 0 24px ${seamGlowHex}, 0 0 42px rgba(251,191,36,0.95);"
-                       class="absolute -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-400 text-slate-950 font-black text-[10.5px] flex items-center gap-1 border-2 border-white transition-transform animate-pulse whitespace-nowrap">
-                    <span id="tearHandleText">GLISSER ➔</span>
+                  <!-- Cible tactile lumineuse (GLISSER ➔ / %) — déplacée en translate3d (GPU) -->
+                  <div id="tearHandleTrack" class="absolute left-4 right-4 inset-y-0 flex items-center pointer-events-none"
+                       style="transform: translate3d(8%, 0, 0); will-change: transform;">
+                    <div id="tearHandlePill"
+                         style="box-shadow: 0 0 24px ${seamGlowHex}, 0 0 42px rgba(251,191,36,0.95); transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);"
+                         class="absolute left-0 tear-pill-idle px-3 py-1 rounded-full bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-400 text-slate-950 font-black text-[10.5px] flex items-center gap-1 border-2 border-white animate-pulse whitespace-nowrap">
+                      <span id="tearHandleText">GLISSER ➔</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!-- CORPS PRINCIPAL DU BOOSTER (glisse vers le bas et s'ouvre au burst !) -->
               <div id="packMainBody"
-                   style="background: ${meta.bgGrad}; --pack-glow: ${meta.glow}; transition: all 640ms cubic-bezier(0.22, 1, 0.36, 1);"
+                   style="background: ${meta.bgGrad}; --pack-glow: ${meta.glow}; transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease-out; will-change: transform, opacity;"
                    class="absolute top-[66px] bottom-0 inset-x-0 rounded-b-2xl overflow-hidden border-x-2 border-b-2 border-white/30 shadow-[0_26px_60px_rgba(0,0,0,0.88)] flex flex-col items-center justify-between p-4 pointer-events-none">
                 <!-- Reflet spéculaire métallique dynamique -->
                 <div id="packMetallicSheen"
@@ -21364,92 +21376,187 @@ const TYPE_EMOJI = {
       `;
 
       initBoosterTearInteraction();
+      preloadBoosterCardImages(activeBooster);
     }
 
-    function applyBoosterTearVisuals(pct, isDragging = false) {
-      if (!activeBooster) return;
-      const packEl = document.getElementById('foilPackEl');
-      const haloEl = document.getElementById('packAmbientHalo');
-      const innerStackEl = document.getElementById('packInnerCardStack');
-      const raysEl = document.getElementById('packSeamGodRays');
-      const leftStripEl = document.getElementById('packLeftPeeledStrip');
-      const rightStripEl = document.getElementById('packRightUncutStrip');
-      const fillEl = document.getElementById('tearProgressFill');
-      const handlePill = document.getElementById('tearHandlePill');
-      const handleTxt = document.getElementById('tearHandleText');
-      const promptTxt = document.getElementById('boosterTearPromptText');
+    // Pré-décode les visuels des 5 cartes pendant la découpe : la pile s'affiche sans à-coup
+    function preloadBoosterCardImages(booster) {
+      if (!booster || !booster.cards) return;
+      booster._imgCache = booster.cards.map(c => {
+        const im = new Image();
+        im.decoding = 'async';
+        im.src = c.img;
+        if (im.decode) im.decode().catch(() => {});
+        return im;
+      });
+    }
 
-      if (haloEl) {
-        haloEl.style.opacity = String(0.18 + (pct / 100) * 0.82);
-        haloEl.style.transform = `scale(${0.85 + (pct / 100) * 0.75})`;
+    // ===== Moteur de découpe fluide (rAF + lissage + transforms GPU uniquement) =====
+    let boosterTearEls = null;
+    let boosterTearLast = { pctInt: -1, prompt: '', dragging: null };
+    function getBoosterTearEls() {
+      if (boosterTearEls && boosterTearEls.packEl && boosterTearEls.packEl.isConnected) return boosterTearEls;
+      const $ = (id) => document.getElementById(id);
+      boosterTearEls = {
+        packEl: $('foilPackEl'),
+        haloEl: $('packAmbientHalo'),
+        innerStackEl: $('packInnerCardStack'),
+        raysEl: $('packSeamGodRays'),
+        leftStripEl: $('packLeftPeeledStrip'),
+        rightStripEl: $('packRightUncutStrip'),
+        fillEl: $('tearProgressFill'),
+        handleTrack: $('tearHandleTrack'),
+        handlePill: $('tearHandlePill'),
+        handleTxt: $('tearHandleText'),
+        promptTxt: $('boosterTearPromptText'),
+      };
+      boosterTearLast = { pctInt: -1, prompt: '', dragging: null };
+      return boosterTearEls;
+    }
+
+    // pct peut être fractionnaire (lissage) ; tremble = temps (ms) pour un tremblement sinusoïdal continu
+    function applyBoosterTearVisuals(pct, isDragging = false, tremorTime = null) {
+      if (!activeBooster) return;
+      const E = getBoosterTearEls();
+      const f = Math.max(0, Math.min(100, pct)) / 100;
+      const p = f * 100;
+
+      if (E.haloEl) {
+        E.haloEl.style.opacity = (0.18 + f * 0.82).toFixed(3);
+        E.haloEl.style.transform = `translateZ(0) scale(${(0.85 + f * 0.75).toFixed(4)})`;
       }
-      if (innerStackEl) {
-        innerStackEl.style.opacity = String(Math.max(0, (pct - 12) / 88));
-        innerStackEl.style.transform = `translateY(${40 - (pct / 100) * 35}px) scale(0.84)`;
+      if (E.innerStackEl) {
+        E.innerStackEl.style.transition = 'none';
+        E.innerStackEl.style.opacity = Math.max(0, (p - 12) / 88).toFixed(3);
+        E.innerStackEl.style.transform = `translate3d(0, ${(40 - f * 35).toFixed(2)}px, 0) scale(0.84)`;
       }
-      if (raysEl) {
-        raysEl.style.width = `${pct}%`;
-        raysEl.style.opacity = String(pct > 4 ? Math.min(1, pct / 28) : 0);
+      if (E.raysEl) {
+        E.raysEl.style.transform = `scaleX(${f.toFixed(4)})`;
+        E.raysEl.style.opacity = (p > 4 ? Math.min(1, p / 28) : 0).toFixed(3);
       }
-      if (leftStripEl) {
-        leftStripEl.style.opacity = pct > 0 ? '1' : '0';
-        leftStripEl.style.clipPath = `polygon(0 0, ${pct}% 0, ${pct}% 100%, 0 100%)`;
-        leftStripEl.style.transformOrigin = `${Math.min(100, pct + 5)}% 100%`;
-        leftStripEl.style.transition = isDragging ? 'none' : 'all 380ms ease-out';
-        leftStripEl.style.transform = `translateY(${-6 - pct * 0.38}px) rotate(${-4 - pct * 0.22}deg) skewX(${-pct * 0.12}deg)`;
+      if (E.leftStripEl) {
+        E.leftStripEl.style.transition = 'none';
+        E.leftStripEl.style.opacity = p > 0.3 ? '1' : '0';
+        E.leftStripEl.style.clipPath = `inset(0 ${(100 - p).toFixed(2)}% 0 0)`;
+        E.leftStripEl.style.transformOrigin = `${Math.min(100, p + 5).toFixed(1)}% 100%`;
+        E.leftStripEl.style.transform = `translate3d(0, ${(-6 * Math.min(1, p / 4) - p * 0.38).toFixed(2)}px, 0) rotate(${(-4 * Math.min(1, p / 4) - p * 0.22).toFixed(2)}deg) skewX(${(-p * 0.12).toFixed(2)}deg)`;
       }
-      if (rightStripEl) {
-        rightStripEl.style.clipPath = `polygon(${pct}% 0, 100% 0, 100% 100%, ${pct}% 100%)`;
+      if (E.rightStripEl) {
+        E.rightStripEl.style.clipPath = `inset(0 0 0 ${p.toFixed(2)}%)`;
       }
-      if (fillEl) {
-        fillEl.style.width = `${pct}%`;
+      if (E.fillEl) {
+        E.fillEl.style.transform = `scaleX(${f.toFixed(4)})`;
       }
-      if (handlePill) {
-        handlePill.style.left = `${Math.min(95, Math.max(8, pct))}%`;
-        handlePill.classList.toggle('scale-125', isDragging);
-        handlePill.classList.toggle('animate-pulse', !isDragging);
+      if (E.handleTrack) {
+        E.handleTrack.style.transform = `translate3d(${Math.min(95, Math.max(8, p)).toFixed(2)}%, 0, 0)`;
       }
-      if (handleTxt) {
-        handleTxt.textContent = pct === 0 ? 'GLISSER ➔' : `${pct}%`;
+      if (E.handlePill && boosterTearLast.dragging !== isDragging) {
+        boosterTearLast.dragging = isDragging;
+        E.handlePill.classList.toggle('tear-pill-active', isDragging);
+        E.handlePill.classList.toggle('tear-pill-idle', !isDragging);
+        E.handlePill.classList.toggle('animate-pulse', !isDragging);
       }
-      if (promptTxt) {
-        promptTxt.textContent = pct === 0
-          ? 'Glissez de gauche à droite sur le booster pour le déchirer !'
-          : pct < 82
-          ? `Continuez de glisser vers la droite ! (${pct}%)`
-          : '✨ Explosion du booster !';
+      // Texte : mis à jour seulement quand la valeur affichée change (évite les reflows à chaque frame)
+      const pctInt = Math.round(p);
+      if (pctInt !== boosterTearLast.pctInt) {
+        boosterTearLast.pctInt = pctInt;
+        if (E.handleTxt) E.handleTxt.textContent = pctInt === 0 ? 'GLISSER ➔' : `${pctInt}%`;
       }
-      if (packEl && isDragging && pct > 5) {
-        const shakeX = (Math.random() - 0.5) * (2 + (pct / 100) * 8);
-        const shakeY = (Math.random() - 0.5) * (2 + (pct / 100) * 8);
-        const tensionScale = 1 + (pct / 100) * 0.07;
-        packEl.style.transition = 'none';
-        packEl.style.transform = `translate(${shakeX}px, ${shakeY}px) scale(${tensionScale})`;
+      const prompt = pctInt === 0
+        ? 'Glissez de gauche à droite sur le booster pour le déchirer !'
+        : pctInt < 82
+        ? 'Continuez de glisser vers la droite !'
+        : '✨ Explosion du booster !';
+      if (prompt !== boosterTearLast.prompt) {
+        boosterTearLast.prompt = prompt;
+        if (E.promptTxt) E.promptTxt.textContent = prompt;
       }
+      if (E.packEl && tremorTime !== null) {
+        // Tremblement de tension continu (sinusoïdes) au lieu d'un bruit aléatoire saccadé
+        const amp = f > 0.05 ? (0.6 + f * 3.2) : 0;
+        const sx = Math.sin(tremorTime * 0.047) * amp + Math.sin(tremorTime * 0.113) * amp * 0.35;
+        const sy = Math.cos(tremorTime * 0.061) * amp * 0.7;
+        E.packEl.style.transition = (performance.now() - boosterTearAnim.dragStartT < 170) ? 'transform 150ms ease-out' : 'none';
+        E.packEl.style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0) scale(${(1 + f * 0.07).toFixed(4)})`;
+      }
+    }
+
+    // Boucle rAF unique : interpole la découpe affichée vers la cible du doigt (ressenti 60/120 Hz)
+    const boosterTearAnim = { raf: 0, target: 0, display: 0, dragging: false, lastT: 0, lastSparkT: 0, rect: null, dragStartT: 0 };
+    function startBoosterTearLoop() {
+      if (boosterTearAnim.raf) return;
+      boosterTearAnim.lastT = performance.now();
+      const tick = (now) => {
+        boosterTearAnim.raf = 0;
+        if (!activeBooster || activeBooster.phase !== 'sealed') return;
+        const A = boosterTearAnim;
+        const dt = Math.min(64, now - A.lastT);
+        A.lastT = now;
+        const prev = A.display;
+        // Lissage exponentiel indépendant du framerate (suivi rapide, retour élastique plus doux)
+        const tau = A.target >= A.display ? 38 : 110;
+        A.display += (A.target - A.display) * (1 - Math.exp(-dt / tau));
+        if (Math.abs(A.target - A.display) < 0.05) A.display = A.target;
+
+        applyBoosterTearVisuals(A.display, A.dragging, A.dragging ? now : null);
+
+        if (A.display > prev + 0.4) {
+          sfxTearStep(A.display / 100);
+          if (now - A.lastSparkT > 55) {
+            A.lastSparkT = now;
+            const r = A.rect || (getBoosterTearEls().packEl && getBoosterTearEls().packEl.getBoundingClientRect());
+            if (r) spawnBoosterSparks(r.left + (r.width * A.display) / 100, r.top + 66 + (Math.random() - 0.5) * 8, 2, activeBooster.isGodPack);
+          }
+        }
+
+        if (A.display >= 82 && A.target >= 82) {
+          completeBoosterRip();
+          return;
+        }
+        if (A.dragging || A.display !== A.target) {
+          A.raf = requestAnimationFrame(tick);
+        } else if (A.display === 0) {
+          const E = getBoosterTearEls();
+          if (E.packEl) {
+            E.packEl.style.transition = 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)';
+            E.packEl.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+          }
+        }
+      };
+      boosterTearAnim.raf = requestAnimationFrame(tick);
+    }
+    function stopBoosterTearLoop() {
+      if (boosterTearAnim.raf) cancelAnimationFrame(boosterTearAnim.raf);
+      boosterTearAnim.raf = 0;
     }
 
     function animateQuickBoosterRip() {
       if (!activeBooster || activeBooster.phase !== 'sealed') return;
       sfx('notchGrab');
-      let pct = Math.max(12, activeBooster.tearProgress || 0);
-      const step = () => {
+      stopBoosterTearLoop();
+      const from = Math.max(boosterTearAnim.display, activeBooster.tearProgress || 0);
+      const to = 100;
+      const dur = 560;
+      const t0 = performance.now();
+      let lastSpark = 0;
+      const ease = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+      const r = getBoosterTearEls().packEl ? getBoosterTearEls().packEl.getBoundingClientRect() : null;
+      const step = (now) => {
         if (!activeBooster || activeBooster.phase !== 'sealed') return;
-        pct = Math.min(100, pct + 18);
-        activeBooster.tearProgress = pct;
-        applyBoosterTearVisuals(pct, true);
+        const k = Math.min(1, (now - t0) / dur);
+        const pct = from + (to - from) * ease(k);
+        activeBooster.tearProgress = Math.round(pct);
+        boosterTearAnim.display = boosterTearAnim.target = pct;
+        applyBoosterTearVisuals(pct, true, now);
         sfxTearStep(pct / 100);
-        const packEl = document.getElementById('foilPackEl');
-        if (packEl) {
-          const r = packEl.getBoundingClientRect();
+        if (r && now - lastSpark > 50) {
+          lastSpark = now;
           spawnBoosterSparks(r.left + (r.width * pct) / 100, r.top + 66, 3, activeBooster.isGodPack);
         }
-        if (pct >= 86) {
-          completeBoosterRip();
-        } else {
-          setTimeout(step, 34);
-        }
+        if (pct >= 90) completeBoosterRip();
+        else requestAnimationFrame(step);
       };
-      step();
+      requestAnimationFrame(step);
     }
 
     function initBoosterTearInteraction() {
@@ -21457,9 +21564,14 @@ const TYPE_EMOJI = {
       const packEl = document.getElementById('foilPackEl');
       const sheenEl = document.getElementById('packMetallicSheen');
       if (!wrap || !packEl) return;
+      boosterTearEls = null;
+      stopBoosterTearLoop();
+      Object.assign(boosterTearAnim, { target: 0, display: 0, dragging: false, rect: null, lastSparkT: 0 });
 
       let tearing = false;
       let startX = null;
+      let hoverRaf = 0;
+      let hoverEvt = null;
 
       packEl.addEventListener('pointerdown', (e) => {
         if (!activeBooster || activeBooster.phase !== 'sealed') return;
@@ -21467,67 +21579,72 @@ const TYPE_EMOJI = {
         startX = e.clientX;
         try { packEl.setPointerCapture(e.pointerId); } catch (_) {}
         sfx('notchGrab');
+        // Rect mesuré une seule fois (pas de getBoundingClientRect à chaque mouvement → pas de reflow forcé)
+        const wr = wrap.getBoundingClientRect();
+        const pw = packEl.offsetWidth, ph = packEl.offsetHeight;
+        const left = wr.left + (wr.width - pw) / 2, top = wr.top + (wr.height - ph) / 2;
+        boosterTearAnim.rect = { left, top, width: pw, height: ph, right: left + pw, bottom: top + ph };
+        boosterTearAnim.dragging = true;
+        boosterTearAnim.dragStartT = performance.now();
 
-        const rect = packEl.getBoundingClientRect();
+        const rect = boosterTearAnim.rect;
         const relX = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
         if (relX < 0.28 && activeBooster.tearProgress < 10) {
           const initPct = Math.max(6, Math.round(relX * 100));
           activeBooster.tearProgress = initPct;
-          applyBoosterTearVisuals(initPct, true);
+          boosterTearAnim.target = initPct;
         }
+        startBoosterTearLoop();
       });
 
       packEl.addEventListener('pointermove', (e) => {
         if (!activeBooster || activeBooster.phase !== 'sealed') return;
-        const rect = packEl.getBoundingClientRect();
 
         if (tearing) {
+          const rect = boosterTearAnim.rect;
+          if (!rect) return;
           const sx = startX ?? rect.left;
           const dragDeltaPct = Math.max(0, ((e.clientX - sx) / (rect.width * 0.72)) * 100);
           const posPct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-          const rawPct = Math.round(Math.max(dragDeltaPct, sx < rect.left + rect.width * 0.45 ? posPct : dragDeltaPct));
+          const rawPct = Math.max(dragDeltaPct, sx < rect.left + rect.width * 0.45 ? posPct : dragDeltaPct);
           const nextPct = Math.min(100, Math.max(activeBooster.tearProgress, rawPct));
-
           if (nextPct > activeBooster.tearProgress) {
             activeBooster.tearProgress = nextPct;
-            applyBoosterTearVisuals(nextPct, true);
-            sfxTearStep(nextPct / 100);
-            spawnBoosterSparks(
-              rect.left + (rect.width * nextPct) / 100,
-              rect.top + 66 + (Math.random() - 0.5) * 8,
-              3,
-              activeBooster.isGodPack
-            );
-            if (nextPct >= 82) {
-              tearing = false;
-              completeBoosterRip();
-            }
+            boosterTearAnim.target = nextPct;
+            startBoosterTearLoop();
           }
           return;
         }
 
-        // Survol 3D hors découpe (milTCG)
-        const px = ((e.clientX - rect.left) / rect.width) * 100;
-        const py = ((e.clientY - rect.top) / rect.height) * 100;
-        const ry = ((px - 50) / 50) * 14;
-        const rx = -((py - 50) / 50) * 11;
-        packEl.style.transition = 'transform 120ms ease-out';
-        packEl.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-        if (sheenEl) sheenEl.style.backgroundPosition = `${px * 2}% ${py * 2}%`;
+        // Survol 3D hors découpe (milTCG) — regroupé par frame
+        hoverEvt = e;
+        if (hoverRaf) return;
+        hoverRaf = requestAnimationFrame(() => {
+          hoverRaf = 0;
+          if (!hoverEvt || tearing || !activeBooster || activeBooster.phase !== 'sealed') return;
+          const rect = wrap.getBoundingClientRect();
+          const px = ((hoverEvt.clientX - rect.left) / rect.width) * 100;
+          const py = ((hoverEvt.clientY - rect.top) / rect.height) * 100;
+          const ry = ((px - 50) / 50) * 14;
+          const rx = -((py - 50) / 50) * 11;
+          packEl.style.transition = 'transform 120ms ease-out';
+          packEl.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+          if (sheenEl) sheenEl.style.backgroundPosition = `${(px * 2).toFixed(1)}% ${(py * 2).toFixed(1)}%`;
+        });
       });
 
       const finishPointer = () => {
         if (!tearing || !activeBooster || activeBooster.phase !== 'sealed') return;
         tearing = false;
         startX = null;
+        boosterTearAnim.dragging = false;
         if (activeBooster.tearProgress >= 82) {
           completeBoosterRip();
         } else {
-          // Retour élastique à 0% si relâché trop tôt (comme milTCG)
+          // Retour élastique fluide à 0% si relâché trop tôt (comme milTCG)
           activeBooster.tearProgress = 0;
-          applyBoosterTearVisuals(0, false);
-          packEl.style.transition = 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)';
-          packEl.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+          boosterTearAnim.target = 0;
+          startBoosterTearLoop();
         }
       };
 
@@ -21535,6 +21652,7 @@ const TYPE_EMOJI = {
       packEl.addEventListener('pointercancel', finishPointer);
       packEl.addEventListener('pointerleave', () => {
         if (!tearing && activeBooster && activeBooster.phase === 'sealed') {
+          hoverEvt = null;
           packEl.style.transition = 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)';
           packEl.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
         }
@@ -21549,6 +21667,16 @@ const TYPE_EMOJI = {
       const seamGlowHex = getPackSeamGlowHex(activeBooster);
       const hasBigHit = activeBooster.cards.some(c => isBigHitRarity(c.rarity));
 
+      stopBoosterTearLoop();
+      boosterTearAnim.dragging = false;
+      const cachedRect = boosterTearAnim.rect;
+      // Fin de couture fluide (82% → 100%) au lieu d'un saut
+      {
+        const E = getBoosterTearEls();
+        const glide = 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease-out';
+        [E.fillEl, E.raysEl, E.handleTrack].forEach(el => { if (el) el.style.transition = glide; });
+        if (E.rightStripEl) E.rightStripEl.style.transition = 'clip-path 220ms ease-out, opacity 260ms ease-out';
+      }
       applyBoosterTearVisuals(100, false);
       triggerBoosterScreenFlash(seamGlowHex);
       sfxPackBurst(hasBigHit);
@@ -21562,30 +21690,32 @@ const TYPE_EMOJI = {
       const mainBodyEl = document.getElementById('packMainBody');
 
       if (haloEl) {
+        haloEl.style.transition = 'transform 620ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease-out';
         haloEl.style.opacity = '1';
-        haloEl.style.transform = 'scale(2.4)';
+        haloEl.style.transform = 'translateZ(0) scale(2.4)';
       }
       if (innerStackEl) {
+        innerStackEl.style.transition = 'transform 560ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease-out';
         innerStackEl.style.opacity = '1';
-        innerStackEl.style.transform = 'translateY(-35px) scale(0.95)';
+        innerStackEl.style.transform = 'translate3d(0, -35px, 0) scale(0.95)';
       }
       if (rightStripEl) rightStripEl.style.opacity = '0';
-      if (guideEl) guideEl.style.opacity = '0';
+      if (guideEl) { guideEl.style.transition = 'opacity 240ms ease-out'; guideEl.style.opacity = '0'; }
       if (leftStripEl) {
-        leftStripEl.style.transition = 'all 520ms cubic-bezier(0.22, 1, 0.36, 1)';
-        leftStripEl.style.transform = 'translate(160px, -220px) rotate(42deg) scale(0.8)';
+        leftStripEl.style.transition = 'transform 560ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease-out 80ms';
+        leftStripEl.style.transform = 'translate3d(160px, -220px, 0) rotate(42deg) scale(0.8)';
         leftStripEl.style.opacity = '0';
       }
       if (packEl) {
         packEl.style.transition = 'transform 450ms cubic-bezier(0.22, 1, 0.36, 1)';
-        packEl.style.transform = 'scale(1.12)';
+        packEl.style.transform = 'translate3d(0, 0, 0) scale(1.12)';
       }
       if (mainBodyEl) {
-        mainBodyEl.style.transform = 'translateY(180px) scale(0.92) rotateX(-18deg)';
+        mainBodyEl.style.transform = 'translate3d(0, 180px, 0) scale(0.92) rotateX(-18deg)';
         mainBodyEl.style.opacity = '0';
       }
 
-      const rect = packEl ? packEl.getBoundingClientRect() : { left: innerWidth / 2 - 100, top: innerHeight / 2 - 150, width: 200, height: 300 };
+      const rect = cachedRect || (packEl ? packEl.getBoundingClientRect() : { left: innerWidth / 2 - 100, top: innerHeight / 2 - 150, width: 200, height: 300 });
       spawnBoosterSparks(rect.left + rect.width / 2, rect.top + 66, 32, activeBooster.isGodPack || hasBigHit);
 
       setTimeout(() => {
@@ -21689,33 +21819,57 @@ const TYPE_EMOJI = {
 
       const topCardEl = () => activeBooster && document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
 
+      // Rect mis en cache (invalidé au resize/scroll) + 1 seule mise à jour visuelle par frame
+      let stageRect = null;
+      const getStageRect = () => (stageRect || (stageRect = revStage.getBoundingClientRect()));
+      window.__boosterStageRectInvalidate = () => { stageRect = null; };
+      if (!window.__boosterStageRectListeners) {
+        window.__boosterStageRectListeners = true;
+        const inv = () => window.__boosterStageRectInvalidate && window.__boosterStageRectInvalidate();
+        window.addEventListener('resize', inv, { passive: true });
+        window.addEventListener('scroll', inv, { passive: true, capture: true });
+      }
+      let moveRaf = 0;
+      let lastMove = null;
+
       revStage.addEventListener('pointerdown', (e) => {
         if (!activeBooster || activeBooster.phase !== 'revealing' || activeBooster.busy) return;
         const el = topCardEl();
         if (!el) return;
+        stageRect = null;
         drag = { x: e.clientX, y: e.clientY, t: performance.now(), dx: 0, dy: 0, moved: false };
         try { revStage.setPointerCapture(e.pointerId); } catch (_) {}
       });
 
       revStage.addEventListener('pointermove', (e) => {
+        lastMove = { clientX: e.clientX, clientY: e.clientY };
+        if (drag) {
+          drag.dx = e.clientX - drag.x;
+          drag.dy = e.clientY - drag.y;
+          if (Math.hypot(drag.dx, drag.dy) > 6) drag.moved = true;
+        }
+        if (moveRaf) return;
+        moveRaf = requestAnimationFrame(() => {
+          moveRaf = 0;
+          if (lastMove) applyStackPointer(lastMove);
+        });
+      });
+
+      const applyStackPointer = (e) => {
         if (!activeBooster || activeBooster.phase !== 'revealing') return;
         const el = topCardEl();
         if (!el) return;
-        const r = revStage.getBoundingClientRect();
+        const r = getStageRect();
         const px = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
         const py = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
 
         if (drag && !activeBooster.busy) {
-          drag.dx = e.clientX - drag.x;
-          drag.dy = e.clientY - drag.y;
-          if (Math.hypot(drag.dx, drag.dy) > 6) drag.moved = true;
-
           if (activeBooster.currentFlipped && drag.moved) {
             el.classList.add('dragging');
             el.classList.remove('tilting');
-            el.style.setProperty('--hx', `${px * 100}%`);
-            el.style.setProperty('--hy', `${py * 100}%`);
-            el.style.transform = `translate(${drag.dx}px, ${drag.dy}px) rotate(${drag.dx * 0.045}deg)`;
+            el.style.setProperty('--hx', `${(px * 100).toFixed(1)}%`);
+            el.style.setProperty('--hy', `${(py * 100).toFixed(1)}%`);
+            el.style.transform = `translate3d(${drag.dx}px, ${drag.dy}px, 0) rotate(${(drag.dx * 0.045).toFixed(2)}deg)`;
             // Faire monter dynamiquement la carte suivante sous le doigt (milTCG)
             layoutBoosterStack(drag.dx, drag.dy);
             return;
@@ -21724,20 +21878,23 @@ const TYPE_EMOJI = {
 
         // Inclinaison 3D holographique au survol (souris / doigt)
         if (activeBooster.currentFlipped && !activeBooster.busy) {
-          el.style.setProperty('--hx', `${px * 100}%`);
-          el.style.setProperty('--hy', `${py * 100}%`);
+          el.style.setProperty('--hx', `${(px * 100).toFixed(1)}%`);
+          el.style.setProperty('--hy', `${(py * 100).toFixed(1)}%`);
           el.classList.add('tilting');
-          el.style.transform = `rotateY(${(px - 0.5) * 24}deg) rotateX(${(0.5 - py) * 20}deg) scale(1.03)`;
+          el.style.transform = `rotateY(${((px - 0.5) * 24).toFixed(2)}deg) rotateX(${((0.5 - py) * 20).toFixed(2)}deg) scale(1.03)`;
         }
-      });
+      };
 
       revStage.addEventListener('pointerleave', () => {
+        if (!drag) { lastMove = null; if (moveRaf) { cancelAnimationFrame(moveRaf); moveRaf = 0; } }
         if (drag || !activeBooster || !activeBooster.currentFlipped || activeBooster.busy) return;
         const el = topCardEl();
         if (el) { el.classList.remove('tilting'); el.style.transform = 'translate(0,0) scale(1)'; }
       });
 
       const endDrag = (e, cancelled) => {
+        if (moveRaf) { cancelAnimationFrame(moveRaf); moveRaf = 0; }
+        lastMove = null;
         if (!drag || !activeBooster) { drag = null; return; }
         const d = drag;
         drag = null;
