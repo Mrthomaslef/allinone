@@ -523,8 +523,35 @@
     }
     .fx-layer { position: fixed; inset: 0; pointer-events: none; z-index: 88; }
     .dmg-float {
-      position: fixed; font: 900 28px/1 'Nunito', sans-serif; color: #fff; pointer-events: none; z-index: 89;
-      -webkit-text-stroke: 2px #7f1d1d; text-shadow: 0 4px 10px rgba(0,0,0,.7);
+      position: fixed; pointer-events: none; z-index: 90; display: flex; align-items: center; justify-content: center;
+      will-change: transform, opacity;
+    }
+    .dmg-float .dmg-num {
+      position: relative; z-index: 2; font: 900 var(--dmg-size, 34px)/1 'Nunito', sans-serif; letter-spacing: -.02em;
+      font-style: italic; white-space: nowrap; padding: 0 .08em;
+      background: linear-gradient(180deg, #fff1f1 0%, #ff6b6b 38%, #dc2626 62%, #7f1d1d 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .dmg-float .dmg-outline {
+      position: absolute; z-index: 2; font: 900 var(--dmg-size, 34px)/1 'Nunito', sans-serif; letter-spacing: -.02em;
+      font-style: italic; white-space: nowrap; padding: 0 .08em; color: #2a0404;
+      -webkit-text-stroke: calc(var(--dmg-size, 34px) * .22) #2a0404; paint-order: stroke fill;
+      filter: drop-shadow(0 0 3px #fff7d6) drop-shadow(0 0 14px rgba(255,30,30,.9)) drop-shadow(0 5px 4px rgba(0,0,0,.8));
+    }
+    .dmg-float .dmg-num { z-index: 3; }
+    .dmg-float .dmg-burst {
+      position: absolute; z-index: 1; width: calc(var(--dmg-size, 34px) * 2.6); height: calc(var(--dmg-size, 34px) * 2.6);
+      background: radial-gradient(circle, rgba(255,240,170,.95) 0%, rgba(255,150,40,.85) 30%, rgba(230,30,20,.7) 55%, rgba(120,0,0,0) 74%);
+      clip-path: polygon(50% 0%, 61% 30%, 95% 18%, 72% 45%, 100% 58%, 68% 64%, 80% 98%, 52% 74%, 28% 100%, 32% 66%, 0% 70%, 26% 48%, 4% 22%, 38% 32%);
+    }
+    .dmg-float.dmg-crit .dmg-num { background: linear-gradient(180deg, #fffbe6 0%, #ffd23f 30%, #ff3b3b 60%, #6b0000 100%); -webkit-background-clip: text; background-clip: text; }
+    .dmg-ring {
+      position: fixed; pointer-events: none; z-index: 89; border-radius: 50%; border: 4px solid rgba(255,60,60,.95);
+      box-shadow: 0 0 18px rgba(255,40,40,.85), inset 0 0 12px rgba(255,120,80,.7); will-change: transform, opacity;
+    }
+    .dmg-flash {
+      position: fixed; pointer-events: none; z-index: 88; border-radius: 10px; mix-blend-mode: screen;
+      background: radial-gradient(circle, rgba(255,70,70,.85) 0%, rgba(220,20,20,.45) 55%, rgba(120,0,0,0) 100%);
     }
     .spark { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 88; will-change: transform, opacity; }
 
@@ -1789,8 +1816,12 @@
     <!-- En-tête Héroïque compact -->
     <div class="w-full text-center relative pt-0.5">
       <div class="menu-topbar flex items-center justify-between gap-2">
-      <button onclick="openPseudoModal(false)" id="pseudoBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-3 py-1 rounded-xl text-xs font-extrabold text-slate-800 border border-slate-200 hover:border-sky-400 transition flex items-center gap-1.5 shadow-sm active:scale-95 z-20 max-w-[140px]" title="Modifier mon pseudo de Dresseur">
+      <button onclick="openPseudoModal(false)" id="pseudoBtnMenu" class="no-accent glass-pill shrink-0 min-h-[38px] pl-3 pr-2 py-1 rounded-xl text-xs font-extrabold text-slate-800 border border-slate-200 hover:border-sky-400 transition flex items-center gap-1.5 shadow-sm active:scale-95 z-20 max-w-[220px]" title="Modifier mon pseudo de Dresseur">
         <span id="menuPseudoLabel" class="text-[11px] font-bold truncate">Dresseur</span>
+        <span id="menuCoinsPill" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-amber-100 border border-amber-300/90 text-amber-900 text-[11px] font-black leading-none shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]" title="Tes pièces (100 pièces = 1 Booster)">
+          <span class="text-[11px] leading-none" aria-hidden="true">🪙</span>
+          <span id="menuCoinsCount" class="font-mono">0</span>
+        </span>
       </button>
       <span class="menu-edition glass-pill px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-[.16em] uppercase text-slate-700 border border-slate-200/90 shadow-sm truncate">Édition FR · 1999</span>
       <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 w-[38px] h-[38px] rounded-xl text-slate-700 border border-slate-200 hover:border-amber-400 transition grid place-items-center shadow-sm active:scale-95 z-20" title="Réglages (Son & Thème)" aria-label="Réglages">
@@ -17799,7 +17830,7 @@ const TYPE_EMOJI = {
           return `
             <div class="adv-row">
               <button type="button" onclick="showGameToast('🔒 Réunis les 8 Badges d\\'Arène pour ouvrir le Conseil des 4 et défier le Maître !')" class="adv-node no-accent locked" style="left:${xOf(i)}%" aria-label="Ligue verrouillée">
-                <span class="adv-disc adv-gate-disc">🏛️<span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span></span>
+                <span class="adv-disc adv-gate-disc"><img src="assets/pokemon-league.png" alt="Pokémon League" class="w-14 h-14 object-contain drop-shadow-md" /><span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span></span>
                 <span class="adv-name">??? · ${getAdvBadgeCount()}/8 badges</span>
                 <span class="adv-stars">Ligue verrouillée</span>
               </button>
@@ -17832,24 +17863,29 @@ const TYPE_EMOJI = {
       }).join('');
 
       box.innerHTML = `
-        <div class="w-full px-3 py-2 rounded-2xl tcg-card-panel flex items-center justify-between gap-2">
-          <div class="min-w-0">
-            <div class="text-sm font-black text-slate-900 leading-tight">🏆 Ligue 2000</div>
-            <div class="flex gap-0.5 mt-0.5 flex-wrap">
-              ${ADV_GYMS().map((t) => `<span class="text-[13px] ${(adventureSave.defeated[t.id] || 0) > 0 ? '' : 'grayscale opacity-30'}">${t.badgeIcon}</span>`).join('')}
-              ${leagueOpen ? `<span class="text-[10px] font-black text-violet-700 ml-1 self-center">· Ligue ${ADVENTURE_TRAINERS.filter((t) => advTier(t) !== 'gym' && (adventureSave.defeated[t.id] || 0) > 0).length}/5</span>` : ''}
+        <div class="sticky -top-2.5 z-30 w-full space-y-1.5">
+          <div class="w-full px-3 py-2 rounded-2xl tcg-card-panel flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="assets/pokemon-league.png" alt="Pokémon League" class="w-10 h-11 object-contain shrink-0 drop-shadow-sm" />
+              <div class="min-w-0">
+                <div class="text-sm font-black text-slate-900 leading-tight">Ligue 2000</div>
+                <div class="flex gap-0.5 mt-0.5 flex-wrap">
+                  ${ADV_GYMS().map((t) => `<span class="text-[13px] ${(adventureSave.defeated[t.id] || 0) > 0 ? '' : 'grayscale opacity-30'}">${t.badgeIcon}</span>`).join('')}
+                  ${leagueOpen ? `<span class="text-[10px] font-black text-violet-700 ml-1 self-center">· Ligue ${ADVENTURE_TRAINERS.filter((t) => advTier(t) !== 'gym' && (adventureSave.defeated[t.id] || 0) > 0).length}/5</span>` : ''}
+                </div>
+              </div>
             </div>
+            <button onclick="document.getElementById('advDeckPicker').classList.toggle('hidden')" class="shrink-0 flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 active:scale-95 transition">
+              <img src="${curDeckMeta.img}" alt="" class="w-8 aspect-[63/88] rounded object-cover border-2 border-sky-400" />
+              <span class="text-left">
+                <span class="block text-[9px] font-extrabold uppercase tracking-wider text-sky-700">Mon deck</span>
+                <span class="block text-[11px] font-black text-slate-900 max-w-[110px] truncate">${curDeckMeta.short || curDeckMeta.name}</span>
+              </span>
+            </button>
           </div>
-          <button onclick="document.getElementById('advDeckPicker').classList.toggle('hidden')" class="shrink-0 flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 active:scale-95 transition">
-            <img src="${curDeckMeta.img}" alt="" class="w-8 aspect-[63/88] rounded object-cover border-2 border-sky-400" />
-            <span class="text-left">
-              <span class="block text-[9px] font-extrabold uppercase tracking-wider text-sky-700">Mon deck</span>
-              <span class="block text-[11px] font-black text-slate-900 max-w-[110px] truncate">${curDeckMeta.short || curDeckMeta.name}</span>
-            </span>
-          </button>
-        </div>
-        <div id="advDeckPicker" class="hidden w-full rounded-2xl tcg-card-panel p-2">
-          <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">${allDeckKeys.map(renderDeckPill).join('')}</div>
+          <div id="advDeckPicker" class="hidden w-full rounded-2xl tcg-card-panel p-2 max-h-[60dvh] overflow-y-auto">
+            <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">${allDeckKeys.map(renderDeckPill).join('')}</div>
+          </div>
         </div>
 
         <div class="adv-path w-full" style="height:${pathH}px; margin-top: 22px; margin-bottom: 40px">
@@ -18227,6 +18263,13 @@ const TYPE_EMOJI = {
       const label = playerPseudo || 'Dresseur';
       const menuLbl = document.getElementById('menuPseudoLabel');
       if (menuLbl) menuLbl.textContent = label;
+      const menuCoins = document.getElementById('menuCoinsCount');
+      if (menuCoins) {
+        const coins = (typeof boosterSave !== 'undefined' && boosterSave)
+          ? (boosterSave.coins || 0)
+          : ((readProfileSummary(playerPseudo) || {}).coins || 0);
+        menuCoins.textContent = `${coins}`;
+      }
       const multiLbl = document.getElementById('multiMyPseudo');
       if (multiLbl) multiLbl.textContent = label;
       const multiDeckPseudo = document.getElementById('multiMyDeckPseudo');
@@ -21283,16 +21326,45 @@ const TYPE_EMOJI = {
       }
 
       if (dmg > 0) {
+        // Flash rouge sur la carte touchée
+        const fl = document.createElement('div');
+        fl.className = 'dmg-flash';
+        Object.assign(fl.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+        document.body.appendChild(fl);
+        fl.animate([{ opacity: 0 }, { opacity: 1, offset: .15 }, { opacity: 0 }], { duration: 480, easing: 'ease-out' }).finished.then(() => fl.remove());
+        // Onde de choc rouge
+        const ring = document.createElement('div');
+        ring.className = 'dmg-ring';
+        const rs = Math.max(r.width, r.height) * .55;
+        Object.assign(ring.style, { left: `${cx - rs / 2}px`, top: `${cy - rs / 2}px`, width: `${rs}px`, height: `${rs}px` });
+        document.body.appendChild(ring);
+        ring.animate([
+          { transform: 'scale(.2)', opacity: 1, borderWidth: '8px' },
+          { transform: 'scale(1.9)', opacity: 0, borderWidth: '1px' }
+        ], { duration: 560, easing: 'cubic-bezier(.1,.7,.3,1)' }).finished.then(() => ring.remove());
+        // Chiffre de dégâts rouge stylisé (taille selon la puissance du coup)
+        const big = dmg >= 100, size = Math.round(Math.min(56, 30 + dmg / 8));
         const f = document.createElement('div');
-        f.className = 'dmg-float';
-        f.textContent = `-${dmg}`;
+        f.className = 'dmg-float' + (big ? ' dmg-crit' : '');
+        f.style.setProperty('--dmg-size', `${size}px`);
+        f.innerHTML = `<span class="dmg-burst"></span><span class="dmg-outline">-${dmg}</span><span class="dmg-num">-${dmg}</span>`;
         f.style.left = `${cx}px`; f.style.top = `${cy}px`;
         document.body.appendChild(f);
+        const tilt = (Math.random() * 10 - 5).toFixed(1);
         f.animate([
-          { transform: 'translate(-50%,-50%) scale(.4)', opacity: 0 },
-          { transform: 'translate(-50%,-90%) scale(1.35)', opacity: 1, offset: 0.25 },
-          { transform: 'translate(-50%,-170%) scale(1)', opacity: 0 }
-        ], { duration: 1000, easing: 'cubic-bezier(.2,.8,.3,1)' }).finished.then(() => f.remove());
+          { transform: `translate(-50%,-50%) scale(2.6) rotate(${-tilt * 2}deg)`, opacity: 0 },
+          { transform: `translate(-50%,-55%) scale(.9) rotate(${tilt}deg)`, opacity: 1, offset: 0.14 },
+          { transform: `translate(-50%,-62%) scale(1.15) rotate(${tilt}deg)`, opacity: 1, offset: 0.24 },
+          { transform: `translate(-50%,-70%) scale(1) rotate(${tilt}deg)`, opacity: 1, offset: 0.62 },
+          { transform: `translate(-50%,-150%) scale(.85) rotate(${tilt}deg)`, opacity: 0 }
+        ], { duration: big ? 1400 : 1150, easing: 'cubic-bezier(.2,.8,.3,1)' }).finished.then(() => f.remove());
+        const burst = f.querySelector('.dmg-burst');
+        burst.animate([
+          { transform: 'scale(.2) rotate(0deg)', opacity: 0 },
+          { transform: 'scale(1.15) rotate(18deg)', opacity: 1, offset: .18 },
+          { transform: 'scale(1.35) rotate(30deg)', opacity: 0, offset: .55 },
+          { transform: 'scale(1.35) rotate(30deg)', opacity: 0 }
+        ], { duration: big ? 1400 : 1150, easing: 'ease-out' });
       }
       sfx('hit'); buzz(30);
     }
