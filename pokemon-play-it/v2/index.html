@@ -1197,7 +1197,22 @@
       background: #f8fafc;
       border: 1px solid #e2e8f0;
     }
-  </style>
+    /* ===== Barre de navigation basse : icônes seules ===== */
+    .nav-ico { position: relative; height: 3rem; display: flex; align-items: center; justify-content: center; border-radius: 1rem; color: #94a3b8; background: transparent; transition: color .18s ease, transform .15s ease, background-color .18s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; --nav-card-fill: #fff; }
+    .nav-ico:hover { color: #475569; }
+    .nav-ico:active { transform: scale(.88); }
+    .nav-ico:focus-visible { outline: 2px solid #f59e0b; outline-offset: 2px; }
+    .nav-ico-svg { width: 1.6rem; height: 1.6rem; transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+    .nav-ico::after { content: ''; position: absolute; bottom: 2px; left: 50%; width: 0; height: 3px; border-radius: 9999px; background: linear-gradient(90deg,#fbbf24,#eab308); transform: translateX(-50%); transition: width .22s ease; }
+    .nav-ico.is-active { color: #0f172a; background: linear-gradient(180deg, rgba(254,243,199,.9), rgba(254,249,195,.55)); --nav-card-fill: #fef9c3; }
+    .nav-ico.is-active .nav-ico-svg { transform: translateY(-2px) scale(1.08); color: #b45309; }
+    .nav-ico.is-active::after { width: 18px; }
+    .nav-ico-multi.is-active { background: linear-gradient(180deg, rgba(207,250,254,.9), rgba(224,242,254,.55)); --nav-card-fill: #e0f2fe; }
+    .nav-ico-multi.is-active .nav-ico-svg { color: #0369a1; }
+    .nav-ico-multi.is-active::after { background: linear-gradient(90deg,#22d3ee,#38bdf8); }
+    .nav-ico-badge { position: absolute; top: 3px; left: calc(50% + 6px); pointer-events: none; }
+    .nav-ico-badge > span { display: inline-block; min-width: 1.1rem; text-align: center; box-shadow: 0 0 0 2px #fff; }
+</style>
 </head>
 <body id="appBody" class="playmat-night flex flex-col">
 
@@ -1656,22 +1671,22 @@
     <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
     <div id="viewDecks" class="hidden w-full space-y-2.5"></div>
 
-    <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS (4 ONGLETS COMPACTS — STYLE TCG POCKET BLANC ÉPURÉ) -->
-    <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-white/92 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-8px_28px_rgba(15,23,42,0.08)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
-      <div class="max-w-lg mx-auto px-2.5 pt-1.5 grid grid-cols-4 gap-1.5">
-        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-slate-100/80 border border-slate-200/80 text-slate-600 hover:text-slate-900 hover:bg-slate-100 active:scale-95">
-          <span>Accueil</span>
-          <span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-500 text-white text-[10px] font-black leading-tight">3</span>
+    <!-- BARRE DE NAVIGATION FIXÉE EN BAS (4 ICÔNES SEULES — STYLE TCG POCKET BLANC ÉPURÉ) -->
+    <nav id="bottomModeNav" aria-label="Navigation principale" class="fixed bottom-0 inset-x-0 z-40 bg-white/92 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-8px_28px_rgba(15,23,42,0.08)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
+      <div class="max-w-md mx-auto px-4 pt-1.5 grid grid-cols-4 gap-2">
+        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" aria-label="Accueil" title="Accueil" class="nav-ico">
+          <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
+          <span class="nav-ico-badge"><span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-500 text-white text-[10px] font-black leading-tight">3</span></span>
         </button>
-        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-slate-900 text-white shadow-md active:scale-95">
-          <span>Jouer IA</span>
+        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" aria-label="Jouer contre l'IA" title="Jouer contre l'IA" class="nav-ico is-active">
+          <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4"/><circle cx="12" cy="3.2" r="1.2"/><circle cx="9" cy="13.5" r="1.3" fill="currentColor"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor"/><path d="M9.5 17h5"/><path d="M2 13v2M22 13v2"/></svg>
         </button>
-        <button id="tabBtnMulti" onclick="switchMenuTab('multi')" class="relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-slate-100/80 border border-slate-200/80 text-slate-600 hover:text-slate-900 hover:bg-slate-100 active:scale-95">
-          <span>Multi</span>
-          <span id="multiNavDot" class="hidden absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white animate-ping"></span>
+        <button id="tabBtnMulti" onclick="switchMenuTab('multi')" aria-label="Multijoueur" title="Multijoueur" class="nav-ico nav-ico-multi">
+          <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.3A5 5 0 0 1 21 19.5"/></svg>
+          <span id="multiNavDot" class="hidden absolute top-1.5 right-[calc(50%-18px)] w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white animate-ping"></span>
         </button>
-        <button id="tabBtnDecks" onclick="switchMenuTab('decks')" class="py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-slate-100/80 border border-slate-200/80 text-slate-600 hover:text-slate-900 hover:bg-slate-100 active:scale-95">
-          <span>Decks</span>
+        <button id="tabBtnDecks" onclick="switchMenuTab('decks')" aria-label="Decks" title="Decks" class="nav-ico">
+          <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="12" height="16" rx="2" transform="rotate(8 13 11)"/><rect x="4" y="5" width="12" height="16" rx="2" fill="var(--nav-card-fill,#fff)"/><path d="M10 10.5l1.2 2.4 2.6.4-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.4z"/></svg>
         </button>
       </div>
     </nav>
@@ -16238,22 +16253,17 @@ const TYPE_EMOJI = {
       const hero = document.getElementById('menuHeroTitle');
       if (hero) hero.classList.add('hidden');
 
-      const activeCls = 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
-      const activeMultiCls = 'relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow-lg ring-2 ring-cyan-200/80 active:scale-95';
-      const idleCls = 'py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-50 shadow-sm active:scale-95';
-      const idleMultiCls = 'relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white border border-sky-300 text-sky-700 hover:text-sky-900 hover:bg-sky-50 shadow-sm active:scale-95';
-      const idleBoosterCls = 'relative py-2.5 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-white border border-amber-300 text-amber-800 hover:text-amber-900 hover:bg-amber-50 shadow-sm active:scale-95';
-
-      const bTuto = document.getElementById('tabBtnTuto');
-      if (bTuto) bTuto.className = isSolo ? activeCls : idleCls;
-      const bQuick = document.getElementById('tabBtnQuick');
-      if (bQuick) bQuick.className = isSolo ? activeCls : idleCls;
-      const bMulti = document.getElementById('tabBtnMulti');
-      if (bMulti) bMulti.className = isMulti ? activeMultiCls : idleMultiCls;
-      const bBoost = document.getElementById('tabBtnBooster');
-      if (bBoost) bBoost.className = isBooster ? activeCls : idleBoosterCls;
-      const bDecks = document.getElementById('tabBtnDecks');
-      if (bDecks) bDecks.className = isDecks ? activeCls : idleCls;
+      const setNav = (id, on, extra) => {
+        const b = document.getElementById(id);
+        if (!b) return;
+        b.className = 'nav-ico' + (extra ? ' ' + extra : '') + (on ? ' is-active' : '');
+        b.setAttribute('aria-current', on ? 'page' : 'false');
+      };
+      setNav('tabBtnTuto', isSolo);
+      setNav('tabBtnQuick', isSolo);
+      setNav('tabBtnMulti', isMulti, 'nav-ico-multi');
+      setNav('tabBtnBooster', isBooster);
+      setNav('tabBtnDecks', isDecks);
       if (isDecks && typeof renderDecksView === 'function') renderDecksView();
 
       if (isSolo) renderQuickSetup();
@@ -23929,25 +23939,25 @@ const TYPE_EMOJI = {
     .no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
     #deckEditor { touch-action: manipulation; overscroll-behavior: contain; }
     #deckEditor .db-scroll { overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
-    .db-tile { position: relative; border-radius: 10px; overflow: hidden; background: #0f172a; border: 1.5px solid rgba(255,255,255,.12); transition: transform .12s ease, opacity .15s ease, border-color .15s; touch-action: manipulation; }
+    .db-tile { position: relative; border-radius: 10px; overflow: hidden; background: #ffffff; border: 1.5px solid #e2e8f0; box-shadow: 0 2px 6px rgba(15,23,42,.06); transition: transform .12s ease, opacity .15s ease, border-color .15s; touch-action: manipulation; }
     .db-tile img { width: 100%; aspect-ratio: 63/88; object-fit: cover; display: block; pointer-events: none; }
-    .db-tile.in-deck { border-color: rgba(250,204,21,.85); box-shadow: 0 0 0 1px rgba(250,204,21,.35); }
+    .db-tile.in-deck { border-color: #f59e0b; box-shadow: 0 0 0 2px rgba(251,191,36,.35); }
     .db-tile.maxed { opacity: .45; }
     .db-tile:active { transform: scale(.95); }
     .db-tile.pop { animation: dbPop .28s ease-out; }
     @keyframes dbPop { 0% { transform: scale(1); } 40% { transform: scale(1.08); } 100% { transform: scale(1); } }
-    .db-badge { position: absolute; top: 3px; right: 3px; min-width: 28px; padding: 1px 5px; border-radius: 999px; font: 900 11px/1.35 Nunito, sans-serif; text-align: center; background: rgba(2,6,23,.85); color: #e2e8f0; border: 1px solid rgba(255,255,255,.25); }
+    .db-badge { position: absolute; top: 3px; right: 3px; min-width: 28px; padding: 1px 5px; border-radius: 999px; font: 900 11px/1.35 Nunito, sans-serif; text-align: center; background: rgba(15,23,42,.85); color: #ffffff; border: 1px solid rgba(255,255,255,.35); }
     .db-tile.in-deck .db-badge { background: #facc15; color: #0f172a; border-color: #fde68a; }
-    .db-step { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font: 900 20px/1 Nunito, sans-serif; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: #fff; touch-action: manipulation; }
+    .db-step { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font: 900 20px/1 Nunito, sans-serif; background: #f1f5f9; border: 1px solid #cbd5e1; color: #0f172a; touch-action: manipulation; }
     .db-step:active { transform: scale(.92); }
-    .db-step:disabled { opacity: .3; }
-    .db-step.plus { background: rgba(250,204,21,.18); border-color: rgba(250,204,21,.5); color: #fde047; }
-    .db-chip { flex: none; min-height: 36px; padding: 6px 12px; border-radius: 999px; font: 800 12px/1 Nunito, sans-serif; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); color: #cbd5e1; display: inline-flex; align-items: center; gap: 5px; touch-action: manipulation; }
-    .db-chip.on { background: #facc15; color: #0f172a; border-color: #fde68a; }
-    .db-tab { flex: 1; min-height: 40px; border-radius: 12px; font: 900 12.5px/1 Nunito, sans-serif; color: #94a3b8; touch-action: manipulation; }
-    .db-tab.on { background: rgba(250,204,21,.16); color: #fde047; box-shadow: inset 0 0 0 1.5px rgba(250,204,21,.55); }
-    .db-sheet-bg { position: fixed; inset: 0; z-index: 70; background: rgba(2,6,23,.75); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); display: flex; align-items: flex-end; justify-content: center; }
-    .db-sheet { width: 100%; max-width: 32rem; max-height: 90dvh; overflow-y: auto; background: #0f172a; border-top: 1.5px solid rgba(250,204,21,.45); border-radius: 22px 22px 0 0; padding: 16px 16px calc(12px + min(12px, env(safe-area-inset-bottom, 0px))); animation: dbSheetIn .22s ease-out; overscroll-behavior: contain; }
+    .db-step:disabled { opacity: .35; }
+    .db-step.plus { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
+    .db-chip { flex: none; min-height: 36px; padding: 6px 12px; border-radius: 999px; font: 800 12px/1 Nunito, sans-serif; background: #f8fafc; border: 1px solid #cbd5e1; color: #334155; display: inline-flex; align-items: center; gap: 5px; touch-action: manipulation; }
+    .db-chip.on { background: #0f172a; color: #ffffff; border-color: #0f172a; }
+    .db-tab { flex: 1; min-height: 40px; border-radius: 12px; font: 900 12.5px/1 Nunito, sans-serif; color: #64748b; touch-action: manipulation; }
+    .db-tab.on { background: #ffffff; color: #0f172a; box-shadow: 0 2px 6px rgba(15,23,42,.08), inset 0 0 0 1px #e2e8f0; }
+    .db-sheet-bg { position: fixed; inset: 0; z-index: 70; background: rgba(15,23,42,.45); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; }
+    .db-sheet { width: 100%; max-width: 32rem; max-height: 90dvh; overflow-y: auto; background: #ffffff; border-top: 1.5px solid #e2e8f0; box-shadow: 0 -12px 32px rgba(15,23,42,.15); border-radius: 24px 24px 0 0; padding: 16px 16px calc(12px + min(12px, env(safe-area-inset-bottom, 0px))); animation: dbSheetIn .22s ease-out; overscroll-behavior: contain; }
     @keyframes dbSheetIn { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
     .db-hand-card { animation: dbDeal .35s ease-out both; }
     @keyframes dbDeal { from { transform: translateY(-24px) rotate(-6deg); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -23959,13 +23969,13 @@ const TYPE_EMOJI = {
     const CUSTOM_DECKS_KEY = 'ppi_v2_custom_decks';
     const DB_TYPES = ['Feu', 'Eau', 'Plante', 'Électrique', 'Psy', 'Combat'];
     const DB_TYPE_STYLE = {
-      'Feu':        { grad: 'from-orange-950/90 via-red-950/85 to-slate-950/95', border: 'border-orange-400/50' },
-      'Eau':        { grad: 'from-cyan-950/90 via-blue-950/85 to-slate-950/95', border: 'border-cyan-400/45' },
-      'Plante':     { grad: 'from-emerald-950/90 via-slate-900/90 to-slate-950/95', border: 'border-emerald-400/45' },
-      'Électrique': { grad: 'from-yellow-950/90 via-amber-950/85 to-slate-950/95', border: 'border-yellow-400/50' },
-      'Psy':        { grad: 'from-fuchsia-950/90 via-purple-950/85 to-slate-950/95', border: 'border-fuchsia-400/45' },
-      'Combat':     { grad: 'from-stone-900/95 via-amber-950/85 to-slate-950/95', border: 'border-amber-500/45' },
-      'Incolore':   { grad: 'from-slate-800/90 via-slate-900/90 to-slate-950/95', border: 'border-slate-400/45' }
+      'Feu':        { grad: 'from-white via-orange-50/70 to-red-50/55', border: 'border-orange-200/90' },
+      'Eau':        { grad: 'from-white via-sky-50/70 to-cyan-50/55', border: 'border-sky-200/90' },
+      'Plante':     { grad: 'from-white via-emerald-50/70 to-teal-50/55', border: 'border-emerald-200/90' },
+      'Électrique': { grad: 'from-white via-amber-50/75 to-yellow-50/55', border: 'border-amber-200/90' },
+      'Psy':        { grad: 'from-white via-fuchsia-50/70 to-purple-50/55', border: 'border-fuchsia-200/90' },
+      'Combat':     { grad: 'from-white via-amber-50/70 to-orange-50/55', border: 'border-amber-200/90' },
+      'Incolore':   { grad: 'from-white via-slate-50/80 to-slate-100/60', border: 'border-slate-200/90' }
     };
     // Énergies de base : illimitées (hors boosters)
     const DB_ENERGY_ID = {};
@@ -24418,47 +24428,47 @@ const TYPE_EMOJI = {
         const cover = dbCoverCard(d);
         const types = DB_TYPES.filter((t) => d.energy[t] > 0).sort((x, y) => d.energy[y] - d.energy[x]);
         return `
-          <div class="rounded-2xl bg-gradient-to-br ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).grad} border ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).border} p-2.5 flex items-center gap-3">
-            <button onclick="openDeckEditor('${d.id}')" class="shrink-0 w-14 aspect-[63/88] rounded-lg overflow-hidden border border-white/25 bg-slate-900 shadow">
+          <div class="rounded-2xl bg-gradient-to-br ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).grad} border ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).border} p-2.5 flex items-center gap-3 shadow-sm">
+            <button onclick="openDeckEditor('${d.id}')" class="shrink-0 w-14 aspect-[63/88] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
               ${cover ? `<img src="${cover.img}" alt="" loading="lazy" class="w-full h-full object-cover" />` : '<div class="w-full h-full flex items-center justify-center text-2xl">🃏</div>'}
             </button>
             <button onclick="openDeckEditor('${d.id}')" class="flex-1 min-w-0 text-left">
-              <div class="text-sm font-black text-white truncate">${dbEsc(d.name)}</div>
-              <div class="flex items-center gap-1 mt-0.5">${types.map((t) => dbTypeIcon(t, 15)).join('')}<span class="text-[11px] font-bold text-slate-300 ml-1">${d.size} cartes · ${d.size === 30 ? 3 : 6} 🏆</span></div>
-              <div class="mt-1 text-[11px] font-extrabold ${a.valid ? 'text-emerald-300' : 'text-amber-300'}">${a.valid ? '✅ Prêt à jouer' : (a.total !== d.size ? `⚠️ ${a.total}/${d.size} cartes${a.basics === 0 && a.total ? ' · pas de Base' : ''}` : `⚠️ ${a.basics === 0 ? 'Il faut 1 Pokémon de Base' : 'Max 4 exemplaires par carte'}`)}</div>
+              <div class="text-sm font-black text-slate-900 truncate">${dbEsc(d.name)}</div>
+              <div class="flex items-center gap-1 mt-0.5">${types.map((t) => dbTypeIcon(t, 15)).join('')}<span class="text-[11px] font-bold text-slate-500 ml-1">${d.size} cartes · ${d.size === 30 ? 3 : 6} 🏆</span></div>
+              <div class="mt-1 text-[11px] font-extrabold ${a.valid ? 'text-emerald-600' : 'text-amber-600'}">${a.valid ? '✅ Prêt à jouer' : (a.total !== d.size ? `⚠️ ${a.total}/${d.size} cartes${a.basics === 0 && a.total ? ' · pas de Base' : ''}` : `⚠️ ${a.basics === 0 ? 'Il faut 1 Pokémon de Base' : 'Max 4 exemplaires par carte'}`)}</div>
             </button>
-            <button onclick="playCustomDeck('${d.id}')" ${a.valid ? '' : 'disabled'} class="shrink-0 min-w-[56px] min-h-[48px] px-2 rounded-xl text-xs font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-white/5 text-slate-500 border border-white/10'}">▶<br>Jouer</button>
+            <button onclick="playCustomDeck('${d.id}')" ${a.valid ? '' : 'disabled'} class="shrink-0 min-w-[56px] min-h-[48px] px-2 rounded-xl text-xs font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-slate-100 text-slate-400 border border-slate-200'}">▶<br>Jouer</button>
           </div>`;
       }).join('');
 
       box.innerHTML = `
-        <div class="rounded-2xl bg-gradient-to-br from-indigo-950/90 via-slate-900/90 to-slate-950/95 border border-yellow-400/35 p-3.5 space-y-3 shadow-xl">
+        <div class="tcg-card-panel p-3.5 space-y-3">
           <div class="flex items-start gap-3">
             <div class="flex-1 min-w-0">
-              <h2 class="text-base font-black text-yellow-300 leading-tight">Création de Deck</h2>
-              <p class="text-[12px] text-slate-300 leading-snug mt-0.5">Construis ton deck avec les cartes de tes boosters. Les <b class="text-yellow-200">Énergies de base sont illimitées</b> ∞.</p>
+              <h2 class="text-base font-black text-slate-900 leading-tight">Création de Deck</h2>
+              <p class="text-[12px] text-slate-500 leading-snug mt-0.5">Construis ton deck avec les cartes de tes boosters. Les <b class="text-amber-700">Énergies de base sont illimitées</b> ∞.</p>
             </div>
           </div>
           <div class="grid grid-cols-3 gap-1.5 text-center">
-            <div class="rounded-xl bg-black/30 border border-white/10 py-1.5"><div class="text-base font-black text-white">${ownedUnique}</div><div class="text-[10.5px] font-bold text-slate-400">cartes uniques</div></div>
-            <div class="rounded-xl bg-black/30 border border-white/10 py-1.5"><div class="text-base font-black text-white">${ownedCopies}</div><div class="text-[10.5px] font-bold text-slate-400">exemplaires</div></div>
-            <div class="rounded-xl bg-black/30 border border-white/10 py-1.5"><div class="text-base font-black text-white">${ownedBasics}</div><div class="text-[10.5px] font-bold text-slate-400">Pokémon de Base</div></div>
+            <div class="rounded-xl bg-slate-50 border border-slate-200/80 py-1.5"><div class="text-base font-black text-slate-900">${ownedUnique}</div><div class="text-[10.5px] font-bold text-slate-500">cartes uniques</div></div>
+            <div class="rounded-xl bg-slate-50 border border-slate-200/80 py-1.5"><div class="text-base font-black text-slate-900">${ownedCopies}</div><div class="text-[10.5px] font-bold text-slate-500">exemplaires</div></div>
+            <div class="rounded-xl bg-slate-50 border border-slate-200/80 py-1.5"><div class="text-base font-black text-slate-900">${ownedBasics}</div><div class="text-[10.5px] font-bold text-slate-500">Pokémon de Base</div></div>
           </div>
           ${ownedBasics === 0 ? `
-            <div class="rounded-xl bg-amber-500/15 border border-amber-400/40 p-3 text-[12.5px] text-amber-100 leading-snug">
+            <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-[12.5px] text-amber-900 leading-snug">
               Tu n'as encore aucun <b>Pokémon de Base</b>. Ouvre des boosters pour obtenir des cartes, puis reviens ici !
               <button onclick="switchMenuTab('booster')" class="mt-2 w-full btn-gold py-2.5 rounded-xl text-xs font-black uppercase">Ouvrir des boosters</button>
             </div>` : `
             <div class="grid grid-cols-2 gap-2">
               <button onclick="openAutoDeckSheet('new')" class="min-h-[56px] rounded-xl btn-gold text-sm font-black flex flex-col items-center justify-center leading-tight shadow-lg">Deck auto<span class="text-[10.5px] font-bold opacity-80">en 1 clic</span></button>
-              <button onclick="createEmptyDeck()" class="min-h-[56px] rounded-xl bg-white/10 border border-white/20 text-sm font-black text-white flex flex-col items-center justify-center leading-tight active:scale-95">+ Nouveau<span class="text-[10.5px] font-bold text-slate-300">à la main</span></button>
+              <button onclick="createEmptyDeck()" class="min-h-[56px] rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-sm font-black text-slate-800 flex flex-col items-center justify-center leading-tight active:scale-95 shadow-sm">+ Nouveau<span class="text-[10.5px] font-bold text-slate-500">à la main</span></button>
             </div>`}
         </div>
         <div class="flex items-center justify-between px-1 pt-1">
           <h3 class="text-[12px] font-black tracking-wider uppercase text-amber-700">Mes decks (${customDecks.length})</h3>
           ${customDecks.length ? '<span class="text-[11px] font-semibold text-slate-600">Touchez pour modifier</span>' : ''}
         </div>
-        <div class="space-y-2">${deckRows || `<div class="rounded-xl border border-dashed border-slate-300 bg-white/70 p-4 text-center text-[12.5px] text-slate-600">Aucun deck pour l'instant.${ownedBasics ? '<br>Essaie <b class="text-amber-700">Deck auto</b> : il choisit tes meilleures cartes.' : ''}</div>`}</div>
+        <div class="space-y-2">${deckRows || `<div class="rounded-xl border border-dashed border-slate-300 bg-white/80 p-4 text-center text-[12.5px] text-slate-600">Aucun deck pour l'instant.${ownedBasics ? '<br>Essaie <b class="text-amber-700">Deck auto</b> : il choisit tes meilleures cartes.' : ''}</div>`}</div>
       `;
     }
 
@@ -24490,13 +24500,13 @@ const TYPE_EMOJI = {
       if (document.getElementById('deckEditor')) return;
       const el = document.createElement('div');
       el.id = 'deckEditor';
-      el.className = 'fixed inset-0 z-[60] hidden bg-slate-950 flex flex-col';
+      el.className = 'fixed inset-0 z-[60] hidden bg-slate-50 flex flex-col';
       el.style.paddingTop = 'env(safe-area-inset-top)';
       el.innerHTML = `
         <div class="max-w-lg w-full mx-auto flex flex-col h-full min-h-0">
-          <div id="dbHeader" class="shrink-0 px-3 pt-2.5 pb-2 space-y-2 border-b border-white/10 bg-slate-950"></div>
+          <div id="dbHeader" class="shrink-0 px-3 pt-2.5 pb-2 space-y-2 border-b border-slate-200 bg-white shadow-sm"></div>
           <div id="dbBody" class="db-scroll flex-1 min-h-0 overflow-y-auto px-3 py-3"></div>
-          <div id="dbFooter" class="shrink-0 px-3 pt-2 border-t border-white/10 bg-slate-950" style="padding-bottom:max(8px, min(12px, env(safe-area-inset-bottom, 0px)))"></div>
+          <div id="dbFooter" class="shrink-0 px-3 pt-2 border-t border-slate-200 bg-white shadow-[0_-4px_16px_rgba(15,23,42,0.06)]" style="padding-bottom:max(8px, min(12px, env(safe-area-inset-bottom, 0px)))"></div>
         </div>`;
       document.body.appendChild(el);
       // Grille « Ajouter » : tap = +1, appui long = zoom
@@ -24522,7 +24532,7 @@ const TYPE_EMOJI = {
       // Tirer pour rafraîchir la collection (sans recharger la page)
       let y0 = null, dist = 0;
       const ind = document.createElement('div');
-      ind.style.cssText = 'position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 6px);transform:translate(-50%,-60px);z-index:5;padding:6px 12px;border-radius:999px;background:#0f172a;border:1px solid rgba(250,204,21,.5);color:#fde047;font:800 11px Nunito,sans-serif;transition:transform .15s;pointer-events:none';
+      ind.style.cssText = 'position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 6px);transform:translate(-50%,-60px);z-index:5;padding:6px 14px;border-radius:999px;background:#ffffff;border:1px solid #cbd5e1;color:#334155;box-shadow:0 8px 20px -4px rgba(15,23,42,0.12);font:800 11px Nunito,sans-serif;transition:transform .15s;pointer-events:none';
       el.appendChild(ind);
       const start = (y) => { if (body.scrollTop <= 0) { y0 = y; dist = 0; } };
       const move = (y) => { if (y0 === null) return; dist = Math.max(0, Math.min(110, y - y0)); ind.style.transform = `translate(-50%, ${dist - 60}px)`; ind.textContent = dist > 70 ? '↻ Relâcher pour actualiser' : '↓ Tirer pour actualiser'; };
@@ -24562,7 +24572,7 @@ const TYPE_EMOJI = {
 
     function dbSetTab(t) { dbTab = t; renderDeckEditor(); document.getElementById('dbBody').scrollTop = 0; }
     function dbSetSize(n) { if (!dbEdit || dbEdit.size === n) return; dbEdit.size = n; dbCommit(); renderDeckEditor(); }
-    function dbCleanName(v) { return String(v || '').replace(/[<>"'`\\]/g, '').trim().slice(0, 28) || 'Mon deck'; }
+    function dbCleanName(v) { return String(v || '').replace(/[<>\"'`\\\\]/g, '').trim().slice(0, 28) || 'Mon deck'; }
     function dbRename(v) { if (!dbEdit) return; dbEdit.name = dbCleanName(v); dbCommit(); }
     function dbDeleteDeck() {
       if (!dbEdit) return;
@@ -24624,27 +24634,27 @@ const TYPE_EMOJI = {
       const a = analyzeDeck(dbEdit);
       const pct = Math.min(100, Math.round(a.total / dbEdit.size * 100));
       const over = a.total > dbEdit.size;
-      const barCls = over ? 'bg-rose-500' : a.total === dbEdit.size ? 'bg-emerald-400' : 'bg-yellow-400';
+      const barCls = over ? 'bg-rose-500' : a.total === dbEdit.size ? 'bg-emerald-500' : 'bg-amber-400';
       document.getElementById('dbHeader').innerHTML = `
         <div class="flex items-center gap-2">
           <button onclick="closeDeckEditor()" class="db-step shrink-0" aria-label="Retour">←</button>
           <input id="dbNameInput" value="${dbEsc(dbEdit.name)}" maxlength="28" onchange="dbRename(this.value)" onkeydown="if(event.key==='Enter')this.blur()"
-            class="flex-1 min-w-0 h-10 px-3 rounded-xl bg-white/5 border border-white/15 text-[16px] font-black text-white focus:outline-none focus:border-yellow-400" style="user-select:text;-webkit-user-select:text" />
+            class="flex-1 min-w-0 h-10 px-3 rounded-xl bg-slate-50 border border-slate-200 text-[16px] font-black text-slate-900 focus:outline-none focus:border-amber-400" style="user-select:text;-webkit-user-select:text" />
           <button onclick="dbDeleteDeck()" class="db-step shrink-0 !text-base" aria-label="Supprimer le deck">🗑️</button>
         </div>
         <div class="flex items-center gap-2">
-          <div class="flex rounded-xl bg-white/5 border border-white/10 p-0.5 shrink-0">
-            ${[30, 60].map((n) => `<button onclick="dbSetSize(${n})" class="min-h-[34px] px-3 rounded-lg text-[12px] font-black ${dbEdit.size === n ? 'bg-yellow-400 text-slate-950' : 'text-slate-300'}">${n}</button>`).join('')}
+          <div class="flex rounded-xl bg-slate-100 border border-slate-200 p-0.5 shrink-0">
+            ${[30, 60].map((n) => `<button onclick="dbSetSize(${n})" class="min-h-[34px] px-3 rounded-lg text-[12px] font-black ${dbEdit.size === n ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600'}">${n}</button>`).join('')}
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-baseline justify-between">
-              <span class="text-[15px] font-black ${over ? 'text-rose-300' : a.total === dbEdit.size ? 'text-emerald-300' : 'text-white'}">${a.total}<span class="text-slate-400 text-[12px]"> / ${dbEdit.size}</span></span>
-              <span class="text-[11px] font-bold text-slate-300 whitespace-nowrap">🐾 ${a.pokemon} · 🎒 ${a.trainers} · ⚡ ${a.energies}</span>
+              <span class="text-[15px] font-black ${over ? 'text-rose-600' : a.total === dbEdit.size ? 'text-emerald-600' : 'text-slate-900'}">${a.total}<span class="text-slate-400 text-[12px]"> / ${dbEdit.size}</span></span>
+              <span class="text-[11px] font-bold text-slate-500 whitespace-nowrap">🐾 ${a.pokemon} · 🎒 ${a.trainers} · ⚡ ${a.energies}</span>
             </div>
-            <div class="h-1.5 mt-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${barCls} transition-all duration-300" style="width:${pct}%"></div></div>
+            <div class="h-1.5 mt-1 rounded-full bg-slate-100 overflow-hidden"><div class="h-full ${barCls} transition-all duration-300" style="width:${pct}%"></div></div>
           </div>
         </div>
-        <div class="flex gap-1 rounded-xl bg-white/5 p-1">
+        <div class="flex gap-1 rounded-xl bg-slate-100 p-1">
           <button onclick="dbSetTab('deck')" class="db-tab whitespace-nowrap ${dbTab === 'deck' ? 'on' : ''}">🃏 Mon deck</button>
           <button onclick="dbSetTab('add')" class="db-tab whitespace-nowrap ${dbTab === 'add' ? 'on' : ''}">＋ Ajouter</button>
           <button onclick="dbSetTab('stats')" class="db-tab relative whitespace-nowrap ${dbTab === 'stats' ? 'on' : ''}">💡 Conseils${a.tips.length ? `<span class="absolute -top-1 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-slate-950 text-[10.5px] leading-[18px]">${a.tips.length}</span>` : ''}</button>
@@ -24655,9 +24665,9 @@ const TYPE_EMOJI = {
       const a = analyzeDeck(dbEdit);
       document.getElementById('dbFooter').innerHTML = `
         <div class="grid grid-cols-[1fr_1fr_1.3fr] gap-2">
-          <button onclick="openAutoDeckSheet('edit')" class="min-h-[50px] rounded-xl bg-white/10 border border-yellow-400/45 text-[12.5px] font-black text-yellow-200 active:scale-95">✨ Auto</button>
-          <button onclick="openTestHand()" ${a.basics ? '' : 'disabled'} class="min-h-[50px] rounded-xl bg-white/10 border border-white/20 text-[12.5px] font-black text-white active:scale-95 disabled:opacity-40">🖐️ Main test</button>
-          <button onclick="playCustomDeck('${dbEdit.id}')" ${a.valid ? '' : 'disabled'} class="min-h-[50px] rounded-xl text-[13px] font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-white/5 border border-white/10 text-slate-500'}">${a.valid ? '▶ Jouer' : `${a.total}/${dbEdit.size}`}</button>
+          <button onclick="openAutoDeckSheet('edit')" class="min-h-[50px] rounded-xl bg-amber-50 border border-amber-300 text-[12.5px] font-black text-amber-900 active:scale-95">✨ Auto</button>
+          <button onclick="openTestHand()" ${a.basics ? '' : 'disabled'} class="min-h-[50px] rounded-xl bg-slate-100 border border-slate-200 text-[12.5px] font-black text-slate-800 active:scale-95 disabled:opacity-40">🖐️ Main test</button>
+          <button onclick="playCustomDeck('${dbEdit.id}')" ${a.valid ? '' : 'disabled'} class="min-h-[50px] rounded-xl text-[13px] font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-slate-100 border border-slate-200 text-slate-400'}">${a.valid ? '▶ Jouer' : `${a.total}/${dbEdit.size}`}</button>
         </div>`;
     }
 
@@ -24686,36 +24696,36 @@ const TYPE_EMOJI = {
         const canAdd = dbMaxAddable(dbEdit, e.id, owned) > 0;
         return `
         <div class="flex items-center gap-2.5 py-1.5">
-          <button onclick="showStickyPreview('${e.c.img}')" class="shrink-0 w-11 aspect-[63/88] rounded-md overflow-hidden border border-white/20 bg-slate-900"><img src="${e.c.img}" alt="" loading="lazy" class="w-full h-full object-cover" /></button>
+          <button onclick="showStickyPreview('${e.c.img}')" class="shrink-0 w-11 aspect-[63/88] rounded-md overflow-hidden border border-slate-200 bg-slate-100 shadow-sm"><img src="${e.c.img}" alt="" loading="lazy" class="w-full h-full object-cover" /></button>
           <div class="flex-1 min-w-0">
-            <div class="text-[13.5px] font-extrabold text-white truncate">${dbEsc(e.c.name)}</div>
-            <div class="flex items-center gap-1 text-[11px] font-semibold text-slate-400">${dbCardMeta(e.c)}<span class="ml-1 text-slate-500">· ${owned[e.id] || 0} possédée${(owned[e.id] || 0) > 1 ? 's' : ''}</span></div>
+            <div class="text-[13.5px] font-extrabold text-slate-900 truncate">${dbEsc(e.c.name)}</div>
+            <div class="flex items-center gap-1 text-[11px] font-semibold text-slate-500">${dbCardMeta(e.c)}<span class="ml-1 text-slate-400">· ${owned[e.id] || 0} possédée${(owned[e.id] || 0) > 1 ? 's' : ''}</span></div>
           </div>
           <button class="db-step" onclick="dbRemove('${e.id}')" aria-label="Retirer">−</button>
-          <span class="w-6 text-center text-[16px] font-black text-yellow-300">${e.n}</span>
+          <span class="w-6 text-center text-[16px] font-black text-amber-700">${e.n}</span>
           <button class="db-step plus" onclick="dbAdd('${e.id}')" ${canAdd ? '' : 'disabled'} aria-label="Ajouter">+</button>
         </div>`;
       };
       const section = (title, count, list, extra = '') => `
-        <div class="mb-3">
-          <div class="flex items-center justify-between pb-1 mb-1 border-b border-white/10">
-            <h4 class="text-[12px] font-black uppercase tracking-wider text-yellow-300">${title}</h4>
-            <span class="text-[12px] font-black text-slate-300">${count}</span>
+        <div class="mb-3 bg-white rounded-2xl border border-slate-200/90 p-3 shadow-sm">
+          <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-100">
+            <h4 class="text-[12px] font-black uppercase tracking-wider text-slate-800">${title}</h4>
+            <span class="text-[12px] font-black text-slate-500">${count}</span>
           </div>
-          ${list.length ? `<div class="divide-y divide-white/5">${list.map(row).join('')}</div>` : extra}
+          ${list.length ? `<div class="divide-y divide-slate-100">${list.map(row).join('')}</div>` : extra}
         </div>`;
       const full = dbTotal(dbEdit) >= dbEdit.size;
       const energyRows = DB_TYPES.map((t) => {
         const n = dbEdit.energy[t] || 0;
         return `
           <div class="flex items-center gap-2.5 py-1.5 ${n ? '' : 'opacity-70'}">
-            <div class="shrink-0 w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">${dbTypeIcon(t, 26)}</div>
+            <div class="shrink-0 w-11 h-11 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center">${dbTypeIcon(t, 26)}</div>
             <div class="flex-1 min-w-0">
-              <div class="text-[13.5px] font-extrabold text-white">Énergie ${t}</div>
-              <div class="text-[11px] font-bold text-emerald-300">∞ illimitée</div>
+              <div class="text-[13.5px] font-extrabold text-slate-900">Énergie ${t}</div>
+              <div class="text-[11px] font-bold text-emerald-600">∞ illimitée</div>
             </div>
             <button class="db-step" onclick="dbEnergy('${t}', -1)" ${n ? '' : 'disabled'} aria-label="Retirer">−</button>
-            <span class="w-6 text-center text-[16px] font-black text-yellow-300">${n}</span>
+            <span class="w-6 text-center text-[16px] font-black text-amber-700">${n}</span>
             <button class="db-step plus" onclick="dbEnergy('${t}', 1)" ${full ? 'disabled' : ''} aria-label="Ajouter">+</button>
           </div>`;
       }).join('');
@@ -24723,25 +24733,25 @@ const TYPE_EMOJI = {
       const empty = !entries.length && !energyTotal;
       body.innerHTML = `
         ${empty ? `
-          <div class="rounded-2xl border border-dashed border-yellow-400/40 bg-yellow-400/5 p-4 text-center space-y-3 mb-4">
+          <div class="rounded-2xl border border-dashed border-amber-300 bg-amber-50/70 p-4 text-center space-y-3 mb-4">
             <div class="text-3xl">🃏</div>
-            <div class="text-[13px] text-slate-200 leading-snug">Ton deck est vide.<br>Ajoute tes cartes une par une, ou laisse le mode auto le remplir.</div>
+            <div class="text-[13px] text-slate-700 leading-snug">Ton deck est vide.<br>Ajoute tes cartes une par une, ou laisse le mode auto le remplir.</div>
             <div class="grid grid-cols-2 gap-2">
-              <button onclick="dbSetTab('add')" class="min-h-[46px] rounded-xl bg-white/10 border border-white/20 text-[12.5px] font-black text-white">＋ Ajouter</button>
+              <button onclick="dbSetTab('add')" class="min-h-[46px] rounded-xl bg-white border border-slate-200 text-[12.5px] font-black text-slate-800 shadow-sm">＋ Ajouter</button>
               <button onclick="openAutoDeckSheet('edit')" class="min-h-[46px] rounded-xl btn-gold text-[12.5px] font-black">✨ Auto</button>
             </div>
           </div>` : ''}
-        ${section('🐾 Pokémon', pk.reduce((s, e) => s + e.n, 0), pk, '<p class="text-[12px] text-slate-500 py-2">Aucun Pokémon — touche « ＋ Ajouter ».</p>')}
-        ${section('🎒 Dresseurs', tr.reduce((s, e) => s + e.n, 0), tr, '<p class="text-[12px] text-slate-500 py-2">Aucun Dresseur.</p>')}
-        <div class="mb-3">
-          <div class="flex items-center justify-between pb-1 mb-1 border-b border-white/10">
-            <h4 class="text-[12px] font-black uppercase tracking-wider text-yellow-300">⚡ Énergies</h4>
-            <span class="text-[12px] font-black text-slate-300">${energyTotal}</span>
+        ${section('🐾 Pokémon', pk.reduce((s, e) => s + e.n, 0), pk, '<p class="text-[12px] text-slate-400 py-2">Aucun Pokémon — touche « ＋ Ajouter ».</p>')}
+        ${section('🎒 Dresseurs', tr.reduce((s, e) => s + e.n, 0), tr, '<p class="text-[12px] text-slate-400 py-2">Aucun Dresseur.</p>')}
+        <div class="mb-3 bg-white rounded-2xl border border-slate-200/90 p-3 shadow-sm">
+          <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-100">
+            <h4 class="text-[12px] font-black uppercase tracking-wider text-slate-800">⚡ Énergies</h4>
+            <span class="text-[12px] font-black text-slate-500">${energyTotal}</span>
           </div>
-          ${en.length ? `<div class="divide-y divide-white/5">${en.map(row).join('')}</div>` : ''}
-          <div class="divide-y divide-white/5">${energyRows}</div>
+          ${en.length ? `<div class="divide-y divide-slate-100">${en.map(row).join('')}</div>` : ''}
+          <div class="divide-y divide-slate-100">${energyRows}</div>
         </div>
-        ${empty ? '' : '<button onclick="dbClear()" class="w-full min-h-[40px] mt-1 mb-2 rounded-xl text-[12px] font-bold text-rose-300/90 border border-rose-400/25 bg-rose-500/5">Vider le deck</button>'}
+        ${empty ? '' : '<button onclick="dbClear()" class="w-full min-h-[40px] mt-1 mb-2 rounded-xl text-[12px] font-bold text-rose-600 border border-rose-200 bg-rose-50 hover:bg-rose-100">Vider le deck</button>'}
       `;
     }
 
@@ -24783,8 +24793,8 @@ const TYPE_EMOJI = {
             <img src="${CARDS_DB[DB_ENERGY_ID[t]]?.img || ''}" alt="Énergie ${t}" loading="lazy" />
             <span class="db-badge">${n}/∞</span>
             <div class="absolute inset-x-0 bottom-0 flex">
-              <button onclick="dbEnergy('${t}', -1)" class="flex-1 h-9 bg-black/75 text-white text-lg font-black border-r border-white/15" aria-label="Retirer">−</button>
-              <button onclick="dbEnergy('${t}', 1)" class="flex-1 h-9 bg-yellow-400/90 text-slate-950 text-lg font-black" aria-label="Ajouter">+</button>
+              <button onclick="dbEnergy('${t}', -1)" class="flex-1 h-9 bg-slate-900/80 text-white text-lg font-black border-r border-white/15" aria-label="Retirer">−</button>
+              <button onclick="dbEnergy('${t}', 1)" class="flex-1 h-9 bg-amber-400/95 text-slate-950 text-lg font-black" aria-label="Ajouter">+</button>
             </div>
           </div>`;
       }).join('') : '';
@@ -24795,19 +24805,19 @@ const TYPE_EMOJI = {
           <button class="db-tile ${inDeck ? 'in-deck' : ''} ${can ? '' : 'maxed'}" data-add="${c.setId}" data-img="${c.img}" aria-label="Ajouter ${dbEsc(c.name)}">
             <img src="${c.img}" alt="${dbEsc(c.name)}" loading="lazy" />
             <span class="db-badge">${inDeck}/${owned[c.setId]}</span>
-            ${inDeck ? `<span onclick="event.stopPropagation(); dbRemove('${c.setId}')" class="absolute bottom-1 left-1 w-8 h-8 rounded-full bg-black/80 border border-white/30 text-white text-lg font-black flex items-center justify-center" role="button" aria-label="Retirer">−</span>` : ''}
+            ${inDeck ? `<span onclick="event.stopPropagation(); dbRemove('${c.setId}')" class="absolute bottom-1 left-1 w-8 h-8 rounded-full bg-slate-900/85 border border-white/30 text-white text-lg font-black flex items-center justify-center" role="button" aria-label="Retirer">−</span>` : ''}
           </button>`;
       }).join('');
       return `
-        <div class="sticky -top-3 z-10 -mx-3 px-3 pt-0 pb-2 bg-slate-950/95 backdrop-blur space-y-1.5">
+        <div class="sticky -top-3 z-10 -mx-3 px-3 pt-1 pb-2 bg-slate-50/95 backdrop-blur border-b border-slate-200/70 space-y-1.5">
           <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">${kinds.map(([k, l]) => `<button onclick="dbSetFilter('${k}')" class="db-chip ${dbFilter.kind === k && dbFilter.type === 'all' ? 'on' : ''}">${l}</button>`).join('')}</div>
           <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">${[...DB_TYPES, 'Incolore'].map((t) => `<button onclick="dbSetFilter(null, '${t}')" class="db-chip ${dbFilter.type === t ? 'on' : ''}" aria-label="${t}">${dbTypeIcon(t, 18)}</button>`).join('')}</div>
-          <p class="text-[11px] font-semibold text-slate-400">Touche = ajouter · Appui long = zoom · <span class="text-yellow-300">2/3</span> = dans le deck / possédées</p>
+          <p class="text-[11px] font-semibold text-slate-500">Touche = ajouter · Appui long = zoom · <span class="text-amber-700 font-bold">2/3</span> = dans le deck / possédées</p>
         </div>
-        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-1">
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-2">
           ${tiles}${energyTiles}
         </div>
-        ${!list.length && !energyTiles ? '<p class="text-center text-[12.5px] text-slate-400 py-6">Aucune carte de ce type dans ta collection.<br>Ouvre des boosters pour en obtenir !</p>' : ''}`;
+        ${!list.length && !energyTiles ? '<p class="text-center text-[12.5px] text-slate-500 py-6">Aucune carte de ce type dans ta collection.<br>Ouvre des boosters pour en obtenir !</p>' : ''}`;
     }
 
     function refreshAddTiles() {
@@ -24821,7 +24831,7 @@ const TYPE_EMOJI = {
         t.querySelector('.db-badge').textContent = `${inDeck}/${owned[id] || 0}`;
         let minus = t.querySelector('[role="button"]');
         if (inDeck && !minus) {
-          t.insertAdjacentHTML('beforeend', `<span onclick="event.stopPropagation(); dbRemove('${id}')" class="absolute bottom-1 left-1 w-8 h-8 rounded-full bg-black/80 border border-white/30 text-white text-lg font-black flex items-center justify-center" role="button" aria-label="Retirer">−</span>`);
+          t.insertAdjacentHTML('beforeend', `<span onclick="event.stopPropagation(); dbRemove('${id}')" class="absolute bottom-1 left-1 w-8 h-8 rounded-full bg-slate-900/85 border border-white/30 text-white text-lg font-black flex items-center justify-center" role="button" aria-label="Retirer">−</span>`);
         } else if (!inDeck && minus) minus.remove();
       });
       document.querySelectorAll('#dbBody [data-energy]').forEach((t) => {
@@ -24840,46 +24850,46 @@ const TYPE_EMOJI = {
       const demand = dbAttackDemand(dbEdit);
       const energyLines = DB_TYPES.filter((t) => demand[t] > 0 || dbEdit.energy[t] > 0).map((t) => {
         const have = dbEdit.energy[t] || 0;
-        return `<div class="flex items-center gap-2 py-1">${dbTypeIcon(t, 18)}<span class="flex-1 text-[12.5px] font-bold text-white">${t}</span>
-          <span class="text-[11.5px] text-slate-400">${demand[t]} symbole${demand[t] > 1 ? 's' : ''} d'attaque</span>
-          <span class="w-10 text-right text-[13px] font-black ${have ? 'text-yellow-300' : 'text-rose-300'}">${have}</span></div>`;
+        return `<div class="flex items-center gap-2 py-1">${dbTypeIcon(t, 18)}<span class="flex-1 text-[12.5px] font-bold text-slate-800">${t}</span>
+          <span class="text-[11.5px] text-slate-500">${demand[t]} symbole${demand[t] > 1 ? 's' : ''} d'attaque</span>
+          <span class="w-10 text-right text-[13px] font-black ${have ? 'text-amber-700' : 'text-rose-600'}">${have}</span></div>`;
       }).join('');
       const pB = Math.round(a.pBasic * 100);
       return `
         <div class="space-y-3">
-          <div class="rounded-2xl p-3 border ${a.valid ? 'bg-emerald-500/10 border-emerald-400/40' : 'bg-amber-500/10 border-amber-400/40'}">
-            <div class="text-[14px] font-black ${a.valid ? 'text-emerald-300' : 'text-amber-200'}">${a.valid ? '✅ Deck valide, prêt à jouer !' : '⚠️ Deck pas encore jouable'}</div>
-            ${a.errors.map((e) => `<div class="text-[12.5px] text-amber-100 mt-1">• ${e}</div>`).join('')}
+          <div class="rounded-2xl p-3 border ${a.valid ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'}">
+            <div class="text-[14px] font-black ${a.valid ? 'text-emerald-800' : 'text-amber-900'}">${a.valid ? '✅ Deck valide, prêt à jouer !' : '⚠️ Deck pas encore jouable'}</div>
+            ${a.errors.map((e) => `<div class="text-[12.5px] text-amber-800 mt-1">• ${e}</div>`).join('')}
             ${a.valid ? '' : `<button onclick="openAutoDeckSheet('edit', true)" class="mt-2 w-full min-h-[44px] rounded-xl btn-gold text-[12.5px] font-black">✨ Compléter automatiquement</button>`}
           </div>
-          <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
-            <div class="text-[12px] font-black uppercase tracking-wider text-yellow-300 mb-2">Composition</div>
-            <div class="flex h-3 rounded-full overflow-hidden bg-white/10">
+          <div class="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
+            <div class="text-[12px] font-black uppercase tracking-wider text-slate-800 mb-2">Composition</div>
+            <div class="flex h-3 rounded-full overflow-hidden bg-slate-100">
               <div class="bg-rose-400" style="width:${pct(a.pokemon)}%"></div>
               <div class="bg-sky-400" style="width:${pct(a.trainers)}%"></div>
-              <div class="bg-yellow-400" style="width:${pct(a.energies)}%"></div>
+              <div class="bg-amber-400" style="width:${pct(a.energies)}%"></div>
             </div>
-            <div class="grid grid-cols-3 gap-1 mt-2 text-center text-[11.5px] font-bold">
-              <div><span class="inline-block w-2 h-2 rounded-full bg-rose-400 mr-1"></span>Pokémon <b class="text-white">${a.pokemon}</b></div>
-              <div><span class="inline-block w-2 h-2 rounded-full bg-sky-400 mr-1"></span>Dresseurs <b class="text-white">${a.trainers}</b></div>
-              <div><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1"></span>Énergies <b class="text-white">${a.energies}</b></div>
+            <div class="grid grid-cols-3 gap-1 mt-2 text-center text-[11.5px] font-bold text-slate-600">
+              <div><span class="inline-block w-2 h-2 rounded-full bg-rose-400 mr-1"></span>Pokémon <b class="text-slate-900">${a.pokemon}</b></div>
+              <div><span class="inline-block w-2 h-2 rounded-full bg-sky-400 mr-1"></span>Dresseurs <b class="text-slate-900">${a.trainers}</b></div>
+              <div><span class="inline-block w-2 h-2 rounded-full bg-amber-400 mr-1"></span>Énergies <b class="text-slate-900">${a.energies}</b></div>
             </div>
-            <p class="text-[11px] text-slate-400 mt-2 text-center">Repère conseillé : ${dbEdit.size === 60 ? '16-20 Pokémon · 12-18 Dresseurs · 22-26 Énergies' : '9-11 Pokémon · 6-8 Dresseurs · 11-14 Énergies'}</p>
+            <p class="text-[11px] text-slate-500 mt-2 text-center">Repère conseillé : ${dbEdit.size === 60 ? '16-20 Pokémon · 12-18 Dresseurs · 22-26 Énergies' : '9-11 Pokémon · 6-8 Dresseurs · 11-14 Énergies'}</p>
           </div>
           <div class="grid grid-cols-2 gap-2">
-            <div class="rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
-              <div class="text-2xl font-black ${a.basics >= minBasics ? 'text-emerald-300' : 'text-amber-300'}">${a.basics}</div>
-              <div class="text-[11px] font-bold text-slate-400">Pokémon de Base<br>(conseillé ≥ ${minBasics})</div>
+            <div class="rounded-2xl bg-white border border-slate-200 p-3 text-center shadow-sm">
+              <div class="text-2xl font-black ${a.basics >= minBasics ? 'text-emerald-600' : 'text-amber-600'}">${a.basics}</div>
+              <div class="text-[11px] font-bold text-slate-500">Pokémon de Base<br>(conseillé ≥ ${minBasics})</div>
             </div>
-            <div class="rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
-              <div class="text-2xl font-black ${pB >= 85 ? 'text-emerald-300' : pB >= 70 ? 'text-yellow-300' : 'text-rose-300'}">${a.total ? pB : 0}%</div>
-              <div class="text-[11px] font-bold text-slate-400">Main de départ<br>avec un Pokémon</div>
+            <div class="rounded-2xl bg-white border border-slate-200 p-3 text-center shadow-sm">
+              <div class="text-2xl font-black ${pB >= 85 ? 'text-emerald-600' : pB >= 70 ? 'text-amber-600' : 'text-rose-600'}">${a.total ? pB : 0}%</div>
+              <div class="text-[11px] font-bold text-slate-500">Main de départ<br>avec un Pokémon</div>
             </div>
           </div>
-          ${energyLines ? `<div class="rounded-2xl bg-white/5 border border-white/10 p-3"><div class="text-[12px] font-black uppercase tracking-wider text-yellow-300 mb-1">Énergies vs attaques</div>${energyLines}</div>` : ''}
-          <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
-            <div class="text-[12px] font-black uppercase tracking-wider text-yellow-300 mb-1.5">💡 Conseils du Professeur</div>
-            ${a.tips.length ? a.tips.map((t) => `<div class="flex gap-2 py-1.5 text-[12.5px] leading-snug text-slate-200"><span class="shrink-0">${t.icon}</span><span>${t.text}</span></div>`).join('') : '<div class="text-[12.5px] text-emerald-200 py-1">Rien à signaler : ton deck est bien équilibré 👌</div>'}
+          ${energyLines ? `<div class="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm"><div class="text-[12px] font-black uppercase tracking-wider text-slate-800 mb-1">Énergies vs attaques</div>${energyLines}</div>` : ''}
+          <div class="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
+            <div class="text-[12px] font-black uppercase tracking-wider text-slate-800 mb-1.5">💡 Conseils du Professeur</div>
+            ${a.tips.length ? a.tips.map((t) => `<div class="flex gap-2 py-1.5 text-[12.5px] leading-snug text-slate-700"><span class="shrink-0">${t.icon}</span><span>${t.text}</span></div>`).join('') : '<div class="text-[12.5px] text-emerald-700 font-bold py-1">Rien à signaler : ton deck est bien équilibré 👌</div>'}
           </div>
         </div>`;
     }
@@ -24923,28 +24933,28 @@ const TYPE_EMOJI = {
       const hasCards = isEdit && Object.keys(dbEdit.cards).length + Object.keys(dbEdit.energy).length > 0;
       const auto = !dbAutoSheet.types.length;
       openDbSheet(`
-        <div class="w-10 h-1.5 rounded-full bg-white/20 mx-auto mb-3"></div>
-        <h3 class="text-[17px] font-black text-yellow-300">✨ ${dbAutoSheet.completeOnly ? 'Compléter mon deck' : 'Deck automatique'}</h3>
-        <p class="text-[12.5px] text-slate-300 leading-snug mt-1">Le mode intelligent choisit tes meilleures lignées d'évolution, ajoute les Dresseurs utiles et calcule les Énergies selon le coût des attaques.</p>
-        <div class="mt-4 text-[12px] font-black uppercase tracking-wider text-slate-300">Taille du deck</div>
+        <div class="w-10 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
+        <h3 class="text-[17px] font-black text-slate-900">✨ ${dbAutoSheet.completeOnly ? 'Compléter mon deck' : 'Deck automatique'}</h3>
+        <p class="text-[12.5px] text-slate-500 leading-snug mt-1">Le mode intelligent choisit tes meilleures lignées d'évolution, ajoute les Dresseurs utiles et calcule les Énergies selon le coût des attaques.</p>
+        <div class="mt-4 text-[12px] font-black uppercase tracking-wider text-slate-600">Taille du deck</div>
         <div class="grid grid-cols-2 gap-2 mt-1.5">
-          ${[30, 60].map((n) => `<button onclick="dbAutoSize(${n})" class="min-h-[52px] rounded-xl border text-[14px] font-black ${dbAutoSheet.size === n ? 'bg-yellow-400 text-slate-950 border-yellow-200' : 'bg-white/5 text-white border-white/15'}">${n} cartes<div class="text-[10.5px] font-bold opacity-75">${n === 30 ? 'Demi-deck · 3 Prix' : 'Deck complet · 6 Prix'}</div></button>`).join('')}
+          ${[30, 60].map((n) => `<button onclick="dbAutoSize(${n})" class="min-h-[52px] rounded-xl border text-[14px] font-black ${dbAutoSheet.size === n ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'}">${n} cartes<div class="text-[10.5px] font-bold opacity-75">${n === 30 ? 'Demi-deck · 3 Prix' : 'Deck complet · 6 Prix'}</div></button>`).join('')}
         </div>
-        <div class="mt-4 flex items-baseline justify-between"><span class="text-[12px] font-black uppercase tracking-wider text-slate-300">Types</span><span class="text-[11px] text-slate-400">2 max · les Incolores vont partout</span></div>
+        <div class="mt-4 flex items-baseline justify-between"><span class="text-[12px] font-black uppercase tracking-wider text-slate-600">Types</span><span class="text-[11px] text-slate-400">2 max · les Incolores vont partout</span></div>
         <div class="grid grid-cols-4 gap-2 mt-1.5">
-          <button onclick="dbAutoToggleType('auto')" class="min-h-[56px] rounded-xl border text-[12px] font-black flex flex-col items-center justify-center gap-0.5 ${auto ? 'bg-yellow-400 text-slate-950 border-yellow-200' : 'bg-white/5 text-white border-white/15'}"><span class="text-lg leading-none">🤖</span>Auto</button>
+          <button onclick="dbAutoToggleType('auto')" class="min-h-[56px] rounded-xl border text-[12px] font-black flex flex-col items-center justify-center gap-0.5 ${auto ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'}"><span class="text-lg leading-none">🤖</span>Auto</button>
           ${DB_TYPES.map((t) => {
             const on = dbAutoSheet.types.includes(t);
             const n = perType[t] || 0;
-            return `<button onclick="dbAutoToggleType('${t}')" class="min-h-[56px] rounded-xl border text-[11px] font-black flex flex-col items-center justify-center gap-0.5 ${on ? 'bg-yellow-400 text-slate-950 border-yellow-200' : 'bg-white/5 text-white border-white/15'} ${n ? '' : 'opacity-45'}">${dbTypeIcon(t, 22)}<span>${t === 'Électrique' ? 'Élec.' : t} <span class="opacity-70">${n}</span></span></button>`;
+            return `<button onclick="dbAutoToggleType('${t}')" class="min-h-[56px] rounded-xl border text-[11px] font-black flex flex-col items-center justify-center gap-0.5 ${on ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'} ${n ? '' : 'opacity-45'}">${dbTypeIcon(t, 22)}<span>${t === 'Électrique' ? 'Élec.' : t} <span class="opacity-70">${n}</span></span></button>`;
           }).join('')}
         </div>
         <div class="mt-5 space-y-2">
           ${hasCards ? `
             <button onclick="runAutoDeck('complete')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black">✨ Compléter (garde mes cartes)</button>
-            ${dbAutoSheet.completeOnly ? '' : '<button onclick="runAutoDeck(\'replace\')" class="w-full min-h-[48px] rounded-xl bg-white/10 border border-white/20 text-[13px] font-black text-white">🔄 Tout refaire automatiquement</button>'}
+            ${dbAutoSheet.completeOnly ? '' : '<button onclick="runAutoDeck(\'replace\')" class="w-full min-h-[48px] rounded-xl bg-slate-100 border border-slate-200 text-[13px] font-black text-slate-800">🔄 Tout refaire automatiquement</button>'}
           ` : `<button onclick="runAutoDeck('${isEdit ? 'replace' : 'new'}')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black">✨ Créer mon deck</button>`}
-          <button onclick="closeDbSheet()" class="w-full min-h-[44px] rounded-xl text-[13px] font-bold text-slate-400">Annuler</button>
+          <button onclick="closeDbSheet()" class="w-full min-h-[44px] rounded-xl text-[13px] font-bold text-slate-500">Annuler</button>
         </div>`);
     }
     function runAutoDeck(how) {
@@ -24985,18 +24995,18 @@ const TYPE_EMOJI = {
       const hasBasic = hand.some((c) => c.category === 'Pokémon' && c.stage === 'Base');
       const a = analyzeDeck(dbEdit);
       openDbSheet(`
-        <div class="w-10 h-1.5 rounded-full bg-white/20 mx-auto mb-3"></div>
+        <div class="w-10 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
         <div class="flex items-center justify-between">
-          <h3 class="text-[17px] font-black text-yellow-300">🖐️ Main de départ</h3>
-          <span class="text-[12px] font-black px-2 py-1 rounded-lg ${hasBasic ? 'bg-emerald-500/20 text-emerald-200' : 'bg-rose-500/20 text-rose-200'}">${hasBasic ? '✅ Jouable' : '❌ Mulligan'}</span>
+          <h3 class="text-[17px] font-black text-slate-900">🖐️ Main de départ</h3>
+          <span class="text-[12px] font-black px-2 py-1 rounded-lg ${hasBasic ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${hasBasic ? '✅ Jouable' : '❌ Mulligan'}</span>
         </div>
         <div class="grid grid-cols-4 gap-1.5 mt-3">
-          ${hand.map((c, i) => `<button onclick="showStickyPreview('${c.img}')" class="db-hand-card rounded-md overflow-hidden border ${c.category === 'Pokémon' && c.stage === 'Base' ? 'border-emerald-400 ring-1 ring-emerald-400/60' : 'border-white/15'}" style="animation-delay:${i * 60}ms"><img src="${c.img}" alt="${dbEsc(c.name)}" class="w-full aspect-[63/88] object-cover" /></button>`).join('')}
+          ${hand.map((c, i) => `<button onclick="showStickyPreview('${c.img}')" class="db-hand-card rounded-md overflow-hidden border ${c.category === 'Pokémon' && c.stage === 'Base' ? 'border-emerald-400 ring-1 ring-emerald-400/60' : 'border-slate-200'}" style="animation-delay:${i * 60}ms"><img src="${c.img}" alt="${dbEsc(c.name)}" class="w-full aspect-[63/88] object-cover" /></button>`).join('')}
         </div>
-        <p class="text-[12px] text-slate-300 mt-3 text-center">Sur 100 mains, environ <b class="text-white">${Math.round(a.pBasic * 100)}</b> contiennent un Pokémon de Base.</p>
+        <p class="text-[12px] text-slate-500 mt-3 text-center">Sur 100 mains, environ <b class="text-slate-900">${Math.round(a.pBasic * 100)}</b> contiennent un Pokémon de Base.</p>
         <div class="grid grid-cols-2 gap-2 mt-3">
           <button onclick="openTestHand()" class="min-h-[50px] rounded-xl btn-gold text-[13px] font-black">🔄 Repiocher</button>
-          <button onclick="closeDbSheet()" class="min-h-[50px] rounded-xl bg-white/10 border border-white/20 text-[13px] font-black text-white">Fermer</button>
+          <button onclick="closeDbSheet()" class="min-h-[50px] rounded-xl bg-slate-100 border border-slate-200 text-[13px] font-black text-slate-800">Fermer</button>
         </div>`);
     }
 
