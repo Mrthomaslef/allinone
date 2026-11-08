@@ -1989,7 +1989,10 @@
           <!-- Code actuel bien visible -->
           <div class="rounded-xl bg-slate-50 border border-slate-200 p-2.5 text-center">
             <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Code de la partie</div>
-            <div id="multiRoomBadge" class="text-2xl font-mono font-black text-slate-900 tracking-[0.25em] my-0.5">ARENE</div>
+            <button type="button" onclick="copyMultiRoomCode(this)" class="group inline-flex items-center gap-2 my-0.5 px-3 py-1 rounded-xl hover:bg-white active:scale-95 transition" style="touch-action: manipulation" aria-label="Copier le code de la partie">
+              <span id="multiRoomBadge" class="text-2xl font-mono font-black text-slate-900 tracking-[0.25em] select-all" style="-webkit-user-select: all; user-select: all;">ARENE</span>
+              <span data-copy-label class="shrink-0 px-2 py-1 rounded-lg bg-sky-100 border border-sky-300 text-sky-900 text-[10.5px] font-black">📋 Copier</span>
+            </button>
             <div id="multiRoomHint" class="text-[10.5px] text-amber-700 leading-snug"></div>
           </div>
 
@@ -2049,7 +2052,10 @@
           </button>
           <div class="flex items-center gap-2 min-w-0">
             <span class="text-[10px] font-bold uppercase text-slate-500">Code :</span>
-            <span id="multiDeckPageRoomBadge" class="font-mono font-black text-xs text-slate-900 tracking-widest px-2 py-0.5 rounded bg-slate-100 border border-slate-200">ARENE</span>
+            <button type="button" onclick="copyMultiRoomCode(this)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 border border-slate-200 active:scale-95 transition" style="touch-action: manipulation" aria-label="Copier le code de la partie">
+              <span id="multiDeckPageRoomBadge" class="font-mono font-black text-xs text-slate-900 tracking-widest" style="-webkit-user-select: all; user-select: all;">ARENE</span>
+              <span data-copy-label class="text-[10px]">📋</span>
+            </button>
           </div>
           <span id="multiDeckPagePeerPill" class="text-[10.5px] font-extrabold text-amber-700 truncate">En attente d'un ami</span>
         </div>
@@ -18639,6 +18645,40 @@ const TYPE_EMOJI = {
     function promptMultiRoomCode() {
       const code = prompt('Entre le code donné par ton ami (ex : PIKA42) :', multiRoomCode);
       if (code) joinMultiRoom(code, true);
+    }
+
+    // Copie le code de la partie dans le presse-papiers (avec repli pour les navigateurs sans Clipboard API)
+    function copyMultiRoomCode(btn) {
+      const code = multiRoomCode;
+      const done = () => {
+        try { if (navigator.vibrate) navigator.vibrate(12); } catch (_) {}
+        const lbl = btn && btn.querySelector('[data-copy-label]');
+        if (lbl) {
+          const old = lbl.textContent;
+          lbl.textContent = lbl.textContent.length > 2 ? '✅ Copié !' : '✅';
+          setTimeout(() => { lbl.textContent = old; }, 1600);
+        }
+        if (typeof showGameToast === 'function') showGameToast(`📋 Code <strong>${code}</strong> copié !`);
+      };
+      const fallback = () => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = code;
+          ta.setAttribute('readonly', '');
+          ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;font-size:16px;';
+          document.body.appendChild(ta);
+          ta.select();
+          ta.setSelectionRange(0, code.length);
+          const ok = document.execCommand('copy');
+          ta.remove();
+          if (ok) done();
+        } catch (_) {}
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+        navigator.clipboard.writeText(code).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
     }
 
     function shareMultiRoomLink() {
