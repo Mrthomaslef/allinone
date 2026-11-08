@@ -14,8 +14,8 @@ GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
     "pokemon-play-it": {
-        "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
-        "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
+        "title": "Pokémon : À Toi de jouer ! (Play It! CD-ROM VF 2000)",
+        "subtitle": "Intégrale CD-ROM VF extraite via Craft Anything · 241 cartes FR (Base, Jungle, Fossile, Rocket), 38 Decks, Sprites .is, Voix VF Juliette, Musiques & 151 Cris",
         "category": "games-family",
         "emoji": "🃏",
         "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
@@ -618,8 +618,8 @@ def main():
             0,
             {
                 "id": "pokemon-play-it",
-                "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
-                "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
+                "title": "Pokémon : À Toi de jouer ! (Play It! CD-ROM VF 2000)",
+                "subtitle": "Intégrale CD-ROM VF extraite via Craft Anything · 241 cartes FR (Base, Jungle, Fossile, Rocket), 38 Decks, Sprites .is, Voix VF Juliette, Musiques & 151 Cris",
                 "category": "games-family",
                 "emoji": "🃏",
                 "logoUrl": "pokemon-play-it/assets/icon.svg?v=2",

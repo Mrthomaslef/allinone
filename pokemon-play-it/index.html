@@ -1,1805 +1,847 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Pokémon : À toi de jouer ! (Play It! 1999 — Mobile JCC)</title>
-  <meta name="description" content="Recréation fidèle pour navigateur mobile de Pokémon Play It! (1999/2000) avec les 4 demi-decks officiels (Set de Base & Jungle FR), Juliette en IA et les vraies règles." />
-  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
-  <meta name="theme-color" content="#0f172a" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokémon : À Toi de jouer ! (Play It! VF 2000 — Craft Anything Rebuild)</title>
+  <link rel="icon" href="assets/ui/buttonball.png" />
   <style>
-    :root { color-scheme: dark; }
-    * { -webkit-tap-highlight-color: transparent; user-select: none; }
+    :root {
+      --bg-dark: #0b1021;
+      --bg-panel: rgba(15, 23, 42, 0.92);
+      --gold: #facc15;
+      --gold-dark: #ca8a04;
+      --blue: #2563eb;
+      --blue-light: #60a5fa;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; user-select: none; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      height: 100dvh;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #1e293b 0%, #090d16 100%);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* Top Navigation Bar */
+    header.topbar {
+      width: 100%;
+      max-width: 1280px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(11, 16, 33, 0.95);
+      border-bottom: 2px solid var(--gold);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      z-index: 50;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .brand img {
+      width: 34px;
+      height: 34px;
+      image-rendering: pixelated;
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--gold);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      letter-spacing: 0.3px;
+    }
+    .brand-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: block;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+    .nav-btn.active {
+      background: linear-gradient(180deg, #facc15 0%, #eab308 100%);
+      color: #0f172a;
+      border-color: #fef08a;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.45);
+    }
+    .audio-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .audio-btn {
+      background: #1e293b;
+      color: var(--gold);
+      border: 1px solid #475569;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .audio-select {
+      background: #0f172a;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    /* Main Workspace Container */
+    main.stage-wrap {
+      width: 100%;
+      max-width: 1280px;
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* Original 800x600 Screen Canvas / Viewport */
+    .game-screen {
+      width: 800px;
+      height: 600px;
+      position: relative;
+      border: 3px solid var(--gold);
+      border-radius: 12px;
       overflow: hidden;
-      background: #0b1120;
+      background-color: #000;
+      background-size: 800px 600px;
+      background-repeat: no-repeat;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.85);
+      flex-shrink: 0;
+    }
+
+    /* Side Inspector / Guide Panel */
+    .side-panel {
+      flex: 1;
+      min-width: 310px;
+      max-width: 420px;
+      height: 600px;
+      background: var(--bg-panel);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Julie Coach Box */
+    .julie-box {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.65), rgba(15, 23, 42, 0.9));
+      border: 1px solid #3b82f6;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .julie-avatar {
+      width: 64px;
+      height: 78px;
+      border-radius: 8px;
+      border: 2px solid var(--gold);
+      object-fit: cover;
+      background: #1e293b;
+      flex-shrink: 0;
+    }
+    .julie-speech {
+      font-size: 0.84rem;
+      line-height: 1.38;
+      color: #f1f5f9;
+    }
+    .julie-name {
+      font-weight: 800;
+      color: var(--gold);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Card Zoom Preview in Side Panel */
+    .card-zoom-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: rgba(9, 13, 22, 0.7);
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 10px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .card-zoom-img {
+      width: 220px;
+      height: 308px;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .card-zoom-img:hover {
+      transform: scale(1.03);
+    }
+    .card-meta {
+      width: 100%;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+    }
+    .card-meta h4 {
+      margin: 4px 0;
+      color: var(--gold);
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #1e293b;
+      border: 1px solid #475569;
       color: #f8fafc;
     }
-    .playmat-night {
-      background: radial-gradient(circle at 50% 45%, #1e3a8a 0%, #0f172a 60%, #060913 100%);
-    }
-    .playmat-jungle {
-      background: radial-gradient(circle at 50% 45%, #14532d 0%, #052e16 65%, #02140a 100%);
-    }
-    .playmat-fossil {
-      background: radial-gradient(circle at 50% 45%, #78350f 0%, #271206 65%, #0c0602 100%);
-    }
-    .playmat-mewtwo {
-      background: radial-gradient(circle at 50% 45%, #7f1d1d 0%, #2a0a18 65%, #090306 100%);
-    }
-    .card-shadow {
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.14);
-    }
-    .card-active-glow {
-      box-shadow: 0 0 18px rgba(250, 204, 21, 0.45), 0 0 0 2px #facc15;
-    }
-    @keyframes coinSpin {
-      0%   { transform: rotateY(0deg) scale(1); }
-      50%  { transform: rotateY(540deg) scale(1.25); }
-      100% { transform: rotateY(1080deg) scale(1); }
-    }
-    .coin-anim {
-      animation: coinSpin 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes hitShake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-8px) rotate(-2deg); }
-      40%, 80% { transform: translateX(8px) rotate(2deg); }
-    }
-    .shake-hit {
-      animation: hitShake 0.4s ease-in-out;
+    .atk-row {
+      background: rgba(30, 41, 59, 0.75);
+      border-left: 3px solid var(--gold);
+      padding: 6px 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    html, body { touch-action: manipulation; overscroll-behavior-y: contain; }
-    /* Tapis : ligne médiane + cercle central + zones */
-    .mat { position: relative; }
-    .mat::before {
-      content: ''; position: absolute; left: 6%; right: 6%; top: 50%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+    /* Views inside .game-screen */
+    .screen-view {
+      display: none;
+      width: 800px;
+      height: 600px;
+      position: relative;
+    }
+    .screen-view.active {
+      display: block;
+    }
+
+    /* Hotspots on Main Menu (main.png 800x600) */
+    .menu-hotspot {
+      position: absolute;
+      border: 2px solid rgba(250, 204, 21, 0.0);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 6px;
+    }
+    .menu-hotspot:hover {
+      border-color: var(--gold);
+      background: rgba(250, 204, 21, 0.16);
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
+    }
+    .menu-hotspot span {
+      background: rgba(11, 16, 33, 0.9);
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 3px 9px;
+      border-radius: 99px;
+      border: 1px solid var(--gold);
       pointer-events: none;
     }
-    .mat::after {
-      content: ''; position: absolute; left: 50%; top: 50%; width: 46%; aspect-ratio: 1;
-      transform: translate(-50%, -50%); border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08); pointer-events: none;
+
+    /* Battle Arena Layout (arena.png 800x600) */
+    .arena-hud {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(6, 10, 22, 0.25);
     }
-    .side { position: relative; z-index: 1; border-radius: 14px; padding: 4px; }
-    .side-ai { background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.05)); }
-    .side-player { background: linear-gradient(0deg, rgba(0,0,0,0.28), rgba(0,0,0,0.05)); }
-    .zone-label { font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 700; }
-    .tcg { aspect-ratio: 63 / 88; border-radius: 6px; }
-    .slot-empty {
-      aspect-ratio: 63 / 88; border-radius: 6px; border: 1.5px dashed rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.18); display: flex; align-items: center; justify-content: center;
-      font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 700;
+    .arena-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(11, 16, 33, 0.88);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.78rem;
     }
-    .card-back {
-      aspect-ratio: 63 / 88; border-radius: 5px; border: 2px solid #e2e8f0;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(250,204,21,0.9) 0 14%, transparent 15%),
-        repeating-linear-gradient(45deg, #1d4ed8 0 4px, #1e3a8a 4px 8px);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    .player-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .active-slot { width: clamp(52px, 9.6dvh, 104px); }
-    .bench-row { max-width: calc(33dvh + 16px); margin: 0 auto; }
-    @media (max-height: 620px) {
-      .active-slot { width: clamp(48px, 8.4dvh, 80px); }
-      .bench-row { max-width: calc(29dvh + 16px); }
-      .zone-label { display: none; }
+    .bench-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      min-height: 82px;
     }
-    .pile-col { width: clamp(30px, 5.2dvh, 46px); flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
-    .prize-stack { position: relative; width: 100%; }
-    .prize-stack .card-back, .prize-stack .slot-empty { position: absolute; left: 0; width: 100%; }
-    .pip {
-      width: 13px; height: 13px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
-      font-size: 7px; line-height: 1; border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    .card-slot {
+      width: 64px;
+      height: 86px;
+      border: 2px dashed rgba(255, 255, 255, 0.35);
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.65);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .dmg-badge {
-      position: absolute; top: 18%; right: -4px; min-width: 22px; height: 22px; padding: 0 4px; border-radius: 999px;
-      background: #dc2626; border: 2px solid #fff; color: #fff; font: 800 10px/18px 'JetBrains Mono', monospace; text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    .card-slot:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .card-slot.active-slot {
+      width: 82px;
+      height: 110px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
+    }
+    .card-slot img.slot-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .hp-pill {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #dc2626;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.66rem;
+      padding: 1px 5px;
+      border-radius: 99px;
+      border: 1px solid #fff;
+      z-index: 3;
+    }
+    .energy-badges {
+      position: absolute;
+      bottom: 2px;
+      left: 2px;
+      right: 2px;
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 3;
+    }
+    .energy-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid #fff;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 1px 2px #000;
+    }
+    .status-badge {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      background: #7c3aed;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 4px;
+      border: 1px solid #fff;
+      z-index: 4;
+    }
+    .center-battlefield {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+    }
+    .active-duel-pair {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+    .hand-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 6px 8px;
+      background: rgba(11, 16, 33, 0.9);
+      border: 1px solid #475569;
+      border-radius: 8px;
+      min-height: 92px;
+      align-items: center;
     }
     .hand-card {
-      position: absolute; bottom: 12px; width: 66px; transform-origin: 50% 120%;
-      transition: transform .18s ease, box-shadow .18s ease;
+      width: 58px;
+      height: 80px;
+      border-radius: 5px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      transition: transform 0.15s;
     }
-    .hand-card:active { transform: translateY(-16px) rotate(0deg) scale(1.08) !important; z-index: 60; }
-    .bubble { background: rgba(2,6,23,0.82); border: 1px solid rgba(255,255,255,0.14); }
-    button:disabled { opacity: .45; }
-    ::-webkit-scrollbar { height: 4px; width: 4px; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 999px; }
+    .hand-card:hover {
+      transform: translateY(-6px) scale(1.06);
+      border-color: var(--gold);
+    }
+    .hand-card.selected {
+      border-color: #22c55e;
+      box-shadow: 0 0 12px #22c55e;
+      transform: translateY(-6px);
+    }
+    .hand-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 3px;
+    }
+
+    /* Action Buttons inside Arena */
+    .btn-action {
+      background: linear-gradient(180deg, #facc15 0%, #ca8a04 100%);
+      color: #0f172a;
+      border: 1px solid #fef08a;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .btn-action:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #64748b;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      border-color: var(--gold);
+    }
+
+    /* Overlay Panels for Collector / Deck Builder / Lessons / Pokédex */
+    .overlay-panel {
+      position: absolute;
+      inset: 14px;
+      background: rgba(11, 16, 33, 0.88);
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      backdrop-filter: blur(3px);
+    }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-bar input, .filter-bar select {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+    .cards-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+      gap: 10px;
+      overflow-y: auto;
+      padding: 6px;
+    }
+    .grid-card-item {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .grid-card-item:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      background: rgba(51, 65, 85, 0.9);
+    }
+    .grid-card-item img {
+      width: 80px;
+      height: 112px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .grid-card-item .cname {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    /* Coin Flip Animation Popup */
+    .coin-modal {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+    }
+    .coin-modal.show {
+      display: flex;
+    }
+    .coin-box {
+      background: #0f172a;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 20px 28px;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.9);
+    }
+
+    @media (max-width: 1150px) {
+      main.stage-wrap {
+        flex-direction: column;
+        align-items: center;
+      }
+      .side-panel {
+        width: 800px;
+        max-width: 800px;
+        height: auto;
+      }
+    }
   </style>
 </head>
-<body id="appBody" class="playmat-night flex flex-col">
+<body>
 
-  <!-- =================================================================== -->
-  <!-- ÉCRAN 1 : MENU PRINCIPAL 1999 (CHOIX DU DEMI-DECK & CODE "FIRE")    -->
-  <!-- =================================================================== -->
-  <div id="menuScreen" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col items-center justify-between max-w-lg mx-auto w-full">
-    <div class="w-full text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/15 border border-yellow-400/40 text-yellow-300 text-[11px] font-bold tracking-wider uppercase mb-2">
-        💿 Wizards of the Coast · Édition CD-ROM 1999
-      </div>
-      <h1 class="text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-b from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow">
-        POKÉMON : À TOI DE JOUER !
-      </h1>
-      <p class="text-xs text-slate-300 mt-1">
-        Pokémon Play It! v1.0 · Vraies cartes FR Set de Base &amp; Jungle (1999)
-      </p>
-    </div>
-
-    <!-- Juliette Welcome Box -->
-    <div class="w-full my-3 p-3.5 rounded-2xl bg-slate-900/85 border border-white/15 flex items-center gap-3 shadow-xl">
-      <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-amber-500 flex items-center justify-center text-2xl shrink-0 shadow-md">
-        👩‍🦰
-      </div>
-      <div class="text-left text-xs leading-relaxed">
-        <div class="font-bold text-yellow-300">Juliette — Instructrice JCC</div>
-        <p class="text-slate-300">
-          « Salut ! Comme mon ami <strong>Sacha Ketchum</strong>, j'adore le JCC Pokémon ! Choisis l'un des <strong>4 demi-decks officiels de 30 cartes</strong> pour m'affronter en 3 Récompenses ! »
-        </p>
+  <header class="topbar">
+    <div class="brand" onclick="switchView('menu')">
+      <img src="assets/ui/buttonbigball.png" alt="PokéBall" />
+      <div>
+        <span class="brand-title">Pokémon : À Toi de jouer !</span>
+        <span class="brand-sub">Play It! (VF 2000) • Reproduction Clean-Room & Assets Originaux</span>
       </div>
     </div>
 
-    <!-- Sélection des 4 Demi-Decks Officiels (Poképédia) -->
-    <div class="w-full space-y-2.5">
-      <div class="flex items-center justify-between text-xs font-bold text-slate-300 px-1">
-        <span>CHOISIS TON DEMI-DECK (30 CARTES) :</span>
-        <button onclick="openAcademyModal()" class="text-yellow-300 underline text-[11px]">🎓 Quiz Académie &amp; Tapis</button>
-      </div>
+    <nav class="nav-tabs">
+      <button class="nav-btn active" data-view="menu" onclick="switchView('menu')">🏠 Menu TV</button>
+      <button class="nav-btn" data-view="arena" onclick="switchView('arena')">⚔️ Arène (Duel vs Juliette)</button>
+      <button class="nav-btn" data-view="lessons" onclick="switchView('lessons')">🎓 Leçons & Défis</button>
+      <button class="nav-btn" data-view="builder" onclick="switchView('builder')">🛠️ Créateur de Deck (38)</button>
+      <button class="nav-btn" data-view="collector" onclick="switchView('collector')">📚 Collectionneur (241)</button>
+      <button class="nav-btn" data-view="pokedex" onclick="switchView('pokedex')">🔍 Pokédex & Astuces</button>
+    </nav>
 
-      <div class="grid grid-cols-2 gap-2.5">
-        <!-- Deck Combat -->
-        <button onclick="startMatch('COMBAT')" class="p-3 rounded-2xl bg-gradient-to-br from-amber-900/70 to-slate-900/90 border-2 border-amber-500/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">🥊</span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">30 cartes</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Combat</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Machoc, Machopeur, Taupiqueur, Doduo, Miaouss
-          </p>
-          <div class="mt-2 text-[10px] text-amber-300 font-semibold">Juliette jouera : Deck Eau 💧</div>
-        </button>
-
-        <!-- Deck Eau -->
-        <button onclick="startMatch('EAU')" class="p-3 rounded-2xl bg-gradient-to-br from-sky-900/70 to-slate-900/90 border-2 border-sky-400/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">💧</span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300">30 cartes</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Eau</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Poissirène, Poissoroy, Stari, Otaria, Minidraco
-          </p>
-          <div class="mt-2 text-[10px] text-sky-300 font-semibold">Juliette jouera : Deck Combat 🥊</div>
-        </button>
-
-        <!-- Deck Feu (Code secret "Fire") -->
-        <button onclick="startMatch('FEU')" id="btnDeckFeu" class="p-3 rounded-2xl bg-gradient-to-br from-red-900/70 to-slate-900/90 border-2 border-red-500/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">🔥</span>
-            <span id="badgeFeu" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-500/25 text-red-200">Code "FIRE" ✓</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Feu</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Salamèche, Reptincel, Ponyta, Caninos, Léo
-          </p>
-          <div class="mt-2 text-[10px] text-red-300 font-semibold">Juliette jouera : Deck Combat 🥊</div>
-        </button>
-
-        <!-- Deck Xtra (Code secret "Fire") -->
-        <button onclick="startMatch('XTRA')" id="btnDeckXtra" class="p-3 rounded-2xl bg-gradient-to-br from-purple-900/70 to-slate-900/90 border-2 border-purple-400/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">⭐</span>
-            <span id="badgeXtra" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/25 text-purple-200">Code "FIRE" ✓</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Xtra</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Arcanin (100 PV), Magmar, Caninos, Salamèche, Potion
-          </p>
-          <div class="mt-2 text-[10px] text-purple-300 font-semibold">Juliette jouera : Deck Combat 🥊</div>
-        </button>
-      </div>
+    <div class="audio-bar">
+      <button class="audio-btn" id="bgmToggleBtn" onclick="toggleBgm()">🔊 Musique: OFF</button>
+      <select class="audio-select" id="bgmSelect" onchange="changeBgmTrack(this.value)">
+        <option value="assets/music/Menu1.mp3">🎵 Menu Principal</option>
+        <option value="assets/music/Play1.mp3">🎵 Combat Arène 1</option>
+        <option value="assets/music/Play2.mp3">🎵 Combat Arène 2</option>
+        <option value="assets/music/Lesson1.mp3">🎵 Leçon 1 (Juliette)</option>
+        <option value="assets/music/Lesson2.mp3">🎵 Leçon 2</option>
+        <option value="assets/music/Builder.mp3">🎵 Deck Builder</option>
+        <option value="assets/music/Collector.mp3">🎵 Collectionneur</option>
+        <option value="assets/music/Signin.mp3">🎵 Écran Titre</option>
+      </select>
     </div>
+  </header>
 
-    <!-- Barre du bas : Tapis de jeu & Audio -->
-    <div class="w-full mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-      <div class="flex items-center gap-1.5">
-        <span>Tapis :</span>
-        <select id="playmatSelect" onchange="changePlaymat(this.value)" class="bg-slate-900 border border-white/15 rounded-lg px-2 py-1 text-xs text-white">
-          <option value="playmat-night">🌙 Bleu Nuit (Pikachu/Ectoplasma)</option>
-          <option value="playmat-jungle">🌿 Jungle (Insécateur/Rafflesia)</option>
-          <option value="playmat-fossil">🦖 Fossile (Ptéra)</option>
-          <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
-        </select>
-      </div>
-      <button onclick="toggleSound()" id="soundBtnMenu" class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-200">
-        🔊 Cris 1G : ON
-      </button>
-    </div>
-  </div>
+  <main class="stage-wrap">
+    <!-- 800x600 Original Game Viewport -->
+    <div class="game-screen" id="gameScreen" style="background-image: url('assets/ui/main.png');">
 
-  <!-- =================================================================== -->
-  <!-- ÉCRAN 2 : PLATEAU DE JEU MOBILE PLEIN ÉCRAN                         -->
-  <!-- =================================================================== -->
-  <div id="gameScreen" class="hidden flex-1 flex flex-col h-full max-w-lg mx-auto w-full overflow-hidden">
-
-    <!-- BARRE HAUT -->
-    <header class="shrink-0 px-2 py-1 bg-black/45 border-b border-white/10 flex items-center justify-between gap-2" style="padding-top:max(4px, env(safe-area-inset-top))">
-      <button onclick="confirmQuitMatch()" class="w-8 h-7 rounded-lg bg-white/10 text-sm text-slate-200 shrink-0" aria-label="Menu">←</button>
-      <div class="flex items-center gap-1.5 min-w-0">
-        <span class="text-xs font-bold text-pink-300 shrink-0">👩‍🦰 Juliette</span>
-        <span id="aiDeckLabel" class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-300 truncate">Eau</span>
-        <span class="text-[10px] font-mono text-slate-300 shrink-0" title="Cartes en main de Juliette">✋<strong id="aiHandCount">7</strong></span>
-      </div>
-      <div id="turnPhaseBadge" class="text-[10px] font-mono font-bold text-yellow-300 truncate text-right">Préparation</div>
-      <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 text-xs shrink-0">🔊</button>
-    </header>
-
-    <!-- TAPIS DE JEU -->
-    <main class="mat flex-1 min-h-0 flex flex-col justify-between px-2 py-1.5 gap-1">
-
-      <!-- CÔTÉ JULIETTE (miroir) -->
-      <section class="side side-ai flex flex-col gap-1.5">
-        <div class="flex items-center gap-1.5">
-          <div class="pile-col">
-            <div class="card-back w-full relative">
-              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 rounded bg-slate-950/90 text-[10px] font-black font-mono text-white" id="aiDeckCount">20</span>
-            </div>
-            <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="text-[9px] font-mono px-1 rounded bg-black/40 text-slate-300">🗑 0</button>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div id="aiBenchRow" class="bench-row grid grid-cols-5 gap-1"></div>
-            <div class="zone-label text-center mt-0.5">Banc de Juliette</div>
-          </div>
-          <div class="pile-col">
-            <div id="aiPrizesZone" class="prize-stack"></div>
-            <span class="text-[10px] font-mono font-bold text-yellow-300">🏆<span id="aiPrizesCount">3</span></span>
-          </div>
+      <!-- VIEW 1: MAIN MENU (Original main.is background) -->
+      <section class="screen-view active" id="view-menu">
+        <div class="menu-hotspot" style="left: 90px; top: 95px; width: 280px; height: 185px;" onclick="switchView('lessons')">
+          <span>🎓 Apprendre à jouer (Leçons)</span>
         </div>
-        <div class="flex justify-center items-center gap-2">
-          <div class="w-20"></div>
-          <div id="aiActiveSlot" class="active-slot"></div>
-          <div id="aiActiveInfo" class="w-20 text-[10px] leading-tight"></div>
+        <div class="menu-hotspot" style="left: 415px; top: 95px; width: 295px; height: 185px;" onclick="switchView('arena')">
+          <span>⚔️ Jouer un Match (Arène vs Juliette)</span>
+        </div>
+        <div class="menu-hotspot" style="left: 90px; top: 305px; width: 280px; height: 185px;" onclick="switchView('collector')">
+          <span>📚 Le Collectionneur (241 Cartes VF)</span>
+        </div>
+        <div class="menu-hotspot" style="left: 415px; top: 305px; width: 295px; height: 185px;" onclick="switchView('builder')">
+          <span>🛠️ Construire un Deck (38 Decks)</span>
+        </div>
+        <div class="menu-hotspot" style="left: 310px; top: 505px; width: 180px; height: 75px;" onclick="switchView('pokedex')">
+          <span>🔍 Pokédex & Conseils</span>
         </div>
       </section>
 
-      <!-- LIGNE MÉDIANE : COMMENTAIRE DE JULIETTE -->
-      <div class="relative z-10 flex justify-center px-1">
-        <div class="bubble w-full rounded-2xl px-2.5 py-1 flex items-center gap-2 shadow-lg">
-          <span class="text-lg leading-none shrink-0">👩‍🦰</span>
-          <div id="julietteSpeech" class="text-[10.5px] leading-snug text-slate-100 line-clamp-2 min-h-[28px]">
-            « Choisis ton Pokémon Actif pour commencer le match ! »
-          </div>
-        </div>
-      </div>
-
-      <!-- TON CÔTÉ -->
-      <section class="side side-player flex flex-col gap-1.5">
-        <div class="flex justify-center items-end gap-2">
-          <div id="playerActiveInfo" class="w-20 text-[10px] leading-tight text-right pb-4"></div>
-          <div id="playerActiveSlot" class="active-slot"></div>
-          <div class="w-20 text-[9px] font-mono text-sky-300 leading-tight pb-4" id="energyStatusText">⚡ 0/1</div>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <div class="pile-col">
-            <div id="playerPrizesZone" class="prize-stack"></div>
-            <span class="text-[10px] font-mono font-bold text-emerald-300">🏆<span id="playerPrizesCount">3</span></span>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="zone-label text-center mb-0.5">Ton Banc</div>
-            <div id="playerBenchRow" class="bench-row grid grid-cols-5 gap-1"></div>
-          </div>
-          <div class="pile-col">
-            <div class="card-back w-full relative">
-              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 rounded bg-slate-950/90 text-[10px] font-black font-mono text-white" id="playerDeckCount">20</span>
+      <!-- VIEW 2: BATTLE ARENA (Original arena.is background) -->
+      <section class="screen-view" id="view-arena">
+        <div class="arena-hud">
+          <!-- Top Bar: Deck Choice, Prizes, Turn Info -->
+          <div class="arena-top-bar">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <strong>Deck :</strong>
+              <select id="arenaDeckSelect" class="audio-select" onchange="startNewDuel()"></select>
+              <button class="btn-secondary" onclick="startNewDuel()">🔄 Nouvelle Partie</button>
             </div>
-            <button id="playerDiscardBtn" onclick="openDiscardViewer('player')" class="text-[9px] font-mono px-1 rounded bg-black/40 text-slate-300">🗑 0</button>
+            <div id="turnBanner" style="font-weight:800; color:var(--gold);">Tour 1 — À toi de jouer !</div>
+            <div style="display:flex; gap:10px;">
+              <span>🏆 Tes Récompenses: <b id="playerPrizesCount">4</b></span>
+              <span>🤖 Juliette: <b id="aiPrizesCount">4</b></span>
+            </div>
+          </div>
+
+          <!-- Opponent (Juliette) Bench -->
+          <div class="player-zone">
+            <div style="display:flex; justify-content:space-between; font-size:0.72rem; padding:0 12px; color:#cbd5e1;">
+              <span>🤖 Banc de Juliette (IA) — Main: <b id="aiHandCount">7</b> | Deck: <b id="aiDeckCount">49</b></span>
+              <span id="aiStatusText">En attente...</span>
+            </div>
+            <div class="bench-row" id="aiBenchRow"></div>
+          </div>
+
+          <!-- Center Active Pokémon Duel -->
+          <div class="center-battlefield">
+            <!-- Deck & Discard Left Info -->
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:center;">
+              <div class="card-slot" onclick="playerDrawCardClick()" title="Ton Deck">
+                <img src="assets/cards/back_s.jpg" class="slot-card-img" alt="Deck" />
+                <span class="hp-pill" style="background:#2563eb;" id="playerDeckCount">49</span>
+              </div>
+              <span style="font-size:0.68rem; font-weight:700;">Ton Deck</span>
+            </div>
+
+            <!-- Active Pokémon Pair + Attack Controls -->
+            <div class="active-duel-pair">
+              <div style="text-align:center;">
+                <div style="font-size:0.7rem; color:#f87171; font-weight:800; margin-bottom:2px;">ACTIF JULIETTE</div>
+                <div class="card-slot active-slot" id="aiActiveSlot" onclick="inspectActive('ai')"></div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:6px; align-items:center; min-width:190px;">
+                <img src="assets/ui/buttonattack.png" alt="Attack" style="height:26px;" />
+                <div id="attackButtonsBox" style="display:flex; flex-direction:column; gap:5px; width:100%;"></div>
+                <div style="display:flex; gap:6px; margin-top:4px;">
+                  <button class="btn-secondary" id="retreatBtn" onclick="retreatActivePokemon()">🏃 Retraite</button>
+                  <button class="btn-action" id="endTurnBtn" onclick="endPlayerTurn()">⏭️ Fin du Tour</button>
+                </div>
+              </div>
+
+              <div style="text-align:center;">
+                <div style="font-size:0.7rem; color:#4ade80; font-weight:800; margin-bottom:2px;">TON POKÉMON ACTIF</div>
+                <div class="card-slot active-slot" id="playerActiveSlot" onclick="inspectActive('player')"></div>
+              </div>
+            </div>
+
+            <!-- Coin & Sound Effect Right Info -->
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:center;">
+              <img src="assets/ui/coin.png" alt="Pièce" style="width:48px; height:48px; object-fit:contain; cursor:pointer;" onclick="manualCoinFlip()" title="Lancer une pièce" />
+              <span style="font-size:0.68rem; font-weight:700;" id="lastCoinLabel">Pièce: Pile/Face</span>
+            </div>
+          </div>
+
+          <!-- Player Bench -->
+          <div class="player-zone">
+            <div class="bench-row" id="playerBenchRow"></div>
+          </div>
+
+          <!-- Player Hand Strip -->
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:0.72rem; margin-bottom:3px;">
+              <span>✋ <b>Ta Main</b> (Clique sur une carte pour la jouer : Pokémon de Base, Évolution, Énergie ou Dresseur)</span>
+              <span id="turnRulesHint" style="color:var(--gold);">Énergie jouée ce tour : 0/1</span>
+            </div>
+            <div class="hand-strip" id="playerHandStrip"></div>
           </div>
         </div>
       </section>
-    </main>
 
-    <!-- BARRE D'ACTION -->
-    <section id="actionStrip" class="shrink-0 px-2 py-1.5 bg-black/60 border-y border-white/15 flex items-center justify-between gap-1.5">
-      <div id="attackButtonsContainer" class="flex items-center gap-1.5 overflow-x-auto min-w-0"></div>
-      <div class="flex items-center gap-1.5 shrink-0">
-        <button id="retreatBtn" onclick="openRetreatModal()" class="px-2 py-1.5 rounded-xl text-[11px] font-bold bg-slate-800 border border-white/15 text-slate-200">🔄</button>
-        <button id="endTurnBtn" onclick="endPlayerTurn()" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 shadow">Fin ⏭</button>
-      </div>
-    </section>
+      <!-- VIEW 3: LESSONS & QUICKPLAY CHALLENGES -->
+      <section class="screen-view" id="view-lessons">
+        <div class="overlay-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; color:var(--gold);">🎓 Leçons Interactives & Défis de Juliette (QuickPlay)</h3>
+            <span class="badge">28 Decks d'entraînement officiels extraits de Decks.pak</span>
+          </div>
+          <p style="margin:0; font-size:0.82rem; color:#cbd5e1;">
+            Dans <b>Pokémon : À Toi de jouer !</b>, Juliette t'accompagne étape par étape : poser un Pokémon de base, attacher des Énergies, faire évoluer tes Pokémon, utiliser les Dresseurs et remporter les 14 défis de badges !
+          </p>
+          <div class="cards-grid" id="lessonsGrid" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));"></div>
+        </div>
+      </section>
 
-    <!-- MAIN EN ÉVENTAIL -->
-    <footer class="shrink-0 bg-black/55 px-2 pt-1" style="padding-bottom:max(4px, env(safe-area-inset-bottom))">
-      <div class="flex items-center justify-between text-[9px] font-mono text-slate-400 px-1">
-        <span>TA MAIN · <strong id="playerHandCount" class="text-white">0</strong></span>
-        <span>Touche une carte 🔍</span>
-      </div>
-      <div id="playerHandRow" class="relative w-full" style="height: clamp(80px, 13dvh, 124px)"></div>
-    </footer>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MODAL : ZOOM CARTE HD + ACTIONS CONTEXTUELLES                       -->
-  <!-- =================================================================== -->
-  <div id="cardModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-white/20 rounded-2xl p-4 max-w-sm w-full flex flex-col items-center gap-3 shadow-2xl max-h-[92dvh] overflow-y-auto">
-      <div class="w-full flex items-center justify-between">
-        <span id="modalCardTitle" class="text-sm font-extrabold text-yellow-300">Carte</span>
-        <button onclick="closeCardModal()" class="w-7 h-7 rounded-full bg-white/10 text-white text-xs font-bold">✕</button>
-      </div>
-
-      <!-- Vraie Image Française 1999 HD -->
-      <img id="modalCardImg" src="" alt="" class="w-56 sm:w-64 rounded-xl card-shadow object-contain bg-slate-800" />
-
-      <!-- Résumé texte officiel + PV / Énergies attachées -->
-      <div id="modalCardDetails" class="w-full text-xs text-slate-200 bg-black/50 p-2.5 rounded-xl border border-white/10 leading-relaxed"></div>
-
-      <!-- Boutons d'action (Poser, Attacher Énergie à..., Évoluer, Jouer Dresseur) -->
-      <div id="modalCardActions" class="w-full flex flex-col gap-2"></div>
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MODAL : LANCER DE PIÈCE ANIMÉ (PILE OU FACE)                        -->
-  <!-- =================================================================== -->
-  <div id="coinModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl p-6 max-w-xs w-full text-center shadow-2xl">
-      <div id="coinTitle" class="text-xs font-mono uppercase tracking-wider text-yellow-300 mb-3">Lancer de Pièce</div>
-      <div id="coinVisual" class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-600 border-4 border-white shadow-xl flex items-center justify-center text-4xl font-black text-slate-950 coin-anim">
-        ⚡
-      </div>
-      <div id="coinResultText" class="text-lg font-black text-white mt-4">FACE !</div>
-      <p id="coinSubText" class="text-xs text-slate-300 mt-1"></p>
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MODAL : CHOIX DE CIBLE (POKÉ BALL / POKÉDEX / REMPLACEMENT K.O.)    -->
-  <!-- =================================================================== -->
-  <div id="pickerModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-white/20 rounded-2xl p-4 max-w-md w-full shadow-2xl max-h-[85dvh] flex flex-col">
-      <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
-        <h3 id="pickerTitle" class="text-sm font-extrabold text-yellow-300">Choisis un Pokémon</h3>
-        <button id="pickerCloseBtn" onclick="closePickerModal()" class="text-xs text-slate-400 hover:text-white">✕</button>
-      </div>
-      <p id="pickerSubtitle" class="text-xs text-slate-300 mb-3"></p>
-      <div id="pickerGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 overflow-y-auto p-1"></div>
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MODAL : QUIZ DE L'ACADÉMIE POKÉMON (EXTRAS CD-ROM 1999)             -->
-  <!-- =================================================================== -->
-  <div id="academyModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl p-5 max-w-md w-full shadow-2xl max-h-[88dvh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
-        <h3 class="text-base font-extrabold text-yellow-300">🎓 Examen de l'Académie Pokémon (1999)</h3>
-        <button onclick="document.getElementById('academyModal').classList.add('hidden')" class="text-slate-400 hover:text-white">✕</button>
-      </div>
-      <div id="academyContent" class="space-y-3 text-xs"></div>
-    </div>
-  </div>
-
-  <!-- =================================================================== -->
-  <!-- MOTEUR COMPLET DU JEU POKÉMON PLAY IT! (1999)                       -->
-  <!-- =================================================================== -->
-  <script>
-    // -----------------------------------------------------------------------
-    // 1. BASE DE DONNÉES EXACTE DES 21 CARTES OFFICIELLES (SET DE BASE & JUNGLE FR)
-    // -----------------------------------------------------------------------
-    const CARDS_DB = {
-      // --- POKÉMON COMBAT & INCOLORE ---
-      'base1-52': {
-        id: 'base1-52', name: 'Machoc', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 50, type: 'Combat', weakness: 'Psy', resistance: null, retreat: 1, dex: 66,
-        img: 'https://assets.tcgdex.net/fr/base/base1/52/high.webp',
-        attacks: [
-          { name: 'Balayage', cost: ['Combat'], damage: 20, text: 'Inflige 20 dégâts.' }
-        ]
-      },
-      'base1-34': {
-        id: 'base1-34', name: 'Machopeur', category: 'Pokémon', stage: 'Niveau 1', evolvesFrom: 'Machoc',
-        hp: 80, type: 'Combat', weakness: 'Psy', resistance: null, retreat: 3, dex: 67,
-        img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp',
-        attacks: [
-          { name: 'Poing-Karaté', cost: ['Combat', 'Combat', 'Incolore'], damage: 50, effect: 'karate_chop', text: '50 dégâts moins 10 pour chaque marqueur de dégâts sur Machopeur.' },
-          { name: 'Sacrifice', cost: ['Combat', 'Combat', 'Incolore', 'Incolore'], damage: 60, effect: 'recoil_20', text: '60 dégâts. Machopeur s\'inflige 20 dégâts.' }
-        ]
-      },
-      'base1-47': {
-        id: 'base1-47', name: 'Taupiqueur', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 30, type: 'Combat', weakness: 'Plante', resistance: 'Électrique', retreat: 0, dex: 50,
-        img: 'https://assets.tcgdex.net/fr/base/base1/47/high.webp',
-        attacks: [
-          { name: 'Tunnel', cost: ['Combat'], damage: 10, text: 'Inflige 10 dégâts.' },
-          { name: 'Jet de boue', cost: ['Combat', 'Combat'], damage: 30, text: 'Inflige 30 dégâts.' }
-        ]
-      },
-      'base1-48': {
-        id: 'base1-48', name: 'Doduo', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 50, type: 'Incolore', weakness: 'Électrique', resistance: 'Combat', retreat: 0, dex: 84,
-        img: 'https://assets.tcgdex.net/fr/base/base1/48/high.webp',
-        attacks: [
-          { name: 'Furie', cost: ['Incolore'], damage: 10, effect: 'fury_attack_2coins', text: 'Lancez 2 pièces : 10 dégâts × le nombre de Faces.' }
-        ]
-      },
-      'base2-56': {
-        id: 'base2-56', name: 'Miaouss', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 50, type: 'Incolore', weakness: 'Combat', resistance: 'Psy', retreat: 1, dex: 52,
-        img: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp',
-        attacks: [
-          { name: 'Jackpot', cost: ['Incolore', 'Incolore'], damage: 10, effect: 'pay_day', text: '10 dégâts. Lancez une pièce : si c\'est Face, piochez 1 carte !' }
-        ]
-      },
-
-      // --- POKÉMON EAU ---
-      'base2-53': {
-        id: 'base2-53', name: 'Poissirène', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 40, type: 'Eau', weakness: 'Électrique', resistance: null, retreat: 0, dex: 118,
-        img: 'https://assets.tcgdex.net/fr/base/base2/53/high.webp',
-        attacks: [
-          { name: "Koud'korne", cost: ['Eau'], damage: 10, text: 'Inflige 10 dégâts.' }
-        ]
-      },
-      'base2-46': {
-        id: 'base2-46', name: 'Poissoroy', category: 'Pokémon', stage: 'Niveau 1', evolvesFrom: 'Poissirène',
-        hp: 70, type: 'Eau', weakness: 'Électrique', resistance: null, retreat: 1, dex: 119,
-        img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp',
-        attacks: [
-          { name: "Koud'korne", cost: ['Eau'], damage: 10, text: 'Inflige 10 dégâts.' },
-          { name: 'Cascade', cost: ['Eau', 'Incolore'], damage: 30, text: 'Inflige 30 dégâts.' }
-        ]
-      },
-      'base1-65': {
-        id: 'base1-65', name: 'Stari', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 40, type: 'Eau', weakness: 'Électrique', resistance: null, retreat: 1, dex: 120,
-        img: 'https://assets.tcgdex.net/fr/base/base1/65/high.webp',
-        attacks: [
-          { name: 'Gifle', cost: ['Eau'], damage: 20, text: 'Inflige 20 dégâts.' }
-        ]
-      },
-      'base1-41': {
-        id: 'base1-41', name: 'Otaria', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 60, type: 'Eau', weakness: 'Électrique', resistance: null, retreat: 1, dex: 86,
-        img: 'https://assets.tcgdex.net/fr/base/base1/41/high.webp',
-        attacks: [
-          { name: "Coup d'Boule", cost: ['Eau'], damage: 10, text: 'Inflige 10 dégâts.' }
-        ]
-      },
-      'base1-26': {
-        id: 'base1-26', name: 'Minidraco', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 40, type: 'Incolore', weakness: null, resistance: 'Psy', retreat: 1, dex: 147,
-        img: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp',
-        attacks: [
-          { name: "Écras' Face", cost: ['Incolore'], damage: 10, text: 'Inflige 10 dégâts.' }
-        ]
-      },
-
-      // --- POKÉMON FEU ---
-      'base1-46': {
-        id: 'base1-46', name: 'Salamèche', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 50, type: 'Feu', weakness: 'Eau', resistance: null, retreat: 1, dex: 4,
-        img: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp',
-        attacks: [
-          { name: 'Griffe', cost: ['Incolore'], damage: 10, text: 'Inflige 10 dégâts.' },
-          { name: 'Flammèche', cost: ['Feu', 'Incolore'], damage: 30, effect: 'discard_fire_1', text: '30 dégâts. Défaussez 1 Énergie Feu attachée à Salamèche.' }
-        ]
-      },
-      'base1-24': {
-        id: 'base1-24', name: 'Reptincel', category: 'Pokémon', stage: 'Niveau 1', evolvesFrom: 'Salamèche',
-        hp: 80, type: 'Feu', weakness: 'Eau', resistance: null, retreat: 1, dex: 5,
-        img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp',
-        attacks: [
-          { name: 'Tranche', cost: ['Incolore', 'Incolore', 'Incolore'], damage: 30, text: 'Inflige 30 dégâts.' },
-          { name: 'Lance-flamme', cost: ['Feu', 'Feu', 'Incolore'], damage: 50, effect: 'discard_fire_1', text: '50 dégâts. Défaussez 1 Énergie Feu attachée à Reptincel.' }
-        ]
-      },
-      'base1-60': {
-        id: 'base1-60', name: 'Ponyta', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 40, type: 'Feu', weakness: 'Eau', resistance: null, retreat: 1, dex: 77,
-        img: 'https://assets.tcgdex.net/fr/base/base1/60/high.webp',
-        attacks: [
-          { name: 'Ruade', cost: ['Incolore', 'Incolore'], damage: 20, text: 'Inflige 20 dégâts.' },
-          { name: 'Queue de flamme', cost: ['Feu', 'Feu'], damage: 30, text: 'Inflige 30 dégâts.' }
-        ]
-      },
-      'base1-28': {
-        id: 'base1-28', name: 'Caninos', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 60, type: 'Feu', weakness: 'Eau', resistance: null, retreat: 1, dex: 58,
-        img: 'https://assets.tcgdex.net/fr/base/base1/28/high.webp',
-        attacks: [
-          { name: 'Intimidation', cost: ['Feu', 'Incolore'], damage: 20, text: 'Inflige 20 dégâts.' }
-        ]
-      },
-      'base1-23': {
-        id: 'base1-23', name: 'Arcanin', category: 'Pokémon', stage: 'Niveau 1', evolvesFrom: 'Caninos',
-        hp: 100, type: 'Feu', weakness: 'Eau', resistance: null, retreat: 3, dex: 59,
-        img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp',
-        attacks: [
-          { name: 'Lance-Flamme', cost: ['Feu', 'Feu', 'Incolore'], damage: 50, effect: 'discard_fire_1', text: '50 dégâts. Défaussez 1 Énergie Feu attachée à Arcanin.' },
-          { name: 'Bélier', cost: ['Feu', 'Feu', 'Incolore', 'Incolore'], damage: 80, effect: 'recoil_30', text: '80 dégâts. Arcanin s\'inflige 30 dégâts.' }
-        ]
-      },
-      'base1-36': {
-        id: 'base1-36', name: 'Magmar', category: 'Pokémon', stage: 'Base', evolvesFrom: null,
-        hp: 50, type: 'Feu', weakness: 'Eau', resistance: null, retreat: 2, dex: 126,
-        img: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp',
-        attacks: [
-          { name: 'Poing de Feu', cost: ['Feu', 'Feu'], damage: 30, text: 'Inflige 30 dégâts.' },
-          { name: 'Lance-flamme', cost: ['Feu', 'Feu', 'Incolore'], damage: 50, effect: 'discard_fire_1', text: '50 dégâts. Défaussez 1 Énergie Feu attachée à Magmar.' }
-        ]
-      },
-
-      // --- CARTES DRESSEUR OFFICIELLES ---
-      'base1-91': {
-        id: 'base1-91', name: 'Léo', category: 'Dresseur',
-        img: 'https://assets.tcgdex.net/fr/base/base1/91/high.webp',
-        text: 'Piochez 2 cartes.'
-      },
-      'base1-92': {
-        id: 'base1-92', name: "Suppression d'Énergie", category: 'Dresseur',
-        img: 'https://assets.tcgdex.net/fr/base/base1/92/high.webp',
-        text: 'Choisissez 1 carte Énergie attachée à un Pokémon de Juliette et défaussez-la.'
-      },
-      'base1-93': {
-        id: 'base1-93', name: 'Rafale de vent', category: 'Dresseur',
-        img: 'https://assets.tcgdex.net/fr/base/base1/93/high.webp',
-        text: 'Choisissez 1 Pokémon du Banc de Juliette et échangez-le avec son Pokémon Actif.'
-      },
-      'base1-94': {
-        id: 'base1-94', name: 'Potion', category: 'Dresseur',
-        img: 'https://assets.tcgdex.net/fr/base/base1/94/high.webp',
-        text: 'Retirez jusqu\'à 20 dégâts (2 marqueurs) d\'un de vos Pokémon.'
-      },
-      'base1-95': {
-        id: 'base1-95', name: 'Transfert', category: 'Dresseur',
-        img: 'https://assets.tcgdex.net/fr/base/base1/95/high.webp',
-        text: 'Échangez 1 Pokémon de votre Banc avec votre Pokémon Actif.'
-      },
-      'base1-87': {
-        id: 'base1-87', name: 'Pokédex', category: 'Dresseur',
-        img: 'https://assets.tcgdex.net/fr/base/base1/87/high.webp',
-        text: 'Regardez les 5 premières cartes de votre deck et placez la meilleure sur le dessus.'
-      },
-      'base2-64': {
-        id: 'base2-64', name: 'Poké Balle', category: 'Dresseur',
-        img: 'https://assets.tcgdex.net/fr/base/base2/64/high.webp',
-        text: 'Lancez une pièce. Si c\'est Face, cherchez un Pokémon dans votre deck et ajoutez-le à votre main.'
-      },
-
-      // --- CARTES ÉNERGIE ---
-      'base1-97': {
-        id: 'base1-97', name: 'Énergie Combat', category: 'Énergie', energyType: 'Combat',
-        img: 'https://assets.tcgdex.net/fr/base/base1/97/high.webp',
-        text: 'Fournit 1 Énergie Combat 🥊.'
-      },
-      'base1-102': {
-        id: 'base1-102', name: 'Énergie Eau', category: 'Énergie', energyType: 'Eau',
-        img: 'https://assets.tcgdex.net/fr/base/base1/102/high.webp',
-        text: 'Fournit 1 Énergie Eau 💧.'
-      },
-      'base1-98': {
-        id: 'base1-98', name: 'Énergie Feu', category: 'Énergie', energyType: 'Feu',
-        img: 'https://assets.tcgdex.net/fr/base/base1/98/high.webp',
-        text: 'Fournit 1 Énergie Feu 🔥.'
-      }
-    };
-
-    // -----------------------------------------------------------------------
-    // 2. LISTES EXACTES DES 4 DEMI-DECKS DE 30 CARTES (POKÉPÉDIA)
-    // -----------------------------------------------------------------------
-    const HALF_DECKS = {
-      COMBAT: [
-        ['base1-52', 3], ['base1-34', 2], ['base1-47', 3], ['base1-48', 2], ['base2-56', 2],
-        ['base1-92', 2], ['base1-87', 1], ['base1-95', 1], ['base1-97', 14]
-      ],
-      EAU: [
-        ['base2-53', 4], ['base2-46', 2], ['base1-65', 3], ['base1-41', 2], ['base1-26', 1],
-        ['base2-64', 2], ['base1-91', 1], ['base1-93', 1], ['base1-102', 14]
-      ],
-      FEU: [
-        ['base1-46', 4], ['base1-24', 2], ['base1-60', 3], ['base1-28', 2],
-        ['base1-91', 1], ['base1-92', 1], ['base1-93', 1], ['base1-95', 2], ['base1-98', 14]
-      ],
-      XTRA: [
-        ['base1-46', 2], ['base1-28', 4], ['base1-23', 2], ['base1-60', 2], ['base1-36', 1], ['base1-26', 1],
-        ['base1-91', 1], ['base1-92', 1], ['base1-94', 1], ['base1-95', 1], ['base1-98', 14]
-      ]
-    };
-
-    const TYPE_EMOJI = {
-      'Combat': '🥊',
-      'Eau': '💧',
-      'Feu': '🔥',
-      'Incolore': '⭐',
-      'Électrique': '⚡',
-      'Psy': '🔮',
-      'Plante': '🌿'
-    };
-
-    // -----------------------------------------------------------------------
-    // 3. ÉTAT DU JEU & AUDIO 1G
-    // -----------------------------------------------------------------------
-    let soundEnabled = true;
-    let game = null;
-    let uidCounter = 1;
-
-    function playPokemonCry(dexId) {
-      if (!soundEnabled || !dexId) return;
-      try {
-        const audio = new Audio(`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/legacy/${dexId}.ogg`);
-        audio.volume = 0.45;
-        audio.play().catch(() => {});
-      } catch (_) {}
-    }
-
-    function toggleSound() {
-      soundEnabled = !soundEnabled;
-      document.getElementById('soundBtnMenu').textContent = soundEnabled ? '🔊 Cris 1G : ON' : '🔇 Cris 1G : OFF';
-      document.getElementById('soundBtnGame').textContent = soundEnabled ? '🔊' : '🔇';
-    }
-
-    function changePlaymat(cls) {
-      const b = document.getElementById('appBody');
-      b.className = `${cls} flex flex-col`;
-    }
-
-    function buildDeck(deckKey) {
-      const recipe = HALF_DECKS[deckKey];
-      const list = [];
-      recipe.forEach(([cid, count]) => {
-        for (let i = 0; i < count; i++) {
-          const tpl = CARDS_DB[cid];
-          list.push({
-            uid: uidCounter++,
-            ...tpl,
-            damage: 0,
-            energies: [],
-            turnsInPlay: 0,
-            evolvedThisTurn: false
-          });
-        }
-      });
-      return shuffle(list);
-    }
-
-    function shuffle(arr) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-
-    function drawStartingHandAndPrizes(deckKey) {
-      while (true) {
-        const deck = buildDeck(deckKey);
-        const hand = deck.splice(0, 7);
-        const hasBasic = hand.some((c) => c.category === 'Pokémon' && c.stage === 'Base');
-        if (hasBasic) {
-          const prizes = deck.splice(0, 3); // 3 Récompenses officielles pour demi-deck 30 cartes
-          return { deck, hand, prizes };
-        }
-      }
-    }
-
-    // -----------------------------------------------------------------------
-    // 4. DÉMARRAGE D'UNE PARTIE CONTRE JULIETTE
-    // -----------------------------------------------------------------------
-    function startMatch(playerDeckKey) {
-      // Comme indiqué sur Poképédia : Juliette joue Eau si le joueur prend Combat, et Combat sinon
-      const aiDeckKey = playerDeckKey === 'COMBAT' ? 'EAU' : 'COMBAT';
-
-      const pInit = drawStartingHandAndPrizes(playerDeckKey);
-      const aiInit = drawStartingHandAndPrizes(aiDeckKey);
-
-      game = {
-        turnNumber: 1,
-        activePlayer: 'player', // 'player' or 'ai'
-        energyAttachedThisTurn: false,
-        retreatedThisTurn: false,
-        gameOver: false,
-        player: {
-          deckKey: playerDeckKey,
-          deck: pInit.deck,
-          hand: pInit.hand,
-          prizes: pInit.prizes,
-          active: null,
-          bench: [],
-          discard: []
-        },
-        ai: {
-          deckKey: aiDeckKey,
-          deck: aiInit.deck,
-          hand: aiInit.hand,
-          prizes: aiInit.prizes,
-          active: null,
-          bench: [],
-          discard: []
-        }
-      };
-
-      // Juliette place automatiquement son meilleur Pokémon de Base en Actif et les autres sur son Banc
-      const aiBasics = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
-      aiBasics.sort((a, b) => (b.hp || 0) - (a.hp || 0));
-      const aiStarter = aiBasics[0];
-      game.ai.hand = game.ai.hand.filter((c) => c.uid !== aiStarter.uid);
-      game.ai.active = aiStarter;
-
-      aiBasics.slice(1, 4).forEach((b) => {
-        if (game.ai.bench.length < 5) {
-          game.ai.hand = game.ai.hand.filter((c) => c.uid !== b.uid);
-          game.ai.bench.push(b);
-        }
-      });
-
-      document.getElementById('menuScreen').classList.add('hidden');
-      document.getElementById('gameScreen').classList.remove('hidden');
-      document.getElementById('aiDeckLabel').textContent = `Deck ${aiDeckKey}`;
-
-      sayJuliette(
-        `J'envoie ${game.ai.active.name} ! Touche un Pokémon de Base dans ta main en bas pour le choisir comme Pokémon Actif.`
-      );
-      renderBoard();
-    }
-
-    function confirmQuitMatch() {
-      document.getElementById('gameScreen').classList.add('hidden');
-      document.getElementById('menuScreen').classList.remove('hidden');
-      game = null;
-    }
-
-    function sayJuliette(text) {
-      document.getElementById('julietteSpeech').innerHTML = `« ${text} »`;
-    }
-
-    // -----------------------------------------------------------------------
-    // 5. RENDU GRAPHIQUE DU PLATEAU MOBILE
-    // -----------------------------------------------------------------------
-    const TYPE_COLOR = {
-      'Combat': '#b45309', 'Eau': '#0284c7', 'Feu': '#dc2626', 'Incolore': '#e5e7eb',
-      'Électrique': '#eab308', 'Psy': '#9333ea', 'Plante': '#16a34a'
-    };
-
-    function energyPips(list) {
-      return list.map((e) => {
-        const t = e.energyType || 'Incolore';
-        return `<span class="pip" style="background:${TYPE_COLOR[t] || '#e5e7eb'}">${TYPE_EMOJI[t] || '⭐'}</span>`;
-      }).join('');
-    }
-
-    function renderPokemonSlot(pkm, owner, zone, index = 0) {
-      const isActive = zone === 'active';
-      if (!pkm) {
-        return `<div class="slot-empty">${isActive ? 'Actif' : ''}</div>`;
-      }
-      const remHp = Math.max(0, pkm.hp - pkm.damage);
-      const hpPct = Math.max(0, Math.min(100, Math.round((remHp / pkm.hp) * 100)));
-      const hpColor = hpPct > 50 ? 'bg-emerald-400' : hpPct > 25 ? 'bg-amber-400' : 'bg-red-500';
-
-      return `
-        <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="cursor-pointer transition active:scale-95">
-          <div class="relative tcg bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'}">
-            <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" loading="lazy" />
-            ${pkm.damage > 0 ? `<div class="dmg-badge">${pkm.damage}</div>` : ''}
-            <div class="absolute inset-x-1 bottom-1 h-1 bg-black/70 rounded-full overflow-hidden">
-              <div class="${hpColor} h-full" style="width:${hpPct}%"></div>
+      <!-- VIEW 4: DECK BUILDER -->
+      <section class="screen-view" id="view-builder">
+        <div class="overlay-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h3 style="margin:0; color:var(--gold);">🛠️ Constructeur & Explorateur de Decks</h3>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <select id="builderDeckSelect" class="audio-select" onchange="loadDeckInBuilder(this.value)"></select>
+              <button class="btn-action" onclick="playCurrentBuilderDeck()">⚔️ Jouer ce Deck dans l'Arène</button>
+              <button class="btn-secondary" onclick="clearCustomDeck()">🗑️ Vider</button>
             </div>
           </div>
-          <div class="flex justify-center flex-wrap gap-0.5 mt-0.5 min-h-[13px]">${energyPips(pkm.energies)}</div>
-        </div>
-      `;
-    }
-
-    function renderPrizeStack(count) {
-      // 3 Récompenses posées en léger décalage (les prises laissent un emplacement vide)
-      const step = 6;
-      let html = '';
-      for (let i = 0; i < 3; i++) {
-        const cls = i < count ? 'card-back' : 'slot-empty';
-        html += `<div class="${cls}" style="top:${i * step}px"></div>`;
-      }
-      return html;
-    }
-
-    function sizePrizeStack(el) {
-      const w = el.clientWidth || 40;
-      el.style.height = `${Math.round(w * 88 / 63) + 12}px`;
-    }
-
-    function openDiscardViewer(owner) {
-      if (!game) return;
-      const pile = game[owner].discard;
-      openPickerModal(
-        owner === 'player' ? '🗑 Ta pile de défausse' : '🗑 Défausse de Juliette',
-        pile.length ? `${pile.length} carte(s) — la plus récente en premier.` : 'Aucune carte défaussée pour le moment.',
-        [...pile].reverse(),
-        () => {},
-        true
-      );
-    }
-
-    function renderHandFan() {
-      const handContainer = document.getElementById('playerHandRow');
-      const hand = game.player.hand;
-      const W = handContainer.clientWidth || 360;
-      const H = handContainer.clientHeight || 110;
-      const cardW = Math.min(80, Math.round((H - 24) * 63 / 88));
-      const n = hand.length;
-      const step = n > 1 ? Math.min(cardW + 4, (W - cardW - 8) / (n - 1)) : 0;
-      const totalW = cardW + step * Math.max(0, n - 1);
-      const startX = (W - totalW) / 2;
-      const mid = (n - 1) / 2;
-
-      handContainer.innerHTML = hand.map((card, idx) => {
-        let badge = '';
-        let playable = false;
-        if (card.category === 'Pokémon' && card.stage === 'Base') {
-          playable = !game.player.active || game.player.bench.length < 5;
-          badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
-        } else if (card.category === 'Pokémon' && card.stage === 'Niveau 1') {
-          playable = true; badge = '⬆ Évol.';
-        } else if (card.category === 'Énergie') {
-          playable = !game.energyAttachedThisTurn; badge = game.energyAttachedThisTurn ? '1/1' : '+ ⚡';
-        } else if (card.category === 'Dresseur') {
-          playable = true; badge = '✨ Jouer';
-        }
-        if (game.activePlayer !== 'player') playable = false;
-        const rot = n > 1 ? (idx - mid) * Math.min(5, 28 / n) : 0;
-        const dy = Math.min(8, Math.abs(idx - mid) * Math.min(3, 14 / Math.max(n, 1)));
-        return `
-          <div onclick="openHandCardModal(${idx})" class="hand-card cursor-pointer"
-               style="left:${startX + idx * step}px; width:${cardW}px; transform: translateY(${dy}px) rotate(${rot}deg); z-index:${idx + 1}">
-            <div class="relative tcg bg-slate-900 card-shadow ${playable ? 'ring-2 ring-yellow-300/70' : ''}">
-              <img src="${card.img}" alt="${card.name}" class="w-full h-full object-cover rounded-[6px]" />
-              <div class="absolute inset-x-0 bottom-0 bg-black/80 text-[8px] font-bold text-center py-0.5 rounded-b-[6px] ${playable ? 'text-yellow-300' : 'text-slate-400'} truncate px-0.5">${badge}</div>
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#e2e8f0; background:rgba(30,41,59,0.8); padding:6px 10px; border-radius:6px;">
+            <span id="builderDeckStats">Cartes dans le deck : 60 / 60</span>
+            <span style="color:var(--gold);">Clique sur une carte à gauche pour la retirer, ou à droite pour l'ajouter (max 4x hors Énergie de base)</span>
+          </div>
+          <div style="display:flex; gap:10px; flex:1; min-height:0;">
+            <div style="flex:1; display:flex; flex-direction:column; border:1px solid #334155; border-radius:8px; padding:6px; overflow-y:auto;" id="builderCurrentList"></div>
+            <div style="flex:1.2; display:flex; flex-direction:column; border:1px solid #334155; border-radius:8px; padding:6px; overflow-y:auto;">
+              <input type="text" id="builderSearchInput" placeholder="Rechercher une carte à ajouter..." oninput="renderBuilderCatalog()" style="background:#0f172a; color:#fff; border:1px solid #475569; padding:6px; border-radius:6px; margin-bottom:6px;" />
+              <div class="cards-grid" id="builderCatalogGrid" style="grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));"></div>
             </div>
           </div>
-        `;
-      }).join('');
-    }
-
-    function renderBoard() {
-      if (!game) return;
-
-      // Compteurs
-      document.getElementById('aiPrizesCount').textContent = game.ai.prizes.length;
-      document.getElementById('aiDeckCount').textContent = game.ai.deck.length;
-      document.getElementById('aiHandCount').textContent = game.ai.hand.length;
-      document.getElementById('playerPrizesCount').textContent = game.player.prizes.length;
-      document.getElementById('playerDeckCount').textContent = game.player.deck.length;
-      document.getElementById('playerHandCount').textContent = game.player.hand.length;
-      document.getElementById('aiDiscardBtn').textContent = `🗑 ${game.ai.discard.length}`;
-      document.getElementById('playerDiscardBtn').textContent = `🗑 ${game.player.discard.length}`;
-
-      // Récompenses (piles décalées)
-      const aiPz = document.getElementById('aiPrizesZone');
-      const pPz = document.getElementById('playerPrizesZone');
-      aiPz.innerHTML = renderPrizeStack(game.ai.prizes.length);
-      pPz.innerHTML = renderPrizeStack(game.player.prizes.length);
-      sizePrizeStack(aiPz); sizePrizeStack(pPz);
-
-      document.getElementById('energyStatusText').innerHTML = game.energyAttachedThisTurn
-        ? '⚡ 1/1<br><span class="text-slate-400">énergie posée</span>'
-        : '⚡ 0/1<br><span class="text-slate-400">énergie dispo</span>';
-
-      document.getElementById('turnPhaseBadge').textContent = !game.player.active
-        ? 'Choisis ton Actif'
-        : game.activePlayer === 'player'
-          ? `Tour ${game.turnNumber} · À TOI`
-          : `Tour ${game.turnNumber} · Juliette…`;
-
-      // Actifs
-      document.getElementById('aiActiveSlot').innerHTML = renderPokemonSlot(game.ai.active, 'ai', 'active');
-      document.getElementById('playerActiveSlot').innerHTML = renderPokemonSlot(game.player.active, 'player', 'active');
-
-      const activeInfo = (pkm) => pkm
-        ? `<div class="font-extrabold text-white">${pkm.name}</div><div class="font-mono text-yellow-300">${Math.max(0, pkm.hp - pkm.damage)}/${pkm.hp} PV</div><div class="text-slate-400 text-[9px]">${TYPE_EMOJI[pkm.type] || ''} ${pkm.type || ''}</div>`
-        : '';
-      document.getElementById('aiActiveInfo').innerHTML = activeInfo(game.ai.active);
-      document.getElementById('playerActiveInfo').innerHTML = activeInfo(game.player.active);
-
-      // Bancs (5 emplacements chacun)
-      const benchHtml = (owner) => Array.from({ length: 5 }, (_, i) => renderPokemonSlot(game[owner].bench[i] || null, owner, 'bench', i)).join('');
-      document.getElementById('aiBenchRow').innerHTML = benchHtml('ai');
-      document.getElementById('playerBenchRow').innerHTML = benchHtml('player');
-
-      renderAttackStrip();
-      renderHandFan();
-    }
-
-    window.addEventListener('resize', () => { if (game) renderBoard(); });
-
-    function canPayAttackCost(pkm, costArray) {
-      if (!pkm) return false;
-      const available = pkm.energies.map((e) => e.energyType);
-      const reqSpecific = costArray.filter((c) => c !== 'Incolore');
-      const reqColorless = costArray.filter((c) => c === 'Incolore').length;
-
-      const pool = [...available];
-      for (const req of reqSpecific) {
-        const idx = pool.indexOf(req);
-        if (idx === -1) return false;
-        pool.splice(idx, 1);
-      }
-      return pool.length >= reqColorless;
-    }
-
-    function renderAttackStrip() {
-      const container = document.getElementById('attackButtonsContainer');
-      const endBtn = document.getElementById('endTurnBtn');
-      const retBtn = document.getElementById('retreatBtn');
-
-      if (!game || !game.player.active || game.activePlayer !== 'player') {
-        container.innerHTML = `<span class="text-[11px] text-slate-400 font-mono px-1">${!game?.player.active ? 'Pose d\'abord un Pokémon de Base !' : 'Juliette réfléchit...'}</span>`;
-        endBtn.disabled = true;
-        retBtn.disabled = true;
-        return;
-      }
-
-      endBtn.disabled = false;
-      retBtn.disabled = false;
-
-      const active = game.player.active;
-      container.innerHTML = (active.attacks || []).map((atk, i) => {
-        const payable = canPayAttackCost(active, atk.cost);
-        const costIcons = atk.cost.map((c) => TYPE_EMOJI[c] || '⭐').join('');
-        return `
-          <button
-            onclick="executePlayerAttack(${i})"
-            ${payable ? '' : 'disabled'}
-            class="px-2 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 shrink-0 transition ${
-              payable
-                ? 'bg-red-600 hover:bg-red-500 text-white shadow border border-red-400/50'
-                : 'bg-slate-800/60 text-slate-500 border border-white/5 cursor-not-allowed'
-            }"
-          >
-            <span>${costIcons}</span>
-            <span>${atk.name}</span>
-            <span class="font-mono text-yellow-300">${atk.damage}</span>
-          </button>
-        `;
-      }).join('');
-    }
-
-    // -----------------------------------------------------------------------
-    // 6. INTERACTION AVEC LES CARTES EN MAIN & SUR LE TERRAIN
-    // -----------------------------------------------------------------------
-    function inspectBoardPokemon(owner, zone, index) {
-      if (!game) return;
-      const target = zone === 'active' ? game[owner].active : game[owner].bench[index];
-      if (!target) return;
-
-      const modal = document.getElementById('cardModal');
-      document.getElementById('modalCardTitle').textContent = `${target.name} (${target.hp - target.damage}/${target.hp} PV)`;
-      document.getElementById('modalCardImg').src = target.img;
-
-      const eList = target.energies.map((e) => `${TYPE_EMOJI[e.energyType]} ${e.name}`).join(', ') || 'Aucune énergie attachée';
-      const atkDesc = (target.attacks || []).map((a) => `• <strong>${a.name} (${a.damage})</strong> : ${a.text}`).join('<br/>');
-      document.getElementById('modalCardDetails').innerHTML = `
-        <div><strong>Énergies :</strong> ${eList}</div>
-        <div><strong>Faiblesse :</strong> ${target.weakness ? TYPE_EMOJI[target.weakness] + ' ×2' : 'Aucune'} · <strong>Résistance :</strong> ${target.resistance ? TYPE_EMOJI[target.resistance] + ' -30' : 'Aucune'} · <strong>Retraite :</strong> ${target.retreat || 0} ⚡</div>
-        <div class="mt-1.5 pt-1.5 border-t border-white/10">${atkDesc}</div>
-      `;
-
-      const actionsEl = document.getElementById('modalCardActions');
-      actionsEl.innerHTML = '';
-
-      if (owner === 'player' && zone === 'active' && game.activePlayer === 'player') {
-        (target.attacks || []).forEach((atk, i) => {
-          const ok = canPayAttackCost(target, atk.cost);
-          const btn = document.createElement('button');
-          btn.className = `w-full py-2 rounded-xl text-xs font-bold ${ok ? 'bg-red-600 text-white' : 'bg-slate-800 text-slate-500'}`;
-          btn.textContent = `⚔️ Attaquer : ${atk.name} (${atk.damage} dégâts)`;
-          btn.disabled = !ok;
-          btn.onclick = () => { closeCardModal(); executePlayerAttack(i); };
-          actionsEl.appendChild(btn);
-        });
-      }
-
-      modal.classList.remove('hidden');
-    }
-
-    function openHandCardModal(handIndex) {
-      if (!game || game.activePlayer !== 'player') return;
-      const card = game.player.hand[handIndex];
-      if (!card) return;
-
-      const modal = document.getElementById('cardModal');
-      document.getElementById('modalCardTitle').textContent = card.name;
-      document.getElementById('modalCardImg').src = card.img;
-
-      if (card.category === 'Pokémon') {
-        const atkDesc = (card.attacks || []).map((a) => `• <strong>${a.name} (${a.damage})</strong> : ${a.text}`).join('<br/>');
-        document.getElementById('modalCardDetails').innerHTML = `
-          <div><strong>${card.stage}</strong> · ${card.hp} PV · Type ${TYPE_EMOJI[card.type] || ''} ${card.type}</div>
-          <div class="mt-1">${atkDesc}</div>
-        `;
-      } else {
-        document.getElementById('modalCardDetails').innerHTML = `<div>${card.text || ''}</div>`;
-      }
-
-      const actionsEl = document.getElementById('modalCardActions');
-      actionsEl.innerHTML = '';
-
-      // CAS 1 : Pokémon de Base
-      if (card.category === 'Pokémon' && card.stage === 'Base') {
-        if (!game.player.active) {
-          const btn = document.createElement('button');
-          btn.className = 'w-full py-2.5 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950';
-          btn.textContent = `👑 Choisir ${card.name} comme Pokémon Actif`;
-          btn.onclick = () => {
-            game.player.hand.splice(handIndex, 1);
-            game.player.active = card;
-            playPokemonCry(card.dex);
-            closeCardModal();
-            sayJuliette(`Super, ${card.name} est ton Pokémon Actif ! Tu peux aussi poser des Pokémon sur ton Banc ou attacher 1 Énergie.`);
-            renderBoard();
-          };
-          actionsEl.appendChild(btn);
-        } else if (game.player.bench.length < 5) {
-          const btn = document.createElement('button');
-          btn.className = 'w-full py-2.5 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950';
-          btn.textContent = `➕ Poser ${card.name} sur le Banc`;
-          btn.onclick = () => {
-            game.player.hand.splice(handIndex, 1);
-            game.player.bench.push(card);
-            playPokemonCry(card.dex);
-            closeCardModal();
-            sayJuliette(`${card.name} rejoint ton Banc !`);
-            renderBoard();
-          };
-          actionsEl.appendChild(btn);
-        }
-      }
-
-      // CAS 2 : Pokémon Niveau 1 (Évolution)
-      if (card.category === 'Pokémon' && card.stage === 'Niveau 1' && game.player.active) {
-        const targets = [];
-        if (
-          game.player.active.name === card.evolvesFrom &&
-          game.player.active.turnsInPlay >= 1 &&
-          !game.player.active.evolvedThisTurn
-        ) {
-          targets.push({ label: `Actif : ${game.player.active.name}`, zone: 'active', idx: 0 });
-        }
-        game.player.bench.forEach((b, bIdx) => {
-          if (b.name === card.evolvesFrom && b.turnsInPlay >= 1 && !b.evolvedThisTurn) {
-            targets.push({ label: `Banc : ${b.name}`, zone: 'bench', idx: bIdx });
-          }
-        });
-
-        if (targets.length === 0) {
-          const info = document.createElement('div');
-          info.className = 'text-amber-300 text-xs text-center py-1';
-          info.textContent = `Il faut un ${card.evolvesFrom} en jeu depuis au moins 1 tour pour évoluer en ${card.name}.`;
-          actionsEl.appendChild(info);
-        } else {
-          targets.forEach((t) => {
-            const btn = document.createElement('button');
-            btn.className = 'w-full py-2.5 rounded-xl text-xs font-extrabold bg-yellow-400 text-slate-950';
-            btn.textContent = `⬆️ Faire évoluer ${t.label} en ${card.name}`;
-            btn.onclick = () => {
-              game.player.hand.splice(handIndex, 1);
-              evolvePokemon('player', t.zone, t.idx, card);
-              closeCardModal();
-              renderBoard();
-            };
-            actionsEl.appendChild(btn);
-          });
-        }
-      }
-
-      // CAS 3 : Carte Énergie (1 par tour)
-      if (card.category === 'Énergie' && game.player.active) {
-        if (game.energyAttachedThisTurn) {
-          const info = document.createElement('div');
-          info.className = 'text-amber-300 text-xs text-center py-1';
-          info.textContent = 'Tu as déjà attaché 1 carte Énergie ce tour-ci (règle officielle : 1 par tour).';
-          actionsEl.appendChild(info);
-        } else {
-          const targets = [{ label: `Actif : ${game.player.active.name}`, ref: game.player.active }];
-          game.player.bench.forEach((b) => targets.push({ label: `Banc : ${b.name}`, ref: b }));
-
-          targets.forEach((t) => {
-            const btn = document.createElement('button');
-            btn.className = 'w-full py-2 rounded-xl text-xs font-bold bg-sky-500 text-slate-950';
-            btn.textContent = `⚡ Attacher à ${t.label}`;
-            btn.onclick = () => {
-              game.player.hand.splice(handIndex, 1);
-              t.ref.energies.push(card);
-              game.energyAttachedThisTurn = true;
-              closeCardModal();
-              sayJuliette(`Énergie ${card.energyType} attachée à ${t.ref.name} !`);
-              renderBoard();
-            };
-            actionsEl.appendChild(btn);
-          });
-        }
-      }
-
-      // CAS 4 : Carte Dresseur
-      if (card.category === 'Dresseur' && game.player.active) {
-        const btn = document.createElement('button');
-        btn.className = 'w-full py-2.5 rounded-xl text-xs font-extrabold bg-purple-500 text-white';
-        btn.textContent = `✨ Utiliser la carte Dresseur ${card.name}`;
-        btn.onclick = () => {
-          closeCardModal();
-          playTrainerCard(handIndex);
-        };
-        actionsEl.appendChild(btn);
-      }
-
-      modal.classList.remove('hidden');
-    }
-
-    function closeCardModal() {
-      document.getElementById('cardModal').classList.add('hidden');
-    }
-
-    function evolvePokemon(owner, zone, benchIdx, evoCard) {
-      const side = game[owner];
-      const basePkm = zone === 'active' ? side.active : side.bench[benchIdx];
-      evoCard.damage = basePkm.damage;
-      evoCard.energies = [...basePkm.energies];
-      evoCard.turnsInPlay = basePkm.turnsInPlay;
-      evoCard.evolvedThisTurn = true;
-
-      if (zone === 'active') {
-        side.active = evoCard;
-      } else {
-        side.bench[benchIdx] = evoCard;
-      }
-      playPokemonCry(evoCard.dex);
-      sayJuliette(`Waouh ! ${basePkm.name} évolue en ${evoCard.name} (${evoCard.hp} PV) !`);
-    }
-
-    // -----------------------------------------------------------------------
-    // 7. EFFETS EXACTS DES 7 CARTES DRESSEUR OFFICIELLES
-    // -----------------------------------------------------------------------
-    async function playTrainerCard(handIndex) {
-      const card = game.player.hand[handIndex];
-      if (!card) return;
-
-      // 1. Léo (Piochez 2 cartes)
-      if (card.id === 'base1-91') {
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        const drawn = game.player.deck.splice(0, 2);
-        game.player.hand.push(...drawn);
-        sayJuliette(`Tu joues Léo et tu pioches ${drawn.length} carte(s) !`);
-        renderBoard();
-        return;
-      }
-
-      // 2. Potion (Retirez jusqu'à 20 dégâts)
-      if (card.id === 'base1-94') {
-        const damaged = [game.player.active, ...game.player.bench].filter((p) => p && p.damage > 0);
-        if (damaged.length === 0) {
-          sayJuliette('Aucun de tes Pokémon n\'a de dégâts à soigner avec Potion.');
-          return;
-        }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        damaged.sort((a, b) => b.damage - a.damage);
-        damaged[0].damage = Math.max(0, damaged[0].damage - 20);
-        sayJuliette(`Potion utilisée : ${damaged[0].name} récupère 20 PV !`);
-        renderBoard();
-        return;
-      }
-
-      // 3. Suppression d'Énergie (Défaussez 1 Énergie adverse)
-      if (card.id === 'base1-92') {
-        const aiTargets = [game.ai.active, ...game.ai.bench].filter((p) => p && p.energies.length > 0);
-        if (aiTargets.length === 0) {
-          sayJuliette('Juliette n\'a aucune carte Énergie attachée à ses Pokémon !');
-          return;
-        }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        const victim = aiTargets[0];
-        const removed = victim.energies.pop();
-        game.ai.discard.push(removed);
-        sayJuliette(`Suppression d'Énergie ! Tu défausses 1 ${removed.name} de mon ${victim.name} !`);
-        renderBoard();
-        return;
-      }
-
-      // 4. Rafale de vent (Échangez l'Actif adverse avec son Banc)
-      if (card.id === 'base1-93') {
-        if (game.ai.bench.length === 0) {
-          sayJuliette('Je n\'ai aucun Pokémon sur mon Banc pour utiliser Rafale de vent !');
-          return;
-        }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        openPickerModal(
-          '🌪️ Rafale de vent',
-          'Choisis quel Pokémon du Banc de Juliette envoyer au combat :',
-          game.ai.bench,
-          (chosenIdx) => {
-            const oldActive = game.ai.active;
-            game.ai.active = game.ai.bench[chosenIdx];
-            game.ai.bench[chosenIdx] = oldActive;
-            playPokemonCry(game.ai.active.dex);
-            sayJuliette(`Rafale de vent ! Tu forces mon ${game.ai.active.name} à venir en Pokémon Actif !`);
-            renderBoard();
-          }
-        );
-        return;
-      }
-
-      // 5. Transfert (Échangez votre Actif avec votre Banc)
-      if (card.id === 'base1-95') {
-        if (game.player.bench.length === 0) {
-          sayJuliette('Tu n\'as aucun Pokémon sur ton Banc pour utiliser Transfert !');
-          return;
-        }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        openPickerModal(
-          '🔄 Transfert',
-          'Choisis le Pokémon de ton Banc qui prend la place de ton Pokémon Actif :',
-          game.player.bench,
-          (chosenIdx) => {
-            const oldActive = game.player.active;
-            game.player.active = game.player.bench[chosenIdx];
-            game.player.bench[chosenIdx] = oldActive;
-            playPokemonCry(game.player.active.dex);
-            sayJuliette(`Transfert ! ${game.player.active.name} passe en Pokémon Actif sans coût de retraite !`);
-            renderBoard();
-          }
-        );
-        return;
-      }
-
-      // 6. Poké Balle (Lancez 1 pièce : si Face, cherchez un Pokémon dans votre deck)
-      if (card.id === 'base2-64') {
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        const isHeads = await flipCoinAnimated('Poké Balle');
-        if (!isHeads) {
-          sayJuliette('Pile ! Dommage, la Poké Balle a échoué.');
-          renderBoard();
-          return;
-        }
-        const pkmsInDeck = game.player.deck.filter((c) => c.category === 'Pokémon');
-        if (pkmsInDeck.length === 0) {
-          sayJuliette('Face ! Mais il n\'y a plus de Pokémon dans ton deck.');
-          renderBoard();
-          return;
-        }
-        openPickerModal(
-          '🔴 Poké Balle réussie (FACE !)',
-          'Choisis un Pokémon de ton deck à ajouter dans ta main :',
-          pkmsInDeck,
-          (chosenIdx) => {
-            const picked = pkmsInDeck[chosenIdx];
-            game.player.deck = game.player.deck.filter((c) => c.uid !== picked.uid);
-            game.player.deck = shuffle(game.player.deck);
-            game.player.hand.push(picked);
-            sayJuliette(`Tu as ajouté ${picked.name} à ta main grâce à la Poké Balle !`);
-            renderBoard();
-          }
-        );
-        return;
-      }
-
-      // 7. Pokédex (Regardez les 5 premières cartes du deck et choisissez celle à mettre sur le dessus)
-      if (card.id === 'base1-87') {
-        if (game.player.deck.length === 0) return;
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        const top5 = game.player.deck.slice(0, 5);
-        openPickerModal(
-          '📟 Pokédex (5 premières cartes du deck)',
-          'Choisis la carte que tu veux placer tout en haut de ton deck pour ta prochaine pioche :',
-          top5,
-          (chosenIdx) => {
-            const chosen = top5[chosenIdx];
-            const rest = top5.filter((_, i) => i !== chosenIdx);
-            game.player.deck.splice(0, top5.length, chosen, ...rest);
-            sayJuliette(`Pokédex : ${chosen.name} est placé sur le dessus de ton deck !`);
-            renderBoard();
-          }
-        );
-      }
-    }
-
-    // -----------------------------------------------------------------------
-    // 8. RETRAITE, COMBAT, PILE OU FACE & RÉCOMPENSES
-    // -----------------------------------------------------------------------
-    function openRetreatModal() {
-      if (!game || game.activePlayer !== 'player' || !game.player.active) return;
-      if (game.retreatedThisTurn) {
-        sayJuliette('Tu as déjà battu en retraite une fois ce tour-ci.');
-        return;
-      }
-      if (game.player.bench.length === 0) {
-        sayJuliette('Tu n\'as aucun Pokémon sur ton Banc pour battre en retraite !');
-        return;
-      }
-      const cost = game.player.active.retreat || 0;
-      if (game.player.active.energies.length < cost) {
-        sayJuliette(`Il faut ${cost} Énergie(s) attachée(s) à ${game.player.active.name} pour battre en retraite.`);
-        return;
-      }
-
-      openPickerModal(
-        `🔄 Retraite (Coût : ${cost} Énergie)`,
-        `Choisis quel Pokémon de ton Banc remplace ${game.player.active.name} :`,
-        game.player.bench,
-        (chosenIdx) => {
-          for (let i = 0; i < cost; i++) {
-            const discarded = game.player.active.energies.pop();
-            if (discarded) game.player.discard.push(discarded);
-          }
-          const oldActive = game.player.active;
-          game.player.active = game.player.bench[chosenIdx];
-          game.player.bench[chosenIdx] = oldActive;
-          game.retreatedThisTurn = true;
-          playPokemonCry(game.player.active.dex);
-          sayJuliette(`${oldActive.name} bat en retraite ! ${game.player.active.name} entre en jeu !`);
-          renderBoard();
-        }
-      );
-    }
-
-    function flipCoinAnimated(label = 'Lancer de Pièce') {
-      return new Promise((resolve) => {
-        const isHeads = Math.random() < 0.5;
-        const modal = document.getElementById('coinModal');
-        const visual = document.getElementById('coinVisual');
-        const resText = document.getElementById('coinResultText');
-        const subText = document.getElementById('coinSubText');
-
-        document.getElementById('coinTitle').textContent = label;
-        visual.classList.remove('coin-anim');
-        void visual.offsetWidth;
-        visual.classList.add('coin-anim');
-
-        visual.textContent = isHeads ? '🔴' : '⚡';
-        resText.textContent = isHeads ? 'FACE !' : 'PILE !';
-        resText.className = isHeads ? 'text-lg font-black text-emerald-400 mt-4' : 'text-lg font-black text-amber-400 mt-4';
-        subText.textContent = isHeads ? 'Lancer réussi !' : 'C\'est Pile.';
-
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-          modal.classList.add('hidden');
-          resolve(isHeads);
-        }, 1150);
-      });
-    }
-
-    async function executeAttack(attackerOwner, attackIndex) {
-      const atkSide = game[attackerOwner];
-      const defOwner = attackerOwner === 'player' ? 'ai' : 'player';
-      const defSide = game[defOwner];
-
-      const attacker = atkSide.active;
-      const defender = defSide.active;
-      const attack = attacker.attacks[attackIndex];
-
-      playPokemonCry(attacker.dex);
-
-      let baseDamage = attack.damage || 0;
-      let extraLog = '';
-
-      // Effets spéciaux d'attaque du Set de Base / Jungle
-      if (attack.effect === 'karate_chop') {
-        const counters = Math.floor(attacker.damage / 10);
-        baseDamage = Math.max(0, 50 - counters * 10);
-      } else if (attack.effect === 'fury_attack_2coins') {
-        const c1 = await flipCoinAnimated(`${attacker.name} — Furie (Pièce 1/2)`);
-        const c2 = await flipCoinAnimated(`${attacker.name} — Furie (Pièce 2/2)`);
-        const heads = (c1 ? 1 : 0) + (c2 ? 1 : 0);
-        baseDamage = heads * 10;
-        extraLog = ` (${heads}/2 Faces)`;
-      } else if (attack.effect === 'pay_day') {
-        const heads = await flipCoinAnimated(`${attacker.name} — Jackpot`);
-        if (heads && atkSide.deck.length > 0) {
-          atkSide.hand.push(atkSide.deck.shift());
-          extraLog = ' (Face : +1 carte piochée !)';
-        } else {
-          extraLog = ' (Pile)';
-        }
-      } else if (attack.effect === 'discard_fire_1') {
-        const fireIdx = attacker.energies.findIndex((e) => e.energyType === 'Feu');
-        if (fireIdx !== -1) {
-          const [removed] = attacker.energies.splice(fireIdx, 1);
-          atkSide.discard.push(removed);
-        } else if (attacker.energies.length > 0) {
-          atkSide.discard.push(attacker.energies.pop());
-        }
-        extraLog = ' (1 Énergie Feu défaussée)';
-      }
-
-      // Calcul Faiblesse (×2) et Résistance (-30)
-      let finalDamage = baseDamage;
-      if (finalDamage > 0) {
-        if (defender.weakness === attacker.type) {
-          finalDamage *= 2;
-          extraLog += ' [Faiblesse ×2 !]';
-        }
-        if (defender.resistance === attacker.type) {
-          finalDamage = Math.max(0, finalDamage - 30);
-          extraLog += ' [Résistance -30]';
-        }
-      }
-
-      defender.damage += finalDamage;
-
-      // Dégâts de recul (Machopeur Sacrifice 20 / Arcanin Bélier 30)
-      if (attack.effect === 'recoil_20') {
-        attacker.damage += 20;
-        extraLog += ` (${attacker.name} subit 20 dégâts de recul)`;
-      } else if (attack.effect === 'recoil_30') {
-        attacker.damage += 30;
-        extraLog += ` (${attacker.name} subit 30 dégâts de recul)`;
-      }
-
-      // Animation visuelle de choc
-      const targetSlotId = defOwner === 'ai' ? 'aiActiveSlot' : 'playerActiveSlot';
-      const slotEl = document.getElementById(targetSlotId);
-      slotEl.classList.add('shake-hit');
-      setTimeout(() => slotEl.classList.remove('shake-hit'), 450);
-
-      sayJuliette(`${attacker.name} utilise <strong>${attack.name}</strong> : ${finalDamage} dégâts sur ${defender.name}${extraLog} !`);
-      renderBoard();
-
-      await new Promise((r) => setTimeout(r, 700));
-
-      // Vérifier K.O. du défenseur
-      if (defender.damage >= defender.hp) {
-        await handleKnockOut(defOwner, attackerOwner);
-      }
-
-      // Vérifier K.O. par recul de l'attaquant
-      if (!game.gameOver && attacker.damage >= attacker.hp) {
-        await handleKnockOut(attackerOwner, defOwner);
-      }
-    }
-
-    async function handleKnockOut(victimOwner, winnerOwner) {
-      const victimSide = game[victimOwner];
-      const winnerSide = game[winnerOwner];
-      const koPkm = victimSide.active;
-
-      victimSide.discard.push(koPkm, ...koPkm.energies);
-      victimSide.active = null;
-
-      // Récompense
-      if (winnerSide.prizes.length > 0) {
-        const prize = winnerSide.prizes.pop();
-        winnerSide.hand.push(prize);
-        sayJuliette(
-          `${koPkm.name} est K.O. ! ${winnerOwner === 'player' ? `Tu récupères 1 carte Récompense (${prize.name}) !` : 'Je récupère 1 carte Récompense !'}`
-        );
-      }
-
-      renderBoard();
-
-      // Conditions de victoire
-      if (winnerSide.prizes.length === 0) {
-        endMatch(winnerOwner, 'Toutes les 3 cartes Récompense ont été remportées !');
-        return;
-      }
-      if (victimSide.bench.length === 0) {
-        endMatch(winnerOwner, `${victimOwner === 'player' ? 'Tu n\'as' : 'Juliette n\'a'} plus aucun Pokémon sur le Banc !`);
-        return;
-      }
-
-      // Promotion d'un Pokémon du Banc
-      if (victimOwner === 'ai') {
-        victimSide.bench.sort((a, b) => b.energies.length - a.energies.length || (b.hp - b.damage) - (a.hp - a.damage));
-        victimSide.active = victimSide.bench.shift();
-        playPokemonCry(victimSide.active.dex);
-        sayJuliette(`J'envoie ${victimSide.active.name} en Pokémon Actif !`);
-        renderBoard();
-      } else {
-        await new Promise((resolve) => {
-          openPickerModal(
-            '💥 Ton Pokémon Actif est K.O. !',
-            'Choisis quel Pokémon de ton Banc monte au combat :',
-            victimSide.bench,
-            (chosenIdx) => {
-              victimSide.active = victimSide.bench.splice(chosenIdx, 1)[0];
-              playPokemonCry(victimSide.active.dex);
-              renderBoard();
-              resolve();
-            },
-            false
-          );
-        });
-      }
-    }
-
-    async function executePlayerAttack(attackIndex) {
-      if (!game || game.activePlayer !== 'player' || !game.player.active) return;
-      await executeAttack('player', attackIndex);
-      if (!game.gameOver) {
-        endPlayerTurn();
-      }
-    }
-
-    // -----------------------------------------------------------------------
-    // 9. GESTION DES TOURS & IA DE JULIETTE
-    // -----------------------------------------------------------------------
-    function endPlayerTurn() {
-      if (!game || game.gameOver) return;
-      if (!game.player.active) {
-        sayJuliette('Tu dois d\'abord choisir ton Pokémon Actif dans ta main !');
-        return;
-      }
-
-      // Incrémenter l'ancienneté des Pokémon du joueur
-      game.player.active.turnsInPlay += 1;
-      game.player.active.evolvedThisTurn = false;
-      game.player.bench.forEach((b) => {
-        b.turnsInPlay += 1;
-        b.evolvedThisTurn = false;
-      });
-
-      game.activePlayer = 'ai';
-      game.energyAttachedThisTurn = false;
-      game.retreatedThisTurn = false;
-      renderBoard();
-
-      setTimeout(runJulietteTurn, 850);
-    }
-
-    async function runJulietteTurn() {
-      if (!game || game.gameOver) return;
-
-      // 1. Pioche obligatoire de Juliette
-      if (game.ai.deck.length === 0) {
-        endMatch('player', 'Juliette n\'a plus de cartes à piocher dans son deck !');
-        return;
-      }
-      game.ai.hand.push(game.ai.deck.shift());
-
-      // Incrémenter l'ancienneté des Pokémon de Juliette
-      if (game.ai.active) {
-        game.ai.active.turnsInPlay += 1;
-        game.ai.active.evolvedThisTurn = false;
-      }
-      game.ai.bench.forEach((b) => {
-        b.turnsInPlay += 1;
-        b.evolvedThisTurn = false;
-      });
-
-      // 2. Poser des Pokémon de Base sur le Banc
-      const basics = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
-      for (const b of basics) {
-        if (game.ai.bench.length < 5) {
-          game.ai.hand = game.ai.hand.filter((c) => c.uid !== b.uid);
-          game.ai.bench.push(b);
-          sayJuliette(`Juliette pose ${b.name} sur son Banc.`);
-          renderBoard();
-          await new Promise((r) => setTimeout(r, 550));
-        }
-      }
-
-      // 3. Évolutions possibles pour Juliette
-      const evos = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Niveau 1');
-      for (const evo of evos) {
-        if (game.ai.active && game.ai.active.name === evo.evolvesFrom && game.ai.active.turnsInPlay >= 1 && !game.ai.active.evolvedThisTurn) {
-          game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
-          evolvePokemon('ai', 'active', 0, evo);
-          renderBoard();
-          await new Promise((r) => setTimeout(r, 600));
-        } else {
-          const bIdx = game.ai.bench.findIndex((b) => b.name === evo.evolvesFrom && b.turnsInPlay >= 1 && !b.evolvedThisTurn);
-          if (bIdx !== -1) {
-            game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
-            evolvePokemon('ai', 'bench', bIdx, evo);
-            renderBoard();
-            await new Promise((r) => setTimeout(r, 600));
-          }
-        }
-      }
-
-      // 4. Jouer Léo ou Suppression d'Énergie si en main
-      const leoIdx = game.ai.hand.findIndex((c) => c.id === 'base1-91');
-      if (leoIdx !== -1 && game.ai.deck.length >= 2) {
-        const [leo] = game.ai.hand.splice(leoIdx, 1);
-        game.ai.discard.push(leo);
-        game.ai.hand.push(...game.ai.deck.splice(0, 2));
-        sayJuliette('Juliette utilise la carte Dresseur Léo et pioche 2 cartes !');
-        renderBoard();
-        await new Promise((r) => setTimeout(r, 600));
-      }
-
-      // 5. Attacher 1 Énergie
-      const energyIdx = game.ai.hand.findIndex((c) => c.category === 'Énergie');
-      if (energyIdx !== -1 && game.ai.active) {
-        const [eCard] = game.ai.hand.splice(energyIdx, 1);
-        const maxNeeded = Math.max(...(game.ai.active.attacks || []).map((a) => a.cost.length), 1);
-        if (game.ai.active.energies.length < maxNeeded || game.ai.bench.length === 0) {
-          game.ai.active.energies.push(eCard);
-          sayJuliette(`Juliette attache ${eCard.name} à ${game.ai.active.name}.`);
-        } else {
-          game.ai.bench[0].energies.push(eCard);
-          sayJuliette(`Juliette attache ${eCard.name} à ${game.ai.bench[0].name} sur son Banc.`);
-        }
-        renderBoard();
-        await new Promise((r) => setTimeout(r, 600));
-      }
-
-      // 6. Choisir la meilleure attaque payable
-      if (game.ai.active) {
-        const attacks = game.ai.active.attacks || [];
-        let bestIdx = -1;
-        for (let i = attacks.length - 1; i >= 0; i--) {
-          if (canPayAttackCost(game.ai.active, attacks[i].cost)) {
-            bestIdx = i;
-            break;
-          }
-        }
-        if (bestIdx !== -1) {
-          await executeAttack('ai', bestIdx);
-        } else {
-          sayJuliette(`Mon ${game.ai.active.name} n'a pas encore assez d'Énergie pour attaquer. À toi de jouer !`);
-        }
-      }
-
-      if (game && !game.gameOver) {
-        startPlayerTurn();
-      }
-    }
-
-    function startPlayerTurn() {
-      game.turnNumber += 1;
-      game.activePlayer = 'player';
-      game.energyAttachedThisTurn = false;
-      game.retreatedThisTurn = false;
-
-      if (game.player.deck.length === 0) {
-        endMatch('ai', 'Tu n\'as plus aucune carte à piocher dans ton deck !');
-        return;
-      }
-      const drawn = game.player.deck.shift();
-      game.player.hand.push(drawn);
-      sayJuliette(`Début du tour ${game.turnNumber} : tu pioches <strong>${drawn.name}</strong> !`);
-      renderBoard();
-    }
-
-    function endMatch(winner, reason) {
-      game.gameOver = true;
-      renderBoard();
-      setTimeout(() => {
-        openPickerModal(
-          winner === 'player' ? '🏆 VICTOIRE ! Tu as battu Juliette !' : '💫 Juliette remporte la partie !',
-          `${reason} Veux-tu rejouer une partie ?`,
-          [],
-          () => {},
-          true
-        );
-        const grid = document.getElementById('pickerGrid');
-        grid.className = 'flex flex-col gap-2';
-        grid.innerHTML = `
-          <button onclick="closePickerModal(); startMatch('${game.player.deckKey}')" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
-            🔄 Rejouer avec le Deck ${game.player.deckKey}
-          </button>
-          <button onclick="closePickerModal(); confirmQuitMatch()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
-            🏠 Choisir un autre Demi-Deck
-          </button>
-        `;
-      }, 400);
-    }
-
-    // -----------------------------------------------------------------------
-    // 10. MODAL DE SÉLECTION & QUIZ DE L'ACADÉMIE POKÉMON (1999)
-    // -----------------------------------------------------------------------
-    function openPickerModal(title, subtitle, cardsList, onPick, allowClose = true) {
-      document.getElementById('pickerTitle').textContent = title;
-      document.getElementById('pickerSubtitle').textContent = subtitle;
-      document.getElementById('pickerCloseBtn').style.display = allowClose ? 'block' : 'none';
-
-      const grid = document.getElementById('pickerGrid');
-      grid.className = 'grid grid-cols-2 sm:grid-cols-3 gap-2.5 overflow-y-auto p-1';
-      grid.innerHTML = cardsList.map((c, idx) => `
-        <div
-          onclick="window._pickerCallback(${idx})"
-          class="cursor-pointer rounded-xl overflow-hidden bg-slate-800 border border-white/15 hover:border-yellow-400 transition p-1.5 flex flex-col items-center"
-        >
-          <img src="${c.img}" alt="${c.name}" class="w-28 rounded-lg object-contain" />
-          <span class="text-xs font-bold text-white mt-1">${c.name}</span>
-          ${c.hp ? `<span class="text-[10px] font-mono text-yellow-300">${c.hp - (c.damage || 0)}/${c.hp} PV</span>` : ''}
         </div>
-      `).join('');
+      </section>
 
-      window._pickerCallback = (idx) => {
-        closePickerModal();
-        onPick(idx);
-      };
+      <!-- VIEW 5: CARD COLLECTOR (241 French Cards) -->
+      <section class="screen-view" id="view-collector">
+        <div class="overlay-panel">
+          <div class="filter-bar">
+            <strong style="color:var(--gold);">📚 Collection (241 cartes VF) :</strong>
+            <input type="text" id="collectorSearch" placeholder="Nom (ex: Dracaufeu, Pikachu, Léo...)" oninput="renderCollectorGrid()" />
+            <select id="collectorSetFilter" onchange="renderCollectorGrid()">
+              <option value="all">Toutes Extensions (4)</option>
+              <option value="0">01 • Set de Base (102)</option>
+              <option value="1">02 • Jungle (64)</option>
+              <option value="2">03 • Fossile (62)</option>
+              <option value="3">04 • Team Rocket (Sélection)</option>
+            </select>
+            <select id="collectorTypeFilter" onchange="renderCollectorGrid()">
+              <option value="all">Tous Types / Catégories</option>
+              <option value="pokemon">Pokémon uniquement</option>
+              <option value="trainer">Dresseurs uniquement</option>
+              <option value="energy">Énergies uniquement</option>
+              <option value="type_1">🔥 Feu</option>
+              <option value="type_5">💧 Eau</option>
+              <option value="type_2">🌿 Plante</option>
+              <option value="type_3">⚡ Électrik</option>
+              <option value="type_4">🔮 Psy</option>
+              <option value="type_0">🥊 Combat</option>
+              <option value="type_6">⭐ Incolore</option>
+            </select>
+            <span class="badge" id="collectorCountBadge">241 cartes</span>
+          </div>
+          <div class="cards-grid" id="collectorGrid"></div>
+        </div>
+      </section>
 
-      document.getElementById('pickerModal').classList.remove('hidden');
-    }
-
-    function closePickerModal() {
-      document.getElementById('pickerModal').classList.add('hidden');
-    }
-
-    const ACADEMY_QUESTIONS = [
-      {
-        q: '1. Combien de cartes Énergie peux-tu attacher à tes Pokémon par tour ?',
-        opts: ['1 seule par tour', 'Autant qu\'on veut', '2 par tour'],
-        ans: 0
-      },
-      {
-        q: '2. Peut-on faire évoluer un Pokémon le tour même où il a été posé en jeu ?',
-        opts: ['Oui, immédiatement', 'Non, il faut attendre le tour suivant', 'Seulement avec une Potion'],
-        ans: 1
-      },
-      {
-        q: '3. Combien de Pokémon au maximum peux-tu avoir sur ton Banc ?',
-        opts: ['3 Pokémon', '5 Pokémon', '6 Pokémon'],
-        ans: 1
-      },
-      {
-        q: '4. Que fait la carte Dresseur « Léo » (Set de Base 91) ?',
-        opts: ['Soigne 20 dégâts', 'Pioche 2 cartes', 'Échange le Pokémon Actif'],
-        ans: 1
-      }
-    ];
-
-    function openAcademyModal() {
-      const box = document.getElementById('academyContent');
-      box.innerHTML = ACADEMY_QUESTIONS.map((item, qIdx) => `
-        <div class="p-3 rounded-xl bg-black/40 border border-white/10">
-          <div class="font-bold text-white mb-2">${item.q}</div>
-          <div class="flex flex-col gap-1.5">
-            ${item.opts.map((opt, oIdx) => `
-              <button
-                onclick="this.className = ${oIdx === item.ans} ? 'text-left px-3 py-1.5 rounded-lg bg-emerald-500/30 border border-emerald-400 text-emerald-200 font-bold' : 'text-left px-3 py-1.5 rounded-lg bg-red-500/30 border border-red-400 text-red-200'"
-                class="text-left px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 transition"
-              >
-                ${opt}
-              </button>
-            `).join('')}
+      <!-- VIEW 6: POKEDEX & TIPS -->
+      <section class="screen-view" id="view-pokedex">
+        <div class="overlay-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; color:var(--gold);">🔍 Encyclopédie Pokédex (Cris Originaux) & 40 Astuces Officielles</h3>
+            <span class="badge">Extrait de tips.bin, pokestrings.bin & Battle.pak</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; flex:1; min-height:0;">
+            <div style="overflow-y:auto; border:1px solid #334155; border-radius:8px; padding:8px;" id="tipsListContainer"></div>
+            <div style="overflow-y:auto; border:1px solid #334155; border-radius:8px; padding:8px;" id="stringsListContainer"></div>
           </div>
         </div>
-      `).join('');
-      document.getElementById('academyModal').classList.remove('hidden');
-    }
+      </section>
 
-    // Pull-to-refresh (menu uniquement, tactile + souris)
-    (function initPullToRefresh() {
-      const el = document.getElementById('menuScreen');
-      const ind = document.createElement('div');
-      ind.style.cssText = 'position:fixed;top:0;left:50%;transform:translate(-50%,-48px);z-index:70;padding:6px 12px;border-radius:999px;background:#0f172a;border:1px solid rgba(250,204,21,.5);color:#fde047;font:700 11px Inter,sans-serif;transition:transform .15s';
-      ind.textContent = '↓ Tirer pour rafraîchir';
-      document.body.appendChild(ind);
-      let y0 = null, dist = 0;
-      const start = (y) => { if (el.scrollTop <= 0 && !el.classList.contains('hidden')) { y0 = y; dist = 0; } };
-      const move = (y) => {
-        if (y0 === null) return;
-        dist = Math.max(0, Math.min(120, y - y0));
-        ind.style.transform = `translate(-50%, ${dist - 48}px)`;
-        ind.textContent = dist > 80 ? '↻ Relâcher pour rafraîchir' : '↓ Tirer pour rafraîchir';
-      };
-      const end = () => {
-        if (y0 === null) return;
-        if (dist > 80) { if (navigator.vibrate) navigator.vibrate(15); location.reload(); }
-        ind.style.transform = 'translate(-50%,-48px)'; y0 = null;
-      };
-      el.addEventListener('touchstart', (e) => start(e.touches[0].clientY), { passive: true });
-      el.addEventListener('touchmove', (e) => move(e.touches[0].clientY), { passive: true });
-      el.addEventListener('touchend', end);
-      el.addEventListener('mousedown', (e) => start(e.clientY));
-      window.addEventListener('mousemove', (e) => { if (e.buttons) move(e.clientY); });
-      window.addEventListener('mouseup', end);
-    })();
-  </script>
+    </div>
+
+    <!-- Side Panel: Juliette Coach + High-Res Card Inspector -->
+    <aside class="side-panel">
+      <div class="julie-box">
+        <img src="assets/ui/julietiny.png" alt="Juliette" class="julie-avatar" />
+        <div style="flex:1;">
+          <div class="julie-name">
+            <span>👩‍🏫 Juliette (Coach JCC)</span>
+            <button class="audio-btn" style="padding:2px 6px; font-size:0.68rem;" onclick="playRandomFrenchVoice()">🔊 Voix VF</button>
+          </div>
+          <div class="julie-speech" id="julieSpeechText">
+            Bienvenue dans <b>Pokémon : À Toi de jouer !</b> Clique sur une carte pour l'examiner en haute définition ou lance un duel dans l'Arène !
+          </div>
+        </div>
+      </div>
+
+      <div class="card-zoom-box" id="cardInspectorBox">
+        <img src="assets/cards/01/004_l.jpg" alt="Carte sélectionnée" class="card-zoom-img" id="zoomCardImg" onclick="playCurrentCardCry()" title="Cliquer pour écouter le cri du Pokémon" />
+        <div class="card-meta" id="zoomCardMeta"></div>
+      </div>
+    </aside>
+  </main>
+
+  <audio id="bgmAudio" loop></audio>
+  <audio id="sfxAudio"></audio>
+
+  <script src="data/game_data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
