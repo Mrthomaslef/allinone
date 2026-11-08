@@ -17254,11 +17254,11 @@ const TYPE_EMOJI = {
       const curDeckMeta = DECK_META[adventureSave.selectedDeck] || DECK_META.V2_FEU;
       const allDeckKeys = [...unlockedTourneyKeys, ...customKeys, ...fullKeys, ...halfKeys];
 
-      // Chemin en zigzag (palier 1 en haut → Grand Maître en bas)
+      // Chemin en zigzag (palier 1 en bas → Grand Maître en haut)
       const xs = [26, 70, 32, 72, 30, 50];
       const ROW = 124;
       const pathH = ROW * totalCount;
-      const pts = ADVENTURE_TRAINERS.map((t, i) => ({ x: xs[i % xs.length], y: i * ROW + 46 }));
+      const pts = ADVENTURE_TRAINERS.map((t, i) => ({ x: xs[i % xs.length], y: (totalCount - 1 - i) * ROW + 46 }));
       let d = `M ${pts[0].x} ${pts[0].y}`;
       for (let i = 1; i < pts.length; i++) {
         const a = pts[i - 1], b = pts[i];
@@ -17273,7 +17273,7 @@ const TYPE_EMOJI = {
         dDone += ` C ${a.x} ${my}, ${b.x} ${my}, ${b.x} ${b.y}`;
       }
 
-      const nodes = ADVENTURE_TRAINERS.map((tr, i) => {
+      const nodes = ADVENTURE_TRAINERS.map((tr, i) => ({ tr, i })).reverse().map(({ tr, i }) => {
         const isDefeated = (adventureSave.defeated[tr.id] || 0) > 0;
         const isUnlocked = tr.rank <= adventureSave.unlockedRank;
         const isCurrent = isUnlocked && !isDefeated;
@@ -17316,7 +17316,7 @@ const TYPE_EMOJI = {
           <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">${allDeckKeys.map(renderDeckPill).join('')}</div>
         </div>
 
-        <div class="adv-path w-full" style="height:${pathH}px; margin-bottom: 24px">
+        <div class="adv-path w-full" style="height:${pathH}px; margin-top: 22px; margin-bottom: 24px">
           <svg class="adv-path-svg" viewBox="0 0 100 ${pathH}" preserveAspectRatio="none" aria-hidden="true">
             <path d="${d}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="9" stroke-linecap="round" vector-effect="non-scaling-stroke" />
             <path d="${d}" fill="none" stroke="rgba(148,163,184,.9)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" vector-effect="non-scaling-stroke" />
