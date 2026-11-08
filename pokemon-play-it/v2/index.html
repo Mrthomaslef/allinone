@@ -941,6 +941,18 @@
       transform: rotateY(180deg);
       animation: packCardFlipLift 0.68s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
+    /* Cartes communes distribuées déjà face visible : aucune animation de retournement au montage */
+    .pack-card-3d.pre-flipped .pack-card-flipper { animation: none; transition: none; }
+    /* Reflets animés (repeints à chaque frame) uniquement sur la carte du dessus, jamais pendant un geste */
+    .pack-card-3d:not(.is-top) .holo-foil-diagonal,
+    .pack-card-3d:not(.is-top) .cosmos-holo-overlay,
+    .pack-card-3d:not(.is-top) .holo-sparkles,
+    .pack-card-3d.dragging .holo-foil-diagonal,
+    .pack-card-3d.dragging .cosmos-holo-overlay,
+    .pack-card-3d.dragging .holo-sparkles,
+    .pack-card-3d.dismissed-fly .holo-foil-diagonal,
+    .pack-card-3d.dismissed-fly .cosmos-holo-overlay,
+    .pack-card-3d.dismissed-fly .holo-sparkles { animation-play-state: paused; }
     @keyframes packCardFlipLift {
       0%   { transform: rotateY(0deg) translateZ(0) scale(1); }
       45%  { transform: rotateY(105deg) translateZ(75px) scale(1.14); }
@@ -976,14 +988,16 @@
     }
     .pack-card-3d .card-face-front img { pointer-events: none; -webkit-user-drag: none; }
     /* Indice de rareté sur le dos avant retournement (Mystery Hit milTCG) */
-    .hint-rare .card-face-back {
-      border: 2.5px solid #fde047 !important;
-      animation: hintPulseRare 1.2s ease-in-out infinite;
+    .hint-rare .card-face-back { border: 2.5px solid #fde047 !important; }
+    .hint-holo .card-face-back { border: 2.5px solid #f472b6 !important; }
+    /* Halo pulsé : ombre fixe sur un pseudo-élément, seule l'opacité est animée (GPU, pas de repeinture) */
+    .pack-card-3d.hint-rare::before, .pack-card-3d.hint-holo::before {
+      content: ''; position: absolute; inset: 0; border-radius: 16px; pointer-events: none;
+      will-change: opacity; animation: hintGlowPulse 1.15s ease-in-out infinite;
     }
-    .hint-holo .card-face-back {
-      border: 2.5px solid #f472b6 !important;
-      animation: hintPulseHolo 1.05s ease-in-out infinite;
-    }
+    .pack-card-3d.hint-rare::before { box-shadow: 0 0 46px rgba(250,204,21,0.95), 0 0 18px #ffffff; }
+    .pack-card-3d.hint-holo::before { box-shadow: 0 0 60px rgba(244,114,182,1), 0 0 34px rgba(56,189,248,0.95); }
+    @keyframes hintGlowPulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
     @keyframes hintPulseRare {
       0%, 100% { box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85), 0 0 22px rgba(250,204,21,0.55); }
       50% { box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85), 0 0 46px rgba(250,204,21,0.95), 0 0 18px #ffffff; }
@@ -1118,6 +1132,7 @@
       );
       mask-image: radial-gradient(circle, black 20%, transparent 68%);
       -webkit-mask-image: radial-gradient(circle, black 20%, transparent 68%);
+      will-change: transform;
       animation: spinRays 14s linear infinite;
     }
     @keyframes spinRays {
@@ -2538,7 +2553,7 @@
   <!-- =================================================================== -->
   <!-- MODAL PLEIN ÉCRAN : OUVERTURE SATISFAISANTE DE BOOSTER (5 CARTES)   -->
   <!-- =================================================================== -->
-  <div id="boosterOpenModal" class="fixed inset-0 z-50 hidden bg-white/92 backdrop-blur-xl flex flex-col items-center justify-between p-4 overflow-y-auto overflow-x-hidden text-slate-800" style="overscroll-behavior:contain; background: radial-gradient(circle at 50% 25%, rgba(255,255,255,0.98) 0%, rgba(241,245,249,0.95) 60%, rgba(226,232,240,0.94) 100%)">
+  <div id="boosterOpenModal" class="fixed inset-0 z-50 hidden bg-white flex flex-col items-center justify-between p-4 overflow-y-auto overflow-x-hidden text-slate-800" style="overscroll-behavior:contain; background: radial-gradient(circle at 50% 25%, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%)">
     <!-- Barre supérieure -->
     <div class="w-full max-w-xl flex items-center justify-between gap-2 z-20 shrink-0">
       <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
@@ -23947,13 +23962,15 @@ const TYPE_EMOJI = {
     }
 
     function triggerRarityConfetti(rarity) {
-      const count = rarity === 'holo' ? 68 : rarity === 'rare' ? 38 : 0;
+      const count = rarity === 'holo' ? 36 : rarity === 'rare' ? 22 : 0;
       if (!count) return;
       const colors = rarity === 'holo'
         ? ['#f472b6', '#c084fc', '#38bdf8', '#fbbf24', '#fde047', '#ffffff']
         : ['#fbbf24', '#fef08a', '#f59e0b', '#38bdf8', '#ffffff'];
       const cx = window.innerWidth / 2;
       const cy = window.innerHeight * 0.52;
+      const frag = document.createDocumentFragment();
+      const jobs = [];
       for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         const w = 6 + Math.random() * 6;
@@ -23965,10 +23982,10 @@ const TYPE_EMOJI = {
         p.style.height = `${h}px`;
         p.style.borderRadius = i % 3 === 0 ? '999px' : '2px';
         p.style.background = colors[i % colors.length];
-        p.style.boxShadow = `0 0 8px ${colors[i % colors.length]}`;
         p.style.pointerEvents = 'none';
         p.style.zIndex = '98';
-        document.body.appendChild(p);
+        p.style.willChange = 'transform, opacity';
+        frag.appendChild(p);
 
         const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.85;
         const velocity = 120 + Math.random() * 240;
@@ -23976,21 +23993,25 @@ const TYPE_EMOJI = {
         const ty = Math.sin(angle) * velocity + 90 + Math.random() * 120;
         const rot = (Math.random() - 0.5) * 720;
 
-        p.animate([
+        jobs.push(() => p.animate([
           { transform: 'translate(-50%, -50%) scale(1) rotate(0deg)', opacity: 1 },
           { transform: `translate(calc(-50% + ${tx * 0.65}px), calc(-50% + ${ty * 0.4}px)) scale(1.05) rotate(${rot * 0.5}deg)`, opacity: 1, offset: 0.45 },
           { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0.3) rotate(${rot}deg)`, opacity: 0 }
         ], {
           duration: 850 + Math.random() * 450,
           easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
-        }).finished.then(() => p.remove());
+        }).finished.then(() => p.remove(), () => p.remove()));
       }
+      document.body.appendChild(frag);
+      jobs.forEach(j => j());
     }
 
     function spawnBoosterSparks(cx, cy, count = 20, rainbow = false) {
       const palette = rainbow
         ? ['#fde047', '#f472b6', '#38bdf8', '#4ade80', '#c084fc', '#ffffff']
         : ['#fde047', '#fbbf24', '#f59e0b', '#ffffff'];
+      const frag = document.createDocumentFragment();
+      const jobs = [];
       for (let i = 0; i < count; i++) {
         const sp = document.createElement('div');
         sp.className = 'spark';
@@ -23998,18 +24019,20 @@ const TYPE_EMOJI = {
         sp.style.width = `${size}px`;
         sp.style.height = `${size}px`;
         sp.style.background = palette[i % palette.length];
-        sp.style.boxShadow = `0 0 10px ${palette[i % palette.length]}, 0 0 18px #ffffff`;
+        sp.style.boxShadow = `0 0 8px ${palette[i % palette.length]}`;
         sp.style.left = `${cx}px`;
         sp.style.top = `${cy}px`;
         sp.style.zIndex = '99';
-        document.body.appendChild(sp);
+        frag.appendChild(sp);
         const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
         const dist = 55 + Math.random() * 115;
-        sp.animate([
+        jobs.push(() => sp.animate([
           { transform: 'translate(-50%, -50%) scale(1.2)', opacity: 1 },
           { transform: `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px) scale(0.1)`, opacity: 0 }
-        ], { duration: 620 + Math.random() * 350, easing: 'cubic-bezier(.1,.85,.25,1)' }).finished.then(() => sp.remove());
+        ], { duration: 620 + Math.random() * 350, easing: 'cubic-bezier(.1,.85,.25,1)' }).finished.then(() => sp.remove(), () => sp.remove()));
       }
+      document.body.appendChild(frag);
+      jobs.forEach(j => j());
     }
 
     function showNoBoosterAvailableModal() {
@@ -24142,7 +24165,7 @@ const TYPE_EMOJI = {
             <!-- Halo de rareté ambiant derrière le booster (milTCG) -->
             <div id="packAmbientHalo"
                  style="opacity: 0.2; transform: translateZ(0) scale(0.86); will-change: transform, opacity; background: radial-gradient(circle, ${seamGlowHex} 0%, transparent 68%);"
-                 class="absolute w-72 h-72 rounded-full pointer-events-none blur-2xl z-0"></div>
+                 class="absolute w-80 h-80 rounded-full pointer-events-none z-0"></div>
 
             <!-- Pile de cartes montante à l'intérieur du sachet (visible quand le haut se déchire et au burst !) -->
             <div id="packInnerCardStack"
@@ -24160,7 +24183,7 @@ const TYPE_EMOJI = {
                    style="transform: scaleX(0); transform-origin: 0 50%; opacity: 0; will-change: transform, opacity;"
                    class="absolute top-[10px] inset-x-0 h-[66px] z-20 pointer-events-none overflow-hidden">
                 <div style="background: conic-gradient(from 180deg at 50% 100%, transparent 0deg, ${seamGlowHex} 35deg, #ffffff 55deg, ${seamGlowHex} 75deg, transparent 110deg);"
-                     class="w-full h-full blur-md opacity-95 animate-pulse"></div>
+                     class="w-full h-full opacity-90"></div>
               </div>
 
               <!-- Languette gauche DÉJÀ DÉCOLLÉE (se courbe et se soulève en 3D en temps réel !) -->
@@ -24703,8 +24726,8 @@ const TYPE_EMOJI = {
         <div class="reveal-stage my-1 flex items-center justify-center" id="boosterRevealStage">
           <!-- Aura de rétroéclairage dynamique selon la rareté -->
           <div id="stackAmbientAura"
-               style="background-color: #38bdf8;"
-               class="absolute -inset-8 rounded-full blur-3xl pointer-events-none transition-all duration-500 opacity-30 scale-95 z-0"></div>
+               style="background: radial-gradient(circle, #38bdf8 0%, transparent 68%); will-change: transform, opacity; transition: opacity 500ms ease, transform 500ms ease;"
+               class="absolute -inset-10 rounded-full pointer-events-none opacity-30 scale-95 z-0"></div>
 
           <div id="boosterRevealFlash" class="reveal-flash"></div>
 
@@ -24714,7 +24737,7 @@ const TYPE_EMOJI = {
             const isHit = isBigHitRarity(c.rarity);
             const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
             return `
-              <div class="pack-card-3d ${!isHit ? 'flipped' : ''}" id="packCard3d-${idx}" data-cidx="${idx}" style="z-index:${20 - idx}; opacity:0;">
+              <div class="pack-card-3d ${!isHit ? 'flipped pre-flipped' : ''} ${idx === 0 ? 'is-top' : ''}" id="packCard3d-${idx}" data-cidx="${idx}" style="z-index:${20 - idx}; opacity:0;">
                 <!-- Bandeau flottant Mystery Hit quand la carte est face cachée (milTCG) -->
                 <div id="mysteryHitPrompt-${idx}" class="${isHit ? '' : 'hidden'} absolute -top-3.5 inset-x-0 z-40 flex justify-center pointer-events-none">
                   <div class="px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-300 via-pink-400 to-amber-300 text-slate-950 font-black text-[10px] tracking-wider uppercase shadow-[0_0_22px_rgba(251,191,36,1)] animate-bounce border-2 border-white whitespace-nowrap">
@@ -24931,9 +24954,9 @@ const TYPE_EMOJI = {
       updateBoosterDots();
 
       if (auraEl) {
-        auraEl.style.backgroundColor = getRarityGlowHex(card.rarity);
+        auraEl.style.background = `radial-gradient(circle, ${getRarityGlowHex(card.rarity)} 0%, transparent 68%)`;
         const isHit = isBigHitRarity(card.rarity);
-        auraEl.className = `absolute -inset-8 rounded-full blur-3xl pointer-events-none transition-all duration-500 z-0 ${
+        auraEl.className = `absolute -inset-10 rounded-full pointer-events-none z-0 ${
           isHit ? 'opacity-65 scale-110 animate-pulse' : 'opacity-25 scale-95'
         }`;
       }
@@ -25053,23 +25076,23 @@ const TYPE_EMOJI = {
           topEl.classList.add('flipped');
         }
         sfx('cardFlip');
-        triggerBoosterScreenFlash(getRarityGlowHex(card.rarity));
 
         const flipBooster = activeBooster;
         setTimeout(() => {
           if (activeBooster !== flipBooster || flipBooster.phase !== 'revealing') return;
+          triggerBoosterScreenFlash(getRarityGlowHex(card.rarity));
           if (card.rarity === 'holo') {
             sfx('holo');
             buzz([35, 50, 45, 70]);
             flashBoosterReveal('holo');
-            spawnBoosterSparks(cx, cy, 44, true);
+            spawnBoosterSparks(cx, cy, 22, true);
             triggerRarityConfetti('holo');
             if (card.dex) playPokemonCry(card.dex);
           } else if (card.rarity === 'rare') {
             sfx('rare');
             buzz([25, 30, 25]);
             flashBoosterReveal('rare');
-            spawnBoosterSparks(cx, cy, 26, false);
+            spawnBoosterSparks(cx, cy, 14, false);
             triggerRarityConfetti('rare');
             if (card.dex) playPokemonCry(card.dex);
           } else {
@@ -25077,9 +25100,9 @@ const TYPE_EMOJI = {
             if (card.dex) playPokemonCry(card.dex);
           }
           updateBoosterStackVisuals();
-        }, 220);
+        }, 300);
 
-        setTimeout(() => { if (activeBooster === flipBooster) flipBooster.busy = false; }, 520);
+        setTimeout(() => { if (activeBooster === flipBooster) flipBooster.busy = false; }, 600);
         return;
       }
 
@@ -25102,15 +25125,26 @@ const TYPE_EMOJI = {
       buzz(10);
 
       const swipeBooster = activeBooster;
+      const hasNext = currentIdx + 1 < cards.length;
+      if (hasNext) {
+        // La carte suivante prend la place du dessus pendant que l'autre s'envole (un seul mouvement fluide)
+        activeBooster.currentIdx += 1;
+        const nextCard0 = cards[activeBooster.currentIdx];
+        activeBooster.currentFlipped = !(nextCard0 && isBigHitRarity(nextCard0.rarity));
+        if (topEl) topEl.classList.remove('is-top');
+        const nextEl = document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
+        if (nextEl) nextEl.classList.add('is-top');
+        layoutBoosterStack(0, 0);
+        // Textes / pied de page reconstruits après la frame suivante (pas de reflow pendant le départ)
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (activeBooster === swipeBooster && swipeBooster.phase === 'revealing') updateBoosterStackVisuals();
+        }));
+      }
       setTimeout(() => {
         if (activeBooster !== swipeBooster || swipeBooster.phase !== 'revealing') return;
-        if (currentIdx + 1 < cards.length) {
-          activeBooster.currentIdx += 1;
+        if (hasNext) {
           const nextCard = cards[activeBooster.currentIdx];
           const nextIsHit = nextCard ? isBigHitRarity(nextCard.rarity) : false;
-          activeBooster.currentFlipped = !nextIsHit;
-          layoutBoosterStack(0, 0);
-          updateBoosterStackVisuals();
           if (nextCard && !nextIsHit) {
             sfx(nextCard.rarity === 'uncommon' ? 'uncommon' : 'common');
             if (nextCard.dex) playPokemonCry(nextCard.dex);
