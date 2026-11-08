@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'f1c507b-1794171141';
+      var BUILD = '676598c-1794171282';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -2328,20 +2328,8 @@
         </div>
       </div>
 
-      <!-- 3. Barre de mission -->
+      <!-- 3. Tuile Mode Aventure -->
       <div class="w-full space-y-2">
-        <div class="hub-tile rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2">
-          <div class="min-w-0">
-            <div id="hubMissionTitle" class="text-[11.5px] font-black text-slate-900 truncate">Ouvre tes boosters gratuits</div>
-            <div id="boosterFreeStatusSub" class="text-[10.5px] font-semibold text-sky-700 truncate">3 gratuits disponibles chaque heure</div>
-          </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <span id="hubMissionBadge" class="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10.5px] font-black">Prêt</span>
-            <button onclick="switchMenuTab('tuto')" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide">Jouer</button>
-          </div>
-        </div>
-
-        <!-- 3b. Tuile Mode Aventure -->
         <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <div class="flex -space-x-2 shrink-0">
@@ -27130,6 +27118,20 @@ const TYPE_EMOJI = {
       return best;
     }
 
+    // Icônes vectorielles dans le thème Pokémon TCG (remplacent les emojis génériques)
+    const DB_ICO = {
+      pokeball: (s = 15) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" class="inline-block shrink-0 align-[-2px]" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffffff" stroke="#0f172a" stroke-width="2"/><path d="M2 12a10 10 0 0 1 20 0Z" fill="#ef4444" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/><line x1="2" y1="12" x2="22" y2="12" stroke="#0f172a" stroke-width="2.2"/><circle cx="12" cy="12" r="3.4" fill="#ffffff" stroke="#0f172a" stroke-width="2"/><circle cx="12" cy="12" r="1.3" fill="#0f172a"/></svg>`,
+      trainer: (s = 15) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" class="inline-block shrink-0 align-[-2px]" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="3" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/><rect x="7" y="5.5" width="10" height="6" rx="1.2" fill="#38bdf8" stroke="#0369a1" stroke-width="1.5"/><path d="M8 15h8M9.5 18h5" stroke="#0369a1" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+      energy: (s = 15) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" class="inline-block shrink-0 align-[-2px]" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#fbbf24" stroke="#78350f" stroke-width="2"/><circle cx="9" cy="8.5" r="2.2" fill="#fef3c7" opacity=".75"/><path d="M13 5.5 7.8 13h4.1l-.9 5.5L16.2 11h-4.1Z" fill="#0f172a"/></svg>`,
+      deck: (s = 16) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" class="inline-block shrink-0 align-[-2px]" aria-hidden="true"><rect x="7" y="3" width="12" height="16" rx="2" transform="rotate(7 13 11)"/><rect x="4" y="5" width="12" height="16" rx="2" fill="#ffffff"/><circle cx="10" cy="13" r="2.4"/><path d="M7.6 13h4.8"/></svg>`,
+      hand: (s = 17) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block shrink-0 align-[-3px]" aria-hidden="true"><rect x="2.5" y="6" width="10" height="14" rx="1.8" transform="rotate(-14 7.5 13)" fill="#ffffff"/><rect x="7" y="4.5" width="10" height="14" rx="1.8" fill="#ffffff"/><rect x="11.5" y="6" width="10" height="14" rx="1.8" transform="rotate(14 16.5 13)" fill="#ffffff"/><circle cx="16.5" cy="13" r="1.7"/></svg>`,
+      back: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>`,
+      trash: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`,
+      auto: (s = 14) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="currentColor" class="inline-block shrink-0 align-[-2px]" aria-hidden="true"><path d="M12 2.5 14.4 9.6 21.5 12 14.4 14.4 12 21.5 9.6 14.4 2.5 12 9.6 9.6Z"/></svg>`,
+      play: (s = 12) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="currentColor" class="inline-block shrink-0 align-[-1px]" aria-hidden="true"><path d="M6 4.5v15l13-7.5Z"/></svg>`,
+      refresh: (s = 15) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="inline-block shrink-0 align-[-2px]" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>`
+    };
+
     // -------------------------------------------------------------- Analyse
     function analyzeDeck(deck) {
       const r = { total: dbTotal(deck), pokemon: 0, trainers: 0, energies: 0, basics: 0, errors: [], tips: [], weak: {} };
@@ -27162,7 +27164,7 @@ const TYPE_EMOJI = {
       if (r.total === 0) return r;
       const minBasics = deck.size === 60 ? 10 : 6;
       if (r.basics > 0 && r.basics < minBasics) {
-        r.tips.push({ icon: '🐣', text: `Seulement ${r.basics} Pokémon de Base : ${Math.round((1 - r.pBasic) * 100)}% de risque de main sans Pokémon. Vise au moins ${minBasics}.` });
+        r.tips.push({ icon: DB_ICO.pokeball(15), text: `Seulement ${r.basics} Pokémon de Base : ${Math.round((1 - r.pBasic) * 100)}% de risque de main sans Pokémon. Vise au moins ${minBasics}.` });
       }
       // Évolutions orphelines
       const missing = new Set();
@@ -27172,34 +27174,34 @@ const TYPE_EMOJI = {
       });
       missing.forEach((k) => {
         const [a, b] = k.split('|');
-        r.tips.push({ icon: '🧬', text: `${a} évolue de <b>${b}</b> : ajoute-le, sinon ${a} restera bloqué en main.` });
+        r.tips.push({ icon: DB_ICO.pokeball(15), text: `${a} évolue de <b>${b}</b> : ajoute-le, sinon ${a} restera bloqué en main.` });
       });
       // Couverture des Énergies
       const demand = dbAttackDemand(deck);
       DB_TYPES.forEach((t) => {
         if (demand[t] > 0 && !(deck.energy[t] > 0)) {
           const who = Object.keys(deck.cards).map((id) => DB_CARD[id]).find((c) => c && c.category === 'Pokémon' && (c.attacks || []).some((a) => (a.cost || []).includes(t)));
-          r.tips.push({ icon: '⚡', text: `Aucune Énergie <b>${t}</b> alors que ${who ? who.name : 'un Pokémon'} en a besoin pour attaquer.` });
+          r.tips.push({ icon: dbTypeIcon(t, 15), text: `Aucune Énergie <b>${t}</b> alors que ${who ? who.name : 'un Pokémon'} en a besoin pour attaquer.` });
         }
       });
       const typesUsed = DB_TYPES.filter((t) => deck.energy[t] > 0).length;
-      if (typesUsed >= 3) r.tips.push({ icon: '🎯', text: `${typesUsed} types d'Énergie différents : le deck sera irrégulier. 1 ou 2 types, c'est l'idéal.` });
+      if (typesUsed >= 3) r.tips.push({ icon: DB_ICO.energy(15), text: `${typesUsed} types d'Énergie différents : le deck sera irrégulier. 1 ou 2 types, c'est l'idéal.` });
       const ratio = r.energies / Math.max(1, r.total);
       if (r.total >= deck.size * 0.8) {
-        if (ratio < 0.3) r.tips.push({ icon: '🔋', text: `Peu d'Énergies (${r.energies}) : tu risques de ne pas pouvoir attaquer. Vise ${deck.size === 60 ? '22-26' : '11-14'}.` });
-        if (ratio > 0.55) r.tips.push({ icon: '🔋', text: `Beaucoup d'Énergies (${r.energies}) : remplace-en quelques-unes par des Dresseurs utiles.` });
+        if (ratio < 0.3) r.tips.push({ icon: DB_ICO.energy(15), text: `Peu d'Énergies (${r.energies}) : tu risques de ne pas pouvoir attaquer. Vise ${deck.size === 60 ? '22-26' : '11-14'}.` });
+        if (ratio > 0.55) r.tips.push({ icon: DB_ICO.energy(15), text: `Beaucoup d'Énergies (${r.energies}) : remplace-en quelques-unes par des Dresseurs utiles.` });
       }
       // Dresseurs conseillés possédés mais absents
       const owned = dbOwnedMap();
       const ownedTrainer = (slug) => Object.keys(owned).find((id) => DB_CARD[id].id === slug);
       const inDeck = (slug) => Object.keys(deck.cards).some((id) => DB_CARD[id] && DB_CARD[id].id === slug && deck.cards[id] > 0);
-      if (ownedTrainer('bill') && !inDeck('bill')) r.tips.push({ icon: '📚', text: 'Tu possèdes <b>Léo</b> (pioche 2 cartes) : c\'est le meilleur Dresseur pour accélérer.' });
+      if (ownedTrainer('bill') && !inDeck('bill')) r.tips.push({ icon: DB_ICO.trainer(15), text: 'Tu possèdes <b>Léo</b> (pioche 2 cartes) : c\'est le meilleur Dresseur pour accélérer.' });
       const hasStage2 = Object.keys(deck.cards).some((id) => DB_CARD[id] && DB_CARD[id].stage === 'Niveau 2');
-      if (hasStage2 && ownedTrainer('pokemon-breeder') && !inDeck('pokemon-breeder')) r.tips.push({ icon: '🧪', text: 'Ajoute <b>Éleveur de Pokémon</b> pour faire évoluer directement en Niveau 2.' });
-      if (r.trainers === 0 && Object.keys(owned).some((id) => DB_CARD[id].category === 'Dresseur')) r.tips.push({ icon: '🎒', text: 'Aucun Dresseur : ajoute Potion, Transfert ou Rafale de vent pour plus d\'options.' });
+      if (hasStage2 && ownedTrainer('pokemon-breeder') && !inDeck('pokemon-breeder')) r.tips.push({ icon: DB_ICO.trainer(15), text: 'Ajoute <b>Éleveur de Pokémon</b> pour faire évoluer directement en Niveau 2.' });
+      if (r.trainers === 0 && Object.keys(owned).some((id) => DB_CARD[id].category === 'Dresseur')) r.tips.push({ icon: DB_ICO.trainer(15), text: 'Aucun Dresseur : ajoute Potion, Transfert ou Rafale de vent pour plus d\'options.' });
       // Faiblesse commune
       const w = Object.entries(r.weak).sort((a, b) => b[1] - a[1])[0];
-      if (w && r.pokemon >= 4 && w[1] / r.pokemon >= 0.5) r.tips.push({ icon: '⚠️', text: `${w[1]} de tes ${r.pokemon} Pokémon sont faibles contre <b>${w[0]}</b> (dégâts ×2).` });
+      if (w && r.pokemon >= 4 && w[1] / r.pokemon >= 0.5) r.tips.push({ icon: dbTypeIcon(w[0], 15), text: `${w[1]} de tes ${r.pokemon} Pokémon sont faibles contre <b>${w[0]}</b> (dégâts ×2).` });
       return r;
     }
 

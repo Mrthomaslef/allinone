@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'f1c507b-1794171141';
+      var BUILD = '676598c-1794171282';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -2328,20 +2328,8 @@
         </div>
       </div>
 
-      <!-- 3. Barre de mission -->
+      <!-- 3. Tuile Mode Aventure -->
       <div class="w-full space-y-2">
-        <div class="hub-tile rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2">
-          <div class="min-w-0">
-            <div id="hubMissionTitle" class="text-[11.5px] font-black text-slate-900 truncate">Ouvre tes boosters gratuits</div>
-            <div id="boosterFreeStatusSub" class="text-[10.5px] font-semibold text-sky-700 truncate">3 gratuits disponibles chaque heure</div>
-          </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <span id="hubMissionBadge" class="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10.5px] font-black">Prêt</span>
-            <button onclick="switchMenuTab('tuto')" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide">Jouer</button>
-          </div>
-        </div>
-
-        <!-- 3b. Tuile Mode Aventure -->
         <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <div class="flex -space-x-2 shrink-0">
