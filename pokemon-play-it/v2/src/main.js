@@ -26,11 +26,22 @@ class App {
     this.coinFlip = new CoinFlip();
     this.currentScreen = 'menu';
     this.saveData = null;
+    this.bgm = new Audio('./src/assets/bgm.m4a');
+    this.bgm.loop = true;
+    this.bgm.volume = 0.28;
     this.init();
   }
 
   async init() {
     this.saveData = await this.loadSave();
+    const tryPlayBgm = () => {
+      if (this.saveData?.settings?.sound !== false && this.bgm.paused) {
+        this.bgm.play().catch(() => {});
+      }
+    };
+    ['pointerdown', 'keydown', 'touchstart', 'click'].forEach(ev =>
+      document.addEventListener(ev, tryPlayBgm, { passive: true })
+    );
     this.renderMenu();
   }
 
@@ -432,7 +443,11 @@ class App {
       </div>
     `;
     document.getElementById('chk-anim').onchange = e => { s.animations = e.target.checked; this.save(); };
-    document.getElementById('chk-snd').onchange = e => { s.sound = e.target.checked; this.save(); };
+    document.getElementById('chk-snd').onchange = e => {
+      s.sound = e.target.checked;
+      if (s.sound) this.bgm.play().catch(() => {}); else this.bgm.pause();
+      this.save();
+    };
     document.getElementById('chk-hap').onchange = e => { s.haptics = e.target.checked; this.save(); };
     document.getElementById('btn-back-set').onclick = () => this.renderMenu();
   }

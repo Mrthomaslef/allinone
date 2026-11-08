@@ -385,6 +385,224 @@
       border: 1px solid rgba(255, 255, 255, 0.16);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
+
+    /* ===== OUVERTURE DE BOOSTER 1999 (5 CARTES · HOLO & FOIL) ===== */
+    .booster-pack-wrap {
+      perspective: 1100px;
+      user-select: none;
+      touch-action: none;
+    }
+    .booster-foil {
+      position: relative;
+      width: 216px;
+      height: 332px;
+      border-radius: 14px;
+      transform-style: preserve-3d;
+      transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.25s ease;
+      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.88), 0 0 32px -6px var(--pack-glow, rgba(250,204,21,0.5));
+    }
+    .booster-foil::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      z-index: 5;
+      pointer-events: none;
+      background: linear-gradient(115deg,
+        transparent 15%,
+        rgba(255,255,255,0.4) 32%,
+        rgba(253,224,71,0.3) 45%,
+        rgba(56,189,248,0.28) 55%,
+        transparent 72%);
+      background-size: 240% 240%;
+      animation: holoShimmer 3.6s ease-in-out infinite;
+      mix-blend-mode: overlay;
+    }
+    .booster-crimp {
+      height: 15px;
+      background: repeating-linear-gradient(90deg,
+        rgba(255,255,255,0.42) 0px,
+        rgba(255,255,255,0.42) 3px,
+        rgba(15,23,42,0.6) 3px,
+        rgba(15,23,42,0.6) 6px);
+    }
+    .booster-top-strip {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      z-index: 12;
+      overflow: hidden;
+      border-radius: 14px 14px 0 0;
+      transform-origin: 90% 100%;
+    }
+    .booster-top-strip.ripped {
+      animation: tearTopFly 0.68s cubic-bezier(0.2, 0.85, 0.3, 1) forwards;
+    }
+    @keyframes tearTopFly {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+      35% { transform: translate(24px, -18px) rotate(14deg) scale(1.04); opacity: 1; }
+      100% { transform: translate(190px, -120px) rotate(45deg) scale(0.72); opacity: 0; }
+    }
+    .booster-body-opened {
+      animation: packBodyDrop 0.62s cubic-bezier(0.22, 0.8, 0.25, 1) forwards;
+    }
+    @keyframes packBodyDrop {
+      0% { transform: scale(1) translateY(0); opacity: 1; filter: brightness(1); }
+      35% { transform: scale(1.08) translateY(-6px); opacity: 1; filter: brightness(2); }
+      100% { transform: scale(0.82) translateY(150px); opacity: 0; filter: brightness(2.6); }
+    }
+    .tear-guide-line {
+      position: absolute;
+      top: 40px; left: -14px; right: -14px;
+      height: 36px;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      cursor: ew-resize;
+    }
+    .tear-dashes {
+      width: 100%;
+      height: 4px;
+      background: repeating-linear-gradient(90deg, #fde047 0 8px, rgba(255,255,255,0.2) 8px 14px);
+      box-shadow: 0 0 14px #facc15;
+      border-radius: 99px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tear-progress-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, #fff, #fde047, #f97316);
+      box-shadow: 0 0 18px #fff;
+    }
+
+    /* Révélation 3D des 5 cartes */
+    .reveal-stage {
+      perspective: 1200px;
+      position: relative;
+      width: min(72vw, 260px);
+      aspect-ratio: 63 / 88;
+      touch-action: none;
+    }
+    .pack-card-3d {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      transform-style: preserve-3d;
+      transition: transform 0.52s cubic-bezier(0.2, 0.9, 0.25, 1.18), opacity 0.36s ease, box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+    .pack-card-3d .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+    }
+    .pack-card-3d .card-face-back {
+      background: var(--card-back) center / cover no-repeat;
+      box-shadow: 0 18px 36px -8px rgba(0,0,0,0.85);
+    }
+    .pack-card-3d .card-face-front {
+      transform: rotateY(180deg);
+      background: #0f172a;
+    }
+    .pack-card-3d.flipped {
+      transform: rotateY(180deg) scale(1.04);
+    }
+    .pack-card-3d.dismissed {
+      transform: translate(135%, -18%) rotateY(180deg) rotateZ(18deg) scale(0.75) !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+    /* Halos de rareté sur la carte révélée */
+    .rarity-glow-common {
+      box-shadow: 0 20px 38px -10px rgba(0,0,0,0.85), 0 0 0 1.5px rgba(226,232,240,0.35);
+    }
+    .rarity-glow-uncommon {
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.85), 0 0 26px rgba(52,211,153,0.55), 0 0 0 2px rgba(110,231,183,0.8);
+    }
+    .rarity-glow-rare {
+      box-shadow: 0 22px 44px -8px rgba(0,0,0,0.9), 0 0 36px rgba(250,204,21,0.8), 0 0 0 2.5px #fde047;
+    }
+    .rarity-glow-holo {
+      box-shadow: 0 24px 52px -8px rgba(0,0,0,0.95), 0 0 52px rgba(244,114,182,0.9), 0 0 24px rgba(250,204,21,0.95), 0 0 0 3px #fff;
+    }
+    /* Effet Cosmos Holo 1999 sur les cartes Rare Holo */
+    .cosmos-holo-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 4;
+      background:
+        radial-gradient(circle at var(--hx, 50%) var(--hy, 40%), rgba(255,255,255,0.6) 0%, transparent 45%),
+        linear-gradient(125deg,
+          rgba(255, 0, 128, 0.3) 10%,
+          rgba(250, 204, 21, 0.34) 28%,
+          rgba(52, 211, 153, 0.3) 46%,
+          rgba(56, 189, 248, 0.34) 64%,
+          rgba(168, 85, 247, 0.34) 82%,
+          rgba(255, 0, 128, 0.3) 95%);
+      background-size: 220% 220%;
+      animation: holoShimmer 3s linear infinite;
+      mix-blend-mode: color-dodge;
+      opacity: 0.82;
+    }
+    .god-rays {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      left: 50%;
+      top: 50%;
+      margin-left: -210px;
+      margin-top: -210px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg 15deg,
+        rgba(250, 204, 21, 0.24) 15deg 30deg,
+        transparent 30deg 45deg,
+        rgba(244, 114, 182, 0.22) 45deg 60deg,
+        transparent 60deg 75deg,
+        rgba(56, 189, 248, 0.24) 75deg 90deg,
+        transparent 90deg 105deg,
+        rgba(250, 204, 21, 0.24) 105deg 120deg,
+        transparent 120deg 135deg,
+        rgba(244, 114, 182, 0.22) 135deg 150deg,
+        transparent 150deg 165deg,
+        rgba(56, 189, 248, 0.24) 165deg 180deg,
+        transparent 180deg 195deg,
+        rgba(250, 204, 21, 0.24) 195deg 210deg,
+        transparent 210deg 225deg,
+        rgba(244, 114, 182, 0.22) 225deg 240deg,
+        transparent 240deg 255deg,
+        rgba(56, 189, 248, 0.24) 255deg 270deg,
+        transparent 270deg 285deg,
+        rgba(250, 204, 21, 0.24) 285deg 300deg,
+        transparent 300deg 315deg,
+        rgba(244, 114, 182, 0.22) 315deg 330deg,
+        transparent 330deg 345deg,
+        rgba(56, 189, 248, 0.24) 345deg 360deg
+      );
+      mask-image: radial-gradient(circle, black 20%, transparent 68%);
+      -webkit-mask-image: radial-gradient(circle, black 20%, transparent 68%);
+      animation: spinRays 14s linear infinite;
+    }
+    @keyframes spinRays {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes summaryCardPop {
+      0% { transform: translateY(22px) scale(0.82); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .summary-card-in {
+      animation: summaryCardPop 0.44s cubic-bezier(0.2, 1.3, 0.3, 1) both;
+    }
   </style>
 </head>
 <body id="appBody" class="playmat-night flex flex-col">
@@ -406,23 +624,29 @@
         Set de Base · Jungle · Fossile — <span class="text-yellow-300 font-bold">228 Cartes Officielles FR HD</span>
       </p>
 
-      <!-- Barre d'accès rapide : Collection 228 Cartes & Académie -->
-      <div class="mt-3 flex items-center justify-center gap-2.5">
+      <!-- Barre d'accès rapide : Boosters 5 Cartes, Collection 228 Cartes & Académie -->
+      <div class="mt-3 flex flex-wrap items-center justify-center gap-2">
+        <button onclick="switchMenuTab('booster')" class="btn-gold px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 active:scale-95 shadow-lg">
+          <span>✨</span> Ouvrir un Booster (5 Cartes)
+        </button>
         <button onclick="openCollectionModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-emerald-300 hover:border-emerald-400/60 hover:text-emerald-200 transition flex items-center gap-1.5 active:scale-95">
-          <span>📖</span> Galerie des 228 Cartes FR
+          <span>📖</span> Galerie (<span id="menuColProgress">0/228</span>)
         </button>
         <button onclick="openAcademyModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-amber-300 hover:border-amber-400/60 hover:text-amber-200 transition flex items-center gap-1.5 active:scale-95">
-          <span>🎓</span> Quiz de l'Académie
+          <span>🎓</span> Quiz Académie
         </button>
       </div>
 
-      <!-- Sélecteur d'onglets : TUTORIEL (Juliette) vs PARTIE RAPIDE (Duel Libre) -->
-      <div class="mt-3.5 p-1 rounded-2xl bg-slate-950/85 border border-white/15 grid grid-cols-2 gap-1.5 max-w-md mx-auto shadow-inner">
-        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md">
-          <span>🎓</span> Tutoriel Juliette
+      <!-- Sélecteur d'onglets : TUTORIEL (Juliette) vs PARTIE RAPIDE vs BOOSTERS 1999 -->
+      <div class="mt-3.5 p-1 rounded-2xl bg-slate-950/85 border border-white/15 grid grid-cols-3 gap-1.5 max-w-lg mx-auto shadow-inner">
+        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md">
+          <span>🎓</span> Tutoriel
         </button>
-        <button id="tabBtnQuick" onclick="switchMenuTab('quick')" class="py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:bg-white/5">
-          <span>⚔️</span> Partie Rapide
+        <button id="tabBtnQuick" onclick="switchMenuTab('quick')" class="py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 text-slate-300 hover:text-white hover:bg-white/5">
+          <span>⚔️</span> Duel Rapide
+        </button>
+        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 text-amber-300 hover:text-yellow-200 hover:bg-white/5">
+          <span>✨</span> Boosters (5c)
         </button>
       </div>
     </div>
@@ -626,6 +850,147 @@
       </div>
     </div>
 
+    <!-- =============================================================== -->
+    <!-- ONGLET 3 : OUVERTURE DE BOOSTERS 1999 (5 CARTES · TAUX ADAPTÉS) -->
+    <!-- =============================================================== -->
+    <div id="viewBooster" class="hidden w-full space-y-3.5">
+      <!-- En-tête Statut de Collection & Taux de Drop -->
+      <div class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/90 via-purple-950/85 to-slate-900/95 border border-yellow-400/50 shadow-2xl flex flex-col gap-2.5">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-xl bg-yellow-400/20 border border-yellow-400/50 flex items-center justify-center text-xl shadow-inner">✨</div>
+            <div>
+              <div class="text-xs font-black uppercase tracking-wider text-yellow-300">Ouverture de Boosters WotC 1999</div>
+              <div class="text-[11px] text-slate-200 font-semibold">5 Cartes par Pack · Vrais numéros &amp; raretés d'époque</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="boosterTotalOpenedBadge" class="text-[10.5px] font-mono font-bold px-2.5 py-1 rounded-lg bg-black/45 border border-white/15 text-amber-300">📦 0 pack ouvert</span>
+            <span id="boosterHoloCountBadge" class="text-[10.5px] font-mono font-bold px-2.5 py-1 rounded-lg bg-pink-500/20 border border-pink-400/40 text-pink-200">✨ 0 Holo</span>
+          </div>
+        </div>
+
+        <!-- Jauge de progression des 228 cartes -->
+        <div class="w-full bg-black/40 p-2.5 rounded-xl border border-white/10 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] font-bold">
+            <span class="text-slate-200">📖 Progression Collection 1999</span>
+            <span id="boosterColCountText" class="font-mono text-emerald-300">0 / 228 cartes (0%)</span>
+          </div>
+          <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div id="boosterColBar" class="h-full bg-gradient-to-r from-emerald-400 via-yellow-400 to-pink-500 transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 pt-1 text-[10px] font-mono text-slate-300 text-center">
+            <div class="bg-white/5 rounded-lg py-1 border border-white/5">Base : <strong id="colStatBase" class="text-yellow-300">0/102</strong></div>
+            <div class="bg-white/5 rounded-lg py-1 border border-white/5">Jungle : <strong id="colStatJungle" class="text-emerald-300">0/64</strong></div>
+            <div class="bg-white/5 rounded-lg py-1 border border-white/5">Fossile : <strong id="colStatFossil" class="text-amber-300">0/62</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SÉLECTION DES 3 BOOSTERS OFFICIELS 1999 -->
+      <div class="w-full space-y-2">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
+            <h2 class="text-xs font-black tracking-wider uppercase text-yellow-200">
+              Choisis ton Booster de 5 Cartes à déchirer
+            </h2>
+          </div>
+          <span class="text-[10px] font-mono text-amber-200 font-bold">1 Holo / 3 Packs ✨</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <!-- Booster Set de Base (1999) -->
+          <button onclick="launchBoosterPack('base')" class="deck-card p-3.5 bg-gradient-to-b from-blue-950/95 via-indigo-950/90 to-slate-950 border border-yellow-400/55 hover:border-yellow-300 flex flex-col items-center text-center gap-2.5 group">
+            <div class="flex items-center justify-between w-full">
+              <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-yellow-400/20 text-yellow-200 border border-yellow-400/40">102 Cartes</span>
+              <span class="text-[9px] font-mono text-sky-300 font-bold">16 Holo ✨</span>
+            </div>
+            <div class="deck-fan my-1" style="width:94px;height:112px">
+              <img src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="Tortank" loading="lazy" class="fan-sub" style="width:66px;left:2px" />
+              <div class="holo-wrap">
+                <img src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="Dracaufeu" loading="lazy" class="fan-main" style="width:74px;margin-left:16px" />
+              </div>
+            </div>
+            <div>
+              <div class="font-black text-base text-white group-hover:text-yellow-300 transition">Booster Set de Base</div>
+              <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">Dracaufeu · Tortank · Florizarre</div>
+              <p class="text-[10px] text-slate-300/80 mt-0.5">Mewtwo, Alakazam, Léviator, Électhor</p>
+            </div>
+            <span class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
+              📦 Ouvrir (5 Cartes)
+            </span>
+          </button>
+
+          <!-- Booster Jungle (1999) -->
+          <button onclick="launchBoosterPack('jungle')" class="deck-card p-3.5 bg-gradient-to-b from-emerald-950/95 via-green-950/90 to-slate-950 border border-emerald-400/55 hover:border-emerald-300 flex flex-col items-center text-center gap-2.5 group">
+            <div class="flex items-center justify-between w-full">
+              <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 border border-emerald-400/40">64 Cartes</span>
+              <span class="text-[9px] font-mono text-emerald-300 font-bold">16 Holo ✨</span>
+            </div>
+            <div class="deck-fan my-1" style="width:94px;height:112px">
+              <img src="https://assets.tcgdex.net/fr/base/base2/3/high.webp" alt="Pyroli" loading="lazy" class="fan-sub" style="width:66px;left:2px" />
+              <div class="holo-wrap">
+                <img src="https://assets.tcgdex.net/fr/base/base2/10/high.webp" alt="Insécateur" loading="lazy" class="fan-main" style="width:74px;margin-left:16px" />
+              </div>
+            </div>
+            <div>
+              <div class="font-black text-base text-white group-hover:text-emerald-300 transition">Booster Jungle</div>
+              <div class="text-[10.5px] text-emerald-200/90 font-semibold mt-0.5">Insécateur · Pyroli · Ronflex</div>
+              <p class="text-[10px] text-slate-300/80 mt-0.5">Voltali, Aquali, Kangourex, Mélodelfe</p>
+            </div>
+            <span class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
+              🌿 Ouvrir (5 Cartes)
+            </span>
+          </button>
+
+          <!-- Booster Fossile (1999) -->
+          <button onclick="launchBoosterPack('fossil')" class="deck-card p-3.5 bg-gradient-to-b from-amber-950/95 via-stone-900/90 to-slate-950 border border-amber-500/55 hover:border-amber-300 flex flex-col items-center text-center gap-2.5 group">
+            <div class="flex items-center justify-between w-full">
+              <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/40">62 Cartes</span>
+              <span class="text-[9px] font-mono text-amber-300 font-bold">15 Holo ✨</span>
+            </div>
+            <div class="deck-fan my-1" style="width:94px;height:112px">
+              <img src="https://assets.tcgdex.net/fr/base/base3/2/high.webp" alt="Artikodin" loading="lazy" class="fan-sub" style="width:66px;left:2px" />
+              <div class="holo-wrap">
+                <img src="https://assets.tcgdex.net/fr/base/base3/1/high.webp" alt="Ptéra" loading="lazy" class="fan-main" style="width:74px;margin-left:16px" />
+              </div>
+            </div>
+            <div>
+              <div class="font-black text-base text-white group-hover:text-amber-300 transition">Booster Fossile</div>
+              <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">Ptéra · Artikodin · Dracolosse</div>
+              <p class="text-[10px] text-slate-300/80 mt-0.5">Ectoplasma, Lokhlass, Sulfura, Kabutops</p>
+            </div>
+            <span class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
+              🦖 Ouvrir (5 Cartes)
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLEAU TRANSPARENT DES TAUX DE RARETÉ ADAPTÉS (5 CARTES / PACK) -->
+      <div class="w-full p-3 rounded-2xl bg-slate-900/90 border border-white/15 text-xs space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-black text-yellow-300 uppercase tracking-wider text-[11px]">📊 Taux de Rareté Adaptés (Pack de 5 Cartes)</span>
+          <span class="text-[10px] font-mono text-pink-300 font-bold">✨ God Pack (5 Holo) : 0,5 %</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+          <div class="p-2 rounded-xl bg-black/40 border border-white/10">
+            <div class="font-bold text-slate-200">Cartes 1, 2 &amp; 3</div>
+            <div class="text-slate-400 text-[10px] mt-0.5">● <strong class="text-white">100 % Commune</strong> (sans doublon dans le pack)</div>
+          </div>
+          <div class="p-2 rounded-xl bg-black/40 border border-emerald-400/25">
+            <div class="font-bold text-emerald-300">Carte 4 (Slot Surprise)</div>
+            <div class="text-slate-300 text-[10px] mt-0.5">◆ <strong class="text-emerald-200">85 % Peu Commune</strong> · ★ 12 % Rare · ✨ 3 % Holo</div>
+          </div>
+          <div class="p-2 rounded-xl bg-gradient-to-br from-amber-500/15 to-pink-500/15 border border-yellow-400/40">
+            <div class="font-bold text-yellow-300">Carte 5 (Slot Climax)</div>
+            <div class="text-slate-200 text-[10px] mt-0.5">✨ <strong class="text-pink-300">33,3 % Rare Holo</strong> · ★ <strong class="text-yellow-200">46,7 % Rare</strong> · ◆ 20 % Peu Com.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Barre du bas : Tapis de jeu & Audio -->
     <div class="w-full mt-1 pt-3 border-t border-white/15 flex items-center justify-between gap-2 text-xs text-slate-300">
       <div class="flex items-center gap-2">
@@ -637,9 +1002,14 @@
           <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
         </select>
       </div>
-      <button onclick="toggleSound()" id="soundBtnMenu" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-bold text-slate-100 hover:border-yellow-400/50 transition">
-        🔊 Cris 1G : ON
-      </button>
+      <div class="flex items-center gap-1.5 flex-wrap justify-end">
+        <button onclick="toggleBgm()" id="bgmBtnMenu" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-bold text-yellow-200 border border-yellow-400/40 hover:border-yellow-400/70 transition flex items-center gap-1" title="Pokémon Theme (8-Bit Remix) - 8 Bit Universe">
+          🎵 Musique 8-Bit : ON
+        </button>
+        <button onclick="toggleSound()" id="soundBtnMenu" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-bold text-slate-100 hover:border-yellow-400/50 transition">
+          🔊 Cris 1G : ON
+        </button>
+      </div>
     </div>
   </div>
 
@@ -658,7 +1028,10 @@
         <span class="text-[10px] font-mono text-slate-200 px-1.5 py-0.5 rounded-full bg-black/30 shrink-0" title="Cartes en main de l'adversaire">✋<strong id="aiHandCount">7</strong></span>
       </div>
       <div id="turnPhaseBadge" class="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-yellow-400/15 border border-yellow-400/35 text-yellow-300 truncate text-right">Préparation</div>
-      <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs shrink-0 transition">🔊</button>
+      <div class="flex items-center gap-1 shrink-0">
+        <button onclick="toggleBgm()" id="bgmBtnGame" class="w-8 h-7 rounded-lg bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/35 text-xs shrink-0 transition" title="Musique 8-Bit ON/OFF">🎵</button>
+        <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs shrink-0 transition" title="Cris 1G & Effets ON/OFF">🔊</button>
+      </div>
     </header>
 
     <!-- TAPIS DE JEU (tailles calculées selon l'écran : voir layoutBoard) -->
@@ -807,6 +1180,31 @@
       </div>
       <div id="academyContent" class="space-y-3 text-xs"></div>
     </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- MODAL PLEIN ÉCRAN : OUVERTURE SATISFAISANTE DE BOOSTER (5 CARTES)   -->
+  <!-- =================================================================== -->
+  <div id="boosterOpenModal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-between p-4 overflow-y-auto">
+    <!-- Barre supérieure -->
+    <div class="w-full max-w-xl flex items-center justify-between z-20">
+      <div class="flex items-center gap-2">
+        <span id="boosterSetBadge" class="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Set de Base · 1999</span>
+        <span id="boosterStepPill" class="text-xs font-mono font-bold text-slate-300">5 cartes</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="boosterSkipBtn" onclick="revealAllBoosterCards()" class="hidden glass-pill px-3 py-1.5 rounded-xl text-xs font-bold text-amber-200 hover:text-white">
+          ⏩ Tout révéler
+        </button>
+        <button onclick="closeBoosterOpenModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center">✕</button>
+      </div>
+    </div>
+
+    <!-- Zone centrale dynamique (Sachet 3D -> Pile de 5 cartes -> Récapitulatif) -->
+    <div id="boosterStageContainer" class="flex-1 w-full max-w-2xl flex flex-col items-center justify-center relative my-2 min-h-[410px]"></div>
+
+    <!-- Pied de modale (instructions ou boutons d'action) -->
+    <div id="boosterFooterZone" class="w-full max-w-xl flex flex-col items-center gap-2 z-20 pb-1"></div>
   </div>
 
   <!-- =================================================================== -->
@@ -1060,7 +1458,8 @@
           "Feu"
         ],
         "damage": 100,
-        "text": "Défaussez 2 cartes Énergie attachées à Dracaufeu pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 2 cartes Énergie attachées à Dracaufeu pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_2"
       }
     ],
     "power": {
@@ -1095,7 +1494,8 @@
           "Feu"
         ],
         "damage": 100,
-        "text": "Défaussez 2 cartes Énergie attachées à Dracaufeu pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 2 cartes Énergie attachées à Dracaufeu pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_2"
       }
     ],
     "power": {
@@ -2484,7 +2884,8 @@
           "Incolore"
         ],
         "damage": 80,
-        "text": "Arcanin s'inflige 30 dégâts."
+        "text": "Arcanin s'inflige 30 dégâts.",
+        "effect": "recoil_30"
       }
     ]
   },
@@ -2523,7 +2924,8 @@
           "Incolore"
         ],
         "damage": 80,
-        "text": "Arcanin s'inflige 30 dégâts."
+        "text": "Arcanin s'inflige 30 dégâts.",
+        "effect": "recoil_30"
       }
     ]
   },
@@ -2561,7 +2963,8 @@
           "Incolore"
         ],
         "damage": 50,
-        "text": "Défaussez 1 carte Énergie {R} attachée à Reptincel pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 1 carte Énergie {R} attachée à Reptincel pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_1"
       }
     ]
   },
@@ -2599,7 +3002,8 @@
           "Incolore"
         ],
         "damage": 50,
-        "text": "Défaussez 1 carte Énergie {R} attachée à Reptincel pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 1 carte Énergie {R} attachée à Reptincel pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_1"
       }
     ]
   },
@@ -3247,7 +3651,8 @@
           "Incolore"
         ],
         "damage": 50,
-        "text": "Inflige 50 dégâts moins 10 dégâts pour chaque marqueur de dégâts sur Machopeur."
+        "text": "Inflige 50 dégâts moins 10 dégâts pour chaque marqueur de dégâts sur Machopeur.",
+        "effect": "karate_chop"
       },
       {
         "name": "Sacrifice",
@@ -3258,7 +3663,8 @@
           "Incolore"
         ],
         "damage": 60,
-        "text": "Machopeur s'inflige 20 dégâts."
+        "text": "Machopeur s'inflige 20 dégâts.",
+        "effect": "recoil_20"
       }
     ]
   },
@@ -3286,7 +3692,8 @@
           "Incolore"
         ],
         "damage": 50,
-        "text": "Inflige 50 dégâts moins 10 dégâts pour chaque marqueur de dégâts sur Machopeur."
+        "text": "Inflige 50 dégâts moins 10 dégâts pour chaque marqueur de dégâts sur Machopeur.",
+        "effect": "karate_chop"
       },
       {
         "name": "Sacrifice",
@@ -3297,7 +3704,8 @@
           "Incolore"
         ],
         "damage": 60,
-        "text": "Machopeur s'inflige 20 dégâts."
+        "text": "Machopeur s'inflige 20 dégâts.",
+        "effect": "recoil_20"
       }
     ]
   },
@@ -3402,7 +3810,8 @@
           "Incolore"
         ],
         "damage": 50,
-        "text": "Défaussez 1 carte Énergie {R} attachée à Magmar pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 1 carte Énergie {R} attachée à Magmar pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_1"
       }
     ]
   },
@@ -3439,7 +3848,8 @@
           "Incolore"
         ],
         "damage": 50,
-        "text": "Défaussez 1 carte Énergie {R} attachée à Magmar pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 1 carte Énergie {R} attachée à Magmar pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_1"
       }
     ]
   },
@@ -4052,7 +4462,8 @@
           "Incolore"
         ],
         "damage": 30,
-        "text": "Défaussez 1 carte Énergie {R} attachée à Salamèche pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 1 carte Énergie {R} attachée à Salamèche pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_1"
       }
     ]
   },
@@ -4087,7 +4498,8 @@
           "Incolore"
         ],
         "damage": 30,
-        "text": "Défaussez 1 carte Énergie {R} attachée à Salamèche pour pouvoir utiliser cette attaque."
+        "text": "Défaussez 1 carte Énergie {R} attachée à Salamèche pour pouvoir utiliser cette attaque.",
+        "effect": "discard_fire_1"
       }
     ]
   },
@@ -4183,7 +4595,8 @@
           "Incolore"
         ],
         "damage": 10,
-        "text": "Lancez 2 pièces. Cette attaque inflige 10 dégâts multipliés par le nombre de faces."
+        "text": "Lancez 2 pièces. Cette attaque inflige 10 dégâts multipliés par le nombre de faces.",
+        "effect": "fury_attack_2coins"
       }
     ]
   },
@@ -4209,7 +4622,8 @@
           "Incolore"
         ],
         "damage": 10,
-        "text": "Lancez 2 pièces. Cette attaque inflige 10 dégâts multipliés par le nombre de faces."
+        "text": "Lancez 2 pièces. Cette attaque inflige 10 dégâts multipliés par le nombre de faces.",
+        "effect": "fury_attack_2coins"
       }
     ]
   },
@@ -8588,7 +9002,7 @@
     "name": "Noadkoko",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Nœufnœuf",
+    "evolvesFrom": "Nœunœuf",
     "hp": 80,
     "type": "Plante",
     "weakness": "Feu",
@@ -8622,7 +9036,7 @@
     "name": "Noadkoko",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Nœufnœuf",
+    "evolvesFrom": "Nœunœuf",
     "hp": 80,
     "type": "Plante",
     "weakness": "Feu",
@@ -9813,7 +10227,7 @@
     "id": "exeggcute",
     "setId": "base2-52",
     "set": "jungle",
-    "name": "Nœufnœuf",
+    "name": "Nœunœuf",
     "category": "Pokémon",
     "stage": "Base",
     "evolvesFrom": null,
@@ -9848,7 +10262,7 @@
     "id": "exeggcute",
     "setId": "base2-52",
     "set": "jungle",
-    "name": "Nœufnœuf",
+    "name": "Nœunœuf",
     "category": "Pokémon",
     "stage": "Base",
     "evolvesFrom": null,
@@ -10090,7 +10504,8 @@
           "Incolore"
         ],
         "damage": 10,
-        "text": "Lancez une pièce. Si c'est face, piochez une carte."
+        "text": "Lancez une pièce. Si c'est face, piochez une carte.",
+        "effect": "pay_day"
       }
     ]
   },
@@ -10117,7 +10532,8 @@
           "Incolore"
         ],
         "damage": 10,
-        "text": "Lancez une pièce. Si c'est face, piochez une carte."
+        "text": "Lancez une pièce. Si c'est face, piochez une carte.",
+        "effect": "pay_day"
       }
     ]
   },
@@ -14711,11 +15127,56 @@ const TYPE_EMOJI = {
     };
 
     // -----------------------------------------------------------------------
-    // 3. ÉTAT DU JEU & AUDIO 1G
+    // 3. ÉTAT DU JEU, MUSIQUE 8-BIT & AUDIO 1G
     // -----------------------------------------------------------------------
     let soundEnabled = true;
+    let bgmEnabled = localStorage.getItem('ppi_v2_bgm') !== 'off';
     let game = null;
     let uidCounter = 1;
+
+    const bgmAudio = new Audio('../assets/bgm.m4a');
+    bgmAudio.loop = true;
+    bgmAudio.volume = 0.28;
+    bgmAudio.preload = 'auto';
+
+    function updateBgmUi() {
+      const btnMenu = document.getElementById('bgmBtnMenu');
+      const btnGame = document.getElementById('bgmBtnGame');
+      if (btnMenu) {
+        btnMenu.textContent = bgmEnabled ? '🎵 Musique 8-Bit : ON' : '🔇 Musique 8-Bit : OFF';
+        btnMenu.classList.toggle('text-yellow-200', bgmEnabled);
+        btnMenu.classList.toggle('text-slate-400', !bgmEnabled);
+      }
+      if (btnGame) {
+        btnGame.textContent = bgmEnabled ? '🎵' : '🔇';
+        btnGame.classList.toggle('opacity-50', !bgmEnabled);
+      }
+    }
+
+    function ensureBgmPlaying() {
+      if (!bgmEnabled) return;
+      if (bgmAudio.paused) {
+        bgmAudio.play().catch(() => {});
+      }
+    }
+
+    function toggleBgm() {
+      bgmEnabled = !bgmEnabled;
+      try { localStorage.setItem('ppi_v2_bgm', bgmEnabled ? 'on' : 'off'); } catch (_) {}
+      if (bgmEnabled) {
+        bgmAudio.play().catch(() => {});
+      } else {
+        bgmAudio.pause();
+      }
+      updateBgmUi();
+    }
+
+    // Déblocage automatique de la musique dès la première interaction (ou au chargement si autorisé)
+    updateBgmUi();
+    ensureBgmPlaying();
+    ['pointerdown', 'keydown', 'touchstart', 'click'].forEach((ev) => {
+      document.addEventListener(ev, () => ensureBgmPlaying(), { passive: true });
+    });
 
     function playPokemonCry(dexId) {
       if (!soundEnabled || !dexId) return;

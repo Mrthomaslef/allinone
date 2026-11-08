@@ -30,7 +30,13 @@ export const CARDS = {
     ],
     "set": "base",
     "number": "1/102",
-    "image": "https://assets.tcgdex.net/fr/base/base1/1/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base1/1/high.webp",
+    "power": {
+      "id": "damage_swap",
+      "name": "Transfert de dégâts",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 PV) d'un de vos Pokémon vers un autre tant que cela ne met pas ce Pokémon K.O."
+    }
   },
   "blastoise": {
     "id": "blastoise",
@@ -62,7 +68,13 @@ export const CARDS = {
     ],
     "set": "base",
     "number": "2/102",
-    "image": "https://assets.tcgdex.net/fr/base/base1/2/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base1/2/high.webp",
+    "power": {
+      "id": "rain_dance",
+      "name": "Danse de la pluie",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez attacher 1 carte Énergie Eau de votre main à 1 de vos Pokémon Eau."
+    }
   },
   "chansey": {
     "id": "chansey",
@@ -135,7 +147,13 @@ export const CARDS = {
     ],
     "set": "base",
     "number": "4/102",
-    "image": "https://assets.tcgdex.net/fr/base/base1/4/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base1/4/high.webp",
+    "power": {
+      "id": "energy_burn",
+      "name": "Combustion d'Énergie",
+      "passive": true,
+      "text": "Toutes les Énergies attachées à Dracaufeu comptent comme de l'Énergie Feu au lieu de leur type habituel."
+    }
   },
   "clefairy": {
     "id": "clefairy",
@@ -288,7 +306,13 @@ export const CARDS = {
     ],
     "set": "base",
     "number": "8/102",
-    "image": "https://assets.tcgdex.net/fr/base/base1/8/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base1/8/high.webp",
+    "power": {
+      "id": "strikes_back",
+      "name": "Riposte",
+      "passive": true,
+      "text": "Chaque fois que l'attaque de votre adversaire inflige des dégâts à Mackogneur (même s'il est mis K.O.), ce pouvoir inflige 10 dégâts au Pokémon Attaquant."
+    }
   },
   "magneton": {
     "id": "magneton",
@@ -567,7 +591,13 @@ export const CARDS = {
     ],
     "set": "base",
     "number": "15/102",
-    "image": "https://assets.tcgdex.net/fr/base/base1/15/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base1/15/high.webp",
+    "power": {
+      "id": "energy_trans",
+      "name": "Transfert d'Énergie",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 carte Énergie Plante attachée à l'un de vos Pokémon vers un autre de vos Pokémon."
+    }
   },
   "zapdos": {
     "id": "zapdos",
@@ -801,7 +831,13 @@ export const CARDS = {
     ],
     "set": "base",
     "number": "21/102",
-    "image": "https://assets.tcgdex.net/fr/base/base1/21/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base1/21/high.webp",
+    "power": {
+      "id": "buzzap",
+      "name": "Buzzap",
+      "passive": false,
+      "text": "Pendant votre tour (avant votre attaque), vous pouvez mettre Électrode K.O. (l'adversaire prend 1 Récompense) et l'attacher à un autre de vos Pokémon comme 2 Énergies de n'importe quel type."
+    }
   },
   "pidgeotto": {
     "id": "pidgeotto",
@@ -1383,7 +1419,7 @@ export const CARDS = {
     "name": "Nidorino",
     "type": "Pokemon",
     "stage": "Stage 1",
-    "evolvesFrom": "Nidoran",
+    "evolvesFrom": "Nidoran ♂",
     "hp": 60,
     "maxHp": 60,
     "energyType": "Grass",
@@ -2993,7 +3029,7 @@ export const CARDS = {
     "name": "M. Mime",
     "type": "Pokemon",
     "stage": "Basic",
-    "evolvesFrom": "Mime Jr.",
+    "evolvesFrom": null,
     "hp": 40,
     "maxHp": 40,
     "energyType": "Psychic",
@@ -3015,7 +3051,13 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "6/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/6/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/6/high.webp",
+    "power": {
+      "id": "invisible_wall",
+      "name": "Mur invisible",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque inflige 30 dégâts ou plus à M. Mime (après Faiblesse et Résistance), prévenez ces dégâts."
+    }
   },
   "nidoqueen": {
     "id": "nidoqueen",
@@ -3177,7 +3219,7 @@ export const CARDS = {
     "name": "Ronflex",
     "type": "Pokemon",
     "stage": "Basic",
-    "evolvesFrom": "Goinfrex",
+    "evolvesFrom": null,
     "hp": 90,
     "maxHp": 90,
     "energyType": "Colorless",
@@ -3204,7 +3246,13 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "11/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/11/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/11/high.webp",
+    "power": {
+      "id": "thick_skinned",
+      "name": "Peau épaisse",
+      "passive": true,
+      "text": "Ronflex ne peut pas devenir Endormi, Confus, Paralysé ou Empoisonné."
+    }
   },
   "vaporeon": {
     "id": "vaporeon",
@@ -3270,7 +3318,14 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "13/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/13/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/13/high.webp",
+    "power": {
+      "id": "shift",
+      "name": "Changement",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez changer le type d'Aéromite pour le type de n'importe quel autre Pokémon en jeu (autre qu'Incolore)."
+    }
   },
   "victreebel": {
     "id": "victreebel",
@@ -3339,7 +3394,14 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "15/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/15/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/15/high.webp",
+    "power": {
+      "id": "heal",
+      "name": "Soins",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez lancer une pièce. Si c'est face, retirez 1 marqueur de dégâts (10 dégâts) d'un de vos Pokémon."
+    }
   },
   "wigglytuff": {
     "id": "wigglytuff",
@@ -3582,7 +3644,7 @@ export const CARDS = {
     "name": "M. Mime",
     "type": "Pokemon",
     "stage": "Basic",
-    "evolvesFrom": "Mime Jr.",
+    "evolvesFrom": null,
     "hp": 40,
     "maxHp": 40,
     "energyType": "Psychic",
@@ -3604,7 +3666,13 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "22/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/22/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/22/high.webp",
+    "power": {
+      "id": "invisible_wall",
+      "name": "Mur invisible",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque inflige 30 dégâts ou plus à M. Mime (après Faiblesse et Résistance), prévenez ces dégâts."
+    }
   },
   "nidoqueen-base2-23": {
     "id": "nidoqueen-base2-23",
@@ -3766,7 +3834,7 @@ export const CARDS = {
     "name": "Ronflex",
     "type": "Pokemon",
     "stage": "Basic",
-    "evolvesFrom": "Goinfrex",
+    "evolvesFrom": null,
     "hp": 90,
     "maxHp": 90,
     "energyType": "Colorless",
@@ -3793,7 +3861,13 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "27/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/27/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/27/high.webp",
+    "power": {
+      "id": "thick_skinned",
+      "name": "Peau épaisse",
+      "passive": true,
+      "text": "Ronflex ne peut pas devenir Endormi, Confus, Paralysé ou Empoisonné."
+    }
   },
   "vaporeon-base2-28": {
     "id": "vaporeon-base2-28",
@@ -3859,7 +3933,14 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "29/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/29/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/29/high.webp",
+    "power": {
+      "id": "shift",
+      "name": "Changement",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez changer le type d'Aéromite pour le type de n'importe quel autre Pokémon en jeu (autre qu'Incolore)."
+    }
   },
   "victreebel-base2-30": {
     "id": "victreebel-base2-30",
@@ -3928,7 +4009,14 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "31/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/31/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/31/high.webp",
+    "power": {
+      "id": "heal",
+      "name": "Soins",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez lancer une pièce. Si c'est face, retirez 1 marqueur de dégâts (10 dégâts) d'un de vos Pokémon."
+    }
   },
   "wigglytuff-base2-32": {
     "id": "wigglytuff-base2-32",
@@ -4033,14 +4121,20 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "34/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/34/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/34/high.webp",
+    "power": {
+      "id": "retreat_aid",
+      "name": "Soutien de retraite",
+      "passive": true,
+      "text": "Tant que Dodrio est sur votre Banc, payez 1 Énergie de moins pour faire battre en retraite votre Pokémon Actif."
+    }
   },
   "exeggutor": {
     "id": "exeggutor",
     "name": "Noadkoko",
     "type": "Pokemon",
     "stage": "Stage 1",
-    "evolvesFrom": "Noeunoeuf",
+    "evolvesFrom": "Nœufnœuf",
     "hp": 80,
     "maxHp": 80,
     "energyType": "Grass",
@@ -4232,7 +4326,7 @@ export const CARDS = {
     "name": "Nidorina",
     "type": "Pokemon",
     "stage": "Stage 1",
-    "evolvesFrom": "Nidoran",
+    "evolvesFrom": "Nidoran ♀",
     "hp": 70,
     "maxHp": 70,
     "energyType": "Grass",
@@ -4808,7 +4902,14 @@ export const CARDS = {
     ],
     "set": "jungle",
     "number": "55/64",
-    "image": "https://assets.tcgdex.net/fr/base/base2/55/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base2/55/high.webp",
+    "power": {
+      "id": "peek",
+      "name": "Espionnage",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez regarder la carte du dessus d'un deck, une carte de la main adverse ou une Récompense."
+    }
   },
   "meowth": {
     "id": "meowth",
@@ -4956,7 +5057,7 @@ export const CARDS = {
     "name": "Pikachu",
     "type": "Pokemon",
     "stage": "Basic",
-    "evolvesFrom": "Pichu",
+    "evolvesFrom": null,
     "hp": 50,
     "maxHp": 50,
     "energyType": "Lightning",
@@ -5108,7 +5209,7 @@ export const CARDS = {
     "name": "Ptéra",
     "type": "Pokemon",
     "stage": "Stage 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 60,
     "maxHp": 60,
     "energyType": "Fighting",
@@ -5132,7 +5233,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "1/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/1/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/1/high.webp",
+    "power": {
+      "id": "prehistoric_power",
+      "name": "Pouvoir préhistorique",
+      "passive": true,
+      "text": "Plus aucune carte Évolution ne peut être jouée tant que Ptéra est en jeu."
+    }
   },
   "articuno": {
     "id": "articuno",
@@ -5193,7 +5300,13 @@ export const CARDS = {
     "attacks": [],
     "set": "fossil",
     "number": "3/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/3/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/3/high.webp",
+    "power": {
+      "id": "transform",
+      "name": "Morphing",
+      "passive": true,
+      "text": "Si Métamorph est votre Pokémon Actif, il copie les PV, le type, le coût de retraite et les attaques du Pokémon Défenseur (toute Énergie attachée à Métamorph fournit n'importe quel type)."
+    }
   },
   "dragonite": {
     "id": "dragonite",
@@ -5224,7 +5337,14 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "4/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/4/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/4/high.webp",
+    "power": {
+      "id": "step_in",
+      "name": "En avant",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), si Dracolosse est sur votre Banc, vous pouvez l'échanger gratuitement avec votre Pokémon Actif."
+    }
   },
   "gengar": {
     "id": "gengar",
@@ -5254,7 +5374,14 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "5/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/5/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/5/high.webp",
+    "power": {
+      "id": "curse",
+      "name": "Malédiction",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 dégâts) d'un des Pokémon de votre adversaire vers un autre de ses Pokémon (même si cela le met K.O.)."
+    }
   },
   "haunter-base3-6": {
     "id": "haunter-base3-6",
@@ -5281,7 +5408,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "6/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/6/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/6/high.webp",
+    "power": {
+      "id": "transparency",
+      "name": "Transparence",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque fait quoi que ce soit à Spectrum, lancez une pièce. Si c'est face, prévenez tous les effets de cette attaque, y compris les dégâts, infligés à Spectrum."
+    }
   },
   "hitmonlee": {
     "id": "hitmonlee",
@@ -5549,7 +5682,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "13/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/13/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/13/high.webp",
+    "power": {
+      "id": "toxic_gas",
+      "name": "Gaz toxique",
+      "passive": true,
+      "text": "Ignorez tous les Pouvoirs Pokémon autres que Gaz toxique ! Ce pouvoir cesse de fonctionner si Grotadmorv est Endormi, Confus ou Paralysé."
+    }
   },
   "raichu-base3-14": {
     "id": "raichu-base3-14",
@@ -5619,7 +5758,7 @@ export const CARDS = {
     "name": "Ptéra",
     "type": "Pokemon",
     "stage": "Stage 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 60,
     "maxHp": 60,
     "energyType": "Fighting",
@@ -5643,7 +5782,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "16/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/16/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/16/high.webp",
+    "power": {
+      "id": "prehistoric_power",
+      "name": "Pouvoir préhistorique",
+      "passive": true,
+      "text": "Plus aucune carte Évolution ne peut être jouée tant que Ptéra est en jeu."
+    }
   },
   "articuno-base3-17": {
     "id": "articuno-base3-17",
@@ -5704,7 +5849,13 @@ export const CARDS = {
     "attacks": [],
     "set": "fossil",
     "number": "18/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/18/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/18/high.webp",
+    "power": {
+      "id": "transform",
+      "name": "Morphing",
+      "passive": true,
+      "text": "Si Métamorph est votre Pokémon Actif, il copie les PV, le type, le coût de retraite et les attaques du Pokémon Défenseur (toute Énergie attachée à Métamorph fournit n'importe quel type)."
+    }
   },
   "dragonite-base3-19": {
     "id": "dragonite-base3-19",
@@ -5735,7 +5886,14 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "19/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/19/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/19/high.webp",
+    "power": {
+      "id": "step_in",
+      "name": "En avant",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), si Dracolosse est sur votre Banc, vous pouvez l'échanger gratuitement avec votre Pokémon Actif."
+    }
   },
   "gengar-base3-20": {
     "id": "gengar-base3-20",
@@ -5765,7 +5923,14 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "20/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/20/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/20/high.webp",
+    "power": {
+      "id": "curse",
+      "name": "Malédiction",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 dégâts) d'un des Pokémon de votre adversaire vers un autre de ses Pokémon (même si cela le met K.O.)."
+    }
   },
   "haunter-base3-21": {
     "id": "haunter-base3-21",
@@ -5792,7 +5957,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "21/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/21/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/21/high.webp",
+    "power": {
+      "id": "transparency",
+      "name": "Transparence",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque fait quoi que ce soit à Spectrum, lancez une pièce. Si c'est face, prévenez tous les effets de cette attaque, y compris les dégâts, infligés à Spectrum."
+    }
   },
   "hitmonlee-base3-22": {
     "id": "hitmonlee-base3-22",
@@ -6060,7 +6231,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "28/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/28/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/28/high.webp",
+    "power": {
+      "id": "toxic_gas",
+      "name": "Gaz toxique",
+      "passive": true,
+      "text": "Ignorez tous les Pouvoirs Pokémon autres que Gaz toxique ! Ce pouvoir cesse de fonctionner si Grotadmorv est Endormi, Confus ou Paralysé."
+    }
   },
   "raichu-base3-29": {
     "id": "raichu-base3-29",
@@ -6444,7 +6621,7 @@ export const CARDS = {
     "name": "Magmar",
     "type": "Pokemon",
     "stage": "Basic",
-    "evolvesFrom": "Magby",
+    "evolvesFrom": null,
     "hp": 70,
     "maxHp": 70,
     "energyType": "Fire",
@@ -6618,7 +6795,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "43/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/43/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/43/high.webp",
+    "power": {
+      "id": "strange_behavior",
+      "name": "Comportement étrange",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts d'un de vos Pokémon vers Flagadoss tant que cela ne met pas Flagadoss K.O."
+    }
   },
   "tentacruel": {
     "id": "tentacruel",
@@ -6827,7 +7010,7 @@ export const CARDS = {
     "name": "Kabuto",
     "type": "Pokemon",
     "stage": "Stage 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 30,
     "maxHp": 30,
     "energyType": "Fighting",
@@ -6848,7 +7031,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "50/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/50/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/50/high.webp",
+    "power": {
+      "id": "kabuto_armor",
+      "name": "Armure de Kabuto",
+      "passive": true,
+      "text": "Lorsqu'une attaque inflige des dégâts à Kabuto, ces dégâts sont divisés par deux (arrondis à la dizaine inférieure la plus proche, après application de la Faiblesse et de la Résistance)."
+    }
   },
   "krabby": {
     "id": "krabby",
@@ -6893,7 +7082,7 @@ export const CARDS = {
     "name": "Amonita",
     "type": "Pokemon",
     "stage": "Stage 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 40,
     "maxHp": 40,
     "energyType": "Water",
@@ -6914,7 +7103,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "52/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/52/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/52/high.webp",
+    "power": {
+      "id": "clairvoyance",
+      "name": "Clairevoyance",
+      "passive": true,
+      "text": "Votre adversaire joue avec sa main découverte."
+    }
   },
   "psyduck": {
     "id": "psyduck",
@@ -7049,7 +7244,13 @@ export const CARDS = {
     ],
     "set": "fossil",
     "number": "56/62",
-    "image": "https://assets.tcgdex.net/fr/base/base3/56/high.webp"
+    "image": "https://assets.tcgdex.net/fr/base/base3/56/high.webp",
+    "power": {
+      "id": "cowardice",
+      "name": "Couardise",
+      "passive": false,
+      "text": "À tout moment pendant votre tour (avant votre attaque), vous pouvez reprendre Tentacool dans votre main (défaussez toutes les cartes qui lui sont attachées). Ne peut pas être utilisé le tour où Tentacool est mis en jeu."
+    }
   },
   "zubat": {
     "id": "zubat",
