@@ -6,7 +6,7 @@
   <title>Pokémon : À toi de jouer ! (1999 · 228 Cartes Base + Jungle + Fossile)</title>
   <meta name="description" content="Recréation fidèle pour navigateur mobile de Pokémon Play It! (1999/2000) avec les 4 demi-decks officiels (Set de Base & Jungle FR), Juliette en IA et les vraies règles." />
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
-  <link rel="apple-touch-icon" href="assets/icon.svg" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#f8fafc" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -319,8 +319,8 @@
 
     /* ===== Assets originaux (SVG maison) ===== */
     .card-back { background: var(--card-back) center / cover no-repeat !important; border: none !important; border-radius: 5px; }
-    .juliette-avatar { display: inline-block; flex-shrink: 0; border-radius: 50%; }
-    .juliette-avatar svg { width: 100%; height: 100%; display: block; }
+    .juliette-avatar { display: inline-block; flex-shrink: 0; border-radius: 50%; overflow: hidden; }
+    .juliette-avatar svg, .juliette-avatar img { width: 100%; height: 100%; display: block; }
     .juliette-avatar.mood-pop { animation: moodPop .45s cubic-bezier(.2,1.5,.4,1); }
     @keyframes moodPop { 0% { transform: scale(.8) rotate(-6deg); } 100% { transform: none; } }
 
@@ -19674,51 +19674,12 @@ const TYPE_EMOJI = {
     document.getElementById('coinFront').innerHTML = coinFaceSVG('face');
     document.getElementById('coinBack').innerHTML = coinFaceSVG('pile');
 
-    // Portrait original de Juliette (3 expressions)
+    // Portrait de Professeur Juliette (style anime 90s détouré assorti aux autres personnages)
     let julietteMood = 'happy';
+    const JULIETTE_AVATAR = 'assets/trainers/juliette.jpg';
+    const JULIETTE_CUTOUT = 'assets/trainers/juliette.png';
     function julietteSVG(mood) {
-      const uid = `j${Math.random().toString(36).slice(2, 7)}`;
-      const eyes = {
-        happy: `<path d="M23.5 31.5q2.5-2.6 5 0M35.5 31.5q2.5-2.6 5 0" stroke="#3b2414" stroke-width="1.6" fill="none" stroke-linecap="round"/>`,
-        focus: `<ellipse cx="26" cy="31.5" rx="2" ry="1.5" fill="#2f5d3a"/><ellipse cx="38" cy="31.5" rx="2" ry="1.5" fill="#2f5d3a"/>
-                <path d="M23.4 30.2h5.2M35.4 30.2h5.2" stroke="#3b2414" stroke-width="1.1" stroke-linecap="round"/>
-                <circle cx="26.7" cy="31.1" r=".5" fill="#fff"/><circle cx="38.7" cy="31.1" r=".5" fill="#fff"/>`,
-        surprised: `<circle cx="26" cy="31.5" r="2.7" fill="#fff" stroke="#3b2414" stroke-width=".7"/><circle cx="38" cy="31.5" r="2.7" fill="#fff" stroke="#3b2414" stroke-width=".7"/>
-                <circle cx="26" cy="31.8" r="1.5" fill="#2f5d3a"/><circle cx="38" cy="31.8" r="1.5" fill="#2f5d3a"/>
-                <circle cx="26.5" cy="31.2" r=".5" fill="#fff"/><circle cx="38.5" cy="31.2" r=".5" fill="#fff"/>`
-      }[mood];
-      const brows = {
-        happy: `<path d="M23 27.2q3-1.4 6 0M35 27.2q3-1.4 6 0" stroke="#7a3315" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
-        focus: `<path d="M23 27.6l6-.8M35 26.4q3-1.8 6 0" stroke="#7a3315" stroke-width="1.3" fill="none" stroke-linecap="round"/>`,
-        surprised: `<path d="M23 25.4q3-2.2 6 0M35 25.4q3-2.2 6 0" stroke="#7a3315" stroke-width="1.2" fill="none" stroke-linecap="round"/>`
-      }[mood];
-      const mouth = {
-        happy: `<path d="M27.5 38.5q4.5 4.2 9 0z" fill="#8c2f24"/><path d="M29 39.3q3 1.2 6 0" stroke="#fff" stroke-width=".9" fill="none"/>`,
-        focus: `<path d="M29 39.4q3 .9 6-.4" stroke="#8c2f24" stroke-width="1.4" fill="none" stroke-linecap="round"/>`,
-        surprised: `<ellipse cx="32" cy="39.6" rx="2.1" ry="2.7" fill="#8c2f24"/>`
-      }[mood];
-      return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <defs><clipPath id="${uid}"><circle cx="32" cy="32" r="30"/></clipPath>
-          <radialGradient id="${uid}b" cx="50%" cy="35%" r="70%"><stop offset="0" stop-color="#fdf3dc"/><stop offset="1" stop-color="#e9c98f"/></radialGradient></defs>
-        <circle cx="32" cy="32" r="31.5" fill="#b4893f"/>
-        <g clip-path="url(#${uid})">
-          <rect width="64" height="64" fill="url(#${uid}b)"/>
-          <path d="M10 22q2-16 22-16t22 16v26q-4 6-10 6H16q-6 0-6-6z" fill="#9c3f1c"/>
-          <path d="M8 64q2-13 15-15h18q13 2 15 15z" fill="#3f7d6e"/>
-          <path d="M26 49l6 7 6-7z" fill="#fdf3dc"/>
-          <rect x="28" y="42" width="8" height="8" rx="3" fill="#efc09c"/>
-          <ellipse cx="32" cy="32" rx="12.5" ry="14" fill="#f6d1b0"/>
-          <circle cx="22.6" cy="35.5" r="2.4" fill="#f08c7a" opacity=".45"/><circle cx="41.4" cy="35.5" r="2.4" fill="#f08c7a" opacity=".45"/>
-          <g fill="#c9845a"><circle cx="24.2" cy="34" r=".45"/><circle cx="25.6" cy="35.2" r=".45"/><circle cx="38.4" cy="35.2" r=".45"/><circle cx="39.8" cy="34" r=".45"/></g>
-          <path d="M19 30q0-14 13-14t13 14q-4-7-9-7.5-3 3.5-10 4.5-4 .5-7 3z" fill="#b24a22"/>
-          <path d="M19.5 22q12.5-9 25 0" stroke="#f2c14e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-          <circle cx="44" cy="22.5" r="2.2" fill="#f2c14e" stroke="#b4893f" stroke-width=".5"/>
-          ${brows}${eyes}
-          <path d="M31.6 34.2q.6 1.6-.4 2" stroke="#d99a78" stroke-width=".8" fill="none" stroke-linecap="round"/>
-          ${mouth}
-        </g>
-        <circle cx="32" cy="32" r="30.5" fill="none" stroke="#fdf3dc" stroke-width="1"/>
-      </svg>`;
+      return `<img src="${JULIETTE_CUTOUT}" style="background:#fef3c7;object-position:top" alt="Professeur Juliette" class="w-full h-full object-cover object-top rounded-full" draggable="false" />`;
     }
     function setJulietteMood(mood) {
       const changed = mood !== julietteMood;
@@ -19728,13 +19689,14 @@ const TYPE_EMOJI = {
         const isBattleAvatar = el.id === 'aiHeaderAvatar' || el.closest('#julietteBubble');
         const inBubble = !!el.closest('#julietteBubble');
         el.classList.toggle('adv-duel-avatar', !!(advTrainer && inBubble));
-        el.classList.toggle('adv-head-avatar', !!(advTrainer && el.id === 'aiHeaderAvatar'));
+        el.classList.toggle('adv-head-avatar', el.id === 'aiHeaderAvatar');
         if (advTrainer && isBattleAvatar) {
           if (advTrainer.color) el.style.setProperty('--adv-c', advTrainer.color);
           el.innerHTML = inBubble
             ? `<img src="${advTrainer.cutout || advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" draggable="false" />`
             : `<img src="${advTrainer.cutout || advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-full h-full object-cover object-top rounded-full" />`;
         } else {
+          if (el.id === 'aiHeaderAvatar') el.style.setProperty('--adv-c', '#fef3c7');
           el.innerHTML = julietteSVG(mood);
         }
         if (changed) { el.classList.remove('mood-pop'); void el.offsetWidth; el.classList.add('mood-pop'); }

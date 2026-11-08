@@ -1,4 +1,93 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#dc2626"/>
-  <text x="32" y="32" dy="0.35em" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="26" font-weight="600" fill="#ffffff">PP</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="75%">
+      <stop offset="0" stop-color="#2b4fd1"/>
+      <stop offset=".55" stop-color="#132a73"/>
+      <stop offset="1" stop-color="#070d24"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffd84a" stop-opacity=".55"/>
+      <stop offset=".6" stop-color="#ffcb05" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#ffcb05" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cardBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d5fd8"/>
+      <stop offset="1" stop-color="#16327f"/>
+    </linearGradient>
+    <radialGradient id="swirl" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#6f9bff" stop-opacity=".9"/>
+      <stop offset=".7" stop-color="#3a66d6" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#2a52be" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff2a8"/>
+      <stop offset=".45" stop-color="#ffcb05"/>
+      <stop offset="1" stop-color="#d99400"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff6b5b"/>
+      <stop offset="1" stop-color="#d42a1b"/>
+    </linearGradient>
+    <linearGradient id="white" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dfe6f2"/>
+    </linearGradient>
+    <linearGradient id="holo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset=".30" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".46" stop-color="#ffffff" stop-opacity=".55"/>
+      <stop offset=".52" stop-color="#b7f0ff" stop-opacity=".35"/>
+      <stop offset=".60" stop-color="#ffd1f5" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".55"/>
+    </filter>
+    <clipPath id="cardClip"><rect x="-72" y="-100" width="144" height="200" rx="13"/></clipPath>
+    <!-- Dos de carte (même design que dans le jeu : bleu, liseré jaune, tourbillon, Poké Ball) -->
+    <g id="back">
+      <rect x="-72" y="-100" width="144" height="200" rx="13" fill="url(#gold)"/>
+      <rect x="-63" y="-91" width="126" height="182" rx="8" fill="url(#cardBlue)"/>
+      <ellipse cx="0" cy="0" rx="52" ry="76" fill="url(#swirl)"/>
+      <ellipse cx="0" cy="0" rx="40" ry="62" fill="none" stroke="#7fa6ff" stroke-opacity=".45" stroke-width="3"/>
+      <g>
+        <circle cx="0" cy="0" r="33" fill="url(#white)" stroke="#111827" stroke-width="4.5"/>
+        <path d="M-33 0 A33 33 0 0 1 33 0 Z" fill="url(#red)" stroke="#111827" stroke-width="4.5"/>
+        <rect x="-33" y="-3.5" width="66" height="7" fill="#111827"/>
+        <circle cx="0" cy="0" r="11" fill="url(#white)" stroke="#111827" stroke-width="4.5"/>
+        <circle cx="0" cy="0" r="4.5" fill="#fff" stroke="#c8d1e0" stroke-width="1.5"/>
+        <ellipse cx="-13" cy="-18" rx="9" ry="5" fill="#fff" opacity=".55" transform="rotate(-30 -13 -18)"/>
+      </g>
+    </g>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- rayons -->
+  <g opacity=".14" fill="#ffffff">
+    <path d="M256 236 L120 -40 L200 -40 Z"/><path d="M256 236 L312 -40 L392 -40 Z"/>
+    <path d="M256 236 L560 60 L560 150 Z"/><path d="M256 236 L-50 70 L-50 160 Z"/>
+    <path d="M256 236 L560 330 L560 420 Z"/><path d="M256 236 L-50 340 L-50 430 Z"/>
+  </g>
+  <circle cx="256" cy="262" r="210" fill="url(#halo)"/>
+  <!-- étoiles -->
+  <g fill="#fff">
+    <circle cx="86" cy="96" r="3.2" opacity=".85"/><circle cx="430" cy="118" r="2.6" opacity=".8"/>
+    <circle cx="452" cy="380" r="2.4" opacity=".6"/><circle cx="62" cy="400" r="2.2" opacity=".55"/>
+    <circle cx="140" cy="60" r="1.8" opacity=".6"/><circle cx="380" cy="64" r="1.8" opacity=".6"/>
+  </g>
+
+  <!-- éventail de 3 dos de carte -->
+  <g filter="url(#shadow)">
+    <g transform="translate(176 282) rotate(-22) scale(.92)"><use href="#back"/><rect x="-72" y="-100" width="144" height="200" rx="13" fill="#000" opacity=".22"/></g>
+    <g transform="translate(336 282) rotate(22) scale(.92)"><use href="#back"/><rect x="-72" y="-100" width="144" height="200" rx="13" fill="#000" opacity=".22"/></g>
+    <g transform="translate(256 262) rotate(-3) scale(1.08)">
+      <use href="#back"/>
+      <g clip-path="url(#cardClip)"><rect x="-150" y="-110" width="300" height="220" fill="url(#holo)"/></g>
+    </g>
+  </g>
+
+  <!-- étincelles -->
+  <g fill="#fff8c4">
+    <path d="M392 150 l7 19 19 7 -19 7 -7 19 -7 -19 -19 -7 19 -7 Z"/>
+    <path d="M118 176 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" opacity=".9"/>
+    <path d="M404 410 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 Z" opacity=".8"/>
+  </g>
 </svg>

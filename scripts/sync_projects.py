@@ -19,7 +19,7 @@ KNOWN_METADATA = {
         "category": "games-family",
         "emoji": "🃏",
         "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
-        "logoUrl": "pokemon-play-it/assets/icon.svg?v=9",
+        "logoUrl": "pokemon-play-it/assets/icon.svg?v=10",
     },
     "uncensored": {
         "title": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI",
@@ -622,7 +622,7 @@ def main():
                 "subtitle": "JCC Pokémon 1999 sur mobile · 228 cartes FR, Boosters, Création de Deck (mode auto 30/60 cartes, Énergies illimitées), Duel IA, Multijoueur & Tutoriel Juliette",
                 "category": "games-family",
                 "emoji": "🃏",
-                "logoUrl": "pokemon-play-it/assets/icon.svg?v=9",
+                "logoUrl": "pokemon-play-it/assets/icon.svg?v=10",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/pokemon-play-it",
                 "pushedAt": output[0]["pushedAt"] if output else None,
