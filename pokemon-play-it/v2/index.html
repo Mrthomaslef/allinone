@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '7c65ffe-1794170666';
+      var BUILD = '4e2f942-1794170776';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -275,11 +275,11 @@
     #badgeCeleb .bc-rays { position: absolute; inset: -60%; background: repeating-conic-gradient(from 0deg, rgba(255,255,255,.11) 0 7deg, transparent 7deg 18deg); animation: advSpin 16s linear infinite; -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 58%); mask-image: radial-gradient(circle, #000 18%, transparent 58%); }
     #badgeCeleb .bc-trainer { position: absolute; right: -10%; bottom: 0; height: 52dvh; opacity: .32; animation: bcTrainer .8s .15s ease both; -webkit-mask-image: linear-gradient(to top, transparent 0, #000 35%); mask-image: linear-gradient(to top, transparent 0, #000 35%); pointer-events: none; }
     @keyframes bcTrainer { from { transform: translateX(40%); opacity: 0; } }
-    #badgeCeleb .bc-stage { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 0 18px; animation: bcShake .38s .98s ease both; }
+    #badgeCeleb .bc-stage { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center; padding: 0 16px; max-width: 420px; width: 100%; animation: bcShake .38s .98s ease both; }
     @keyframes bcShake { 0%,100% { transform: none; } 20% { transform: translate(-6px, 3px); } 40% { transform: translate(5px, -4px); } 60% { transform: translate(-4px, 2px); } 80% { transform: translate(3px, -1px); } }
-    #badgeCeleb .bc-title { font: 900 30px/1 'Nunito', sans-serif; color: #fde047; -webkit-text-stroke: 2px #0f172a; text-shadow: 3px 4px 0 #0f172a; animation: advPop .45s 1s cubic-bezier(.2,1.6,.4,1) both; }
-    #badgeCeleb .bc-medal-wrap { position: relative; width: 180px; height: 180px; display: grid; place-items: center; }
-    #badgeCeleb .bc-medal { position: relative; width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; overflow: hidden;
+    #badgeCeleb .bc-title { font: 900 28px/1 'Nunito', sans-serif; color: #fde047; -webkit-text-stroke: 2px #0f172a; text-shadow: 3px 4px 0 #0f172a; animation: advPop .45s 1s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-medal-wrap { position: relative; width: 152px; height: 152px; display: grid; place-items: center; }
+    #badgeCeleb .bc-medal { position: relative; width: 128px; height: 128px; border-radius: 50%; display: grid; place-items: center; overflow: hidden;
       background: radial-gradient(circle at 32% 28%, #fff 0%, #fef3c7 14%, #fbbf24 40%, #b45309 80%, #78350f 100%);
       box-shadow: 0 0 0 6px rgba(255,255,255,.92), 0 0 0 11px var(--adv-c), 0 0 60px 14px rgba(253,224,71,.45), inset 0 -10px 18px rgba(0,0,0,.35), inset 0 8px 14px rgba(255,255,255,.6);
       animation: bcDrop .7s .3s cubic-bezier(.3,1.45,.5,1) both, bcFloat 3s 1.6s ease-in-out infinite; }
@@ -295,14 +295,24 @@
     @keyframes bcSpark { 0% { opacity: 1; transform: rotate(var(--a)) translateY(-60px) scaleY(.2); } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-160px) scaleY(1); } }
     #badgeCeleb .bc-conf { position: absolute; left: 50%; top: 50%; width: 9px; height: 14px; margin: -7px 0 0 -4.5px; opacity: 0; animation: bcConf 1.7s calc(1s + var(--d)) cubic-bezier(.15,.7,.35,1) both; }
     @keyframes bcConf { 0% { opacity: 1; transform: translate(0,0) rotate(0) scale(.5); } 75% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 170px)) rotate(var(--r)) scale(1); } }
-    #badgeCeleb .bc-name { font: 900 21px/1.1 'Nunito', sans-serif; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.6); animation: advPop .4s 1.2s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-name { font: 900 19px/1.1 'Nunito', sans-serif; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.6); animation: advPop .4s 1.2s cubic-bezier(.2,1.6,.4,1) both; }
     #badgeCeleb .bc-gains { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-    #badgeCeleb .bc-chip { padding: 6px 13px; border-radius: 999px; background: #fff; color: #0f172a; font-weight: 900; font-size: 14px; box-shadow: 0 4px 0 rgba(15,23,42,.6); animation: advPop .4s 1.45s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-chip { padding: 5px 12px; border-radius: 999px; background: #fff; color: #0f172a; font-weight: 900; font-size: 13px; box-shadow: 0 4px 0 rgba(15,23,42,.6); animation: advPop .4s 1.45s cubic-bezier(.2,1.6,.4,1) both; }
     #badgeCeleb .bc-chip b { color: #b45309; display: inline-block; min-width: 2.2em; text-align: left; }
     #badgeCeleb .bc-chip.bump b { animation: bcBump .18s ease; }
     @keyframes bcBump { 50% { transform: scale(1.35); } }
-    #badgeCeleb .bc-badges { display: grid; grid-template-columns: repeat(8, 32px); gap: 5px; animation: advPop .4s 1.9s both; }
-    #badgeCeleb .bc-badges span { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.12); font-size: 17px; filter: grayscale(1) opacity(.35); }
+    #badgeCeleb .bc-deck-showcase { width: 100%; padding: 10px 12px; border-radius: 18px; background: linear-gradient(135deg, rgba(15,23,42,.95) 0%, rgba(30,41,59,.96) 60%, rgba(69,26,3,.92) 100%); border: 2.5px solid #fde047; box-shadow: 0 10px 26px rgba(0,0,0,.65), 0 0 24px rgba(253,224,71,.5), inset 0 1px 0 rgba(255,255,255,.25); display: flex; align-items: center; gap: 12px; text-align: left; animation: advPop .5s 1.68s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-deck-cards { position: relative; width: 64px; height: 74px; flex-shrink: 0; }
+    #badgeCeleb .bc-deck-sub { position: absolute; right: 0; top: 4px; width: 46px; aspect-ratio: 63/88; border-radius: 6px; object-fit: cover; transform: rotate(9deg); border: 1.5px solid rgba(255,255,255,.55); box-shadow: 0 4px 10px rgba(0,0,0,.5); }
+    #badgeCeleb .bc-deck-main { position: absolute; left: 0; top: 0; width: 50px; aspect-ratio: 63/88; border-radius: 6px; object-fit: cover; transform: rotate(-5deg); border: 2px solid #fde047; box-shadow: 0 6px 14px rgba(0,0,0,.65); }
+    #badgeCeleb .bc-deck-60c { position: absolute; bottom: -2px; left: 2px; padding: 1px 6px; border-radius: 6px; background: #4f46e5; border: 1.5px solid #fde047; color: #fff; font: 900 10px/1.2 'Nunito', sans-serif; letter-spacing: .03em; box-shadow: 0 2px 6px rgba(0,0,0,.5); }
+    #badgeCeleb .bc-deck-info { min-width: 0; flex: 1; }
+    #badgeCeleb .bc-deck-kicker { display: inline-flex; align-items: center; gap: 4px; padding: 1.5px 7px; border-radius: 999px; background: linear-gradient(90deg, #fde047, #f59e0b); color: #0f172a; font: 900 9.5px/1.3 'Nunito', sans-serif; letter-spacing: .05em; text-transform: uppercase; }
+    #badgeCeleb .bc-deck-title { margin-top: 3px; font: 900 15px/1.15 'Nunito', sans-serif; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #badgeCeleb .bc-deck-desc { margin-top: 2px; font: 700 11px/1.25 'Nunito', sans-serif; color: #fde68a; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    #badgeCeleb .bc-deck-meta { margin-top: 3px; font: 800 10px/1.2 'Nunito', sans-serif; color: #38bdf8; }
+    #badgeCeleb .bc-badges { display: grid; grid-template-columns: repeat(8, 30px); gap: 5px; animation: advPop .4s 1.95s both; }
+    #badgeCeleb .bc-badges span { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.12); font-size: 16px; filter: grayscale(1) opacity(.35); }
     #badgeCeleb .bc-badges span.on { background: rgba(253,224,71,.28); filter: none; }
     #badgeCeleb .bc-badges span.new { box-shadow: 0 0 0 2px #fde047, 0 0 14px #fde047; animation: bcNew 1s 2.2s ease both; }
     @keyframes bcNew { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.7) rotate(-12deg); } }
@@ -2021,18 +2031,22 @@
         </div>
       </details>
 
-      <!-- BLOC 2 : PARTIE RAPIDE / DUEL IA LIBRE -->
+      <!-- BLOC 2 : PARTIE RAPIDE / DUEL IA LIBRE (60 CARTES) -->
       <div id="viewQuick" class="w-full space-y-2.5">
         <!-- Carte Face-à-Face (Sticky) + Bouton Lancer le Duel -->
         <div class="sticky -top-2.5 z-30 w-full p-2.5 rounded-2xl tcg-card-panel space-y-2">
+          <div class="flex items-center justify-between gap-2 pb-1 border-b border-slate-200/80">
+            <span class="font-black text-slate-900 text-xs truncate">⚔️ Partie Rapide · Duel IA</span>
+            <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-300 shrink-0">Decks Complets · 60c</span>
+          </div>
           <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
             <!-- Joueur -->
             <div class="flex items-center gap-2 min-w-0">
               <img id="quickSummaryPlayerImg" src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="" class="w-9 aspect-[63/88] rounded-md object-cover border-2 border-amber-400 shrink-0 shadow-sm" />
               <div class="min-w-0">
-                <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-700">Ton Deck</div>
-                <div id="quickSummaryPlayerName" class="text-xs font-black text-slate-900 leading-tight truncate">Demi Combat</div>
-                <div id="quickSummaryPlayerMeta" class="text-[10px] font-semibold text-slate-500 leading-tight truncate">30 cartes · 3 Prix</div>
+                <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-700">Ton Deck · 60c</div>
+                <div id="quickSummaryPlayerName" class="text-xs font-black text-slate-900 leading-tight truncate">Dracaufeu</div>
+                <div id="quickSummaryPlayerMeta" class="text-[10px] font-semibold text-slate-500 leading-tight truncate">60c · 60 cartes · 6 Prix</div>
               </div>
             </div>
 
@@ -2044,16 +2058,16 @@
             <!-- Adversaire IA -->
             <div class="flex items-center gap-2 min-w-0 justify-end text-right">
               <div class="min-w-0">
-                <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-rose-600">Adversaire IA</div>
-                <div id="quickSummaryAiName" class="text-xs font-black text-slate-900 leading-tight truncate">Demi Eau</div>
-                <div id="quickSummaryAiMeta" class="text-[10px] font-semibold text-slate-500 leading-tight truncate">30 cartes · 3 Prix</div>
+                <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-rose-600">Adversaire IA · 60c</div>
+                <div id="quickSummaryAiName" class="text-xs font-black text-slate-900 leading-tight truncate">Tortank</div>
+                <div id="quickSummaryAiMeta" class="text-[10px] font-semibold text-slate-500 leading-tight truncate">60c · 60 cartes · 6 Prix</div>
               </div>
-              <img id="quickSummaryAiImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded-md object-cover border-2 border-rose-400 shrink-0 shadow-sm" />
+              <img id="quickSummaryAiImg" src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="" class="w-9 aspect-[63/88] rounded-md object-cover border-2 border-rose-400 shrink-0 shadow-sm" />
             </div>
           </div>
 
           <button onclick="startQuickMatch()" class="w-full btn-gold py-2.5 px-4 rounded-xl text-xs sm:text-[13px] font-black uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:scale-[0.99] transition">
-            <span>Lancer le Duel</span>
+            <span>Lancer le Duel (60c)</span>
           </button>
         </div>
 
@@ -17711,8 +17725,8 @@ const TYPE_EMOJI = {
       return recipe.some(([id, n]) => n > 0 && CARDS_DB[id] && CARDS_DB[id].category === 'Pokémon' && CARDS_DB[id].stage === 'Base');
     }
 
-    let quickPlayerDeck = 'COMBAT';
-    let quickAiDeck = 'EAU';
+    let quickPlayerDeck = 'V2_FEU';
+    let quickAiDeck = 'V2_EAU';
 
     function switchMenuTab(tab) {
       const isSolo = tab === 'tuto' || tab === 'quick' || tab === 'solo';
@@ -18137,7 +18151,7 @@ const TYPE_EMOJI = {
       if (el) el.remove();
     }
 
-    // Célébration plein écran à la 1re victoire : badge qui tombe, impact, éclats, confettis, pièces qui défilent
+    // Célébration plein écran à la 1re victoire : badge qui tombe, impact, éclats, confettis, pièces qui défilent + Deck du Champion mis en avant
     function showBadgeCelebration(tr, coins, packs) {
       if (!tr) return;
       const old = document.getElementById('badgeCeleb');
@@ -18145,6 +18159,7 @@ const TYPE_EMOJI = {
       const tier = advTier(tr);
       const leagueJustOpened = tier === 'gym' && getAdvBadgeCount() === ADV_GYM_COUNT;
       const title = tier === 'champion' ? 'MAÎTRE DE LA LIGUE !' : tier === 'elite' ? 'SCEAU OBTENU !' : 'BADGE OBTENU !';
+      const deckMeta = DECK_META[tr.deckKey] || {};
       const cols = ['#fde047', '#f472b6', '#60a5fa', '#34d399', '#fb923c', '#ffffff', tr.color];
       let conf = '';
       for (let i = 0; i < 56; i++) {
@@ -18165,16 +18180,28 @@ const TYPE_EMOJI = {
           <div class="bc-medal-wrap">
             <div class="bc-ring"></div><div class="bc-ring r2"></div>
             ${sparks}
-            <div class="bc-medal"><span class="bc-icon">${advBadgeSvg(tr, 108, true)}</span><span class="bc-shine"></span></div>
+            <div class="bc-medal"><span class="bc-icon">${advBadgeSvg(tr, 96, true)}</span><span class="bc-shine"></span></div>
             ${conf}
           </div>
           <div class="bc-name">${tr.badgeName}</div>
           <div class="bc-gains">
             <span class="bc-chip bc-coins">🪙 +<b>0</b></span>
             ${packs ? `<span class="bc-chip" style="animation-delay:1.6s">🎴 +${packs} Booster${packs > 1 ? 's' : ''}</span>` : ''}
-            <span class="bc-chip" style="animation-delay:1.75s">🃏 Deck 2000</span>
           </div>
-          ${tier === 'gym' ? `<div class="bc-badges">${ADV_GYMS().map((g) => `<span class="${(adventureSave.defeated[g.id] || 0) > 0 ? 'on' : ''} ${g.id === tr.id ? 'new' : ''}">${advBadgeSvg(g, 24, true)}</span>`).join('')}</div>` : ''}
+          <div class="bc-deck-showcase">
+            <div class="bc-deck-cards">
+              ${deckMeta.subImg ? `<img class="bc-deck-sub" src="${deckMeta.subImg}" alt="" />` : ''}
+              <img class="bc-deck-main" src="${deckMeta.img || tr.avatar}" alt="${dbEsc(deckMeta.name || tr.deckArchetype)}" />
+              <span class="bc-deck-60c">60c</span>
+            </div>
+            <div class="bc-deck-info">
+              <div class="bc-deck-kicker">🏆 Deck de ${dbEsc(tr.name)} récupéré · 60c</div>
+              <div class="bc-deck-title">${dbEsc(deckMeta.short || tr.deckArchetype)}</div>
+              <div class="bc-deck-desc">${dbEsc(deckMeta.desc || tr.deckArchetype)}</div>
+              <div class="bc-deck-meta">⭐ ${dbEsc(deckMeta.star || '60 cartes')} · Jouable en Partie Rapide (60c) &amp; Aventure</div>
+            </div>
+          </div>
+          ${tier === 'gym' ? `<div class="bc-badges">${ADV_GYMS().map((g) => `<span class="${(adventureSave.defeated[g.id] || 0) > 0 ? 'on' : ''} ${g.id === tr.id ? 'new' : ''}">${advBadgeSvg(g, 22, true)}</span>`).join('')}</div>` : ''}
           ${leagueJustOpened ? '<div class="bc-unlock">🏛️ Le Conseil des 4 est ouvert !</div>' : ''}
           ${tier === 'champion' ? '<div class="bc-unlock">👑 Tu es le nouveau Maître de la Ligue 2000 !</div>' : ''}
           <div class="bc-tap">Touche pour continuer</div>
@@ -18213,6 +18240,20 @@ const TYPE_EMOJI = {
       }
     }
     function buzzPattern(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (_) {} }
+
+    function useChampionDeckInQuick(deckKey) {
+      if (!deckKeyPlayable(deckKey)) return;
+      quickPlayerDeck = deckKey;
+      try { localStorage.setItem('ppi_v2_quick_player_deck', deckKey); } catch (_) {}
+      closePickerModal();
+      confirmQuitMatch();
+      switchMenuTab('quick');
+      document.getElementById('menuScreen')?.scrollTo({ top: 0, behavior: 'smooth' });
+      const d = DECK_META[deckKey];
+      if (d && typeof showGameToast === 'function') {
+        showGameToast(`🏆 Deck Champion <b>${dbEsc(d.short || d.name)} (60c)</b> équipé en Partie Rapide !`);
+      }
+    }
 
     // Intro VS : le dresseur détouré entre en scène avec sa bulle au lancement du combat
     function showAdvIntro(tr) {
@@ -18266,64 +18307,68 @@ const TYPE_EMOJI = {
       const aGrid = document.getElementById('quickAiGrid');
       if (!pGrid || !aGrid) return;
 
-      const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
       const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
       const unlockedTourneyKeys = typeof getUnlockedTournamentDeckKeys === 'function' ? getUnlockedTournamentDeckKeys() : [];
 
       const renderPlayerCard = (k) => {
         const d = DECK_META[k];
+        if (!d) return '';
         const sel = quickPlayerDeck === k;
-        const isHalf = d.cards === 30;
         const isTourney = !!d.tournament;
         const starLabel = (d.star || '').split(' (')[0];
         return `
-          <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl border ${sel ? 'bg-amber-50/95 border-amber-400 ring-2 ring-amber-400 shadow-md scale-[1.01]' : 'bg-slate-50/90 hover:bg-white border-slate-200/90 hover:border-slate-300'} flex flex-col items-center gap-1 transition active:scale-95">
+          <button onclick="selectQuickPlayerDeck('${k}')" class="p-1.5 rounded-xl border ${sel ? 'bg-amber-50/95 border-amber-400 ring-2 ring-amber-400 shadow-md scale-[1.01]' : isTourney ? 'bg-amber-50/40 hover:bg-amber-50/80 border-amber-300/90 hover:border-amber-400' : 'bg-slate-50/90 hover:bg-white border-slate-200/90 hover:border-slate-300'} flex flex-col items-center gap-1 transition active:scale-95">
             <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-slate-900">
               <img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span class="absolute bottom-0.5 left-0.5 text-[9px] font-black uppercase px-1 rounded ${isTourney ? 'bg-amber-400 text-slate-950' : isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-600 text-white'}">${isTourney ? '2000' : isHalf ? '30c' : '60c'}</span>
+              ${isTourney ? '<span class="absolute top-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded bg-amber-400 text-slate-950 shadow">🏆</span>' : ''}
+              <span class="absolute bottom-0.5 left-0.5 text-[9px] font-black uppercase px-1 rounded ${isTourney ? 'bg-amber-400 text-slate-950' : 'bg-indigo-600 text-white'}">60c</span>
               ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black flex items-center justify-center shadow">✓</span>' : ''}
             </div>
             <span class="text-[11px] font-black ${sel ? 'text-amber-900' : 'text-slate-900'} w-full text-center leading-tight truncate">${d.short}</span>
-            <span class="text-[9.5px] font-semibold ${sel ? 'text-amber-700' : 'text-slate-500'} w-full text-center leading-none truncate -mt-0.5">${starLabel && starLabel !== d.short ? starLabel : (d.prizes + ' Prix')}</span>
+            <span class="text-[9.5px] font-semibold ${sel ? 'text-amber-700' : 'text-slate-500'} w-full text-center leading-none truncate -mt-0.5">${starLabel && starLabel !== d.short ? `${starLabel} · 60c` : '60c · 6 Prix'}</span>
           </button>
         `;
       };
 
-      const customKeys = typeof getCustomDeckKeys === 'function' ? getCustomDeckKeys(true) : [];
-      if (!deckKeyPlayable(quickPlayerDeck)) quickPlayerDeck = 'COMBAT';
+      const customKeys = (typeof getCustomDeckKeys === 'function' ? getCustomDeckKeys(true) : []).filter((k) => DECK_META[k]?.cards === 60);
+      if (!deckKeyPlayable(quickPlayerDeck) || DECK_META[quickPlayerDeck]?.cards === 30) quickPlayerDeck = 'V2_FEU';
+      if (quickAiDeck !== 'RANDOM' && (!deckKeyPlayable(quickAiDeck) || DECK_META[quickAiDeck]?.cards === 30)) quickAiDeck = 'V2_EAU';
+
       pGrid.innerHTML = `
         <div class="flex items-center justify-between gap-2">
           <div>
-            <h2 class="text-xs font-black tracking-wider uppercase text-slate-900">1. Choisis ton Deck</h2>
-            <p class="text-[10.5px] text-slate-500 leading-tight">Demi-deck rapide (3 Prix) ou Deck complet (6 Prix)</p>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <h2 class="text-xs font-black tracking-wider uppercase text-slate-900">1. Choisis ton Deck</h2>
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-300 shrink-0">60c · 6 Prix</span>
+            </div>
+            <p class="text-[10.5px] text-slate-500 leading-tight mt-0.5">Decks complets de 60 cartes (60c) · Les demi-decks 30c sont dans le Tutoriel en haut</p>
           </div>
           <button onclick="switchMenuTab('decks')" class="shrink-0 px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[10px] font-extrabold text-emerald-800 transition active:scale-95">
-            ${customKeys.length ? 'Mes Decks (' + customKeys.length + ')' : '+ Créer un deck'}
+            ${customKeys.length ? 'Mes Decks 60c (' + customKeys.length + ')' : '+ Créer un deck'}
           </button>
         </div>
         ${unlockedTourneyKeys.length ? `
-        <div class="space-y-1">
-          <div class="flex items-center justify-between px-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">🏆 Decks Champions Tournois 2000 (${unlockedTourneyKeys.length}/${ADVENTURE_TRAINERS.length})</span>
+        <div class="p-2 rounded-xl bg-gradient-to-br from-amber-50/90 via-yellow-50/60 to-white border border-amber-300/90 space-y-1.5 shadow-sm">
+          <div class="flex items-center justify-between gap-1 px-0.5">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">🏆 Decks des Champions récupérés · 60c (${unlockedTourneyKeys.length}/${ADVENTURE_TRAINERS.length})</span>
+            <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full bg-amber-400/90 text-slate-950">Tournois 2000 · 60c</span>
           </div>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${unlockedTourneyKeys.map(renderPlayerCard).join('')}</div>
-        </div>` : ''}
+        </div>` : `
+        <div onclick="switchMenuTab('adventure')" class="cursor-pointer p-2 rounded-xl bg-amber-50/70 hover:bg-amber-50 border border-dashed border-amber-300 flex items-center justify-between gap-2 transition active:scale-[0.99]">
+          <span class="text-[10.5px] font-bold text-amber-900 leading-snug">🏆 Bats les Champions du <b>Mode Aventure</b> pour récupérer leurs Decks officiels <b>60c</b> !</span>
+          <span class="shrink-0 text-[10px] font-black text-amber-800 underline">Défier →</span>
+        </div>`}
         ${customKeys.length ? `
         <div class="space-y-1">
           <div class="flex items-center justify-between px-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">Mes Decks perso</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">Mes Decks perso · 60 cartes (60c)</span>
           </div>
-          <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderPlayerCard).join('')}</div>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${customKeys.map(renderPlayerCard).join('')}</div>
         </div>` : ''}
-        <div class="space-y-1">
-          <div class="flex items-center justify-between px-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">Demi-Decks Rapides · 30 cartes (3 Prix)</span>
-          </div>
-          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderPlayerCard).join('')}</div>
-        </div>
         <div class="space-y-1 pt-0.5">
           <div class="flex items-center justify-between px-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">Decks Complets · 60 cartes (6 Prix)</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">Decks Complets · 60 cartes (60c · 6 Prix)</span>
           </div>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderPlayerCard).join('')}</div>
         </div>
@@ -18331,16 +18376,18 @@ const TYPE_EMOJI = {
 
       const renderAiCard = (k) => {
         const isRand = k === 'RANDOM';
-        const d = isRand ? { key: 'RANDOM', short: 'Aléatoire', cards: '30/60', prizes: '?', star: 'Surprise' } : DECK_META[k];
+        const d = isRand ? { key: 'RANDOM', short: 'Aléatoire', cards: 60, prizes: 6, star: 'Surprise' } : DECK_META[k];
+        if (!d) return '';
         const sel = quickAiDeck === k;
-        const isHalf = d.cards === 30;
+        const isTourney = !!d.tournament;
         return `
           <button onclick="selectQuickAiDeck('${k}')" class="p-1 rounded-xl border ${sel ? 'bg-rose-50/95 border-rose-400 ring-2 ring-rose-400 shadow-md scale-[1.01]' : 'bg-slate-50/90 hover:bg-white border-slate-200/90 hover:border-slate-300'} flex flex-col items-center gap-0.5 transition active:scale-95">
             <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden shadow-sm flex items-center justify-center bg-slate-900">
               ${isRand
                 ? `<span class="text-sm font-black text-rose-300">?</span>`
                 : `<img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
-                   <span class="absolute bottom-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-rose-600 text-white'}">${isHalf ? '30c' : '60c'}</span>
+                   ${isTourney ? '<span class="absolute top-0.5 left-0.5 text-[8px] font-black uppercase px-1 rounded bg-amber-400 text-slate-950">🏆</span>' : ''}
+                   <span class="absolute bottom-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded bg-rose-600 text-white">60c</span>
                    ${sel ? '<span class="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[9px] font-black flex items-center justify-center shadow">✓</span>' : ''}`
               }
             </div>
@@ -18349,39 +18396,44 @@ const TYPE_EMOJI = {
         `;
       };
 
+      const aiDeckPool = [...fullKeys, ...unlockedTourneyKeys];
       aGrid.innerHTML = `
         <div class="flex items-center justify-between gap-2">
           <div>
-            <h2 class="text-xs font-black tracking-wider uppercase text-slate-900">2. Adversaire IA</h2>
-            <p class="text-[10.5px] text-slate-500 leading-tight">Choisis le deck adverse ou tire au sort</p>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <h2 class="text-xs font-black tracking-wider uppercase text-slate-900">2. Adversaire IA</h2>
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300 shrink-0">60c · 6 Prix</span>
+            </div>
+            <p class="text-[10.5px] text-slate-500 leading-tight mt-0.5">Choisis le deck 60c adverse ou tire au sort</p>
           </div>
-          <button onclick="selectQuickAiDeck('RANDOM')" class="px-2.5 py-1 rounded-xl text-[10px] font-extrabold border transition active:scale-95 ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-500 shadow-sm' : 'bg-rose-50 text-rose-700 border-rose-300 hover:bg-rose-100'}">IA Aléatoire</button>
+          <button onclick="selectQuickAiDeck('RANDOM')" class="px-2.5 py-1 rounded-xl text-[10px] font-extrabold border transition active:scale-95 ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-500 shadow-sm' : 'bg-rose-50 text-rose-700 border-rose-300 hover:bg-rose-100'}">IA Aléatoire · 60c</button>
         </div>
-        <div class="grid grid-cols-5 gap-1.5">${[...halfKeys, ...fullKeys].map(renderAiCard).join('')}</div>
+        <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${aiDeckPool.map(renderAiCard).join('')}</div>
       `;
 
-      const pMeta = DECK_META[quickPlayerDeck];
+      const pMeta = DECK_META[quickPlayerDeck] || DECK_META.V2_FEU;
       document.getElementById('quickSummaryPlayerImg').src = pMeta.img;
       document.getElementById('quickSummaryPlayerName').textContent = pMeta.short;
       const pMetaEl = document.getElementById('quickSummaryPlayerMeta');
-      if (pMetaEl) pMetaEl.textContent = `${pMeta.cards} cartes · ${pMeta.prizes} Prix`;
+      if (pMetaEl) pMetaEl.textContent = `60c · ${pMeta.cards} cartes · ${pMeta.prizes} Prix`;
 
       const aMetaEl = document.getElementById('quickSummaryAiMeta');
       if (quickAiDeck === 'RANDOM') {
         document.getElementById('quickSummaryAiImg').src = pMeta.subImg;
-        document.getElementById('quickSummaryAiName').textContent = 'Aléatoire';
-        if (aMetaEl) aMetaEl.textContent = 'Deck surprise IA';
+        document.getElementById('quickSummaryAiName').textContent = 'Aléatoire (60c)';
+        if (aMetaEl) aMetaEl.textContent = '60c · Deck surprise IA · 6 Prix';
       } else {
-        const aMeta = DECK_META[quickAiDeck];
+        const aMeta = DECK_META[quickAiDeck] || DECK_META.V2_EAU;
         document.getElementById('quickSummaryAiImg').src = aMeta.img;
         document.getElementById('quickSummaryAiName').textContent = aMeta.short;
-        if (aMetaEl) aMetaEl.textContent = `${aMeta.cards} cartes · ${aMeta.prizes} Prix`;
+        if (aMetaEl) aMetaEl.textContent = `60c · ${aMeta.cards} cartes · ${aMeta.prizes} Prix`;
       }
     }
     renderQuickSetup();
 
     function startQuickMatch() {
-      const keys = Object.keys(DECK_META).filter((k) => !k.startsWith('CUSTOM_') && !k.startsWith('ADV_'));
+      const unlockedTourneyKeys = typeof getUnlockedTournamentDeckKeys === 'function' ? getUnlockedTournamentDeckKeys() : [];
+      const keys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT', ...unlockedTourneyKeys];
       const aiKey = quickAiDeck === 'RANDOM'
         ? keys[Math.floor(Math.random() * keys.length)]
         : quickAiDeck;
@@ -24443,6 +24495,10 @@ const TYPE_EMOJI = {
             adventureSave.unlockedRank = advTrainer.rank + 1;
             unlockedNextTrainer = ADVENTURE_TRAINERS.find((t) => t.rank === advTrainer.rank + 1) || null;
           }
+          if (firstTimeAdvWin && advTrainer.deckKey) {
+            quickPlayerDeck = advTrainer.deckKey;
+            try { localStorage.setItem('ppi_v2_quick_player_deck', quickPlayerDeck); } catch (_) {}
+          }
           saveAdventureData();
           earnedCoinsAmount = firstTimeAdvWin ? advTrainer.rewardCoins : 100;
           earnedFreePacks = firstTimeAdvWin ? (advTrainer.rewardFreePacks || 0) : 0;
@@ -24490,13 +24546,35 @@ const TYPE_EMOJI = {
         const grid = document.getElementById('pickerGrid');
         grid.className = 'flex flex-col gap-2';
 
-        const advUnlockHtml = (advTrainer && isWin && firstTimeAdvWin) ? `
-          <div class="w-full p-2.5 rounded-xl bg-sky-50 border border-sky-300 flex items-center gap-2.5 text-left shadow-sm">
-            <img src="${advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-11 h-11 rounded-xl object-cover object-top border border-sky-400 shrink-0" />
-            <div class="min-w-0 flex-1">
-              <div class="text-[10.5px] font-black text-sky-700 uppercase tracking-wide">${advTrainer.badgeIcon} ${dbEsc(advTrainer.badgeName)} remporté !</div>
-              <div class="text-[11px] font-extrabold text-slate-800 truncate">Deck débloqué : ${dbEsc(DECK_META[advTrainer.deckKey]?.name || advTrainer.deckArchetype)}</div>
-              <div class="text-[10px] font-semibold text-slate-600">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Maître de la Ligue 2000 !'}</div>
+        const champDeckMeta = advTrainer ? (DECK_META[advTrainer.deckKey] || {}) : null;
+        const advUnlockHtml = (advTrainer && isWin) ? `
+          <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-amber-950 border-2 border-amber-400 text-left shadow-xl space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2 py-0.5 rounded-full bg-gradient-to-r from-yellow-300 to-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                🏆 ${firstTimeAdvWin ? 'Deck du Champion récupéré !' : 'Deck du Champion débloqué'} · 60c
+              </span>
+              <span class="text-[10px] font-extrabold text-amber-300 truncate">${advTrainer.badgeIcon} ${dbEsc(advTrainer.badgeName)}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="relative w-16 h-[74px] shrink-0">
+                ${champDeckMeta?.subImg ? `<img src="${champDeckMeta.subImg}" alt="" class="absolute right-0 top-1 w-11 aspect-[63/88] rounded-md object-cover rotate-6 border border-white/50 shadow-md" />` : ''}
+                <img src="${champDeckMeta?.img || advTrainer.avatar}" alt="${dbEsc(champDeckMeta?.name || advTrainer.deckArchetype)}" class="absolute left-0 top-0 w-12 aspect-[63/88] rounded-md object-cover -rotate-3 border-2 border-amber-300 shadow-lg" />
+                <span class="absolute -bottom-1 left-0.5 px-1.5 py-0.5 rounded bg-indigo-600 border border-amber-300 text-white text-[9.5px] font-black uppercase shadow">60c</span>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-sm font-black text-white leading-tight truncate">${dbEsc(champDeckMeta?.name || advTrainer.deckArchetype)}</div>
+                <div class="text-[11px] font-bold text-amber-200 leading-snug mt-0.5">${dbEsc(champDeckMeta?.desc || advTrainer.deckArchetype)}</div>
+                <div class="text-[10px] font-extrabold text-sky-300 mt-1">⭐ ${dbEsc(champDeckMeta?.star || '60 cartes')} · 60 cartes (60c) · 6 Prix</div>
+                ${firstTimeAdvWin ? `<div class="text-[10px] font-semibold text-emerald-300 mt-0.5">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Maître de la Ligue 2000 !'}</div>` : ''}
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+              <button onclick="useChampionDeckInQuick('${advTrainer.deckKey}')" class="py-2 px-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[11px] uppercase tracking-wide shadow active:scale-95 transition">
+                ⚡ Jouer ce Deck (60c)
+              </button>
+              <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('adventure'); openAdvDeckInspector('${advTrainer.id}');" class="py-2 px-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-extrabold text-[11px] active:scale-95 transition">
+                📜 Voir les 60 cartes
+              </button>
             </div>
           </div>
         ` : '';
@@ -27334,7 +27412,7 @@ const TYPE_EMOJI = {
           grad: st.grad, border: st.border
         };
       });
-      if (typeof quickPlayerDeck !== 'undefined' && String(quickPlayerDeck).startsWith('CUSTOM_') && !deckKeyPlayable(quickPlayerDeck)) quickPlayerDeck = 'COMBAT';
+      if (typeof quickPlayerDeck !== 'undefined' && (!deckKeyPlayable(quickPlayerDeck) || DECK_META[quickPlayerDeck]?.cards === 30)) quickPlayerDeck = 'V2_FEU';
     }
     function saveCustomDeck(deck) {
       deck.updatedAt = Date.now();
@@ -27404,6 +27482,7 @@ const TYPE_EMOJI = {
             <div class="rounded-xl bg-slate-50 border border-slate-200/80 py-1.5"><div class="text-base font-black text-slate-900">${ownedCopies}</div><div class="text-[10.5px] font-bold text-slate-500">exemplaires</div></div>
             <div class="rounded-xl bg-slate-50 border border-slate-200/80 py-1.5"><div class="text-base font-black text-slate-900">${ownedBasics}</div><div class="text-[10.5px] font-bold text-slate-500">Pokémon de Base</div></div>
           </div>
+          <button type="button" onclick="openCollectionModal('all')" style="touch-action:manipulation" class="w-full min-h-[44px] rounded-xl bg-white hover:bg-slate-50 border border-amber-300 text-[13px] font-black text-slate-800 flex items-center justify-center gap-2 shadow-sm active:scale-[.98] transition">📚 Voir ma collection <span class="text-[11px] font-bold text-slate-500">(${ownedUnique} cartes)</span></button>
           ${ownedBasics === 0 ? `
             <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-[12.5px] text-amber-900 leading-snug">
               Tu n'as encore aucun <b>Pokémon de Base</b>. Ouvre des boosters pour obtenir des cartes, puis reviens ici !
@@ -27972,7 +28051,7 @@ const TYPE_EMOJI = {
     registerCustomDecks();
     try {
       const lastQuick = localStorage.getItem('ppi_v2_quick_player_deck');
-      if (lastQuick && deckKeyPlayable(lastQuick)) quickPlayerDeck = lastQuick;
+      if (lastQuick && deckKeyPlayable(lastQuick) && DECK_META[lastQuick]?.cards === 60) quickPlayerDeck = lastQuick;
     } catch (_) {}
     if (typeof renderQuickSetup === 'function') renderQuickSetup();
     renderDecksView();

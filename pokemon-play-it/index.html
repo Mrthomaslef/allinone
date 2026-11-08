@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '7c65ffe-1794170666';
+      var BUILD = '4e2f942-1794170776';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -24495,6 +24495,10 @@ const TYPE_EMOJI = {
             adventureSave.unlockedRank = advTrainer.rank + 1;
             unlockedNextTrainer = ADVENTURE_TRAINERS.find((t) => t.rank === advTrainer.rank + 1) || null;
           }
+          if (firstTimeAdvWin && advTrainer.deckKey) {
+            quickPlayerDeck = advTrainer.deckKey;
+            try { localStorage.setItem('ppi_v2_quick_player_deck', quickPlayerDeck); } catch (_) {}
+          }
           saveAdventureData();
           earnedCoinsAmount = firstTimeAdvWin ? advTrainer.rewardCoins : 100;
           earnedFreePacks = firstTimeAdvWin ? (advTrainer.rewardFreePacks || 0) : 0;
@@ -24542,13 +24546,35 @@ const TYPE_EMOJI = {
         const grid = document.getElementById('pickerGrid');
         grid.className = 'flex flex-col gap-2';
 
-        const advUnlockHtml = (advTrainer && isWin && firstTimeAdvWin) ? `
-          <div class="w-full p-2.5 rounded-xl bg-sky-50 border border-sky-300 flex items-center gap-2.5 text-left shadow-sm">
-            <img src="${advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-11 h-11 rounded-xl object-cover object-top border border-sky-400 shrink-0" />
-            <div class="min-w-0 flex-1">
-              <div class="text-[10.5px] font-black text-sky-700 uppercase tracking-wide">${advTrainer.badgeIcon} ${dbEsc(advTrainer.badgeName)} remporté !</div>
-              <div class="text-[11px] font-extrabold text-slate-800 truncate">Deck débloqué : ${dbEsc(DECK_META[advTrainer.deckKey]?.name || advTrainer.deckArchetype)}</div>
-              <div class="text-[10px] font-semibold text-slate-600">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Maître de la Ligue 2000 !'}</div>
+        const champDeckMeta = advTrainer ? (DECK_META[advTrainer.deckKey] || {}) : null;
+        const advUnlockHtml = (advTrainer && isWin) ? `
+          <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-amber-950 border-2 border-amber-400 text-left shadow-xl space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2 py-0.5 rounded-full bg-gradient-to-r from-yellow-300 to-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                🏆 ${firstTimeAdvWin ? 'Deck du Champion récupéré !' : 'Deck du Champion débloqué'} · 60c
+              </span>
+              <span class="text-[10px] font-extrabold text-amber-300 truncate">${advTrainer.badgeIcon} ${dbEsc(advTrainer.badgeName)}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="relative w-16 h-[74px] shrink-0">
+                ${champDeckMeta?.subImg ? `<img src="${champDeckMeta.subImg}" alt="" class="absolute right-0 top-1 w-11 aspect-[63/88] rounded-md object-cover rotate-6 border border-white/50 shadow-md" />` : ''}
+                <img src="${champDeckMeta?.img || advTrainer.avatar}" alt="${dbEsc(champDeckMeta?.name || advTrainer.deckArchetype)}" class="absolute left-0 top-0 w-12 aspect-[63/88] rounded-md object-cover -rotate-3 border-2 border-amber-300 shadow-lg" />
+                <span class="absolute -bottom-1 left-0.5 px-1.5 py-0.5 rounded bg-indigo-600 border border-amber-300 text-white text-[9.5px] font-black uppercase shadow">60c</span>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-sm font-black text-white leading-tight truncate">${dbEsc(champDeckMeta?.name || advTrainer.deckArchetype)}</div>
+                <div class="text-[11px] font-bold text-amber-200 leading-snug mt-0.5">${dbEsc(champDeckMeta?.desc || advTrainer.deckArchetype)}</div>
+                <div class="text-[10px] font-extrabold text-sky-300 mt-1">⭐ ${dbEsc(champDeckMeta?.star || '60 cartes')} · 60 cartes (60c) · 6 Prix</div>
+                ${firstTimeAdvWin ? `<div class="text-[10px] font-semibold text-emerald-300 mt-0.5">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Maître de la Ligue 2000 !'}</div>` : ''}
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+              <button onclick="useChampionDeckInQuick('${advTrainer.deckKey}')" class="py-2 px-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[11px] uppercase tracking-wide shadow active:scale-95 transition">
+                ⚡ Jouer ce Deck (60c)
+              </button>
+              <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('adventure'); openAdvDeckInspector('${advTrainer.id}');" class="py-2 px-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-extrabold text-[11px] active:scale-95 transition">
+                📜 Voir les 60 cartes
+              </button>
             </div>
           </div>
         ` : '';
@@ -27386,7 +27412,7 @@ const TYPE_EMOJI = {
           grad: st.grad, border: st.border
         };
       });
-      if (typeof quickPlayerDeck !== 'undefined' && String(quickPlayerDeck).startsWith('CUSTOM_') && !deckKeyPlayable(quickPlayerDeck)) quickPlayerDeck = 'COMBAT';
+      if (typeof quickPlayerDeck !== 'undefined' && (!deckKeyPlayable(quickPlayerDeck) || DECK_META[quickPlayerDeck]?.cards === 30)) quickPlayerDeck = 'V2_FEU';
     }
     function saveCustomDeck(deck) {
       deck.updatedAt = Date.now();
@@ -28025,7 +28051,7 @@ const TYPE_EMOJI = {
     registerCustomDecks();
     try {
       const lastQuick = localStorage.getItem('ppi_v2_quick_player_deck');
-      if (lastQuick && deckKeyPlayable(lastQuick)) quickPlayerDeck = lastQuick;
+      if (lastQuick && deckKeyPlayable(lastQuick) && DECK_META[lastQuick]?.cards === 60) quickPlayerDeck = lastQuick;
     } catch (_) {}
     if (typeof renderQuickSetup === 'function') renderQuickSetup();
     renderDecksView();
