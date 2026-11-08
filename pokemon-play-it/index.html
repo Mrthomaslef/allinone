@@ -1779,7 +1779,7 @@
     <!-- ONGLET 1 UNIFIÉ : DUEL IA (PARTIE RAPIDE) + TUTORIEL REPLIABLE  -->
     <!-- =============================================================== -->
     <div id="viewTuto" class="hidden w-full space-y-2.5">
-      <!-- ACCÈS DIRECT AU MODE AVENTURE (LIGUE TOURNOIS 2000) -->
+      <!-- ACCÈS DIRECT AU MODE AVENTURE -->
       <div onclick="switchMenuTab('adventure')" class="cursor-pointer w-full p-2.5 rounded-2xl tcg-card-panel flex items-center justify-between gap-2.5 active:scale-[0.99] transition">
         <div class="flex items-center gap-2.5 min-w-0 flex-1">
           <div class="flex -space-x-2 shrink-0">
@@ -1787,17 +1787,9 @@
             <img src="assets/trainers/kai.png" style="background:#e0f2fe;object-position:top" alt="Kaï" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
             <img src="assets/trainers/axel.png" style="background:#e0f2fe;object-position:top" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
           </div>
-          <div class="min-w-0 flex-1 text-left">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="font-black text-slate-900 text-xs truncate">Mode Aventure · Ligue 2000</span>
-              <span id="soloAdvProgressBadge" class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 shrink-0">0/8 Badges</span>
-            </div>
-            <p class="text-slate-500 text-[10.5px] leading-tight mt-0.5 truncate">
-              8 Arènes, le Conseil des 4 et le Maître · vrais decks de tournois 2000
-            </p>
-          </div>
+          <span class="font-black text-slate-900 text-xs truncate">Mode Aventure</span>
         </div>
-        <button type="button" class="btn-gold px-3 py-1.5 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Défier →</button>
+        <button type="button" class="btn-gold px-3 py-1.5 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Mode Aventure</button>
       </div>
 
       <!-- BLOC 1 REPLIÉ PAR DÉFAUT : TUTORIEL GUIDÉ AVEC JULIETTE -->
@@ -2198,7 +2190,7 @@
           </div>
         </div>
 
-        <!-- 3b. Tuile Mode Aventure · Ligue Tournois 2000 -->
+        <!-- 3b. Tuile Mode Aventure -->
         <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <div class="flex -space-x-2 shrink-0">
@@ -2206,15 +2198,9 @@
               <img src="assets/trainers/ryo.png" style="background:#e0f2fe;object-position:top" alt="Ryo" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
               <img src="assets/trainers/axel.png" style="background:#e0f2fe;object-position:top" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
             </div>
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5">
-                <span class="text-[12px] font-black text-slate-900 truncate">Mode Aventure · Ligue 2000</span>
-                <span id="hubAdvBadge" class="px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 text-[9.5px] font-extrabold shrink-0">0/8</span>
-              </div>
-              <div class="text-[10px] font-semibold text-slate-500 truncate">8 Arènes · Conseil des 4 · Maître de la Ligue</div>
-            </div>
+            <span class="text-[12px] font-black text-slate-900 truncate">Mode Aventure</span>
           </div>
-          <button type="button" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Aventure</button>
+          <button type="button" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Mode Aventure</button>
         </div>
       </div>
 
@@ -2241,7 +2227,7 @@
       </details>
     </div>
 
-    <!-- VUE : MODE AVENTURE · LIGUE TOURNOIS 2000 (rendue par renderAdventureView) -->
+    <!-- VUE : MODE AVENTURE (rendue par renderAdventureView) -->
     <div id="viewAdventure" class="hidden w-full space-y-2.5"></div>
 
     <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
@@ -2254,9 +2240,8 @@
           <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
           <span class="nav-ico-badge"><span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-500 text-white text-[10px] font-black leading-tight">3</span></span>
         </button>
-        <button id="tabBtnAdventure" onclick="switchMenuTab('adventure')" aria-label="Mode Aventure · Ligue 2000" title="Mode Aventure · Ligue 2000" class="nav-ico">
+        <button id="tabBtnAdventure" onclick="switchMenuTab('adventure')" aria-label="Mode Aventure" title="Mode Aventure" class="nav-ico">
           <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          <span class="nav-ico-badge"><span id="navAdvBadge" class="px-1.5 py-0.2 rounded-full bg-sky-500 text-white text-[9.5px] font-black leading-tight">0/8</span></span>
         </button>
         <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" aria-label="Jouer contre l'IA" title="Jouer contre l'IA" class="nav-ico is-active">
           <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4"/><circle cx="12" cy="3.2" r="1.2"/><circle cx="9" cy="13.5" r="1.3" fill="currentColor"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor"/><path d="M9.5 17h5"/><path d="M2 13v2M22 13v2"/></svg>
@@ -23918,7 +23903,7 @@ const TYPE_EMOJI = {
               🔄 Revanche contre ${dbEsc(advTrainer.name)} (${dbEsc(usedDeckLabel)})
             </button>
             <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('adventure');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 border border-slate-300">
-              🏆 Retour à la Ligue 2000 (Mode Aventure)
+              🏆 Mode Aventure
             </button>
           `;
         } else {
