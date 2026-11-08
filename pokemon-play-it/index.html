@@ -946,9 +946,10 @@
         <span class="text-[10.5px] text-cyan-300/80">✎</span>
       </button>
       <span class="menu-edition text-[10px] font-extrabold tracking-[.18em] uppercase text-yellow-200/80 truncate">Édition FR · 1999</span>
-      <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-2.5 py-1 rounded-xl text-xs font-extrabold text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1.5 shadow-lg active:scale-95 z-20" title="Réglage du Son & Volume">
+      <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-2.5 py-1 rounded-xl text-xs font-extrabold text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1 shadow-lg active:scale-95 z-20" title="Réglages (Son & Thème)">
         <span id="audioBtnMenuIcon">🔊</span>
-        <span id="audioBtnMenuLabel" class="text-[11px] font-bold">Son</span>
+        <span>🎨</span>
+        <span id="audioBtnMenuLabel" class="text-[11px] font-bold">Réglages</span>
       </button>
       </div>
       <h1 class="mt-1.5 text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-b from-white via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(250,204,21,0.35)]">
@@ -1266,21 +1267,26 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <!-- Booster Set de Base (1999) -->
-          <button onclick="launchBoosterPack('base')" class="deck-card p-3.5 bg-gradient-to-b from-blue-950/95 via-indigo-950/90 to-slate-950 border border-yellow-400/55 hover:border-yellow-300 flex flex-col items-center text-center gap-2.5 group">
+          <button onclick="launchBoosterPack('base')" class="deck-card p-3.5 bg-gradient-to-b from-blue-950/95 via-indigo-950/90 to-slate-950 border border-yellow-400/55 hover:border-yellow-300 flex flex-col items-center text-center gap-2 group">
             <div class="flex items-center justify-between w-full">
               <span class="text-[10.5px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-yellow-400/20 text-yellow-200 border border-yellow-400/40">102 Cartes</span>
               <span class="text-[10.5px] font-mono text-sky-300 font-bold">16 Holo ✨</span>
             </div>
-            <div class="deck-fan my-1" style="width:94px;height:112px">
-              <img src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="Tortank" loading="lazy" class="fan-sub" style="width:66px;left:2px" />
-              <div class="holo-wrap">
-                <img src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="Dracaufeu" loading="lazy" class="fan-main" style="width:74px;margin-left:16px" />
+            <div class="relative my-1 flex items-center justify-center" style="width:136px;height:118px">
+              <img id="baseBoosterFanLeft" src="assets/boosters/base-tortank.jpg" alt="Booster Tortank" loading="lazy" class="rounded-md shadow-lg border border-white/30 object-cover transition-all duration-300 group-hover:-translate-x-1 group-hover:-rotate-15" style="width:58px;height:102px;position:absolute;left:4px;top:10px;transform:rotate(-13deg)" />
+              <img id="baseBoosterFanRight" src="assets/boosters/base-florizarre.jpg" alt="Booster Florizarre" loading="lazy" class="rounded-md shadow-lg border border-white/30 object-cover transition-all duration-300 group-hover:translate-x-1 group-hover:rotate-15" style="width:58px;height:102px;position:absolute;right:4px;top:10px;transform:rotate(13deg)" />
+              <div class="holo-wrap relative z-10 rounded-lg shadow-2xl border-2 border-yellow-300/90 overflow-hidden transition-transform duration-300 group-hover:scale-105" style="width:66px;height:114px">
+                <img id="baseBoosterFanCenter" src="assets/boosters/base-dracaufeu.jpg" alt="Booster Dracaufeu" loading="lazy" class="w-full h-full object-cover" />
               </div>
             </div>
             <div>
               <div class="font-black text-base text-white group-hover:text-yellow-300 transition">Booster Set de Base</div>
-              <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">Dracaufeu · Tortank · Florizarre</div>
-              <p class="text-[10px] text-slate-300/80 mt-0.5">Mewtwo, Alakazam, Léviator, Électhor</p>
+              <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">3 illustrations Édition 1 FR</div>
+            </div>
+            <div class="flex items-center justify-center gap-1 w-full" onclick="event.stopPropagation()">
+              <span id="baseArtBtn-tortank" onclick="selectBaseBoosterArt('tortank')" class="cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-white/5 text-sky-200 border-white/15 hover:border-sky-300">💧 Tortank</span>
+              <span id="baseArtBtn-dracaufeu" onclick="selectBaseBoosterArt('dracaufeu')" class="cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-yellow-400/25 text-yellow-200 border-yellow-400/70 shadow">🔥 Dracaufeu</span>
+              <span id="baseArtBtn-florizarre" onclick="selectBaseBoosterArt('florizarre')" class="cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-white/5 text-emerald-200 border-white/15 hover:border-emerald-300">🌿 Florizarre</span>
             </div>
             <span id="boosterBtnCta-base" class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
               🎁 Ouvrir GRATUIT (3/3)
@@ -1359,19 +1365,6 @@
     <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
     <div id="viewDecks" class="hidden w-full space-y-2.5"></div>
 
-    <!-- Barre du bas : Tapis de jeu -->
-    <div class="w-full mt-auto pt-3 border-t border-white/15 flex items-center justify-center gap-2 text-xs text-slate-300">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-slate-400">🎨 Tapis de jeu :</span>
-        <select id="playmatSelect" onchange="changePlaymat(this.value)" class="glass-pill rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none">
-          <option value="playmat-night">🌙 Bleu Nuit (Pikachu / Ectoplasma)</option>
-          <option value="playmat-jungle">🌿 Jungle (Insécateur / Rafflesia)</option>
-          <option value="playmat-fossil">🦖 Fossile (Ptéra)</option>
-          <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
-        </select>
-      </div>
-    </div>
-
     <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS (4 ONGLETS COMPACTS) -->
     <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
       <div class="max-w-lg mx-auto px-2.5 pt-1.5 grid grid-cols-4 gap-1.5">
@@ -1413,7 +1406,7 @@
       </div>
       <div id="turnPhaseBadge" class="phase-badge text-[11px] font-extrabold px-2.5 py-1 rounded-xl bg-yellow-400/15 border border-yellow-400/35 text-yellow-300 text-right">Préparation</div>
       <div class="flex items-center gap-1 shrink-0">
-        <button onclick="openAudioModal()" id="audioBtnGame" class="w-10 h-10 justify-center rounded-xl bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/35 text-xs font-bold text-yellow-200 shrink-0 transition flex items-center gap-1" title="Réglage du Son & Volume">
+        <button onclick="openAudioModal()" id="audioBtnGame" class="w-10 h-10 justify-center rounded-xl bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/35 text-xs font-bold text-yellow-200 shrink-0 transition flex items-center gap-1" title="Réglages (Son & Thème)">
           <span id="audioBtnGameIcon">🔊</span>
         </button>
       </div>
@@ -1566,15 +1559,61 @@
   </div>
 
   <!-- =================================================================== -->
-  <!-- MODAL : RÉGLAGES AUDIO & VOLUME (POPUP HAUT DROITE)                 -->
+  <!-- MODAL : RÉGLAGES SON & THÈME (POPUP HAUT DROITE)                    -->
   <!-- =================================================================== -->
   <div id="audioModal" onclick="if(event.target===this)closeAudioModal()" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-start justify-end p-3 sm:p-5 pt-14 sm:pt-16">
-    <div class="bg-slate-900/95 border border-yellow-400/40 rounded-2xl p-4 max-w-xs w-full shadow-2xl space-y-4">
+    <div class="bg-slate-900/95 border border-yellow-400/40 rounded-2xl p-4 max-w-xs w-full shadow-2xl space-y-3.5 max-h-[85dvh] overflow-y-auto overscroll-contain">
       <div class="flex items-center justify-between pb-2 border-b border-white/10">
         <h3 class="text-sm font-extrabold text-yellow-300 flex items-center gap-1.5">
-          <span>🔊</span><span>Réglages du Son</span>
+          <span>⚙️</span><span>Réglages · Son &amp; Thème</span>
         </h3>
         <button onclick="closeAudioModal()" class="x-close w-6 h-6 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white flex items-center justify-center text-xs" aria-label="Fermer">✕</button>
+      </div>
+
+      <!-- Thème / Tapis de jeu -->
+      <div class="bg-black/35 border border-white/10 rounded-xl p-3 space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <div class="text-xs font-extrabold text-white flex items-center gap-1.5">🎨 Thème / Tapis de jeu</div>
+            <div class="text-[10px] text-slate-400">Ambiance visuelle du plateau 1999</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5" id="playmatButtonsGrid">
+          <button type="button" data-playmat="playmat-night" onclick="changePlaymat('playmat-night')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🌙</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Bleu Nuit</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Pikachu · Ectoplasma</span>
+            </span>
+          </button>
+          <button type="button" data-playmat="playmat-jungle" onclick="changePlaymat('playmat-jungle')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🌿</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Jungle</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Insécateur · Rafflesia</span>
+            </span>
+          </button>
+          <button type="button" data-playmat="playmat-fossil" onclick="changePlaymat('playmat-fossil')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🦖</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Fossile</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Ptéra Préhistorique</span>
+            </span>
+          </button>
+          <button type="button" data-playmat="playmat-mewtwo" onclick="changePlaymat('playmat-mewtwo')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🔮</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Mewtwo Rouge</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Base Set 2</span>
+            </span>
+          </button>
+        </div>
+        <select id="playmatSelect" onchange="changePlaymat(this.value)" class="sr-only" aria-label="Thème du tapis de jeu">
+          <option value="playmat-night">🌙 Bleu Nuit (Pikachu / Ectoplasma)</option>
+          <option value="playmat-jungle">🌿 Jungle (Insécateur / Rafflesia)</option>
+          <option value="playmat-fossil">🦖 Fossile (Ptéra)</option>
+          <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
+        </select>
       </div>
 
       <!-- Musique 8-Bit -->
@@ -15665,8 +15704,7 @@ const TYPE_EMOJI = {
       const gameBtn = document.getElementById('audioBtnGame');
 
       if (menuIcon) menuIcon.textContent = icon;
-      if (menuLabel) menuLabel.textContent = anyActive ? 'Son' : 'Muet';
-      if (menuBtn) menuBtn.classList.toggle('opacity-60', !anyActive);
+      if (menuLabel) menuLabel.textContent = 'Réglages';
       if (gameIcon) gameIcon.textContent = icon;
       if (gameBtn) gameBtn.classList.toggle('opacity-60', !anyActive);
 
@@ -15823,6 +15861,14 @@ const TYPE_EMOJI = {
       b.classList.add(cls);
       const sel = document.getElementById('playmatSelect');
       if (sel && sel.value !== cls) sel.value = cls;
+      document.querySelectorAll('.playmat-opt-btn').forEach((btn) => {
+        const active = btn.getAttribute('data-playmat') === cls;
+        btn.className = `playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 active:scale-95 ${
+          active
+            ? 'bg-yellow-400/20 border-yellow-400 text-yellow-200 ring-1 ring-yellow-400/60 shadow'
+            : 'bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50'
+        }`;
+      });
       try { localStorage.setItem('ppi_playmat', cls); } catch (e) {}
     }
     try { changePlaymat(localStorage.getItem('ppi_playmat') || PLAYMATS[0]); } catch (e) {}
@@ -17467,7 +17513,11 @@ const TYPE_EMOJI = {
 
     function renderPokemonSlot(pkm, owner, zone, index = 0) {
       const isActive = zone === 'active';
+      const canPromoteFromBench = isActive && owner === 'player' && game && !game.gameOver && !game.player.active && game.player.bench.length > 0;
       if (!pkm) {
+        if (canPromoteFromBench) {
+          return `<div class="pkm-stack"><div onclick="openBenchPromoModal()" class="slot-empty drop-ok cursor-pointer text-amber-300 font-black">⚔️ Actif</div></div>`;
+        }
         return `<div class="pkm-stack"><div class="slot-empty">${isActive ? 'Actif' : ''}</div></div>`;
       }
       const maxHp = game ? effHp(pkm) : pkm.hp;
@@ -17483,14 +17533,16 @@ const TYPE_EMOJI = {
         <img src="${e.img}" alt="${e.name}" class="energy-under ${fx.attached.has(e.uid) ? 'energy-in' : ''}"
              style="transform: translateY(${(i + 1) * step}%) translateX(${(i % 2 ? 1 : -1) * 2}%) rotate(${(i % 2 ? 1.5 : -1.5)}deg); z-index:${10 - i}" />`).join('');
       const anim = fx.evolved.has(pkm.uid) ? 'card-evolve' : fx.placed.has(pkm.uid) ? 'card-place' : '';
+      const needsPromoHighlight = owner === 'player' && zone === 'bench' && game && !game.gameOver && !game.player.active;
 
       return `
         <div class="pkm-stack" data-uid="${pkm.uid}">
           ${energies}
-          <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="tcg tilt cursor-pointer bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
+          <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="tcg tilt cursor-pointer bg-slate-900 ${isActive ? 'card-active-glow' : needsPromoHighlight ? 'ring-2 ring-amber-400 shadow-[0_0_14px_rgba(250,204,21,0.55)]' : 'card-shadow'} ${anim}" style="z-index:20">
             <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" draggable="false" />
             ${renderDamageTokens(pkm)}
             ${badges ? `<div class="pkm-status">${badges}</div>` : ''}
+            ${needsPromoHighlight ? `<div class="absolute inset-x-0 top-0 bg-amber-400/95 text-slate-950 text-[8.5px] font-black text-center py-0.5 rounded-t-[5px] tracking-tight pointer-events-none">⚔️ ENVOYER</div>` : ''}
             ${pkm.special === 'asleep' || pkm.special === 'paralyzed' ? '<div class="absolute inset-0 rounded-[6px] bg-indigo-900/30 pointer-events-none"></div>' : ''}
             <div class="pkm-hud">
               <div class="pkm-hud-row">
@@ -17591,16 +17643,18 @@ const TYPE_EMOJI = {
       if (game && game.mode === 'quick') return { badge: '', playable: false };
       if (game && game.mode === 'multi' && game.setupPhase) {
         if (card.category === 'Pokémon' && card.stage === 'Base' && !game.gameOver) {
-          const playable = !game.player.active || game.player.bench.length < 5;
-          const badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
+          const canBeActive = !game.player.active && game.player.bench.length === 0;
+          const playable = canBeActive || game.player.bench.length < 5;
+          const badge = canBeActive ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
           return { badge, playable };
         }
         return { badge: '', playable: false };
       }
       let badge = '', playable = false;
       if (card.category === 'Pokémon' && card.stage === 'Base') {
-        playable = !game.player.active || game.player.bench.length < 5;
-        badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
+        const canBeActive = !game.player.active && game.player.bench.length === 0;
+        playable = canBeActive || game.player.bench.length < 5;
+        badge = canBeActive ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
       } else if (card.category === 'Pokémon' && (card.stage === 'Niveau 1' || card.stage === 'Niveau 2')) {
         playable = dropTargetsFor(card).length > 0; badge = '⬆ Évol.';
       } else if (card.category === 'Énergie') {
@@ -17936,7 +17990,16 @@ const TYPE_EMOJI = {
       }
     }
 
-    window.addEventListener('resize', () => { if (game) renderBoard(); });
+    window.addEventListener('resize', () => {
+      if (!game) return;
+      const prev = mpApplyingRemote;
+      mpApplyingRemote = true;
+      try {
+        renderBoard();
+      } finally {
+        mpApplyingRemote = prev;
+      }
+    });
 
     // Taille des cartes calculée selon la place réellement disponible :
     // bancs pleine largeur, Pokémon Actifs le plus grand possible, piles sur les côtés.
@@ -18015,7 +18078,7 @@ const TYPE_EMOJI = {
       const P = game.player, t = [];
       if (game.mode === 'multi' && game.setupPhase) {
         if (card.category === 'Pokémon' && card.stage === 'Base') {
-          if (!P.active) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
+          if (!P.active && P.bench.length === 0) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
           else if (P.bench.length < 5) {
             for (let i = P.bench.length; i < 5; i++) t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actPlayBasic(card, 'bench') });
           }
@@ -18023,7 +18086,7 @@ const TYPE_EMOJI = {
         return t;
       }
       if (card.category === 'Pokémon' && card.stage === 'Base') {
-        if (!P.active) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
+        if (!P.active && P.bench.length === 0) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
         else if (P.bench.length < 5) {
           for (let i = P.bench.length; i < 5; i++) t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actPlayBasic(card, 'bench') });
         }
@@ -18040,6 +18103,7 @@ const TYPE_EMOJI = {
     }
 
     function whyNotPlayable(card) {
+      if (!game.player.active && game.player.bench.length > 0 && card.category !== 'Pokémon') return 'Choisis d\'abord quel Pokémon de ton Banc monte au combat !';
       if (!game.player.active && card.category !== 'Pokémon') return 'Pose d\'abord un Pokémon de Base comme Pokémon Actif !';
       if (card.category === 'Énergie' && game.energyAttachedThisTurn) return 'Une seule Énergie par tour !';
       if (card.category === 'Dresseur' && game.player.noTrainersTurns) return 'Migraine : aucune carte Dresseur ce tour-ci !';
@@ -18394,12 +18458,15 @@ const TYPE_EMOJI = {
       d.hc.classList.add('dragging-src');
       sfx('pick'); buzz(6);
 
-      d.targets = dropTargetsFor(d.card).map((t) => ({ ...t, el: document.querySelector(t.sel) })).filter((t) => t.el);
+      const rawTargets = d.fromBench
+        ? [{ sel: '#playerActiveSlot', act: () => promotePlayerBenchToActive(d.idx) }]
+        : dropTargetsFor(d.card);
+      d.targets = rawTargets.map((t) => ({ ...t, el: document.querySelector(t.sel) })).filter((t) => t.el);
       d.targets.forEach((t) => {
         if (t.wide) document.getElementById('matDropHint').classList.add('show');
         else t.el.classList.add('drop-ok');
       });
-      if (!d.targets.length) sayJuliette(whyNotPlayable(d.card));
+      if (!d.targets.length && !d.fromBench) sayJuliette(whyNotPlayable(d.card));
 
       const loop = () => {
         if (!drag || drag !== d || !d.ghost) return;
@@ -18411,6 +18478,56 @@ const TYPE_EMOJI = {
         d.raf = requestAnimationFrame(loop);
       };
       loop();
+    }
+
+    function initBenchDrag() {
+      const benchRow = document.getElementById('playerBenchRow');
+      if (!benchRow) return;
+
+      benchRow.addEventListener('pointerdown', (e) => {
+        if (!game || game.gameOver || game.player.active || !game.player.bench.length) return;
+        const slotEl = e.target.closest ? e.target.closest('[data-slot]') : null;
+        if (!slotEl) return;
+        const idx = +slotEl.dataset.slot;
+        const card = game.player.bench[idx];
+        const tcgEl = slotEl.querySelector('.tcg');
+        if (!card || !tcgEl) return;
+        try { benchRow.setPointerCapture(e.pointerId); } catch (_) {}
+        hidePreview();
+        drag = {
+          hc: tcgEl, idx, card, fromBench: true,
+          pid: e.pointerId, pType: e.pointerType,
+          x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY,
+          started: false, preview: false, scrubbed: false, rot: 0, vx: 0, targets: [], hot: null,
+          lp: null
+        };
+      });
+
+      benchRow.addEventListener('pointermove', (e) => {
+        if (!drag || !drag.fromBench || e.pointerId !== drag.pid) return;
+        const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+        if (!drag.started) {
+          if (Math.hypot(dx, dy) < 10) return;
+          if (!game || game.gameOver || game.player.active) { drag = null; return; }
+          hidePreview();
+          startDrag();
+        }
+        drag.vx = e.clientX - drag.x;
+        drag.x = e.clientX; drag.y = e.clientY;
+        updateHot();
+      });
+
+      const finish = (e, cancelled) => {
+        if (!drag || !drag.fromBench || e.pointerId !== drag.pid) return;
+        const d = drag;
+        if (d.started) {
+          endDrag(cancelled);
+          return;
+        }
+        drag = null;
+      };
+      benchRow.addEventListener('pointerup', (e) => finish(e, false));
+      benchRow.addEventListener('pointercancel', (e) => finish(e, true));
     }
 
     function hitTarget(x, y) {
@@ -18519,6 +18636,7 @@ const TYPE_EMOJI = {
         if (e.pointerType === 'mouse') return;
         const inHand = e.target.closest ? e.target.closest('#playerHandRow') : null;
         if (inHand) return;
+        if (game && !game.player.active && e.target.closest && e.target.closest('#playerBenchRow')) return;
         const el = e.target.closest ? e.target.closest('.tilt') : null;
         if (!el) {
           if (previewSticky) { hidePreview(); setHandFocus(null); }
@@ -18710,6 +18828,18 @@ const TYPE_EMOJI = {
         return;
       }
 
+      if (game && !game.gameOver && !game.player.active && game.player.bench.length > 0) {
+        container.innerHTML = `
+          <button onclick="openBenchPromoModal()" class="atk-btn w-full max-w-[168px] ml-auto px-2.5 py-2 min-h-[44px] rounded-xl btn-token flex items-center justify-center gap-1.5 font-black text-[11px] animate-pulse">
+            ⚔️ Choisir sur le Banc
+          </button>
+        `;
+        endBtn.disabled = true;
+        retBtn.disabled = true;
+        endBtn.classList.remove('ready');
+        return;
+      }
+
       if (!game || !game.player.active || game.activePlayer !== 'player') {
         const waitLabel = game?.mode === 'multi'
           ? `Tour de ${game.oppPseudo || 'l\'adversaire'}...`
@@ -18761,6 +18891,7 @@ const TYPE_EMOJI = {
     // -----------------------------------------------------------------------
     function inspectBoardPokemon(owner, zone, index) {
       if (!game) return;
+      hidePreview();
       const target = zone === 'active' ? game[owner].active : game[owner].bench[index];
       if (!target) return;
 
@@ -18791,6 +18922,17 @@ const TYPE_EMOJI = {
       const actionsEl = document.getElementById('modalCardActions');
       actionsEl.innerHTML = '';
 
+      if (owner === 'player' && zone === 'bench' && !game.player.active && !game.gameOver) {
+        const promoBtn = document.createElement('button');
+        promoBtn.className = 'w-full min-h-[44px] px-3 py-2.5 rounded-xl text-[13px] font-black bg-gradient-to-r from-emerald-400 to-teal-500 text-slate-950 shadow-lg';
+        promoBtn.textContent = `⚔️ Envoyer ${target.name} au combat (Pokémon Actif)`;
+        promoBtn.onclick = () => {
+          closeCardModal();
+          promotePlayerBenchToActive(index);
+        };
+        actionsEl.appendChild(promoBtn);
+      }
+
       if (owner === 'player' && zone === 'active' && game.activePlayer === 'player' && !(game.mode === 'multi' && game.setupPhase)) {
         effAttacks(target).forEach((atk, i) => {
           const use = attackUsable('player', i);
@@ -18816,6 +18958,7 @@ const TYPE_EMOJI = {
 
     function openHandCardModal(handIndex) {
       if (!game) return;
+      hidePreview();
       const isMultiSetup = game.mode === 'multi' && game.setupPhase;
       if (game.activePlayer !== 'player' && !isMultiSetup) return;
       if (!isMultiSetup && playerBusy()) return;
@@ -18841,7 +18984,7 @@ const TYPE_EMOJI = {
 
       // CAS 1 : Pokémon de Base
       if (card.category === 'Pokémon' && card.stage === 'Base') {
-        if (!game.player.active) {
+        if (!game.player.active && game.player.bench.length === 0) {
           const btn = document.createElement('button');
           btn.className = 'w-full py-2.5 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950';
           btn.textContent = `👑 Choisir ${card.name} comme Pokémon Actif`;
@@ -21207,6 +21350,11 @@ const TYPE_EMOJI = {
         bgGrad: 'linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 38%, #0f172a 100%)',
         accent: '#facc15',
         glow: 'rgba(250, 204, 21, 0.55)',
+        packArtworks: [
+          { key: 'tortank', label: 'Tortank', icon: '💧', img: 'assets/boosters/base-tortank.jpg' },
+          { key: 'dracaufeu', label: 'Dracaufeu', icon: '🔥', img: 'assets/boosters/base-dracaufeu.jpg' },
+          { key: 'florizarre', label: 'Florizarre', icon: '🌿', img: 'assets/boosters/base-florizarre.jpg' }
+        ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base1/4/high.webp',
           'https://assets.tcgdex.net/fr/base/base1/2/high.webp',
@@ -21648,8 +21796,48 @@ const TYPE_EMOJI = {
       `;
     }
 
+    let selectedBaseBoosterArtKey = 'dracaufeu';
+    function selectBaseBoosterArt(artKey) {
+      const arts = BOOSTER_SETS.base.packArtworks || [];
+      const found = arts.find(a => a.key === artKey);
+      if (!found) return;
+      selectedBaseBoosterArtKey = found.key;
+      const order = found.key === 'tortank'
+        ? ['dracaufeu', 'tortank', 'florizarre']
+        : found.key === 'florizarre'
+        ? ['tortank', 'florizarre', 'dracaufeu']
+        : ['tortank', 'dracaufeu', 'florizarre'];
+      const byKey = Object.fromEntries(arts.map(a => [a.key, a]));
+      const leftEl = document.getElementById('baseBoosterFanLeft');
+      const centerEl = document.getElementById('baseBoosterFanCenter');
+      const rightEl = document.getElementById('baseBoosterFanRight');
+      if (leftEl && byKey[order[0]]) { leftEl.src = byKey[order[0]].img; leftEl.alt = `Booster ${byKey[order[0]].label}`; }
+      if (centerEl && byKey[order[1]]) { centerEl.src = byKey[order[1]].img; centerEl.alt = `Booster ${byKey[order[1]].label}`; }
+      if (rightEl && byKey[order[2]]) { rightEl.src = byKey[order[2]].img; rightEl.alt = `Booster ${byKey[order[2]].label}`; }
+
+      arts.forEach(a => {
+        const btn = document.getElementById(`baseArtBtn-${a.key}`);
+        if (!btn) return;
+        const active = a.key === selectedBaseBoosterArtKey;
+        btn.className = active
+          ? 'cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-yellow-400/25 text-yellow-200 border-yellow-400/70 shadow'
+          : 'cursor-pointer px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition bg-white/5 text-slate-200 border-white/15 hover:border-yellow-300/60';
+      });
+    }
+
+    function switchActiveBoosterArt(artKey) {
+      if (!activeBooster || activeBooster.phase !== 'sealed' || !activeBooster.meta.packArtworks) return;
+      const found = activeBooster.meta.packArtworks.find(a => a.key === artKey);
+      if (!found) return;
+      selectedBaseBoosterArtKey = found.key;
+      activeBooster.packArt = found;
+      selectBaseBoosterArt(found.key);
+      document.getElementById('boosterSetBadge').textContent = `${activeBooster.meta.short} · ${found.label}`;
+      renderSealedBoosterStage();
+    }
+
     let lastBoosterLaunchAt = 0;
-    function launchBoosterPack(setKey = 'base') {
+    function launchBoosterPack(setKey = 'base', artKey = null) {
       // Anti double-tap : « Ouvrir un autre » est remplacé sur place par le booster suivant
       if (Date.now() - lastBoosterLaunchAt < 450) return;
       lastBoosterLaunchAt = Date.now();
@@ -21671,11 +21859,19 @@ const TYPE_EMOJI = {
       }
 
       const meta = BOOSTER_SETS[setKey] || BOOSTER_SETS.base;
+      let packArt = null;
+      if (meta.packArtworks && meta.packArtworks.length) {
+        const wantedKey = artKey || selectedBaseBoosterArtKey;
+        packArt = meta.packArtworks.find(a => a.key === wantedKey) || meta.packArtworks[0];
+        const im = new Image();
+        im.src = packArt.img;
+      }
       const packData = generateBoosterPack(meta.key);
       packData.cards.forEach(c => { const im = new Image(); im.src = c.img; });
       const firstIsHit = packData.cards[0] ? isBigHitRarity(packData.cards[0].rarity) : false;
       activeBooster = {
         meta,
+        packArt,
         ...packData,
         paymentLabel,
         phase: 'sealed', // 'sealed' | 'ripping' | 'revealing' | 'summary'
@@ -21685,7 +21881,9 @@ const TYPE_EMOJI = {
       };
 
       const modal = document.getElementById('boosterOpenModal');
-      document.getElementById('boosterSetBadge').textContent = `${meta.name}`.replace(/\s*\(\d{4}\)/, '');
+      document.getElementById('boosterSetBadge').textContent = packArt
+        ? `${meta.short} · ${packArt.label}`
+        : `${meta.name}`.replace(/\s*\(\d{4}\)/, '');
       document.getElementById('boosterStepPill').textContent = `${paymentLabel} · 5 Cartes`;
       document.getElementById('boosterSkipBtn').classList.add('hidden');
       modal.classList.remove('hidden');
@@ -21695,10 +21893,17 @@ const TYPE_EMOJI = {
 
     function renderSealedBoosterStage() {
       if (!activeBooster) return;
-      const { meta } = activeBooster;
+      const { meta, packArt } = activeBooster;
       const seamGlowHex = getPackSeamGlowHex(activeBooster);
       const stage = document.getElementById('boosterStageContainer');
       const footer = document.getElementById('boosterFooterZone');
+
+      const topStripBg = packArt
+        ? `background-image: url('${packArt.img}'); background-size: 264px 405px; background-position: 0px 0px; background-repeat: no-repeat;`
+        : `background: ${meta.bgGrad};`;
+      const mainBodyBg = packArt
+        ? `background-image: url('${packArt.img}'); background-size: 264px 405px; background-position: 0px -66px; background-repeat: no-repeat;`
+        : `background: ${meta.bgGrad};`;
 
       stage.innerHTML = `
         <div class="flex flex-col items-center justify-center w-full py-1 select-none">
@@ -21729,26 +21934,34 @@ const TYPE_EMOJI = {
 
               <!-- Languette gauche DÉJÀ DÉCOLLÉE (se courbe et se soulève en 3D en temps réel !) -->
               <div id="packLeftPeeledStrip"
-                   style="clip-path: inset(0 100% 0 0); transform-origin: 5% 100%; opacity: 0; will-change: transform, clip-path; background: ${meta.bgGrad};"
+                   style="clip-path: inset(0 100% 0 0); transform-origin: 5% 100%; opacity: 0; will-change: transform, clip-path; ${topStripBg}"
                    class="absolute top-0 inset-x-0 h-[68px] z-40 rounded-t-2xl overflow-hidden shadow-[0_16px_28px_rgba(0,0,0,0.68)] pointer-events-none border-t border-x border-white/40">
-                <div class="booster-crimp w-full border-b border-white/50"></div>
-                <div class="w-full h-[52px] relative flex items-center justify-between px-3.5">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-200/55 via-white/25 to-transparent"></div>
-                  <span class="relative z-10 text-[10px] font-black tracking-[0.2em] uppercase text-white drop-shadow">WIZARDS 1999</span>
-                  <span class="relative z-10 text-[10px] font-black tracking-[0.18em] uppercase text-yellow-200 drop-shadow">5 CARTES FR</span>
-                </div>
+                ${packArt ? `
+                  <div class="absolute inset-0 bg-gradient-to-t from-white/25 via-transparent to-white/15"></div>
+                ` : `
+                  <div class="booster-crimp w-full border-b border-white/50"></div>
+                  <div class="w-full h-[52px] relative flex items-center justify-between px-3.5">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-200/55 via-white/25 to-transparent"></div>
+                    <span class="relative z-10 text-[10px] font-black tracking-[0.2em] uppercase text-white drop-shadow">WIZARDS 1999</span>
+                    <span class="relative z-10 text-[10px] font-black tracking-[0.18em] uppercase text-yellow-200 drop-shadow">5 CARTES FR</span>
+                  </div>
+                `}
               </div>
 
               <!-- Languette droite NON COUPÉE (reste attachée jusqu'au passage du doigt) -->
               <div id="packRightUncutStrip"
-                   style="clip-path: inset(0 0 0 0); will-change: clip-path; background: ${meta.bgGrad};"
+                   style="clip-path: inset(0 0 0 0); will-change: clip-path; ${topStripBg}"
                    class="absolute top-0 inset-x-0 h-[68px] z-30 rounded-t-2xl overflow-hidden pointer-events-none border-t-2 border-x-2 border-white/30">
-                <div class="booster-crimp w-full border-b border-white/40"></div>
-                <div class="w-full h-[52px] relative flex items-center justify-between px-3.5">
+                ${packArt ? `
                   <div class="absolute inset-0 booster-metallic-sheen opacity-50"></div>
-                  <span class="relative z-10 text-[10px] font-black tracking-[0.2em] uppercase text-yellow-200/95 drop-shadow">WIZARDS 1999</span>
-                  <span class="relative z-10 text-[10px] font-black tracking-[0.18em] uppercase text-white/90 drop-shadow">5 CARTES FR</span>
-                </div>
+                ` : `
+                  <div class="booster-crimp w-full border-b border-white/40"></div>
+                  <div class="w-full h-[52px] relative flex items-center justify-between px-3.5">
+                    <div class="absolute inset-0 booster-metallic-sheen opacity-50"></div>
+                    <span class="relative z-10 text-[10px] font-black tracking-[0.2em] uppercase text-yellow-200/95 drop-shadow">WIZARDS 1999</span>
+                    <span class="relative z-10 text-[10px] font-black tracking-[0.18em] uppercase text-white/90 drop-shadow">5 CARTES FR</span>
+                  </div>
+                `}
               </div>
 
               <!-- COUTURE D'ÉNERGIE EN FUSION & POIGNÉE TACTILE (milTCG) -->
@@ -21776,57 +21989,73 @@ const TYPE_EMOJI = {
 
               <!-- CORPS PRINCIPAL DU BOOSTER (glisse vers le bas et s'ouvre au burst !) -->
               <div id="packMainBody"
-                   style="background: ${meta.bgGrad}; --pack-glow: ${meta.glow}; transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease-out; will-change: transform, opacity;"
+                   style="${mainBodyBg} --pack-glow: ${meta.glow}; transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease-out; will-change: transform, opacity;"
                    class="absolute top-[66px] bottom-0 inset-x-0 rounded-b-2xl overflow-hidden border-x-2 border-b-2 border-white/30 shadow-[0_26px_60px_rgba(0,0,0,0.88)] flex flex-col items-center justify-between p-4 pointer-events-none">
                 <!-- Reflet spéculaire métallique dynamique -->
                 <div id="packMetallicSheen"
                      style="background-position: 50% 50%;"
                      class="absolute inset-0 booster-metallic-sheen pointer-events-none z-20 opacity-65"></div>
 
-                <!-- Trame foil micro-points -->
-                <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:16px_16px] pointer-events-none"></div>
+                ${packArt ? '' : `
+                  <!-- Trame foil micro-points -->
+                  <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1.5px,transparent_1.5px)] [background-size:16px_16px] pointer-events-none"></div>
 
-                <!-- Emblème supérieur de l'extension -->
-                <div class="relative z-10 text-center mt-0.5">
-                  <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/45 backdrop-blur-md border border-yellow-400/40 text-[10px] font-extrabold text-yellow-300 tracking-widest mb-1">
-                    ✨ JCC POKÉMON · 1999
-                  </div>
-                  <div class="font-black text-lg sm:text-xl text-white tracking-tight uppercase drop-shadow-[0_4px_8px_rgba(0,0,0,0.65)] leading-tight">
-                    ${meta.short}
-                  </div>
-                  <div class="text-[10px] text-white/90 font-semibold mt-0.5 leading-snug">
-                    ${meta.subtitle}
-                  </div>
-                </div>
-
-                <!-- Médaillon central héroïque + Éventail des 3 cartes phares -->
-                <div class="relative z-10 my-auto flex flex-col items-center">
-                  <div class="relative w-36 h-36 rounded-full p-1 bg-gradient-to-tr from-amber-300 via-white to-pink-400 shadow-[0_0_32px_rgba(251,191,36,0.45)] flex items-center justify-center">
-                    <div class="w-full h-full rounded-full bg-slate-950/85 border-2 border-slate-950 flex items-center justify-center relative overflow-visible">
-                      <img src="${meta.heroImgs[1]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -left-2 top-3 -rotate-12" />
-                      <img src="${meta.heroImgs[2]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -right-2 top-3 rotate-12" />
-                      <img src="${meta.heroImgs[0]}" alt="" class="w-[82px] aspect-[63/88] rounded-lg object-cover shadow-2xl border-2 border-yellow-300 relative z-10" />
+                  <!-- Emblème supérieur de l'extension -->
+                  <div class="relative z-10 text-center mt-0.5">
+                    <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/45 backdrop-blur-md border border-yellow-400/40 text-[10px] font-extrabold text-yellow-300 tracking-widest mb-1">
+                      ✨ JCC POKÉMON · 1999
+                    </div>
+                    <div class="font-black text-lg sm:text-xl text-white tracking-tight uppercase drop-shadow-[0_4px_8px_rgba(0,0,0,0.65)] leading-tight">
+                      ${meta.short}
+                    </div>
+                    <div class="text-[10px] text-white/90 font-semibold mt-0.5 leading-snug">
+                      ${meta.subtitle}
                     </div>
                   </div>
-                  <div class="-mt-2.5 mx-auto w-max px-3 py-0.5 rounded-full bg-slate-950/92 border border-amber-400/65 text-amber-300 font-black text-[10.5px] tracking-wider uppercase shadow-lg relative z-20">
-                    ★ 5 CARTES GARANTIES ★
-                  </div>
-                </div>
 
-                <!-- Pied de sachet & soudure basse aluminium -->
-                <div class="relative z-10 w-full flex items-center justify-between text-[9.5px] font-bold text-white/80 pt-1.5 border-t border-white/20 mb-1.5">
-                  <span>ÉDITION WOTC FR</span>
-                  <span>1 HOLO / 3 PACKS</span>
-                </div>
-                <div class="booster-crimp absolute bottom-0 inset-x-0 opacity-85"></div>
+                  <!-- Médaillon central héroïque + Éventail des 3 cartes phares -->
+                  <div class="relative z-10 my-auto flex flex-col items-center">
+                    <div class="relative w-36 h-36 rounded-full p-1 bg-gradient-to-tr from-amber-300 via-white to-pink-400 shadow-[0_0_32px_rgba(251,191,36,0.45)] flex items-center justify-center">
+                      <div class="w-full h-full rounded-full bg-slate-950/85 border-2 border-slate-950 flex items-center justify-center relative overflow-visible">
+                        <img src="${meta.heroImgs[1]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -left-2 top-3 -rotate-12" />
+                        <img src="${meta.heroImgs[2]}" alt="" class="w-[68px] aspect-[63/88] rounded-md object-cover shadow-lg border border-white/35 absolute -right-2 top-3 rotate-12" />
+                        <img src="${meta.heroImgs[0]}" alt="" class="w-[82px] aspect-[63/88] rounded-lg object-cover shadow-2xl border-2 border-yellow-300 relative z-10" />
+                      </div>
+                    </div>
+                    <div class="-mt-2.5 mx-auto w-max px-3 py-0.5 rounded-full bg-slate-950/92 border border-amber-400/65 text-amber-300 font-black text-[10.5px] tracking-wider uppercase shadow-lg relative z-20">
+                      ★ 5 CARTES GARANTIES ★
+                    </div>
+                  </div>
+
+                  <!-- Pied de sachet & soudure basse aluminium -->
+                  <div class="relative z-10 w-full flex items-center justify-between text-[9.5px] font-bold text-white/80 pt-1.5 border-t border-white/20 mb-1.5">
+                    <span>ÉDITION WOTC FR</span>
+                    <span>1 HOLO / 3 PACKS</span>
+                  </div>
+                  <div class="booster-crimp absolute bottom-0 inset-x-0 opacity-85"></div>
+                `}
               </div>
             </div>
           </div>
         </div>
       `;
 
+      const artPickerHtml = (meta.packArtworks && meta.packArtworks.length) ? `
+        <div class="flex items-center justify-center gap-1.5">
+          ${meta.packArtworks.map(a => {
+            const active = packArt && packArt.key === a.key;
+            return `<button onclick="switchActiveBoosterArt('${a.key}')" class="px-2.5 py-1 rounded-xl text-[11px] font-extrabold border transition ${
+              active
+                ? 'bg-yellow-400/25 text-yellow-200 border-yellow-400/80 shadow'
+                : 'bg-slate-900/80 text-slate-300 border-white/15 hover:border-yellow-300/60'
+            }">${a.icon} ${a.label}</button>`;
+          }).join('')}
+        </div>
+      ` : '';
+
       footer.innerHTML = `
         <div class="flex flex-col items-center gap-2 w-full">
+          ${artPickerHtml}
           <div class="px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-400/40 text-amber-200 text-[11px] sm:text-xs font-bold shadow-[0_0_20px_rgba(251,191,36,0.15)] flex items-center gap-2 max-w-full">
             <span class="text-amber-400 animate-bounce shrink-0">✋</span>
             <span id="boosterTearPromptText" class="truncate">Glissez de gauche à droite sur le booster pour le déchirer !</span>

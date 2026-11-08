@@ -9,11 +9,12 @@ export class CoinFlip {
     
     const overlay = document.createElement('div');
     overlay.className = 'coin-overlay';
+    overlay.style.background = 'transparent';
+    overlay.style.pointerEvents = 'none';
     overlay.innerHTML = `
       <div class="coin" id="coin">
         <img src="./src/assets/coin-heads.svg" alt="Face">
       </div>
-      <p style="color:#ffcb05;font-size:16px">Lancer de pièce...</p>
     `;
     document.body.appendChild(overlay);
     
