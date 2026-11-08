@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'f1c507b-1794171125';
+      var BUILD = 'f1c507b-1794171141';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -250,7 +250,7 @@
     #aiActionFeed .aif-item.out { opacity: 0; transform: translateY(-6px); transition: opacity .3s ease, transform .3s ease; }
     @keyframes aifIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } }
     /* Badges vectoriels Ligue 2000 */
-    .adv-badge { display: inline-block; flex-shrink: 0; vertical-align: middle; filter: drop-shadow(0 2px 2px rgba(15,23,42,.35)); }
+    .adv-badge { display: inline-block; flex-shrink: 0; vertical-align: middle; overflow: visible; filter: drop-shadow(0 2px 1.5px rgba(15,23,42,.45)) drop-shadow(0 0 1px rgba(255,214,90,.35)); }
     .adv-badge-off { filter: grayscale(1) brightness(1.15) opacity(.38); }
     .adv-medal { position: absolute; z-index: 3; right: -10px; bottom: -6px; line-height: 0; animation: advMedalIn .5s cubic-bezier(.2,1.6,.4,1) both; }
     @keyframes advMedalIn { from { transform: scale(.4) rotate(-25deg); opacity: 0; } }
@@ -17930,21 +17930,54 @@ const TYPE_EMOJI = {
     }
     let advBadgeSeq = 0;
     function advBadgeSvg(tr, size = 28, earned = true) {
+      // Badge 3D métallique : tranche extrudée, cerclage or brossé biseauté, émail bombé, glyphe argent en relief, reflet spéculaire.
       const spec = ADV_BADGE_SPEC[tr.id] || { shape: 'hex', glyph: 'fist' };
       const d = ADV_SHAPES[spec.shape];
       const id = `abg${++advBadgeSeq}`;
       const c = tr.color || '#64748b';
-      const inner = 'transform="translate(24 24) scale(.8) translate(-24 -24)"';
+      const sc = (k) => `transform="translate(24 24) scale(${k}) translate(-24 -24)"`;
+      const big = size >= 30;
+      const glyph = ADV_GLYPHS[spec.glyph];
+      const gT = 'translate(24 24.6) scale(.9) translate(-12 -12)';
       return `<svg class="adv-badge ${earned ? '' : 'adv-badge-off'}" viewBox="0 0 48 48" width="${size}" height="${size}" aria-hidden="true">
         <defs>
-          <linearGradient id="${id}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7cf"/><stop offset=".45" stop-color="#f6c33b"/><stop offset="1" stop-color="#9a6100"/></linearGradient>
-          <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${advShade(c, 0.38)}"/><stop offset=".55" stop-color="${c}"/><stop offset="1" stop-color="${advShade(c, -0.4)}"/></linearGradient>
-          <linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".48" stop-color="#fff" stop-opacity="0"/></linearGradient>
+          <linearGradient id="${id}r" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fffbe8"/><stop offset=".16" stop-color="#f9d65c"/><stop offset=".34" stop-color="#b9780b"/>
+            <stop offset=".5" stop-color="#fff0ae"/><stop offset=".68" stop-color="#dc9c16"/><stop offset=".86" stop-color="#8a5400"/><stop offset="1" stop-color="#e9b43a"/>
+          </linearGradient>
+          <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+            <stop offset=".6" stop-color="#3b2300" stop-opacity="0"/><stop offset="1" stop-color="#3b2300" stop-opacity=".75"/>
+          </linearGradient>
+          <radialGradient id="${id}f" cx=".36" cy=".3" r=".85">
+            <stop offset="0" stop-color="${advShade(c, 0.55)}"/><stop offset=".38" stop-color="${advShade(c, 0.12)}"/>
+            <stop offset=".78" stop-color="${advShade(c, -0.3)}"/><stop offset="1" stop-color="${advShade(c, -0.58)}"/>
+          </radialGradient>
+          <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/>
+          </linearGradient>
+          <linearGradient id="${id}m" x1="0" y1="0" x2="0" y2="24" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffffff"/><stop offset=".42" stop-color="#e2e8f0"/><stop offset=".55" stop-color="#94a3b8"/>
+            <stop offset=".72" stop-color="#f1f5f9"/><stop offset="1" stop-color="#cbd5e1"/>
+          </linearGradient>
+          <linearGradient id="${id}w" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+          <clipPath id="${id}c"><path d="${d}" ${sc(.78)}/></clipPath>
         </defs>
-        <path d="${d}" fill="url(#${id}r)" stroke="rgba(15,23,42,.6)" stroke-width="1.3" stroke-linejoin="round"/>
-        <path d="${d}" fill="url(#${id}f)" ${inner}/>
-        <path d="${d}" fill="url(#${id}s)" ${inner}/>
-        <g transform="translate(24 25) scale(.95) translate(-12 -12)" fill="#fff" stroke="rgba(15,23,42,.45)" stroke-width=".8" stroke-linejoin="round">${ADV_GLYPHS[spec.glyph]}</g>
+        <path d="${d}" fill="#4a2c00" transform="translate(0 2.1)"/>
+        <path d="${d}" fill="url(#${id}r)" stroke="#3b2300" stroke-opacity=".75" stroke-width="1.1" stroke-linejoin="round"/>
+        <path d="${d}" fill="none" stroke="url(#${id}b)" stroke-width="1.5" stroke-linejoin="round" ${sc(.91)}/>
+        <path d="${d}" fill="#5a3600" ${sc(.81)}/>
+        <path d="${d}" fill="url(#${id}f)" ${sc(.78)}/>
+        <g clip-path="url(#${id}c)">
+          <g transform="translate(0 1)"><path d="${d}" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="2.4" ${sc(.78)}/></g>
+          <ellipse cx="17" cy="8" rx="26" ry="15" fill="url(#${id}g)" opacity=".55"/>
+          ${big ? `<rect x="-30" y="-6" width="16" height="60" fill="url(#${id}w)" transform="rotate(22 24 24)"><animate attributeName="x" values="-30;60;60" keyTimes="0;.45;1" dur="3.6s" repeatCount="indefinite"/></rect>` : ''}
+        </g>
+        <g transform="${gT} translate(.7 1.1)" fill="#000" fill-opacity=".45">${glyph}</g>
+        <g transform="${gT}" fill="url(#${id}m)" stroke="#334155" stroke-opacity=".7" stroke-width=".7" stroke-linejoin="round">${glyph}</g>
+        <path d="M11 7.5 L12 10.2 L14.7 11.2 L12 12.2 L11 14.9 L10 12.2 L7.3 11.2 L10 10.2 Z" fill="#fff" opacity="${earned ? '.95' : '0'}" transform="translate(11 11.2) scale(.7) translate(-11 -11.2)"/>
       </svg>`;
     }
     const ADV_ICON_LOCK = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 10.5V8.2a4 4 0 0 1 8 0v2.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><rect x="5" y="10.2" width="14" height="10.3" rx="2.6" fill="#fff"/><circle cx="12" cy="15.1" r="1.7" fill="#334155"/><rect x="11.2" y="15.4" width="1.6" height="2.8" rx=".8" fill="#334155"/></svg>';
