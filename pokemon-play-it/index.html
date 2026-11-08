@@ -859,22 +859,6 @@
       <p class="text-[11.5px] text-slate-300/90 mt-0.5 font-medium">
         Set de Base · Jungle · Fossile — <span class="text-yellow-300 font-bold">228 Cartes Officielles FR HD</span>
       </p>
-
-      <!-- Barre d'accès rapide : Collection 228 Cartes, Pièces, Boosters Gratuits & Académie -->
-      <div class="mt-2.5 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-        <button onclick="openCollectionModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-emerald-300 hover:border-emerald-400/60 hover:text-emerald-200 transition flex items-center gap-1.5 active:scale-95">
-          <span>📖</span> Galerie <span id="menuColProgress" class="opacity-80">0/228</span>
-        </button>
-        <button onclick="switchMenuTab('booster')" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-yellow-300 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1.5 active:scale-95" title="100 pièces par victoire · 1 Booster = 100 pièces">
-          <span>🪙</span> <span id="menuCoinsCount">0</span> <span class="text-[10.5px] text-amber-200/90 font-bold">pièces</span>
-        </button>
-        <button onclick="switchMenuTab('booster')" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-cyan-200 border border-cyan-400/40 hover:border-cyan-300 transition flex items-center gap-1.5 active:scale-95" title="3 Boosters gratuits toutes les heures">
-          <span>🎁</span> <span id="menuFreeBoostersBadge">3/3 gratuits</span>
-        </button>
-        <button onclick="openAcademyModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-amber-300 hover:border-amber-400/60 hover:text-amber-200 transition flex items-center gap-1.5 active:scale-95">
-          <span>🎓</span> Quiz Académie
-        </button>
-      </div>
     </div>
 
     <!-- =============================================================== -->
@@ -1165,18 +1149,18 @@
         </div>
 
         <!-- Jauge de progression des 228 cartes -->
-        <div class="w-full bg-black/40 p-2.5 rounded-xl border border-white/10 space-y-1.5">
+        <div onclick="openCollectionModal('all')" class="cursor-pointer w-full bg-black/40 hover:bg-black/55 p-2.5 rounded-xl border border-white/10 hover:border-emerald-400/50 transition space-y-1.5" title="Ouvrir la Galerie Collection 1999">
           <div class="flex items-center justify-between text-[11px] font-bold">
-            <span class="text-slate-200">📖 Progression Collection 1999</span>
+            <span class="text-slate-200 flex items-center gap-1.5">📖 Galerie Collection 1999 <span class="text-[10px] text-emerald-300 font-extrabold underline">Voir →</span></span>
             <span id="boosterColCountText" class="font-mono text-emerald-300">0 / 228 cartes (0%)</span>
           </div>
           <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
             <div id="boosterColBar" class="h-full bg-gradient-to-r from-emerald-400 via-yellow-400 to-pink-500 transition-all duration-500" style="width: 0%"></div>
           </div>
           <div class="grid grid-cols-3 gap-1.5 pt-1 text-[10px] font-mono text-slate-300 text-center">
-            <div class="bg-white/5 rounded-lg py-1 border border-white/5">Base : <strong id="colStatBase" class="text-yellow-300">0/102</strong></div>
-            <div class="bg-white/5 rounded-lg py-1 border border-white/5">Jungle : <strong id="colStatJungle" class="text-emerald-300">0/64</strong></div>
-            <div class="bg-white/5 rounded-lg py-1 border border-white/5">Fossile : <strong id="colStatFossil" class="text-amber-300">0/62</strong></div>
+            <div onclick="event.stopPropagation(); openCollectionModal('base')" class="bg-white/5 hover:bg-white/15 rounded-lg py-1 border border-white/5 transition">Base : <strong id="colStatBase" class="text-yellow-300">0/102</strong></div>
+            <div onclick="event.stopPropagation(); openCollectionModal('jungle')" class="bg-white/5 hover:bg-white/15 rounded-lg py-1 border border-white/5 transition">Jungle : <strong id="colStatJungle" class="text-emerald-300">0/64</strong></div>
+            <div onclick="event.stopPropagation(); openCollectionModal('fossil')" class="bg-white/5 hover:bg-white/15 rounded-lg py-1 border border-white/5 transition">Fossile : <strong id="colStatFossil" class="text-amber-300">0/62</strong></div>
           </div>
         </div>
       </div>
@@ -1299,8 +1283,11 @@
     </div>
 
     <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS -->
+    <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
+    <div id="viewDecks" class="hidden w-full space-y-2.5"></div>
+
     <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(8px, env(safe-area-inset-bottom))">
-      <div class="max-w-lg mx-auto px-2.5 pt-2 grid grid-cols-4 gap-1.5">
+      <div class="max-w-lg mx-auto px-2 pt-2 grid grid-cols-5 gap-1">
         <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
           <span class="text-base sm:text-sm leading-none">🎓</span>
           <span>Tutoriel</span>
@@ -1318,6 +1305,10 @@
           <span class="text-base sm:text-sm leading-none">✨</span>
           <span>Boosters</span>
           <span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black leading-tight">3</span>
+        </button>
+        <button id="tabBtnDecks" onclick="switchMenuTab('decks')" class="py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95">
+          <span class="text-base sm:text-sm leading-none">🛠️</span>
+          <span>Decks</span>
         </button>
       </div>
     </nav>
@@ -1479,12 +1470,12 @@
   </div>
 
   <!-- =================================================================== -->
-  <!-- MODAL : QUIZ DE L'ACADÉMIE POKÉMON (EXTRAS CD-ROM 1999)             -->
+  <!-- MODAL : GALERIE COLLECTION 1999                                     -->
   <!-- =================================================================== -->
   <div id="academyModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl p-5 max-w-md w-full shadow-2xl max-h-[88dvh] flex flex-col overflow-hidden">
       <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
-        <h3 class="text-base font-extrabold text-yellow-300">🎓 Examen de l'Académie Pokémon (1999)</h3>
+        <h3 class="text-base font-extrabold text-yellow-300">📖 Galerie 1999</h3>
         <button onclick="document.getElementById('academyModal').classList.add('hidden')" class="x-close text-slate-400 hover:text-white">✕</button>
       </div>
       <div id="academyContent" class="space-y-3 text-xs flex-1 min-h-0 overflow-y-auto overscroll-contain"></div>
@@ -15784,6 +15775,9 @@ const TYPE_EMOJI = {
       const isQuick = tab === 'quick';
       const isMulti = tab === 'multi';
       const isBooster = tab === 'booster';
+      const isDecks = tab === 'decks';
+      const vd = document.getElementById('viewDecks');
+      if (vd) vd.classList.toggle('hidden', !isDecks);
       document.getElementById('viewTuto').classList.toggle('hidden', !isTuto);
       document.getElementById('viewQuick').classList.toggle('hidden', !isQuick);
       const vm = document.getElementById('viewMulti');
@@ -15803,6 +15797,9 @@ const TYPE_EMOJI = {
       if (bMulti) bMulti.className = isMulti ? activeMultiCls : idleMultiCls;
       const bBoost = document.getElementById('tabBtnBooster');
       if (bBoost) bBoost.className = isBooster ? activeCls : idleBoosterCls;
+      const bDecks = document.getElementById('tabBtnDecks');
+      if (bDecks) bDecks.className = isDecks ? activeCls : idleCls;
+      if (isDecks && typeof renderDecksView === 'function') renderDecksView();
 
       if (isQuick) renderQuickSetup();
       if (isMulti) {
@@ -15816,6 +15813,7 @@ const TYPE_EMOJI = {
 
     function selectQuickPlayerDeck(key) {
       quickPlayerDeck = key;
+      try { localStorage.setItem('ppi_v2_quick_player_deck', key); } catch (_) {}
       renderQuickSetup();
     }
 
@@ -15847,11 +15845,22 @@ const TYPE_EMOJI = {
         `;
       };
 
+      const customKeys = typeof getCustomDeckKeys === 'function' ? getCustomDeckKeys(true) : [];
+      if (!DECK_META[quickPlayerDeck]) quickPlayerDeck = 'COMBAT';
       pGrid.innerHTML = `
         <div class="flex items-center justify-between px-1">
           <h2 class="text-[11px] font-black tracking-wider uppercase text-yellow-300">1. Choisis Ton Deck</h2>
           <span class="text-[10.5px] font-mono text-slate-300">Demi-Deck (30c) ou Complet (60c)</span>
         </div>
+        ${customKeys.length ? `
+        <div class="space-y-1">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-emerald-300">🛠️ Mes Decks (ma collection)</span>
+            <button onclick="switchMenuTab('decks')" class="text-[10.5px] font-bold text-emerald-200 underline underline-offset-2">Modifier</button>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderPlayerCard).join('')}</div>
+        </div>` : `
+        <button onclick="switchMenuTab('decks')" class="w-full px-3 py-2 rounded-xl bg-emerald-500/10 border border-dashed border-emerald-400/40 text-[11px] font-extrabold text-emerald-200 text-left">🛠️ Crée ton propre deck avec les cartes de tes boosters →</button>`}
         <div class="space-y-1">
           <div class="flex items-center justify-between px-1">
             <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-amber-300">📀 4 Demi-Decks Officiels 1999 (30 cartes · 3 Prix)</span>
@@ -15916,7 +15925,7 @@ const TYPE_EMOJI = {
     renderQuickSetup();
 
     function startQuickMatch() {
-      const keys = Object.keys(DECK_META);
+      const keys = Object.keys(DECK_META).filter((k) => !k.startsWith('CUSTOM_'));
       const aiKey = quickAiDeck === 'RANDOM'
         ? keys[Math.floor(Math.random() * keys.length)]
         : quickAiDeck;
@@ -20463,7 +20472,7 @@ const TYPE_EMOJI = {
     }
 
     // -----------------------------------------------------------------------
-    // 10. MODAL DE SÉLECTION & QUIZ DE L'ACADÉMIE POKÉMON (1999)
+    // 10. MODAL DE SÉLECTION (POKÉ BALL / POKÉDEX / REMPLACEMENT K.O.)
     // -----------------------------------------------------------------------
     function openPickerModal(title, subtitle, cardsList, onPick, allowClose = true) {
       document.getElementById('pickerTitle').textContent = title;
@@ -20494,29 +20503,6 @@ const TYPE_EMOJI = {
     function closePickerModal() {
       document.getElementById('pickerModal').classList.add('hidden');
     }
-
-    const ACADEMY_QUESTIONS = [
-      {
-        q: '1. Combien de cartes Énergie peux-tu attacher à tes Pokémon par tour ?',
-        opts: ['1 seule par tour', 'Autant qu\'on veut', '2 par tour'],
-        ans: 0
-      },
-      {
-        q: '2. Peut-on faire évoluer un Pokémon le tour même où il a été posé en jeu ?',
-        opts: ['Oui, immédiatement', 'Non, il faut attendre le tour suivant', 'Seulement avec une Potion'],
-        ans: 1
-      },
-      {
-        q: '3. Combien de Pokémon au maximum peux-tu avoir sur ton Banc ?',
-        opts: ['3 Pokémon', '5 Pokémon', '6 Pokémon'],
-        ans: 1
-      },
-      {
-        q: '4. Que fait la carte Dresseur « Léo » (Set de Base 91) ?',
-        opts: ['Soigne 20 dégâts', 'Pioche 2 cartes', 'Échange le Pokémon Actif'],
-        ans: 1
-      }
-    ];
 
     
     // =======================================================================
@@ -21661,28 +21647,6 @@ const TYPE_EMOJI = {
       document.getElementById('academyModal').classList.remove('hidden');
     }
 
-    function openAcademyModal() {
-      const modalTitle = document.querySelector('#academyModal h3');
-      if (modalTitle) modalTitle.textContent = "🎓 Examen de l'Académie Pokémon (1999)";
-      const box = document.getElementById('academyContent');
-      box.innerHTML = ACADEMY_QUESTIONS.map((item, qIdx) => `
-        <div class="p-3 rounded-xl bg-black/40 border border-white/10">
-          <div class="font-bold text-white mb-2">${item.q}</div>
-          <div class="flex flex-col gap-1.5">
-            ${item.opts.map((opt, oIdx) => `
-              <button
-                onclick="this.className = ${oIdx === item.ans} ? 'text-left px-3 py-1.5 rounded-lg bg-emerald-500/30 border border-emerald-400 text-emerald-200 font-bold' : 'text-left px-3 py-1.5 rounded-lg bg-red-500/30 border border-red-400 text-red-200'"
-                class="text-left px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 transition"
-              >
-                ${opt}
-              </button>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
-      document.getElementById('academyModal').classList.remove('hidden');
-    }
-
     // Pull-to-refresh (menu uniquement, tactile + souris)
     (function initPullToRefresh() {
       const el = document.getElementById('menuScreen');
@@ -21713,6 +21677,1079 @@ const TYPE_EMOJI = {
     initHandDrag();
     initHover();
     initTouchPeek();
+  </script>
+
+  <!-- =================================================================== -->
+  <!-- 12. CRÉATION DE DECK (collection des boosters + Énergies illimitées) -->
+  <!-- =================================================================== -->
+  <style>
+    .no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+    #deckEditor { touch-action: manipulation; overscroll-behavior: contain; }
+    #deckEditor .db-scroll { overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+    .db-tile { position: relative; border-radius: 10px; overflow: hidden; background: #0f172a; border: 1.5px solid rgba(255,255,255,.12); transition: transform .12s ease, opacity .15s ease, border-color .15s; touch-action: manipulation; }
+    .db-tile img { width: 100%; aspect-ratio: 63/88; object-fit: cover; display: block; pointer-events: none; }
+    .db-tile.in-deck { border-color: rgba(250,204,21,.85); box-shadow: 0 0 0 1px rgba(250,204,21,.35); }
+    .db-tile.maxed { opacity: .45; }
+    .db-tile:active { transform: scale(.95); }
+    .db-tile.pop { animation: dbPop .28s ease-out; }
+    @keyframes dbPop { 0% { transform: scale(1); } 40% { transform: scale(1.08); } 100% { transform: scale(1); } }
+    .db-badge { position: absolute; top: 3px; right: 3px; min-width: 28px; padding: 1px 5px; border-radius: 999px; font: 900 11px/1.35 Nunito, sans-serif; text-align: center; background: rgba(2,6,23,.85); color: #e2e8f0; border: 1px solid rgba(255,255,255,.25); }
+    .db-tile.in-deck .db-badge { background: #facc15; color: #0f172a; border-color: #fde68a; }
+    .db-step { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font: 900 20px/1 Nunito, sans-serif; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: #fff; touch-action: manipulation; }
+    .db-step:active { transform: scale(.92); }
+    .db-step:disabled { opacity: .3; }
+    .db-step.plus { background: rgba(250,204,21,.18); border-color: rgba(250,204,21,.5); color: #fde047; }
+    .db-chip { flex: none; min-height: 36px; padding: 6px 12px; border-radius: 999px; font: 800 12px/1 Nunito, sans-serif; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); color: #cbd5e1; display: inline-flex; align-items: center; gap: 5px; touch-action: manipulation; }
+    .db-chip.on { background: #facc15; color: #0f172a; border-color: #fde68a; }
+    .db-tab { flex: 1; min-height: 40px; border-radius: 12px; font: 900 12.5px/1 Nunito, sans-serif; color: #94a3b8; touch-action: manipulation; }
+    .db-tab.on { background: rgba(250,204,21,.16); color: #fde047; box-shadow: inset 0 0 0 1.5px rgba(250,204,21,.55); }
+    .db-sheet-bg { position: fixed; inset: 0; z-index: 70; background: rgba(2,6,23,.75); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); display: flex; align-items: flex-end; justify-content: center; }
+    .db-sheet { width: 100%; max-width: 32rem; max-height: 90dvh; overflow-y: auto; background: #0f172a; border-top: 1.5px solid rgba(250,204,21,.45); border-radius: 22px 22px 0 0; padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); animation: dbSheetIn .22s ease-out; overscroll-behavior: contain; }
+    @keyframes dbSheetIn { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .db-hand-card { animation: dbDeal .35s ease-out both; }
+    @keyframes dbDeal { from { transform: translateY(-24px) rotate(-6deg); opacity: 0; } to { transform: none; opacity: 1; } }
+  </style>
+  <script>
+    // =======================================================================
+    // 12. CRÉATION DE DECK — cartes obtenues en boosters + Énergies de base ∞
+    // =======================================================================
+    const CUSTOM_DECKS_KEY = 'ppi_v2_custom_decks';
+    const DB_TYPES = ['Feu', 'Eau', 'Plante', 'Électrique', 'Psy', 'Combat'];
+    const DB_TYPE_STYLE = {
+      'Feu':        { grad: 'from-orange-950/90 via-red-950/85 to-slate-950/95', border: 'border-orange-400/50' },
+      'Eau':        { grad: 'from-cyan-950/90 via-blue-950/85 to-slate-950/95', border: 'border-cyan-400/45' },
+      'Plante':     { grad: 'from-emerald-950/90 via-slate-900/90 to-slate-950/95', border: 'border-emerald-400/45' },
+      'Électrique': { grad: 'from-yellow-950/90 via-amber-950/85 to-slate-950/95', border: 'border-yellow-400/50' },
+      'Psy':        { grad: 'from-fuchsia-950/90 via-purple-950/85 to-slate-950/95', border: 'border-fuchsia-400/45' },
+      'Combat':     { grad: 'from-stone-900/95 via-amber-950/85 to-slate-950/95', border: 'border-amber-500/45' },
+      'Incolore':   { grad: 'from-slate-800/90 via-slate-900/90 to-slate-950/95', border: 'border-slate-400/45' }
+    };
+    // Énergies de base : illimitées (hors boosters)
+    const DB_ENERGY_ID = {};
+    Object.values(CARDS_DB).forEach((c) => {
+      if (c.category === 'Énergie' && !c.double && c.energyType && !DB_ENERGY_ID[c.energyType]) DB_ENERGY_ID[c.energyType] = c.setId;
+    });
+    const DB_IS_BASIC_ENERGY = (c) => c && c.category === 'Énergie' && !c.double;
+    const DB_CARD = {};
+    ALL_UNIQUE_CARDS.forEach((c) => { DB_CARD[c.setId] = c; });
+    const DB_STAGE_ORDER = { 'Base': 0, 'Niveau 1': 1, 'Niveau 2': 2 };
+    const DB_FOSSIL_NAME = 'Mystérieux Fossile';
+
+    // Poids des Dresseurs pour le mode automatique (règles 1999)
+    const DB_TRAINER_WEIGHT = {
+      'bill': 10, 'professor-oak': 9, 'computer-search': 8.5, 'gust-of-wind': 8, 'energy-removal': 8,
+      'super-energy-removal': 7, 'switch': 7, 'poke-ball': 6.5, 'pluspower': 6.5, 'pokemon-breeder': 7,
+      'super-potion': 6, 'potion': 6, 'energy-retrieval': 6, 'item-finder': 5.5, 'pokemon-trader': 5,
+      'energy-search': 5, 'scoop-up': 4.5, 'revive': 4, 'mr-fuji': 4, 'defender': 4, 'clefairy-doll': 3.5,
+      'pokedex': 3.5, 'pokemon-center': 3, 'full-heal': 3, 'maintenance': 3, 'lass': 3,
+      'impostor-professor-oak': 3, 'gambler': 3, 'recycle': 3, 'pokemon-flute': 2, 'devolution-spray': 1,
+      'mysterious-fossil': 0
+    };
+    const DB_TRAINER_MAX = { 'bill': 4, 'professor-oak': 2, 'computer-search': 2, 'gust-of-wind': 3, 'energy-removal': 4, 'super-energy-removal': 2, 'switch': 2, 'poke-ball': 3, 'pluspower': 3, 'pokemon-breeder': 3, 'potion': 2, 'super-potion': 2 };
+
+    let customDecks = [];
+    try {
+      const raw = JSON.parse(localStorage.getItem(CUSTOM_DECKS_KEY) || '[]');
+      if (Array.isArray(raw)) customDecks = raw.filter((d) => d && d.id && d.cards && d.energy);
+    } catch (_) {}
+    function persistCustomDecks() {
+      try { localStorage.setItem(CUSTOM_DECKS_KEY, JSON.stringify(customDecks)); } catch (_) {}
+    }
+
+    // ---------------------------------------------------------------- Outils
+    function dbOwnedMap() {
+      const m = {};
+      ALL_UNIQUE_CARDS.forEach((c) => {
+        if (DB_IS_BASIC_ENERGY(c)) return;
+        const n = boosterSave.counts[c.setId] || 0;
+        if (n > 0) m[c.setId] = n;
+      });
+      return m;
+    }
+    function dbTotal(deck) {
+      let t = 0;
+      Object.values(deck.cards).forEach((n) => { t += n; });
+      Object.values(deck.energy).forEach((n) => { t += n; });
+      return t;
+    }
+    function dbNameCount(deck, name) {
+      let t = 0;
+      Object.entries(deck.cards).forEach(([id, n]) => { if (DB_CARD[id] && DB_CARD[id].name === name) t += n; });
+      return t;
+    }
+    function dbMaxAddable(deck, setId, owned) {
+      const c = DB_CARD[setId];
+      if (!c) return 0;
+      const cur = deck.cards[setId] || 0;
+      const byOwned = (owned[setId] || 0) - cur;
+      const byName = 4 - dbNameCount(deck, c.name);
+      const bySize = deck.size - dbTotal(deck);
+      return Math.max(0, Math.min(byOwned, byName, bySize));
+    }
+    function dbCardPower(c) {
+      if (!c) return 0;
+      if (c.name === DB_FOSSIL_NAME) return 1.5;
+      if (c.category !== 'Pokémon') return 0;
+      const atks = c.attacks || [];
+      let best = 0, maxDmg = 0;
+      atks.forEach((a) => {
+        const dmg = parseInt(a.damage, 10) || 0;
+        const cost = Math.max(1, (a.cost || []).length);
+        maxDmg = Math.max(maxDmg, dmg);
+        best = Math.max(best, dmg / cost * (cost <= 2 ? 1.2 : 1) + (a.text ? 5 : 0));
+      });
+      return (c.hp || 0) / 10 + maxDmg / 10 + best / 8 + (c.power ? 3 : 0) - (c.retreat || 0) * 0.6;
+    }
+    function dbAttackDemand(deck) {
+      // Symboles d'Énergie demandés par les attaques des Pokémon du deck (× copies)
+      const d = { Incolore: 0 };
+      DB_TYPES.forEach((t) => { d[t] = 0; });
+      Object.entries(deck.cards).forEach(([id, n]) => {
+        const c = DB_CARD[id];
+        if (!c || c.category !== 'Pokémon') return;
+        (c.attacks || []).forEach((a) => (a.cost || []).forEach((t) => { if (d[t] !== undefined) d[t] += n; }));
+      });
+      return d;
+    }
+    function dbHypergeoAtLeastOne(N, K, draw) {
+      if (K <= 0 || N <= 0) return 0;
+      if (N - K < draw) return 1;
+      let p = 1;
+      for (let i = 0; i < draw; i++) p *= (N - K - i) / (N - i);
+      return 1 - p;
+    }
+    function dbMainType(deck) {
+      let best = null, bn = -1;
+      Object.entries(deck.energy).forEach(([t, n]) => { if (n > bn) { bn = n; best = t; } });
+      if (bn > 0) return best;
+      const tally = {};
+      Object.entries(deck.cards).forEach(([id, n]) => {
+        const c = DB_CARD[id];
+        if (c && c.category === 'Pokémon' && c.type && c.type !== 'Incolore') tally[c.type] = (tally[c.type] || 0) + n;
+      });
+      return Object.entries(tally).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Incolore';
+    }
+    function dbCoverCard(deck) {
+      let best = null, bs = -1;
+      Object.keys(deck.cards).forEach((id) => {
+        const c = DB_CARD[id];
+        if (!c || c.category !== 'Pokémon') return;
+        const s = dbCardPower(c) + (DB_STAGE_ORDER[c.stage] || 0) * 4;
+        if (s > bs) { bs = s; best = c; }
+      });
+      return best;
+    }
+
+    // -------------------------------------------------------------- Analyse
+    function analyzeDeck(deck) {
+      const r = { total: dbTotal(deck), pokemon: 0, trainers: 0, energies: 0, basics: 0, errors: [], tips: [], weak: {} };
+      const presentNames = new Set();
+      Object.entries(deck.cards).forEach(([id, n]) => {
+        const c = DB_CARD[id];
+        if (!c || !n) return;
+        presentNames.add(c.name);
+        if (c.category === 'Pokémon') {
+          r.pokemon += n;
+          if (c.stage === 'Base') r.basics += n;
+          if (c.weakness) r.weak[c.weakness] = (r.weak[c.weakness] || 0) + n;
+        } else if (c.category === 'Dresseur') r.trainers += n;
+        else r.energies += n;
+      });
+      Object.values(deck.energy).forEach((n) => { r.energies += n; });
+      r.pBasic = dbHypergeoAtLeastOne(r.total, r.basics, 7);
+
+      if (r.total !== deck.size) {
+        r.errors.push(r.total < deck.size
+          ? `Il manque <b>${deck.size - r.total}</b> carte${deck.size - r.total > 1 ? 's' : ''} (${r.total}/${deck.size}).`
+          : `<b>${r.total - deck.size}</b> carte${r.total - deck.size > 1 ? 's' : ''} en trop (${r.total}/${deck.size}).`);
+      }
+      if (r.basics === 0) r.errors.push('Il faut au moins <b>1 Pokémon de Base</b> pour commencer une partie.');
+      const names = {};
+      Object.entries(deck.cards).forEach(([id, n]) => { const c = DB_CARD[id]; if (c) names[c.name] = (names[c.name] || 0) + n; });
+      Object.entries(names).forEach(([nm, n]) => { if (n > 4) r.errors.push(`Maximum 4 exemplaires de <b>${nm}</b> (${n}).`); });
+      r.valid = r.errors.length === 0;
+
+      if (r.total === 0) return r;
+      const minBasics = deck.size === 60 ? 10 : 6;
+      if (r.basics > 0 && r.basics < minBasics) {
+        r.tips.push({ icon: '🐣', text: `Seulement ${r.basics} Pokémon de Base : ${Math.round((1 - r.pBasic) * 100)}% de risque de main sans Pokémon. Vise au moins ${minBasics}.` });
+      }
+      // Évolutions orphelines
+      const missing = new Set();
+      Object.keys(deck.cards).forEach((id) => {
+        const c = DB_CARD[id];
+        if (c && c.evolvesFrom && !presentNames.has(c.evolvesFrom)) missing.add(`${c.name}|${c.evolvesFrom}`);
+      });
+      missing.forEach((k) => {
+        const [a, b] = k.split('|');
+        r.tips.push({ icon: '🧬', text: `${a} évolue de <b>${b}</b> : ajoute-le, sinon ${a} restera bloqué en main.` });
+      });
+      // Couverture des Énergies
+      const demand = dbAttackDemand(deck);
+      DB_TYPES.forEach((t) => {
+        if (demand[t] > 0 && !(deck.energy[t] > 0)) {
+          const who = Object.keys(deck.cards).map((id) => DB_CARD[id]).find((c) => c && c.category === 'Pokémon' && (c.attacks || []).some((a) => (a.cost || []).includes(t)));
+          r.tips.push({ icon: '⚡', text: `Aucune Énergie <b>${t}</b> alors que ${who ? who.name : 'un Pokémon'} en a besoin pour attaquer.` });
+        }
+      });
+      const typesUsed = DB_TYPES.filter((t) => deck.energy[t] > 0).length;
+      if (typesUsed >= 3) r.tips.push({ icon: '🎯', text: `${typesUsed} types d'Énergie différents : le deck sera irrégulier. 1 ou 2 types, c'est l'idéal.` });
+      const ratio = r.energies / Math.max(1, r.total);
+      if (r.total >= deck.size * 0.8) {
+        if (ratio < 0.3) r.tips.push({ icon: '🔋', text: `Peu d'Énergies (${r.energies}) : tu risques de ne pas pouvoir attaquer. Vise ${deck.size === 60 ? '22-26' : '11-14'}.` });
+        if (ratio > 0.55) r.tips.push({ icon: '🔋', text: `Beaucoup d'Énergies (${r.energies}) : remplace-en quelques-unes par des Dresseurs utiles.` });
+      }
+      // Dresseurs conseillés possédés mais absents
+      const owned = dbOwnedMap();
+      const ownedTrainer = (slug) => Object.keys(owned).find((id) => DB_CARD[id].id === slug);
+      const inDeck = (slug) => Object.keys(deck.cards).some((id) => DB_CARD[id] && DB_CARD[id].id === slug && deck.cards[id] > 0);
+      if (ownedTrainer('bill') && !inDeck('bill')) r.tips.push({ icon: '📚', text: 'Tu possèdes <b>Léo</b> (pioche 2 cartes) : c\'est le meilleur Dresseur pour accélérer.' });
+      const hasStage2 = Object.keys(deck.cards).some((id) => DB_CARD[id] && DB_CARD[id].stage === 'Niveau 2');
+      if (hasStage2 && ownedTrainer('pokemon-breeder') && !inDeck('pokemon-breeder')) r.tips.push({ icon: '🧪', text: 'Ajoute <b>Éleveur de Pokémon</b> pour faire évoluer directement en Niveau 2.' });
+      if (r.trainers === 0 && Object.keys(owned).some((id) => DB_CARD[id].category === 'Dresseur')) r.tips.push({ icon: '🎒', text: 'Aucun Dresseur : ajoute Potion, Transfert ou Rafale de vent pour plus d\'options.' });
+      // Faiblesse commune
+      const w = Object.entries(r.weak).sort((a, b) => b[1] - a[1])[0];
+      if (w && r.pokemon >= 4 && w[1] / r.pokemon >= 0.5) r.tips.push({ icon: '⚠️', text: `${w[1]} de tes ${r.pokemon} Pokémon sont faibles contre <b>${w[0]}</b> (dégâts ×2).` });
+      return r;
+    }
+
+    // ------------------------------------------------- Mode automatique 🤖
+    function autoBuildDeck(opts) {
+      const size = opts.size === 30 ? 30 : 60;
+      const owned = dbOwnedMap();
+      const deck = { size, cards: {}, energy: {} };
+      if (opts.seed) {
+        Object.entries(opts.seed.cards).forEach(([id, n]) => { const k = Math.min(n, owned[id] || 0); if (k > 0) deck.cards[id] = k; });
+        Object.entries(opts.seed.energy).forEach(([t, n]) => { if (n > 0) deck.energy[t] = n; });
+      }
+      const room = () => size - dbTotal(deck);
+      const addName = (name, n) => {
+        // Répartit n copies d'un nom entre ses différentes impressions possédées
+        let left = n;
+        const ids = Object.keys(owned).filter((id) => DB_CARD[id].name === name).sort((a, b) => owned[b] - owned[a]);
+        for (const id of ids) {
+          if (left <= 0) break;
+          const k = Math.min(left, dbMaxAddable(deck, id, owned));
+          if (k > 0) { deck.cards[id] = (deck.cards[id] || 0) + k; left -= k; }
+        }
+        return n - left;
+      };
+      const ownedNameCopies = (name) => Math.min(4, Object.keys(owned).filter((id) => DB_CARD[id].name === name).reduce((s, id) => s + owned[id], 0));
+
+      // 1) Choix des types
+      const pokeOwned = Object.keys(owned).map((id) => DB_CARD[id]).filter((c) => c.category === 'Pokémon');
+      const ownedNames = new Set(Object.keys(owned).map((id) => DB_CARD[id].name));
+      const playable = (c) => c.stage === 'Base' || ownedNames.has(c.evolvesFrom);
+      let types = (opts.types || []).filter((t) => DB_TYPES.includes(t));
+      if (!types.length) {
+        const seedTally = {};
+        Object.entries(deck.cards).forEach(([id, n]) => { const c = DB_CARD[id]; if (c && c.category === 'Pokémon' && c.type !== 'Incolore') seedTally[c.type] = (seedTally[c.type] || 0) + n; });
+        const seedTypes = Object.entries(seedTally).sort((a, b) => b[1] - a[1]).map((e) => e[0]);
+        if (seedTypes.length) types = seedTypes.slice(0, 2);
+        else {
+          const score = {}, basics = {}, copies = {};
+          pokeOwned.forEach((c) => {
+            if (!playable(c) || c.type === 'Incolore') return;
+            const n = Math.min(4, owned[c.setId]);
+            score[c.type] = (score[c.type] || 0) + dbCardPower(c) * n * (c.stage === 'Base' ? 1.25 : 1);
+            copies[c.type] = (copies[c.type] || 0) + n;
+            if (c.stage === 'Base') basics[c.type] = (basics[c.type] || 0) + n;
+          });
+          const ranked = Object.keys(score).sort((a, b) => score[b] - score[a]);
+          if (ranked.length) {
+            types = [ranked[0]];
+            const needCopies = size === 60 ? 15 : 8, needBasics = size === 60 ? 10 : 6;
+            const colorless = pokeOwned.filter((c) => c.type === 'Incolore' && playable(c)).reduce((s, c) => s + Math.min(4, owned[c.setId]), 0);
+            const colorlessBasics = pokeOwned.filter((c) => c.type === 'Incolore' && c.stage === 'Base').reduce((s, c) => s + Math.min(4, owned[c.setId]), 0);
+            if (ranked[1] && ((copies[ranked[0]] + colorless) < needCopies || (basics[ranked[0]] || 0) + colorlessBasics < needBasics)) types.push(ranked[1]);
+          }
+        }
+      }
+      const allowed = new Set([...types, 'Incolore']);
+
+      // 2) Lignées d'évolution (Base → Niveau 1 → Niveau 2), fossile inclus
+      const byName = {};
+      pokeOwned.forEach((c) => { if (allowed.has(c.type)) (byName[c.name] = byName[c.name] || []).push(c); });
+      const fossilOwned = Object.keys(owned).find((id) => DB_CARD[id].id === 'mysterious-fossil');
+      const bestOf = (name) => (byName[name] || []).reduce((b, c) => (!b || dbCardPower(c) > dbCardPower(b) ? c : b), null);
+      const evosOf = (name) => Object.keys(byName).filter((n) => byName[n][0].evolvesFrom === name);
+      const lines = [];
+      const roots = Object.keys(byName).filter((n) => byName[n][0].stage === 'Base');
+      if (fossilOwned) roots.push(DB_FOSSIL_NAME);
+      roots.forEach((root) => {
+        const s1s = evosOf(root);
+        if (root === DB_FOSSIL_NAME && !s1s.length) return;
+        const variants = s1s.length ? s1s : [null];
+        variants.forEach((s1) => {
+          const s2s = s1 ? evosOf(s1) : [];
+          const s2 = s2s.sort((a, b) => dbCardPower(bestOf(b)) - dbCardPower(bestOf(a)))[0] || null;
+          const chain = [root, s1, s2].filter(Boolean);
+          const rootPow = root === DB_FOSSIL_NAME ? 1.5 : dbCardPower(bestOf(root));
+          const score = rootPow + (s1 ? dbCardPower(bestOf(s1)) * 1.25 : 0) + (s2 ? dbCardPower(bestOf(s2)) * 1.5 : 0) + (s2 ? 4 : s1 ? 2 : 0);
+          lines.push({ chain, score });
+        });
+      });
+      lines.sort((a, b) => b.score - a.score);
+
+      // 3) Pokémon
+      const countPokemonSlots = () => Object.entries(deck.cards).reduce((s, [id, n]) => s + ((DB_CARD[id].category === 'Pokémon' || DB_CARD[id].name === DB_FOSSIL_NAME) ? n : 0), 0);
+      const countBasics = () => Object.entries(deck.cards).reduce((s, [id, n]) => s + (DB_CARD[id].category === 'Pokémon' && DB_CARD[id].stage === 'Base' ? n : 0), 0);
+      // Compléter les pré-évolutions manquantes d'un deck commencé
+      Object.keys(deck.cards).forEach((id) => {
+        const c = DB_CARD[id];
+        if (!c.evolvesFrom || dbNameCount(deck, c.evolvesFrom) > 0) return;
+        addName(c.evolvesFrom, Math.max(1, dbNameCount(deck, c.name)));
+      });
+      const pokeTarget = size === 60 ? 18 : 10;
+      const shape = size === 60 ? [4, 3, 2] : [3, 2, 1];
+      for (const line of lines) {
+        const free = Math.min(pokeTarget - countPokemonSlots(), room());
+        if (free < 1) break;
+        const already = line.chain.map((n) => dbNameCount(deck, n));
+        if (already.some((n) => n > 0) && already.every((n, i) => n >= Math.min(shape[i], ownedNameCopies(line.chain[i])))) continue;
+        const want = line.chain.map((n, i) => {
+          const single = line.chain.length === 1 ? (size === 60 ? 3 : 2) : shape[i];
+          return Math.min(single, ownedNameCopies(n));
+        });
+        for (let i = 1; i < want.length; i++) want[i] = Math.min(want[i], want[i - 1]);
+        while (want.length && want[0] > 0 && want.reduce((s, n, i) => s + Math.max(0, n - already[i]), 0) > free) {
+          const last = want.length - 1;
+          if (last > 0 && want[last] <= Math.max(1, already[last])) want.pop();
+          else want[last]--;
+        }
+        want.forEach((n, i) => { const add = n - dbNameCount(deck, line.chain[i]); if (add > 0) addName(line.chain[i], add); });
+      }
+      // Assez de Pokémon de Base pour éviter les mulligans
+      const minBasics = size === 60 ? 10 : 6;
+      if (countBasics() < minBasics) {
+        const extra = Object.keys(byName).filter((n) => byName[n][0].stage === 'Base').sort((a, b) => dbCardPower(bestOf(b)) - dbCardPower(bestOf(a)));
+        for (const n of extra) {
+          if (countBasics() >= minBasics || room() <= 0) break;
+          addName(n, Math.min(minBasics - countBasics(), 4));
+        }
+      }
+      if (countBasics() === 0) {
+        // Aucun Pokémon de Base dans ces types : prendre le meilleur de la collection
+        const any = pokeOwned.filter((c) => c.stage === 'Base').sort((a, b) => dbCardPower(b) - dbCardPower(a))[0];
+        if (any) addName(any.name, size === 60 ? 4 : 3);
+      }
+
+      // 4) Dresseurs
+      const hasStage2 = Object.keys(deck.cards).some((id) => DB_CARD[id].stage === 'Niveau 2');
+      const hasEvo = Object.keys(deck.cards).some((id) => DB_CARD[id].stage === 'Niveau 1' || DB_CARD[id].stage === 'Niveau 2');
+      const trainerTarget = size === 60 ? 16 : 7;
+      const countTrainers = () => Object.entries(deck.cards).reduce((s, [id, n]) => s + (DB_CARD[id].category === 'Dresseur' && DB_CARD[id].name !== DB_FOSSIL_NAME ? n : 0), 0);
+      const trainerIds = Object.keys(owned).filter((id) => DB_CARD[id].category === 'Dresseur');
+      const weightOf = (id) => {
+        const slug = DB_CARD[id].id;
+        let w = DB_TRAINER_WEIGHT[slug] ?? 2;
+        if (slug === 'pokemon-breeder' && !hasStage2) w = 0;
+        if ((slug === 'pokemon-trader' || slug === 'devolution-spray') && !hasEvo) w = 0;
+        return w;
+      };
+      let guard = 80;
+      while (countTrainers() < trainerTarget && room() > 0 && guard-- > 0) {
+        let best = null, bw = 0;
+        trainerIds.forEach((id) => {
+          const slug = DB_CARD[id].id;
+          const have = dbNameCount(deck, DB_CARD[id].name);
+          const cap = Math.min(DB_TRAINER_MAX[slug] ?? (size === 60 ? 2 : 1), size === 30 ? 2 : 4);
+          if (have >= cap || dbMaxAddable(deck, id, owned) <= 0) return;
+          const w = weightOf(id) * Math.pow(0.62, have);
+          if (w > bw) { bw = w; best = id; }
+        });
+        if (!best || bw < 1.2) break;
+        deck.cards[best] = (deck.cards[best] || 0) + 1;
+      }
+
+      // 5) Double Énergie Incolore (carte de booster)
+      const demand = dbAttackDemand(deck);
+      const totalDemand = Object.values(demand).reduce((s, n) => s + n, 0);
+      const dceId = Object.keys(owned).find((id) => DB_CARD[id].category === 'Énergie' && DB_CARD[id].double);
+      if (dceId && totalDemand > 0 && demand.Incolore / totalDemand >= 0.25) {
+        const want = Math.min(size === 60 ? 4 : 2, dbMaxAddable(deck, dceId, owned));
+        if (want > 0) deck.cards[dceId] = (deck.cards[dceId] || 0) + want;
+      }
+
+      // 6) Énergies de base (illimitées) réparties selon les coûts d'attaque
+      const left = room();
+      if (left > 0) {
+        let weights = {};
+        DB_TYPES.forEach((t) => { if (demand[t] > 0) weights[t] = demand[t]; });
+        if (!Object.keys(weights).length) (types.length ? types : ['Combat']).forEach((t) => { weights[t] = 1; });
+        const existing = DB_TYPES.reduce((s, t) => s + (deck.energy[t] || 0), 0);
+        const finalTotal = existing + left;
+        const wSum = Object.values(weights).reduce((s, n) => s + n, 0);
+        const targets = Object.entries(weights).map(([t, w]) => {
+          const exact = finalTotal * w / wSum;
+          return { t, n: Math.floor(exact), frac: exact - Math.floor(exact) };
+        });
+        let rest = finalTotal - targets.reduce((s, x) => s + x.n, 0);
+        targets.sort((a, b) => b.frac - a.frac).forEach((x) => { if (rest > 0) { x.n++; rest--; } });
+        let toAdd = left;
+        targets.sort((a, b) => b.n - a.n).forEach((x) => {
+          const add = Math.min(toAdd, Math.max(0, x.n - (deck.energy[x.t] || 0)));
+          if (add > 0) { deck.energy[x.t] = (deck.energy[x.t] || 0) + add; toAdd -= add; }
+        });
+        if (toAdd > 0) { const t = targets[0].t; deck.energy[t] = (deck.energy[t] || 0) + toAdd; }
+      }
+      return { deck, types };
+    }
+
+    // ------------------------------------------- Intégration Duel IA / partie
+    function getCustomDeckKeys(validOnly) {
+      return customDecks.filter((d) => !validOnly || analyzeDeck(d).valid).map((d) => 'CUSTOM_' + d.id);
+    }
+    function registerCustomDecks() {
+      Object.keys(DECK_META).forEach((k) => { if (k.startsWith('CUSTOM_')) { delete DECK_META[k]; delete HALF_DECKS[k]; } });
+      customDecks.forEach((d) => {
+        const key = 'CUSTOM_' + d.id;
+        const recipe = Object.entries(d.cards).filter(([id, n]) => n > 0 && CARDS_DB[id]);
+        Object.entries(d.energy).forEach(([t, n]) => { if (n > 0 && DB_ENERGY_ID[t]) recipe.push([DB_ENERGY_ID[t], n]); });
+        HALF_DECKS[key] = recipe;
+        const cover = dbCoverCard(d);
+        const st = DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore;
+        DECK_META[key] = {
+          key, custom: true, name: d.name, short: d.name, cards: d.size, prizes: d.size === 30 ? 3 : 6,
+          star: cover ? `${cover.name} (${cover.hp} PV)` : 'Deck perso',
+          desc: 'Deck créé avec ta collection',
+          img: cover ? cover.img : 'https://assets.tcgdex.net/fr/base/base1/97/high.webp',
+          subImg: cover ? cover.img : 'https://assets.tcgdex.net/fr/base/base1/97/high.webp',
+          grad: st.grad, border: st.border
+        };
+      });
+      if (typeof quickPlayerDeck !== 'undefined' && String(quickPlayerDeck).startsWith('CUSTOM_') && !DECK_META[quickPlayerDeck]) quickPlayerDeck = 'COMBAT';
+    }
+    function saveCustomDeck(deck) {
+      deck.updatedAt = Date.now();
+      const i = customDecks.findIndex((d) => d.id === deck.id);
+      if (i >= 0) customDecks[i] = deck; else customDecks.unshift(deck);
+      persistCustomDecks();
+      registerCustomDecks();
+    }
+
+    // =========================================================== Interface
+    let dbEdit = null;          // deck en cours d'édition
+    let dbTab = 'deck';         // 'deck' | 'add' | 'stats'
+    let dbFilter = { kind: 'all', type: 'all' };
+    let dbAutoSheet = { size: 60, types: [], mode: 'new' };
+
+    function dbEsc(s) { return String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+    function dbTypeIcon(t, size = 16) { return typeof energyOrb === 'function' ? energyOrb(t, size) : (TYPE_EMOJI[t] || '⭐'); }
+    function dbBuzz(ms) { try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {} }
+    function dbToast(html) {
+      if (typeof showGameToast !== 'function') return;
+      showGameToast(html);
+      const t = document.getElementById('gameToast');
+      const ed = document.getElementById('deckEditor');
+      if (t) t.style.top = ed && !ed.classList.contains('hidden') ? 'calc(100% - 150px - env(safe-area-inset-bottom))' : '13%';
+    }
+
+    // ---------- Vue liste (onglet « Decks » du menu)
+    function renderDecksView() {
+      const box = document.getElementById('viewDecks');
+      if (!box) return;
+      const owned = dbOwnedMap();
+      const ownedUnique = Object.keys(owned).length;
+      const ownedPokemon = Object.keys(owned).filter((id) => DB_CARD[id].category === 'Pokémon');
+      const ownedBasics = ownedPokemon.filter((id) => DB_CARD[id].stage === 'Base').length;
+      const ownedCopies = Object.values(owned).reduce((s, n) => s + n, 0);
+
+      const deckRows = customDecks.map((d) => {
+        const a = analyzeDeck(d);
+        const cover = dbCoverCard(d);
+        const types = DB_TYPES.filter((t) => d.energy[t] > 0).sort((x, y) => d.energy[y] - d.energy[x]);
+        return `
+          <div class="rounded-2xl bg-gradient-to-br ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).grad} border ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).border} p-2.5 flex items-center gap-3">
+            <button onclick="openDeckEditor('${d.id}')" class="shrink-0 w-14 aspect-[63/88] rounded-lg overflow-hidden border border-white/25 bg-slate-900 shadow">
+              ${cover ? `<img src="${cover.img}" alt="" loading="lazy" class="w-full h-full object-cover" />` : '<div class="w-full h-full flex items-center justify-center text-2xl">🃏</div>'}
+            </button>
+            <button onclick="openDeckEditor('${d.id}')" class="flex-1 min-w-0 text-left">
+              <div class="text-sm font-black text-white truncate">${dbEsc(d.name)}</div>
+              <div class="flex items-center gap-1 mt-0.5">${types.map((t) => dbTypeIcon(t, 15)).join('')}<span class="text-[11px] font-bold text-slate-300 ml-1">${d.size} cartes · ${d.size === 30 ? 3 : 6} 🏆</span></div>
+              <div class="mt-1 text-[11px] font-extrabold ${a.valid ? 'text-emerald-300' : 'text-amber-300'}">${a.valid ? '✅ Prêt à jouer' : `⚠️ ${a.total}/${d.size} cartes${a.basics === 0 && a.total ? ' · pas de Base' : ''}`}</div>
+            </button>
+            <button onclick="playCustomDeck('${d.id}')" ${a.valid ? '' : 'disabled'} class="shrink-0 min-w-[56px] min-h-[48px] px-2 rounded-xl text-xs font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-white/5 text-slate-500 border border-white/10'}">▶<br>Jouer</button>
+          </div>`;
+      }).join('');
+
+      box.innerHTML = `
+        <div class="rounded-2xl bg-gradient-to-br from-indigo-950/90 via-slate-900/90 to-slate-950/95 border border-yellow-400/35 p-3.5 space-y-3 shadow-xl">
+          <div class="flex items-start gap-3">
+            <div class="text-3xl leading-none">🛠️</div>
+            <div class="flex-1 min-w-0">
+              <h2 class="text-base font-black text-yellow-300 leading-tight">Création de Deck</h2>
+              <p class="text-[12px] text-slate-300 leading-snug mt-0.5">Construis ton deck avec les cartes de tes boosters. Les <b class="text-yellow-200">Énergies de base sont illimitées</b> ∞.</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 text-center">
+            <div class="rounded-xl bg-black/30 border border-white/10 py-1.5"><div class="text-base font-black text-white">${ownedUnique}</div><div class="text-[10.5px] font-bold text-slate-400">cartes uniques</div></div>
+            <div class="rounded-xl bg-black/30 border border-white/10 py-1.5"><div class="text-base font-black text-white">${ownedCopies}</div><div class="text-[10.5px] font-bold text-slate-400">exemplaires</div></div>
+            <div class="rounded-xl bg-black/30 border border-white/10 py-1.5"><div class="text-base font-black text-white">${ownedBasics}</div><div class="text-[10.5px] font-bold text-slate-400">Pokémon de Base</div></div>
+          </div>
+          ${ownedBasics === 0 ? `
+            <div class="rounded-xl bg-amber-500/15 border border-amber-400/40 p-3 text-[12.5px] text-amber-100 leading-snug">
+              Tu n'as encore aucun <b>Pokémon de Base</b>. Ouvre des boosters pour obtenir des cartes, puis reviens ici !
+              <button onclick="switchMenuTab('booster')" class="mt-2 w-full btn-gold py-2.5 rounded-xl text-xs font-black uppercase">✨ Ouvrir des boosters</button>
+            </div>` : `
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="openAutoDeckSheet('new')" class="min-h-[56px] rounded-xl btn-gold text-sm font-black flex flex-col items-center justify-center leading-tight shadow-lg">✨ Deck auto<span class="text-[10.5px] font-bold opacity-80">en 1 clic</span></button>
+              <button onclick="createEmptyDeck()" class="min-h-[56px] rounded-xl bg-white/10 border border-white/20 text-sm font-black text-white flex flex-col items-center justify-center leading-tight active:scale-95">＋ Nouveau<span class="text-[10.5px] font-bold text-slate-300">à la main</span></button>
+            </div>`}
+        </div>
+        <div class="flex items-center justify-between px-1 pt-1">
+          <h3 class="text-[12px] font-black tracking-wider uppercase text-yellow-300">Mes decks (${customDecks.length})</h3>
+          ${customDecks.length ? '<span class="text-[11px] font-semibold text-slate-400">Touchez pour modifier</span>' : ''}
+        </div>
+        <div class="space-y-2">${deckRows || `<div class="rounded-xl border border-dashed border-white/20 p-4 text-center text-[12.5px] text-slate-400">Aucun deck pour l'instant.${ownedBasics ? '<br>Essaie <b class="text-yellow-200">✨ Deck auto</b> : il choisit tes meilleures cartes.' : ''}</div>`}</div>
+      `;
+    }
+
+    function createEmptyDeck(size) {
+      if (!size) {
+        const owned = dbOwnedMap();
+        const pokeCopies = Object.keys(owned).filter((id) => DB_CARD[id].category === 'Pokémon').reduce((n, id) => n + Math.min(4, owned[id]), 0);
+        size = pokeCopies >= 16 ? 60 : 30;
+      }
+      const d = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name: `Mon deck ${customDecks.length + 1}`, size, cards: {}, energy: {} };
+      saveCustomDeck(d);
+      openDeckEditor(d.id, 'add');
+    }
+
+    function playCustomDeck(id) {
+      const d = customDecks.find((x) => x.id === id);
+      if (!d || !analyzeDeck(d).valid) return;
+      registerCustomDecks();
+      closeDeckEditor(true);
+      quickPlayerDeck = 'CUSTOM_' + id;
+      try { localStorage.setItem('ppi_v2_quick_player_deck', quickPlayerDeck); } catch (_) {}
+      switchMenuTab('quick');
+      document.getElementById('menuScreen')?.scrollTo({ top: 0, behavior: 'smooth' });
+      dbToast(`✅ <b>${dbEsc(d.name)}</b> sélectionné — choisis l'adversaire puis lance !`);
+    }
+
+    // ---------- Éditeur plein écran
+    function ensureDeckEditorDom() {
+      if (document.getElementById('deckEditor')) return;
+      const el = document.createElement('div');
+      el.id = 'deckEditor';
+      el.className = 'fixed inset-0 z-[60] hidden bg-slate-950 flex flex-col';
+      el.style.paddingTop = 'env(safe-area-inset-top)';
+      el.innerHTML = `
+        <div class="max-w-lg w-full mx-auto flex flex-col h-full min-h-0">
+          <div id="dbHeader" class="shrink-0 px-3 pt-2.5 pb-2 space-y-2 border-b border-white/10 bg-slate-950"></div>
+          <div id="dbBody" class="db-scroll flex-1 min-h-0 overflow-y-auto px-3 py-3"></div>
+          <div id="dbFooter" class="shrink-0 px-3 pt-2 border-t border-white/10 bg-slate-950" style="padding-bottom:max(10px, env(safe-area-inset-bottom))"></div>
+        </div>`;
+      document.body.appendChild(el);
+      // Grille « Ajouter » : tap = +1, appui long = zoom
+      const body = el.querySelector('#dbBody');
+      let lp = null;
+      body.addEventListener('pointerdown', (e) => {
+        const t = e.target.closest('[data-add]');
+        if (!t) return;
+        lp = { t, x: e.clientX, y: e.clientY, fired: false };
+        lp.timer = setTimeout(() => { if (!lp) return; lp.fired = true; dbBuzz(8); if (typeof showStickyPreview === 'function') showStickyPreview(t.dataset.img); }, 430);
+      });
+      body.addEventListener('pointermove', (e) => { if (lp && Math.hypot(e.clientX - lp.x, e.clientY - lp.y) > 10) { clearTimeout(lp.timer); lp.moved = true; } });
+      const endLp = () => { if (lp) clearTimeout(lp.timer); };
+      body.addEventListener('pointerup', endLp);
+      body.addEventListener('pointercancel', () => { endLp(); lp = null; });
+      body.addEventListener('click', (e) => {
+        const t = e.target.closest('[data-add]');
+        if (!t) return;
+        if (lp && lp.t === t && (lp.fired || lp.moved)) { lp = null; return; }
+        lp = null;
+        dbAdd(t.dataset.add, t);
+      });
+      // Tirer pour rafraîchir la collection (sans recharger la page)
+      let y0 = null, dist = 0;
+      const ind = document.createElement('div');
+      ind.style.cssText = 'position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 6px);transform:translate(-50%,-60px);z-index:5;padding:6px 12px;border-radius:999px;background:#0f172a;border:1px solid rgba(250,204,21,.5);color:#fde047;font:800 11px Nunito,sans-serif;transition:transform .15s;pointer-events:none';
+      el.appendChild(ind);
+      const start = (y) => { if (body.scrollTop <= 0) { y0 = y; dist = 0; } };
+      const move = (y) => { if (y0 === null) return; dist = Math.max(0, Math.min(110, y - y0)); ind.style.transform = `translate(-50%, ${dist - 60}px)`; ind.textContent = dist > 70 ? '↻ Relâcher pour actualiser' : '↓ Tirer pour actualiser'; };
+      const end = () => { if (y0 === null) return; if (dist > 70) { dbBuzz(15); renderDeckEditor(); dbToast('Collection actualisée'); } ind.style.transform = 'translate(-50%,-60px)'; y0 = null; };
+      body.addEventListener('touchstart', (e) => start(e.touches[0].clientY), { passive: true });
+      body.addEventListener('touchmove', (e) => move(e.touches[0].clientY), { passive: true });
+      body.addEventListener('touchend', end);
+      body.addEventListener('mousedown', (e) => { if (!e.target.closest('button, input, [data-add]')) start(e.clientY); });
+      window.addEventListener('mousemove', (e) => { if (e.buttons && y0 !== null) move(e.clientY); });
+      window.addEventListener('mouseup', end);
+    }
+
+    function openDeckEditor(id, tab = 'deck') {
+      const d = customDecks.find((x) => x.id === id);
+      if (!d) return;
+      ensureDeckEditorDom();
+      dbEdit = JSON.parse(JSON.stringify(d));
+      dbTab = tab;
+      document.getElementById('deckEditor').classList.remove('hidden');
+      renderDeckEditor();
+      document.getElementById('dbBody').scrollTop = 0;
+    }
+    function closeDeckEditor(silent) {
+      const el = document.getElementById('deckEditor');
+      if (el) el.classList.add('hidden');
+      if (dbEdit && dbTotal(dbEdit) === 0) {
+        customDecks = customDecks.filter((d) => d.id !== dbEdit.id);
+        persistCustomDecks();
+        registerCustomDecks();
+      }
+      dbEdit = null;
+      closeDbSheet();
+      renderDecksView();
+      if (!silent && typeof renderQuickSetup === 'function') renderQuickSetup();
+    }
+    function dbCommit() { if (dbEdit) saveCustomDeck(JSON.parse(JSON.stringify(dbEdit))); }
+
+    function dbSetTab(t) { dbTab = t; renderDeckEditor(); document.getElementById('dbBody').scrollTop = 0; }
+    function dbSetSize(n) { if (!dbEdit || dbEdit.size === n) return; dbEdit.size = n; dbCommit(); renderDeckEditor(); }
+    function dbRename(v) { if (!dbEdit) return; dbEdit.name = (v || '').trim().slice(0, 28) || 'Mon deck'; dbCommit(); }
+    function dbDeleteDeck() {
+      if (!dbEdit) return;
+      if (!confirm(`Supprimer « ${dbEdit.name} » ?`)) return;
+      customDecks = customDecks.filter((d) => d.id !== dbEdit.id);
+      persistCustomDecks();
+      registerCustomDecks();
+      dbEdit = null;
+      closeDeckEditor();
+    }
+
+    function dbAdd(setId, tileEl) {
+      if (!dbEdit) return;
+      const owned = dbOwnedMap();
+      if (dbMaxAddable(dbEdit, setId, owned) <= 0) {
+        const c = DB_CARD[setId];
+        const why = dbTotal(dbEdit) >= dbEdit.size ? `Deck plein (${dbEdit.size} cartes)`
+          : dbNameCount(dbEdit, c.name) >= 4 ? `Maximum 4 × ${c.name}`
+          : `Tu possèdes ${owned[setId] || 0} × ${c.name}`;
+        dbToast(why); dbBuzz([10, 40, 10]);
+        return;
+      }
+      dbEdit.cards[setId] = (dbEdit.cards[setId] || 0) + 1;
+      dbBuzz(6);
+      dbCommit();
+      if (tileEl && dbTab === 'add') { renderDbHeader(); refreshAddTiles(); tileEl.classList.remove('pop'); void tileEl.offsetWidth; tileEl.classList.add('pop'); }
+      else renderDeckEditor();
+    }
+    function dbRemove(setId) {
+      if (!dbEdit || !dbEdit.cards[setId]) return;
+      dbEdit.cards[setId]--;
+      if (dbEdit.cards[setId] <= 0) delete dbEdit.cards[setId];
+      dbBuzz(5); dbCommit();
+      if (dbTab === 'add') { renderDbHeader(); refreshAddTiles(); } else renderDeckEditor();
+    }
+    function dbEnergy(t, delta) {
+      if (!dbEdit) return;
+      const cur = dbEdit.energy[t] || 0;
+      if (delta > 0 && dbTotal(dbEdit) >= dbEdit.size) { dbToast(`Deck plein (${dbEdit.size} cartes)`); dbBuzz([10, 40, 10]); return; }
+      const next = Math.max(0, cur + delta);
+      if (next === 0) delete dbEdit.energy[t]; else dbEdit.energy[t] = next;
+      dbBuzz(5); dbCommit();
+      if (dbTab === 'add') { renderDbHeader(); refreshAddTiles(); } else renderDeckEditor();
+    }
+    function dbClear() {
+      if (!dbEdit || !dbTotal(dbEdit)) return;
+      if (!confirm('Vider entièrement ce deck ?')) return;
+      dbEdit.cards = {}; dbEdit.energy = {}; dbCommit(); renderDeckEditor();
+    }
+
+    function renderDeckEditor() {
+      if (!dbEdit) return;
+      renderDbHeader();
+      renderDbBody();
+      renderDbFooter();
+    }
+
+    function renderDbHeader() {
+      const a = analyzeDeck(dbEdit);
+      const pct = Math.min(100, Math.round(a.total / dbEdit.size * 100));
+      const over = a.total > dbEdit.size;
+      const barCls = over ? 'bg-rose-500' : a.total === dbEdit.size ? 'bg-emerald-400' : 'bg-yellow-400';
+      document.getElementById('dbHeader').innerHTML = `
+        <div class="flex items-center gap-2">
+          <button onclick="closeDeckEditor()" class="db-step shrink-0" aria-label="Retour">←</button>
+          <input id="dbNameInput" value="${dbEsc(dbEdit.name)}" maxlength="28" onchange="dbRename(this.value)" onkeydown="if(event.key==='Enter')this.blur()"
+            class="flex-1 min-w-0 h-10 px-3 rounded-xl bg-white/5 border border-white/15 text-[16px] font-black text-white focus:outline-none focus:border-yellow-400" style="user-select:text;-webkit-user-select:text" />
+          <button onclick="dbDeleteDeck()" class="db-step shrink-0 !text-base" aria-label="Supprimer le deck">🗑️</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="flex rounded-xl bg-white/5 border border-white/10 p-0.5 shrink-0">
+            ${[30, 60].map((n) => `<button onclick="dbSetSize(${n})" class="min-h-[34px] px-3 rounded-lg text-[12px] font-black ${dbEdit.size === n ? 'bg-yellow-400 text-slate-950' : 'text-slate-300'}">${n}</button>`).join('')}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-baseline justify-between">
+              <span class="text-[15px] font-black ${over ? 'text-rose-300' : a.total === dbEdit.size ? 'text-emerald-300' : 'text-white'}">${a.total}<span class="text-slate-400 text-[12px]"> / ${dbEdit.size}</span></span>
+              <span class="text-[11px] font-bold text-slate-300 whitespace-nowrap">🐾 ${a.pokemon} · 🎒 ${a.trainers} · ⚡ ${a.energies}</span>
+            </div>
+            <div class="h-1.5 mt-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${barCls} transition-all duration-300" style="width:${pct}%"></div></div>
+          </div>
+        </div>
+        <div class="flex gap-1 rounded-xl bg-white/5 p-1">
+          <button onclick="dbSetTab('deck')" class="db-tab ${dbTab === 'deck' ? 'on' : ''}">🃏 Mon deck</button>
+          <button onclick="dbSetTab('add')" class="db-tab ${dbTab === 'add' ? 'on' : ''}">＋ Ajouter</button>
+          <button onclick="dbSetTab('stats')" class="db-tab ${dbTab === 'stats' ? 'on' : ''}">📊 Conseils${a.tips.length ? ` <span class="ml-0.5 px-1.5 rounded-full bg-amber-400 text-slate-950 text-[10px]">${a.tips.length}</span>` : ''}</button>
+        </div>`;
+    }
+
+    function renderDbFooter() {
+      const a = analyzeDeck(dbEdit);
+      document.getElementById('dbFooter').innerHTML = `
+        <div class="grid grid-cols-[1fr_1fr_1.3fr] gap-2">
+          <button onclick="openAutoDeckSheet('edit')" class="min-h-[50px] rounded-xl bg-white/10 border border-yellow-400/45 text-[12.5px] font-black text-yellow-200 active:scale-95">✨ Auto</button>
+          <button onclick="openTestHand()" ${a.basics ? '' : 'disabled'} class="min-h-[50px] rounded-xl bg-white/10 border border-white/20 text-[12.5px] font-black text-white active:scale-95 disabled:opacity-40">🖐️ Main test</button>
+          <button onclick="playCustomDeck('${dbEdit.id}')" ${a.valid ? '' : 'disabled'} class="min-h-[50px] rounded-xl text-[13px] font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-white/5 border border-white/10 text-slate-500'}">${a.valid ? '▶ Jouer' : `${a.total}/${dbEdit.size}`}</button>
+        </div>`;
+    }
+
+    function dbCardMeta(c) {
+      if (c.category === 'Pokémon') return `${dbTypeIcon(c.type, 13)}<span>${c.stage === 'Base' ? 'Base' : c.stage.replace('Niveau ', 'Niv. ')} · ${c.hp} PV</span>`;
+      if (c.category === 'Dresseur') return '<span>🎒 Dresseur</span>';
+      return `${dbTypeIcon('Incolore', 13)}<span>Énergie spéciale</span>`;
+    }
+
+    function renderDbBody() {
+      const body = document.getElementById('dbBody');
+      if (dbTab === 'add') { body.innerHTML = renderAddTab(); return; }
+      if (dbTab === 'stats') { body.innerHTML = renderStatsTab(); return; }
+      const owned = dbOwnedMap();
+      const entries = Object.entries(dbEdit.cards).filter(([id, n]) => n > 0 && DB_CARD[id]).map(([id, n]) => ({ c: DB_CARD[id], n, id }));
+      const sortFn = (x, y) => {
+        const ta = DB_TYPES.indexOf(x.c.type), tb = DB_TYPES.indexOf(y.c.type);
+        if (ta !== tb) return ta - tb;
+        if ((x.c.dex || 0) !== (y.c.dex || 0)) return (x.c.dex || 0) - (y.c.dex || 0);
+        return (DB_STAGE_ORDER[x.c.stage] || 0) - (DB_STAGE_ORDER[y.c.stage] || 0);
+      };
+      const pk = entries.filter((e) => e.c.category === 'Pokémon').sort(sortFn);
+      const tr = entries.filter((e) => e.c.category === 'Dresseur').sort((x, y) => x.c.name.localeCompare(y.c.name));
+      const en = entries.filter((e) => e.c.category === 'Énergie');
+      const row = (e) => {
+        const canAdd = dbMaxAddable(dbEdit, e.id, owned) > 0;
+        return `
+        <div class="flex items-center gap-2.5 py-1.5">
+          <button onclick="showStickyPreview('${e.c.img}')" class="shrink-0 w-11 aspect-[63/88] rounded-md overflow-hidden border border-white/20 bg-slate-900"><img src="${e.c.img}" alt="" loading="lazy" class="w-full h-full object-cover" /></button>
+          <div class="flex-1 min-w-0">
+            <div class="text-[13.5px] font-extrabold text-white truncate">${dbEsc(e.c.name)}</div>
+            <div class="flex items-center gap-1 text-[11px] font-semibold text-slate-400">${dbCardMeta(e.c)}<span class="ml-1 text-slate-500">· ${owned[e.id] || 0} possédée${(owned[e.id] || 0) > 1 ? 's' : ''}</span></div>
+          </div>
+          <button class="db-step" onclick="dbRemove('${e.id}')" aria-label="Retirer">−</button>
+          <span class="w-6 text-center text-[16px] font-black text-yellow-300">${e.n}</span>
+          <button class="db-step plus" onclick="dbAdd('${e.id}')" ${canAdd ? '' : 'disabled'} aria-label="Ajouter">+</button>
+        </div>`;
+      };
+      const section = (title, count, list, extra = '') => `
+        <div class="mb-3">
+          <div class="flex items-center justify-between pb-1 mb-1 border-b border-white/10">
+            <h4 class="text-[12px] font-black uppercase tracking-wider text-yellow-300">${title}</h4>
+            <span class="text-[12px] font-black text-slate-300">${count}</span>
+          </div>
+          ${list.length ? `<div class="divide-y divide-white/5">${list.map(row).join('')}</div>` : extra}
+        </div>`;
+      const full = dbTotal(dbEdit) >= dbEdit.size;
+      const energyRows = DB_TYPES.map((t) => {
+        const n = dbEdit.energy[t] || 0;
+        return `
+          <div class="flex items-center gap-2.5 py-1.5 ${n ? '' : 'opacity-70'}">
+            <div class="shrink-0 w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">${dbTypeIcon(t, 26)}</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-[13.5px] font-extrabold text-white">Énergie ${t}</div>
+              <div class="text-[11px] font-bold text-emerald-300">∞ illimitée</div>
+            </div>
+            <button class="db-step" onclick="dbEnergy('${t}', -1)" ${n ? '' : 'disabled'} aria-label="Retirer">−</button>
+            <span class="w-6 text-center text-[16px] font-black text-yellow-300">${n}</span>
+            <button class="db-step plus" onclick="dbEnergy('${t}', 1)" ${full ? 'disabled' : ''} aria-label="Ajouter">+</button>
+          </div>`;
+      }).join('');
+      const energyTotal = DB_TYPES.reduce((s, t) => s + (dbEdit.energy[t] || 0), 0) + en.reduce((s, e) => s + e.n, 0);
+      const empty = !entries.length && !energyTotal;
+      body.innerHTML = `
+        ${empty ? `
+          <div class="rounded-2xl border border-dashed border-yellow-400/40 bg-yellow-400/5 p-4 text-center space-y-3 mb-4">
+            <div class="text-3xl">🃏</div>
+            <div class="text-[13px] text-slate-200 leading-snug">Ton deck est vide.<br>Ajoute tes cartes une par une, ou laisse le mode auto le remplir.</div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="dbSetTab('add')" class="min-h-[46px] rounded-xl bg-white/10 border border-white/20 text-[12.5px] font-black text-white">＋ Ajouter</button>
+              <button onclick="openAutoDeckSheet('edit')" class="min-h-[46px] rounded-xl btn-gold text-[12.5px] font-black">✨ Auto</button>
+            </div>
+          </div>` : ''}
+        ${section('🐾 Pokémon', pk.reduce((s, e) => s + e.n, 0), pk, '<p class="text-[12px] text-slate-500 py-2">Aucun Pokémon — touche « ＋ Ajouter ».</p>')}
+        ${section('🎒 Dresseurs', tr.reduce((s, e) => s + e.n, 0), tr, '<p class="text-[12px] text-slate-500 py-2">Aucun Dresseur.</p>')}
+        <div class="mb-3">
+          <div class="flex items-center justify-between pb-1 mb-1 border-b border-white/10">
+            <h4 class="text-[12px] font-black uppercase tracking-wider text-yellow-300">⚡ Énergies</h4>
+            <span class="text-[12px] font-black text-slate-300">${energyTotal}</span>
+          </div>
+          ${en.length ? `<div class="divide-y divide-white/5">${en.map(row).join('')}</div>` : ''}
+          <div class="divide-y divide-white/5">${energyRows}</div>
+        </div>
+        ${empty ? '' : '<button onclick="dbClear()" class="w-full min-h-[40px] mt-1 mb-2 rounded-xl text-[12px] font-bold text-rose-300/90 border border-rose-400/25 bg-rose-500/5">Vider le deck</button>'}
+      `;
+    }
+
+    function dbAddPool() {
+      const owned = dbOwnedMap();
+      const setOrder = { base: 1, jungle: 2, fossil: 3 };
+      let list = Object.keys(owned).map((id) => DB_CARD[id]);
+      if (dbFilter.kind === 'pokemon') list = list.filter((c) => c.category === 'Pokémon');
+      if (dbFilter.kind === 'trainer') list = list.filter((c) => c.category === 'Dresseur');
+      if (dbFilter.kind === 'energy') list = list.filter((c) => c.category === 'Énergie');
+      if (dbFilter.type !== 'all') list = list.filter((c) => c.category === 'Pokémon' && c.type === dbFilter.type);
+      list.sort((a, b) => {
+        const ca = a.category === 'Pokémon' ? 0 : a.category === 'Dresseur' ? 1 : 2;
+        const cb = b.category === 'Pokémon' ? 0 : b.category === 'Dresseur' ? 1 : 2;
+        if (ca !== cb) return ca - cb;
+        const ta = DB_TYPES.indexOf(a.type), tb = DB_TYPES.indexOf(b.type);
+        if (ta !== tb) return ta - tb;
+        if ((a.dex || 0) !== (b.dex || 0)) return (a.dex || 0) - (b.dex || 0);
+        return (setOrder[a.set] || 9) - (setOrder[b.set] || 9);
+      });
+      return { list, owned };
+    }
+
+    function dbSetFilter(kind, type) {
+      if (kind) { dbFilter.kind = kind; if (kind !== 'pokemon' && kind !== 'all') dbFilter.type = 'all'; }
+      if (type) { dbFilter.type = dbFilter.type === type ? 'all' : type; if (dbFilter.type !== 'all') dbFilter.kind = 'pokemon'; }
+      renderDbBody();
+    }
+
+    function renderAddTab() {
+      const { list, owned } = dbAddPool();
+      const kinds = [['all', 'Tout'], ['pokemon', '🐾 Pokémon'], ['trainer', '🎒 Dresseurs'], ['energy', '⚡ Énergies']];
+      const showEnergy = dbFilter.kind === 'all' || dbFilter.kind === 'energy';
+      const full = dbTotal(dbEdit) >= dbEdit.size;
+      const energyTiles = showEnergy && dbFilter.type === 'all' ? DB_TYPES.map((t) => {
+        const n = dbEdit.energy[t] || 0;
+        return `
+          <div class="db-tile ${n ? 'in-deck' : ''} ${full ? 'maxed' : ''}" data-energy="${t}">
+            <img src="${CARDS_DB[DB_ENERGY_ID[t]]?.img || ''}" alt="Énergie ${t}" loading="lazy" />
+            <span class="db-badge">${n}/∞</span>
+            <div class="absolute inset-x-0 bottom-0 flex">
+              <button onclick="dbEnergy('${t}', -1)" class="flex-1 h-9 bg-black/75 text-white text-lg font-black border-r border-white/15" aria-label="Retirer">−</button>
+              <button onclick="dbEnergy('${t}', 1)" class="flex-1 h-9 bg-yellow-400/90 text-slate-950 text-lg font-black" aria-label="Ajouter">+</button>
+            </div>
+          </div>`;
+      }).join('') : '';
+      const tiles = list.map((c) => {
+        const inDeck = dbEdit.cards[c.setId] || 0;
+        const can = dbMaxAddable(dbEdit, c.setId, owned) > 0;
+        return `
+          <button class="db-tile ${inDeck ? 'in-deck' : ''} ${can ? '' : 'maxed'}" data-add="${c.setId}" data-img="${c.img}" aria-label="Ajouter ${dbEsc(c.name)}">
+            <img src="${c.img}" alt="${dbEsc(c.name)}" loading="lazy" />
+            <span class="db-badge">${inDeck}/${owned[c.setId]}</span>
+            ${inDeck ? `<span onclick="event.stopPropagation(); dbRemove('${c.setId}')" class="absolute bottom-1 left-1 w-8 h-8 rounded-full bg-black/80 border border-white/30 text-white text-lg font-black flex items-center justify-center" role="button" aria-label="Retirer">−</span>` : ''}
+          </button>`;
+      }).join('');
+      return `
+        <div class="sticky -top-3 z-10 -mx-3 px-3 pt-0 pb-2 bg-slate-950/95 backdrop-blur space-y-1.5">
+          <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">${kinds.map(([k, l]) => `<button onclick="dbSetFilter('${k}')" class="db-chip ${dbFilter.kind === k && dbFilter.type === 'all' ? 'on' : ''}">${l}</button>`).join('')}</div>
+          <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">${[...DB_TYPES, 'Incolore'].map((t) => `<button onclick="dbSetFilter(null, '${t}')" class="db-chip ${dbFilter.type === t ? 'on' : ''}" aria-label="${t}">${dbTypeIcon(t, 18)}</button>`).join('')}</div>
+          <p class="text-[11px] font-semibold text-slate-400">Touche = ajouter · Appui long = zoom · <span class="text-yellow-300">2/3</span> = dans le deck / possédées</p>
+        </div>
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-1">
+          ${tiles}${energyTiles}
+        </div>
+        ${!list.length && !energyTiles ? '<p class="text-center text-[12.5px] text-slate-400 py-6">Aucune carte de ce type dans ta collection.<br>Ouvre des boosters pour en obtenir !</p>' : ''}`;
+    }
+
+    function refreshAddTiles() {
+      const owned = dbOwnedMap();
+      const full = dbTotal(dbEdit) >= dbEdit.size;
+      document.querySelectorAll('#dbBody [data-add]').forEach((t) => {
+        const id = t.dataset.add;
+        const inDeck = dbEdit.cards[id] || 0;
+        t.classList.toggle('in-deck', inDeck > 0);
+        t.classList.toggle('maxed', dbMaxAddable(dbEdit, id, owned) <= 0);
+        t.querySelector('.db-badge').textContent = `${inDeck}/${owned[id] || 0}`;
+        let minus = t.querySelector('[role="button"]');
+        if (inDeck && !minus) {
+          t.insertAdjacentHTML('beforeend', `<span onclick="event.stopPropagation(); dbRemove('${id}')" class="absolute bottom-1 left-1 w-8 h-8 rounded-full bg-black/80 border border-white/30 text-white text-lg font-black flex items-center justify-center" role="button" aria-label="Retirer">−</span>`);
+        } else if (!inDeck && minus) minus.remove();
+      });
+      document.querySelectorAll('#dbBody [data-energy]').forEach((t) => {
+        const n = dbEdit.energy[t.dataset.energy] || 0;
+        t.classList.toggle('in-deck', n > 0);
+        t.classList.toggle('maxed', full);
+        t.querySelector('.db-badge').textContent = `${n}/∞`;
+      });
+      renderDbFooter();
+    }
+
+    function renderStatsTab() {
+      const a = analyzeDeck(dbEdit);
+      const pct = (n) => a.total ? Math.round(n / a.total * 100) : 0;
+      const minBasics = dbEdit.size === 60 ? 10 : 6;
+      const demand = dbAttackDemand(dbEdit);
+      const energyLines = DB_TYPES.filter((t) => demand[t] > 0 || dbEdit.energy[t] > 0).map((t) => {
+        const have = dbEdit.energy[t] || 0;
+        return `<div class="flex items-center gap-2 py-1">${dbTypeIcon(t, 18)}<span class="flex-1 text-[12.5px] font-bold text-white">${t}</span>
+          <span class="text-[11.5px] text-slate-400">${demand[t]} symbole${demand[t] > 1 ? 's' : ''} d'attaque</span>
+          <span class="w-10 text-right text-[13px] font-black ${have ? 'text-yellow-300' : 'text-rose-300'}">${have}</span></div>`;
+      }).join('');
+      const pB = Math.round(a.pBasic * 100);
+      return `
+        <div class="space-y-3">
+          <div class="rounded-2xl p-3 border ${a.valid ? 'bg-emerald-500/10 border-emerald-400/40' : 'bg-amber-500/10 border-amber-400/40'}">
+            <div class="text-[14px] font-black ${a.valid ? 'text-emerald-300' : 'text-amber-200'}">${a.valid ? '✅ Deck valide, prêt à jouer !' : '⚠️ Deck pas encore jouable'}</div>
+            ${a.errors.map((e) => `<div class="text-[12.5px] text-amber-100 mt-1">• ${e}</div>`).join('')}
+            ${a.valid ? '' : `<button onclick="openAutoDeckSheet('edit', true)" class="mt-2 w-full min-h-[44px] rounded-xl btn-gold text-[12.5px] font-black">✨ Compléter automatiquement</button>`}
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+            <div class="text-[12px] font-black uppercase tracking-wider text-yellow-300 mb-2">Composition</div>
+            <div class="flex h-3 rounded-full overflow-hidden bg-white/10">
+              <div class="bg-rose-400" style="width:${pct(a.pokemon)}%"></div>
+              <div class="bg-sky-400" style="width:${pct(a.trainers)}%"></div>
+              <div class="bg-yellow-400" style="width:${pct(a.energies)}%"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-1 mt-2 text-center text-[11.5px] font-bold">
+              <div><span class="inline-block w-2 h-2 rounded-full bg-rose-400 mr-1"></span>Pokémon <b class="text-white">${a.pokemon}</b></div>
+              <div><span class="inline-block w-2 h-2 rounded-full bg-sky-400 mr-1"></span>Dresseurs <b class="text-white">${a.trainers}</b></div>
+              <div><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1"></span>Énergies <b class="text-white">${a.energies}</b></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2 text-center">Repère conseillé : ${dbEdit.size === 60 ? '16-20 Pokémon · 12-18 Dresseurs · 22-26 Énergies' : '9-11 Pokémon · 6-8 Dresseurs · 11-14 Énergies'}</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-black ${a.basics >= minBasics ? 'text-emerald-300' : 'text-amber-300'}">${a.basics}</div>
+              <div class="text-[11px] font-bold text-slate-400">Pokémon de Base<br>(conseillé ≥ ${minBasics})</div>
+            </div>
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
+              <div class="text-2xl font-black ${pB >= 85 ? 'text-emerald-300' : pB >= 70 ? 'text-yellow-300' : 'text-rose-300'}">${a.total ? pB : 0}%</div>
+              <div class="text-[11px] font-bold text-slate-400">Main de départ<br>avec un Pokémon</div>
+            </div>
+          </div>
+          ${energyLines ? `<div class="rounded-2xl bg-white/5 border border-white/10 p-3"><div class="text-[12px] font-black uppercase tracking-wider text-yellow-300 mb-1">Énergies vs attaques</div>${energyLines}</div>` : ''}
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
+            <div class="text-[12px] font-black uppercase tracking-wider text-yellow-300 mb-1.5">💡 Conseils du Professeur</div>
+            ${a.tips.length ? a.tips.map((t) => `<div class="flex gap-2 py-1.5 text-[12.5px] leading-snug text-slate-200"><span class="shrink-0">${t.icon}</span><span>${t.text}</span></div>`).join('') : '<div class="text-[12.5px] text-emerald-200 py-1">Rien à signaler : ton deck est bien équilibré 👌</div>'}
+          </div>
+        </div>`;
+    }
+
+    // ---------- Feuille « Deck auto »
+    function closeDbSheet() { document.getElementById('dbSheet')?.remove(); }
+    function openDbSheet(html) {
+      closeDbSheet();
+      const bg = document.createElement('div');
+      bg.id = 'dbSheet';
+      bg.className = 'db-sheet-bg';
+      bg.innerHTML = `<div class="db-sheet" onclick="event.stopPropagation()">${html}</div>`;
+      bg.addEventListener('click', closeDbSheet);
+      document.body.appendChild(bg);
+    }
+    function openAutoDeckSheet(mode, completeOnly = false) {
+      dbAutoSheet.mode = mode;
+      dbAutoSheet.size = mode === 'edit' && dbEdit ? dbEdit.size : dbAutoSheet.size;
+      if (mode === 'edit' && dbEdit) {
+        const t = DB_TYPES.filter((x) => dbEdit.energy[x] > 0).sort((x, y) => dbEdit.energy[y] - dbEdit.energy[x]).slice(0, 2);
+        dbAutoSheet.types = t;
+      }
+      dbAutoSheet.completeOnly = completeOnly;
+      renderAutoSheet();
+    }
+    function dbAutoToggleType(t) {
+      if (t === 'auto') dbAutoSheet.types = [];
+      else if (dbAutoSheet.types.includes(t)) dbAutoSheet.types = dbAutoSheet.types.filter((x) => x !== t);
+      else {
+        dbAutoSheet.types.push(t);
+        if (dbAutoSheet.types.length > 2) dbAutoSheet.types.shift();
+      }
+      renderAutoSheet();
+    }
+    function dbAutoSize(n) { dbAutoSheet.size = n; renderAutoSheet(); }
+    function renderAutoSheet() {
+      const owned = dbOwnedMap();
+      const perType = {};
+      Object.keys(owned).forEach((id) => { const c = DB_CARD[id]; if (c.category === 'Pokémon') perType[c.type] = (perType[c.type] || 0) + owned[id]; });
+      const isEdit = dbAutoSheet.mode === 'edit' && dbEdit;
+      const hasCards = isEdit && Object.keys(dbEdit.cards).length + Object.keys(dbEdit.energy).length > 0;
+      const auto = !dbAutoSheet.types.length;
+      openDbSheet(`
+        <div class="w-10 h-1.5 rounded-full bg-white/20 mx-auto mb-3"></div>
+        <h3 class="text-[17px] font-black text-yellow-300">✨ ${dbAutoSheet.completeOnly ? 'Compléter mon deck' : 'Deck automatique'}</h3>
+        <p class="text-[12.5px] text-slate-300 leading-snug mt-1">Le mode intelligent choisit tes meilleures lignées d'évolution, ajoute les Dresseurs utiles et calcule les Énergies selon le coût des attaques.</p>
+        <div class="mt-4 text-[12px] font-black uppercase tracking-wider text-slate-300">Taille du deck</div>
+        <div class="grid grid-cols-2 gap-2 mt-1.5">
+          ${[30, 60].map((n) => `<button onclick="dbAutoSize(${n})" class="min-h-[52px] rounded-xl border text-[14px] font-black ${dbAutoSheet.size === n ? 'bg-yellow-400 text-slate-950 border-yellow-200' : 'bg-white/5 text-white border-white/15'}">${n} cartes<div class="text-[10.5px] font-bold opacity-75">${n === 30 ? 'Demi-deck · 3 Prix' : 'Deck complet · 6 Prix'}</div></button>`).join('')}
+        </div>
+        <div class="mt-4 flex items-baseline justify-between"><span class="text-[12px] font-black uppercase tracking-wider text-slate-300">Types</span><span class="text-[11px] text-slate-400">2 max · les Incolores vont partout</span></div>
+        <div class="grid grid-cols-4 gap-2 mt-1.5">
+          <button onclick="dbAutoToggleType('auto')" class="min-h-[56px] rounded-xl border text-[12px] font-black flex flex-col items-center justify-center gap-0.5 ${auto ? 'bg-yellow-400 text-slate-950 border-yellow-200' : 'bg-white/5 text-white border-white/15'}"><span class="text-lg leading-none">🤖</span>Auto</button>
+          ${DB_TYPES.map((t) => {
+            const on = dbAutoSheet.types.includes(t);
+            const n = perType[t] || 0;
+            return `<button onclick="dbAutoToggleType('${t}')" class="min-h-[56px] rounded-xl border text-[11px] font-black flex flex-col items-center justify-center gap-0.5 ${on ? 'bg-yellow-400 text-slate-950 border-yellow-200' : 'bg-white/5 text-white border-white/15'} ${n ? '' : 'opacity-45'}">${dbTypeIcon(t, 22)}<span>${t === 'Électrique' ? 'Élec.' : t} <span class="opacity-70">${n}</span></span></button>`;
+          }).join('')}
+        </div>
+        <div class="mt-5 space-y-2">
+          ${hasCards ? `
+            <button onclick="runAutoDeck('complete')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black">✨ Compléter (garde mes cartes)</button>
+            ${dbAutoSheet.completeOnly ? '' : '<button onclick="runAutoDeck(\'replace\')" class="w-full min-h-[48px] rounded-xl bg-white/10 border border-white/20 text-[13px] font-black text-white">🔄 Tout refaire automatiquement</button>'}
+          ` : `<button onclick="runAutoDeck('${isEdit ? 'replace' : 'new'}')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black">✨ Créer mon deck</button>`}
+          <button onclick="closeDbSheet()" class="w-full min-h-[44px] rounded-xl text-[13px] font-bold text-slate-400">Annuler</button>
+        </div>`);
+    }
+    function runAutoDeck(how) {
+      const seed = how === 'complete' && dbEdit ? { cards: dbEdit.cards, energy: dbEdit.energy } : null;
+      const { deck, types } = autoBuildDeck({ size: dbAutoSheet.size, types: dbAutoSheet.types, seed });
+      if (!Object.keys(deck.cards).some((id) => DB_CARD[id].category === 'Pokémon' && DB_CARD[id].stage === 'Base')) {
+        closeDbSheet();
+        dbToast('Pas assez de Pokémon de Base dans ta collection : ouvre quelques boosters !');
+        return;
+      }
+      const label = types.length ? types.join(' / ') : 'Mix';
+      if (how === 'new') {
+        const d = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name: `Auto ${label} · ${deck.size}`, size: deck.size, cards: deck.cards, energy: deck.energy };
+        saveCustomDeck(d);
+        closeDbSheet();
+        openDeckEditor(d.id, 'deck');
+      } else {
+        dbEdit.size = deck.size; dbEdit.cards = deck.cards; dbEdit.energy = deck.energy;
+        if (/^Mon deck \d+$/.test(dbEdit.name) || /^Auto /.test(dbEdit.name)) dbEdit.name = `Auto ${label} · ${deck.size}`;
+        dbCommit();
+        closeDbSheet();
+        dbTab = 'deck';
+        renderDeckEditor();
+      }
+      const a = analyzeDeck(dbEdit);
+      dbBuzz([12, 30, 12]);
+      dbToast(a.valid ? `✨ Deck prêt : ${a.pokemon} Pokémon · ${a.trainers} Dresseurs · ${a.energies} Énergies` : `✨ Deck rempli au maximum (${a.total}/${dbEdit.size})`);
+    }
+
+    // ---------- Main de départ test
+    function openTestHand() {
+      if (!dbEdit) return;
+      const pool = [];
+      Object.entries(dbEdit.cards).forEach(([id, n]) => { for (let i = 0; i < n; i++) pool.push(DB_CARD[id]); });
+      Object.entries(dbEdit.energy).forEach(([t, n]) => { for (let i = 0; i < n; i++) pool.push(CARDS_DB[DB_ENERGY_ID[t]]); });
+      if (pool.length < 7) { dbToast('Il faut au moins 7 cartes pour tester une main'); return; }
+      const hand = shuffle(pool).slice(0, 7);
+      const hasBasic = hand.some((c) => c.category === 'Pokémon' && c.stage === 'Base');
+      const a = analyzeDeck(dbEdit);
+      openDbSheet(`
+        <div class="w-10 h-1.5 rounded-full bg-white/20 mx-auto mb-3"></div>
+        <div class="flex items-center justify-between">
+          <h3 class="text-[17px] font-black text-yellow-300">🖐️ Main de départ</h3>
+          <span class="text-[12px] font-black px-2 py-1 rounded-lg ${hasBasic ? 'bg-emerald-500/20 text-emerald-200' : 'bg-rose-500/20 text-rose-200'}">${hasBasic ? '✅ Jouable' : '❌ Mulligan'}</span>
+        </div>
+        <div class="grid grid-cols-4 gap-1.5 mt-3">
+          ${hand.map((c, i) => `<button onclick="showStickyPreview('${c.img}')" class="db-hand-card rounded-md overflow-hidden border ${c.category === 'Pokémon' && c.stage === 'Base' ? 'border-emerald-400 ring-1 ring-emerald-400/60' : 'border-white/15'}" style="animation-delay:${i * 60}ms"><img src="${c.img}" alt="${dbEsc(c.name)}" class="w-full aspect-[63/88] object-cover" /></button>`).join('')}
+        </div>
+        <p class="text-[12px] text-slate-300 mt-3 text-center">Sur 100 mains, environ <b class="text-white">${Math.round(a.pBasic * 100)}</b> contiennent un Pokémon de Base.</p>
+        <div class="grid grid-cols-2 gap-2 mt-3">
+          <button onclick="openTestHand()" class="min-h-[50px] rounded-xl btn-gold text-[13px] font-black">🔄 Repiocher</button>
+          <button onclick="closeDbSheet()" class="min-h-[50px] rounded-xl bg-white/10 border border-white/20 text-[13px] font-black text-white">Fermer</button>
+        </div>`);
+    }
+
+    // Démarrage : enregistre les decks perso pour le Duel IA
+    registerCustomDecks();
+    try {
+      const lastQuick = localStorage.getItem('ppi_v2_quick_player_deck');
+      if (lastQuick && DECK_META[lastQuick]) quickPlayerDeck = lastQuick;
+    } catch (_) {}
+    if (typeof renderQuickSetup === 'function') renderQuickSetup();
+    renderDecksView();
   </script>
 </body>
 </html>
