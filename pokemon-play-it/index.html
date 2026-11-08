@@ -55,6 +55,63 @@
     .shake-hit {
       animation: hitShake 0.4s ease-in-out;
     }
+
+    html, body { touch-action: manipulation; overscroll-behavior-y: contain; }
+    /* Tapis : ligne médiane + cercle central + zones */
+    .mat { position: relative; }
+    .mat::before {
+      content: ''; position: absolute; left: 6%; right: 6%; top: 50%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      pointer-events: none;
+    }
+    .mat::after {
+      content: ''; position: absolute; left: 50%; top: 50%; width: 46%; aspect-ratio: 1;
+      transform: translate(-50%, -50%); border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08); pointer-events: none;
+    }
+    .side { position: relative; z-index: 1; border-radius: 14px; padding: 4px; }
+    .side-ai { background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.05)); }
+    .side-player { background: linear-gradient(0deg, rgba(0,0,0,0.28), rgba(0,0,0,0.05)); }
+    .zone-label { font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 700; }
+    .tcg { aspect-ratio: 63 / 88; border-radius: 6px; }
+    .slot-empty {
+      aspect-ratio: 63 / 88; border-radius: 6px; border: 1.5px dashed rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.18); display: flex; align-items: center; justify-content: center;
+      font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 700;
+    }
+    .card-back {
+      aspect-ratio: 63 / 88; border-radius: 5px; border: 2px solid #e2e8f0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(250,204,21,0.9) 0 14%, transparent 15%),
+        repeating-linear-gradient(45deg, #1d4ed8 0 4px, #1e3a8a 4px 8px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    .active-slot { width: clamp(52px, 9.6dvh, 104px); }
+    .bench-row { max-width: calc(33dvh + 16px); margin: 0 auto; }
+    @media (max-height: 620px) {
+      .active-slot { width: clamp(48px, 8.4dvh, 80px); }
+      .bench-row { max-width: calc(29dvh + 16px); }
+      .zone-label { display: none; }
+    }
+    .pile-col { width: clamp(30px, 5.2dvh, 46px); flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+    .prize-stack { position: relative; width: 100%; }
+    .prize-stack .card-back, .prize-stack .slot-empty { position: absolute; left: 0; width: 100%; }
+    .pip {
+      width: 13px; height: 13px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 7px; line-height: 1; border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .dmg-badge {
+      position: absolute; top: 18%; right: -4px; min-width: 22px; height: 22px; padding: 0 4px; border-radius: 999px;
+      background: #dc2626; border: 2px solid #fff; color: #fff; font: 800 10px/18px 'JetBrains Mono', monospace; text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+    .hand-card {
+      position: absolute; bottom: 12px; width: 66px; transform-origin: 50% 120%;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .hand-card:active { transform: translateY(-16px) rotate(0deg) scale(1.08) !important; z-index: 60; }
+    .bubble { background: rgba(2,6,23,0.82); border: 1px solid rgba(255,255,255,0.14); }
+    button:disabled { opacity: .45; }
     ::-webkit-scrollbar { height: 4px; width: 4px; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 999px; }
   </style>
@@ -174,103 +231,98 @@
   <!-- =================================================================== -->
   <div id="gameScreen" class="hidden flex-1 flex flex-col h-full max-w-lg mx-auto w-full overflow-hidden">
 
-    <!-- BARRE HAUT : INFOS JULIETTE + MENU -->
-    <header class="shrink-0 px-2.5 py-1.5 bg-slate-950/85 border-b border-white/10 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2 min-w-0">
-        <button onclick="confirmQuitMatch()" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300">
-          ← Menu
-        </button>
-        <div class="truncate">
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs font-bold text-pink-300">👩‍🦰 Juliette</span>
-            <span id="aiDeckLabel" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/10 text-slate-300">Eau</span>
-          </div>
-        </div>
+    <!-- BARRE HAUT -->
+    <header class="shrink-0 px-2 py-1 bg-black/45 border-b border-white/10 flex items-center justify-between gap-2" style="padding-top:max(4px, env(safe-area-inset-top))">
+      <button onclick="confirmQuitMatch()" class="w-8 h-7 rounded-lg bg-white/10 text-sm text-slate-200 shrink-0" aria-label="Menu">←</button>
+      <div class="flex items-center gap-1.5 min-w-0">
+        <span class="text-xs font-bold text-pink-300 shrink-0">👩‍🦰 Juliette</span>
+        <span id="aiDeckLabel" class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-300 truncate">Eau</span>
+        <span class="text-[10px] font-mono text-slate-300 shrink-0" title="Cartes en main de Juliette">✋<strong id="aiHandCount">7</strong></span>
       </div>
-
-      <!-- Compteurs Juliette (Récompenses, Deck, Main) -->
-      <div class="flex items-center gap-2 text-[11px] font-mono shrink-0">
-        <span class="px-2 py-0.5 rounded-full bg-yellow-400/15 border border-yellow-400/30 text-yellow-300" title="Cartes Récompense restantes de Juliette">
-          🏆 <strong id="aiPrizesCount">3</strong>
-        </span>
-        <span class="text-slate-300" title="Cartes dans le deck de Juliette">🎴 <strong id="aiDeckCount">20</strong></span>
-        <span class="text-slate-300" title="Cartes en main de Juliette">✋ <strong id="aiHandCount">7</strong></span>
-        <button onclick="toggleSound()" id="soundBtnGame" class="px-1.5 py-0.5 rounded bg-white/5 text-xs">🔊</button>
-      </div>
+      <div id="turnPhaseBadge" class="text-[10px] font-mono font-bold text-yellow-300 truncate text-right">Préparation</div>
+      <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 text-xs shrink-0">🔊</button>
     </header>
 
-    <!-- ZONE ADVERSE (BANC JULIETTE + ACTIF JULIETTE) -->
-    <section class="shrink-0 px-2.5 pt-1.5 pb-1 flex flex-col gap-1.5">
-      <!-- Banc de Juliette (5 slots compacts) -->
-      <div id="aiBenchRow" class="grid grid-cols-5 gap-1.5 min-h-[54px]"></div>
+    <!-- TAPIS DE JEU -->
+    <main class="mat flex-1 min-h-0 flex flex-col justify-between px-2 py-1.5 gap-1">
 
-      <!-- Pokémon Actif de Juliette + Bulle Conseil Juliette -->
-      <div class="flex items-center justify-between gap-2">
-        <!-- Bulle de Juliette / Journal d'action -->
-        <div class="flex-1 bg-slate-950/75 border border-white/10 rounded-xl p-2 text-[11px] leading-snug text-slate-200 min-h-[68px] flex flex-col justify-between">
-          <div id="julietteSpeech" class="text-slate-200 line-clamp-3">
+      <!-- CÔTÉ JULIETTE (miroir) -->
+      <section class="side side-ai flex flex-col gap-1.5">
+        <div class="flex items-center gap-1.5">
+          <div class="pile-col">
+            <div class="card-back w-full relative">
+              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 rounded bg-slate-950/90 text-[10px] font-black font-mono text-white" id="aiDeckCount">20</span>
+            </div>
+            <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="text-[9px] font-mono px-1 rounded bg-black/40 text-slate-300">🗑 0</button>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div id="aiBenchRow" class="bench-row grid grid-cols-5 gap-1"></div>
+            <div class="zone-label text-center mt-0.5">Banc de Juliette</div>
+          </div>
+          <div class="pile-col">
+            <div id="aiPrizesZone" class="prize-stack"></div>
+            <span class="text-[10px] font-mono font-bold text-yellow-300">🏆<span id="aiPrizesCount">3</span></span>
+          </div>
+        </div>
+        <div class="flex justify-center items-center gap-2">
+          <div class="w-20"></div>
+          <div id="aiActiveSlot" class="active-slot"></div>
+          <div id="aiActiveInfo" class="w-20 text-[10px] leading-tight"></div>
+        </div>
+      </section>
+
+      <!-- LIGNE MÉDIANE : COMMENTAIRE DE JULIETTE -->
+      <div class="relative z-10 flex justify-center px-1">
+        <div class="bubble w-full rounded-2xl px-2.5 py-1 flex items-center gap-2 shadow-lg">
+          <span class="text-lg leading-none shrink-0">👩‍🦰</span>
+          <div id="julietteSpeech" class="text-[10.5px] leading-snug text-slate-100 line-clamp-2 min-h-[28px]">
             « Choisis ton Pokémon Actif pour commencer le match ! »
           </div>
-          <div id="turnPhaseBadge" class="text-[10px] font-mono text-yellow-300 font-semibold mt-1">
-            Phase : Préparation
-          </div>
         </div>
-
-        <!-- Slot Actif Juliette -->
-        <div id="aiActiveSlot" class="w-28 shrink-0 flex justify-center"></div>
       </div>
-    </section>
 
-    <!-- BARRE CENTRALE : ATTAQUES & BOUTONS D'ACTION DU JOUEUR -->
-    <section id="actionStrip" class="shrink-0 px-2.5 py-1.5 bg-slate-950/90 border-y border-white/15 flex items-center justify-between gap-1.5 overflow-x-auto">
-      <div id="attackButtonsContainer" class="flex items-center gap-1.5 overflow-x-auto"></div>
-      <div class="flex items-center gap-1.5 shrink-0">
-        <button id="retreatBtn" onclick="openRetreatModal()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-slate-800 hover:bg-slate-700 border border-white/15 text-slate-200 transition">
-          🔄 Retraite
-        </button>
-        <button id="endTurnBtn" onclick="endPlayerTurn()" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 shadow transition">
-          Fin du tour ⏭
-        </button>
-      </div>
-    </section>
-
-    <!-- ZONE JOUEUR (ACTIF JOUEUR + BANC JOUEUR) -->
-    <section class="shrink-0 px-2.5 pt-1.5 pb-1 flex flex-col gap-1.5">
-      <div class="flex items-center justify-between gap-2">
-        <!-- Slot Actif Joueur -->
-        <div id="playerActiveSlot" class="w-28 shrink-0 flex justify-center"></div>
-
-        <!-- Infos Joueur (Récompenses, Deck, Règles du tour) -->
-        <div class="flex-1 bg-slate-950/75 border border-white/10 rounded-xl p-2 text-[11px] flex flex-col justify-between min-h-[68px]">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-emerald-300">🧢 Toi</span>
-            <div class="flex items-center gap-2 font-mono">
-              <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300">
-                🏆 <strong id="playerPrizesCount">3</strong>
-              </span>
-              <span class="text-slate-300">🎴 <strong id="playerDeckCount">20</strong></span>
+      <!-- TON CÔTÉ -->
+      <section class="side side-player flex flex-col gap-1.5">
+        <div class="flex justify-center items-end gap-2">
+          <div id="playerActiveInfo" class="w-20 text-[10px] leading-tight text-right pb-4"></div>
+          <div id="playerActiveSlot" class="active-slot"></div>
+          <div class="w-20 text-[9px] font-mono text-sky-300 leading-tight pb-4" id="energyStatusText">⚡ 0/1</div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div class="pile-col">
+            <div id="playerPrizesZone" class="prize-stack"></div>
+            <span class="text-[10px] font-mono font-bold text-emerald-300">🏆<span id="playerPrizesCount">3</span></span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="zone-label text-center mb-0.5">Ton Banc</div>
+            <div id="playerBenchRow" class="bench-row grid grid-cols-5 gap-1"></div>
+          </div>
+          <div class="pile-col">
+            <div class="card-back w-full relative">
+              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 rounded bg-slate-950/90 text-[10px] font-black font-mono text-white" id="playerDeckCount">20</span>
             </div>
-          </div>
-          <div id="energyStatusText" class="text-[10px] font-mono text-sky-300 mt-1">
-            ⚡ Énergie ce tour : 0 / 1 attachée
-          </div>
-          <div class="text-[10px] text-slate-400">
-             Touche une carte pour la jouer ou zoomer 🔍
+            <button id="playerDiscardBtn" onclick="openDiscardViewer('player')" class="text-[9px] font-mono px-1 rounded bg-black/40 text-slate-300">🗑 0</button>
           </div>
         </div>
-      </div>
+      </section>
+    </main>
 
-      <!-- Banc du Joueur (5 slots) -->
-      <div id="playerBenchRow" class="grid grid-cols-5 gap-1.5 min-h-[58px]"></div>
+    <!-- BARRE D'ACTION -->
+    <section id="actionStrip" class="shrink-0 px-2 py-1.5 bg-black/60 border-y border-white/15 flex items-center justify-between gap-1.5">
+      <div id="attackButtonsContainer" class="flex items-center gap-1.5 overflow-x-auto min-w-0"></div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button id="retreatBtn" onclick="openRetreatModal()" class="px-2 py-1.5 rounded-xl text-[11px] font-bold bg-slate-800 border border-white/15 text-slate-200">🔄</button>
+        <button id="endTurnBtn" onclick="endPlayerTurn()" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 shadow">Fin ⏭</button>
+      </div>
     </section>
 
-    <!-- MAIN DU JOUEUR (SCROLL HORIZONTAL EN BAS) -->
-    <footer class="flex-1 min-h-[118px] bg-slate-950/90 border-t border-white/15 px-2.5 py-1.5 flex flex-col justify-center overflow-hidden">
-      <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1 px-1">
-        <span>TA MAIN (<strong id="playerHandCount" class="text-white">0</strong> CARTES)</span>
-        <span>Touche une carte pour agir</span>
+    <!-- MAIN EN ÉVENTAIL -->
+    <footer class="shrink-0 bg-black/55 px-2 pt-1" style="padding-bottom:max(4px, env(safe-area-inset-bottom))">
+      <div class="flex items-center justify-between text-[9px] font-mono text-slate-400 px-1">
+        <span>TA MAIN · <strong id="playerHandCount" class="text-white">0</strong></span>
+        <span>Touche une carte 🔍</span>
       </div>
-      <div id="playerHandRow" class="flex items-center gap-2 overflow-x-auto pb-1 h-full"></div>
+      <div id="playerHandRow" class="relative w-full" style="height: clamp(80px, 13dvh, 124px)"></div>
     </footer>
   </div>
 
@@ -713,38 +765,107 @@
     // -----------------------------------------------------------------------
     // 5. RENDU GRAPHIQUE DU PLATEAU MOBILE
     // -----------------------------------------------------------------------
+    const TYPE_COLOR = {
+      'Combat': '#b45309', 'Eau': '#0284c7', 'Feu': '#dc2626', 'Incolore': '#e5e7eb',
+      'Électrique': '#eab308', 'Psy': '#9333ea', 'Plante': '#16a34a'
+    };
+
+    function energyPips(list) {
+      return list.map((e) => {
+        const t = e.energyType || 'Incolore';
+        return `<span class="pip" style="background:${TYPE_COLOR[t] || '#e5e7eb'}">${TYPE_EMOJI[t] || '⭐'}</span>`;
+      }).join('');
+    }
+
     function renderPokemonSlot(pkm, owner, zone, index = 0) {
+      const isActive = zone === 'active';
       if (!pkm) {
-        return `
-          <div class="w-full h-14 rounded-xl border border-dashed border-white/15 bg-black/20 flex items-center justify-center text-[10px] text-slate-500">
-            Vide
-          </div>
-        `;
+        return `<div class="slot-empty">${isActive ? 'Actif' : ''}</div>`;
       }
       const remHp = Math.max(0, pkm.hp - pkm.damage);
       const hpPct = Math.max(0, Math.min(100, Math.round((remHp / pkm.hp) * 100)));
       const hpColor = hpPct > 50 ? 'bg-emerald-400' : hpPct > 25 ? 'bg-amber-400' : 'bg-red-500';
-      const eIcons = pkm.energies.map((e) => TYPE_EMOJI[e.energyType] || '⭐').join('');
-      const isActive = zone === 'active';
 
       return `
-        <div
-          onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})"
-          class="relative cursor-pointer rounded-xl overflow-hidden bg-slate-900 ${isActive ? 'w-24 sm:w-28 card-active-glow' : 'w-full card-shadow'} transition transform active:scale-95"
-        >
-          <img src="${pkm.img}" alt="${pkm.name}" class="w-full ${isActive ? 'h-32 sm:h-36' : 'h-16 sm:h-20'} object-cover object-top" />
-          <div class="absolute inset-x-0 bottom-0 bg-slate-950/90 px-1.5 py-1 border-t border-white/15">
-            <div class="flex items-center justify-between text-[9px] font-bold leading-none mb-0.5">
-              <span class="truncate text-white">${pkm.name}</span>
-              <span class="text-yellow-300 font-mono">${remHp}/${pkm.hp}</span>
-            </div>
-            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+        <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="cursor-pointer transition active:scale-95">
+          <div class="relative tcg bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'}">
+            <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" loading="lazy" />
+            ${pkm.damage > 0 ? `<div class="dmg-badge">${pkm.damage}</div>` : ''}
+            <div class="absolute inset-x-1 bottom-1 h-1 bg-black/70 rounded-full overflow-hidden">
               <div class="${hpColor} h-full" style="width:${hpPct}%"></div>
             </div>
-            <div class="text-[9px] leading-none mt-0.5 truncate min-h-[10px]">${eIcons || '<span class="text-slate-500">0 ⚡</span>'}</div>
           </div>
+          <div class="flex justify-center flex-wrap gap-0.5 mt-0.5 min-h-[13px]">${energyPips(pkm.energies)}</div>
         </div>
       `;
+    }
+
+    function renderPrizeStack(count) {
+      // 3 Récompenses posées en léger décalage (les prises laissent un emplacement vide)
+      const step = 6;
+      let html = '';
+      for (let i = 0; i < 3; i++) {
+        const cls = i < count ? 'card-back' : 'slot-empty';
+        html += `<div class="${cls}" style="top:${i * step}px"></div>`;
+      }
+      return html;
+    }
+
+    function sizePrizeStack(el) {
+      const w = el.clientWidth || 40;
+      el.style.height = `${Math.round(w * 88 / 63) + 12}px`;
+    }
+
+    function openDiscardViewer(owner) {
+      if (!game) return;
+      const pile = game[owner].discard;
+      openPickerModal(
+        owner === 'player' ? '🗑 Ta pile de défausse' : '🗑 Défausse de Juliette',
+        pile.length ? `${pile.length} carte(s) — la plus récente en premier.` : 'Aucune carte défaussée pour le moment.',
+        [...pile].reverse(),
+        () => {},
+        true
+      );
+    }
+
+    function renderHandFan() {
+      const handContainer = document.getElementById('playerHandRow');
+      const hand = game.player.hand;
+      const W = handContainer.clientWidth || 360;
+      const H = handContainer.clientHeight || 110;
+      const cardW = Math.min(80, Math.round((H - 24) * 63 / 88));
+      const n = hand.length;
+      const step = n > 1 ? Math.min(cardW + 4, (W - cardW - 8) / (n - 1)) : 0;
+      const totalW = cardW + step * Math.max(0, n - 1);
+      const startX = (W - totalW) / 2;
+      const mid = (n - 1) / 2;
+
+      handContainer.innerHTML = hand.map((card, idx) => {
+        let badge = '';
+        let playable = false;
+        if (card.category === 'Pokémon' && card.stage === 'Base') {
+          playable = !game.player.active || game.player.bench.length < 5;
+          badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
+        } else if (card.category === 'Pokémon' && card.stage === 'Niveau 1') {
+          playable = true; badge = '⬆ Évol.';
+        } else if (card.category === 'Énergie') {
+          playable = !game.energyAttachedThisTurn; badge = game.energyAttachedThisTurn ? '1/1' : '+ ⚡';
+        } else if (card.category === 'Dresseur') {
+          playable = true; badge = '✨ Jouer';
+        }
+        if (game.activePlayer !== 'player') playable = false;
+        const rot = n > 1 ? (idx - mid) * Math.min(5, 28 / n) : 0;
+        const dy = Math.min(8, Math.abs(idx - mid) * Math.min(3, 14 / Math.max(n, 1)));
+        return `
+          <div onclick="openHandCardModal(${idx})" class="hand-card cursor-pointer"
+               style="left:${startX + idx * step}px; width:${cardW}px; transform: translateY(${dy}px) rotate(${rot}deg); z-index:${idx + 1}">
+            <div class="relative tcg bg-slate-900 card-shadow ${playable ? 'ring-2 ring-yellow-300/70' : ''}">
+              <img src="${card.img}" alt="${card.name}" class="w-full h-full object-cover rounded-[6px]" />
+              <div class="absolute inset-x-0 bottom-0 bg-black/80 text-[8px] font-bold text-center py-0.5 rounded-b-[6px] ${playable ? 'text-yellow-300' : 'text-slate-400'} truncate px-0.5">${badge}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function renderBoard() {
@@ -754,68 +875,49 @@
       document.getElementById('aiPrizesCount').textContent = game.ai.prizes.length;
       document.getElementById('aiDeckCount').textContent = game.ai.deck.length;
       document.getElementById('aiHandCount').textContent = game.ai.hand.length;
-
       document.getElementById('playerPrizesCount').textContent = game.player.prizes.length;
       document.getElementById('playerDeckCount').textContent = game.player.deck.length;
       document.getElementById('playerHandCount').textContent = game.player.hand.length;
+      document.getElementById('aiDiscardBtn').textContent = `🗑 ${game.ai.discard.length}`;
+      document.getElementById('playerDiscardBtn').textContent = `🗑 ${game.player.discard.length}`;
 
-      document.getElementById('energyStatusText').textContent = game.energyAttachedThisTurn
-        ? '⚡ Énergie ce tour : 1 / 1 (Max atteint)'
-        : '⚡ Énergie ce tour : 0 / 1 disponible';
+      // Récompenses (piles décalées)
+      const aiPz = document.getElementById('aiPrizesZone');
+      const pPz = document.getElementById('playerPrizesZone');
+      aiPz.innerHTML = renderPrizeStack(game.ai.prizes.length);
+      pPz.innerHTML = renderPrizeStack(game.player.prizes.length);
+      sizePrizeStack(aiPz); sizePrizeStack(pPz);
+
+      document.getElementById('energyStatusText').innerHTML = game.energyAttachedThisTurn
+        ? '⚡ 1/1<br><span class="text-slate-400">énergie posée</span>'
+        : '⚡ 0/1<br><span class="text-slate-400">énergie dispo</span>';
 
       document.getElementById('turnPhaseBadge').textContent = !game.player.active
-        ? 'Phase : Choisis ton Pokémon Actif'
+        ? 'Choisis ton Actif'
         : game.activePlayer === 'player'
-          ? `Tour ${game.turnNumber} — À TON TOUR`
-          : `Tour ${game.turnNumber} — Tour de Juliette...`;
+          ? `Tour ${game.turnNumber} · À TOI`
+          : `Tour ${game.turnNumber} · Juliette…`;
 
       // Actifs
       document.getElementById('aiActiveSlot').innerHTML = renderPokemonSlot(game.ai.active, 'ai', 'active');
       document.getElementById('playerActiveSlot').innerHTML = renderPokemonSlot(game.player.active, 'player', 'active');
 
-      // Banc Juliette (5 slots)
-      const aiBenchHtml = [];
-      for (let i = 0; i < 5; i++) {
-        aiBenchHtml.push(renderPokemonSlot(game.ai.bench[i] || null, 'ai', 'bench', i));
-      }
-      document.getElementById('aiBenchRow').innerHTML = aiBenchHtml.join('');
+      const activeInfo = (pkm) => pkm
+        ? `<div class="font-extrabold text-white">${pkm.name}</div><div class="font-mono text-yellow-300">${Math.max(0, pkm.hp - pkm.damage)}/${pkm.hp} PV</div><div class="text-slate-400 text-[9px]">${TYPE_EMOJI[pkm.type] || ''} ${pkm.type || ''}</div>`
+        : '';
+      document.getElementById('aiActiveInfo').innerHTML = activeInfo(game.ai.active);
+      document.getElementById('playerActiveInfo').innerHTML = activeInfo(game.player.active);
 
-      // Banc Joueur (5 slots)
-      const pBenchHtml = [];
-      for (let i = 0; i < 5; i++) {
-        pBenchHtml.push(renderPokemonSlot(game.player.bench[i] || null, 'player', 'bench', i));
-      }
-      document.getElementById('playerBenchRow').innerHTML = pBenchHtml.join('');
+      // Bancs (5 emplacements chacun)
+      const benchHtml = (owner) => Array.from({ length: 5 }, (_, i) => renderPokemonSlot(game[owner].bench[i] || null, owner, 'bench', i)).join('');
+      document.getElementById('aiBenchRow').innerHTML = benchHtml('ai');
+      document.getElementById('playerBenchRow').innerHTML = benchHtml('player');
 
-      // Boutons d'attaque du Pokémon Actif du joueur
       renderAttackStrip();
-
-      // Main du joueur
-      const handContainer = document.getElementById('playerHandRow');
-      handContainer.innerHTML = game.player.hand.map((card, idx) => {
-        let badge = '';
-        if (card.category === 'Pokémon' && card.stage === 'Base') {
-          badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Banc plein');
-        } else if (card.category === 'Pokémon' && card.stage === 'Niveau 1') {
-          badge = '⬆ Évoluer';
-        } else if (card.category === 'Énergie') {
-          badge = game.energyAttachedThisTurn ? '⚡ 1/1' : '+ Attacher';
-        } else if (card.category === 'Dresseur') {
-          badge = '✨ Jouer';
-        }
-        return `
-          <div
-            onclick="openHandCardModal(${idx})"
-            class="relative shrink-0 w-16 sm:w-20 h-24 sm:h-28 rounded-xl overflow-hidden card-shadow cursor-pointer bg-slate-900 transition transform hover:-translate-y-1 active:scale-95"
-          >
-            <img src="${card.img}" alt="${card.name}" class="w-full h-full object-cover" />
-            <div class="absolute inset-x-0 bottom-0 bg-slate-950/90 text-[9px] font-bold text-center py-0.5 text-yellow-300 border-t border-white/15 truncate px-1">
-              ${badge}
-            </div>
-          </div>
-        `;
-      }).join('');
+      renderHandFan();
     }
+
+    window.addEventListener('resize', () => { if (game) renderBoard(); });
 
     function canPayAttackCost(pkm, costArray) {
       if (!pkm) return false;
@@ -855,7 +957,7 @@
           <button
             onclick="executePlayerAttack(${i})"
             ${payable ? '' : 'disabled'}
-            class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1.5 shrink-0 transition ${
+            class="px-2 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 shrink-0 transition ${
               payable
                 ? 'bg-red-600 hover:bg-red-500 text-white shadow border border-red-400/50'
                 : 'bg-slate-800/60 text-slate-500 border border-white/5 cursor-not-allowed'
@@ -1670,6 +1772,34 @@
       `).join('');
       document.getElementById('academyModal').classList.remove('hidden');
     }
+
+    // Pull-to-refresh (menu uniquement, tactile + souris)
+    (function initPullToRefresh() {
+      const el = document.getElementById('menuScreen');
+      const ind = document.createElement('div');
+      ind.style.cssText = 'position:fixed;top:0;left:50%;transform:translate(-50%,-48px);z-index:70;padding:6px 12px;border-radius:999px;background:#0f172a;border:1px solid rgba(250,204,21,.5);color:#fde047;font:700 11px Inter,sans-serif;transition:transform .15s';
+      ind.textContent = '↓ Tirer pour rafraîchir';
+      document.body.appendChild(ind);
+      let y0 = null, dist = 0;
+      const start = (y) => { if (el.scrollTop <= 0 && !el.classList.contains('hidden')) { y0 = y; dist = 0; } };
+      const move = (y) => {
+        if (y0 === null) return;
+        dist = Math.max(0, Math.min(120, y - y0));
+        ind.style.transform = `translate(-50%, ${dist - 48}px)`;
+        ind.textContent = dist > 80 ? '↻ Relâcher pour rafraîchir' : '↓ Tirer pour rafraîchir';
+      };
+      const end = () => {
+        if (y0 === null) return;
+        if (dist > 80) { if (navigator.vibrate) navigator.vibrate(15); location.reload(); }
+        ind.style.transform = 'translate(-50%,-48px)'; y0 = null;
+      };
+      el.addEventListener('touchstart', (e) => start(e.touches[0].clientY), { passive: true });
+      el.addEventListener('touchmove', (e) => move(e.touches[0].clientY), { passive: true });
+      el.addEventListener('touchend', end);
+      el.addEventListener('mousedown', (e) => start(e.clientY));
+      window.addEventListener('mousemove', (e) => { if (e.buttons) move(e.clientY); });
+      window.addEventListener('mouseup', end);
+    })();
   </script>
 </body>
 </html>
