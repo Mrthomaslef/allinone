@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ppi-mobile-v38';
+const CACHE_NAME = 'ppi-mobile-v39';
 const ASSETS = [
   '/', '/index.html', '/manifest.json',
   '/src/main.js', '/src/engine/GameState.js', '/src/engine/RulesEngine.js',
@@ -13,7 +13,8 @@ const ASSETS = [
   '../assets/trainers/hanae.jpg', '../assets/trainers/ryo.jpg', '../assets/trainers/kai.jpg',
   '../assets/trainers/takuya.jpg', '../assets/trainers/soren.jpg', '../assets/trainers/axel.jpg',
   '../assets/trainers/hanae.png', '../assets/trainers/ryo.png', '../assets/trainers/kai.png',
-  '../assets/trainers/takuya.png', '../assets/trainers/soren.png', '../assets/trainers/axel.png'
+  '../assets/trainers/takuya.png', '../assets/trainers/soren.png', '../assets/trainers/axel.png',
+  '../assets/trainers/mika.jpg', '../assets/trainers/mika.png', '../assets/trainers/yuki.jpg', '../assets/trainers/yuki.png', '../assets/trainers/dorian.jpg', '../assets/trainers/dorian.png', '../assets/trainers/lena.jpg', '../assets/trainers/lena.png', '../assets/trainers/raphael.jpg', '../assets/trainers/raphael.png', '../assets/trainers/selene.jpg', '../assets/trainers/selene.png', '../assets/trainers/ren.jpg', '../assets/trainers/ren.png'
 ];
 
 self.addEventListener('install', e => {

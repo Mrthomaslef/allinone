@@ -216,6 +216,52 @@
     button:disabled { opacity: .45; }
 
     /* ===== Mode Aventure : chemin de progression, intro VS détourée, dresseur en duel ===== */
+    .adv-gate-disc { display: grid !important; place-items: center; font-size: 38px; background: radial-gradient(circle at 50% 35%, #64748b, #0f172a) !important; border-color: #c4b5fd !important; }
+    .adv-node.tier-elite .adv-disc { border-color: #c4b5fd; box-shadow: 0 0 0 3px #7c3aed, 0 8px 18px -6px rgba(15,23,42,.45); }
+    .adv-node.tier-champion .adv-disc { border-color: #fde047; box-shadow: 0 0 0 4px #f59e0b, 0 0 26px 6px rgba(253,224,71,.55); }
+    /* ===== Célébration du badge (1re victoire) ===== */
+    #badgeCeleb { position: fixed; inset: 0; z-index: 600; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; touch-action: manipulation; animation: bcIn .25s ease both; }
+    @keyframes bcIn { from { opacity: 0; } }
+    #badgeCeleb.out { animation: advOut .35s ease-in forwards; }
+    #badgeCeleb .bc-bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, var(--adv-c) 0%, rgba(2,6,23,.97) 64%); }
+    #badgeCeleb .bc-rays { position: absolute; inset: -60%; background: repeating-conic-gradient(from 0deg, rgba(255,255,255,.11) 0 7deg, transparent 7deg 18deg); animation: advSpin 16s linear infinite; -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 58%); mask-image: radial-gradient(circle, #000 18%, transparent 58%); }
+    #badgeCeleb .bc-trainer { position: absolute; right: -10%; bottom: 0; height: 52dvh; opacity: .32; animation: bcTrainer .8s .15s ease both; -webkit-mask-image: linear-gradient(to top, transparent 0, #000 35%); mask-image: linear-gradient(to top, transparent 0, #000 35%); pointer-events: none; }
+    @keyframes bcTrainer { from { transform: translateX(40%); opacity: 0; } }
+    #badgeCeleb .bc-stage { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 0 18px; animation: bcShake .38s .98s ease both; }
+    @keyframes bcShake { 0%,100% { transform: none; } 20% { transform: translate(-6px, 3px); } 40% { transform: translate(5px, -4px); } 60% { transform: translate(-4px, 2px); } 80% { transform: translate(3px, -1px); } }
+    #badgeCeleb .bc-title { font: 900 30px/1 'Nunito', sans-serif; color: #fde047; -webkit-text-stroke: 2px #0f172a; text-shadow: 3px 4px 0 #0f172a; animation: advPop .45s 1s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-medal-wrap { position: relative; width: 180px; height: 180px; display: grid; place-items: center; }
+    #badgeCeleb .bc-medal { position: relative; width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; overflow: hidden;
+      background: radial-gradient(circle at 32% 28%, #fff 0%, #fef3c7 14%, #fbbf24 40%, #b45309 80%, #78350f 100%);
+      box-shadow: 0 0 0 6px rgba(255,255,255,.92), 0 0 0 11px var(--adv-c), 0 0 60px 14px rgba(253,224,71,.45), inset 0 -10px 18px rgba(0,0,0,.35), inset 0 8px 14px rgba(255,255,255,.6);
+      animation: bcDrop .7s .3s cubic-bezier(.3,1.45,.5,1) both, bcFloat 3s 1.6s ease-in-out infinite; }
+    @keyframes bcDrop { 0% { transform: translateY(-115vh) rotate(-540deg) scale(.5); } 72% { transform: translateY(0) rotate(10deg) scale(1.14); } 100% { transform: none; } }
+    @keyframes bcFloat { 50% { transform: translateY(-7px) rotate(-2deg); } }
+    #badgeCeleb .bc-icon { font-size: 74px; line-height: 1; filter: drop-shadow(0 3px 0 rgba(0,0,0,.35)); }
+    #badgeCeleb .bc-shine { position: absolute; inset: -30%; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.9) 50%, transparent 60%); transform: translateX(-120%); animation: bcShine 2.4s 1.2s ease-in-out infinite; }
+    @keyframes bcShine { 0% { transform: translateX(-120%); } 45%, 100% { transform: translateX(120%); } }
+    #badgeCeleb .bc-ring { position: absolute; inset: 15px; border-radius: 50%; border: 5px solid #fde047; opacity: 0; animation: bcRing .9s 1s ease-out both; }
+    #badgeCeleb .bc-ring.r2 { border-color: #fff; animation-delay: 1.18s; }
+    @keyframes bcRing { 0% { transform: scale(.7); opacity: 1; } 100% { transform: scale(2.6); opacity: 0; } }
+    #badgeCeleb .bc-spark { position: absolute; left: 50%; top: 50%; width: 5px; height: 48px; margin: -24px 0 0 -2.5px; border-radius: 4px; background: linear-gradient(#fff, rgba(253,224,71,0)); opacity: 0; animation: bcSpark .7s var(--d) ease-out both; }
+    @keyframes bcSpark { 0% { opacity: 1; transform: rotate(var(--a)) translateY(-60px) scaleY(.2); } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-160px) scaleY(1); } }
+    #badgeCeleb .bc-conf { position: absolute; left: 50%; top: 50%; width: 9px; height: 14px; margin: -7px 0 0 -4.5px; opacity: 0; animation: bcConf 1.7s calc(1s + var(--d)) cubic-bezier(.15,.7,.35,1) both; }
+    @keyframes bcConf { 0% { opacity: 1; transform: translate(0,0) rotate(0) scale(.5); } 75% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 170px)) rotate(var(--r)) scale(1); } }
+    #badgeCeleb .bc-name { font: 900 21px/1.1 'Nunito', sans-serif; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.6); animation: advPop .4s 1.2s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-gains { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    #badgeCeleb .bc-chip { padding: 6px 13px; border-radius: 999px; background: #fff; color: #0f172a; font-weight: 900; font-size: 14px; box-shadow: 0 4px 0 rgba(15,23,42,.6); animation: advPop .4s 1.45s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-chip b { color: #b45309; display: inline-block; min-width: 2.2em; text-align: left; }
+    #badgeCeleb .bc-chip.bump b { animation: bcBump .18s ease; }
+    @keyframes bcBump { 50% { transform: scale(1.35); } }
+    #badgeCeleb .bc-badges { display: grid; grid-template-columns: repeat(8, 32px); gap: 5px; animation: advPop .4s 1.9s both; }
+    #badgeCeleb .bc-badges span { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.12); font-size: 17px; filter: grayscale(1) opacity(.35); }
+    #badgeCeleb .bc-badges span.on { background: rgba(253,224,71,.28); filter: none; }
+    #badgeCeleb .bc-badges span.new { box-shadow: 0 0 0 2px #fde047, 0 0 14px #fde047; animation: bcNew 1s 2.2s ease both; }
+    @keyframes bcNew { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.7) rotate(-12deg); } }
+    #badgeCeleb .bc-unlock { padding: 9px 15px; border-radius: 14px; background: linear-gradient(90deg, #7c3aed, #db2777); color: #fff; font-weight: 900; font-size: 15px; box-shadow: 0 6px 20px rgba(124,58,237,.65); animation: advPop .5s 2.4s cubic-bezier(.2,1.6,.4,1) both; }
+    #badgeCeleb .bc-tap { margin-top: 4px; font-size: 11px; font-weight: 800; color: rgba(255,255,255,.7); animation: bcBlink 1.4s 2.8s ease-in-out infinite both; }
+    @keyframes bcBlink { 0%, 100% { opacity: .25; } 50% { opacity: .95; } }
+    @media (prefers-reduced-motion: reduce) { #badgeCeleb *, #badgeCeleb { animation-duration: .01s !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; } }
     .adv-path { position: relative; }
     .adv-path-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
     .adv-row { position: relative; height: 124px; z-index: 1; }
@@ -1739,10 +1785,10 @@
           <div class="min-w-0 flex-1 text-left">
             <div class="flex items-center gap-1.5 flex-wrap">
               <span class="font-black text-slate-900 text-xs truncate">Mode Aventure · Ligue 2000</span>
-              <span id="soloAdvProgressBadge" class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 shrink-0">0/6 Champions</span>
+              <span id="soloAdvProgressBadge" class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 shrink-0">0/8 Badges</span>
             </div>
             <p class="text-slate-500 text-[10.5px] leading-tight mt-0.5 truncate">
-              Affronte 6 Champions manga avec de vrais decks de tournois 2000
+              8 Arènes, le Conseil des 4 et le Maître · vrais decks de tournois 2000
             </p>
           </div>
         </div>
@@ -2158,9 +2204,9 @@
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-1.5">
                 <span class="text-[12px] font-black text-slate-900 truncate">Mode Aventure · Ligue 2000</span>
-                <span id="hubAdvBadge" class="px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 text-[9.5px] font-extrabold shrink-0">0/6</span>
+                <span id="hubAdvBadge" class="px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 text-[9.5px] font-extrabold shrink-0">0/8</span>
               </div>
-              <div class="text-[10px] font-semibold text-slate-500 truncate">6 Champions Manga · Vrais decks de tournois 2000</div>
+              <div class="text-[10px] font-semibold text-slate-500 truncate">8 Arènes · Conseil des 4 · Maître de la Ligue</div>
             </div>
           </div>
           <button type="button" class="btn-gold px-3 py-1 rounded-xl text-[10.5px] font-black uppercase tracking-wide shrink-0">Aventure</button>
@@ -2205,7 +2251,7 @@
         </button>
         <button id="tabBtnAdventure" onclick="switchMenuTab('adventure')" aria-label="Mode Aventure · Ligue 2000" title="Mode Aventure · Ligue 2000" class="nav-ico">
           <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          <span class="nav-ico-badge"><span id="navAdvBadge" class="px-1.5 py-0.2 rounded-full bg-sky-500 text-white text-[9.5px] font-black leading-tight">0/6</span></span>
+          <span class="nav-ico-badge"><span id="navAdvBadge" class="px-1.5 py-0.2 rounded-full bg-sky-500 text-white text-[9.5px] font-black leading-tight">0/8</span></span>
         </button>
         <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" aria-label="Jouer contre l'IA" title="Jouer contre l'IA" class="nav-ico is-active">
           <svg class="nav-ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4"/><circle cx="12" cy="3.2" r="1.2"/><circle cx="9" cy="13.5" r="1.3" fill="currentColor"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor"/><path d="M9.5 17h5"/><path d="M2 13v2M22 13v2"/></svg>
@@ -16483,7 +16529,7 @@
         ['fighting-energy', 24],
         ['base1-91', 4], ['base1-94', 4], ['base1-95', 2], ['base1-93', 2], ['base2-64', 4]
       ],
-      // --- 6 DECKS HISTORIQUES DE TOURNOIS OFFICIELS (1999–2000 BASE–JUNGLE–FOSSILE) ---
+      // --- 13 DECKS DE TOURNOIS 2000 (Top 8 Super Trainer Showdown 2000 & listes types PTCG Archive) ---
       ADV_1_VENUSAUR: [
         ['base1-44', 4], ['base1-30', 3], ['base1-15', 3], ['base1-48', 3], ['base2-34', 3], ['base2-5', 3], ['base2-10', 1], ['base3-3', 1],
         ['base1-88', 3], ['base1-85', 3], ['base1-81', 3], ['base1-77', 3], ['base1-74', 2], ['base1-71', 2], ['base1-84', 2], ['base1-93', 2], ['base1-79', 2], ['base1-75', 1],
@@ -16495,14 +16541,14 @@
         ['base1-101', 6], ['base1-96', 4]
       ],
       ADV_3_RAINDANCE: [
-        ['base1-63', 4], ['base1-42', 1], ['base1-2', 3], ['base3-2', 4], ['base3-10', 2],
-        ['base1-88', 4], ['base1-91', 4], ['base1-71', 4], ['base1-76', 4], ['base1-74', 3], ['base1-81', 3], ['base1-79', 2], ['base1-77', 2], ['base1-93', 2], ['base1-83', 1],
-        ['base1-102', 17]
+        ['base1-2', 3], ['base1-63', 4], ['base3-10', 3], ['base3-2', 4],
+        ['base1-80', 2], ['base1-91', 4], ['base1-76', 3], ['base1-84', 4], ['base1-75', 4], ['base1-88', 4], ['base1-71', 4], ['base1-77', 2],
+        ['base1-102', 19]
       ],
       ADV_4_WIGGLYTUFF: [
-        ['base2-54', 3], ['base2-16', 2], ['base3-39', 4], ['base2-10', 4], ['base3-48', 1], ['base3-13', 1],
-        ['base1-88', 4], ['base1-91', 4], ['base1-81', 4], ['base1-84', 3], ['base1-74', 3], ['base1-92', 3], ['base1-79', 2], ['base1-93', 2], ['base1-75', 2], ['base1-71', 1], ['base1-95', 1],
-        ['base1-98', 12], ['base1-96', 4]
+        ['base3-3', 2], ['base1-7', 3], ['base2-54', 3], ['base2-10', 3], ['base3-39', 3], ['base2-16', 2],
+        ['base1-93', 2], ['base1-81', 2], ['base1-88', 2], ['base1-84', 4], ['base1-74', 2], ['base1-71', 2], ['base1-79', 3], ['base1-92', 3], ['base1-91', 3],
+        ['base1-96', 4], ['base1-97', 9], ['base1-98', 8]
       ],
       ADV_5_DAMAGESWAP: [
         ['base1-43', 4], ['base1-32', 3], ['base1-1', 3], ['base2-5', 3], ['base1-3', 2], ['base2-6', 2], ['base2-10', 2], ['base3-56', 2],
@@ -16510,9 +16556,44 @@
         ['base1-101', 9], ['base1-99', 4], ['base1-96', 4]
       ],
       ADV_6_HAYMAKER: [
-        ['base1-7', 4], ['base1-20', 4], ['base2-10', 3], ['base3-39', 2],
-        ['base1-88', 4], ['base1-91', 4], ['base1-92', 4], ['base1-79', 3], ['base1-84', 3], ['base1-93', 3], ['base1-74', 3], ['base1-78', 3], ['base1-71', 2], ['base1-81', 2],
-        ['base1-97', 7], ['base1-100', 5], ['base1-96', 4]
+        ['base2-10', 4], ['base3-3', 2], ['base1-20', 3], ['base1-7', 3],
+        ['base1-79', 4], ['base1-78', 2], ['base1-91', 3], ['base1-81', 2], ['base1-71', 3], ['base1-84', 3], ['base1-92', 4], ['base1-88', 3], ['base1-93', 2],
+        ['base1-96', 4], ['base1-97', 9], ['base1-100', 9]
+      ],
+      ADV_7_TOOLBOX: [
+        ['base1-20', 3], ['base2-10', 2], ['base2-6', 3], ['base3-39', 2], ['base3-3', 2],
+        ['base1-91', 3], ['base1-92', 3], ['base1-88', 3], ['base1-74', 4], ['base1-81', 2], ['base1-75', 1], ['base1-71', 1], ['base3-60', 1], ['base1-78', 2], ['base1-93', 3], ['base1-79', 2], ['base1-84', 3],
+        ['base1-96', 3], ['base1-101', 6], ['base1-100', 6], ['base1-98', 5]
+      ],
+      ADV_8_ARTICUNO: [
+        ['base3-2', 3], ['base1-7', 3], ['base1-52', 2], ['base2-10', 3], ['base1-3', 1],
+        ['base1-91', 3], ['base1-95', 3], ['base1-71', 2], ['base1-84', 2], ['base3-59', 3], ['base1-88', 2], ['base1-81', 3], ['base1-93', 2], ['base1-92', 2], ['base1-79', 2],
+        ['base1-96', 2], ['base1-97', 9], ['base1-102', 13]
+      ],
+      ADV_9_KANGASKHAN: [
+        ['base1-3', 1], ['base3-3', 3], ['base3-39', 3], ['base1-7', 3], ['base2-10', 3], ['base2-5', 3],
+        ['base1-92', 3], ['base1-79', 3], ['base1-88', 2], ['base1-84', 3], ['base1-71', 2], ['base1-91', 2],
+        ['base1-96', 3], ['base1-98', 13], ['base1-97', 13]
+      ],
+      ADV_10_AERODACTYL: [
+        ['base3-1', 2], ['base3-62', 2], ['base1-20', 4], ['base1-7', 4], ['base2-10', 2],
+        ['base1-88', 3], ['base1-91', 3], ['base1-71', 3], ['base1-74', 3], ['base1-84', 3], ['base1-92', 3], ['base1-79', 3], ['base1-93', 3], ['base1-81', 2], ['base1-78', 2],
+        ['base1-97', 8], ['base1-100', 6], ['base1-96', 4]
+      ],
+      ADV_11_WIGGLYMAGMAR: [
+        ['base3-3', 1], ['base2-54', 3], ['base1-7', 3], ['base3-39', 4], ['base2-10', 3], ['base2-16', 3],
+        ['base1-92', 2], ['base1-78', 2], ['base1-79', 2], ['base1-71', 3], ['base1-93', 2], ['base1-84', 3], ['base1-88', 3], ['base1-95', 1],
+        ['base1-96', 4], ['base1-99', 1], ['base1-98', 10], ['base1-97', 10]
+      ],
+      ADV_12_MAGBUZZ: [
+        ['base1-20', 4], ['base3-39', 3], ['base3-3', 3], ['base2-10', 1],
+        ['base1-88', 4], ['base1-92', 4], ['base1-79', 3], ['base1-91', 3], ['base1-78', 3], ['base1-74', 3], ['base1-81', 3], ['base1-93', 3], ['base1-84', 2], ['base1-75', 2], ['base1-71', 1], ['base3-59', 1],
+        ['base1-98', 7], ['base1-100', 7], ['base1-96', 3]
+      ],
+      ADV_13_CHAMPION: [
+        ['base2-16', 4], ['base1-7', 4], ['base2-54', 4], ['base2-10', 4],
+        ['base1-71', 4], ['base1-91', 3], ['base1-75', 3], ['base1-88', 4], ['base1-74', 3], ['base1-93', 3], ['base1-78', 2], ['base1-84', 4], ['base1-81', 2],
+        ['base1-96', 4], ['base1-97', 12]
       ]
     };
 
@@ -16791,14 +16872,21 @@ const TYPE_EMOJI = {
       // --- 6 DECKS HISTORIQUES DE TOURNOIS OFFICIELS (1999–2000) ---
       ADV_1_VENUSAUR: { key: 'ADV_1_VENUSAUR', tournament: true, name: 'Tournoi 2000 · Venusaur Energy Trans', short: 'Venusaur 2000', cards: 60, prizes: 6, star: 'Florizarre (100 PV)', desc: 'Florizarre (Transfert d\'Énergie), Dodrio, Kangourex, Centre Pokémon', img: 'https://assets.tcgdex.net/fr/base/base1/15/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/34/high.webp', grad: 'from-white via-emerald-50/85 to-teal-50/90', border: 'border-emerald-300/90' },
       ADV_2_ARCANINE: { key: 'ADV_2_ARCANINE', tournament: true, name: 'Tournoi 2000 · Arcanine / Electrode Buzzap', short: 'Arcanin Buzzap', cards: 60, prizes: 6, star: 'Arcanin (100 PV)', desc: 'Psykokwak (Migraine), Électrode (Buzzap), Arcanin (Bélier 80)', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/21/high.webp', grad: 'from-white via-orange-50/85 to-amber-50/90', border: 'border-orange-300/90' },
-      ADV_3_RAINDANCE: { key: 'ADV_3_RAINDANCE', tournament: true, name: 'STS 2000 · Rain Dance (J. Viray)', short: 'Rain Dance 2000', cards: 60, prizes: 6, star: 'Tortank (100 PV)', desc: 'Tortank (Danse de la pluie), Artikodin Fossile, Lokhlass, Éleveur', img: 'https://assets.tcgdex.net/fr/base/base1/2/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/2/high.webp', grad: 'from-white via-sky-50/85 to-blue-50/90', border: 'border-sky-300/90' },
-      ADV_4_WIGGLYTUFF: { key: 'ADV_4_WIGGLYTUFF', tournament: true, name: 'TMB / STS 2000 · Do the Wave (T. Yoneda)', short: 'Do the Wave', cards: 60, prizes: 6, star: 'Grodoudou (80 PV)', desc: 'Grodoudou (Faire la Vague 60), Magmar Fossile, Insécateur, Grotadmorv', img: 'https://assets.tcgdex.net/fr/base/base2/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/39/high.webp', grad: 'from-white via-pink-50/85 to-rose-50/90', border: 'border-pink-300/90' },
+      ADV_3_RAINDANCE: { key: 'ADV_3_RAINDANCE', tournament: true, name: 'STS West 2000 · Rain Dance (J. Viray)', short: 'Rain Dance 2000', cards: 60, prizes: 6, star: 'Tortank (100 PV)', desc: 'Tortank (Danse de la pluie), Artikodin, Lokhlass, Éleveur', img: 'https://assets.tcgdex.net/fr/base/base1/2/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/2/high.webp', grad: 'from-white via-sky-50/85 to-blue-50/90', border: 'border-sky-300/90' },
+      ADV_4_WIGGLYTUFF: { key: 'ADV_4_WIGGLYTUFF', tournament: true, name: 'STS West 2000 · Do the Wave (G. Manquez)', short: 'Do the Wave', cards: 60, prizes: 6, star: 'Grodoudou (80 PV)', desc: 'Grodoudou (Faire la Vague), Magmar, Tygnon, Insécateur', img: 'https://assets.tcgdex.net/fr/base/base2/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/39/high.webp', grad: 'from-white via-pink-50/85 to-rose-50/90', border: 'border-pink-300/90' },
       ADV_5_DAMAGESWAP: { key: 'ADV_5_DAMAGESWAP', tournament: true, name: 'Tournoi 2000 · Alakazam Damage Swap', short: 'Damage Swap', cards: 60, prizes: 6, star: 'Alakazam (80 PV)', desc: 'Alakazam (Transfert de dégâts), M. Mime (Mur invisible), Leveinard, Rappel', img: 'https://assets.tcgdex.net/fr/base/base1/1/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/6/high.webp', grad: 'from-white via-purple-50/85 to-fuchsia-50/90', border: 'border-purple-300/90' },
-      ADV_6_HAYMAKER: { key: 'ADV_6_HAYMAKER', tournament: true, name: 'STS 2000 · Haymaker Champion (A. Marshall)', short: 'Haymaker 2000', cards: 60, prizes: 6, star: 'Tygnon (70 PV)', desc: 'Tygnon, Élektek, Insécateur, Magmar Fossile, 7 Suppressions d\'Énergie', img: 'https://assets.tcgdex.net/fr/base/base1/7/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/20/high.webp', grad: 'from-white via-amber-50/85 to-red-50/90', border: 'border-amber-400/90' }
+      ADV_6_HAYMAKER: { key: 'ADV_6_HAYMAKER', tournament: true, name: 'STS West 2000 · Haymaker (C. Graham)', short: 'Haymaker 2000', cards: 60, prizes: 6, star: 'Tygnon (70 PV)', desc: 'Tygnon, Élektek, Insécateur, Métamorph, 8 Suppressions d\'Énergie', img: 'https://assets.tcgdex.net/fr/base/base1/7/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/20/high.webp', grad: 'from-white via-amber-50/85 to-red-50/90', border: 'border-amber-400/90' },
+      ADV_7_TOOLBOX: { key: 'ADV_7_TOOLBOX', tournament: true, name: 'STS West 2000 · Buzz / Mime (M. Morris)', short: 'Buzz Mime', cards: 60, prizes: 6, star: 'Élektek (70 PV)', desc: 'Élektek, M. Mime (Mur invisible), Magmar, Métamorph', img: 'https://assets.tcgdex.net/fr/base/base1/20/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/6/high.webp', grad: 'from-white via-yellow-50/85 to-amber-50/90', border: 'border-yellow-300/90' },
+      ADV_8_ARTICUNO: { key: 'ADV_8_ARTICUNO', tournament: true, name: 'STS West 2000 · Artikodin / Tygnon (D. Diamond)', short: 'Blizzard Chan', cards: 60, prizes: 6, star: 'Artikodin (70 PV)', desc: 'Artikodin, Tygnon, Insécateur, Machoc, Leveinard', img: 'https://assets.tcgdex.net/fr/base/base3/2/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/7/high.webp', grad: 'from-white via-cyan-50/85 to-sky-50/90', border: 'border-cyan-300/90' },
+      ADV_9_KANGASKHAN: { key: 'ADV_9_KANGASKHAN', tournament: true, name: 'STS East 2000 · Kangourex Rempart (J. Schosse)', short: 'Rempart', cards: 60, prizes: 6, star: 'Kangourex (90 PV)', desc: 'Kangourex, Magmar, Tygnon, Insécateur, Métamorph', img: 'https://assets.tcgdex.net/fr/base/base2/5/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/39/high.webp', grad: 'from-white via-red-50/85 to-orange-50/90', border: 'border-red-300/90' },
+      ADV_10_AERODACTYL: { key: 'ADV_10_AERODACTYL', tournament: true, name: 'Archétype 2000 · Ptéra / Haymaker', short: 'Ptéra Lock', cards: 60, prizes: 6, star: 'Ptéra (60 PV)', desc: 'Ptéra (Pouvoir préhistorique : 0 évolution), Tygnon, Élektek', img: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/7/high.webp', grad: 'from-white via-stone-50/85 to-amber-50/90', border: 'border-stone-300/90' },
+      ADV_11_WIGGLYMAGMAR: { key: 'ADV_11_WIGGLYMAGMAR', tournament: true, name: 'STS West 2000 · Wiggly / Magmar (J. Pratt)', short: 'Wiggly Magmar', cards: 60, prizes: 6, star: 'Grodoudou (80 PV)', desc: 'Grodoudou, Magmar, Tygnon, Insécateur, Métamorph', img: 'https://assets.tcgdex.net/fr/base/base3/39/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/16/high.webp', grad: 'from-white via-fuchsia-50/85 to-pink-50/90', border: 'border-fuchsia-300/90' },
+      ADV_12_MAGBUZZ: { key: 'ADV_12_MAGBUZZ', tournament: true, name: 'Archétype 2000 · Magmar / Élektek', short: 'MagBuzz', cards: 60, prizes: 6, star: 'Magmar (70 PV)', desc: 'Magmar, Élektek, 3 Métamorph, 7 Suppressions d\'Énergie', img: 'https://assets.tcgdex.net/fr/base/base1/20/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/3/high.webp', grad: 'from-white via-violet-50/85 to-purple-50/90', border: 'border-violet-300/90' },
+      ADV_13_CHAMPION: { key: 'ADV_13_CHAMPION', tournament: true, name: 'STS West 2000 · Wiggly Haymaker (W. Lieu)', short: 'Maître 2000', cards: 60, prizes: 6, star: 'Grodoudou (80 PV)', desc: '4 Grodoudou, 4 Tygnon, 4 Insécateur, 4 PlusPower', img: 'https://assets.tcgdex.net/fr/base/base2/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/7/high.webp', grad: 'from-white via-amber-50/85 to-yellow-50/90', border: 'border-amber-400/90' }
     };
 
     // =======================================================================
-    // 2B. MODE AVENTURE · LIGUE TOURNOIS 2000 (6 CHAMPIONS MANGA HIGGSFIELD)
+    // 2B. MODE AVENTURE · LIGUE TOURNOIS 2000 (8 ARÈNES + CONSEIL DES 4 + MAÎTRE, PORTRAITS HIGGSFIELD)
     //     Vraies listes historiques 1999–2000 (Base + Jungle + Fossile)
     // =======================================================================
     const ADVENTURE_TRAINERS = [
@@ -16816,7 +16904,7 @@ const TYPE_EMOJI = {
         color: '#22c55e',
         deckKey: 'ADV_1_VENUSAUR',
         deckArchetype: 'Venusaur / Dodrio (Energy Trans)',
-        tourneyCitation: 'Archétype officiel Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
+        tourneyCitation: 'Archétype officiel Base–Fossil (1999–2000) · liste type PTCG Archive',
         realPlayer: 'Métagame Tournois WOTC 1999–2000',
         playmat: 'playmat-jungle',
         rewardCoins: 150,
@@ -16853,7 +16941,7 @@ const TYPE_EMOJI = {
         color: '#f97316',
         deckKey: 'ADV_2_ARCANINE',
         deckArchetype: 'Psyduck / Arcanine / Electrode (Buzzap)',
-        tourneyCitation: 'Archétype de tournoi Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
+        tourneyCitation: 'Archétype de tournoi Base–Fossil (1999–2000) · liste type PTCG Archive',
         realPlayer: 'Circuit Super Trainer Showdown 1999–2000',
         playmat: 'playmat-fossil',
         rewardCoins: 200,
@@ -16879,75 +16967,75 @@ const TYPE_EMOJI = {
       {
         id: 'kai',
         rank: 3,
-        stars: '★★★☆☆',
-        difficultyLabel: 'Palier 3 · Champion West Coast',
+        stars: '★★☆☆☆',
+        difficultyLabel: 'Arène 3 · Champion de Long Beach',
         name: 'Kaï',
         title: 'Le Prodige du Queen Mary',
-        badgeName: 'Badge Déluge 2000',
+        badgeName: 'Badge Déluge',
         badgeIcon: '🌊',
         avatar: 'assets/trainers/kai.jpg',
         cutout: 'assets/trainers/kai.png',
         color: '#0ea5e9',
         deckKey: 'ADV_3_RAINDANCE',
-        deckArchetype: 'Rain Dance (Blastoise / Articuno / Lapras)',
-        tourneyCitation: '1re Place Super Trainer Showdown West Coast (Juillet 2000, Queen Mary, Long Beach CA)',
-        realPlayer: 'Joseph Viray (Champion STS West Coast 2000)',
+        deckArchetype: 'Rain Dance (Tortank / Artikodin / Lokhlass)',
+        tourneyCitation: 'Liste de Joseph Viray · Champion 10 ans et moins, Super Trainer Showdown West Coast (Queen Mary, Long Beach, 22 juillet 2000) · 4 Rocket\'s Sneak Attack (Team Rocket, absentes du jeu) remplacées par 4 Fillette',
+        realPlayer: 'Joseph Viray (Champion STS West 2000, 10 ans et moins)',
         playmat: 'playmat-night',
         rewardCoins: 250,
         rewardFreePacks: 1,
         accentBadge: 'bg-sky-100 text-sky-900 border-sky-300',
-        keyCards: ['base1-2', 'base3-2', 'base1-76', 'base1-88'],
-        personality: 'Sang-froid absolu, casque autour du cou et regard calculateur. Dès que Tortank touche le terrain au tour 2, il déclenche une averse d\'Énergies Eau.',
-        strategyNote: 'Utilise 4 Éleveur de Pokémon pour poser Tortank dès le tour 2 sans passer par Carabaffe, puis attache toutes ses Énergies Eau d\'un seul coup avec Danse de la pluie !',
+        keyCards: ['base1-2', 'base3-2', 'base3-10', 'base1-76'],
+        personality: 'Sang-froid absolu et regard calculateur. Dès que Tortank touche le terrain, il déclenche une averse d\'Énergies Eau.',
+        strategyNote: '3 Éleveur de Pokémon pour poser Tortank sans Carabaffe, puis Danse de la pluie et 19 Énergies Eau.',
         quotes: {
-          intro: 'Sur le paquebot Queen Mary en juillet 2000, ce deck Rain Dance a tout balayé. Voyons si tu sais nager contre le déluge.',
+          intro: 'Sur le Queen Mary, en juillet 2000, cette liste a gagné. Voyons si tu sais nager contre le déluge.',
           turn: [
-            'Éleveur de Pokémon + Tortank : la Danse de la pluie commence maintenant.',
-            'Une, deux, trois Énergies Eau en un seul tour… L\'Hydrocanon est chargé à 60 dégâts.',
-            'Artikodin Fossile gèle le Banc adverse pendant que Tortank contrôle l\'océan.'
+            'Éleveur de Pokémon + Tortank : la Danse de la pluie commence.',
+            'Une, deux, trois Énergies Eau en un seul tour…',
+            'Artikodin et Lokhlass tiennent la ligne pendant que Tortank se charge.'
           ],
-          trainerPlay: 'Je vide ma main avec Professeur Chen pour alimenter la Danse de la pluie !',
-          koPlayer: 'Emporté par la vague ! C\'est la puissance brute du Rain Dance de l\'an 2000.',
-          koSelf: 'Pas mal… mais tant qu\'il reste de l\'Eau dans ma défausse, Sauvegarde d\'Énergie relance la marée.',
-          win: 'Submergé en quelques tours. Personne n\'arrête Tortank une fois la pluie lancée.',
-          lose: 'Incroyable… Tu as survécu à la Danse de la pluie de Long Beach ! Le Badge Déluge 2000 est à toi.'
+          trainerPlay: 'Professeur Chen : je recharge la marée !',
+          koPlayer: 'Emporté par la vague !',
+          koSelf: 'Pas mal… mais la marée remonte toujours.',
+          win: 'Submergé. Personne n\'arrête Tortank une fois la pluie lancée.',
+          lose: 'Tu as survécu au déluge de Long Beach ! Le Badge Déluge est à toi.'
         }
       },
       {
         id: 'takuya',
         rank: 4,
-        stars: '★★★★☆',
-        difficultyLabel: 'Palier 4 · Champion d\'Honolulu',
+        stars: '★★★☆☆',
+        difficultyLabel: 'Arène 4 · Showman de la Vague',
         name: 'Takuya',
-        title: 'Le Stratège d\'Honolulu',
-        badgeName: 'Badge Vague 2000',
+        title: 'Le Showman de Long Beach',
+        badgeName: 'Badge Vague',
         badgeIcon: '🌺',
         avatar: 'assets/trainers/takuya.jpg',
         cutout: 'assets/trainers/takuya.png',
         color: '#ec4899',
         deckKey: 'ADV_4_WIGGLYTUFF',
-        deckArchetype: 'Do the Wave (Wigglytuff / Magmar / Scyther / Muk)',
-        tourneyCitation: 'Champion Tropical Mega Battle (Honolulu) & Finaliste STS West Coast (Juillet 2000)',
-        realPlayer: 'Takuya Yoneda (Champion TMB) & William Lieu (Finaliste STS 2000)',
+        deckArchetype: 'Do the Wave (Grodoudou / Magmar / Tygnon)',
+        tourneyCitation: 'Liste de Gilbert Manquez · ¼ de finale 10 ans et moins, Super Trainer Showdown West Coast (Long Beach, juillet 2000)',
+        realPlayer: 'Gilbert Manquez (Top 8 STS West 2000)',
         playmat: 'playmat-jungle',
         rewardCoins: 300,
         rewardFreePacks: 1,
         accentBadge: 'bg-pink-100 text-pink-900 border-pink-300',
-        keyCards: ['base2-16', 'base3-39', 'base2-10', 'base3-13'],
-        personality: 'Charismatique, souriant mais redoutable. Inspiré du champion japonais du Tropical Mega Battle d\'Honolulu, il transforme un Banc plein en rouleau compresseur.',
-        strategyNote: 'Remplit ses 5 places de Banc et attache une Double Énergie Incolore à Grodoudou pour infliger 60 dégâts dès le tour 2 avec Faire la Vague, tout en bloquant les Pouvoirs avec Grotadmorv !',
+        keyCards: ['base2-16', 'base3-39', 'base1-7', 'base3-3'],
+        personality: 'Charismatique et souriant, mais redoutable : il transforme un Banc plein en rouleau compresseur.',
+        strategyNote: 'Banc rempli + Double Énergie Incolore : Grodoudou frappe à 60 avec Faire la Vague, épaulé par Magmar et Tygnon.',
         quotes: {
-          intro: 'Aloha ! À Honolulu comme à Long Beach, « Faire la Vague » de Grodoudou a surpris les meilleurs joueurs du monde !',
+          intro: 'Mesdames et messieurs… Faites la vague ! Mon Grodoudou adore un Banc bien rempli.',
           turn: [
-            'Banc complet : 5 Pokémon en soutien = 60 dégâts pour Grodoudou à chaque tour !',
-            'Le Gaz Toxique de mon Grotadmorv coupe tous les Pouvoirs Pokémon du plateau !',
-            'Magmar Fossile et Insécateur tiennent la ligne pendant que Rondoudou se prépare.'
+            'Banc complet : Faire la Vague à 60 dégâts !',
+            'Magmar et Tygnon tiennent la scène pendant que Rondoudou se prépare.',
+            'Un PlusPower, et le spectacle continue !'
           ],
-          trainerPlay: 'Un bon champion ne laisse jamais son Banc vide !',
-          koPlayer: '60 dégâts + PlusPower ! Voilà pourquoi Grodoudou est une terreur des tournois 2000 !',
-          koSelf: 'Haha, bien joué ! Mais mon Banc est encore plein, la vague suivante arrive !',
-          win: 'La vague d\'Honolulu a tout emporté ! C\'était un super match !',
-          lose: 'Sublime ! Tu as brisé ma vague avec un sang-froid de champion mondial. Prends mon deck Do the Wave !'
+          trainerPlay: 'Un bon showman ne laisse jamais son Banc vide !',
+          koPlayer: 'Standing ovation ! La vague t\'a emporté.',
+          koSelf: 'Haha, bien joué ! Mais la vague suivante arrive.',
+          win: 'Rideau ! C\'était un super spectacle.',
+          lose: 'Bravo, tu as brisé ma vague ! Prends le Badge Vague.'
         }
       },
       {
@@ -16964,7 +17052,7 @@ const TYPE_EMOJI = {
         color: '#8b5cf6',
         deckKey: 'ADV_5_DAMAGESWAP',
         deckArchetype: 'Damage Swap Stall (Alakazam / Mr. Mime / Chansey)',
-        tourneyCitation: 'Archétype de contrôle Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
+        tourneyCitation: 'Archétype de contrôle Base–Fossil (1999–2000) · liste type PTCG Archive',
         realPlayer: 'Maîtres du Contrôle WOTC 1999–2000',
         playmat: 'playmat-mewtwo',
         rewardCoins: 350,
@@ -16990,40 +17078,305 @@ const TYPE_EMOJI = {
       {
         id: 'axel',
         rank: 6,
-        stars: '👑★★★★★',
-        difficultyLabel: 'BOSS FINAL · Grand Champion 2000',
+        stars: '★★★★☆',
+        difficultyLabel: 'Arène 6 · Roi du Haymaker',
         name: 'Axel',
         title: 'Le Roi du Haymaker',
-        badgeName: 'Couronne Haymaker 2000',
-        badgeIcon: '👑',
+        badgeName: 'Badge Uppercut',
+        badgeIcon: '🥊',
         avatar: 'assets/trainers/axel.jpg',
         cutout: 'assets/trainers/axel.png',
         color: '#eab308',
         deckKey: 'ADV_6_HAYMAKER',
-        deckArchetype: 'Haymaker (Hitmonchan / Electabuzz / Scyther / Magmar)',
-        tourneyCitation: '1re Place 15+ Super Trainer Showdown West Coast (Juillet 2000) & Archive Jason Klaczynski',
-        realPlayer: 'Andrew Marshall (Champion 15+ STS 2000) & Jason Klaczynski (3× Champion du Monde)',
+        deckArchetype: 'Haymaker (Tygnon / Élektek / Insécateur / Métamorph)',
+        tourneyCitation: 'Liste de Chris Graham · ¼ de finale 10 ans et moins, Super Trainer Showdown West Coast (Long Beach, juillet 2000)',
+        realPlayer: 'Chris Graham (Top 8 STS West 2000)',
         playmat: 'playmat-night',
-        rewardCoins: 500,
-        rewardFreePacks: 2,
+        rewardCoins: 400,
+        rewardFreePacks: 1,
         accentBadge: 'bg-amber-100 text-amber-950 border-amber-400',
         keyCards: ['base1-7', 'base1-20', 'base2-10', 'base1-79'],
-        personality: 'Rival ultime au sommet de la Ligue 2000. Il joue le légendaire Haymaker : zéro évolution, vitesse foudroyante, privation totale d\'Énergie et K.O. mathématiques au PlusPower.',
-        strategyNote: '4 Tygnon, 4 Élektek, 3 Insécateur, 2 Magmar Fossile + 4 Suppression d\'Énergie, 3 Double Suppression d\'Énergie, 3 PlusPower et 3 Rafale de vent. Le deck n°1 incontesté de l\'an 2000 !',
+        personality: 'Arrogant et ultra-rapide. Zéro évolution, privation d\'Énergie et K.O. au PlusPower.',
+        strategyNote: '12 Pokémon de Base qui frappent tour 1, 4 Suppression + 4 Double Suppression d\'Énergie.',
         quotes: {
-          intro: 'Alors c\'est toi qui as battu les 5 Champions ? Voici le vrai roi de l\'an 2000 : le Haymaker de tournoi. Zéro évolution, 100% efficacité.',
+          intro: 'Zéro évolution, 100 % efficacité. Bienvenue dans le Haymaker.',
           turn: [
-            'Suppression d\'Énergie + Double Suppression d\'Énergie : tu n\'attaqueras pas ce tour-ci !',
-            'Jab de Tygnon, Éclair d\'Élektek, PlusPower : chaque point de dégât est calculé au millimètre.',
-            'Rafale de vent ! Je vais chercher ton Pokémon le plus fragile directement sur ton Banc !'
+            'Suppression d\'Énergie : tu n\'attaqueras pas ce tour-ci !',
+            'Jab de Tygnon + PlusPower : calculé au millimètre.',
+            'Rafale de vent ! Je viens chercher ton Pokémon le plus fragile.'
           ],
-          trainerPlay: 'C\'est comme ça qu\'on joue au Championnat du Monde 2000 !',
-          koPlayer: 'K.O. net et sans bavure ! Le Haymaker ne pardonne aucune erreur de tempo.',
-          koSelf: 'Bien joué ! Mais chacun de mes Pokémon de Base a 70 PV et frappe dès le premier tour !',
-          win: 'Voilà pourquoi le Haymaker a régné sans partage sur l\'année 2000. Reviens quand tu voudras ta revanche !',
-          lose: 'INCROYABLE ! Tu as vaincu le Haymaker officiel de juillet 2000 ! Tu es le nouveau Grand Maître de la Ligue 2000 !'
+          trainerPlay: 'Le tempo, c\'est tout !',
+          koPlayer: 'K.O. net et sans bavure !',
+          koSelf: 'Bien joué… mais chacun de mes Pokémon frappe dès le tour 1 !',
+          win: 'Voilà pourquoi le Haymaker régnait en 2000.',
+          lose: 'INCROYABLE ! Tu as encaissé le Haymaker. Le Badge Uppercut est à toi !'
+        }
+      },
+      {
+        id: 'mika',
+        rank: 7,
+        stars: '★★★★☆',
+        difficultyLabel: 'Arène 7 · Inventrice Survoltée',
+        name: 'Mika',
+        title: 'L\'Inventrice Survoltée',
+        badgeName: 'Badge Circuit',
+        badgeIcon: '⚡',
+        avatar: 'assets/trainers/mika.jpg',
+        cutout: 'assets/trainers/mika.png',
+        color: '#14b8a6',
+        deckKey: 'ADV_7_TOOLBOX',
+        deckArchetype: 'Élektek / M. Mime / Magmar / Métamorph',
+        tourneyCitation: 'Liste de Mitch Morris · ½ finale 10 ans et moins, Super Trainer Showdown West Coast (Long Beach, juillet 2000)',
+        realPlayer: 'Mitch Morris (½ finaliste STS West 2000)',
+        playmat: 'playmat-night',
+        rewardCoins: 400,
+        rewardFreePacks: 1,
+        accentBadge: 'bg-teal-100 text-teal-900 border-teal-300',
+        keyCards: ['base1-20', 'base2-6', 'base3-39', 'base3-3'],
+        personality: 'Bricoleuse géniale et espiègle : chaque carte est une pièce de sa machine.',
+        strategyNote: 'M. Mime bloque les grosses attaques (Mur invisible) pendant qu\'Élektek et Magmar frappent.',
+        quotes: {
+          intro: 'Mes circuits sont branchés ! M. Mime en bouclier, Élektek en batterie. Prêt pour la décharge ?',
+          turn: [
+            'Mur invisible : tes attaques de 30 et plus ne passent pas !',
+            'Élektek, surtension !',
+            'Métamorph copie ton Pokémon… pratique, non ?'
+          ],
+          trainerPlay: 'Récupérateur : je recycle mes meilleures pièces !',
+          koPlayer: 'Court-circuit ! Hihi !',
+          koSelf: 'Oups, un fusible a sauté…',
+          win: 'Expérience réussie ! Reviens tester mon prochain prototype.',
+          lose: 'Tu as grillé ma machine ! Le Badge Circuit est à toi.'
+        }
+      },
+      {
+        id: 'yuki',
+        rank: 8,
+        stars: '★★★★★',
+        difficultyLabel: 'Arène 8 · Poing de Givre',
+        name: 'Yuki',
+        title: 'Le Poing de Givre',
+        badgeName: 'Badge Blizzard',
+        badgeIcon: '❄️',
+        avatar: 'assets/trainers/yuki.jpg',
+        cutout: 'assets/trainers/yuki.png',
+        color: '#38bdf8',
+        deckKey: 'ADV_8_ARTICUNO',
+        deckArchetype: 'Artikodin / Tygnon / Insécateur',
+        tourneyCitation: 'Liste de Devin Diamond · ¼ de finale 10 ans et moins, Super Trainer Showdown West Coast (Long Beach, juillet 2000)',
+        realPlayer: 'Devin Diamond (Top 8 STS West 2000)',
+        playmat: 'playmat-night',
+        rewardCoins: 450,
+        rewardFreePacks: 2,
+        accentBadge: 'bg-sky-100 text-sky-900 border-sky-300',
+        keyCards: ['base3-2', 'base1-7', 'base2-10', 'base3-59'],
+        personality: 'Calme et implacable. Dernière gardienne avant la Ligue : elle frappe vite et gèle tout le reste.',
+        strategyNote: 'Tygnon et Insécateur frappent tôt, Artikodin paralyse ; Recherche d\'Énergie assure les attaques.',
+        quotes: {
+          intro: 'Sept badges… Il t\'en manque un. Personne ne passe le Blizzard sans se battre.',
+          turn: [
+            'Le froid ralentit tout. Sauf mes poings.',
+            'Artikodin : Blocage glacial !',
+            'Tygnon, Jab ! Puis encore un.'
+          ],
+          trainerPlay: 'Concentration… Recherche d\'Énergie.',
+          koPlayer: 'Gelé sur place.',
+          koSelf: 'Bon coup. Ta technique s\'affine.',
+          win: 'La Ligue n\'est pas encore pour toi. Entraîne-toi dans la neige.',
+          lose: 'Huit badges. La porte de la Ligue s\'ouvre pour toi.'
+        }
+      },
+      {
+        id: 'dorian',
+        rank: 9,
+        tier: 'elite',
+        stars: '★★★★★',
+        difficultyLabel: 'Conseil des 4 · 1er membre',
+        name: 'Dorian',
+        title: 'Le Rempart',
+        badgeName: 'Sceau du Rempart',
+        badgeIcon: '🛡️',
+        avatar: 'assets/trainers/dorian.jpg',
+        cutout: 'assets/trainers/dorian.png',
+        color: '#ef4444',
+        deckKey: 'ADV_9_KANGASKHAN',
+        deckArchetype: 'Kangourex / Magmar / Tygnon / Métamorph',
+        tourneyCitation: 'Liste de Jerome Schosse · Finaliste 10 ans et moins, Super Trainer Showdown East Coast (Secaucus NJ, 2000)',
+        realPlayer: 'Jerome Schosse (Finaliste STS East 2000)',
+        playmat: 'playmat-fossil',
+        rewardCoins: 500,
+        rewardFreePacks: 2,
+        accentBadge: 'bg-red-100 text-red-900 border-red-300',
+        keyCards: ['base2-5', 'base3-39', 'base1-7', 'base3-3'],
+        personality: 'Garde du corps du Conseil. Peu de mots, beaucoup de PV.',
+        strategyNote: 'Kangourex (90 PV) encaisse, Magmar brûle, 6 Suppressions d\'Énergie t\'asphyxient.',
+        quotes: {
+          intro: 'Personne ne franchit cette porte. Montre-moi ce que valent tes huit badges.',
+          turn: [
+            'Kangourex encaisse. Toujours.',
+            'Suppression d\'Énergie. Recommence.',
+            'Magmar, brûle-le.'
+          ],
+          trainerPlay: 'Méthode. Patience. Pression.',
+          koPlayer: 'Barrage tenu.',
+          koSelf: 'Une brèche… intéressant.',
+          win: 'Le Rempart tient. Reviens plus fort.',
+          lose: 'Tu es passé. Le Sceau du Rempart est à toi.'
+        }
+      },
+      {
+        id: 'lena',
+        rank: 10,
+        tier: 'elite',
+        stars: '★★★★★',
+        difficultyLabel: 'Conseil des 4 · 2e membre',
+        name: 'Léna',
+        title: 'L\'Archéologue',
+        badgeName: 'Sceau Fossile',
+        badgeIcon: '🦴',
+        avatar: 'assets/trainers/lena.jpg',
+        cutout: 'assets/trainers/lena.png',
+        color: '#d97706',
+        deckKey: 'ADV_10_AERODACTYL',
+        deckArchetype: 'Ptéra Lock / Haymaker',
+        tourneyCitation: 'Liste type de l\'archétype Ptéra / Haymaker · PTCG Archive (Base–Fossile) · archétype présent au Top 8 15 ans et plus du STS East Coast 2000 (Mike Delgaudio)',
+        realPlayer: 'Archétype Ptéra / Haymaker (Base–Fossile 2000)',
+        playmat: 'playmat-fossil',
+        rewardCoins: 500,
+        rewardFreePacks: 2,
+        accentBadge: 'bg-amber-100 text-amber-900 border-amber-300',
+        keyCards: ['base3-1', 'base3-62', 'base1-7', 'base1-20'],
+        personality: 'Aventurière passionnée : avec Ptéra en jeu, plus aucune évolution n\'est possible.',
+        strategyNote: 'Mystérieux Fossile → Ptéra : Pouvoir préhistorique bloque toutes les évolutions. Tygnon et Élektek finissent le travail.',
+        quotes: {
+          intro: 'Ce fossile a 65 millions d\'années. Ton évolution peut bien attendre un peu, non ?',
+          turn: [
+            'Pouvoir préhistorique : plus aucune évolution !',
+            'Tes Pokémon de Base contre mes Tygnon… bonne chance.',
+            'Une petite fouille avec Recherche informatique…'
+          ],
+          trainerPlay: 'Fouille méthodique !',
+          koPlayer: 'Encore un pour ma collection !',
+          koSelf: 'Ouch ! Belle découverte.',
+          win: 'Fouille terminée : tu restes au stade Base !',
+          lose: 'Tu as déterré la victoire ! Le Sceau Fossile est à toi.'
+        }
+      },
+      {
+        id: 'raphael',
+        rank: 11,
+        tier: 'elite',
+        stars: '★★★★★',
+        difficultyLabel: 'Conseil des 4 · 3e membre',
+        name: 'Raphaël',
+        title: 'Le Prince de la Scène',
+        badgeName: 'Sceau Ovation',
+        badgeIcon: '🌹',
+        avatar: 'assets/trainers/raphael.jpg',
+        cutout: 'assets/trainers/raphael.png',
+        color: '#db2777',
+        deckKey: 'ADV_11_WIGGLYMAGMAR',
+        deckArchetype: 'Grodoudou / Magmar / Tygnon / Insécateur',
+        tourneyCitation: 'Liste de John Pratt · ¼ de finale 11–14 ans, Super Trainer Showdown West Coast (Long Beach, juillet 2000)',
+        realPlayer: 'John Pratt (Top 8 STS West 2000)',
+        playmat: 'playmat-mewtwo',
+        rewardCoins: 500,
+        rewardFreePacks: 2,
+        accentBadge: 'bg-pink-100 text-pink-900 border-pink-300',
+        keyCards: ['base2-16', 'base3-39', 'base1-7', 'base2-10'],
+        personality: 'Théâtral et élégant : chaque K.O. est un rappel sous les projecteurs.',
+        strategyNote: '4 Magmar Fossile, 3 Grodoudou : brûlure, Faire la Vague et 3 PlusPower pour les finitions.',
+        quotes: {
+          intro: 'Les projecteurs sont sur nous… Que le dernier acte commence !',
+          turn: [
+            'Magmar, une flamme pour le public !',
+            'Grodoudou : Faire la Vague, tout le Banc chante !',
+            'PlusPower… pour le final.'
+          ],
+          trainerPlay: 'Changement de décor !',
+          koPlayer: 'Rappel ! Rappel !',
+          koSelf: 'Une fausse note ? Impossible…',
+          win: 'Le rideau tombe. Merci pour ce duo !',
+          lose: 'Bravo ! Une ovation pour toi. Le Sceau Ovation est à toi.'
+        }
+      },
+      {
+        id: 'selene',
+        rank: 12,
+        tier: 'elite',
+        stars: '★★★★★',
+        difficultyLabel: 'Conseil des 4 · 4e membre',
+        name: 'Séléné',
+        title: 'La Métamorphe',
+        badgeName: 'Sceau Miroir',
+        badgeIcon: '🪞',
+        avatar: 'assets/trainers/selene.jpg',
+        cutout: 'assets/trainers/selene.png',
+        color: '#8b5cf6',
+        deckKey: 'ADV_12_MAGBUZZ',
+        deckArchetype: 'Magmar / Élektek / 3 Métamorph',
+        tourneyCitation: 'Liste type de l\'archétype Magmar / Élektek · PTCG Archive (Base–Fossile 1999–2000)',
+        realPlayer: 'Archétype Magmar / Élektek (Base–Fossile 2000)',
+        playmat: 'playmat-mewtwo',
+        rewardCoins: 600,
+        rewardFreePacks: 2,
+        accentBadge: 'bg-violet-100 text-violet-900 border-violet-300',
+        keyCards: ['base3-3', 'base3-39', 'base1-20', 'base1-79'],
+        personality: 'Mystérieuse et joueuse : ses 3 Métamorph deviennent ton propre Pokémon.',
+        strategyNote: 'Métamorph copie ton Actif, Magmar et Élektek frappent, 7 Suppressions d\'Énergie te vident.',
+        quotes: {
+          intro: 'Chut… Et si ton meilleur Pokémon se battait contre toi ?',
+          turn: [
+            'Morphing : me voilà… toi.',
+            'Plus d\'Énergie ? Quel dommage.',
+            'Le miroir ne ment jamais.'
+          ],
+          trainerPlay: 'Un petit tour de passe-passe…',
+          koPlayer: 'Battu par ton propre reflet !',
+          koSelf: 'Le miroir se fissure…',
+          win: 'Tu t\'es battu toi-même. Joli, non ?',
+          lose: 'Le miroir est brisé. Le Maître t\'attend.'
+        }
+      },
+      {
+        id: 'ren',
+        rank: 13,
+        tier: 'champion',
+        stars: '👑',
+        difficultyLabel: 'Maître de la Ligue 2000',
+        name: 'Ren',
+        title: 'Le Maître de la Ligue',
+        badgeName: 'Couronne du Maître',
+        badgeIcon: '👑',
+        avatar: 'assets/trainers/ren.jpg',
+        cutout: 'assets/trainers/ren.png',
+        color: '#f59e0b',
+        deckKey: 'ADV_13_CHAMPION',
+        deckArchetype: 'Wiggly Haymaker (Grodoudou / Tygnon / Insécateur)',
+        tourneyCitation: 'Liste de William Lieu · Finaliste 15 ans et plus, Super Trainer Showdown West Coast (Long Beach, juillet 2000)',
+        realPlayer: 'William Lieu (Finaliste 15+ STS West 2000)',
+        playmat: 'playmat-mewtwo',
+        rewardCoins: 1000,
+        rewardFreePacks: 3,
+        accentBadge: 'bg-amber-100 text-amber-950 border-amber-400',
+        keyCards: ['base2-16', 'base1-7', 'base2-10', 'base1-84'],
+        personality: 'Serein, imbattable depuis des années. Il ne gaspille jamais une carte.',
+        strategyNote: '4-4-4-4 : Grodoudou, Tygnon, Rondoudou, Insécateur, 4 PlusPower et 3 Fillette. Pur tempo.',
+        quotes: {
+          intro: 'Huit badges, quatre sceaux. Tu es arrivé jusqu\'ici… Montre-moi qui mérite la couronne.',
+          turn: [
+            'Chaque carte a sa place. Aucune n\'est de trop.',
+            'Faire la Vague. Le Banc est plein.',
+            'Fillette : on repart de zéro, à mon rythme.'
+          ],
+          trainerPlay: 'Exactement comme prévu.',
+          koPlayer: 'Calculé.',
+          koSelf: 'Enfin un vrai défi.',
+          win: 'La couronne reste ici. Reviens, je t\'attendrai.',
+          lose: 'La couronne est à toi. Tu es le nouveau Maître de la Ligue 2000 !'
         }
       }
+
     ];
 
     const PROFILE_ADV_BASE = 'ppi_v2_adventure_save';
@@ -17066,6 +17419,12 @@ const TYPE_EMOJI = {
       return ADVENTURE_TRAINERS.filter((t) => (adventureSave.defeated[t.id] || 0) > 0).length;
     }
 
+    const ADV_GYM_COUNT = 8;
+    const advTier = (t) => t.tier || 'gym';
+    const ADV_GYMS = () => ADVENTURE_TRAINERS.filter((t) => advTier(t) === 'gym');
+    function getAdvBadgeCount() { return ADV_GYMS().filter((t) => (adventureSave.defeated[t.id] || 0) > 0).length; }
+    function isAdvLeagueOpen() { return getAdvBadgeCount() >= ADV_GYM_COUNT; }
+
     function getUnlockedTournamentDeckKeys() {
       return ADVENTURE_TRAINERS
         .filter((t) => (adventureSave.defeated[t.id] || 0) > 0)
@@ -17073,15 +17432,16 @@ const TYPE_EMOJI = {
     }
 
     function updateAdventureBadgesUi() {
-      const done = getDefeatedAdvCount();
-      const total = ADVENTURE_TRAINERS.length;
+      const leagueOpen = isAdvLeagueOpen();
+      const done = leagueOpen ? getDefeatedAdvCount() : getAdvBadgeCount();
+      const total = leagueOpen ? ADVENTURE_TRAINERS.length : ADV_GYM_COUNT;
       const navB = document.getElementById('navAdvBadge');
       if (navB) {
         navB.textContent = `${done}/${total}`;
         navB.className = `px-1.5 py-0.2 rounded-full ${done >= total ? 'bg-amber-400 text-slate-950' : 'bg-sky-500 text-white'} text-[9.5px] font-black leading-tight`;
       }
       const soloB = document.getElementById('soloAdvProgressBadge');
-      if (soloB) soloB.textContent = `${done}/${total} Champions`;
+      if (soloB) soloB.textContent = leagueOpen ? `${done}/${total} Ligue` : `${done}/${total} Badges`;
       const hubB = document.getElementById('hubAdvBadge');
       if (hubB) hubB.textContent = `${done}/${total}`;
     }
@@ -17227,6 +17587,10 @@ const TYPE_EMOJI = {
     function startAdventureMatch(trainerId) {
       const tr = ADVENTURE_TRAINERS.find((t) => t.id === trainerId);
       if (!tr) return;
+      if (advTier(tr) !== 'gym' && !isAdvLeagueOpen()) {
+        showGameToast('🔒 Obtiens les 8 Badges d\'Arène pour accéder au Conseil des 4 !');
+        return;
+      }
       if (tr.rank > adventureSave.unlockedRank) {
         const prev = ADVENTURE_TRAINERS.find((t) => t.rank === tr.rank - 1);
         showGameToast(`🔒 Bats d'abord <strong>${prev ? prev.name : 'le dresseur précédent'}</strong> pour débloquer ${tr.name} !`);
@@ -17269,43 +17633,63 @@ const TYPE_EMOJI = {
       const curDeckMeta = DECK_META[adventureSave.selectedDeck] || DECK_META.V2_FEU;
       const allDeckKeys = [...unlockedTourneyKeys, ...customKeys, ...fullKeys, ...halfKeys];
 
-      // Chemin en zigzag (palier 1 en bas → Grand Maître en haut)
-      const xs = [26, 70, 32, 72, 30, 50];
+      // Chemin en zigzag (Arène 1 en bas → Maître de la Ligue en haut).
+      // Le Conseil des 4 et le Maître restent masqués tant que les 8 badges ne sont pas réunis.
+      const leagueOpen = isAdvLeagueOpen();
+      const visibleTrainers = ADVENTURE_TRAINERS.filter((t) => advTier(t) === 'gym' || leagueOpen);
+      const items = visibleTrainers.map((tr) => ({ tr }));
+      if (!leagueOpen) items.push({ gate: true });
+      const xs = [26, 70, 32, 72, 30, 68, 34, 66, 28, 72, 30, 70];
       const ROW = 124;
-      const pathH = ROW * totalCount;
-      const pts = ADVENTURE_TRAINERS.map((t, i) => ({ x: xs[i % xs.length], y: (totalCount - 1 - i) * ROW + 46 }));
-      let d = `M ${pts[0].x} ${pts[0].y}`;
-      for (let i = 1; i < pts.length; i++) {
-        const a = pts[i - 1], b = pts[i];
-        const my = (a.y + b.y) / 2;
-        d += ` C ${a.x} ${my}, ${b.x} ${my}, ${b.x} ${b.y}`;
-      }
-      const doneIdx = defeatedCount; // segments franchis
-      let dDone = `M ${pts[0].x} ${pts[0].y}`;
-      for (let i = 1; i <= Math.min(doneIdx, pts.length - 1); i++) {
-        const a = pts[i - 1], b = pts[i];
-        const my = (a.y + b.y) / 2;
-        dDone += ` C ${a.x} ${my}, ${b.x} ${my}, ${b.x} ${b.y}`;
-      }
+      const nItems = items.length;
+      const pathH = ROW * nItems;
+      const xOf = (i) => (i === nItems - 1 ? 50 : xs[i % xs.length]);
+      const pts = items.map((it, i) => ({ x: xOf(i), y: (nItems - 1 - i) * ROW + 46 }));
+      const seg = (upto) => {
+        let p = `M ${pts[0].x} ${pts[0].y}`;
+        for (let i = 1; i <= upto; i++) {
+          const a = pts[i - 1], b = pts[i];
+          const my = (a.y + b.y) / 2;
+          p += ` C ${a.x} ${my}, ${b.x} ${my}, ${b.x} ${b.y}`;
+        }
+        return p;
+      };
+      const d = seg(nItems - 1);
+      const doneIdx = Math.min(nItems - 1, visibleTrainers.filter((t) => (adventureSave.defeated[t.id] || 0) > 0).length);
+      const dDone = seg(doneIdx);
 
-      const nodes = ADVENTURE_TRAINERS.map((tr, i) => ({ tr, i })).reverse().map(({ tr, i }) => {
+      const nodes = items.map((it, i) => ({ it, i })).reverse().map(({ it, i }) => {
+        if (it.gate) {
+          return `
+            <div class="adv-row">
+              <button type="button" onclick="showGameToast('🔒 Réunis les 8 Badges d\\'Arène pour ouvrir le Conseil des 4 et défier le Maître !')" class="adv-node locked" style="left:${xOf(i)}%" aria-label="Ligue verrouillée">
+                <span class="adv-disc adv-gate-disc">🏛️<span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span></span>
+                <span class="adv-name">??? · ${getAdvBadgeCount()}/8 badges</span>
+                <span class="adv-stars">Ligue verrouillée</span>
+              </button>
+            </div>
+          `;
+        }
+        const tr = it.tr;
+        const tier = advTier(tr);
         const isDefeated = (adventureSave.defeated[tr.id] || 0) > 0;
         const isUnlocked = tr.rank <= adventureSave.unlockedRank;
         const isCurrent = isUnlocked && !isDefeated;
         const state = isDefeated ? 'done' : isCurrent ? 'current' : 'locked';
-        const isBoss = i === totalCount - 1;
+        const isBoss = tier === 'champion';
         return `
           <div class="adv-row">
-            <button type="button" onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node ${state}" style="left:${xs[i % xs.length]}%" aria-label="${tr.name}">
-              <span class="adv-disc" style="background: radial-gradient(circle at 50% 35%, #fff 0%, ${tr.color} 75%); ${isBoss ? 'width:96px;height:96px;border-color:#fde047;' : ''}">
+            <button type="button" onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node ${state} tier-${tier}" style="left:${xOf(i)}%" aria-label="${tr.name}">
+              <span class="adv-disc" style="background: radial-gradient(circle at 50% 35%, #fff 0%, ${tr.color} 75%); ${isBoss ? 'width:96px;height:96px;' : ''}">
                 <img class="adv-cut" src="${tr.cutout}" alt="" loading="lazy" draggable="false" />
-                ${isDefeated ? `<span class="adv-tag bg-emerald-500 text-white" style="right:-6px;bottom:-2px">✓</span>` : ''}
+                ${isDefeated ? `<span class="adv-tag bg-emerald-500 text-white" style="right:-6px;bottom:-2px">${tr.badgeIcon}</span>` : ''}
                 ${!isUnlocked ? `<span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span>` : ''}
                 ${isCurrent ? `<span class="adv-tag bg-sky-500 text-white" style="right:-8px;bottom:-2px">⚔️</span>` : ''}
                 ${isBoss ? `<span class="adv-tag bg-amber-300 text-slate-900" style="left:50%;top:-14px;transform:translateX(-50%)">👑</span>` : ''}
+                ${tier === 'elite' ? `<span class="adv-tag bg-violet-600 text-white" style="left:-6px;bottom:-2px">C4</span>` : ''}
               </span>
-              <span class="adv-name">${tr.badgeIcon} ${tr.name}</span>
-              <span class="adv-stars">${tr.stars}</span>
+              <span class="adv-name">${tier === 'gym' ? tr.badgeIcon + ' ' : ''}${tr.name}</span>
+              <span class="adv-stars">${tier === 'gym' ? tr.stars : tier === 'elite' ? 'Conseil des 4' : 'Maître'}</span>
             </button>
           </div>
         `;
@@ -17315,8 +17699,9 @@ const TYPE_EMOJI = {
         <div class="w-full px-3 py-2 rounded-2xl tcg-card-panel flex items-center justify-between gap-2">
           <div class="min-w-0">
             <div class="text-sm font-black text-slate-900 leading-tight">🏆 Ligue 2000</div>
-            <div class="flex gap-0.5 mt-0.5">
-              ${ADVENTURE_TRAINERS.map((t) => `<span class="text-[13px] ${(adventureSave.defeated[t.id] || 0) > 0 ? '' : 'grayscale opacity-30'}">${t.badgeIcon}</span>`).join('')}
+            <div class="flex gap-0.5 mt-0.5 flex-wrap">
+              ${ADV_GYMS().map((t) => `<span class="text-[13px] ${(adventureSave.defeated[t.id] || 0) > 0 ? '' : 'grayscale opacity-30'}">${t.badgeIcon}</span>`).join('')}
+              ${leagueOpen ? `<span class="text-[10px] font-black text-violet-700 ml-1 self-center">· Ligue ${ADVENTURE_TRAINERS.filter((t) => advTier(t) !== 'gym' && (adventureSave.defeated[t.id] || 0) > 0).length}/5</span>` : ''}
             </div>
           </div>
           <button onclick="document.getElementById('advDeckPicker').classList.toggle('hidden')" class="shrink-0 flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 active:scale-95 transition">
@@ -17387,6 +17772,83 @@ const TYPE_EMOJI = {
       const el = document.getElementById('advSheet');
       if (el) el.remove();
     }
+
+    // Célébration plein écran à la 1re victoire : badge qui tombe, impact, éclats, confettis, pièces qui défilent
+    function showBadgeCelebration(tr, coins, packs) {
+      if (!tr) return;
+      const old = document.getElementById('badgeCeleb');
+      if (old) old.remove();
+      const tier = advTier(tr);
+      const leagueJustOpened = tier === 'gym' && getAdvBadgeCount() === ADV_GYM_COUNT;
+      const title = tier === 'champion' ? 'MAÎTRE DE LA LIGUE !' : tier === 'elite' ? 'SCEAU OBTENU !' : 'BADGE OBTENU !';
+      const cols = ['#fde047', '#f472b6', '#60a5fa', '#34d399', '#fb923c', '#ffffff', tr.color];
+      let conf = '';
+      for (let i = 0; i < 56; i++) {
+        const ang = Math.random() * Math.PI * 2, dist = 110 + Math.random() * 230;
+        conf += `<i class="bc-conf" style="--dx:${Math.round(Math.cos(ang) * dist)}px;--dy:${Math.round(Math.sin(ang) * dist - 60)}px;--r:${Math.round(Math.random() * 900 - 450)}deg;--d:${(Math.random() * 0.25).toFixed(2)}s;background:${cols[i % cols.length]};${i % 3 === 0 ? 'border-radius:50%;width:10px;height:10px;' : ''}"></i>`;
+      }
+      let sparks = '';
+      for (let i = 0; i < 12; i++) sparks += `<b class="bc-spark" style="--a:${i * 30}deg;--d:${(0.98 + (i % 3) * 0.08).toFixed(2)}s"></b>`;
+      const el = document.createElement('div');
+      el.id = 'badgeCeleb';
+      el.style.setProperty('--adv-c', tr.color || '#f59e0b');
+      el.innerHTML = `
+        <div class="bc-bg"></div>
+        <div class="bc-rays"></div>
+        ${tr.cutout ? `<img class="bc-trainer" src="${tr.cutout}" alt="" />` : ''}
+        <div class="bc-stage">
+          <div class="bc-title">${title}</div>
+          <div class="bc-medal-wrap">
+            <div class="bc-ring"></div><div class="bc-ring r2"></div>
+            ${sparks}
+            <div class="bc-medal"><span class="bc-icon">${tr.badgeIcon}</span><span class="bc-shine"></span></div>
+            ${conf}
+          </div>
+          <div class="bc-name">${tr.badgeName}</div>
+          <div class="bc-gains">
+            <span class="bc-chip bc-coins">🪙 +<b>0</b></span>
+            ${packs ? `<span class="bc-chip" style="animation-delay:1.6s">🎴 +${packs} Booster${packs > 1 ? 's' : ''}</span>` : ''}
+            <span class="bc-chip" style="animation-delay:1.75s">🃏 Deck 2000</span>
+          </div>
+          ${tier === 'gym' ? `<div class="bc-badges">${ADV_GYMS().map((g) => `<span class="${(adventureSave.defeated[g.id] || 0) > 0 ? 'on' : ''} ${g.id === tr.id ? 'new' : ''}">${g.badgeIcon}</span>`).join('')}</div>` : ''}
+          ${leagueJustOpened ? '<div class="bc-unlock">🏛️ Le Conseil des 4 est ouvert !</div>' : ''}
+          ${tier === 'champion' ? '<div class="bc-unlock">👑 Tu es le nouveau Maître de la Ligue 2000 !</div>' : ''}
+          <div class="bc-tap">Touche pour continuer</div>
+        </div>
+      `;
+      const born = Date.now();
+      el.addEventListener('click', () => {
+        if (Date.now() - born < 1200) return;
+        el.classList.add('out');
+        setTimeout(() => el.remove(), 360);
+      });
+      document.body.appendChild(el);
+
+      // Sons + vibrations synchronisés : chute, impact, éclat, pièces
+      try { sfx('swoosh'); } catch (_) {}
+      setTimeout(() => { try { sfx('ko'); sfx('holo'); } catch (_) {} buzzPattern([40, 30, 90]); }, 820);
+      setTimeout(() => { try { sfx('rare'); } catch (_) {} }, 1050);
+      // Compteur de pièces qui défile
+      const chip = el.querySelector('.bc-coins');
+      const num = chip && chip.querySelector('b');
+      if (num && coins > 0) {
+        setTimeout(() => {
+          const t0 = performance.now(), dur = 950;
+          let lastTick = 0;
+          const step = (now) => {
+            if (!document.body.contains(el)) return;
+            const k = Math.min(1, (now - t0) / dur);
+            const v = Math.round(coins * (1 - Math.pow(1 - k, 3)));
+            num.textContent = v;
+            if (now - lastTick > 110 && k < 1) { lastTick = now; chip.classList.remove('bump'); void chip.offsetWidth; chip.classList.add('bump'); try { sfx('coin'); } catch (_) {} }
+            if (k < 1) requestAnimationFrame(step);
+            else buzzPattern([25]);
+          };
+          requestAnimationFrame(step);
+        }, 1550);
+      }
+    }
+    function buzzPattern(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (_) {} }
 
     // Intro VS : le dresseur détouré entre en scène avec sa bulle au lancement du combat
     function showAdvIntro(tr) {
@@ -17475,7 +17937,7 @@ const TYPE_EMOJI = {
         ${unlockedTourneyKeys.length ? `
         <div class="space-y-1">
           <div class="flex items-center justify-between px-0.5">
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">🏆 Decks Champions Tournois 2000 (${unlockedTourneyKeys.length}/6)</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">🏆 Decks Champions Tournois 2000 (${unlockedTourneyKeys.length}/${ADVENTURE_TRAINERS.length})</span>
           </div>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${unlockedTourneyKeys.map(renderPlayerCard).join('')}</div>
         </div>` : ''}
@@ -18839,7 +19301,9 @@ const TYPE_EMOJI = {
         V2_ELECTRIK: 'V2_COMBAT', V2_PSY: 'V2_PLANTE', V2_COMBAT: 'V2_PSY',
         ADV_1_VENUSAUR: 'ADV_2_ARCANINE', ADV_2_ARCANINE: 'ADV_3_RAINDANCE',
         ADV_3_RAINDANCE: 'ADV_4_WIGGLYTUFF', ADV_4_WIGGLYTUFF: 'ADV_5_DAMAGESWAP',
-        ADV_5_DAMAGESWAP: 'ADV_6_HAYMAKER', ADV_6_HAYMAKER: 'ADV_3_RAINDANCE'
+        ADV_5_DAMAGESWAP: 'ADV_6_HAYMAKER', ADV_6_HAYMAKER: 'ADV_7_TOOLBOX',
+        ADV_7_TOOLBOX: 'ADV_8_ARTICUNO', ADV_8_ARTICUNO: 'ADV_9_KANGASKHAN', ADV_9_KANGASKHAN: 'ADV_10_AERODACTYL',
+        ADV_10_AERODACTYL: 'ADV_11_WIGGLYMAGMAR', ADV_11_WIGGLYMAGMAR: 'ADV_12_MAGBUZZ', ADV_12_MAGBUZZ: 'ADV_13_CHAMPION', ADV_13_CHAMPION: 'ADV_6_HAYMAKER'
       };
       if (!deckKeyPlayable(playerDeckKey)) {
         showGameToast('⚠️ Ce deck n\'est pas jouable (il faut un deck valide avec au moins 1 Pokémon de Base).');
@@ -23180,6 +23644,10 @@ const TYPE_EMOJI = {
         sfx('coin');
       }
       game.gameOver = true;
+      if (advTrainer && isWin && firstTimeAdvWin) {
+        const celebCoins = earnedCoinsAmount, celebPacks = earnedFreePacks;
+        setTimeout(() => showBadgeCelebration(advTrainer, celebCoins, celebPacks), 650);
+      }
       setJulietteMood(isWin ? 'surprised' : 'happy');
       if (advTrainer) {
         sayJuliette(`<strong>${advTrainer.name} :</strong> « ${isWin ? advTrainer.quotes.lose : advTrainer.quotes.win} »`);
@@ -23213,7 +23681,7 @@ const TYPE_EMOJI = {
             <div class="min-w-0 flex-1">
               <div class="text-[10.5px] font-black text-sky-700 uppercase tracking-wide">${advTrainer.badgeIcon} ${dbEsc(advTrainer.badgeName)} remporté !</div>
               <div class="text-[11px] font-extrabold text-slate-800 truncate">Deck débloqué : ${dbEsc(DECK_META[advTrainer.deckKey]?.name || advTrainer.deckArchetype)}</div>
-              <div class="text-[10px] font-semibold text-slate-600">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Grand Maître 2000 !'}</div>
+              <div class="text-[10px] font-semibold text-slate-600">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Maître de la Ligue 2000 !'}</div>
             </div>
           </div>
         ` : '';
