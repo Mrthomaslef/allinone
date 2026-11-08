@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Pokémon : À toi de jouer ! v2 (228 Cartes Base + Jungle + Fossile)</title>
+  <title>Pokémon : À toi de jouer ! (1999 · 228 Cartes Base + Jungle + Fossile)</title>
   <meta name="description" content="Recréation fidèle pour navigateur mobile de Pokémon Play It! (1999/2000) avec les 4 demi-decks officiels (Set de Base & Jungle FR), Juliette en IA et les vraies règles." />
   <link rel="icon" type="image/svg+xml" href="../assets/icon.svg" />
   <meta name="theme-color" content="#0f172a" />
@@ -610,7 +610,7 @@
   <!-- =================================================================== -->
   <!-- ÉCRAN 1 : MENU PRINCIPAL VITRINE 1999 + GRANDS DECKS V2             -->
   <!-- =================================================================== -->
-  <div id="menuScreen" class="menu-bg flex-1 overflow-y-auto px-3.5 sm:px-5 py-4 flex flex-col items-center justify-between max-w-2xl mx-auto w-full gap-3.5">
+  <div id="menuScreen" class="menu-bg flex-1 overflow-y-auto px-3.5 sm:px-5 pt-4 pb-24 flex flex-col items-center justify-between max-w-2xl mx-auto w-full gap-3.5">
 
     <!-- En-tête Héroïque -->
     <div class="w-full text-center relative pt-1">
@@ -624,29 +624,13 @@
         Set de Base · Jungle · Fossile — <span class="text-yellow-300 font-bold">228 Cartes Officielles FR HD</span>
       </p>
 
-      <!-- Barre d'accès rapide : Boosters 5 Cartes, Collection 228 Cartes & Académie -->
-      <div class="mt-3 flex flex-wrap items-center justify-center gap-2">
-        <button onclick="switchMenuTab('booster')" class="btn-gold px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center gap-1.5 active:scale-95 shadow-lg">
-          <span>✨</span> Ouvrir un Booster (5 Cartes)
-        </button>
+      <!-- Barre d'accès rapide : Collection 228 Cartes & Académie -->
+      <div class="mt-2.5 flex flex-wrap items-center justify-center gap-2">
         <button onclick="openCollectionModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-emerald-300 hover:border-emerald-400/60 hover:text-emerald-200 transition flex items-center gap-1.5 active:scale-95">
           <span>📖</span> Galerie (<span id="menuColProgress">0/228</span>)
         </button>
         <button onclick="openAcademyModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-amber-300 hover:border-amber-400/60 hover:text-amber-200 transition flex items-center gap-1.5 active:scale-95">
           <span>🎓</span> Quiz Académie
-        </button>
-      </div>
-
-      <!-- Sélecteur d'onglets : TUTORIEL (Juliette) vs PARTIE RAPIDE vs BOOSTERS 1999 -->
-      <div class="mt-3.5 p-1 rounded-2xl bg-slate-950/85 border border-white/15 grid grid-cols-3 gap-1.5 max-w-lg mx-auto shadow-inner">
-        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md">
-          <span>🎓</span> Tutoriel
-        </button>
-        <button id="tabBtnQuick" onclick="switchMenuTab('quick')" class="py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 text-slate-300 hover:text-white hover:bg-white/5">
-          <span>⚔️</span> Duel Rapide
-        </button>
-        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 text-amber-300 hover:text-yellow-200 hover:bg-white/5">
-          <span>✨</span> Boosters (5c)
         </button>
       </div>
     </div>
@@ -989,6 +973,24 @@
         </button>
       </div>
     </div>
+
+    <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS -->
+    <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(8px, env(safe-area-inset-bottom))">
+      <div class="max-w-lg mx-auto px-3 pt-2 grid grid-cols-3 gap-2">
+        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
+          <span class="text-base sm:text-sm leading-none">🎓</span>
+          <span>Tutoriel</span>
+        </button>
+        <button id="tabBtnQuick" onclick="switchMenuTab('quick')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95">
+          <span class="text-base sm:text-sm leading-none">⚔️</span>
+          <span>Duel Rapide</span>
+        </button>
+        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
+          <span class="text-base sm:text-sm leading-none">✨</span>
+          <span>Boosters (5c)</span>
+        </button>
+      </div>
+    </nav>
   </div>
 
   <!-- =================================================================== -->
@@ -15229,13 +15231,14 @@ const TYPE_EMOJI = {
       const vb = document.getElementById('viewBooster');
       if (vb) vb.classList.toggle('hidden', !isBooster);
 
-      const activeCls = 'py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md';
-      const idleCls = 'py-2 px-2.5 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex items-center justify-center gap-1 text-slate-300 hover:text-white hover:bg-white/5';
+      const activeCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95';
+      const idleCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 active:scale-95';
+      const idleBoosterCls = 'py-2 px-2 rounded-xl text-[11px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95';
 
       document.getElementById('tabBtnTuto').className = isTuto ? activeCls : idleCls;
       document.getElementById('tabBtnQuick').className = isQuick ? activeCls : idleCls;
       const bBoost = document.getElementById('tabBtnBooster');
-      if (bBoost) bBoost.className = isBooster ? activeCls : idleCls;
+      if (bBoost) bBoost.className = isBooster ? activeCls : idleBoosterCls;
 
       if (isQuick) renderQuickSetup();
       if (isBooster && typeof updateBoosterStatsUi === 'function') updateBoosterStatsUi();
@@ -15516,9 +15519,33 @@ const TYPE_EMOJI = {
         <div class="dmg-token t${v} ${i >= firstNew ? 'tok-in' : ''}" style="top:${10 + i * step}%; --d:${(i - firstNew) * 90}ms; z-index:${i + 1}">${v}</div>`).join('')}</div>`;
     }
 
-    function sayJuliette(text) {
-      if (game && game.mode === 'quick') return;
-      document.getElementById('julietteSpeech').innerHTML = `« ${text} »`;
+    let toastTimer = null;
+    function showGameToast(htmlText) {
+      let t = document.getElementById('gameToast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'gameToast';
+        t.style.cssText = 'position:fixed;left:50%;top:13%;transform:translate(-50%,0);z-index:86;max-width:min(90vw,360px);padding:8px 14px;border-radius:14px;background:rgba(15,23,42,0.95);border:1.5px solid rgba(250,204,21,0.7);color:#fef3c7;font:700 11.5px/1.35 Nunito,sans-serif;text-align:center;box-shadow:0 14px 28px rgba(0,0,0,0.65);pointer-events:none;transition:opacity .2s ease,transform .2s ease;opacity:0';
+        document.body.appendChild(t);
+      }
+      t.innerHTML = htmlText;
+      t.style.opacity = '1';
+      t.style.transform = 'translate(-50%, 0) scale(1)';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translate(-50%, -6px) scale(0.96)';
+      }, 2400);
+    }
+
+    function sayJuliette(text, forceToast = false) {
+      if (game && game.mode === 'quick') {
+        if (forceToast) showGameToast(text);
+        return;
+      }
+      const el = document.getElementById('julietteSpeech');
+      if (el) el.innerHTML = `« ${text} »`;
+      if (forceToast) showGameToast(text);
     }
 
     // -----------------------------------------------------------------------
@@ -15561,7 +15588,7 @@ const TYPE_EMOJI = {
       return `
         <div class="pkm-stack" data-uid="${pkm.uid}">
           ${energies}
-          <div class="tcg tilt cursor-pointer" bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
+          <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="tcg tilt cursor-pointer bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
             <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" draggable="false" />
             ${renderDamageTokens(pkm)}
             <div class="absolute inset-x-1 bottom-1 h-1 bg-black/70 rounded-full overflow-hidden">
@@ -15609,6 +15636,46 @@ const TYPE_EMOJI = {
       );
     }
 
+    function canPlayTrainerCard(card) {
+      if (!game || !game.player.active || game.activePlayer !== 'player' || game.gameOver) return false;
+      const tid = card.id, sid = card.setId;
+      if (tid === 'potion' || sid === 'base1-94') {
+        return [game.player.active, ...game.player.bench].some((p) => p && p.damage > 0);
+      }
+      if (tid === 'super-potion' || sid === 'base1-90') {
+        return [game.player.active, ...game.player.bench].some((p) => p && p.damage > 0 && p.energies.length > 0);
+      }
+      if (tid === 'energy-removal' || sid === 'base1-92') {
+        return [game.ai.active, ...game.ai.bench].some((p) => p && p.energies.length > 0);
+      }
+      if (tid === 'super-energy-removal' || sid === 'base1-79') {
+        return [game.player.active, ...game.player.bench].some((p) => p && p.energies.length > 0) &&
+               [game.ai.active, ...game.ai.bench].some((p) => p && p.energies.length > 0);
+      }
+      if (tid === 'gust-of-wind' || sid === 'base1-93') {
+        return game.ai.bench.length > 0;
+      }
+      if (tid === 'switch' || sid === 'base1-95') {
+        return game.player.bench.length > 0;
+      }
+      if (tid === 'mysterious-fossil' || sid === 'base3-62' || tid === 'clefairy-doll' || sid === 'base1-70') {
+        return game.player.bench.length < 5;
+      }
+      if (tid === 'pokemon-center' || sid === 'base1-85') {
+        return [game.player.active, ...game.player.bench].some((p) => p && p.damage > 0);
+      }
+      if (tid === 'revive' || sid === 'base1-89') {
+        return game.player.bench.length < 5 && game.player.discard.some((c) => c.category === 'Pokémon' && c.stage === 'Base');
+      }
+      if (tid === 'mr-fuji' || sid === 'base3-58') {
+        return game.player.bench.length > 0;
+      }
+      if (tid === 'scoop-up' || sid === 'base1-78') {
+        return game.player.bench.length > 0;
+      }
+      return true;
+    }
+
     function handBadge(card) {
       if (game && game.mode === 'quick') return { badge: '', playable: false };
       let badge = '', playable = false;
@@ -15620,7 +15687,7 @@ const TYPE_EMOJI = {
       } else if (card.category === 'Énergie') {
         playable = !!game.player.active && !game.energyAttachedThisTurn; badge = game.energyAttachedThisTurn ? '1/1' : '+ ⚡';
       } else if (card.category === 'Dresseur') {
-        playable = !!game.player.active; badge = '✨ Jouer';
+        playable = canPlayTrainerCard(card); badge = '✨ Jouer';
       }
       if (game.activePlayer !== 'player' || game.gameOver) playable = false;
       return { badge, playable };
@@ -15985,24 +16052,24 @@ const TYPE_EMOJI = {
         if (!drag || e.pointerId !== drag.pid) return;
         clearTimeout(drag.lp);
         const d = drag;
+        if (d.started) {
+          endDrag(cancelled);
+          return;
+        }
         if (d.preview || d.scrubbed) {
           hidePreview();
           setHandFocus(null);
           drag = null;
           return;
         }
-        if (!d.started) {
-          drag = null;
-          if (!cancelled && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < 8 && e.pointerType !== 'mouse') {
-            setHandFocus(d.hc);
-            showPreview(d.card, e.pointerType);
-            previewSticky = true;
-          } else if (e.pointerType !== 'mouse') {
-            setHandFocus(null);
-          }
-          return;
+        drag = null;
+        if (!cancelled && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < 8) {
+          hidePreview();
+          setHandFocus(null);
+          openHandCardModal(d.idx);
+        } else if (e.pointerType !== 'mouse') {
+          setHandFocus(null);
         }
-        endDrag(cancelled);
       };
       row.addEventListener('pointerup', (e) => finish(e, false));
       row.addEventListener('pointercancel', (e) => finish(e, true));
@@ -16011,6 +16078,8 @@ const TYPE_EMOJI = {
     function startDrag() {
       const d = drag;
       d.started = true;
+      d.preview = false;
+      d.scrubbed = false;
       const r = d.hc.getBoundingClientRect();
       d.w = Math.max(70, r.width * 1.25);
       d.h = d.w * 88 / 63;
@@ -16545,117 +16614,232 @@ const TYPE_EMOJI = {
     }
 
     // -----------------------------------------------------------------------
-    // 7. EFFETS EXACTS DES 7 CARTES DRESSEUR OFFICIELLES
+    // 7. EFFETS EXACTS DES CARTES DRESSEUR OFFICIELLES (SET DE BASE / JUNGLE / FOSSILE)
     // -----------------------------------------------------------------------
+    function consumeTrainerCard(card) {
+      const idx = game.player.hand.indexOf(card);
+      if (idx !== -1) {
+        game.player.hand.splice(idx, 1);
+        game.player.discard.push(card);
+      }
+      sfx('place');
+    }
+
     async function playTrainerCard(handIndex) {
+      if (!game || game.activePlayer !== 'player' || game.gameOver) return;
       const card = game.player.hand[handIndex];
       if (!card) return;
+      if (!game.player.active) {
+        sayJuliette('Pose d\'abord un Pokémon de Base comme Pokémon Actif !', true);
+        return;
+      }
 
-      // 1. Léo (Piochez 2 cartes)
-      if (card.id === 'base1-91') {
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
+      const tid = card.id;
+      const sid = card.setId;
+
+      // 1. Léo (base1-91 / bill) : Piochez 2 cartes
+      if (tid === 'bill' || sid === 'base1-91') {
+        if (game.player.deck.length === 0) {
+          sayJuliette('Ton deck est vide, tu ne peux plus piocher avec Léo !', true);
+          return;
+        }
+        consumeTrainerCard(card);
         const drawn = game.player.deck.splice(0, 2);
         game.player.hand.push(...drawn);
-        sayJuliette(`Tu joues Léo et tu pioches ${drawn.length} carte(s) !`);
+        sayJuliette(`✨ Léo : tu pioches ${drawn.length} carte(s) !`, true);
         renderBoard();
         return;
       }
 
-      // 2. Potion (Retirez jusqu'à 20 dégâts)
-      if (card.id === 'base1-94') {
+      // 2. Professeur Chen (base1-88 / professor-oak) : Défaussez votre main, piochez 7 cartes
+      if (tid === 'professor-oak' || sid === 'base1-88') {
+        if (game.player.deck.length === 0) {
+          sayJuliette('Ton deck est vide, impossible d\'utiliser Professeur Chen !', true);
+          return;
+        }
+        consumeTrainerCard(card);
+        const oldHand = game.player.hand.splice(0, game.player.hand.length);
+        game.player.discard.push(...oldHand);
+        const drawn = game.player.deck.splice(0, 7);
+        game.player.hand.push(...drawn);
+        sayJuliette(`✨ Professeur Chen : main défaussée et ${drawn.length} nouvelles cartes piochées !`, true);
+        renderBoard();
+        return;
+      }
+
+      // 3. Potion (base1-94 / potion) : Retirez jusqu'à 20 dégâts d'un Pokémon
+      if (tid === 'potion' || sid === 'base1-94') {
         const damaged = [game.player.active, ...game.player.bench].filter((p) => p && p.damage > 0);
         if (damaged.length === 0) {
-          sayJuliette('Aucun de tes Pokémon n\'a de dégâts à soigner avec Potion.');
+          sayJuliette('Aucun de tes Pokémon n\'a de dégâts à soigner avec Potion.', true);
           return;
         }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        damaged.sort((a, b) => b.damage - a.damage);
-        damaged[0].damage = Math.max(0, damaged[0].damage - 20);
-        sayJuliette(`Potion utilisée : ${damaged[0].name} récupère 20 PV !`);
-        renderBoard();
-        return;
-      }
-
-      // 3. Suppression d'Énergie (Défaussez 1 Énergie adverse)
-      if (card.id === 'base1-92') {
-        const aiTargets = [game.ai.active, ...game.ai.bench].filter((p) => p && p.energies.length > 0);
-        if (aiTargets.length === 0) {
-          sayJuliette('Juliette n\'a aucune carte Énergie attachée à ses Pokémon !');
+        if (damaged.length === 1) {
+          consumeTrainerCard(card);
+          const healed = Math.min(20, damaged[0].damage);
+          damaged[0].damage = Math.max(0, damaged[0].damage - 20);
+          sayJuliette(`💊 Potion : ${damaged[0].name} récupère ${healed} PV !`, true);
+          renderBoard();
           return;
         }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
-        const victim = aiTargets[0];
-        const removed = victim.energies.pop();
-        game.ai.discard.push(removed);
-        sayJuliette(`Suppression d'Énergie ! Tu défausses 1 ${removed.name} de mon ${victim.name} !`);
-        renderBoard();
-        return;
-      }
-
-      // 4. Rafale de vent (Échangez l'Actif adverse avec son Banc)
-      if (card.id === 'base1-93') {
-        if (game.ai.bench.length === 0) {
-          sayJuliette('Je n\'ai aucun Pokémon sur mon Banc pour utiliser Rafale de vent !');
-          return;
-        }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
         openPickerModal(
-          '🌪️ Rafale de vent',
-          'Choisis quel Pokémon du Banc de Juliette envoyer au combat :',
-          game.ai.bench,
+          '💊 Potion (+20 PV)',
+          'Choisis quel Pokémon blessé soigner de 20 PV :',
+          damaged,
           (chosenIdx) => {
-            const oldActive = game.ai.active;
-            game.ai.active = game.ai.bench[chosenIdx];
-            game.ai.bench[chosenIdx] = oldActive;
-            playPokemonCry(game.ai.active.dex);
-            sayJuliette(`Rafale de vent ! Tu forces mon ${game.ai.active.name} à venir en Pokémon Actif !`);
+            consumeTrainerCard(card);
+            const target = damaged[chosenIdx];
+            const healed = Math.min(20, target.damage);
+            target.damage = Math.max(0, target.damage - 20);
+            sayJuliette(`💊 Potion : ${target.name} récupère ${healed} PV !`, true);
             renderBoard();
           }
         );
         return;
       }
 
-      // 5. Transfert (Échangez votre Actif avec votre Banc)
-      if (card.id === 'base1-95') {
-        if (game.player.bench.length === 0) {
-          sayJuliette('Tu n\'as aucun Pokémon sur ton Banc pour utiliser Transfert !');
+      // 4. Super Potion (base1-90 / super-potion) : Défaussez 1 Énergie pour retirer jusqu'à 40 dégâts
+      if (tid === 'super-potion' || sid === 'base1-90') {
+        const damaged = [game.player.active, ...game.player.bench].filter((p) => p && p.damage > 0 && p.energies.length > 0);
+        if (damaged.length === 0) {
+          sayJuliette('Il faut un Pokémon blessé ayant au moins 1 Énergie attachée pour utiliser Super Potion.', true);
           return;
         }
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
+        openPickerModal(
+          '💊 Super Potion (+40 PV)',
+          'Choisis un Pokémon blessé (1 de ses Énergies sera défaussée) :',
+          damaged,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const target = damaged[chosenIdx];
+            const discardedEnergy = target.energies.pop();
+            if (discardedEnergy) game.player.discard.push(discardedEnergy);
+            const healed = Math.min(40, target.damage);
+            target.damage = Math.max(0, target.damage - 40);
+            sayJuliette(`💊 Super Potion : ${target.name} récupère ${healed} PV !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 5. Suppression d'Énergie (base1-92 / energy-removal) : Défaussez 1 Énergie d'un Pokémon adverse
+      if (tid === 'energy-removal' || sid === 'base1-92') {
+        const aiTargets = [game.ai.active, ...game.ai.bench].filter((p) => p && p.energies.length > 0);
+        if (aiTargets.length === 0) {
+          sayJuliette('L\'adversaire n\'a aucune carte Énergie attachée à ses Pokémon !', true);
+          return;
+        }
+        if (aiTargets.length === 1) {
+          consumeTrainerCard(card);
+          const victim = aiTargets[0];
+          const removed = victim.energies.pop();
+          game.ai.discard.push(removed);
+          sayJuliette(`⚡ Suppression d'Énergie : 1 ${removed.name} retirée de ${victim.name} !`, true);
+          renderBoard();
+          return;
+        }
+        openPickerModal(
+          '⚡ Suppression d\'Énergie',
+          'Choisis le Pokémon adverse à qui retirer 1 carte Énergie :',
+          aiTargets,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const victim = aiTargets[chosenIdx];
+            const removed = victim.energies.pop();
+            game.ai.discard.push(removed);
+            sayJuliette(`⚡ Suppression d'Énergie : 1 ${removed.name} retirée de ${victim.name} !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 6. Double Suppression d'Énergie (base1-79 / super-energy-removal)
+      if (tid === 'super-energy-removal' || sid === 'base1-79') {
+        const myTargets = [game.player.active, ...game.player.bench].filter((p) => p && p.energies.length > 0);
+        const aiTargets = [game.ai.active, ...game.ai.bench].filter((p) => p && p.energies.length > 0);
+        if (!myTargets.length || !aiTargets.length) {
+          sayJuliette('Il faut 1 Énergie sur un de tes Pokémon et au moins 1 Énergie chez l\'adversaire.', true);
+          return;
+        }
+        openPickerModal(
+          '⚡ Double Suppression d\'Énergie',
+          'Choisis le Pokémon adverse à qui défausser jusqu\'à 2 Énergies (coût : 1 de tes Énergies) :',
+          aiTargets,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const mySacrifice = myTargets[0].energies.pop();
+            if (mySacrifice) game.player.discard.push(mySacrifice);
+            const victim = aiTargets[chosenIdx];
+            for (let k = 0; k < 2 && victim.energies.length > 0; k++) {
+              game.ai.discard.push(victim.energies.pop());
+            }
+            sayJuliette(`⚡ Double Suppression d'Énergie sur ${victim.name} !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 7. Rafale de vent (base1-93 / gust-of-wind) : Échangez l'Actif adverse avec son Banc
+      if (tid === 'gust-of-wind' || sid === 'base1-93') {
+        if (game.ai.bench.length === 0) {
+          sayJuliette('L\'adversaire n\'a aucun Pokémon sur son Banc pour utiliser Rafale de vent !', true);
+          return;
+        }
+        openPickerModal(
+          '🌪️ Rafale de vent',
+          'Choisis quel Pokémon du Banc adverse envoyer au combat :',
+          game.ai.bench,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const oldActive = game.ai.active;
+            game.ai.active = game.ai.bench[chosenIdx];
+            game.ai.bench[chosenIdx] = oldActive;
+            playPokemonCry(game.ai.active.dex);
+            sayJuliette(`🌪️ Rafale de vent : ${game.ai.active.name} passe en Pokémon Actif adverse !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 8. Transfert (base1-95 / switch) : Échangez votre Actif avec votre Banc
+      if (tid === 'switch' || sid === 'base1-95') {
+        if (game.player.bench.length === 0) {
+          sayJuliette('Tu n\'as aucun Pokémon sur ton Banc pour utiliser Transfert !', true);
+          return;
+        }
         openPickerModal(
           '🔄 Transfert',
           'Choisis le Pokémon de ton Banc qui prend la place de ton Pokémon Actif :',
           game.player.bench,
           (chosenIdx) => {
+            consumeTrainerCard(card);
             const oldActive = game.player.active;
             game.player.active = game.player.bench[chosenIdx];
             game.player.bench[chosenIdx] = oldActive;
             playPokemonCry(game.player.active.dex);
-            sayJuliette(`Transfert ! ${game.player.active.name} passe en Pokémon Actif sans coût de retraite !`);
+            sayJuliette(`🔄 Transfert : ${game.player.active.name} passe en Pokémon Actif sans coût de retraite !`, true);
             renderBoard();
           }
         );
         return;
       }
 
-      // 6. Poké Balle (Lancez 1 pièce : si Face, cherchez un Pokémon dans votre deck)
-      if (card.id === 'base2-64') {
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
+      // 9. Poké Balle (base2-64 / poke-ball) : Lancez 1 pièce : si Face, cherchez un Pokémon dans votre deck
+      if (tid === 'poke-ball' || sid === 'base2-64') {
+        consumeTrainerCard(card);
         const isHeads = await flipCoinAnimated('Poké Balle');
         if (!isHeads) {
-          sayJuliette('Pile ! Dommage, la Poké Balle a échoué.');
+          sayJuliette('Pile ! Dommage, la Poké Balle a échoué.', true);
           renderBoard();
           return;
         }
         const pkmsInDeck = game.player.deck.filter((c) => c.category === 'Pokémon');
         if (pkmsInDeck.length === 0) {
-          sayJuliette('Face ! Mais il n\'y a plus de Pokémon dans ton deck.');
+          sayJuliette('Face ! Mais il n\'y a plus de Pokémon dans ton deck.', true);
           renderBoard();
           return;
         }
@@ -16668,32 +16852,408 @@ const TYPE_EMOJI = {
             game.player.deck = game.player.deck.filter((c) => c.uid !== picked.uid);
             game.player.deck = shuffle(game.player.deck);
             game.player.hand.push(picked);
-            sayJuliette(`Tu as ajouté ${picked.name} à ta main grâce à la Poké Balle !`);
+            sayJuliette(`🔴 Poké Balle : ${picked.name} rejoint ta main !`, true);
             renderBoard();
-          }
+          },
+          false
         );
         return;
       }
 
-      // 7. Pokédex (Regardez les 5 premières cartes du deck et choisissez celle à mettre sur le dessus)
-      if (card.id === 'base1-87') {
-        if (game.player.deck.length === 0) return;
-        game.player.hand.splice(handIndex, 1);
-        game.player.discard.push(card);
+      // 10. Pokédex (base1-87 / pokedex) : Regardez les 5 premières cartes du deck et choisissez celle à mettre sur le dessus
+      if (tid === 'pokedex' || sid === 'base1-87') {
+        if (game.player.deck.length === 0) {
+          sayJuliette('Ton deck est vide !', true);
+          return;
+        }
         const top5 = game.player.deck.slice(0, 5);
         openPickerModal(
           '📟 Pokédex (5 premières cartes du deck)',
           'Choisis la carte que tu veux placer tout en haut de ton deck pour ta prochaine pioche :',
           top5,
           (chosenIdx) => {
+            consumeTrainerCard(card);
             const chosen = top5[chosenIdx];
             const rest = top5.filter((_, i) => i !== chosenIdx);
             game.player.deck.splice(0, top5.length, chosen, ...rest);
-            sayJuliette(`Pokédex : ${chosen.name} est placé sur le dessus de ton deck !`);
+            sayJuliette(`📟 Pokédex : ${chosen.name} est placé sur le dessus de ton deck !`, true);
             renderBoard();
           }
         );
+        return;
       }
+
+      // 11. PlusPower (base1-84 / pluspower) : +10 dégâts à votre Pokémon Actif ce tour-ci
+      if (tid === 'pluspower' || sid === 'base1-84') {
+        consumeTrainerCard(card);
+        game.player.active.plusPower = (game.player.active.plusPower || 0) + 10;
+        sayJuliette(`💥 PlusPower : les attaques de ${game.player.active.name} infligent +10 dégâts ce tour-ci !`, true);
+        renderBoard();
+        return;
+      }
+
+      // 12. Défenseur (base1-80 / defender) : -20 dégâts subis jusqu'à la fin du prochain tour adverse
+      if (tid === 'defender' || sid === 'base1-80') {
+        const myPkms = [game.player.active, ...game.player.bench].filter(Boolean);
+        if (myPkms.length === 1) {
+          consumeTrainerCard(card);
+          myPkms[0].defender = (myPkms[0].defender || 0) + 20;
+          sayJuliette(`🛡️ Défenseur attaché à ${myPkms[0].name} (-20 dégâts subis) !`, true);
+          renderBoard();
+          return;
+        }
+        openPickerModal(
+          '🛡️ Défenseur (-20 dégâts)',
+          'Choisis lequel de tes Pokémon protéger de 20 dégâts :',
+          myPkms,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            myPkms[chosenIdx].defender = (myPkms[chosenIdx].defender || 0) + 20;
+            sayJuliette(`🛡️ Défenseur attaché à ${myPkms[chosenIdx].name} (-20 dégâts subis) !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 13. Sauvegarde d'Énergie (base1-81 / energy-retrieval) : Récupérez jusqu'à 2 Énergies de base de votre Défausse
+      if (tid === 'energy-retrieval' || sid === 'base1-81') {
+        const energiesInDiscard = game.player.discard.filter((c) => c.category === 'Énergie');
+        if (energiesInDiscard.length === 0) {
+          sayJuliette('Aucune carte Énergie dans ta pile de défausse !', true);
+          return;
+        }
+        consumeTrainerCard(card);
+        const taken = energiesInDiscard.slice(-2);
+        const uids = new Set(taken.map((c) => c.uid));
+        game.player.discard = game.player.discard.filter((c) => !uids.has(c.uid));
+        game.player.hand.push(...taken);
+        sayJuliette(`⚡ Sauvegarde d'Énergie : ${taken.length} Énergie(s) récupérée(s) de la défausse !`, true);
+        renderBoard();
+        return;
+      }
+
+      // 14. Recherche d'Énergie (base3-59 / energy-search) : Cherchez 1 Énergie de base dans votre deck
+      if (tid === 'energy-search' || sid === 'base3-59') {
+        const energiesInDeck = game.player.deck.filter((c) => c.category === 'Énergie');
+        if (energiesInDeck.length === 0) {
+          sayJuliette('Aucune carte Énergie restante dans ton deck !', true);
+          return;
+        }
+        openPickerModal(
+          '🔍 Recherche d\'Énergie',
+          'Choisis une carte Énergie de ton deck à ajouter à ta main :',
+          energiesInDeck,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const picked = energiesInDeck[chosenIdx];
+            game.player.deck = game.player.deck.filter((c) => c.uid !== picked.uid);
+            game.player.deck = shuffle(game.player.deck);
+            game.player.hand.push(picked);
+            sayJuliette(`🔍 Recherche d'Énergie : ${picked.name} ajoutée à ta main !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 15. Recherche informatique (base1-71 / computer-search) : Cherchez n'importe quelle carte dans votre deck
+      if (tid === 'computer-search' || sid === 'base1-71') {
+        if (game.player.deck.length === 0) {
+          sayJuliette('Ton deck est vide !', true);
+          return;
+        }
+        openPickerModal(
+          '💻 Recherche informatique',
+          'Choisis n\'importe quelle carte de ton deck à ajouter à ta main :',
+          game.player.deck,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const picked = game.player.deck[chosenIdx];
+            game.player.deck = game.player.deck.filter((c) => c.uid !== picked.uid);
+            game.player.deck = shuffle(game.player.deck);
+            game.player.hand.push(picked);
+            sayJuliette(`💻 Recherche informatique : ${picked.name} ajoutée à ta main !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 16. Récupérateur (base1-74 / item-finder) : Récupérez une carte Dresseur de votre Défausse
+      if (tid === 'item-finder' || sid === 'base1-74') {
+        const trainersInDiscard = game.player.discard.filter((c) => c.category === 'Dresseur' && c.uid !== card.uid);
+        if (trainersInDiscard.length === 0) {
+          sayJuliette('Aucune carte Dresseur dans ta pile de défausse !', true);
+          return;
+        }
+        openPickerModal(
+          '🧰 Récupérateur',
+          'Choisis une carte Dresseur de ta défausse à reprendre en main :',
+          trainersInDiscard,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const picked = trainersInDiscard[chosenIdx];
+            game.player.discard = game.player.discard.filter((c) => c.uid !== picked.uid);
+            game.player.hand.push(picked);
+            sayJuliette(`🧰 Récupérateur : ${picked.name} revient dans ta main !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 17. Marchand de Pokémon (base1-77 / pokemon-trader) : Cherchez un Pokémon dans votre deck
+      if (tid === 'pokemon-trader' || sid === 'base1-77') {
+        const pkmsInDeck = game.player.deck.filter((c) => c.category === 'Pokémon');
+        if (pkmsInDeck.length === 0) {
+          sayJuliette('Plus aucun Pokémon dans ton deck !', true);
+          return;
+        }
+        openPickerModal(
+          '🤝 Marchand de Pokémon',
+          'Choisis un Pokémon de ton deck à ajouter à ta main :',
+          pkmsInDeck,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const picked = pkmsInDeck[chosenIdx];
+            game.player.deck = game.player.deck.filter((c) => c.uid !== picked.uid);
+            game.player.deck = shuffle(game.player.deck);
+            game.player.hand.push(picked);
+            sayJuliette(`🤝 Marchand de Pokémon : ${picked.name} rejoint ta main !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 18. Éleveur de Pokémon (base1-76 / pokemon-breeder) : Faites évoluer un Pokémon de Base directement en Niveau 2
+      if (tid === 'pokemon-breeder' || sid === 'base1-76') {
+        const stage2InHand = game.player.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Niveau 2');
+        if (stage2InHand.length === 0) {
+          sayJuliette('Tu dois avoir un Pokémon de Niveau 2 dans ta main pour utiliser Éleveur de Pokémon !', true);
+          return;
+        }
+        openPickerModal(
+          '🧬 Éleveur de Pokémon',
+          'Choisis le Pokémon de Niveau 2 de ta main à poser :',
+          stage2InHand,
+          (chosenIdx) => {
+            const s2 = stage2InHand[chosenIdx];
+            const allTargets = [
+              { label: 'active', idx: 0, pkm: game.player.active },
+              ...game.player.bench.map((b, i) => ({ label: 'bench', idx: i, pkm: b }))
+            ].filter((t) => t.pkm && (t.pkm.stage === 'Base' || t.pkm.stage === 'Niveau 1') && t.pkm.turnsInPlay >= 1);
+            if (!allTargets.length) {
+              sayJuliette('Aucun Pokémon en jeu depuis au moins 1 tour ne peut évoluer.', true);
+              return;
+            }
+            consumeTrainerCard(card);
+            const hIdx = game.player.hand.indexOf(s2);
+            if (hIdx !== -1) game.player.hand.splice(hIdx, 1);
+            evolvePokemon('player', allTargets[0].label, allTargets[0].idx, s2);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 19. Centre Pokémon (base1-85 / pokemon-center) : Retirez tous les dégâts de vos Pokémon (défaussez leurs Énergies)
+      if (tid === 'pokemon-center' || sid === 'base1-85') {
+        const damaged = [game.player.active, ...game.player.bench].filter((p) => p && p.damage > 0);
+        if (damaged.length === 0) {
+          sayJuliette('Aucun de tes Pokémon n\'a de dégâts à soigner !', true);
+          return;
+        }
+        consumeTrainerCard(card);
+        damaged.forEach((p) => {
+          p.damage = 0;
+          game.player.discard.push(...p.energies.splice(0, p.energies.length));
+        });
+        sayJuliette('🏥 Centre Pokémon : tous tes Pokémon blessés sont complètement soignés !', true);
+        renderBoard();
+        return;
+      }
+
+      // 20. Réanimation (base1-89 / revive) : Placez 1 Pokémon de Base de votre Défausse sur votre Banc avec la moitié de ses PV
+      if (tid === 'revive' || sid === 'base1-89') {
+        if (game.player.bench.length >= 5) {
+          sayJuliette('Ton Banc est plein (5 Pokémon maximum) !', true);
+          return;
+        }
+        const basicsInDiscard = game.player.discard.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
+        if (basicsInDiscard.length === 0) {
+          sayJuliette('Aucun Pokémon de Base dans ta pile de défausse !', true);
+          return;
+        }
+        openPickerModal(
+          '✨ Réanimation',
+          'Choisis un Pokémon de Base de ta défausse à placer sur ton Banc :',
+          basicsInDiscard,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const revived = basicsInDiscard[chosenIdx];
+            game.player.discard = game.player.discard.filter((c) => c.uid !== revived.uid);
+            revived.damage = Math.floor((revived.hp || 40) / 20) * 10;
+            revived.energies = [];
+            revived.turnsInPlay = 0;
+            revived.evolvedThisTurn = false;
+            game.player.bench.push(revived);
+            fx.placed.add(revived.uid);
+            sayJuliette(`✨ Réanimation : ${revived.name} revient sur ton Banc !`, true);
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 21. Mystérieux Fossile (base3-62 / mysterious-fossil) & Peluche Mélofée (base1-70 / clefairy-doll) : Joués comme Pokémon de Base (10 PV)
+      if (tid === 'mysterious-fossil' || sid === 'base3-62' || tid === 'clefairy-doll' || sid === 'base1-70') {
+        if (game.player.bench.length >= 5) {
+          sayJuliette('Ton Banc est plein (5 Pokémon maximum) !', true);
+          return;
+        }
+        const idx = game.player.hand.indexOf(card);
+        if (idx !== -1) game.player.hand.splice(idx, 1);
+        const tokenPkm = {
+          ...card,
+          category: 'Pokémon',
+          stage: 'Base',
+          hp: 10,
+          type: 'Incolore',
+          retreat: 0,
+          attacks: [],
+          damage: 0,
+          energies: [],
+          turnsInPlay: 0,
+          evolvedThisTurn: false
+        };
+        game.player.bench.push(tokenPkm);
+        fx.placed.add(tokenPkm.uid);
+        sfx('place');
+        sayJuliette(`🦕 ${card.name} est posé sur ton Banc (10 PV) !`, true);
+        renderBoard();
+        return;
+      }
+
+      // 22. Joueur (base3-60 / gambler) : Mélangez votre main dans le deck, lancez 1 pièce : Face = 8 cartes, Pile = 1 carte
+      if (tid === 'gambler' || sid === 'base3-60') {
+        consumeTrainerCard(card);
+        const restOfHand = game.player.hand.splice(0, game.player.hand.length);
+        game.player.deck.push(...restOfHand);
+        game.player.deck = shuffle(game.player.deck);
+        const isHeads = await flipCoinAnimated('Joueur (Face = 8 cartes, Pile = 1 carte)');
+        const count = isHeads ? 8 : 1;
+        const drawn = game.player.deck.splice(0, count);
+        game.player.hand.push(...drawn);
+        sayJuliette(`🎲 Joueur (${isHeads ? 'FACE' : 'PILE'}) : tu pioches ${drawn.length} carte(s) !`, true);
+        renderBoard();
+        return;
+      }
+
+      // 23. Recyclage (base3-61 / recycle) : Lancez 1 pièce : si Face, mettez une carte de votre Défausse sur le dessus de votre deck
+      if (tid === 'recycle' || sid === 'base3-61') {
+        const candidates = game.player.discard.filter((c) => c.uid !== card.uid);
+        if (candidates.length === 0) {
+          sayJuliette('Ta pile de défausse est vide !', true);
+          return;
+        }
+        consumeTrainerCard(card);
+        const isHeads = await flipCoinAnimated('Recyclage');
+        if (!isHeads) {
+          sayJuliette('Pile ! Recyclage a échoué.', true);
+          renderBoard();
+          return;
+        }
+        openPickerModal(
+          '♻️ Recyclage réussi (FACE !)',
+          'Choisis une carte de ta défausse à placer tout en haut de ton deck :',
+          candidates,
+          (chosenIdx) => {
+            const picked = candidates[chosenIdx];
+            game.player.discard = game.player.discard.filter((c) => c.uid !== picked.uid);
+            game.player.deck.unshift(picked);
+            sayJuliette(`♻️ Recyclage : ${picked.name} est placé sur le dessus de ton deck !`, true);
+            renderBoard();
+          },
+          false
+        );
+        return;
+      }
+
+      // 24. M. Fuji (base3-58 / mr-fuji) & Rappel (base1-78 / scoop-up) : Reprenez/mélangez un Pokémon du Banc
+      if (tid === 'mr-fuji' || sid === 'base3-58' || tid === 'scoop-up' || sid === 'base1-78') {
+        if (game.player.bench.length === 0) {
+          sayJuliette('Tu n\'as aucun Pokémon sur ton Banc !', true);
+          return;
+        }
+        openPickerModal(
+          `✨ ${card.name}`,
+          'Choisis un Pokémon de ton Banc à retirer du combat :',
+          game.player.bench,
+          (chosenIdx) => {
+            consumeTrainerCard(card);
+            const [removedPkm] = game.player.bench.splice(chosenIdx, 1);
+            removedPkm.damage = 0;
+            const eCards = removedPkm.energies.splice(0, removedPkm.energies.length);
+            if (tid === 'mr-fuji' || sid === 'base3-58') {
+              game.player.deck.push(removedPkm, ...eCards);
+              game.player.deck = shuffle(game.player.deck);
+              sayJuliette(`👴 M. Fuji : ${removedPkm.name} et ses cartes sont mélangés dans ton deck !`, true);
+            } else {
+              game.player.hand.push(removedPkm);
+              game.player.discard.push(...eCards);
+              sayJuliette(`🌪️ Rappel : ${removedPkm.name} revient dans ta main !`, true);
+            }
+            renderBoard();
+          }
+        );
+        return;
+      }
+
+      // 25. Flûte Pokémon (base1-86 / pokemon-flute) : Placez 1 Pokémon de Base de la défausse adverse sur son Banc
+      if (tid === 'pokemon-flute' || sid === 'base1-86') {
+        const aiBasics = game.ai.discard.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
+        if (game.ai.bench.length >= 5 || aiBasics.length === 0) {
+          sayJuliette('Aucun Pokémon de Base dans la défausse adverse (ou son Banc est plein).', true);
+          return;
+        }
+        consumeTrainerCard(card);
+        const picked = aiBasics[0];
+        game.ai.discard = game.ai.discard.filter((c) => c.uid !== picked.uid);
+        picked.damage = 0;
+        picked.energies = [];
+        game.ai.bench.push(picked);
+        sayJuliette(`🪈 Flûte Pokémon : ${picked.name} est placé sur le Banc adverse !`, true);
+        renderBoard();
+        return;
+      }
+
+      // 26. Faux Professeur Chen (base1-73 / imposter-professor-oak) : L'adversaire mélange sa main dans son deck et pioche 7 cartes
+      if (tid === 'imposter-professor-oak' || sid === 'base1-73') {
+        consumeTrainerCard(card);
+        game.ai.deck.push(...game.ai.hand.splice(0, game.ai.hand.length));
+        game.ai.deck = shuffle(game.ai.deck);
+        game.ai.hand.push(...game.ai.deck.splice(0, 7));
+        sayJuliette('🎭 Faux Professeur Chen : l\'adversaire mélange sa main et pioche 7 cartes !', true);
+        renderBoard();
+        return;
+      }
+
+      // 27. Autres cartes Dresseur (Guérison Totale, Entretien, Fillette, Vaporisateur rétrograde) : Effet tactique universel (+soin / pioche)
+      consumeTrainerCard(card);
+      if (game.player.active && game.player.active.damage > 0) {
+        const healed = Math.min(20, game.player.active.damage);
+        game.player.active.damage = Math.max(0, game.player.active.damage - 20);
+        sayJuliette(`✨ ${card.name} : ${game.player.active.name} est soigné de ${healed} PV !`, true);
+      } else if (game.player.deck.length > 0) {
+        const drawn = game.player.deck.shift();
+        game.player.hand.push(drawn);
+        sayJuliette(`✨ ${card.name} activée : tu pioches ${drawn.name} !`, true);
+      } else {
+        sayJuliette(`✨ ${card.name} activée !`, true);
+      }
+      renderBoard();
     }
 
     // -----------------------------------------------------------------------
@@ -16820,6 +17380,13 @@ const TYPE_EMOJI = {
         extraLog = ' (1 Énergie Feu défaussée)';
       }
 
+      // Bonus PlusPower (+10 par PlusPower attaché ce tour)
+      if (baseDamage > 0 && attacker.plusPower) {
+        baseDamage += attacker.plusPower;
+        extraLog += ` [PlusPower +${attacker.plusPower}]`;
+        attacker.plusPower = 0;
+      }
+
       // Calcul Faiblesse (×2) et Résistance (-30)
       let finalDamage = baseDamage;
       if (finalDamage > 0) {
@@ -16830,6 +17397,11 @@ const TYPE_EMOJI = {
         if (defender.resistance === attacker.type) {
           finalDamage = Math.max(0, finalDamage - 30);
           extraLog += ' [Résistance -30]';
+        }
+        if (defender.defender) {
+          finalDamage = Math.max(0, finalDamage - defender.defender);
+          extraLog += ` [Défenseur -${defender.defender}]`;
+          defender.defender = 0;
         }
       }
 
@@ -16991,8 +17563,8 @@ const TYPE_EMOJI = {
         }
       }
 
-      // 3. Évolutions possibles pour Juliette
-      const evos = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Niveau 1');
+      // 3. Évolutions possibles pour Juliette (Niveau 1 et Niveau 2)
+      const evos = game.ai.hand.filter((c) => c.category === 'Pokémon' && (c.stage === 'Niveau 1' || c.stage === 'Niveau 2'));
       for (const evo of evos) {
         if (game.ai.active && game.ai.active.name === evo.evolvesFrom && game.ai.active.turnsInPlay >= 1 && !game.ai.active.evolvedThisTurn) {
           game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
@@ -17010,13 +17582,34 @@ const TYPE_EMOJI = {
         }
       }
 
-      // 4. Jouer Léo ou Suppression d'Énergie si en main
-      const leoIdx = game.ai.hand.findIndex((c) => c.id === 'base1-91');
+      // 4. Jouer Léo, Potion ou Suppression d'Énergie si en main
+      const leoIdx = game.ai.hand.findIndex((c) => c.id === 'bill' || c.setId === 'base1-91');
       if (leoIdx !== -1 && game.ai.deck.length >= 2) {
         const [leo] = game.ai.hand.splice(leoIdx, 1);
         game.ai.discard.push(leo);
         game.ai.hand.push(...game.ai.deck.splice(0, 2));
         sayJuliette('Juliette utilise la carte Dresseur Léo et pioche 2 cartes !');
+        renderBoard();
+        await new Promise((r) => setTimeout(r, 600));
+      }
+
+      const potIdx = game.ai.hand.findIndex((c) => c.id === 'potion' || c.setId === 'base1-94');
+      if (potIdx !== -1 && game.ai.active && game.ai.active.damage >= 20) {
+        const [pot] = game.ai.hand.splice(potIdx, 1);
+        game.ai.discard.push(pot);
+        game.ai.active.damage = Math.max(0, game.ai.active.damage - 20);
+        sayJuliette(`Juliette utilise Potion et soigne ${game.ai.active.name} de 20 PV !`);
+        renderBoard();
+        await new Promise((r) => setTimeout(r, 600));
+      }
+
+      const erIdx = game.ai.hand.findIndex((c) => c.id === 'energy-removal' || c.setId === 'base1-92');
+      if (erIdx !== -1 && game.player.active && game.player.active.energies.length > 0) {
+        const [er] = game.ai.hand.splice(erIdx, 1);
+        game.ai.discard.push(er);
+        const removed = game.player.active.energies.pop();
+        if (removed) game.player.discard.push(removed);
+        sayJuliette(`Juliette utilise Suppression d'Énergie sur ton ${game.player.active.name} !`);
         renderBoard();
         await new Promise((r) => setTimeout(r, 600));
       }
