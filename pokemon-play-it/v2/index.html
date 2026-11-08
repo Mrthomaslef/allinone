@@ -16634,6 +16634,35 @@ const TYPE_EMOJI = {
     bgmAudio.volume = (bgmVolumePct / 100) * 0.8;
     bgmAudio.preload = 'auto';
 
+    // Volume de la musique : iOS/iPadOS ignore audio.volume (lecture seule) → on passe par un GainNode Web Audio
+    let bgmGainNode = null;
+    let bgmCtx = null;
+    function connectBgmGraph() {
+      if (bgmGainNode || location.protocol === 'file:') return bgmGainNode;
+      try {
+        bgmCtx = bgmCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const src = bgmCtx.createMediaElementSource(bgmAudio);
+        bgmGainNode = bgmCtx.createGain();
+        src.connect(bgmGainNode).connect(bgmCtx.destination);
+        bgmAudio.volume = 1;
+      } catch (_) { bgmGainNode = null; }
+      return bgmGainNode;
+    }
+    function applyBgmVolume() {
+      const v = (bgmVolumePct / 100) * 0.8;
+      const g = connectBgmGraph();
+      if (g && bgmCtx) {
+        if (bgmCtx.state === 'suspended') bgmCtx.resume().catch(() => {});
+        g.gain.setTargetAtTime(v, bgmCtx.currentTime, 0.04);
+      } else {
+        bgmAudio.volume = v;
+      }
+    }
+    function playBgm() {
+      applyBgmVolume();
+      bgmAudio.play().catch(() => {}); // BGM_RAW_PLAY
+    }
+
     function updateBgmUi() {
       const anyActive = (bgmEnabled && bgmVolumePct > 0) || (soundEnabled && sfxVolumePct > 0);
       const avgPct = Math.round(((bgmEnabled ? bgmVolumePct : 0) + (soundEnabled ? sfxVolumePct : 0)) / 2);
@@ -16693,7 +16722,7 @@ const TYPE_EMOJI = {
 
     function setBgmVolume(val) {
       bgmVolumePct = Math.max(0, Math.min(100, parseInt(val, 10) || 0));
-      bgmAudio.volume = (bgmVolumePct / 100) * 0.8;
+      applyBgmVolume();
       try { localStorage.setItem('ppi_v2_bgm_vol', String(bgmVolumePct)); } catch (_) {}
       if (bgmVolumePct === 0 && bgmEnabled) {
         bgmEnabled = false;
@@ -16701,7 +16730,7 @@ const TYPE_EMOJI = {
         try { localStorage.setItem('ppi_v2_bgm', 'off'); } catch (_) {}
       } else if (bgmVolumePct > 0 && !bgmEnabled) {
         bgmEnabled = true;
-        bgmAudio.play().catch(() => {});
+        playBgm();
         try { localStorage.setItem('ppi_v2_bgm', 'on'); } catch (_) {}
       }
       updateBgmUi();
@@ -16731,8 +16760,7 @@ const TYPE_EMOJI = {
         soundEnabled = true;
         if (bgmVolumePct === 0) bgmVolumePct = 35;
         if (sfxVolumePct === 0) sfxVolumePct = 80;
-        bgmAudio.volume = (bgmVolumePct / 100) * 0.8;
-        bgmAudio.play().catch(() => {});
+        playBgm();
       }
       try {
         localStorage.setItem('ppi_v2_bgm', bgmEnabled ? 'on' : 'off');
@@ -16744,7 +16772,7 @@ const TYPE_EMOJI = {
     function ensureBgmPlaying() {
       if (!bgmEnabled || bgmVolumePct <= 0) return;
       if (bgmAudio.paused) {
-        bgmAudio.play().catch(() => {});
+        playBgm();
       }
     }
 
@@ -16752,12 +16780,11 @@ const TYPE_EMOJI = {
       bgmEnabled = !bgmEnabled;
       if (bgmEnabled && bgmVolumePct === 0) {
         bgmVolumePct = 35;
-        bgmAudio.volume = (bgmVolumePct / 100) * 0.8;
         try { localStorage.setItem('ppi_v2_bgm_vol', String(bgmVolumePct)); } catch (_) {}
       }
       try { localStorage.setItem('ppi_v2_bgm', bgmEnabled ? 'on' : 'off'); } catch (_) {}
       if (bgmEnabled) {
-        bgmAudio.play().catch(() => {});
+        playBgm();
       } else {
         bgmAudio.pause();
       }
