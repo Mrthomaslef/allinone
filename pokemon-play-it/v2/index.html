@@ -8,6 +8,33 @@
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
+  <!-- Mise à jour automatique : si une version plus récente est en ligne (version.json), on recharge.
+       Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
+  <script>
+    (function () {
+      var BUILD = '9a83f25-1794167739';
+      if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
+      function check() {
+        try {
+          fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (v) {
+              if (!v || !v.build || v.build === BUILD) return;
+              var k = 'ppi_reload_' + v.build;
+              if (sessionStorage.getItem(k)) return;
+              sessionStorage.setItem(k, '1');
+              var u = new URL(location.href);
+              u.searchParams.set('v', v.build);
+              location.replace(u.toString());
+            })
+            .catch(function () {});
+        } catch (e) {}
+      }
+      check();
+      document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') check(); });
+      window.addEventListener('pageshow', function (e) { if (e.persisted) check(); });
+    })();
+  </script>
   <meta name="theme-color" content="#f8fafc" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
