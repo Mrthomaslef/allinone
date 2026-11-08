@@ -265,7 +265,8 @@
     .adv-path { position: relative; }
     .adv-path-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
     .adv-row { position: relative; height: 124px; z-index: 1; }
-    .adv-node { position: absolute; top: 4px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; padding: 0; touch-action: manipulation; }
+    .adv-node { position: absolute; top: -24px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; padding: 28px 10px 4px; cursor: pointer; touch-action: manipulation; }
+    .adv-node:not(:disabled):active { transform: translateX(-50%) translateY(1px) scale(.96) !important; }
     .adv-disc { position: relative; width: 84px; height: 84px; border-radius: 9999px; border: 3px solid #fff; box-shadow: 0 8px 18px -6px rgba(15,23,42,.45); }
     .adv-disc .adv-cut { position: absolute; left: 50%; bottom: 0; width: 104px; max-width: none; height: 118px; transform: translateX(-50%); object-fit: cover; object-position: top center; pointer-events: none;
       -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 100%); clip-path: inset(-60px -20px 0 -20px round 0 0 42px 42px); filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
@@ -17666,7 +17667,7 @@ const TYPE_EMOJI = {
         if (it.gate) {
           return `
             <div class="adv-row">
-              <button type="button" onclick="showGameToast('🔒 Réunis les 8 Badges d\\'Arène pour ouvrir le Conseil des 4 et défier le Maître !')" class="adv-node locked" style="left:${xOf(i)}%" aria-label="Ligue verrouillée">
+              <button type="button" onclick="showGameToast('🔒 Réunis les 8 Badges d\\'Arène pour ouvrir le Conseil des 4 et défier le Maître !')" class="adv-node no-accent locked" style="left:${xOf(i)}%" aria-label="Ligue verrouillée">
                 <span class="adv-disc adv-gate-disc">🏛️<span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span></span>
                 <span class="adv-name">??? · ${getAdvBadgeCount()}/8 badges</span>
                 <span class="adv-stars">Ligue verrouillée</span>
@@ -17683,7 +17684,7 @@ const TYPE_EMOJI = {
         const isBoss = tier === 'champion';
         return `
           <div class="adv-row">
-            <button type="button" onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node ${state} tier-${tier}" style="left:${xOf(i)}%" aria-label="${tr.name}">
+            <button type="button" onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node no-accent ${state} tier-${tier}" style="left:${xOf(i)}%" aria-label="${tr.name}">
               <span class="adv-disc" style="background: radial-gradient(circle at 50% 35%, #fff 0%, ${tr.color} 75%); ${isBoss ? 'width:96px;height:96px;' : ''}">
                 <img class="adv-cut" src="${tr.cutout}" alt="" loading="lazy" draggable="false" />
                 ${isDefeated ? `<span class="adv-tag bg-emerald-500 text-white" style="right:-6px;bottom:-2px">${tr.badgeIcon}</span>` : ''}
@@ -17720,7 +17721,7 @@ const TYPE_EMOJI = {
           <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">${allDeckKeys.map(renderDeckPill).join('')}</div>
         </div>
 
-        <div class="adv-path w-full" style="height:${pathH}px; margin-top: 22px; margin-bottom: 24px">
+        <div class="adv-path w-full" style="height:${pathH}px; margin-top: 22px; margin-bottom: 40px">
           <svg class="adv-path-svg" viewBox="0 0 100 ${pathH}" preserveAspectRatio="none" aria-hidden="true">
             <path d="${d}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="9" stroke-linecap="round" vector-effect="non-scaling-stroke" />
             <path d="${d}" fill="none" stroke="rgba(148,163,184,.9)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" vector-effect="non-scaling-stroke" />
@@ -17730,7 +17731,7 @@ const TYPE_EMOJI = {
         </div>
       `;
       const cur = box.querySelector('.adv-node.current');
-      if (cur) requestAnimationFrame(() => { try { cur.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {} });
+      if (cur) requestAnimationFrame(() => { try { cur.scrollIntoView({ block: 'center', behavior: 'instant' }); } catch (_) { try { cur.scrollIntoView({ block: 'center' }); } catch (__) {} } });
     }
 
     // Fiche courte d'un dresseur (portrait détouré + bulle + 2 boutons)
