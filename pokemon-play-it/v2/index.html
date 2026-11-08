@@ -268,8 +268,8 @@
     .adv-node { position: absolute; top: -24px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; padding: 28px 10px 4px; cursor: pointer; touch-action: manipulation; }
     .adv-node:not(:disabled):active { transform: translateX(-50%) translateY(1px) scale(.96) !important; }
     .adv-disc { position: relative; width: 84px; height: 84px; border-radius: 9999px; border: 3px solid #fff; box-shadow: 0 8px 18px -6px rgba(15,23,42,.45); }
-    .adv-disc .adv-cut { position: absolute; left: 50%; bottom: 0; width: 104px; max-width: none; height: 118px; transform: translateX(-50%); object-fit: cover; object-position: top center; pointer-events: none;
-      -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 100%); clip-path: inset(-60px -20px 0 -20px round 0 0 42px 42px); filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+    .adv-disc .adv-cut { position: absolute; left: 50%; bottom: 0; width: 84px; max-width: none; height: 108px; transform: translateX(-50%); object-fit: cover; object-position: top center; pointer-events: none;
+      clip-path: inset(-36px 0 0 0 round 0 0 42px 42px); -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 10%, #000 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 10%, #000 100%); mask-composite: intersect; }
     .adv-node.locked .adv-disc { background: #cbd5e1 !important; }
     .adv-node.locked .adv-cut { filter: grayscale(1) brightness(.35) contrast(1.2); opacity: .9; }
     .adv-node.current .adv-disc { animation: advPulse 1.8s ease-in-out infinite; }
@@ -289,7 +289,7 @@
     #advIntro .adv-intro-bg { position: absolute; inset: 0; background: radial-gradient(circle at 70% 45%, var(--adv-c) 0%, rgba(2,6,23,.96) 68%); }
     #advIntro .adv-intro-rays { position: absolute; inset: -50%; background: repeating-conic-gradient(from 0deg, rgba(255,255,255,.07) 0 8deg, transparent 8deg 20deg); animation: advSpin 26s linear infinite; }
     @keyframes advSpin { to { transform: rotate(360deg); } }
-    #advIntro .adv-intro-cut { position: absolute; right: -6%; bottom: 0; height: min(64dvh, 560px); max-width: 100%; object-fit: contain; object-position: bottom right; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); mask-composite: intersect; animation: advSlideIn .55s cubic-bezier(.2,1.2,.4,1) both; }
+    #advIntro .adv-intro-cut { position: absolute; right: -6%; bottom: 0; height: min(64dvh, 560px); max-width: 100%; object-fit: contain; object-position: bottom right; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%); mask-composite: intersect; animation: advSlideIn .55s cubic-bezier(.2,1.2,.4,1) both; }
     @keyframes advSlideIn { from { transform: translateX(70%); opacity: 0; } to { transform: none; opacity: 1; } }
     #advIntro .adv-intro-bubble { position: absolute; left: 5%; top: max(64px, env(safe-area-inset-top)); max-width: 64%; font-size: clamp(14px, 4.2vw, 19px); animation: advPop .45s .45s cubic-bezier(.2,1.6,.4,1) both; }
     @keyframes advPop { from { transform: scale(.3); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -303,20 +303,19 @@
     #advSheet .adv-sheet-card { width: 100%; max-width: 32rem; border-radius: 26px 26px 0 0; background: #fff; overflow: hidden; animation: advSheetUp .32s cubic-bezier(.2,1.1,.4,1) both; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
     @keyframes advSheetUp { from { transform: translateY(100%); } to { transform: none; } }
     #advSheet .adv-sheet-hero { position: relative; height: 230px; background: radial-gradient(circle at 72% 60%, var(--adv-c), #0f172a 78%); overflow: hidden; }
-    #advSheet .adv-sheet-cut { position: absolute; right: -2%; bottom: 0; height: 250px; object-fit: contain; object-position: bottom; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); mask-composite: intersect; }
+    #advSheet .adv-sheet-cut { position: absolute; right: -2%; bottom: 0; height: 250px; object-fit: contain; object-position: bottom; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%); mask-composite: intersect; }
     #advSheet .adv-sheet-bubble { position: absolute; left: 12px; top: 14px; max-width: 58%; font-size: 13px; }
     /* Dresseur détouré en grand pendant le duel */
-    .juliette-avatar.adv-duel-avatar { width: 78px !important; height: 96px !important; margin: -52px 0 -6px -4px !important; border-radius: 0 !important; overflow: visible; pointer-events: none; }
-    .juliette-avatar.adv-duel-avatar img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 4px 5px rgba(0,0,0,.55)); }
+    .juliette-avatar.adv-duel-avatar { width: 76px !important; height: 92px !important; margin: -48px 0 -6px -2px !important; border-radius: 0 !important; background: transparent !important; border: 0 !important; box-shadow: none !important; overflow: visible; pointer-events: none; }
+    .juliette-avatar.adv-duel-avatar img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; border: 0 !important; box-shadow: none !important; background: transparent !important; -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 20%, #000 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 80%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0%, #000 20%, #000 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 80%, transparent 100%); mask-composite: intersect; }
     .juliette-avatar.adv-head-avatar { width: 30px !important; height: 30px !important; overflow: hidden; background: var(--adv-c, #334155); }
-    #julietteBubble.adv-duel { overflow: visible; padding-left: 2px; }
+    #julietteBubble.adv-duel { overflow: visible; padding-left: 2px; transition: opacity .28s ease, transform .28s ease; }
+    #julietteBubble.adv-duel.adv-bubble-hide { opacity: 0 !important; pointer-events: none !important; transform: translateY(4px) scale(.96); }
     #julietteBubble.adv-duel #julietteSpeech { position: relative; background: #fff; border: 2px solid #0f172a; border-radius: 14px; padding: 4px 9px; font-weight: 700; box-shadow: 3px 3px 0 rgba(15,23,42,.85); }
     #julietteBubble.adv-duel #julietteSpeech::before { content: ''; position: absolute; left: -7px; top: 50%; width: 11px; height: 11px; margin-top: -6px; background: #fff; border-left: 2px solid #0f172a; border-bottom: 2px solid #0f172a; transform: rotate(45deg); }
     #julietteBubble.adv-duel.bubble { background: transparent !important; border: 0 !important; box-shadow: none !important; }
     #julietteBubble.adv-duel #julietteSpeech { display: block; -webkit-line-clamp: unset; overflow: visible; min-width: 0; flex: 1; }
     #julietteBubble.adv-duel .adv-remark { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    #julietteBubble.adv-duel .adv-event { display: block; margin-top: 1px; font-size: 9px; font-weight: 600; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    #julietteBubble.adv-duel .adv-event strong { color: #475569; }
 
     /* ===== Assets originaux (SVG maison) ===== */
     .card-back { background: var(--card-back) center / cover no-repeat !important; border: none !important; border-radius: 5px; }
@@ -16771,6 +16770,7 @@ const TYPE_EMOJI = {
 
     function ensureBgmPlaying() {
       if (!bgmEnabled || bgmVolumePct <= 0) return;
+      if (battleThemeActive) return; // ne pas couvrir le jingle de combat
       if (bgmAudio.paused) {
         playBgm();
       }
@@ -16789,6 +16789,84 @@ const TYPE_EMOJI = {
         bgmAudio.pause();
       }
       updateBgmUi();
+    }
+
+    // -----------------------------------------------------------------------
+    // Jingle de début de combat (Mode Aventure) : vidéo YouTube jouée une seule fois, sans boucle.
+    // Lecteur caché préchargé dès l'entrée dans le Mode Aventure pour démarrer pile au clic.
+    // -----------------------------------------------------------------------
+    const BATTLE_START_YT_ID = 'DnY5ymkU8gc';
+    let battleThemeActive = false;
+    let battleYtPlayer = null;
+    let battleYtReady = false;
+    let battleYtPendingPlay = false;
+    let battleYtApiLoading = false;
+
+    function battleThemeVolume() {
+      if (bgmEnabled && bgmVolumePct > 0) return bgmVolumePct;
+      if (soundEnabled && sfxVolumePct > 0) return sfxVolumePct;
+      return 0;
+    }
+
+    function initBattleThemePlayer() {
+      if (battleYtPlayer || battleYtApiLoading && !(window.YT && window.YT.Player)) return;
+      const create = () => {
+        if (battleYtPlayer) return;
+        let host = document.getElementById('battleThemeYt');
+        if (!host) {
+          const wrap = document.createElement('div');
+          wrap.setAttribute('aria-hidden', 'true');
+          wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:200px;height:113px;opacity:0;pointer-events:none;';
+          host = document.createElement('div');
+          host.id = 'battleThemeYt';
+          wrap.appendChild(host);
+          document.body.appendChild(wrap);
+        }
+        battleYtPlayer = new YT.Player('battleThemeYt', {
+          width: 200, height: 113, videoId: BATTLE_START_YT_ID,
+          playerVars: { autoplay: 0, controls: 0, loop: 0, playsinline: 1, rel: 0, fs: 0, disablekb: 1, modestbranding: 1 },
+          events: {
+            onReady: () => {
+              battleYtReady = true;
+              if (battleYtPendingPlay) { battleYtPendingPlay = false; playBattleStartTheme(); }
+            },
+            onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) stopBattleStartTheme(); },
+            onError: () => stopBattleStartTheme()
+          }
+        });
+        const ifr = battleYtPlayer.getIframe && battleYtPlayer.getIframe();
+        if (ifr) ifr.setAttribute('allow', 'autoplay; encrypted-media');
+      };
+      if (window.YT && window.YT.Player) { create(); return; }
+      battleYtApiLoading = true;
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => { try { if (typeof prev === 'function') prev(); } catch (_) {} create(); };
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      tag.async = true;
+      document.head.appendChild(tag);
+    }
+
+    function playBattleStartTheme() {
+      const vol = battleThemeVolume();
+      if (vol <= 0) return;
+      battleThemeActive = true;
+      bgmAudio.pause();
+      if (!battleYtPlayer || !battleYtReady) { battleYtPendingPlay = true; initBattleThemePlayer(); return; }
+      try {
+        battleYtPlayer.unMute();
+        battleYtPlayer.setVolume(vol);
+        battleYtPlayer.seekTo(0, true);
+        battleYtPlayer.playVideo();
+      } catch (_) { stopBattleStartTheme(); }
+    }
+
+    function stopBattleStartTheme() {
+      battleYtPendingPlay = false;
+      if (battleYtPlayer && battleYtReady) { try { battleYtPlayer.stopVideo(); } catch (_) {} }
+      if (!battleThemeActive) return;
+      battleThemeActive = false;
+      ensureBgmPlaying();
     }
 
     // Déblocage automatique de la musique dès la première interaction (ou au chargement si autorisé)
@@ -17617,11 +17695,13 @@ const TYPE_EMOJI = {
         adventureSave.selectedDeck = 'V2_FEU';
       }
       startMatch(adventureSave.selectedDeck, tr.deckKey, 'adventure', tr.id);
+      if (game && game.mode === 'adventure') playBattleStartTheme();
     }
 
     function renderAdventureView() {
       const box = document.getElementById('viewAdventure');
       if (!box) return;
+      initBattleThemePlayer();
       if (!deckKeyPlayable(adventureSave.selectedDeck)) {
         adventureSave.selectedDeck = 'V2_FEU';
       }
@@ -17892,10 +17972,13 @@ const TYPE_EMOJI = {
         if (closed) return;
         closed = true;
         el.classList.add('out');
-        setTimeout(() => el.remove(), 330);
+        setTimeout(() => {
+          el.remove();
+          if (isAdvMatch()) advSpeak(tr.quotes.intro, 2600);
+        }, 330);
       };
       el.addEventListener('click', close);
-      setTimeout(close, 5200);
+      setTimeout(close, 3600);
       document.body.appendChild(el);
       try { if (navigator.vibrate) navigator.vibrate(18); } catch (_) {}
     }
@@ -19396,18 +19479,22 @@ const TYPE_EMOJI = {
 
       const isQuick = mode === 'quick';
       const isAdv = mode === 'adventure' && !!advTrainer;
-      document.getElementById('julietteBubble').classList.toggle('hidden', isQuick);
+      const jb = document.getElementById('julietteBubble');
+      jb.classList.toggle('hidden', isQuick);
+      jb.classList.toggle('adv-duel', isAdv);
+      jb.classList.toggle('adv-bubble-hide', isAdv);
+      clearTimeout(advBubbleTimer);
       document.getElementById('aiHeaderAvatar').classList.toggle('hidden', isQuick);
       document.getElementById('aiHeaderName').textContent = isAdv
         ? `${advTrainer.badgeIcon} ${advTrainer.name}`
         : (isQuick ? '⚔️ Adversaire IA' : 'Juliette');
       document.getElementById('aiDeckLabel').textContent = DECK_META[aiDeckKey]?.short || aiDeckKey;
 
-      document.getElementById('julietteBubble').classList.toggle('adv-duel', isAdv);
       if (isAdv) {
         advLastRemark = '';
+        advLastSpeakTurn = -99;
         game.advRemark = advTrainer.quotes.intro;
-        sayJuliette(`${advTrainer.name} envoie ${game.ai.active.name}.`);
+        renderAdvBubble();
         showAdvIntro(advTrainer);
       } else if (!isQuick) {
         sayJuliette(
@@ -19418,6 +19505,7 @@ const TYPE_EMOJI = {
     }
 
     function confirmQuitMatch() {
+      stopBattleStartTheme();
       const wasMulti = !!(game && game.mode === 'multi');
       const wasAdv = !!(game && game.mode === 'adventure');
       if (wasMulti && !game.gameOver && !mpApplyingRemote) {
@@ -19713,36 +19801,46 @@ const TYPE_EMOJI = {
     };
 
     let advLastRemark = '';
+    let advBubbleTimer = null;
+    let advLastSpeakTurn = -99;
     function isAdvMatch() { return !!(game && game.mode === 'adventure' && game.advTrainer); }
     function renderAdvBubble() {
       const el = document.getElementById('julietteSpeech');
       if (!el || !isAdvMatch()) return;
       const remark = game.advRemark || game.advTrainer.quotes.intro;
-      el.innerHTML = `<span class="adv-remark">« ${remark} »</span>${game.advEvent ? `<span class="adv-event">${game.advEvent}</span>` : ''}`;
+      el.innerHTML = `<span class="adv-remark">« ${remark} »</span>`;
     }
-    // Le dresseur parle avec ses propres mots (aucune consigne de tutoriel)
-    function advSpeak(text) {
+    // Le dresseur parle ponctuellement : la boîte de dialogue apparaît puis disparaît
+    function advSpeak(text, duration = 2700) {
       if (!isAdvMatch() || !text) return;
       game.advRemark = text;
       advLastRemark = text;
       renderAdvBubble();
+      const jb = document.getElementById('julietteBubble');
+      if (jb) jb.classList.remove('adv-bubble-hide');
+      clearTimeout(advBubbleTimer);
+      advBubbleTimer = setTimeout(() => {
+        const b = document.getElementById('julietteBubble');
+        if (b && isAdvMatch()) b.classList.add('adv-bubble-hide');
+      }, duration);
     }
-    // Réplique selon l'événement et le caractère du dresseur ; renvoie '' (utilisable dans un gabarit)
+    // Réplique uniquement sur les moments forts du duel (K.O., gros coup, pouvoir clé) ; renvoie ''
+    const ADV_KEY_EVENTS = new Set(['koSelf', 'koPlayer', 'playerBigHit', 'trainerPlay', 'win', 'lose']);
     function advSay(event, chance = 1) {
-      if (!isAdvMatch() || game.gameOver || Math.random() > chance) return '';
+      if (!isAdvMatch() || game.gameOver || !ADV_KEY_EVENTS.has(event) || Math.random() > chance) return '';
+      const turn = game.turnNumber || 1;
+      const isKoOrEnd = event === 'koSelf' || event === 'koPlayer' || event === 'win' || event === 'lose';
+      if (!isKoOrEnd && (turn - advLastSpeakTurn) < 2) return '';
       const tr = game.advTrainer;
       const R = ADVENTURE_REMARKS[tr.id] || {};
       const q = tr.quotes[event];
-      let pool = [...(R[event] || []), ...(Array.isArray(q) ? q : (q ? [q] : []))];
-      if (event === 'aiTurn') pool = [...(tr.quotes.turn || [])];
-      if (event === 'playerTurn' || event === 'aiTurn') {
-        const diff = game.player.prizes.length - game.ai.prizes.length; // > 0 : le dresseur mène
-        if (diff > 0 && R.leading && Math.random() < 0.5) pool = R.leading;
-        else if (diff < 0 && R.trailing && Math.random() < 0.5) pool = R.trailing;
-      }
+      const pool = [...(R[event] || []), ...(Array.isArray(q) ? q : (q ? [q] : []))];
       const choices = pool.filter((t) => t !== advLastRemark);
       const pick = (choices.length ? choices : pool)[Math.floor(Math.random() * (choices.length || pool.length))];
-      if (pick) advSpeak(pick);
+      if (pick) {
+        advLastSpeakTurn = turn;
+        advSpeak(pick);
+      }
       return '';
     }
 
@@ -19757,9 +19855,10 @@ const TYPE_EMOJI = {
         return;
       }
       if (isAdvMatch()) {
-        game.advEvent = text;
-        renderAdvBubble();
-        if (forceToast) showGameToast(text);
+        // Pas de description d'action en mode Aventure : uniquement les alertes d'action bloquée
+        if (forceToast && /(impossible|d'abord|déjà|aucun|il te faut|il faut|ne peut pas|vide|migraine)/i.test(text)) {
+          showGameToast(text);
+        }
         return;
       }
       const el = document.getElementById('julietteSpeech');
@@ -23770,8 +23869,7 @@ const TYPE_EMOJI = {
           if (!alive()) return;
         } else {
           const why = game.ai.active.special ? `est ${SPECIAL_META[game.ai.active.special].label}` : 'ne peut pas attaquer';
-          if (isAdvMatch()) { sayJuliette(`${game.ai.active.name} ${why} ce tour-ci.`); advSpeak(`Mon ${game.ai.active.name} ${why} ce tour-ci… À toi !`); }
-          else sayJuliette(`Mon ${game.ai.active.name} ${why} ce tour-ci. À toi de jouer !`);
+          if (!isAdvMatch()) sayJuliette(`Mon ${game.ai.active.name} ${why} ce tour-ci. À toi de jouer !`);
         }
       }
 
