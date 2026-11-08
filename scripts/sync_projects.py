@@ -13,14 +13,6 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
-    "craft-anything-pokemon": {
-        "title": "Pokémon : À Toi de jouer ! — Édition CD-ROM 2000 (Craft Anything)",
-        "subtitle": "Rétro-ingénierie Craft Anything du CD-ROM Abandonware France (#5272) · Écran TV 800x600 original (.is), 241 cartes FR (Base/Jungle/Fossile/Rocket), 38 Decks (.dek), Voix VF Juliette & 8 Musiques MP3",
-        "category": "games-family",
-        "emoji": "💿",
-        "prodUrl": "https://mrthomaslef.github.io/allinone/craft-anything-pokemon/",
-        "logoUrl": "craft-anything-pokemon/assets/ui/buttonbigball.png",
-    },
     "pokemon-play-it": {
         "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
         "subtitle": "Le jeu officiel d'initiation au JCC Pokémon de 1999 sur Mobile · 4 Demi-Decks (Combat, Eau, Feu, Xtra), vraies cartes FR Set de Base/Jungle, IA Juliette & Cris 1G",
@@ -633,22 +625,6 @@ def main():
                 "logoUrl": "pokemon-play-it/assets/icon.svg?v=6",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/pokemon-play-it",
-                "pushedAt": output[0]["pushedAt"] if output else None,
-            },
-        )
-
-    if not any(item["id"].lower() == "craft-anything-pokemon" for item in output):
-        output.insert(
-            0,
-            {
-                "id": "craft-anything-pokemon",
-                "title": "Pokémon : À Toi de jouer ! — Édition CD-ROM 2000 (Craft Anything)",
-                "subtitle": "Rétro-ingénierie Craft Anything du CD-ROM Abandonware France (#5272) · Écran TV 800x600 original (.is), 241 cartes FR (Base/Jungle/Fossile/Rocket), 38 Decks (.dek), Voix VF Juliette & 8 Musiques MP3",
-                "category": "games-family",
-                "emoji": "💿",
-                "logoUrl": "craft-anything-pokemon/assets/ui/buttonbigball.png",
-                "prodUrl": "https://mrthomaslef.github.io/allinone/craft-anything-pokemon/",
-                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/craft-anything-pokemon",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
