@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '8ee57ce-1794170532';
+      var BUILD = '7c65ffe-1794170666';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -2524,11 +2524,11 @@
   <!-- =================================================================== -->
   <!-- MODAL : ZOOM CARTE HD + ACTIONS CONTEXTUELLES                       -->
   <!-- =================================================================== -->
-  <div id="previewScrim" onclick="hidePreview()" aria-hidden="true"><span class="preview-close">✕ Fermer</span></div>
+  <div id="previewScrim" onclick="event.stopPropagation(); hidePreview()" aria-hidden="true"><span class="preview-close">✕ Fermer</span></div>
   <div id="cardPreview"><div class="pv-card"><img alt="" /><div class="pv-foil"></div><div class="pv-glitter"></div><div class="pv-glare"></div></div></div>
   <div id="turnBanner"><span class="ribbon">À TOI !</span></div>
 
-  <div id="cardModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+  <div id="cardModal" onclick="if(event.target===this){event.stopPropagation();closeCardModal();}" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-white/20 rounded-2xl p-4 max-w-sm w-full flex flex-col items-center gap-3 shadow-2xl max-h-[92dvh] overflow-y-auto">
       <div class="w-full flex items-center justify-between">
         <span id="modalCardTitle" class="text-sm font-extrabold text-yellow-300">Carte</span>
@@ -2562,7 +2562,7 @@
   <!-- =================================================================== -->
   <!-- MODAL : CHOIX DE CIBLE (POKÉ BALL / POKÉDEX / REMPLACEMENT K.O.)    -->
   <!-- =================================================================== -->
-  <div id="pickerModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+  <div id="pickerModal" onclick="if(event.target===this && document.getElementById('pickerCloseBtn').style.display!=='none'){event.stopPropagation();closePickerModal();}" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-white/20 rounded-2xl p-4 max-w-md w-full shadow-2xl max-h-[85dvh] flex flex-col">
       <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
         <h3 id="pickerTitle" class="text-sm font-extrabold text-yellow-300">Choisis un Pokémon</h3>
@@ -21389,18 +21389,40 @@ const TYPE_EMOJI = {
 
     function initTouchPeek() {
       let held = null;
-      // Tout appui ailleurs referme un aperçu resté ouvert
+      let swallowClickUntil = 0;
+      document.addEventListener('click', (e) => {
+        if (Date.now() < swallowClickUntil) {
+          swallowClickUntil = 0;
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
+      // Tout appui ailleurs referme un aperçu resté ouvert sans cliquer sur ce qu'il y a derrière
       document.addEventListener('pointerdown', (e) => {
-        if (e.pointerType === 'mouse') return;
         if (e.target.closest && e.target.closest('#cardPreview.pv3d')) return;
+        const scrim = document.getElementById('previewScrim');
+        if (scrim && scrim.classList.contains('show')) {
+          e.preventDefault();
+          e.stopPropagation();
+          swallowClickUntil = Date.now() + 450;
+          hidePreview();
+          setHandFocus(null);
+          return;
+        }
+        if (e.pointerType === 'mouse') return;
+        if (previewSticky) {
+          e.preventDefault();
+          e.stopPropagation();
+          swallowClickUntil = Date.now() + 450;
+          hidePreview();
+          setHandFocus(null);
+          return;
+        }
         const inHand = e.target.closest ? e.target.closest('#playerHandRow') : null;
         if (inHand) return;
         if (game && !game.player.active && e.target.closest && e.target.closest('#playerBenchRow')) return;
         const el = e.target.closest ? e.target.closest('.tilt') : null;
-        if (!el) {
-          if (previewSticky) { hidePreview(); setHandFocus(null); }
-          return;
-        }
+        if (!el) return;
         setHandFocus(null);
         const img = el.querySelector('img');
         if (!img) return;
