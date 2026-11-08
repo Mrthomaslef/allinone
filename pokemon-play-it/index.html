@@ -117,7 +117,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'af5c4dc-1794174500';
+      var BUILD = 'af2f133-1794174783';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -18449,6 +18449,9 @@ const TYPE_EMOJI = {
       el.addEventListener('click', () => {
         if (Date.now() - born < 1200) return;
         el.classList.add('out');
+        closePickerModal();
+        confirmQuitMatch();
+        switchMenuTab('adventure');
         setTimeout(() => el.remove(), 360);
       });
       document.body.appendChild(el);
@@ -25229,7 +25232,7 @@ const TYPE_EMOJI = {
       }
       game.gameOver = true;
       clearSavedMatch();
-      if (advTrainer && isWin && firstTimeAdvWin) {
+      if (advTrainer && isWin) {
         const celebCoins = earnedCoinsAmount, celebPacks = earnedFreePacks;
         setTimeout(() => showBadgeCelebration(advTrainer, celebCoins, celebPacks), 650);
       }
@@ -25239,6 +25242,7 @@ const TYPE_EMOJI = {
         advSpeak(isWin ? advTrainer.quotes.lose : advTrainer.quotes.win);
       }
       renderBoard();
+      if (advTrainer && isWin) return;
       const oppName = game.mode === 'multi'
         ? (game.oppPseudo || 'ton adversaire')
         : (advTrainer ? `${advTrainer.name} (${advTrainer.title})` : (game.mode === 'quick' ? 'l\'IA' : 'Juliette'));
@@ -25381,6 +25385,10 @@ const TYPE_EMOJI = {
 
     function closePickerModal() {
       document.getElementById('pickerModal').classList.add('hidden');
+      if (game && game.gameOver && game.mode === 'adventure') {
+        confirmQuitMatch();
+        switchMenuTab('adventure');
+      }
     }
 
     
