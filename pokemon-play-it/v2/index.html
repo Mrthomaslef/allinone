@@ -946,9 +946,10 @@
         <span class="text-[10.5px] text-cyan-300/80">✎</span>
       </button>
       <span class="menu-edition text-[10px] font-extrabold tracking-[.18em] uppercase text-yellow-200/80 truncate">Édition FR · 1999</span>
-      <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-2.5 py-1 rounded-xl text-xs font-extrabold text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1.5 shadow-lg active:scale-95 z-20" title="Réglage du Son & Volume">
+      <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-2.5 py-1 rounded-xl text-xs font-extrabold text-yellow-200 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1 shadow-lg active:scale-95 z-20" title="Réglages (Son & Thème)">
         <span id="audioBtnMenuIcon">🔊</span>
-        <span id="audioBtnMenuLabel" class="text-[11px] font-bold">Son</span>
+        <span>🎨</span>
+        <span id="audioBtnMenuLabel" class="text-[11px] font-bold">Réglages</span>
       </button>
       </div>
       <h1 class="mt-1.5 text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-b from-white via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(250,204,21,0.35)]">
@@ -1364,19 +1365,6 @@
     <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
     <div id="viewDecks" class="hidden w-full space-y-2.5"></div>
 
-    <!-- Barre du bas : Tapis de jeu -->
-    <div class="w-full mt-auto pt-3 border-t border-white/15 flex items-center justify-center gap-2 text-xs text-slate-300">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-slate-400">🎨 Tapis de jeu :</span>
-        <select id="playmatSelect" onchange="changePlaymat(this.value)" class="glass-pill rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none">
-          <option value="playmat-night">🌙 Bleu Nuit (Pikachu / Ectoplasma)</option>
-          <option value="playmat-jungle">🌿 Jungle (Insécateur / Rafflesia)</option>
-          <option value="playmat-fossil">🦖 Fossile (Ptéra)</option>
-          <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
-        </select>
-      </div>
-    </div>
-
     <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS (4 ONGLETS COMPACTS) -->
     <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
       <div class="max-w-lg mx-auto px-2.5 pt-1.5 grid grid-cols-4 gap-1.5">
@@ -1418,7 +1406,7 @@
       </div>
       <div id="turnPhaseBadge" class="phase-badge text-[11px] font-extrabold px-2.5 py-1 rounded-xl bg-yellow-400/15 border border-yellow-400/35 text-yellow-300 text-right">Préparation</div>
       <div class="flex items-center gap-1 shrink-0">
-        <button onclick="openAudioModal()" id="audioBtnGame" class="w-10 h-10 justify-center rounded-xl bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/35 text-xs font-bold text-yellow-200 shrink-0 transition flex items-center gap-1" title="Réglage du Son & Volume">
+        <button onclick="openAudioModal()" id="audioBtnGame" class="w-10 h-10 justify-center rounded-xl bg-yellow-400/15 hover:bg-yellow-400/25 border border-yellow-400/35 text-xs font-bold text-yellow-200 shrink-0 transition flex items-center gap-1" title="Réglages (Son & Thème)">
           <span id="audioBtnGameIcon">🔊</span>
         </button>
       </div>
@@ -1571,15 +1559,61 @@
   </div>
 
   <!-- =================================================================== -->
-  <!-- MODAL : RÉGLAGES AUDIO & VOLUME (POPUP HAUT DROITE)                 -->
+  <!-- MODAL : RÉGLAGES SON & THÈME (POPUP HAUT DROITE)                    -->
   <!-- =================================================================== -->
   <div id="audioModal" onclick="if(event.target===this)closeAudioModal()" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-start justify-end p-3 sm:p-5 pt-14 sm:pt-16">
-    <div class="bg-slate-900/95 border border-yellow-400/40 rounded-2xl p-4 max-w-xs w-full shadow-2xl space-y-4">
+    <div class="bg-slate-900/95 border border-yellow-400/40 rounded-2xl p-4 max-w-xs w-full shadow-2xl space-y-3.5 max-h-[85dvh] overflow-y-auto overscroll-contain">
       <div class="flex items-center justify-between pb-2 border-b border-white/10">
         <h3 class="text-sm font-extrabold text-yellow-300 flex items-center gap-1.5">
-          <span>🔊</span><span>Réglages du Son</span>
+          <span>⚙️</span><span>Réglages · Son &amp; Thème</span>
         </h3>
         <button onclick="closeAudioModal()" class="x-close w-6 h-6 rounded-lg bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white flex items-center justify-center text-xs" aria-label="Fermer">✕</button>
+      </div>
+
+      <!-- Thème / Tapis de jeu -->
+      <div class="bg-black/35 border border-white/10 rounded-xl p-3 space-y-2">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <div class="text-xs font-extrabold text-white flex items-center gap-1.5">🎨 Thème / Tapis de jeu</div>
+            <div class="text-[10px] text-slate-400">Ambiance visuelle du plateau 1999</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5" id="playmatButtonsGrid">
+          <button type="button" data-playmat="playmat-night" onclick="changePlaymat('playmat-night')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🌙</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Bleu Nuit</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Pikachu · Ectoplasma</span>
+            </span>
+          </button>
+          <button type="button" data-playmat="playmat-jungle" onclick="changePlaymat('playmat-jungle')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🌿</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Jungle</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Insécateur · Rafflesia</span>
+            </span>
+          </button>
+          <button type="button" data-playmat="playmat-fossil" onclick="changePlaymat('playmat-fossil')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🦖</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Fossile</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Ptéra Préhistorique</span>
+            </span>
+          </button>
+          <button type="button" data-playmat="playmat-mewtwo" onclick="changePlaymat('playmat-mewtwo')" class="playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50 active:scale-95">
+            <span class="text-sm leading-none">🔮</span>
+            <span class="min-w-0">
+              <span class="block text-[11px] font-extrabold leading-tight truncate">Mewtwo Rouge</span>
+              <span class="block text-[9px] text-slate-400 leading-tight truncate">Base Set 2</span>
+            </span>
+          </button>
+        </div>
+        <select id="playmatSelect" onchange="changePlaymat(this.value)" class="sr-only" aria-label="Thème du tapis de jeu">
+          <option value="playmat-night">🌙 Bleu Nuit (Pikachu / Ectoplasma)</option>
+          <option value="playmat-jungle">🌿 Jungle (Insécateur / Rafflesia)</option>
+          <option value="playmat-fossil">🦖 Fossile (Ptéra)</option>
+          <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
+        </select>
       </div>
 
       <!-- Musique 8-Bit -->
@@ -15670,8 +15704,7 @@ const TYPE_EMOJI = {
       const gameBtn = document.getElementById('audioBtnGame');
 
       if (menuIcon) menuIcon.textContent = icon;
-      if (menuLabel) menuLabel.textContent = anyActive ? 'Son' : 'Muet';
-      if (menuBtn) menuBtn.classList.toggle('opacity-60', !anyActive);
+      if (menuLabel) menuLabel.textContent = 'Réglages';
       if (gameIcon) gameIcon.textContent = icon;
       if (gameBtn) gameBtn.classList.toggle('opacity-60', !anyActive);
 
@@ -15828,6 +15861,14 @@ const TYPE_EMOJI = {
       b.classList.add(cls);
       const sel = document.getElementById('playmatSelect');
       if (sel && sel.value !== cls) sel.value = cls;
+      document.querySelectorAll('.playmat-opt-btn').forEach((btn) => {
+        const active = btn.getAttribute('data-playmat') === cls;
+        btn.className = `playmat-opt-btn px-2 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 active:scale-95 ${
+          active
+            ? 'bg-yellow-400/20 border-yellow-400 text-yellow-200 ring-1 ring-yellow-400/60 shadow'
+            : 'bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50'
+        }`;
+      });
       try { localStorage.setItem('ppi_playmat', cls); } catch (e) {}
     }
     try { changePlaymat(localStorage.getItem('ppi_playmat') || PLAYMATS[0]); } catch (e) {}
@@ -16829,7 +16870,145 @@ const TYPE_EMOJI = {
       }
     }
 
-    async function handleIncomingMultiRaw(raw) {
+    function applyRemotePlayerSide(incomingPlayerSide) {
+      if (!incomingPlayerSide) return;
+      // Si un paquet MP_STATE_SYNC en transit arrive avec active=null alors que le joueur local
+      // vient déjà de promouvoir un Pokémon de son Banc en Actif, on préserve la promotion locale.
+      if (
+        !incomingPlayerSide.active &&
+        game &&
+        game.player &&
+        game.player.active &&
+        !game.setupPhase &&
+        Array.isArray(incomingPlayerSide.bench) &&
+        incomingPlayerSide.bench.some((b) => b && b.uid === game.player.active.uid)
+      ) {
+        const promotedUid = game.player.active.uid;
+        const promotedCard = incomingPlayerSide.bench.find((b) => b && b.uid === promotedUid) || game.player.active;
+        game.player = {
+          ...incomingPlayerSide,
+          active: promotedCard,
+          bench: incomingPlayerSide.bench.filter((b) => b && b.uid !== promotedUid)
+        };
+        return;
+      }
+      game.player = incomingPlayerSide;
+      if (game.player.active && mpPromoPickerOpen) {
+        mpPromoPickerOpen = false;
+        closePickerModal();
+        if (mpLocalPromoResolve) {
+          const r = mpLocalPromoResolve;
+          mpLocalPromoResolve = null;
+          r(0);
+        }
+      }
+    }
+
+    function promotePlayerBenchToActive(chosenIdx = 0) {
+      if (!game || game.gameOver || !game.player) return false;
+      if (game.player.active || !game.player.bench.length) return false;
+      const idx = (typeof chosenIdx === 'number' && chosenIdx >= 0 && chosenIdx < game.player.bench.length) ? chosenIdx : 0;
+      const [promoted] = game.player.bench.splice(idx, 1);
+      if (!promoted) return false;
+      clearConditions(promoted);
+      game.player.active = promoted;
+      fx.placed.add(promoted.uid);
+      playPokemonCry(promoted.dex);
+      sfx('place');
+      buzz(16);
+      mpPromoPickerOpen = false;
+      hidePreview();
+      closeCardModal();
+      closePickerModal();
+
+      if (game.mode === 'multi') {
+        const prev = mpApplyingRemote;
+        mpApplyingRemote = true;
+        try {
+          renderBoard();
+        } finally {
+          mpApplyingRemote = prev;
+        }
+        sendMultiPacket('MP_PROMOTE_CHOICE', {
+          matchId: game.matchId,
+          chosenIdx: idx,
+          chosenUid: promoted.uid,
+          side: cloneSide(game.player)
+        });
+        if (game.activePlayer === 'player' && !game.setupPhase) {
+          broadcastMultiBoardSync();
+        }
+      } else {
+        renderBoard();
+      }
+
+      sayJuliette(`⚔️ <strong>${promoted.name}</strong> monte au combat en Pokémon Actif !`, game.mode === 'multi');
+
+      if (mpLocalPromoResolve) {
+        const r = mpLocalPromoResolve;
+        mpLocalPromoResolve = null;
+        r(idx);
+      }
+      return true;
+    }
+
+    function openBenchPromoModal(title = '💥 Ton Pokémon Actif est K.O. !', subtitle = 'Choisis quel Pokémon de ton Banc monte au combat :') {
+      if (!game || game.gameOver || game.player.active || !game.player.bench.length) {
+        return Promise.resolve(null);
+      }
+      hidePreview();
+      closeCardModal();
+      return new Promise((resolve) => {
+        mpLocalPromoResolve = resolve;
+        mpPromoPickerOpen = true;
+        openPickerModal(
+          title,
+          subtitle,
+          game.player.bench,
+          (chosenIdx) => {
+            promotePlayerBenchToActive(chosenIdx);
+          },
+          false
+        );
+      });
+    }
+
+    async function requestRemoteBenchPromo() {
+      if (!game || game.mode !== 'multi' || game.gameOver || game.ai.active || !game.ai.bench.length) return false;
+      showGameToast(`⏳ En attente du choix de Pokémon Actif de <strong>${game.oppPseudo || 'l\'adversaire'}</strong>…`);
+      sendMultiPacket('MP_REQUEST_PROMO', {
+        matchId: game.matchId,
+        actorSide: cloneSide(game.player),
+        targetSide: cloneSide(game.ai)
+      });
+      const promoReply = await new Promise((resolve) => {
+        mpPendingPromoResolve = resolve;
+        setTimeout(() => {
+          if (mpPendingPromoResolve === resolve) {
+            mpPendingPromoResolve = null;
+            resolve(null);
+          }
+        }, 22000);
+      });
+      if (promoReply && promoReply.side && promoReply.side.active) {
+        const prev = mpApplyingRemote;
+        mpApplyingRemote = true;
+        try {
+          game.ai = promoReply.side;
+          fx.placed.add(game.ai.active.uid);
+          playPokemonCry(game.ai.active.dex);
+          showGameToast(`⚔️ <strong>${game.oppPseudo || 'Adversaire'}</strong> envoie <strong>${game.ai.active.name}</strong> au combat !`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = prev;
+        }
+        return true;
+      }
+      if (game.ai.active) return true;
+      return false;
+    }
+
+    function handleIncomingMultiRaw(raw) {
       let msg;
       try {
         msg = typeof raw === 'string' ? JSON.parse(raw) : raw;
@@ -16877,9 +17056,47 @@ const TYPE_EMOJI = {
         return;
       }
 
+      // Résolution immédiate hors file d'attente pour débloquer l'attaquant en attente du choix de Banc
+      if (msg.type === 'MP_PROMOTE_CHOICE') {
+        if (mpPendingPromoResolve) {
+          const r = mpPendingPromoResolve;
+          mpPendingPromoResolve = null;
+          r(msg);
+          return;
+        }
+        if (game && game.mode === 'multi' && msg.side) {
+          const prev = mpApplyingRemote;
+          mpApplyingRemote = true;
+          try {
+            const hadActive = !!game.ai.active;
+            game.ai = msg.side;
+            if (!hadActive && game.ai.active) {
+              fx.placed.add(game.ai.active.uid);
+              playPokemonCry(game.ai.active.dex);
+            }
+            renderBoard();
+          } finally {
+            mpApplyingRemote = prev;
+          }
+        }
+        return;
+      }
+
+      mpIncomingChain = mpIncomingChain
+        .then(() => processIncomingMultiPacket(msg))
+        .catch((err) => {
+          console.error('Multi packet error:', err);
+          mpApplyingRemote = false;
+        });
+    }
+
+    async function processIncomingMultiPacket(msg) {
       if (msg.type === 'MP_MATCH_START') {
         if (multiLastMatchId === msg.matchId) return;
         multiLastMatchId = msg.matchId;
+        mpPendingPromoResolve = null;
+        mpLocalPromoResolve = null;
+        mpPromoPickerOpen = false;
         startMultiMatchFromPayload(msg);
         return;
       }
@@ -16888,115 +17105,117 @@ const TYPE_EMOJI = {
 
       if (msg.type === 'MP_SETUP_UPDATE') {
         mpApplyingRemote = true;
-        const hadActive = !!game.ai.active;
-        game.ai = msg.side;
-        if (!hadActive && game.ai.active) {
-          fx.placed.add(game.ai.active.uid);
-          playPokemonCry(game.ai.active.dex);
+        try {
+          const hadActive = !!game.ai.active;
+          game.ai = msg.side;
+          if (!hadActive && game.ai.active) {
+            fx.placed.add(game.ai.active.uid);
+            playPokemonCry(game.ai.active.dex);
+          }
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
         }
-        renderBoard();
-        mpApplyingRemote = false;
         checkMultiSetupComplete();
         return;
       }
 
       if (msg.type === 'MP_STATE_SYNC') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        if (msg.toast) showGameToast(`🌐 ${game.oppPseudo} : ${msg.toast}`);
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          if (msg.toast) showGameToast(`🌐 ${game.oppPseudo} : ${msg.toast}`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_COIN_FLIP') {
-        flipCoinAnimated(`${game.oppPseudo} · ${msg.label}`, msg.isHeads);
+        await flipCoinAnimated(`${game.oppPseudo} · ${msg.label}`, msg.isHeads);
         return;
       }
 
       if (msg.type === 'MP_ATTACK_ANIM') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
-        await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
-        showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
+          await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
+          showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_KO_ANIM') {
         mpApplyingRemote = true;
-        const localVictim = msg.victimIsActor ? 'ai' : 'player';
-        await animateKO(localVictim);
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          const localVictim = msg.victimIsActor ? 'ai' : 'player';
+          await animateKO(localVictim);
+          game.ai = msg.actorSide;
+          game.player = msg.targetSide;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_REQUEST_PROMO') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        renderBoard();
-        mpApplyingRemote = false;
-        if (game.player.bench.length > 0) {
-          openPickerModal(
-            '💥 Ton Pokémon Actif est K.O. !',
-            'Choisis quel Pokémon de ton Banc monte au combat :',
-            game.player.bench,
-            (chosenIdx) => {
-              mpApplyingRemote = true;
-              game.player.active = game.player.bench.splice(chosenIdx, 1)[0];
-              fx.placed.add(game.player.active.uid);
-              playPokemonCry(game.player.active.dex);
-              renderBoard();
-              mpApplyingRemote = false;
-              sendMultiPacket('MP_PROMOTE_CHOICE', {
-                matchId: game.matchId,
-                chosenIdx,
-                side: cloneSide(game.player)
-              });
-            },
-            false
-          );
+        try {
+          game.ai = msg.actorSide;
+          game.player = msg.targetSide;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
         }
-        return;
-      }
-
-      if (msg.type === 'MP_PROMOTE_CHOICE') {
-        if (mpPendingPromoResolve) {
-          const r = mpPendingPromoResolve;
-          mpPendingPromoResolve = null;
-          r(msg);
+        if (!game.player.active && game.player.bench.length > 0 && !game.gameOver) {
+          openBenchPromoModal(
+            '💥 Ton Pokémon Actif est K.O. !',
+            'Choisis quel Pokémon de ton Banc monte au combat :'
+          );
         }
         return;
       }
 
       if (msg.type === 'MP_END_TURN') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        game.halfTurn = (game.halfTurn || 0) + 1;
-        renderBoard();
-        mpApplyingRemote = false;
-        startPlayerTurn();
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          game.halfTurn = (game.halfTurn || 0) + 1;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
+        if (!game.player.active && game.player.bench.length > 0 && !game.gameOver) {
+          await openBenchPromoModal();
+        }
+        if (game && !game.gameOver) {
+          startPlayerTurn();
+        }
         return;
       }
 
       if (msg.type === 'MP_GAME_OVER') {
         if (game.gameOver) return;
         mpApplyingRemote = true;
-        if (msg.actorSide && msg.targetSide) {
-          game.ai = msg.actorSide;
-          game.player = msg.targetSide;
+        try {
+          if (msg.actorSide && msg.targetSide) {
+            game.ai = msg.actorSide;
+            game.player = msg.targetSide;
+          }
+          endMatch(msg.winnerIsActor ? 'ai' : 'player', msg.reason);
+        } finally {
+          mpApplyingRemote = false;
         }
-        endMatch(msg.winnerIsActor ? 'ai' : 'player', msg.reason);
-        mpApplyingRemote = false;
         return;
       }
     }
@@ -17294,7 +17513,11 @@ const TYPE_EMOJI = {
 
     function renderPokemonSlot(pkm, owner, zone, index = 0) {
       const isActive = zone === 'active';
+      const canPromoteFromBench = isActive && owner === 'player' && game && !game.gameOver && !game.player.active && game.player.bench.length > 0;
       if (!pkm) {
+        if (canPromoteFromBench) {
+          return `<div class="pkm-stack"><div onclick="openBenchPromoModal()" class="slot-empty drop-ok cursor-pointer text-amber-300 font-black">⚔️ Actif</div></div>`;
+        }
         return `<div class="pkm-stack"><div class="slot-empty">${isActive ? 'Actif' : ''}</div></div>`;
       }
       const maxHp = game ? effHp(pkm) : pkm.hp;
@@ -17310,14 +17533,16 @@ const TYPE_EMOJI = {
         <img src="${e.img}" alt="${e.name}" class="energy-under ${fx.attached.has(e.uid) ? 'energy-in' : ''}"
              style="transform: translateY(${(i + 1) * step}%) translateX(${(i % 2 ? 1 : -1) * 2}%) rotate(${(i % 2 ? 1.5 : -1.5)}deg); z-index:${10 - i}" />`).join('');
       const anim = fx.evolved.has(pkm.uid) ? 'card-evolve' : fx.placed.has(pkm.uid) ? 'card-place' : '';
+      const needsPromoHighlight = owner === 'player' && zone === 'bench' && game && !game.gameOver && !game.player.active;
 
       return `
         <div class="pkm-stack" data-uid="${pkm.uid}">
           ${energies}
-          <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="tcg tilt cursor-pointer bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
+          <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})" class="tcg tilt cursor-pointer bg-slate-900 ${isActive ? 'card-active-glow' : needsPromoHighlight ? 'ring-2 ring-amber-400 shadow-[0_0_14px_rgba(250,204,21,0.55)]' : 'card-shadow'} ${anim}" style="z-index:20">
             <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" draggable="false" />
             ${renderDamageTokens(pkm)}
             ${badges ? `<div class="pkm-status">${badges}</div>` : ''}
+            ${needsPromoHighlight ? `<div class="absolute inset-x-0 top-0 bg-amber-400/95 text-slate-950 text-[8.5px] font-black text-center py-0.5 rounded-t-[5px] tracking-tight pointer-events-none">⚔️ ENVOYER</div>` : ''}
             ${pkm.special === 'asleep' || pkm.special === 'paralyzed' ? '<div class="absolute inset-0 rounded-[6px] bg-indigo-900/30 pointer-events-none"></div>' : ''}
             <div class="pkm-hud">
               <div class="pkm-hud-row">
@@ -17418,16 +17643,18 @@ const TYPE_EMOJI = {
       if (game && game.mode === 'quick') return { badge: '', playable: false };
       if (game && game.mode === 'multi' && game.setupPhase) {
         if (card.category === 'Pokémon' && card.stage === 'Base' && !game.gameOver) {
-          const playable = !game.player.active || game.player.bench.length < 5;
-          const badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
+          const canBeActive = !game.player.active && game.player.bench.length === 0;
+          const playable = canBeActive || game.player.bench.length < 5;
+          const badge = canBeActive ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
           return { badge, playable };
         }
         return { badge: '', playable: false };
       }
       let badge = '', playable = false;
       if (card.category === 'Pokémon' && card.stage === 'Base') {
-        playable = !game.player.active || game.player.bench.length < 5;
-        badge = !game.player.active ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
+        const canBeActive = !game.player.active && game.player.bench.length === 0;
+        playable = canBeActive || game.player.bench.length < 5;
+        badge = canBeActive ? '👑 Actif' : (game.player.bench.length < 5 ? '+ Banc' : 'Plein');
       } else if (card.category === 'Pokémon' && (card.stage === 'Niveau 1' || card.stage === 'Niveau 2')) {
         playable = dropTargetsFor(card).length > 0; badge = '⬆ Évol.';
       } else if (card.category === 'Énergie') {
@@ -17763,7 +17990,16 @@ const TYPE_EMOJI = {
       }
     }
 
-    window.addEventListener('resize', () => { if (game) renderBoard(); });
+    window.addEventListener('resize', () => {
+      if (!game) return;
+      const prev = mpApplyingRemote;
+      mpApplyingRemote = true;
+      try {
+        renderBoard();
+      } finally {
+        mpApplyingRemote = prev;
+      }
+    });
 
     // Taille des cartes calculée selon la place réellement disponible :
     // bancs pleine largeur, Pokémon Actifs le plus grand possible, piles sur les côtés.
@@ -17842,7 +18078,7 @@ const TYPE_EMOJI = {
       const P = game.player, t = [];
       if (game.mode === 'multi' && game.setupPhase) {
         if (card.category === 'Pokémon' && card.stage === 'Base') {
-          if (!P.active) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
+          if (!P.active && P.bench.length === 0) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
           else if (P.bench.length < 5) {
             for (let i = P.bench.length; i < 5; i++) t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actPlayBasic(card, 'bench') });
           }
@@ -17850,7 +18086,7 @@ const TYPE_EMOJI = {
         return t;
       }
       if (card.category === 'Pokémon' && card.stage === 'Base') {
-        if (!P.active) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
+        if (!P.active && P.bench.length === 0) t.push({ sel: '#playerActiveSlot', act: () => actPlayBasic(card, 'active') });
         else if (P.bench.length < 5) {
           for (let i = P.bench.length; i < 5; i++) t.push({ sel: `#playerBenchRow [data-slot="${i}"]`, act: () => actPlayBasic(card, 'bench') });
         }
@@ -17867,6 +18103,7 @@ const TYPE_EMOJI = {
     }
 
     function whyNotPlayable(card) {
+      if (!game.player.active && game.player.bench.length > 0 && card.category !== 'Pokémon') return 'Choisis d\'abord quel Pokémon de ton Banc monte au combat !';
       if (!game.player.active && card.category !== 'Pokémon') return 'Pose d\'abord un Pokémon de Base comme Pokémon Actif !';
       if (card.category === 'Énergie' && game.energyAttachedThisTurn) return 'Une seule Énergie par tour !';
       if (card.category === 'Dresseur' && game.player.noTrainersTurns) return 'Migraine : aucune carte Dresseur ce tour-ci !';
