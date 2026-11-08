@@ -95,14 +95,40 @@
 
     /* Bouncy App Icon Squircle */
     .app-squircle {
+      position: relative;
       border-radius: 28%;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.28);
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
     }
     .app-card:hover .app-squircle,
     .grid-tile:hover .app-squircle,
     .fav-tile:hover .app-squircle {
       transform: rotate(-4deg) scale(1.07);
+    }
+
+    /* Long-Press Copy URL on App Logo */
+    [data-copy-url],
+    [data-copy-url] * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    [data-copy-url].logo-pressing {
+      transform: scale(0.90) !important;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.85), 0 0 22px rgba(236, 72, 153, 0.65) !important;
+    }
+    [data-copy-url].logo-copied {
+      transform: scale(1.06) !important;
+      box-shadow: 0 0 0 3px #34d399, 0 0 26px rgba(52, 211, 153, 0.85) !important;
+      border-color: #34d399 !important;
+    }
+    [data-copy-url] .logo-copy-badge {
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+    [data-copy-url].logo-copied .logo-copy-badge {
+      opacity: 1;
     }
 
     /* Star Button Bounce */
@@ -168,15 +194,25 @@
     <header class="pt-2 md:pt-5 pb-4 md:pb-5">
       <div class="flex items-center justify-between gap-2 md:gap-4">
         <div class="flex items-center gap-3.5 md:gap-4 min-w-0">
-          <div class="relative shrink-0 logo-bounce">
+          <div
+            class="relative shrink-0 logo-bounce rounded-[18px] md:rounded-[20px] cursor-pointer"
+            data-copy-url="https://mrthomaslef.github.io/allinone/"
+            data-copy-title="Tapp Store"
+            title="Maintenir appuyé pour copier l'URL du Tapp Store"
+          >
             <div class="absolute -inset-1 rounded-[20px] bg-gradient-to-tr from-pink-500 via-purple-500 to-cyan-400 opacity-75 blur-sm"></div>
             <img
               src="assets/logo.jpg?v=tapp2"
               onerror="this.src='assets/icon.svg?v=tapp2'"
               alt="Logo Tapp Store"
+              draggable="false"
               class="relative w-14 h-14 md:w-16 md:h-16 rounded-[18px] md:rounded-[20px] object-cover shadow-xl border-2 border-white/30"
             />
-            <span id="live-dot" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-emerald-400 ring-2 ring-[#0E0920]" title="Synchronisation GitHub en direct"></span>
+            <div class="logo-copy-badge pointer-events-none absolute inset-0 rounded-[18px] md:rounded-[20px] bg-emerald-950/90 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
+              <span class="text-emerald-300 text-sm font-black leading-none">✓</span>
+              <span class="text-[9px] font-extrabold uppercase tracking-wider text-emerald-200 mt-0.5">Copié</span>
+            </div>
+            <span id="live-dot" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 md:w-4 md:h-4 rounded-full bg-emerald-400 ring-2 ring-[#0E0920] z-20" title="Synchronisation GitHub en direct"></span>
           </div>
 
           <div class="min-w-0">
@@ -1213,7 +1249,13 @@
         const emoji = imgEl.dataset.emoji || '🚀';
         const parent = imgEl.parentElement;
         if (parent) {
-          parent.innerHTML = `<span class="text-2xl select-none">${emoji}</span>`;
+          parent.innerHTML = `
+            <span class="text-2xl select-none">${emoji}</span>
+            <div class="logo-copy-badge pointer-events-none absolute inset-0 bg-emerald-950/90 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
+              <span class="text-emerald-300 text-sm font-black leading-none">✓</span>
+              <span class="text-[9px] font-extrabold uppercase tracking-wider text-emerald-200 mt-0.5">Copié</span>
+            </div>
+          `;
         }
       }
     }
@@ -1488,18 +1530,30 @@
       const fitClass = p.logoFit === 'contain'
         ? 'w-full h-full object-contain p-1.5 bg-slate-900'
         : 'w-full h-full object-cover';
+      const safeTitle = String(p.title || '').replace(/"/g, '&quot;');
+      const safeUrl = String(p.prodUrl || '').replace(/"/g, '&quot;');
 
       return `
-        <div class="${sizeClass} app-squircle bg-slate-900/90 border border-white/20 overflow-hidden flex items-center justify-center shrink-0">
+        <div
+          class="${sizeClass} app-squircle bg-slate-900/90 border border-white/20 overflow-hidden flex items-center justify-center shrink-0"
+          data-copy-url="${safeUrl}"
+          data-copy-title="${safeTitle}"
+          title="Maintenir appuyé pour copier l'URL (${safeUrl})"
+        >
           <img
             src="${primarySrc}"
-            alt="${p.title}"
+            alt="${safeTitle}"
+            draggable="false"
             data-fallbacks="${fallbacks.join('|')}"
             data-emoji="${p.emoji || '🚀'}"
             onerror="handleLogoError(this)"
             loading="lazy"
             class="${fitClass}"
           />
+          <div class="logo-copy-badge pointer-events-none absolute inset-0 bg-emerald-950/90 backdrop-blur-[2px] flex flex-col items-center justify-center z-10">
+            <span class="text-emerald-300 text-sm font-black leading-none">✓</span>
+            <span class="text-[9px] font-extrabold uppercase tracking-wider text-emerald-200 mt-0.5">Copié</span>
+          </div>
         </div>
       `;
     }
@@ -2334,11 +2388,224 @@
       }, { passive: false });
     }
 
+    // --- APPUI LONG SUR LE LOGO D'UNE APP POUR COPIER SON URL ---
+    let copyToastTimer = null;
+
+    async function copyUrlToClipboard(text) {
+      if (!text) return false;
+      let copied = false;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          copied = true;
+        } catch (_) {}
+      }
+      if (!copied) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.top = '-9999px';
+          ta.style.left = '-9999px';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          ta.setSelectionRange(0, text.length);
+          copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+        } catch (_) {}
+      }
+      return copied;
+    }
+
+    function showCopyUrlToast(title, url) {
+      let toast = document.getElementById('copy-url-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'copy-url-toast';
+        toast.className = 'fixed left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-slate-950/95 border border-emerald-400/50 shadow-[0_12px_32px_rgba(0,0,0,0.65),0_0_20px_rgba(52,211,153,0.25)] backdrop-blur-xl flex items-center gap-3 max-w-[92vw] sm:max-w-md transition-all duration-200 pointer-events-none opacity-0 translate-y-3';
+        toast.style.bottom = 'max(1.25rem, calc(var(--safe-bottom) + 0.75rem))';
+        document.body.appendChild(toast);
+      }
+
+      const shortTitle = String(title || 'Application').split('—')[0].trim();
+      toast.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 font-black text-sm shrink-0">
+          🔗
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="text-xs font-extrabold text-emerald-300 truncate">URL copiée • ${shortTitle}</div>
+          <div class="text-[11px] font-mono text-purple-200/80 truncate">${url}</div>
+        </div>
+      `;
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', 'translate-y-3');
+        toast.classList.add('opacity-100', 'translate-y-0');
+      });
+
+      if (copyToastTimer) clearTimeout(copyToastTimer);
+      copyToastTimer = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-3');
+      }, 2600);
+    }
+
+    function initLongPressCopyUrl() {
+      const LONG_PRESS_MS = 450;
+      const MOVE_TOLERANCE = 12;
+      let pressTimer = null;
+      let feedbackTimer = null;
+      let activeEl = null;
+      let startX = 0;
+      let startY = 0;
+      let longPressTriggered = false;
+      let lastCopiedUrl = '';
+      let suppressClickUntil = 0;
+
+      const clearTimers = () => {
+        if (pressTimer) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+        if (feedbackTimer) {
+          clearTimeout(feedbackTimer);
+          feedbackTimer = null;
+        }
+        if (activeEl) {
+          activeEl.classList.remove('logo-pressing');
+        }
+      };
+
+      const triggerCopyForElement = (el) => {
+        if (!el) return;
+        const url = el.getAttribute('data-copy-url');
+        const title = el.getAttribute('data-copy-title') || 'App';
+        if (!url) return;
+
+        longPressTriggered = true;
+        lastCopiedUrl = url;
+        suppressClickUntil = Date.now() + 900;
+
+        el.classList.remove('logo-pressing');
+        el.classList.add('logo-copied');
+        setTimeout(() => {
+          el.classList.remove('logo-copied');
+        }, 1500);
+
+        copyUrlToClipboard(url);
+        if (navigator.vibrate) {
+          try { navigator.vibrate([20, 40, 25]); } catch (_) {}
+        }
+        showCopyUrlToast(title, url);
+      };
+
+      const onStart = (el, x, y) => {
+        clearTimers();
+        activeEl = el;
+        startX = x;
+        startY = y;
+        longPressTriggered = false;
+        lastCopiedUrl = '';
+
+        feedbackTimer = setTimeout(() => {
+          if (activeEl) activeEl.classList.add('logo-pressing');
+        }, 100);
+
+        pressTimer = setTimeout(() => {
+          triggerCopyForElement(activeEl);
+        }, LONG_PRESS_MS);
+      };
+
+      const onMove = (x, y) => {
+        if (!pressTimer && !feedbackTimer) return;
+        if (Math.hypot(x - startX, y - startY) > MOVE_TOLERANCE) {
+          clearTimers();
+          activeEl = null;
+        }
+      };
+
+      const onEnd = (e) => {
+        clearTimers();
+        if (longPressTriggered) {
+          if (lastCopiedUrl) {
+            copyUrlToClipboard(lastCopiedUrl);
+          }
+          if (e && e.cancelable) {
+            e.preventDefault();
+          }
+          if (e) {
+            e.stopPropagation();
+          }
+        }
+        activeEl = null;
+      };
+
+      document.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) return;
+        const el = e.target && e.target.closest ? e.target.closest('[data-copy-url]') : null;
+        if (!el) return;
+        onStart(el, e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+
+      document.addEventListener('touchmove', (e) => {
+        if (e.touches.length !== 1) return;
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+
+      document.addEventListener('touchend', onEnd, { passive: false });
+      document.addEventListener('touchcancel', () => {
+        clearTimers();
+        activeEl = null;
+        longPressTriggered = false;
+      }, { passive: true });
+
+      document.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        const el = e.target && e.target.closest ? e.target.closest('[data-copy-url]') : null;
+        if (!el) return;
+        onStart(el, e.clientX, e.clientY);
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        onMove(e.clientX, e.clientY);
+      });
+
+      document.addEventListener('mouseup', onEnd);
+
+      window.addEventListener('click', (e) => {
+        if (longPressTriggered || Date.now() < suppressClickUntil) {
+          if (lastCopiedUrl) {
+            copyUrlToClipboard(lastCopiedUrl);
+          }
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          longPressTriggered = false;
+          suppressClickUntil = 0;
+        }
+      }, true);
+
+      window.addEventListener('contextmenu', (e) => {
+        const el = e.target && e.target.closest ? e.target.closest('[data-copy-url]') : null;
+        if (!el) return;
+        e.preventDefault();
+        e.stopPropagation();
+        if (!longPressTriggered && Date.now() >= suppressClickUntil) {
+          clearTimers();
+          triggerCopyForElement(el);
+        }
+      }, true);
+    }
+
     updateViewToggleIcon();
     renderTabs();
     renderFavoritesDock();
     renderProjects();
     initPullToRefresh();
+    initLongPressCopyUrl();
     syncFavoritesEverywhere();
     syncGeminiUltraWidget(false);
     syncFromGitHub(false);
