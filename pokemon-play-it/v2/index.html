@@ -46,7 +46,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'a6c77f8-1794172537';
+      var BUILD = '09d8f7d-1794172643';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -279,12 +279,6 @@
     button:disabled { opacity: .45; }
 
     /* ===== Mode Aventure : chemin de progression, intro VS détourée, dresseur en duel ===== */
-    /* Fil des actions de l'adversaire */
-    #aiActionFeed { position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 58px); transform: translateX(-50%); z-index: 84; width: min(92vw, 380px); display: flex; flex-direction: column; gap: 5px; pointer-events: none; }
-    #aiActionFeed .aif-item { padding: 6px 11px; border-radius: 12px; background: rgba(255,255,255,.95); color: #0f172a; font: 800 11.5px/1.3 'Nunito', sans-serif; border-left: 4px solid #38bdf8; box-shadow: 0 8px 18px -6px rgba(2,6,23,.55); animation: aifIn .28s cubic-bezier(.2,1.3,.4,1) both; }
-    #aiActionFeed .aif-item.harm { background: #fff1f2; color: #881337; border-left-color: #e11d48; box-shadow: 0 0 0 1.5px rgba(225,29,72,.35), 0 8px 18px -6px rgba(2,6,23,.55); }
-    #aiActionFeed .aif-item.out { opacity: 0; transform: translateY(-6px); transition: opacity .3s ease, transform .3s ease; }
-    @keyframes aifIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } }
     /* Badges vectoriels Ligue 2000 */
     .adv-badge { display: inline-block; flex-shrink: 0; vertical-align: middle; overflow: visible; filter: drop-shadow(0 2px 1.5px rgba(15,23,42,.45)) drop-shadow(0 0 1px rgba(255,214,90,.35)); }
     .adv-badge-off { filter: grayscale(1) brightness(1.15) opacity(.38); }
@@ -17104,6 +17098,13 @@ const TYPE_EMOJI = {
     function setBattleMode(inBattle) {
       const b = document.getElementById('appBody') || document.body;
       if (b) b.classList.toggle('in-battle', !!inBattle);
+      if (inBattle) {
+        clearTimeout(toastTimer);
+        const t = document.getElementById('gameToast');
+        if (t) t.style.opacity = '0';
+        const aif = document.getElementById('aiActionFeed');
+        if (aif) aif.remove();
+      }
       const metaTheme = document.querySelector('meta[name="theme-color"]');
       if (metaTheme) metaTheme.setAttribute('content', inBattle ? '#0b1120' : '#f8fafc');
     }
@@ -20058,6 +20059,7 @@ const TYPE_EMOJI = {
 
     let toastTimer = null;
     function showGameToast(htmlText) {
+      if ((game && !game.gameOver) || document.body.classList.contains('in-battle')) return;
       let t = document.getElementById('gameToast');
       if (!t) {
         t = document.createElement('div');
@@ -20254,49 +20256,10 @@ const TYPE_EMOJI = {
       return '';
     }
 
-    // Fil des actions de l'adversaire (Partie rapide & Aventure, où la bulle de description est masquée) :
-    // chaque carte jouée par l'IA s'affiche brièvement en haut ; celles qui te pénalisent ressortent en rouge.
-    const AI_FEED_HARM = /Suppression d'Énergie|Rafale de vent|Fillette|Migraine|\bton\b|\btes\b/i;
-    function aiActionFeed(text) {
-      let box = document.getElementById('aiActionFeed');
-      if (!box) {
-        box = document.createElement('div');
-        box.id = 'aiActionFeed';
-        document.body.appendChild(box);
-      }
-      const clean = String(text).replace(/<[^>]+>/g, '').replace(/^\s*[«"]\s*|\s*[»"]\s*$/g, '').trim();
-      if (!clean) return;
-      const harm = AI_FEED_HARM.test(clean);
-      const item = document.createElement('div');
-      item.className = `aif-item${harm ? ' harm' : ''}`;
-      item.textContent = clean;
-      box.appendChild(item);
-      while (box.children.length > 3) box.firstElementChild.remove();
-      if (harm) { try { if (navigator.vibrate) navigator.vibrate([20, 40, 20]); } catch (_) {} }
-      setTimeout(() => { item.classList.add('out'); setTimeout(() => item.remove(), 320); }, harm ? 4200 : 2800);
-    }
-
-    function sayJuliette(text, forceToast = false) {
-      if (game && game.activePlayer === 'ai' && !game.gameOver && (game.mode === 'quick' || isAdvMatch())) aiActionFeed(text);
-      if (game && game.mode === 'multi') {
-        mpLastToastText = text;
-        if (forceToast) showGameToast(text);
-        return;
-      }
-      if (game && game.mode === 'quick') {
-        if (forceToast) showGameToast(text);
-        return;
-      }
-      if (isAdvMatch()) {
-        // Pas de description d'action en mode Aventure : uniquement les alertes d'action bloquée
-        if (forceToast && /(impossible|d'abord|déjà|aucun|il te faut|il faut|ne peut pas|vide|migraine)/i.test(text)) {
-          showGameToast(text);
-        }
-        return;
-      }
+    function sayJuliette(text) {
+      if (!game || game.mode !== 'tutorial') return;
       const el = document.getElementById('julietteSpeech');
       if (el) el.innerHTML = `« ${text} »`;
-      if (forceToast) showGameToast(text);
     }
 
     // -----------------------------------------------------------------------

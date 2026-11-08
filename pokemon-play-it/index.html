@@ -46,7 +46,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = 'a6c77f8-1794172537';
+      var BUILD = '09d8f7d-1794172643';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -279,12 +279,6 @@
     button:disabled { opacity: .45; }
 
     /* ===== Mode Aventure : chemin de progression, intro VS détourée, dresseur en duel ===== */
-    /* Fil des actions de l'adversaire */
-    #aiActionFeed { position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 58px); transform: translateX(-50%); z-index: 84; width: min(92vw, 380px); display: flex; flex-direction: column; gap: 5px; pointer-events: none; }
-    #aiActionFeed .aif-item { padding: 6px 11px; border-radius: 12px; background: rgba(255,255,255,.95); color: #0f172a; font: 800 11.5px/1.3 'Nunito', sans-serif; border-left: 4px solid #38bdf8; box-shadow: 0 8px 18px -6px rgba(2,6,23,.55); animation: aifIn .28s cubic-bezier(.2,1.3,.4,1) both; }
-    #aiActionFeed .aif-item.harm { background: #fff1f2; color: #881337; border-left-color: #e11d48; box-shadow: 0 0 0 1.5px rgba(225,29,72,.35), 0 8px 18px -6px rgba(2,6,23,.55); }
-    #aiActionFeed .aif-item.out { opacity: 0; transform: translateY(-6px); transition: opacity .3s ease, transform .3s ease; }
-    @keyframes aifIn { from { opacity: 0; transform: translateY(-10px) scale(.96); } }
     /* Badges vectoriels Ligue 2000 */
     .adv-badge { display: inline-block; flex-shrink: 0; vertical-align: middle; overflow: visible; filter: drop-shadow(0 2px 1.5px rgba(15,23,42,.45)) drop-shadow(0 0 1px rgba(255,214,90,.35)); }
     .adv-badge-off { filter: grayscale(1) brightness(1.15) opacity(.38); }
@@ -16977,6 +16971,8 @@ const TYPE_EMOJI = {
     // Lecteur caché préchargé dès l'entrée dans le Mode Aventure pour démarrer pile au clic.
     // -----------------------------------------------------------------------
     const BATTLE_START_YT_ID = 'DnY5ymkU8gc';
+    const BATTLE_START_JINGLE_MS = 6000; // durée du jingle : l'intro VS dure exactement autant
+    let advIntroCloseFn = null; // fermeture de l'intro VS, appelée à la fin du jingle
     let battleThemeActive = false;
     let battleYtPlayer = null;
     let battleYtReady = false;
@@ -17011,7 +17007,7 @@ const TYPE_EMOJI = {
               battleYtReady = true;
               if (battleYtPendingPlay) { battleYtPendingPlay = false; playBattleStartTheme(); }
             },
-            onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) stopBattleStartTheme(); },
+            onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) { if (advIntroCloseFn) advIntroCloseFn(); stopBattleStartTheme(); } },
             onError: () => stopBattleStartTheme()
           }
         });
@@ -17102,6 +17098,13 @@ const TYPE_EMOJI = {
     function setBattleMode(inBattle) {
       const b = document.getElementById('appBody') || document.body;
       if (b) b.classList.toggle('in-battle', !!inBattle);
+      if (inBattle) {
+        clearTimeout(toastTimer);
+        const t = document.getElementById('gameToast');
+        if (t) t.style.opacity = '0';
+        const aif = document.getElementById('aiActionFeed');
+        if (aif) aif.remove();
+      }
       const metaTheme = document.querySelector('meta[name="theme-color"]');
       if (metaTheme) metaTheme.setAttribute('content', inBattle ? '#0b1120' : '#f8fafc');
     }
@@ -18314,9 +18317,12 @@ const TYPE_EMOJI = {
         </div>
       `;
       let closed = false;
+      let autoTimer = null;
       const close = () => {
         if (closed) return;
         closed = true;
+        clearTimeout(autoTimer);
+        if (advIntroCloseFn === close) advIntroCloseFn = null;
         el.classList.add('out');
         setTimeout(() => {
           el.remove();
@@ -18324,20 +18330,61 @@ const TYPE_EMOJI = {
         }, 330);
       };
       el.addEventListener('click', close);
-      setTimeout(close, 3600);
+      advIntroCloseFn = close;
+      // Durée calée sur le jingle : fermeture à la fin réelle de la musique (événement ENDED),
+      // ou après la durée du jingle si le son est coupé. Garde-fou si le lecteur YouTube tarde.
+      setTimeout(() => {
+        if (closed) return;
+        autoTimer = setTimeout(close, battleThemeActive ? BATTLE_START_JINGLE_MS + 6000 : BATTLE_START_JINGLE_MS);
+      }, 0);
       document.body.appendChild(el);
       try { if (navigator.vibrate) navigator.vibrate(18); } catch (_) {}
     }
 
+    // Choix de deck repliés : seul le deck sélectionné est visible tant qu'on ne déplie pas.
+    let quickPlayerOpen = false;
+    let quickAiOpen = false;
+
+    function toggleQuickPicker(which) {
+      if (which === 'player') quickPlayerOpen = !quickPlayerOpen;
+      else quickAiOpen = !quickAiOpen;
+      renderQuickSetup();
+    }
+
     function selectQuickPlayerDeck(key) {
       quickPlayerDeck = key;
+      quickPlayerOpen = false;
       try { localStorage.setItem('ppi_v2_quick_player_deck', key); } catch (_) {}
       renderQuickSetup();
     }
 
     function selectQuickAiDeck(key) {
       quickAiDeck = key;
+      quickAiOpen = false;
       renderQuickSetup();
+    }
+
+    // En-tête replié : image du deck sélectionné + nom, tout le bandeau déplie/replie la liste.
+    function quickFoldHeader(which, step, title, meta, open) {
+      const isP = which === 'player';
+      const ring = isP ? 'border-amber-400' : 'border-rose-400';
+      const label = isP ? 'text-amber-700' : 'text-rose-600';
+      const art = meta.img
+        ? `<img src="${meta.img}" alt="" class="deck-art w-full h-full object-cover" />`
+        : `<span class="text-xl font-black text-rose-300">?</span>`;
+      return `
+        <button onclick="toggleQuickPicker('${which}')" aria-expanded="${open}" class="w-full flex items-center gap-3 text-left active:scale-[0.99] transition" style="touch-action:manipulation">
+          <div class="relative w-24 sm:w-28 aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-slate-900 border-2 ${ring} shrink-0 flex items-center justify-center">
+            ${art}
+            <span class="absolute bottom-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded ${isP ? 'bg-indigo-600' : 'bg-rose-600'} text-white">60c</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-[9.5px] font-extrabold uppercase tracking-wider ${label}">${step}. ${title}</div>
+            <div class="text-sm font-black text-slate-900 leading-tight truncate">${meta.short}</div>
+            <div class="text-[10px] font-semibold text-slate-500 leading-tight truncate">${meta.sub}</div>
+          </div>
+          <span class="shrink-0 w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 text-xs font-black transition-transform ${open ? 'rotate-180' : ''}">▾</span>
+        </button>`;
     }
 
     function renderQuickSetup() {
@@ -18372,15 +18419,14 @@ const TYPE_EMOJI = {
       if (!deckKeyPlayable(quickPlayerDeck) || DECK_META[quickPlayerDeck]?.cards === 30) quickPlayerDeck = 'V2_FEU';
       if (quickAiDeck !== 'RANDOM' && (!deckKeyPlayable(quickAiDeck) || DECK_META[quickAiDeck]?.cards === 30)) quickAiDeck = 'V2_EAU';
 
-      pGrid.innerHTML = `
-        <div class="flex items-center justify-between gap-2">
-          <div>
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <h2 class="text-xs font-black tracking-wider uppercase text-slate-900">1. Choisis ton Deck</h2>
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-300 shrink-0">60c · 6 Prix</span>
-            </div>
-            <p class="text-[10.5px] text-slate-500 leading-tight mt-0.5">Decks complets de 60 cartes (60c) · Les demi-decks 30c sont dans le Tutoriel en haut</p>
-          </div>
+      const pSel = DECK_META[quickPlayerDeck] || DECK_META.V2_FEU;
+      const pStar = (pSel.star || '').split(' (')[0];
+      pGrid.innerHTML = quickFoldHeader('player', 1, 'Ton Deck', {
+        img: pSel.img, short: pSel.short,
+        sub: pStar && pStar !== pSel.short ? `${pStar} · 60 cartes · 6 Prix` : '60 cartes · 6 Prix'
+      }, quickPlayerOpen) + (!quickPlayerOpen ? '' : `
+        <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/80">
+          <p class="text-[10.5px] text-slate-500 leading-tight">Decks complets 60c · Les demi-decks 30c sont dans le Tutoriel</p>
           <button onclick="switchMenuTab('decks')" class="shrink-0 px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[10px] font-extrabold text-emerald-800 transition active:scale-95">
             ${customKeys.length ? 'Mes Decks 60c (' + customKeys.length + ')' : '+ Créer un deck'}
           </button>
@@ -18406,7 +18452,7 @@ const TYPE_EMOJI = {
           </div>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderPlayerCard).join('')}</div>
         </div>
-      `;
+      `);
 
       const renderAiCard = (k) => {
         const isRand = k === 'RANDOM';
@@ -18431,19 +18477,16 @@ const TYPE_EMOJI = {
       };
 
       const aiDeckPool = [...fullKeys, ...unlockedTourneyKeys];
-      aGrid.innerHTML = `
-        <div class="flex items-center justify-between gap-2">
-          <div>
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <h2 class="text-xs font-black tracking-wider uppercase text-slate-900">2. Adversaire IA</h2>
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300 shrink-0">60c · 6 Prix</span>
-            </div>
-            <p class="text-[10.5px] text-slate-500 leading-tight mt-0.5">Choisis le deck 60c adverse ou tire au sort</p>
-          </div>
+      const aSel = quickAiDeck === 'RANDOM' ? null : (DECK_META[quickAiDeck] || DECK_META.V2_EAU);
+      aGrid.innerHTML = quickFoldHeader('ai', 2, 'Adversaire IA', aSel
+        ? { img: aSel.img, short: aSel.short, sub: '60 cartes · 6 Prix' }
+        : { img: '', short: 'Aléatoire', sub: 'Deck surprise · 60 cartes · 6 Prix' }, quickAiOpen) + (!quickAiOpen ? '' : `
+        <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/80">
+          <p class="text-[10.5px] text-slate-500 leading-tight">Choisis le deck 60c adverse ou tire au sort</p>
           <button onclick="selectQuickAiDeck('RANDOM')" class="px-2.5 py-1 rounded-xl text-[10px] font-extrabold border transition active:scale-95 ${quickAiDeck === 'RANDOM' ? 'bg-rose-500 text-white border-rose-500 shadow-sm' : 'bg-rose-50 text-rose-700 border-rose-300 hover:bg-rose-100'}">IA Aléatoire · 60c</button>
         </div>
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${aiDeckPool.map(renderAiCard).join('')}</div>
-      `;
+      `);
 
       const pMeta = DECK_META[quickPlayerDeck] || DECK_META.V2_FEU;
       document.getElementById('quickSummaryPlayerImg').src = pMeta.img;
@@ -19447,8 +19490,7 @@ const TYPE_EMOJI = {
       clearConditions(promoted);
       game.player.active = promoted;
       fx.placed.add(promoted.uid);
-      playPokemonCry(promoted.dex);
-      sfx('place');
+      sfxBattle('summon');
       buzz(16);
       mpPromoPickerOpen = false;
       hidePreview();
@@ -19530,7 +19572,7 @@ const TYPE_EMOJI = {
         try {
           game.ai = promoReply.side;
           fx.placed.add(game.ai.active.uid);
-          playPokemonCry(game.ai.active.dex);
+          sfxBattle('summon');
           showGameToast(`⚔️ <strong>${game.oppPseudo || 'Adversaire'}</strong> envoie <strong>${game.ai.active.name}</strong> au combat !`);
           renderBoard();
         } finally {
@@ -19606,7 +19648,7 @@ const TYPE_EMOJI = {
             game.ai = msg.side;
             if (!hadActive && game.ai.active) {
               fx.placed.add(game.ai.active.uid);
-              playPokemonCry(game.ai.active.dex);
+              sfxBattle('summon');
             }
             renderBoard();
           } finally {
@@ -19644,7 +19686,7 @@ const TYPE_EMOJI = {
           game.ai = msg.side;
           if (!hadActive && game.ai.active) {
             fx.placed.add(game.ai.active.uid);
-            playPokemonCry(game.ai.active.dex);
+            sfxBattle('summon');
           }
           renderBoard();
         } finally {
@@ -19677,7 +19719,7 @@ const TYPE_EMOJI = {
         try {
           game.ai = msg.actorSide;
           applyRemotePlayerSide(msg.targetSide);
-          if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
+          sfxBattle('charge', msg.atkType);
           await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
           showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
           renderBoard();
@@ -20017,6 +20059,7 @@ const TYPE_EMOJI = {
 
     let toastTimer = null;
     function showGameToast(htmlText) {
+      if ((game && !game.gameOver) || document.body.classList.contains('in-battle')) return;
       let t = document.getElementById('gameToast');
       if (!t) {
         t = document.createElement('div');
@@ -20213,49 +20256,10 @@ const TYPE_EMOJI = {
       return '';
     }
 
-    // Fil des actions de l'adversaire (Partie rapide & Aventure, où la bulle de description est masquée) :
-    // chaque carte jouée par l'IA s'affiche brièvement en haut ; celles qui te pénalisent ressortent en rouge.
-    const AI_FEED_HARM = /Suppression d'Énergie|Rafale de vent|Fillette|Migraine|\bton\b|\btes\b/i;
-    function aiActionFeed(text) {
-      let box = document.getElementById('aiActionFeed');
-      if (!box) {
-        box = document.createElement('div');
-        box.id = 'aiActionFeed';
-        document.body.appendChild(box);
-      }
-      const clean = String(text).replace(/<[^>]+>/g, '').replace(/^\s*[«"]\s*|\s*[»"]\s*$/g, '').trim();
-      if (!clean) return;
-      const harm = AI_FEED_HARM.test(clean);
-      const item = document.createElement('div');
-      item.className = `aif-item${harm ? ' harm' : ''}`;
-      item.textContent = clean;
-      box.appendChild(item);
-      while (box.children.length > 3) box.firstElementChild.remove();
-      if (harm) { try { if (navigator.vibrate) navigator.vibrate([20, 40, 20]); } catch (_) {} }
-      setTimeout(() => { item.classList.add('out'); setTimeout(() => item.remove(), 320); }, harm ? 4200 : 2800);
-    }
-
-    function sayJuliette(text, forceToast = false) {
-      if (game && game.activePlayer === 'ai' && !game.gameOver && (game.mode === 'quick' || isAdvMatch())) aiActionFeed(text);
-      if (game && game.mode === 'multi') {
-        mpLastToastText = text;
-        if (forceToast) showGameToast(text);
-        return;
-      }
-      if (game && game.mode === 'quick') {
-        if (forceToast) showGameToast(text);
-        return;
-      }
-      if (isAdvMatch()) {
-        // Pas de description d'action en mode Aventure : uniquement les alertes d'action bloquée
-        if (forceToast && /(impossible|d'abord|déjà|aucun|il te faut|il faut|ne peut pas|vide|migraine)/i.test(text)) {
-          showGameToast(text);
-        }
-        return;
-      }
+    function sayJuliette(text) {
+      if (!game || game.mode !== 'tutorial') return;
       const el = document.getElementById('julietteSpeech');
       if (el) el.innerHTML = `« ${text} »`;
-      if (forceToast) showGameToast(text);
     }
 
     // -----------------------------------------------------------------------
@@ -20815,8 +20819,7 @@ const TYPE_EMOJI = {
         sayJuliette(`${card.name} rejoint ton Banc !`);
       }
       fx.placed.add(card.uid);
-      playPokemonCry(card.dex);
-      sfx('place');
+      sfxBattle('summon');
     }
 
     function rainDanceFor(card, ref) {
@@ -20830,10 +20833,10 @@ const TYPE_EMOJI = {
       if (game.energyAttachedThisTurn && !rain) return;
       game.player.hand.splice(i, 1);
       ref.energies.push(card);
-      if (rain) { fx.attached.add(card.uid); sfx('place'); sayJuliette(`🌧️ Danse de la pluie : Énergie Eau attachée à ${ref.name} (sans compter dans ton Énergie du tour) !`); return; }
+      if (rain) { fx.attached.add(card.uid); sfxBattle('energy', 'Eau'); sayJuliette(`🌧️ Danse de la pluie : Énergie Eau attachée à ${ref.name} (sans compter dans ton Énergie du tour) !`); return; }
       game.energyAttachedThisTurn = true;
       fx.attached.add(card.uid);
-      sfx('place');
+      sfxBattle('energy', card.energyType);
       sayJuliette(`Énergie ${card.energyType} glissée sous ${ref.name} !`);
     }
 
@@ -21084,6 +21087,236 @@ const TYPE_EMOJI = {
       } catch (_) {}
     }
     const buzz = (ms) => { try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {} };
+
+    // =======================================================================
+    // SONS DE COMBAT « JEU DE CARTES » (synthétisés, aucun fichier, aucun cri de Pokémon)
+    // Chaque action a sa signature sonore ; l'impact et la charge d'attaque dépendent du TYPE.
+    // =======================================================================
+    let battleBus = null;
+    function battleOut(c) {
+      if (battleBus && battleBus.context === c) return battleBus;
+      try {
+        const comp = c.createDynamicsCompressor();
+        comp.threshold.value = -16; comp.knee.value = 10; comp.ratio.value = 5;
+        comp.attack.value = 0.003; comp.release.value = 0.18;
+        comp.connect(c.destination);
+        battleBus = comp;
+      } catch (_) { battleBus = c.destination; }
+      return battleBus;
+    }
+    function battleNoiseBuf(c) {
+      if (battleNoiseBuf._b && battleNoiseBuf._b.sampleRate === c.sampleRate) return battleNoiseBuf._b;
+      const len = c.sampleRate; // 1 s de bruit blanc réutilisé
+      const b = c.createBuffer(1, len, c.sampleRate);
+      const d = b.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      battleNoiseBuf._b = b;
+      return b;
+    }
+
+    function sfxBattle(kind, type = 'Incolore', amount = 0) {
+      const c = getAudioCtx();
+      if (!c) return;
+      try {
+        const out = battleOut(c);
+        const T = c.currentTime + 0.005;
+        const S = Math.max(0.02, sfxVolumePct / 100);
+        const env = (g, start, dur, vol, atk = 0.004) => {
+          g.gain.setValueAtTime(0.0001, start);
+          g.gain.linearRampToValueAtTime(Math.max(0.0002, vol * S), start + atk);
+          g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+        };
+        // Bruit filtré (balayage de fréquence possible)
+        const nz = (start, dur, f1, f2 = f1, { q = 1, vol = 0.3, ft = 'bandpass', atk = 0.003 } = {}) => {
+          const src = c.createBufferSource(); src.buffer = battleNoiseBuf(c);
+          const f = c.createBiquadFilter(); f.type = ft; f.Q.value = q;
+          f.frequency.setValueAtTime(f1, start); f.frequency.exponentialRampToValueAtTime(Math.max(20, f2), start + dur);
+          const g = c.createGain(); env(g, start, dur, vol, atk);
+          src.connect(f).connect(g).connect(out);
+          src.start(start, Math.random() * 0.5); src.stop(start + dur + 0.02);
+        };
+        // Oscillateur avec glissando, vibrato optionnel
+        const os = (start, dur, f1, f2 = f1, { vol = 0.2, wave = 'sine', atk = 0.004, vib = 0, vibRate = 7 } = {}) => {
+          const o = c.createOscillator(); o.type = wave;
+          o.frequency.setValueAtTime(f1, start); o.frequency.exponentialRampToValueAtTime(Math.max(20, f2), start + dur);
+          if (vib) {
+            const l = c.createOscillator(), lg = c.createGain();
+            l.frequency.value = vibRate; lg.gain.value = vib;
+            l.connect(lg).connect(o.frequency); l.start(start); l.stop(start + dur + 0.02);
+          }
+          const g = c.createGain(); env(g, start, dur, vol, atk);
+          o.connect(g).connect(out); o.start(start); o.stop(start + dur + 0.02);
+        };
+        // Carte posée sur le tapis (base commune à beaucoup d'actions)
+        const slap = (t, vol = 1) => {
+          nz(t, 0.07, 1400, 500, { q: 0.7, vol: 0.42 * vol, ft: 'lowpass' });
+          os(t, 0.09, 150, 70, { vol: 0.3 * vol });
+        };
+        const slide = (t, vol = 1) => nz(t, 0.11, 1800, 5200, { q: 1.4, vol: 0.16 * vol, atk: 0.04 });
+        const chime = (t, notes, { step = 0.06, dur = 0.38, vol = 0.1, wave = 'triangle' } = {}) =>
+          notes.forEach((f, i) => { os(t + i * step, dur, f, f * 1.003, { vol, wave }); os(t + i * step, dur * 0.7, f * 2, f * 2, { vol: vol * 0.3 }); });
+
+        // Petite signature musicale par type (Énergie attachée, charge d'attaque)
+        const typeMotif = (t, ty, k = 1) => {
+          switch (ty) {
+            case 'Feu':
+              nz(t, 0.32, 900, 3200, { q: 0.8, vol: 0.2 * k, atk: 0.05 });
+              for (let i = 0; i < 5; i++) nz(t + 0.03 + Math.random() * 0.25, 0.018, 2600 + Math.random() * 2500, 2600, { q: 4, vol: 0.18 * k });
+              os(t, 0.3, 330, 700, { vol: 0.09 * k, wave: 'sawtooth' });
+              break;
+            case 'Eau':
+              for (let i = 0; i < 4; i++) { const f = 500 + i * 180 + Math.random() * 80; os(t + i * 0.055, 0.07, f, f * 2.1, { vol: 0.16 * k }); }
+              nz(t, 0.25, 1200, 500, { q: 1.2, vol: 0.08 * k, atk: 0.04 });
+              break;
+            case 'Électrique':
+              os(t, 0.22, 1600, 900, { vol: 0.07 * k, wave: 'square', vib: 400, vibRate: 55 });
+              nz(t, 0.05, 6000, 6000, { q: 2, vol: 0.18 * k, ft: 'highpass' });
+              nz(t + 0.11, 0.04, 7000, 7000, { q: 2, vol: 0.14 * k, ft: 'highpass' });
+              break;
+            case 'Plante':
+              [523.25, 659.25, 783.99].forEach((f, i) => { os(t + i * 0.06, 0.16, f, f, { vol: 0.15 * k }); os(t + i * 0.06, 0.05, f * 3, f * 3, { vol: 0.05 * k }); });
+              nz(t, 0.22, 4000, 2500, { q: 0.9, vol: 0.06 * k, atk: 0.06 });
+              break;
+            case 'Psy':
+              os(t, 0.5, 440, 880, { vol: 0.1 * k, vib: 18, vibRate: 6 });
+              os(t, 0.5, 443, 886, { vol: 0.08 * k, wave: 'triangle', vib: 14, vibRate: 5 });
+              os(t + 0.2, 0.45, 1318.5, 1318.5, { vol: 0.05 * k, vib: 22, vibRate: 8 });
+              break;
+            case 'Combat':
+              os(t, 0.16, 140, 60, { vol: 0.32 * k });
+              nz(t, 0.06, 900, 400, { q: 1, vol: 0.2 * k, ft: 'lowpass' });
+              os(t + 0.12, 0.13, 120, 55, { vol: 0.26 * k });
+              break;
+            default:
+              chime(t, [783.99, 1174.66], { vol: 0.09 * k });
+          }
+        };
+
+        switch (kind) {
+          case 'summon': // Pokémon posé en jeu / nouveau Pokémon Actif
+            slap(T);
+            chime(T + 0.05, [987.77, 1479.98], { step: 0.05, dur: 0.3, vol: 0.06 });
+            buzz(14);
+            break;
+          case 'energy': // Énergie glissée sous un Pokémon
+            slide(T, 0.9);
+            nz(T + 0.08, 0.05, 1000, 500, { q: 0.8, vol: 0.2, ft: 'lowpass' });
+            typeMotif(T + 0.09, type, 0.9);
+            buzz(10);
+            break;
+          case 'trainer': // Carte Dresseur jouée
+            nz(T, 0.05, 3200, 3200, { q: 1, vol: 0.22 });
+            slap(T + 0.04, 0.7);
+            chime(T + 0.08, [880, 1318.5, 1760], { step: 0.055, dur: 0.32, vol: 0.08 });
+            break;
+          case 'evolve': // Évolution : montée lumineuse + accord final
+            slap(T, 0.8);
+            os(T + 0.03, 0.75, 180, 1500, { vol: 0.09, wave: 'sawtooth', atk: 0.3 });
+            nz(T + 0.03, 0.75, 600, 6000, { q: 1.5, vol: 0.09, atk: 0.4 });
+            [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => os(T + 0.1 + i * 0.09, 0.3, f, f, { vol: 0.08, wave: 'triangle' }));
+            chime(T + 0.62, [1046.5, 1318.5, 1567.98, 2093], { step: 0.012, dur: 0.9, vol: 0.08 });
+            buzz([20, 40, 30]);
+            break;
+          case 'retreat': // Battre en retraite
+            nz(T, 0.32, 3000, 600, { q: 1.6, vol: 0.2, atk: 0.06 });
+            os(T, 0.28, 660, 330, { vol: 0.07, wave: 'triangle' });
+            break;
+          case 'charge': // Déclaration d'attaque (selon le type)
+            nz(T, 0.18, 400, 2400, { q: 1, vol: 0.1, atk: 0.12 });
+            typeMotif(T + 0.04, type, 1);
+            break;
+          case 'impact': { // Coup porté (selon le type), intensité selon les dégâts
+            const dmg = Math.max(0, amount || 0);
+            if (dmg <= 0) { // Attaque bloquée / sans dégâts
+              os(T, 0.18, 220, 180, { vol: 0.12, wave: 'triangle' });
+              nz(T, 0.08, 800, 600, { q: 2, vol: 0.12 });
+              break;
+            }
+            const k = 0.75 + Math.min(dmg, 120) / 120 * 0.55;
+            // socle commun : sub-impact
+            os(T, 0.28, 120, 42, { vol: 0.34 * k });
+            switch (type) {
+              case 'Feu':
+                nz(T, 0.55, 3600, 300, { q: 0.6, vol: 0.4 * k, ft: 'lowpass' });
+                for (let i = 0; i < 9; i++) nz(T + 0.04 + Math.random() * 0.4, 0.02, 2000 + Math.random() * 4000, 2000, { q: 5, vol: 0.2 * k });
+                os(T, 0.4, 220, 80, { vol: 0.1 * k, wave: 'sawtooth' });
+                break;
+              case 'Eau':
+                nz(T, 0.4, 2800, 450, { q: 1.1, vol: 0.38 * k });
+                for (let i = 0; i < 7; i++) { const f = 350 + Math.random() * 900, s = T + 0.08 + Math.random() * 0.35; os(s, 0.06, f, f * 2.2, { vol: 0.12 * k }); }
+                break;
+              case 'Électrique':
+                nz(T, 0.07, 5000, 5000, { q: 0.7, vol: 0.4 * k, ft: 'highpass' });
+                os(T, 0.38, 1800, 120, { vol: 0.11 * k, wave: 'sawtooth', vib: 600, vibRate: 70 });
+                os(T + 0.02, 0.3, 900, 90, { vol: 0.08 * k, wave: 'square', vib: 300, vibRate: 45 });
+                nz(T + 0.12, 0.05, 7000, 7000, { q: 1, vol: 0.2 * k, ft: 'highpass' });
+                nz(T + 0.22, 0.04, 6000, 6000, { q: 1, vol: 0.14 * k, ft: 'highpass' });
+                break;
+              case 'Plante':
+                nz(T, 0.13, 5200, 1800, { q: 2.2, vol: 0.34 * k }); // coup de fouet
+                os(T + 0.03, 0.14, 330, 300, { vol: 0.2 * k }); // claquement boisé
+                os(T + 0.09, 0.12, 247, 230, { vol: 0.16 * k });
+                nz(T + 0.08, 0.35, 3500, 2200, { q: 0.8, vol: 0.12 * k, atk: 0.03 }); // feuilles
+                break;
+              case 'Psy':
+                os(T, 0.6, 300, 1400, { vol: 0.12 * k, vib: 30, vibRate: 9 });
+                os(T, 0.6, 1400, 300, { vol: 0.09 * k, wave: 'triangle', vib: 25, vibRate: 7 });
+                nz(T, 0.3, 1500, 4000, { q: 3, vol: 0.14 * k, atk: 0.12 });
+                os(T + 0.15, 0.7, 1567.98, 1560, { vol: 0.07 * k, vib: 20, vibRate: 6 });
+                break;
+              case 'Combat':
+                os(T, 0.32, 95, 38, { vol: 0.45 * k });
+                nz(T, 0.13, 700, 250, { q: 0.8, vol: 0.45 * k, ft: 'lowpass' });
+                os(T, 0.09, 90, 60, { vol: 0.15 * k, wave: 'square' });
+                break;
+              default:
+                nz(T, 0.14, 1500, 600, { q: 0.8, vol: 0.38 * k });
+                os(T, 0.12, 400, 200, { vol: 0.1 * k, wave: 'triangle' });
+            }
+            if (dmg >= 100) { // coup critique : boom + éclat
+              os(T + 0.02, 0.6, 70, 30, { vol: 0.4 });
+              chime(T + 0.08, [1318.5, 1975.5], { step: 0.03, dur: 0.4, vol: 0.06 });
+            }
+            break;
+          }
+          case 'ko': // K.O. : la carte tombe et se brise
+            os(T, 0.65, 520, 70, { vol: 0.16, wave: 'triangle' });
+            os(T, 0.65, 523, 72, { vol: 0.08, wave: 'sawtooth' });
+            for (let i = 0; i < 10; i++) nz(T + 0.25 + Math.random() * 0.3, 0.05, 4500 + Math.random() * 4000, 3000, { q: 6, vol: 0.12 });
+            os(T + 0.6, 0.35, 110, 40, { vol: 0.4 });
+            nz(T + 0.6, 0.12, 900, 300, { q: 0.7, vol: 0.3, ft: 'lowpass' });
+            break;
+          case 'prize': // Carte Récompense piochée
+            slide(T);
+            chime(T + 0.1, [1318.5, 1661.2, 1975.5, 2637], { step: 0.06, dur: 0.5, vol: 0.1 });
+            break;
+          case 'status': // État spécial (type = poison/toxic/asleep/confused/paralyzed)
+            if (type === 'poison' || type === 'toxic') {
+              for (let i = 0; i < 5; i++) { const f = 180 + Math.random() * 160; os(T + i * 0.07, 0.09, f, f * 1.8, { vol: 0.16 }); }
+              os(T, 0.4, 233, 220, { vol: 0.06, wave: 'sawtooth' });
+            } else if (type === 'asleep') {
+              os(T, 0.35, 784, 784, { vol: 0.12 }); os(T + 0.3, 0.55, 523.25, 520, { vol: 0.12 });
+            } else if (type === 'confused') {
+              os(T, 0.6, 600, 600, { vol: 0.11, wave: 'triangle', vib: 120, vibRate: 5 });
+              os(T + 0.05, 0.55, 900, 450, { vol: 0.06, vib: 90, vibRate: 7 });
+            } else if (type === 'paralyzed') {
+              os(T, 0.3, 160, 150, { vol: 0.12, wave: 'square', vib: 40, vibRate: 30 });
+              nz(T, 0.06, 6000, 6000, { q: 1, vol: 0.15, ft: 'highpass' });
+            }
+            break;
+          case 'win':
+            [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => os(T + i * 0.12, 0.22, f, f, { vol: 0.13, wave: 'square' }));
+            [1046.5, 1318.5, 1567.98].forEach((f) => os(T + 0.5, 1.1, f, f, { vol: 0.08, wave: 'triangle' }));
+            chime(T + 0.5, [2093, 2637, 3136], { step: 0.07, dur: 0.6, vol: 0.05 });
+            break;
+          case 'lose':
+            [659.25, 622.25, 587.33].forEach((f, i) => os(T + i * 0.22, 0.24, f, f, { vol: 0.11, wave: 'triangle' }));
+            os(T + 0.66, 1.0, 554.37, 520, { vol: 0.11, wave: 'triangle', vib: 8, vibRate: 5 });
+            os(T + 0.66, 1.0, 138.6, 130, { vol: 0.12 });
+            break;
+        }
+      } catch (_) {}
+    }
 
     // =======================================================================
     // GLISSER-DÉPOSER & SURVOL FLUIDE CARTE À CARTE DE LA MAIN
@@ -21681,7 +21914,7 @@ const TYPE_EMOJI = {
           { transform: 'scale(1.35) rotate(30deg)', opacity: 0 }
         ], { duration: big ? 1400 : 1150, easing: 'ease-out' });
       }
-      sfx('hit'); buzz(30);
+      sfxBattle('impact', type, dmg); buzz(dmg >= 100 ? [30, 30, 50] : 30);
     }
 
     async function animateAttack(atkOwner, defOwner, dmg, type) {
@@ -21711,7 +21944,7 @@ const TYPE_EMOJI = {
     async function animateKO(owner) {
       const el = activeCardEl(owner);
       if (!el) return;
-      sfx('ko'); buzz([40, 60, 40]);
+      sfxBattle('ko'); buzz([40, 60, 40]);
       const stack = el.closest('.pkm-stack');
       await (stack || el).animate([
         { transform: 'none', filter: 'none', opacity: 1 },
@@ -22080,8 +22313,7 @@ const TYPE_EMOJI = {
       fx.evolved.add(evoCard.uid);
       fx.prevHp.set(evoCard.uid, Math.max(0, Math.round(((basePkm.hp - basePkm.damage) / basePkm.hp) * 100)));
       fx.prevDmg.set(evoCard.uid, evoCard.damage);
-      sfx('place'); buzz(20);
-      playPokemonCry(evoCard.dex);
+      sfxBattle('evolve');
       sayJuliette(`Waouh ! ${basePkm.name} évolue en ${evoCard.name} (${evoCard.hp} PV) !`);
       if (owner === 'player') advSay('playerEvolve');
     }
@@ -22095,7 +22327,7 @@ const TYPE_EMOJI = {
         game.player.hand.splice(idx, 1);
         game.player.discard.push(card);
       }
-      sfx('place');
+      sfxBattle('trainer');
       advSay('playerTrainer', 0.5);
     }
 
@@ -22608,7 +22840,7 @@ const TYPE_EMOJI = {
         };
         game.player.bench.push(tokenPkm);
         fx.placed.add(tokenPkm.uid);
-        sfx('place');
+        sfxBattle('summon');
         sayJuliette(`🦕 ${card.name} est posé sur ton Banc (10 PV) !`, true);
         renderBoard();
         return;
@@ -22830,6 +23062,7 @@ const TYPE_EMOJI = {
             const ok = await flipCoinAnimated(`💫 ${act.name} est Confus — Retraite ?`);
             if (!ok) { sayJuliette(`💫 ${act.name} est Confus : la retraite échoue (Énergies défaussées) !`, true); renderBoard(); return; }
           }
+          sfxBattle('retreat');
           swapActive('player', chosenIdx);
           sayJuliette(`${act.name} bat en retraite ! ${game.player.active.name} entre en jeu !`);
           advSay('playerRetreat');
@@ -23009,11 +23242,13 @@ const TYPE_EMOJI = {
       if (!canBeAffected(p)) { log.push(`${p.name} est immunisé contre les états spéciaux`); return; }
       if (kind === 'poison' || kind === 'toxic') {
         p.poison = kind === 'toxic' ? 20 : Math.max(p.poison || 0, 10);
+        sfxBattle('status', kind);
         log.push(`☠️ ${p.name} est Empoisonné${kind === 'toxic' ? ' (20/tour)' : ''}`);
         return;
       }
       p.special = kind; // Endormi / Confus / Paralysé se remplacent
       p.paraTurns = kind === 'paralyzed' ? 2 : 0;
+      sfxBattle('status', kind);
       log.push(`${SPECIAL_META[kind].emoji} ${p.name} est ${SPECIAL_META[kind].label}`);
     }
     function clearConditions(p) {
@@ -23027,7 +23262,7 @@ const TYPE_EMOJI = {
       const old = side.active;
       side.active = side.bench[benchIdx];
       if (old) { clearConditions(old); side.bench[benchIdx] = old; } else side.bench.splice(benchIdx, 1);
-      if (side.active) { fx.placed.add(side.active.uid); playPokemonCry(side.active.dex); }
+      if (side.active) { fx.placed.add(side.active.uid); sfxBattle('summon'); }
     }
     function statusBadges(p) {
       const b = [];
@@ -23238,7 +23473,7 @@ const TYPE_EMOJI = {
       const idx = await chooseFrom(owner, title || '🔁 Nouveau Pokémon Actif', 'Choisis quel Pokémon de ton Banc devient Actif :', side.bench, pickStrongest, false);
       side.active = side.bench.splice(idx ?? 0, 1)[0];
       fx.placed.add(side.active.uid);
-      playPokemonCry(side.active.dex);
+      sfxBattle('summon');
       renderBoard();
     }
 
@@ -23319,7 +23554,7 @@ const TYPE_EMOJI = {
       const usable = attackUsable(attackerOwner, attackIndex);
       if (!usable.ok) { sayJuliette(`${attack.name} impossible : ${usable.reason}.`, true); return; }
       game.attackedThisTurn = true;
-      playPokemonCry(attacker.dex);
+      sfxBattle('charge', effType(attacker));
       const log = [];
 
       // 1. Confusion : pile = 20 dégâts à lui-même, l'attaque échoue
@@ -23714,7 +23949,7 @@ const TYPE_EMOJI = {
           if (di === null) return;
           const e = waters[0];
           side.hand.splice(side.hand.indexOf(e), 1);
-          dsts[di].energies.push(e); fx.attached.add(e.uid); sfx('place');
+          dsts[di].energies.push(e); fx.attached.add(e.uid); sfxBattle('energy', 'Eau');
           say(`Énergie Eau attachée à ${dsts[di].name}.`);
           break;
         }
@@ -23919,6 +24154,7 @@ const TYPE_EMOJI = {
         const prize = winnerSide.prizes.pop();
         fx.dealFrom.set(prize.uid, 'prize');
         winnerSide.hand.push(prize);
+        setTimeout(() => sfxBattle('prize'), 250);
         sayJuliette(
           `${koPkm.name} est K.O. ! ${winnerOwner === 'player' ? `Tu récupères 1 carte Récompense (${prize.name}) !` : `${oppLabel()} récupère 1 carte Récompense !`}`,
           game.mode === 'multi'
@@ -23971,7 +24207,7 @@ const TYPE_EMOJI = {
             game.ai = promoReply.side;
             if (game.ai.active) {
               fx.placed.add(game.ai.active.uid);
-              playPokemonCry(game.ai.active.dex);
+              sfxBattle('summon');
             }
             renderBoard();
             mpApplyingRemote = false;
@@ -23981,7 +24217,7 @@ const TYPE_EMOJI = {
         victimSide.bench.sort((a, b) => b.energies.length - a.energies.length || (b.hp - b.damage) - (a.hp - a.damage));
         victimSide.active = victimSide.bench.shift();
         fx.placed.add(victimSide.active.uid);
-        playPokemonCry(victimSide.active.dex);
+        sfxBattle('summon');
         sayJuliette(`${game.mode === 'multi' ? (game.oppPseudo || 'Adversaire') + ' envoie' : (game.advTrainer ? `${game.advTrainer.name} envoie` : 'J\'envoie')} ${victimSide.active.name} en Pokémon Actif !`, game.mode === 'multi');
         renderBoard();
       } else {
@@ -23993,7 +24229,7 @@ const TYPE_EMOJI = {
             (chosenIdx) => {
               victimSide.active = victimSide.bench.splice(chosenIdx, 1)[0];
               fx.placed.add(victimSide.active.uid);
-              playPokemonCry(victimSide.active.dex);
+              sfxBattle('summon');
               renderBoard();
               resolve();
             },
@@ -24099,7 +24335,7 @@ const TYPE_EMOJI = {
           if (game.ai.bench.length < 5) {
             game.ai.hand = game.ai.hand.filter((c) => c.uid !== b.uid);
             game.ai.bench.push(freshInPlay(b));
-            fx.placed.add(b.uid); sfx('place');
+            fx.placed.add(b.uid); sfxBattle('summon');
             sayJuliette(`${oppLabel()} pose ${b.name} sur son Banc.`);
             renderBoard();
             await wait(500); if (!alive()) return;
@@ -24386,13 +24622,13 @@ const TYPE_EMOJI = {
           const maxNeeded = Math.max(...(game.ai.active.attacks || []).map((a) => a.cost.length), 1);
           if (energyUnits(game.ai.active).length < maxNeeded || game.ai.bench.length === 0) {
             game.ai.active.energies.push(eCard);
-            fx.attached.add(eCard.uid); sfx('place');
+            fx.attached.add(eCard.uid); sfxBattle('energy', eCard.energyType);
             sayJuliette(`${oppLabel()} attache ${eCard.name} à ${game.ai.active.name}.`);
           } else {
             // Attacher au meilleur Pokémon du Banc qui a encore besoin d'Énergie
             const benchTarget = game.ai.bench.find((b) => energyUnits(b).length < Math.max(...(b.attacks || []).map((a) => a.cost.length), 2)) || game.ai.bench[0];
             benchTarget.energies.push(eCard);
-            fx.attached.add(eCard.uid); sfx('place');
+            fx.attached.add(eCard.uid); sfxBattle('energy', eCard.energyType);
             sayJuliette(`${oppLabel()} attache ${eCard.name} à ${benchTarget.name} sur son Banc.`);
           }
           renderBoard();
@@ -24524,6 +24760,7 @@ const TYPE_EMOJI = {
         });
       }
       const isWin = winner === 'player';
+      if (!game._endSfxPlayed) { game._endSfxPlayed = true; setTimeout(() => sfxBattle(isWin ? 'win' : 'lose'), 300); }
       const advTrainer = game.mode === 'adventure' ? game.advTrainer : null;
       let earnedCoinsAmount = WIN_REWARD_COINS;
       let earnedFreePacks = 0;
