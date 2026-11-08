@@ -243,7 +243,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '20bf971-1794173041';
+      var BUILD = '418f176-1794173347';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -322,6 +322,12 @@
     html.ios-standalone, html.ios-standalone body {
       height: 100vh !important;
       min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    html.ios-standalone body.in-battle,
+    body.in-battle {
+      height: 100dvh !important;
+      min-height: 100dvh !important;
+      max-height: 100dvh !important;
     }
     /* Verrouillage strict en mode portrait sur téléphone (bloque le basculement en paysage) */
     @media screen and (orientation: landscape) and (hover: none) and (pointer: coarse) and (max-height: 560px) {
@@ -444,9 +450,21 @@
     }
     #cardModal, #coinModal, #pickerModal, #academyModal, #boosterOpenModal, #pseudoModal {
       padding-top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
-      padding-bottom: calc(0.75rem + min(12px, env(safe-area-inset-bottom, 0px))) !important;
+      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)) !important;
     }
     #gameScreen > header { padding-top: max(6px, calc(env(safe-area-inset-top, 0px) + 2px)) !important; }
+    #battleHandFooter {
+      padding-bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 12px)) !important;
+      touch-action: none;
+      overscroll-behavior: none;
+    }
+    @supports (-webkit-touch-callout: none) {
+      /* Sur iOS (iPhone / iPad), éloigne franchement la main de la barre système d'accueil (Home Indicator)
+         pour que glisser ou toucher une carte en bas ne déclenche jamais le changement d'application d'iOS */
+      #battleHandFooter {
+        padding-bottom: max(30px, calc(env(safe-area-inset-bottom, 0px) + 14px)) !important;
+      }
+    }
     #gameToast { top: calc(13% + env(safe-area-inset-top, 0px)) !important; }
     .card-shadow {
       box-shadow: 0 1px 1px rgba(0,0,0,.35), 0 6px 12px -3px rgba(0,0,0,.5);
@@ -521,7 +539,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.6);
     }
     .hand-card {
-      position: absolute; bottom: 6px; width: 66px; transform-origin: 50% 120%;
+      position: absolute; bottom: 12px; width: 66px; transform-origin: 50% 120%;
       transition: transform .16s cubic-bezier(.2,.9,.3,1.2), box-shadow .16s ease;
     }
     .hand-card.hand-focus {
@@ -731,7 +749,7 @@
     .tilt.tilting::after { opacity: 1; }
 
     /* Main : survol fluide géré par .hand-focus (souris + tactile) */
-    #playerHandRow { touch-action: none; }
+    #playerHandRow, #playerBenchRow { touch-action: none; }
     .hand-card { touch-action: none; cursor: grab; }
     .hand-card.dragging-src { opacity: .22; }
 
@@ -2784,13 +2802,13 @@
       </section>
     </main>
 
-    <!-- MAIN EN ÉVENTAIL -->
-    <footer class="shrink-0 bg-gradient-to-b from-black/30 to-black/50 px-2 pt-1" style="padding-bottom:max(4px, min(10px, env(safe-area-inset-bottom, 0px)))">
-      <div class="flex items-center justify-between text-[10.5px] font-bold text-slate-300/80 px-1">
+    <!-- MAIN EN ÉVENTAIL (relevée au-dessus de la barre d'accueil iOS pour ne jamais déclencher le changement d'app) -->
+    <footer id="battleHandFooter" class="shrink-0 bg-gradient-to-b from-black/30 to-black/60 px-2 pt-1">
+      <div id="playerHandRow" class="relative w-full" style="height: clamp(82px, 14dvh, 132px)"></div>
+      <div class="flex items-center justify-between text-[10.5px] font-bold text-slate-300/80 px-1 pt-0.5 select-none pointer-events-none">
         <span>TA MAIN · <strong id="playerHandCount" class="text-white">0</strong></span>
         <span>Glisse pour jouer · touche pour voir 🔍</span>
       </div>
-      <div id="playerHandRow" class="relative w-full" style="height: clamp(82px, 14dvh, 132px)"></div>
     </footer>
   </div>
 
@@ -21032,7 +21050,7 @@ const TYPE_EMOJI = {
       handContainer.innerHTML = hand.map((card, idx) => {
         const { badge, playable } = handBadge(card);
         const rot = n > 1 ? (idx - mid) * Math.min(5, 28 / n) : 0;
-        const dy = Math.min(8, Math.abs(idx - mid) * Math.min(3, 14 / Math.max(n, 1)));
+        const dy = Math.min(6, Math.abs(idx - mid) * Math.min(2.5, 12 / Math.max(n, 1)));
         const isNew = !fx.handSeen.has(card.uid);
         if (isNew) {
           const source = fx.dealFrom.get(card.uid) || 'deck';
@@ -21781,7 +21799,7 @@ const TYPE_EMOJI = {
       const rect = row.getBoundingClientRect();
       const x = clientX - rect.left;
       const y = clientY - rect.top;
-      if (y < -44 || y > rect.height + 28) return null;
+      if (y < -44 || y > rect.height + 10) return null;
       const first = cards[0];
       const last = cards[cards.length - 1];
       if (x < first.offsetLeft - 14 || x > last.offsetLeft + last.offsetWidth + 14) return null;
@@ -21801,6 +21819,19 @@ const TYPE_EMOJI = {
 
     function initHandDrag() {
       const row = document.getElementById('playerHandRow');
+      const footer = document.getElementById('battleHandFooter') || (row && row.closest('footer'));
+
+      // Bloque tout geste natif iOS / Safari (rebond, navigation, barre du bas) lors de la manipulation des cartes en main
+      const blockNativeTouch = (e) => {
+        if (game && e.cancelable) e.preventDefault();
+      };
+      if (footer) {
+        footer.addEventListener('touchstart', blockNativeTouch, { passive: false });
+        footer.addEventListener('touchmove', blockNativeTouch, { passive: false });
+      } else if (row) {
+        row.addEventListener('touchstart', blockNativeTouch, { passive: false });
+        row.addEventListener('touchmove', blockNativeTouch, { passive: false });
+      }
 
       row.addEventListener('pointerdown', (e) => {
         const hc = pickHandCardAt(e.clientX, e.clientY) || e.target.closest('.hand-card');
@@ -21833,7 +21864,7 @@ const TYPE_EMOJI = {
         if (!drag.started) {
           if (e.pointerType !== 'mouse') {
             // Tirer vers le haut => lancer le glisser-déposer de la carte actuellement survolée
-            const pullingUp = dy < -20 && Math.abs(dy) > Math.abs(dx) * 0.72;
+            const pullingUp = dy < -12 && Math.abs(dy) > Math.abs(dx) * 0.65;
             if (!pullingUp) {
               const overHc = pickHandCardAt(e.clientX, e.clientY);
               if (overHc && overHc !== drag.hc) {
@@ -21935,6 +21966,10 @@ const TYPE_EMOJI = {
     function initBenchDrag() {
       const benchRow = document.getElementById('playerBenchRow');
       if (!benchRow) return;
+
+      benchRow.addEventListener('touchmove', (e) => {
+        if (drag && drag.fromBench && e.cancelable) e.preventDefault();
+      }, { passive: false });
 
       benchRow.addEventListener('pointerdown', (e) => {
         if (!game || game.gameOver || game.player.active || !game.player.bench.length) return;
@@ -27643,25 +27678,57 @@ const TYPE_EMOJI = {
       document.getElementById('academyModal').classList.remove('hidden');
     }
 
+    // Indicateur Pull-to-Refresh : simple flèche tournante, invisible au repos (aucun texte)
+    function createPtrArrow(parent, fixed) {
+      const ind = document.createElement('div');
+      ind.setAttribute('aria-hidden', 'true');
+      ind.style.cssText = `position:${fixed ? 'fixed' : 'absolute'};left:50%;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:70;width:34px;height:34px;margin-left:-17px;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.18);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(-44px);pointer-events:none;transition:opacity .15s,transform .15s;color:#64748b`;
+      ind.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .05s"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
+      parent.appendChild(ind);
+      const svg = ind.firstChild;
+      return {
+        update(dist, threshold) {
+          const r = Math.min(1, dist / threshold);
+          ind.style.transition = 'none';
+          ind.style.opacity = String(Math.min(1, r * 1.4));
+          ind.style.transform = `translateY(${Math.min(dist, threshold) * 0.7 - 44}px)`;
+          ind.style.color = r >= 1 ? '#2563eb' : '#64748b';
+          svg.style.animation = '';
+          svg.style.transform = `rotate(${r * 300}deg)`;
+        },
+        spin() { svg.style.animation = 'ptrSpin .6s linear infinite'; },
+        hide(delay = 0) {
+          setTimeout(() => {
+            ind.style.transition = 'opacity .2s, transform .2s';
+            ind.style.opacity = '0';
+            ind.style.transform = 'translateY(-44px)';
+            svg.style.animation = '';
+          }, delay);
+        },
+      };
+    }
+    if (!document.getElementById('ptrSpinStyle')) {
+      const st = document.createElement('style'); st.id = 'ptrSpinStyle';
+      st.textContent = '@keyframes ptrSpin{to{transform:rotate(360deg)}}';
+      document.head.appendChild(st);
+    }
+
     // Pull-to-refresh (menu uniquement, tactile + souris)
     (function initPullToRefresh() {
       const el = document.getElementById('menuScreen');
-      const ind = document.createElement('div');
-      ind.style.cssText = 'position:fixed;top:env(safe-area-inset-top);left:50%;transform:translate(-50%,-48px);z-index:70;padding:6px 14px;border-radius:999px;background:#ffffff;border:1px solid #cbd5e1;color:#334155;box-shadow:0 8px 20px -4px rgba(15,23,42,0.12);font:700 11px Inter,sans-serif;transition:transform .15s';
-      ind.textContent = '↓ Tirer pour rafraîchir';
-      document.body.appendChild(ind);
+      const ptr = createPtrArrow(document.body, true);
       let y0 = null, dist = 0;
       const start = (y) => { if (el.scrollTop <= 0 && !el.classList.contains('hidden')) { y0 = y; dist = 0; } };
       const move = (y) => {
         if (y0 === null) return;
         dist = Math.max(0, Math.min(120, y - y0));
-        ind.style.transform = `translate(-50%, ${dist - 48}px)`;
-        ind.textContent = dist > 80 ? '↻ Relâcher pour rafraîchir' : '↓ Tirer pour rafraîchir';
+        ptr.update(dist, 80);
       };
       const end = () => {
         if (y0 === null) return;
-        if (dist > 80) { if (navigator.vibrate) navigator.vibrate(15); location.reload(); }
-        ind.style.transform = 'translate(-50%,-48px)'; y0 = null;
+        if (dist > 80) { if (navigator.vibrate) navigator.vibrate(15); ptr.spin(); location.reload(); }
+        else ptr.hide();
+        y0 = null;
       };
       el.addEventListener('touchstart', (e) => start(e.touches[0].clientY), { passive: true });
       el.addEventListener('touchmove', (e) => move(e.touches[0].clientY), { passive: true });
@@ -28306,12 +28373,10 @@ const TYPE_EMOJI = {
       });
       // Tirer pour rafraîchir la collection (sans recharger la page)
       let y0 = null, dist = 0;
-      const ind = document.createElement('div');
-      ind.style.cssText = 'position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 6px);transform:translate(-50%,-60px);z-index:5;padding:6px 14px;border-radius:999px;background:#ffffff;border:1px solid #cbd5e1;color:#334155;box-shadow:0 8px 20px -4px rgba(15,23,42,0.12);font:800 11px Nunito,sans-serif;transition:transform .15s;pointer-events:none';
-      el.appendChild(ind);
+      const ptr = createPtrArrow(el, false);
       const start = (y) => { if (body.scrollTop <= 0) { y0 = y; dist = 0; } };
-      const move = (y) => { if (y0 === null) return; dist = Math.max(0, Math.min(110, y - y0)); ind.style.transform = `translate(-50%, ${dist - 60}px)`; ind.textContent = dist > 70 ? '↻ Relâcher pour actualiser' : '↓ Tirer pour actualiser'; };
-      const end = () => { if (y0 === null) return; if (dist > 70) { dbBuzz(15); renderDeckEditor(); dbToast('Collection actualisée'); } ind.style.transform = 'translate(-50%,-60px)'; y0 = null; };
+      const move = (y) => { if (y0 === null) return; dist = Math.max(0, Math.min(110, y - y0)); ptr.update(dist, 70); };
+      const end = () => { if (y0 === null) return; if (dist > 70) { dbBuzz(15); ptr.spin(); renderDeckEditor(); dbToast('Collection actualisée'); ptr.hide(450); } else ptr.hide(); y0 = null; };
       body.addEventListener('touchstart', (e) => start(e.touches[0].clientY), { passive: true });
       body.addEventListener('touchmove', (e) => move(e.touches[0].clientY), { passive: true });
       body.addEventListener('touchend', end);
