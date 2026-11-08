@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 932" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e3a8a"/>
+      <stop offset=".22" stop-color="#2f6fe0"/>
+      <stop offset=".44" stop-color="#7cc4fb"/>
+      <stop offset=".58" stop-color="#fde9a8"/>
+      <stop offset=".66" stop-color="#fdba74"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="318" cy="520" r="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffbeb" stop-opacity="1"/>
+      <stop offset=".16" stop-color="#fde68a" stop-opacity=".95"/>
+      <stop offset=".45" stop-color="#fcd34d" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#fcd34d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b9bf0"/>
+      <stop offset="1" stop-color="#c4b5fd"/>
+    </linearGradient>
+    <linearGradient id="mMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4c5fc4"/>
+      <stop offset="1" stop-color="#7c8de0"/>
+    </linearGradient>
+    <linearGradient id="hill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a3e635"/>
+      <stop offset="1" stop-color="#4d9a2a"/>
+    </linearGradient>
+    <linearGradient id="hill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fcf4b"/>
+      <stop offset="1" stop-color="#2f7d32"/>
+    </linearGradient>
+    <linearGradient id="meadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4fbf4a"/>
+      <stop offset=".5" stop-color="#2e9440"/>
+      <stop offset="1" stop-color="#1c6b33"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <g id="cloud">
+      <ellipse cx="0" cy="8" rx="62" ry="14" fill="#c7d2fe" opacity=".75"/>
+      <circle cx="-30" cy="0" r="18" fill="#fff"/>
+      <circle cx="-4" cy="-12" r="25" fill="#fff"/>
+      <circle cx="24" cy="-4" r="20" fill="#fff"/>
+      <ellipse cx="0" cy="4" rx="56" ry="13" fill="#fff"/>
+      <ellipse cx="-6" cy="-22" rx="14" ry="6" fill="#fff" opacity=".9"/>
+    </g>
+    <g id="pine">
+      <rect x="-2.5" y="0" width="5" height="12" rx="1.5" fill="#6b3f1d"/>
+      <path d="M0 -46 L18 -8 L-18 -8 Z" fill="#166534"/>
+      <path d="M0 -34 L22 4 L-22 4 Z" fill="#15803d"/>
+      <path d="M0 -46 L-18 -8 L0 -8 Z M0 -34 L-22 4 L0 4 Z" fill="#22a04b"/>
+      <ellipse cx="0" cy="12" rx="16" ry="3.5" fill="#0f3d1e" opacity=".35"/>
+    </g>
+    <g id="bush">
+      <ellipse cx="0" cy="6" rx="22" ry="4" fill="#0f3d1e" opacity=".3"/>
+      <circle cx="-10" cy="-2" r="10" fill="#1f8a3c"/>
+      <circle cx="8" cy="-4" r="12" fill="#239a43"/>
+      <circle cx="-2" cy="-10" r="9" fill="#34b553"/>
+      <circle cx="-5" cy="-13" r="3.5" fill="#86efac" opacity=".7"/>
+    </g>
+  </defs>
+
+  <!-- Ciel doré de fin de journée -->
+  <rect width="430" height="932" fill="url(#sky)"/>
+  <rect width="430" height="932" fill="url(#sun)"/>
+  <!-- Rayons de soleil -->
+  <g fill="#fff" opacity=".13">
+    <path d="M318 520 L120 0 L190 0 Z"/>
+    <path d="M318 520 L260 0 L320 0 Z"/>
+    <path d="M318 520 L400 0 L460 0 Z"/>
+    <path d="M318 520 L0 200 L0 290 Z"/>
+    <path d="M318 520 L430 160 L430 240 Z"/>
+  </g>
+  <circle cx="318" cy="520" r="34" fill="#fffbeb"/>
+
+  <!-- Étoiles discrètes en haut du ciel -->
+  <g fill="#fff">
+    <circle cx="40" cy="40" r="1.4" opacity=".8"/><circle cx="120" cy="22" r="1" opacity=".6"/>
+    <circle cx="210" cy="56" r="1.2" opacity=".7"/><circle cx="350" cy="30" r="1.5" opacity=".8"/>
+    <circle cx="395" cy="92" r="1" opacity=".6"/><circle cx="75" cy="118" r="1" opacity=".5"/>
+  </g>
+
+  <!-- Nuages en volume -->
+  <use href="#cloud" x="88" y="150" opacity=".95"/>
+  <use href="#cloud" transform="translate(330 250) scale(.8)" opacity=".9"/>
+  <use href="#cloud" transform="translate(70 360) scale(.65)" opacity=".85"/>
+  <use href="#cloud" transform="translate(250 420) scale(1.1)" opacity=".8"/>
+
+  <!-- Montagnes lointaines -->
+  <path d="M0 600 L0 520 L46 470 L84 505 L130 438 L176 492 L214 455 L262 512 L300 470 L352 525 L394 486 L430 520 L430 600 Z" fill="url(#mFar)"/>
+  <path d="M130 438 L146 458 L136 455 L128 466 L120 452 Z M46 470 L58 483 L44 482 Z M300 470 L314 486 L298 484 Z" fill="#fff" opacity=".9"/>
+
+  <!-- Plateau de la Ligue avec stade au sommet -->
+  <path d="M150 600 L172 520 L258 520 L282 600 Z" fill="#5b5fc7"/>
+  <path d="M172 520 L258 520 L262 532 L168 532 Z" fill="#8187e6"/>
+  <g transform="translate(215 520)">
+    <ellipse cx="0" cy="-2" rx="36" ry="5" fill="#3730a3" opacity=".45"/>
+    <rect x="-28" y="-20" width="56" height="18" rx="2" fill="#eef2ff"/>
+    <rect x="-28" y="-20" width="56" height="4" fill="#fbbf24"/>
+    <g fill="#a5b4fc"><rect x="-22" y="-14" width="4" height="12"/><rect x="-12" y="-14" width="4" height="12"/><rect x="-2" y="-14" width="4" height="12"/><rect x="8" y="-14" width="4" height="12"/><rect x="18" y="-14" width="4" height="12"/></g>
+    <path d="M-20 -20 Q0 -44 20 -20 Z" fill="#fde68a"/>
+    <path d="M-20 -20 Q0 -44 20 -20 L8 -20 Q0 -36 -8 -20 Z" fill="#f59e0b" opacity=".55"/>
+    <rect x="-1" y="-56" width="2" height="16" fill="#334155"/>
+    <path d="M1 -56 L14 -52 L1 -48 Z" fill="#ef4444"/>
+    <circle cx="0" cy="-30" r="34" fill="#fde68a" opacity=".18"/>
+  </g>
+
+  <!-- Montagnes intermédiaires -->
+  <path d="M0 640 L0 560 L40 530 L92 590 L120 572 L150 610 L0 640 Z" fill="url(#mMid)"/>
+  <path d="M430 640 L430 556 L392 532 L350 584 L318 566 L280 612 Z" fill="url(#mMid)"/>
+  <path d="M40 530 L52 544 L40 541 L30 548 L26 541 Z M392 532 L404 545 L394 543 L382 548 Z" fill="#fff" opacity=".85"/>
+
+  <!-- Collines -->
+  <path d="M0 660 Q80 600 170 640 T330 630 T430 625 L430 760 L0 760 Z" fill="url(#hill1)"/>
+  <path d="M0 662 Q80 602 170 642 T330 632 T430 627" fill="none" stroke="url(#shine)" stroke-width="5" opacity=".7"/>
+  <path d="M0 720 Q110 660 230 700 T430 690 L430 820 L0 820 Z" fill="url(#hill2)"/>
+  <path d="M0 721 Q110 661 230 701 T430 691" fill="none" stroke="#c6f27a" stroke-width="2.5" opacity=".55"/>
+
+  <!-- Forêt en arrière-plan -->
+  <use href="#pine" transform="translate(26 668) scale(.75)"/>
+  <use href="#pine" transform="translate(52 676) scale(.62)"/>
+  <use href="#pine" transform="translate(388 660) scale(.72)"/>
+  <use href="#pine" transform="translate(410 672) scale(.6)"/>
+  <use href="#pine" transform="translate(360 676) scale(.55)"/>
+
+  <!-- Prairie au premier plan -->
+  <path d="M0 790 Q130 742 260 772 T430 760 L430 932 L0 932 Z" fill="url(#meadow)"/>
+  <path d="M0 791 Q130 743 260 773 T430 761" fill="none" stroke="#8be36f" stroke-width="3" opacity=".7"/>
+
+  <use href="#pine" transform="translate(18 800) scale(1.05)"/>
+  <use href="#pine" transform="translate(410 792) scale(1.1)"/>
+  <use href="#pine" transform="translate(384 816) scale(.85)"/>
+  <use href="#bush" x="70" y="820"/>
+  <use href="#bush" transform="translate(342 846) scale(.9)"/>
+  <use href="#bush" transform="translate(40 880) scale(1.2)"/>
+  <use href="#bush" transform="translate(400 900) scale(1.15)"/>
+
+  <!-- Fleurs & touffes d'herbe -->
+  <g>
+    <circle cx="120" cy="840" r="2.4" fill="#fff"/><circle cx="124" cy="842" r="1.2" fill="#facc15"/>
+    <circle cx="300" cy="812" r="2.2" fill="#fde047"/><circle cx="210" cy="868" r="2.4" fill="#fff"/>
+    <circle cx="160" cy="902" r="2.2" fill="#f472b6"/><circle cx="270" cy="900" r="2.4" fill="#fff"/>
+    <circle cx="96" cy="790" r="1.8" fill="#fde047"/><circle cx="330" cy="880" r="2" fill="#f472b6"/>
+  </g>
+  <g fill="none" stroke="#1c6b33" stroke-width="1.6" stroke-linecap="round" opacity=".7">
+    <path d="M150 860 l-3 -8 M152 860 l0 -10 M154 860 l3 -8"/>
+    <path d="M250 830 l-3 -8 M252 830 l0 -10 M254 830 l3 -8"/>
+    <path d="M300 915 l-3 -8 M302 915 l0 -10 M304 915 l3 -8"/>
+  </g>
+</svg>
