@@ -19,7 +19,7 @@ KNOWN_METADATA = {
         "category": "games-family",
         "emoji": "🃏",
         "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
-        "logoUrl": "pokemon-play-it/assets/icon.svg?v=2",
+        "logoUrl": "pokemon-play-it/assets/icon.svg?v=3",
     },
     "uncensored": {
         "title": "UNCENSORED·OS — DeepSeek V4.1 & Abliterated AI",
@@ -622,7 +622,7 @@ def main():
                 "subtitle": "Intégrale CD-ROM VF extraite via Craft Anything · 241 cartes FR (Base, Jungle, Fossile, Rocket), 38 Decks, Sprites .is, Voix VF Juliette, Musiques & 151 Cris",
                 "category": "games-family",
                 "emoji": "🃏",
-                "logoUrl": "pokemon-play-it/assets/icon.svg?v=2",
+                "logoUrl": "pokemon-play-it/assets/icon.svg?v=3",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/pokemon-play-it",
                 "pushedAt": output[0]["pushedAt"] if output else None,
