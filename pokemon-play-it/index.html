@@ -14,7 +14,8 @@
   <style>
     :root { color-scheme: dark; }
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
-    img { -webkit-user-drag: none; -webkit-touch-callout: none; }
+    *, *::before, *::after { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    img { -webkit-user-drag: none; -webkit-touch-callout: none; pointer-events: auto; }
     body {
       font-family: 'Nunito', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       height: 100dvh;
@@ -462,7 +463,7 @@
     <footer class="shrink-0 bg-gradient-to-b from-black/30 to-black/50 px-2 pt-1" style="padding-bottom:max(4px, env(safe-area-inset-bottom))">
       <div class="flex items-center justify-between text-[9px] font-mono text-slate-400 px-1">
         <span>TA MAIN · <strong id="playerHandCount" class="text-white">0</strong></span>
-        <span>Glisse une carte sur le tapis · appui long 🔍</span>
+        <span>Glisse pour jouer · touche pour voir 🔍</span>
       </div>
       <div id="playerHandRow" class="relative w-full" style="height: clamp(80px, 13dvh, 124px)"></div>
     </footer>
@@ -949,8 +950,7 @@
       return `
         <div class="pkm-stack" data-uid="${pkm.uid}">
           ${energies}
-          <div onclick="inspectBoardPokemon('${owner}', '${zone}', ${index})"
-               class="tcg tilt cursor-pointer bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
+          <div class="tcg tilt cursor-pointer" bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
             <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" draggable="false" />
             ${pkm.damage > 0 ? `<div class="dmg-badge ${dmgChanged ? 'dmg-pop' : ''}">${pkm.damage}</div>` : ''}
             <div class="absolute inset-x-1 bottom-1 h-1 bg-black/70 rounded-full overflow-hidden">
@@ -1216,6 +1216,7 @@
       row.addEventListener('pointerdown', (e) => {
         const hc = e.target.closest('.hand-card');
         if (!hc || !game) return;
+        hidePreview();
         const idx = +hc.dataset.hidx;
         const card = game.player.hand[idx];
         if (!card) return;
@@ -1252,7 +1253,9 @@
         if (d.preview) { hidePreview(); drag = null; return; }
         if (!d.started) {
           drag = null;
-          if (!cancelled && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < 8) openHandCardModal(d.idx);
+          if (!cancelled && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < 8 && e.pointerType !== 'mouse') {
+            showPreview(d.card, e.pointerType); previewSticky = true;
+          }
           return;
         }
         endDrag(cancelled);
@@ -1376,7 +1379,34 @@
       pv.style.top = `${Math.max(12, (innerHeight - w * 88 / 63) / 2 - 30)}px`;
       pv.classList.remove('show'); void pv.offsetWidth; pv.classList.add('show');
     }
-    function hidePreview() { document.getElementById('cardPreview').classList.remove('show'); }
+    let previewSticky = false;
+    function hidePreview() { previewSticky = false; document.getElementById('cardPreview').classList.remove('show'); }
+
+    function initTouchPeek() {
+      let held = null;
+      // Tout appui ailleurs referme un aperçu resté ouvert
+      document.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse') return;
+        const el = e.target.closest ? e.target.closest('.tilt') : null;
+        if (!el) { if (previewSticky) hidePreview(); return; }
+        const img = el.querySelector('img');
+        if (!img) return;
+        showPreview({ img: img.src }, e.pointerType);
+        buzz(6);
+        held = { t: Date.now(), id: e.pointerId };
+      }, true);
+      const release = (e) => {
+        if (!held || e.pointerId !== held.id) return;
+        // Appui court = l'aperçu reste affiché (toucher ailleurs pour fermer) ; appui long = disparaît au relâcher
+        if (Date.now() - held.t > 320) hidePreview(); else previewSticky = true;
+        held = null;
+      };
+      document.addEventListener('pointerup', release, true);
+      document.addEventListener('pointercancel', release, true);
+      ['contextmenu', 'selectstart', 'dragstart'].forEach((ev) => document.addEventListener(ev, (e) => {
+        if (!(e.target.closest && e.target.closest('input, textarea'))) e.preventDefault();
+      }));
+    }
 
     function initHover() {
       document.addEventListener('pointermove', (e) => {
@@ -1395,7 +1425,7 @@
           el.classList.add('tilting'); tiltEl = el;
           const img = el.querySelector('img');
           clearTimeout(hoverTimer);
-          hoverTimer = setTimeout(() => img && showPreview({ img: img.src }, 'mouse'), 550);
+          hoverTimer = setTimeout(() => img && showPreview({ img: img.src }, 'mouse'), 260);
         }
       });
       // Aperçu au survol des cartes de la main (souris)
@@ -1405,9 +1435,9 @@
         if (!hc || !game) return;
         const card = game.player.hand[+hc.dataset.hidx];
         clearTimeout(hoverTimer);
-        hoverTimer = setTimeout(() => card && !(drag && drag.started) && showPreview(card, 'mouse'), 550);
+        hoverTimer = setTimeout(() => card && !(drag && drag.started) && showPreview(card, 'mouse'), 260);
       });
-      document.getElementById('playerHandRow').addEventListener('pointerleave', () => { clearTimeout(hoverTimer); hidePreview(); });
+      document.getElementById('playerHandRow').addEventListener('pointerleave', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(hoverTimer); hidePreview(); });
     }
 
     // =======================================================================
@@ -2371,6 +2401,7 @@
     })();
     initHandDrag();
     initHover();
+    initTouchPeek();
   </script>
 </body>
 </html>
