@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="dark">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
@@ -8,17 +8,17 @@
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
   <link rel="apple-touch-icon" href="assets/icon.svg" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0b1120" />
+  <meta name="theme-color" content="#f8fafc" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Pokémon Play It" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: dark; }
+    :root { color-scheme: light; --playmat-url: url("assets/playmats/night.jpg"); --playmat-fallback: #1d435a; }
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
     *, *::before, *::after { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     img { -webkit-user-drag: none; -webkit-touch-callout: none; pointer-events: auto; }
@@ -29,7 +29,7 @@
       height: 100%;
       min-height: 100dvh;
       min-height: -webkit-fill-available;
-      background: #0b1120;
+      background: #f8fafc;
     }
     body {
       margin: 0;
@@ -41,6 +41,11 @@
       min-height: 100dvh;
       min-height: -webkit-fill-available;
       overflow: hidden;
+      background: #f8fafc;
+      color: #0f172a;
+      transition: background-color 0.65s ease, color 0.4s ease;
+    }
+    body.in-battle {
       background: #0b1120;
       color: #f8fafc;
     }
@@ -54,20 +59,55 @@
       height: 100vh !important;
       min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
     }
-    /* Tapis illustrés (fond peint + voile pour la lisibilité des cartes) */
-    .playmat-night, .playmat-jungle, .playmat-fossil, .playmat-mewtwo { background-size: cover; background-position: center; background-repeat: no-repeat; }
-    .playmat-night  { background-color: #1d435a; background-image: linear-gradient(180deg, rgba(5,10,20,.42), rgba(5,10,20,.28) 45%, rgba(5,10,20,.42)), url("assets/playmats/night.jpg"); }
-    .playmat-jungle { background-color: #2b4f2d; background-image: linear-gradient(180deg, rgba(5,10,20,.42), rgba(5,10,20,.28) 45%, rgba(5,10,20,.42)), url("assets/playmats/jungle.jpg"); }
-    .playmat-fossil { background-color: #634630; background-image: linear-gradient(180deg, rgba(5,10,20,.42), rgba(5,10,20,.28) 45%, rgba(5,10,20,.42)), url("assets/playmats/fossil.jpg"); }
-    .playmat-mewtwo { background-color: #532536; background-image: linear-gradient(180deg, rgba(5,10,20,.42), rgba(5,10,20,.28) 45%, rgba(5,10,20,.42)), url("assets/playmats/mewtwo.jpg"); }
-    /* Grain de feutrine + vignettage */
+    /* Tapis illustrés : désaturés/blancs dans les menus (style TCG Pocket), en pleine couleur quand on lance un combat */
+    .playmat-night  { --playmat-url: url("assets/playmats/night.jpg");  --playmat-fallback: #1d435a; }
+    .playmat-jungle { --playmat-url: url("assets/playmats/jungle.jpg"); --playmat-fallback: #2b4f2d; }
+    .playmat-fossil { --playmat-url: url("assets/playmats/fossil.jpg"); --playmat-fallback: #634630; }
+    .playmat-mewtwo { --playmat-url: url("assets/playmats/mewtwo.jpg"); --playmat-fallback: #532536; }
+
+    /* Calque d'arrière-plan du paysage / tapis : blanc désaturé au menu -> couleur vive en combat */
     body::before {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .32; mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      content: '';
+      position: fixed;
+      inset: -12px;
+      pointer-events: none;
+      z-index: 0;
+      background-color: var(--playmat-fallback, #1d435a);
+      background-image: var(--playmat-url, url("assets/playmats/night.jpg"));
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      /* Menu : paysage désaturé blanc nacré très doux façon TCG Pocket */
+      filter: grayscale(1) saturate(0) brightness(1.92) contrast(0.52);
+      opacity: 0.34;
+      transform: scale(1.02);
+      transition:
+        filter 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: filter, opacity, transform;
     }
+    /* Voile de finition : nacré lumineux dans les menus, vignettage feutrine en plein combat */
     body::after {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.45) 100%);
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.82) 0%, rgba(248, 250, 252, 0.68) 55%, rgba(241, 245, 249, 0.86) 100%);
+      transition: background 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    /* Quand on lance un combat : le tapis / paysage reprend toutes ses couleurs ! */
+    body.in-battle::before {
+      filter: grayscale(0) saturate(1.12) brightness(0.96) contrast(1.04);
+      opacity: 1;
+      transform: scale(1);
+    }
+    body.in-battle::after {
+      background:
+        linear-gradient(180deg, rgba(5, 10, 20, 0.34), rgba(5, 10, 20, 0.18) 45%, rgba(5, 10, 20, 0.36)),
+        radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.42) 100%);
     }
     #menuScreen, #gameScreen { position: relative; z-index: 1; }
     /* Mode application (PWA plein écran) : respecter encoche / barre d'état sans bande vide en bas */
@@ -461,8 +501,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.015);
-      filter: contrast(1.04) saturate(1.06);
+      image-rendering: -webkit-optimize-contrast;
+      filter: contrast(1.03) saturate(1.05);
       pointer-events: none;
     }
     /* Relief 3D homogénéisé : coussin cylindrique + soudures striées haut/bas + pli de scellage */
@@ -1227,138 +1267,177 @@
     </div>
 
     <!-- =============================================================== -->
-    <!-- ONGLET MULTI : PARCOURS GUIDÉ DÉBUTANT (4 ÉTAPES)                -->
+    <!-- ONGLET MULTI : 2 PAGES SÉPARÉES (1. SALON · 2. DECK & PRÊT)     -->
     <!-- =============================================================== -->
     <div id="viewMulti" class="hidden w-full space-y-2.5">
-      <!-- En-tête simple -->
-      <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-slate-950/95 border border-cyan-400/45 shadow-xl">
+      <!-- En-tête + Barre de navigation entre les 2 pages -->
+      <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-slate-950/95 border border-cyan-400/45 shadow-xl space-y-2.5">
         <div class="flex items-start justify-between gap-2">
           <div class="min-w-0">
             <h2 class="text-sm font-black text-white leading-tight">Jouer contre un ami</h2>
-            <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">Chacun sur son téléphone ou ordinateur, en direct. Suis les 4 étapes ci-dessous.</p>
+            <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">Étape 1 : rejoins le salon avec ton ami · Étape 2 : choisis ton deck et clique sur Prêt.</p>
           </div>
           <span id="multiNetPill" class="shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 border border-white/15 text-[10px] font-bold text-slate-200">
             <span id="multiNetDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
             <span id="multiNetLabel">Connexion…</span>
           </span>
         </div>
-      </div>
 
-      <!-- ÉTAPE 1 : PSEUDO -->
-      <div class="w-full p-3 rounded-2xl bg-slate-900/85 border border-white/15 flex items-center gap-2.5">
-        <span id="multiStep1Num" class="mp-step-num">1</span>
-        <div class="min-w-0 flex-1">
-          <div class="text-[10.5px] font-black uppercase tracking-wider text-cyan-300">Ton nom de dresseur</div>
-          <div class="text-[11px] text-slate-400 leading-snug">C'est le nom que ton ami verra.</div>
-          <div id="multiMyPseudo" class="text-sm font-black text-white truncate mt-0.5">Dresseur</div>
-        </div>
-        <button onclick="openPseudoModal(false)" class="shrink-0 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-cyan-200 transition active:scale-95">Modifier</button>
-      </div>
-
-      <!-- ÉTAPE 2 : RETROUVER SON AMI AVEC UN CODE -->
-      <div class="w-full p-3 rounded-2xl bg-slate-900/85 border border-white/15 space-y-2.5">
-        <div class="flex items-start gap-2.5">
-          <span id="multiStep2Num" class="mp-step-num">2</span>
-          <div class="min-w-0 flex-1">
-            <div class="text-[10.5px] font-black uppercase tracking-wider text-cyan-300">Retrouve ton ami</div>
-            <div class="text-[11px] text-slate-400 leading-snug">Vous devez avoir <strong class="text-white">le même code</strong> tous les deux. Un seul joueur crée le code, l'autre le rejoint.</div>
-          </div>
-        </div>
-
-        <!-- Code actuel bien visible -->
-        <div class="rounded-xl bg-slate-950/80 border border-cyan-400/40 p-2.5 text-center">
-          <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Code de la partie</div>
-          <div id="multiRoomBadge" class="text-2xl font-mono font-black text-white tracking-[0.25em] my-0.5">ARENE</div>
-          <div id="multiRoomHint" class="text-[10.5px] text-amber-300 leading-snug"></div>
-        </div>
-
-        <!-- Deux choix clairs (repliés une fois l'ami connecté) -->
-        <button id="multiChangeCodeBtn" onclick="multiShowRoomChoices = true; renderMultiSetup();" class="hidden w-full py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10.5px] font-bold text-slate-300 transition active:scale-95">Changer de code / inviter quelqu'un d'autre</button>
-        <div id="multiRoomChoices" class="grid grid-cols-2 gap-2">
-          <div class="rounded-xl bg-white/5 border border-emerald-400/30 p-2 space-y-1.5 flex flex-col">
-            <div class="text-[10.5px] font-black text-emerald-300">Je crée la partie</div>
-            <button onclick="createPrivateMultiRoom()" class="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-white transition active:scale-95">Nouveau code</button>
-            <button onclick="shareMultiRoomLink()" id="multiShareBtn" class="w-full py-2 rounded-lg bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-400/50 text-[11px] font-extrabold text-emerald-100 transition active:scale-95">Envoyer à mon ami</button>
-          </div>
-          <div class="rounded-xl bg-white/5 border border-cyan-400/30 p-2 space-y-1.5 flex flex-col">
-            <div class="text-[10.5px] font-black text-cyan-300">J'ai reçu un code</div>
-            <input id="multiJoinInput" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" maxlength="8" placeholder="EX : PIKA42" onkeydown="if(event.key==='Enter'){joinMultiRoomFromInput();}" class="w-full px-2 py-2 rounded-lg bg-slate-950 border border-white/20 text-center font-mono font-black tracking-widest text-white text-[16px] uppercase placeholder:text-slate-600 placeholder:text-[11px] focus:outline-none focus:border-cyan-400" />
-            <button onclick="joinMultiRoomFromInput()" class="w-full py-2 rounded-lg bg-cyan-500/25 hover:bg-cyan-500/35 border border-cyan-400/50 text-[11px] font-extrabold text-cyan-100 transition active:scale-95">Rejoindre</button>
-          </div>
-        </div>
-
-        <!-- Où en est l'ami ? -->
-        <div id="multiOppBox" class="rounded-xl p-2.5 flex items-center gap-2.5 bg-slate-950/70 border border-white/10">
-          <img id="multiOppDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-rose-400/60 shrink-0 shadow opacity-40 grayscale" />
-          <div class="min-w-0 flex-1">
-            <div id="multiOppPseudo" class="text-xs font-black text-amber-300 truncate">En attente de ton ami…</div>
-            <div id="multiOppStatusSub" class="text-[10.5px] text-slate-400 leading-snug">Ton ami doit ouvrir le jeu, aller dans l'onglet Multi et entrer le même code.</div>
-          </div>
+        <!-- Sélecteur des 2 pages -->
+        <div class="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-slate-950/85 border border-white/10">
+          <button id="multiTabBtnLobby" onclick="switchMultiSubPage('lobby')" class="py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow">
+            <span id="multiStep1Badge" class="w-4 h-4 rounded-full bg-slate-950/25 text-[10px] font-black inline-flex items-center justify-center">1</span>
+            <span>1. Rejoindre le salon</span>
+          </button>
+          <button id="multiTabBtnDeck" onclick="switchMultiSubPage('deck')" class="py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:bg-white/5">
+            <span id="multiStep2Badge" class="w-4 h-4 rounded-full bg-white/15 text-[10px] font-black inline-flex items-center justify-center">2</span>
+            <span>2. Deck &amp; Prêt</span>
+          </button>
         </div>
       </div>
 
-      <!-- ÉTAPE 3 : CHOIX DU DECK -->
-      <div class="w-full p-3 rounded-2xl bg-slate-900/85 border border-white/15 space-y-2">
-        <div class="flex items-start gap-2.5">
-          <span id="multiStep3Num" class="mp-step-num">3</span>
+      <!-- ============================================================= -->
+      <!-- PAGE 1 : REJOINDRE LE SALON (PSEUDO + CODE DE LA PARTIE)      -->
+      <!-- ============================================================= -->
+      <div id="multiPageLobby" class="w-full space-y-2.5">
+        <!-- ÉTAPE 1 : PSEUDO -->
+        <div class="w-full p-3 rounded-2xl bg-slate-900/85 border border-white/15 flex items-center gap-2.5">
+          <span id="multiStep1Num" class="mp-step-num">1</span>
           <div class="min-w-0 flex-1">
-            <div class="text-[10.5px] font-black uppercase tracking-wider text-cyan-300">Choisis ton deck</div>
-            <div class="text-[11px] text-slate-400 leading-snug">Touche une carte pour la choisir. Débutant ? Prends un <strong class="text-amber-300">Demi-Deck</strong> : parties plus courtes (3 cartes Récompense à gagner).</div>
+            <div class="text-[10.5px] font-black uppercase tracking-wider text-cyan-300">Ton nom de dresseur</div>
+            <div class="text-[11px] text-slate-400 leading-snug">C'est le nom que ton ami verra.</div>
+            <div id="multiMyPseudo" class="text-sm font-black text-white truncate mt-0.5">Dresseur</div>
           </div>
+          <button onclick="openPseudoModal(false)" class="shrink-0 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-cyan-200 transition active:scale-95">Modifier</button>
         </div>
-        <div class="w-full space-y-2" id="multiDeckGrid"></div>
+
+        <!-- ÉTAPE 2 : RETROUVER SON AMI AVEC UN CODE -->
+        <div class="w-full p-3 rounded-2xl bg-slate-900/85 border border-white/15 space-y-2.5">
+          <div class="flex items-start gap-2.5">
+            <span id="multiStep2Num" class="mp-step-num">2</span>
+            <div class="min-w-0 flex-1">
+              <div class="text-[10.5px] font-black uppercase tracking-wider text-cyan-300">Retrouve ton ami</div>
+              <div class="text-[11px] text-slate-400 leading-snug">Vous devez avoir <strong class="text-white">le même code</strong> tous les deux. Un seul joueur crée le code, l'autre le rejoint.</div>
+            </div>
+          </div>
+
+          <!-- Code actuel bien visible -->
+          <div class="rounded-xl bg-slate-950/80 border border-cyan-400/40 p-2.5 text-center">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Code de la partie</div>
+            <div id="multiRoomBadge" class="text-2xl font-mono font-black text-white tracking-[0.25em] my-0.5">ARENE</div>
+            <div id="multiRoomHint" class="text-[10.5px] text-amber-300 leading-snug"></div>
+          </div>
+
+          <!-- Deux choix clairs (repliés une fois l'ami connecté) -->
+          <button id="multiChangeCodeBtn" onclick="multiShowRoomChoices = true; renderMultiSetup();" class="hidden w-full py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[10.5px] font-bold text-slate-300 transition active:scale-95">Changer de code / inviter quelqu'un d'autre</button>
+          <div id="multiRoomChoices" class="grid grid-cols-2 gap-2">
+            <div class="rounded-xl bg-white/5 border border-emerald-400/30 p-2 space-y-1.5 flex flex-col">
+              <div class="text-[10.5px] font-black text-emerald-300">Je crée la partie</div>
+              <button onclick="createPrivateMultiRoom()" class="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-white transition active:scale-95">Nouveau code</button>
+              <button onclick="shareMultiRoomLink()" id="multiShareBtn" class="w-full py-2 rounded-lg bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-400/50 text-[11px] font-extrabold text-emerald-100 transition active:scale-95">Envoyer à mon ami</button>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-cyan-400/30 p-2 space-y-1.5 flex flex-col">
+              <div class="text-[10.5px] font-black text-cyan-300">J'ai reçu un code</div>
+              <input id="multiJoinInput" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" maxlength="8" placeholder="EX : PIKA42" onkeydown="if(event.key==='Enter'){joinMultiRoomFromInput();}" class="w-full px-2 py-2 rounded-lg bg-slate-950 border border-white/20 text-center font-mono font-black tracking-widest text-white text-[16px] uppercase placeholder:text-slate-600 placeholder:text-[11px] focus:outline-none focus:border-cyan-400" />
+              <button onclick="joinMultiRoomFromInput()" class="w-full py-2 rounded-lg bg-cyan-500/25 hover:bg-cyan-500/35 border border-cyan-400/50 text-[11px] font-extrabold text-cyan-100 transition active:scale-95">Rejoindre</button>
+            </div>
+          </div>
+
+          <!-- Où en est l'ami ? -->
+          <div id="multiOppBox" class="rounded-xl p-2.5 flex items-center gap-2.5 bg-slate-950/70 border border-white/10">
+            <img id="multiOppDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-rose-400/60 shrink-0 shadow opacity-40 grayscale" />
+            <div class="min-w-0 flex-1">
+              <div id="multiOppPseudo" class="text-xs font-black text-amber-300 truncate">En attente de ton ami…</div>
+              <div id="multiOppStatusSub" class="text-[10.5px] text-slate-400 leading-snug">Ton ami doit ouvrir le jeu, aller dans l'onglet Multi et entrer le même code.</div>
+            </div>
+          </div>
+
+          <!-- Bouton pour passer à la Page 2 (Choix du deck & Prêt) -->
+          <button id="multiLobbyNextBtn" onclick="switchMultiSubPage('deck')" class="w-full btn-gold py-3 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 active:scale-98 transition">
+            <span id="multiLobbyNextLabel">Continuer → Choisir mon Deck</span>
+          </button>
+        </div>
+
+        <!-- AIDE DÉBUTANT -->
+        <details class="w-full rounded-2xl bg-slate-900/70 border border-white/10 p-3 text-[11px] text-slate-300 group">
+          <summary class="cursor-pointer font-black text-cyan-200 list-none flex items-center justify-between">
+            <span>Comment ça marche ? (aide)</span><span class="text-slate-500 group-open:rotate-180 transition">▼</span>
+          </summary>
+          <ol class="mt-2 space-y-1.5 list-decimal pl-4 leading-snug">
+            <li><strong>Joueur A</strong> appuie sur <em>Nouveau code</em> puis <em>Envoyer à mon ami</em> (SMS, WhatsApp…).</li>
+            <li><strong>Joueur B</strong> ouvre le lien reçu (le code se remplit tout seul) ou tape le code dans <em>J'ai reçu un code</em>.</li>
+            <li>Passe ensuite à la page <strong>2. Deck &amp; Prêt</strong> pour choisir ton deck et appuyer sur <em>Je suis prêt</em>.</li>
+            <li>Pendant la partie, chacun joue <strong>à son tour</strong> : le bandeau indique à qui c'est de jouer.</li>
+          </ol>
+          <p class="mt-2 text-slate-400 leading-snug">Ton ami n'apparaît pas ? Vérifiez que le code est <strong>identique</strong>, que vous avez Internet, et gardez l'onglet Multi ouvert sur les deux appareils.</p>
+        </details>
       </div>
 
-      <!-- ÉTAPE 4 : PRÊT -->
-      <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-slate-950/95 border border-amber-400/45 shadow-xl space-y-2.5">
-        <div class="flex items-start gap-2.5">
-          <span id="multiStep4Num" class="mp-step-num">4</span>
-          <div class="min-w-0 flex-1">
-            <div class="text-[10.5px] font-black uppercase tracking-wider text-amber-300">C'est parti !</div>
-            <div class="text-[11px] text-slate-400 leading-snug">Appuie sur <strong class="text-white">« Je suis prêt »</strong>. Le duel démarre <strong class="text-white">tout seul</strong> quand vous êtes prêts tous les deux.</div>
-          </div>
-        </div>
-
-        <!-- Récap Toi VS Ami -->
-        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 p-2 rounded-xl bg-slate-950/80 border border-white/15">
+      <!-- ============================================================= -->
+      <!-- PAGE 2 : CHOIX DU DECK + BOUTON PRÊT                          -->
+      <!-- ============================================================= -->
+      <div id="multiPageDeck" class="hidden w-full space-y-2.5">
+        <!-- Barre de rappel du salon + bouton retour Page 1 -->
+        <div class="w-full px-3 py-2 rounded-2xl bg-slate-900/90 border border-white/15 flex items-center justify-between gap-2">
+          <button onclick="switchMultiSubPage('lobby')" class="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-bold text-cyan-200 transition active:scale-95 flex items-center gap-1 shrink-0">
+            <span>← Salon</span>
+          </button>
           <div class="flex items-center gap-2 min-w-0">
-            <img id="multiMyDeckImg" src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-cyan-400/80 shrink-0 shadow" />
-            <div class="min-w-0">
-              <div class="text-[10px] font-bold uppercase text-slate-400">Toi</div>
-              <div id="multiMyDeckName" class="text-[11px] font-bold text-white truncate">Demi Combat</div>
-              <div id="multiMyReadyBadge" class="text-[10.5px] font-black text-slate-400">Pas encore prêt</div>
-            </div>
+            <span class="text-[10px] font-bold uppercase text-slate-400">Code :</span>
+            <span id="multiDeckPageRoomBadge" class="font-mono font-black text-xs text-white tracking-widest px-2 py-0.5 rounded bg-slate-950 border border-cyan-400/40">ARENE</span>
           </div>
-          <span class="text-[10px] font-black text-amber-300 px-1.5 py-0.5 rounded bg-white/10">VS</span>
-          <div class="flex items-center gap-2 min-w-0 justify-end text-right">
-            <div class="min-w-0">
-              <div class="text-[10px] font-bold uppercase text-slate-400">Ton ami</div>
-              <div id="multiOppDeckName" class="text-[11px] font-bold text-slate-300 truncate">—</div>
-              <div id="multiOppReadyBadge" class="text-[10.5px] font-black text-slate-500">Absent</div>
-            </div>
-          </div>
+          <span id="multiDeckPagePeerPill" class="text-[10.5px] font-extrabold text-amber-300 truncate">En attente d'un ami</span>
         </div>
 
-        <button id="multiGoBtn" onclick="clickMultiGo()" class="w-full btn-gold py-3.5 rounded-xl text-sm font-black uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 active:scale-98 transition">
-          <span id="multiGoBtnLabel">Je suis prêt !</span>
-        </button>
-        <div id="multiStatusBanner" class="text-[11px] text-center font-semibold text-cyan-200/90 leading-snug"></div>
-      </div>
+        <!-- CHOIX DU DECK -->
+        <div class="w-full p-3 rounded-2xl bg-slate-900/85 border border-white/15 space-y-2">
+          <div class="flex items-start gap-2.5">
+            <span id="multiStep3Num" class="mp-step-num">1</span>
+            <div class="min-w-0 flex-1">
+              <div class="text-[10.5px] font-black uppercase tracking-wider text-cyan-300">Choisis ton deck</div>
+              <div class="text-[11px] text-slate-400 leading-snug">Touche une carte pour la choisir. Débutant ? Prends un <strong class="text-amber-300">Demi-Deck</strong> : parties plus courtes (3 cartes Récompense à gagner).</div>
+            </div>
+          </div>
+          <div class="w-full space-y-2" id="multiDeckGrid"></div>
+        </div>
 
-      <!-- AIDE DÉBUTANT -->
-      <details class="w-full rounded-2xl bg-slate-900/70 border border-white/10 p-3 text-[11px] text-slate-300 group">
-        <summary class="cursor-pointer font-black text-cyan-200 list-none flex items-center justify-between">
-          <span>Comment ça marche ? (aide)</span><span class="text-slate-500 group-open:rotate-180 transition">▼</span>
-        </summary>
-        <ol class="mt-2 space-y-1.5 list-decimal pl-4 leading-snug">
-          <li><strong>Joueur A</strong> appuie sur <em>Nouveau code</em> puis <em>Envoyer à mon ami</em> (SMS, WhatsApp…).</li>
-          <li><strong>Joueur B</strong> ouvre le lien reçu (le code se remplit tout seul) ou tape le code dans <em>J'ai reçu un code</em>.</li>
-          <li>Quand l'ami apparaît en <span class="text-emerald-300 font-bold">vert</span>, vous êtes connectés.</li>
-          <li>Chacun choisit son deck, puis appuie sur <em>Je suis prêt</em>. Le duel se lance automatiquement.</li>
-          <li>Pendant la partie, chacun joue <strong>à son tour</strong> : le bandeau indique à qui c'est de jouer.</li>
-        </ol>
-        <p class="mt-2 text-slate-400 leading-snug">Ton ami n'apparaît pas ? Vérifiez que le code est <strong>identique</strong>, que vous avez Internet, et gardez l'onglet Multi ouvert sur les deux appareils.</p>
-      </details>
+        <!-- BOUTON PRÊT + RÉCAP TOI VS AMI -->
+        <div class="w-full p-3 rounded-2xl bg-gradient-to-br from-slate-900/95 via-indigo-950/90 to-slate-950/95 border border-amber-400/45 shadow-xl space-y-2.5">
+          <div class="flex items-start gap-2.5">
+            <span id="multiStep4Num" class="mp-step-num">2</span>
+            <div class="min-w-0 flex-1">
+              <div class="text-[10.5px] font-black uppercase tracking-wider text-amber-300">C'est parti !</div>
+              <div class="text-[11px] text-slate-400 leading-snug">Appuie sur <strong class="text-white">« Je suis prêt »</strong>. Le duel démarre <strong class="text-white">tout seul</strong> quand vous êtes prêts tous les deux.</div>
+            </div>
+          </div>
+
+          <!-- Récap Toi VS Ami -->
+          <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 p-2 rounded-xl bg-slate-950/80 border border-white/15">
+            <div class="flex items-center gap-2 min-w-0">
+              <img id="multiMyDeckImg" src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-cyan-400/80 shrink-0 shadow" />
+              <div class="min-w-0">
+                <div id="multiMyDeckPseudo" class="text-[10px] font-bold uppercase text-cyan-300 truncate">Toi</div>
+                <div id="multiMyDeckName" class="text-[11px] font-bold text-white truncate">Demi Combat</div>
+                <div id="multiMyReadyBadge" class="text-[10.5px] font-black text-slate-400">Pas encore prêt</div>
+              </div>
+            </div>
+            <span class="text-[10px] font-black text-amber-300 px-1.5 py-0.5 rounded bg-white/10">VS</span>
+            <div class="flex items-center gap-2 min-w-0 justify-end text-right">
+              <div class="min-w-0">
+                <div class="text-[10px] font-bold uppercase text-slate-400">Ton ami</div>
+                <div id="multiOppDeckName" class="text-[11px] font-bold text-slate-300 truncate">—</div>
+                <div id="multiOppReadyBadge" class="text-[10.5px] font-black text-slate-500">Pas encore là</div>
+              </div>
+              <img id="multiOppRecapDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-rose-400/60 shrink-0 shadow opacity-40 grayscale" />
+            </div>
+          </div>
+
+          <button id="multiGoBtn" onclick="clickMultiGo()" class="w-full btn-gold py-3.5 rounded-xl text-sm font-black uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 active:scale-98 transition">
+            <span id="multiGoBtnLabel">Je suis prêt !</span>
+          </button>
+          <div id="multiStatusBanner" class="text-[11px] text-center font-semibold text-cyan-200/90 leading-snug"></div>
+        </div>
+      </div>
     </div>
 
     <!-- =============================================================== -->
@@ -16084,6 +16163,7 @@ const TYPE_EMOJI = {
 
       if (isSolo) renderQuickSetup();
       if (isMulti) {
+        if (!multiMyReady) multiSubPage = 'lobby';
         if (!playerPseudo) openPseudoModal(true);
         ensureMultiRealtimeConnected();
         renderMultiSetup();
@@ -16902,17 +16982,17 @@ const TYPE_EMOJI = {
         ${customKeys.length ? `
         <div class="space-y-1">
           <div class="flex items-center justify-between px-1">
-            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-emerald-300">🛠️ Mes Decks perso</span>
+            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-emerald-300">Mes Decks perso</span>
             <button onclick="switchMenuTab('decks')" class="text-[10px] font-bold text-emerald-200 underline underline-offset-2">Modifier</button>
           </div>
           <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderMultiCard).join('')}</div>
         </div>` : ''}
         <div class="space-y-1">
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-amber-300 px-1 block">⭐ Conseillé pour débuter · Demi-Decks (30 cartes, parties courtes)</span>
+          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-amber-300 px-1 block">Conseillé pour débuter · Demi-Decks (30 cartes, parties courtes)</span>
           <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderMultiCard).join('')}</div>
         </div>
         <div class="space-y-1 pt-0.5">
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-cyan-300 px-1 block">🔥 Decks complets (60 cartes, parties longues)</span>
+          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-cyan-300 px-1 block">Decks complets (60 cartes, parties longues)</span>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderMultiCard).join('')}</div>
         </div>
         <div class="text-[10.5px] text-slate-300 px-1">Ton choix : <strong class="text-white">${myMeta.name}</strong> — ${myMeta.desc}</div>
