@@ -266,6 +266,14 @@ KNOWN_METADATA = {
         "emoji": "🌴",
         "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
     },
+    "forestia-mobile": {
+        "title": "Forestia (1998) — Édition Web Universelle (REA)",
+        "subtitle": "Abandonware LaserMedia recodé en HTML5/Canvas/WebAudio autonome (61 binaires Director 6, 9 424 scripts Lingo décompilés, 640 scènes Forêt, Tour 360° VR, 80 Animaux & Herbier)",
+        "category": "games-family",
+        "emoji": "🌲",
+        "prodUrl": "https://mrthomaslef.github.io/forestia-mobile/",
+        "logoUrl": "https://mrthomaslef.github.io/forestia-mobile/assets/icon.svg",
+    },
     "m4-gaming": {
         "title": "M4 Gaming",
         "subtitle": "82 Jeux avec Icônes • Allume la Télé & Lance sur Mac mini M4",

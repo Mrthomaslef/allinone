@@ -8,7 +8,7 @@
     "logoUrl": "pokemon-play-it/assets/icon.svg?v=10",
     "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/pokemon-play-it",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "uncensored",
@@ -19,7 +19,7 @@
     "logoUrl": "uncensored/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/uncensored",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "gestion-anticoagulant",
@@ -30,7 +30,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "film-et-serie",
@@ -41,7 +41,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "torrent",
@@ -52,7 +52,7 @@
     "logoUrl": "torrent/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/torrent",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "patrimoine-os",
@@ -63,7 +63,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "gemini-ultra",
@@ -74,7 +74,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "second-brain-voice",
@@ -85,7 +85,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "stats-youtube",
@@ -96,7 +96,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -107,7 +107,18 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-08T14:18:40Z"
+    "pushedAt": "2026-11-08T22:57:53Z"
+  },
+  {
+    "id": "forestia-mobile",
+    "title": "Forestia (1998) — Édition Web Universelle (REA)",
+    "subtitle": "Abandonware LaserMedia recodé en HTML5/Canvas/WebAudio autonome (61 binaires Director 6, 9 424 scripts Lingo décompilés, 640 scènes Forêt, Tour 360° VR, 80 Animaux & Herbier)",
+    "category": "games-family",
+    "emoji": "🌲",
+    "logoUrl": "https://mrthomaslef.github.io/forestia-mobile/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/forestia-mobile/",
+    "githubUrl": "https://github.com/Mrthomaslef/forestia-mobile",
+    "pushedAt": "2026-11-08T22:57:53Z"
   },
   {
     "id": "mapp-store",
@@ -284,17 +295,6 @@
     "prodUrl": "https://mrthomaslef.github.io/agenda-famille/",
     "githubUrl": "https://github.com/Mrthomaslef/agenda-famille",
     "pushedAt": "2026-11-06T07:48:28Z"
-  },
-  {
-    "id": "forestia-mobile",
-    "title": "Forestia — Lancer avec Moonlight",
-    "subtitle": "Forestia (1998) — Cloud & Mobile Web Player",
-    "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "https://mrthomaslef.github.io/forestia-mobile/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/forestia-mobile/",
-    "githubUrl": "https://github.com/Mrthomaslef/forestia-mobile",
-    "pushedAt": "2026-11-06T06:31:21Z"
   },
   {
     "id": "quiz-pokemon",
