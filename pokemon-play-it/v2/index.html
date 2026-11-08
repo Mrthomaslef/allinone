@@ -1133,20 +1133,31 @@
     #previewScrim .preview-close { position: absolute; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom)); transform: translateX(-50%);
       padding: 10px 20px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); color: #fff; font: 800 13px 'Nunito', sans-serif; }
 
-    /* Galerie : segment Possédées / Classeur + rails de filtres + emplacements vides */
+    /* Galerie : segment Possédées / Classeur + grilles de filtres sans scroll horizontal + emplacements */
     .seg-toggle { display: grid; grid-template-columns: 1fr 1fr; padding: 3px; border-radius: 12px; background: #f1f5f9; border: 1px solid #cbd5e1; }
-    .seg-toggle button { min-height: 36px; border-radius: 9px; font: 800 12px 'Nunito', sans-serif; color: #475569; transition: background .15s, color .15s; }
-    .seg-toggle button.on { background: #ffffff; color: #0f172a; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(203, 213, 225, 0.7); }
-    .chip-rail { display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; padding-bottom: 2px; }
-    .chip-rail::-webkit-scrollbar { display: none; }
-    .chip-rail > button { flex: 0 0 auto; white-space: nowrap; scroll-snap-align: start; min-height: 32px; }
-    .binder-slot { background: repeating-linear-gradient(135deg, rgba(148, 163, 184, 0.08) 0 6px, transparent 6px 12px), #f8fafc; border: 1.5px dashed #cbd5e1; box-shadow: inset 0 2px 6px rgba(15, 23, 42, 0.04); }
+    .seg-toggle button { min-height: 34px; border-radius: 9px; font: 800 11.5px 'Nunito', sans-serif; color: #475569; transition: all .15s ease; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .seg-toggle button.on { background: #ffffff; color: #0f172a; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(203, 213, 225, 0.8); }
+    .binder-slot {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.75) 0%, transparent 70%),
+        repeating-linear-gradient(135deg, rgba(148, 163, 184, 0.06) 0 6px, transparent 6px 12px),
+        #f1f5f9;
+      border: 1.5px dashed #cbd5e1;
+      box-shadow: inset 0 2px 6px rgba(15, 23, 42, 0.05);
+    }
+    .col-card-tile {
+      transition: transform .16s cubic-bezier(.2,.9,.3,1), box-shadow .16s ease, border-color .16s ease;
+      touch-action: manipulation;
+    }
+    .col-card-tile:hover { transform: translateY(-2px); }
+    .col-card-tile:active { transform: scale(0.97); }
+    #academyModal, #academyContent { overflow-x: hidden; }
 
     /* Boutons ✕ des fenêtres : cible tactile 40 px */
     .x-close { min-width: 40px; min-height: 40px; display: inline-grid; place-items: center; border-radius: 12px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #334155; font-size: 15px; transition: background .15s, color .15s; }
     .x-close:hover { background: #e2e8f0; color: #0f172a; }
-    /* Galerie : bascule + filtres restent visibles au défilement */
-    .col-sticky { position: sticky; top: 0; z-index: 20; margin: -4px -4px 8px; padding: 6px 4px 8px; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
+    /* Galerie : bascule + filtres restent visibles au défilement sans débordement horizontal */
+    .col-sticky { position: sticky; top: 0; z-index: 20; margin: 0 0 8px; padding: 2px 0 8px; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; }
     .bench-row .pkm-hud { padding: 1px 2px 2px; gap: 1px; }
     .bench-row .pkm-hpbar { height: 2px; }
 
@@ -1525,7 +1536,7 @@
           <!-- Illustration 1 : Tortank -->
           <button onclick="launchBoosterPack('base', 'tortank')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
-              <img src="assets/boosters/base-tortank.jpg" alt="Booster Tortank" class="w-full h-full object-cover" />
+              <img src="assets/boosters/base-tortank.jpg?v=2" alt="Booster Tortank" class="w-full h-full object-cover" />
               <span class="pack-3d-relief"></span>
               <span class="pack-3d-glare"></span>
             </span>
@@ -1535,7 +1546,7 @@
           <!-- Illustration 2 : Dracaufeu -->
           <button onclick="launchBoosterPack('base', 'dracaufeu')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap is-Featured-Pack">
-              <img src="assets/boosters/base-dracaufeu.jpg" alt="Booster Dracaufeu" class="w-full h-full object-cover" />
+              <img src="assets/boosters/base-dracaufeu.jpg?v=2" alt="Booster Dracaufeu" class="w-full h-full object-cover" />
               <span class="pack-3d-relief"></span>
               <span class="pack-3d-glare"></span>
             </span>
@@ -1545,7 +1556,7 @@
           <!-- Illustration 3 : Florizarre -->
           <button onclick="launchBoosterPack('base', 'florizarre')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
-              <img src="assets/boosters/base-florizarre.jpg" alt="Booster Florizarre" class="w-full h-full object-cover" />
+              <img src="assets/boosters/base-florizarre.jpg?v=2" alt="Booster Florizarre" class="w-full h-full object-cover" />
               <span class="pack-3d-relief"></span>
               <span class="pack-3d-glare"></span>
             </span>
@@ -1824,13 +1835,24 @@
   <!-- =================================================================== -->
   <!-- MODAL : GALERIE COLLECTION 1999                                     -->
   <!-- =================================================================== -->
-  <div id="academyModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white/95 border border-slate-200 rounded-3xl p-5 max-w-md w-full shadow-2xl max-h-[88dvh] flex flex-col overflow-hidden text-slate-800">
-      <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200/80">
-        <h3 class="text-base font-extrabold text-slate-800">Galerie 1999</h3>
-        <button onclick="document.getElementById('academyModal').classList.add('hidden')" class="x-close w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs font-bold">✕</button>
+  <div id="academyModal" onclick="if(event.target===this)this.classList.add('hidden')" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-4">
+    <div class="bg-white border border-slate-200/90 rounded-3xl p-3.5 sm:p-4 max-w-lg w-full shadow-[0_24px_60px_-15px_rgba(15,23,42,0.35)] max-h-[90dvh] flex flex-col overflow-hidden text-slate-800">
+      <div class="pb-2.5 mb-2 border-b border-slate-200/80 shrink-0">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-amber-400 via-yellow-400 to-orange-400 text-slate-950 shadow-sm border border-amber-300 flex items-center justify-center shrink-0 text-base font-black">📖</div>
+            <div class="min-w-0">
+              <h3 class="text-[15px] sm:text-base font-black text-slate-900 leading-tight truncate">Galerie Collector 1999</h3>
+              <p id="academyHeaderSub" class="text-[10.5px] font-bold text-slate-500 leading-tight mt-0.5 truncate">Set de Base · Jungle · Fossile</p>
+            </div>
+          </div>
+          <button onclick="document.getElementById('academyModal').classList.add('hidden')" class="x-close w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center text-xs font-bold shrink-0" aria-label="Fermer">✕</button>
+        </div>
+        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden mt-2 border border-slate-200/60">
+          <div id="academyHeaderBar" class="h-full bg-gradient-to-r from-emerald-400 via-amber-400 to-pink-500 transition-all duration-500" style="width: 0%"></div>
+        </div>
       </div>
-      <div id="academyContent" class="space-y-3 text-xs flex-1 min-h-0 overflow-y-auto overscroll-contain"></div>
+      <div id="academyContent" class="text-xs flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"></div>
     </div>
   </div>
 
@@ -15978,8 +16000,8 @@ const TYPE_EMOJI = {
         bgmToggle.textContent = bgmEnabled ? 'ON' : 'OFF';
         bgmToggle.className = `px-2.5 py-1 rounded-lg text-[11px] font-extrabold border transition ${
           bgmEnabled
-            ? 'bg-emerald-500/25 border-emerald-400/50 text-emerald-200'
-            : 'bg-slate-800 border-white/15 text-slate-400'
+            ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+            : 'bg-slate-100 border-slate-200 text-slate-400'
         }`;
       }
       const sfxToggle = document.getElementById('sfxModalToggleBtn');
@@ -15987,8 +16009,8 @@ const TYPE_EMOJI = {
         sfxToggle.textContent = soundEnabled ? 'ON' : 'OFF';
         sfxToggle.className = `px-2.5 py-1 rounded-lg text-[11px] font-extrabold border transition ${
           soundEnabled
-            ? 'bg-emerald-500/25 border-emerald-400/50 text-emerald-200'
-            : 'bg-slate-800 border-white/15 text-slate-400'
+            ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+            : 'bg-slate-100 border-slate-200 text-slate-400'
         }`;
       }
 
@@ -16130,13 +16152,21 @@ const TYPE_EMOJI = {
         const active = btn.getAttribute('data-playmat') === cls;
         btn.className = `playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 active:scale-95 ${
           active
-            ? 'bg-yellow-400/20 border-yellow-400 text-yellow-200 ring-1 ring-yellow-400/60 shadow'
-            : 'bg-slate-800/80 border-white/15 text-slate-200 hover:border-yellow-400/50'
+            ? 'bg-amber-50 border-amber-400 text-amber-900 ring-1 ring-amber-400/60 shadow-sm'
+            : 'bg-white border-slate-200 text-slate-700 hover:border-amber-400'
         }`;
       });
       try { localStorage.setItem('ppi_playmat', cls); } catch (e) {}
     }
     try { changePlaymat(localStorage.getItem('ppi_playmat') || PLAYMATS[0]); } catch (e) {}
+
+    // Bascule entre l'ambiance blanche désaturée des menus (style TCG Pocket) et le tapis en couleur pendant un combat
+    function setBattleMode(inBattle) {
+      const b = document.getElementById('appBody') || document.body;
+      if (b) b.classList.toggle('in-battle', !!inBattle);
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', inBattle ? '#0b1120' : '#f8fafc');
+    }
 
     function buildDeck(deckKey) {
       const recipe = HALF_DECKS[deckKey];
@@ -16167,16 +16197,16 @@ const TYPE_EMOJI = {
     }
 
     const DECK_META = {
-      V2_FEU: { key: 'V2_FEU', name: 'Deck Dracaufeu', short: 'Dracaufeu', cards: 60, prizes: 6, star: 'Dracaufeu (120 PV)', desc: 'Salamèche → Dracaufeu, Feunard, Arcanin', img: 'https://assets.tcgdex.net/fr/base/base1/4/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/12/high.webp', grad: 'from-orange-950/90 via-red-950/85 to-slate-950/95', border: 'border-orange-400/50' },
-      V2_EAU: { key: 'V2_EAU', name: 'Deck Tortank & Fossile', short: 'Tortank', cards: 60, prizes: 6, star: 'Tortank (100 PV)', desc: 'Carapuce → Tortank, Léviator, Kabutops', img: 'https://assets.tcgdex.net/fr/base/base1/2/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/9/high.webp', grad: 'from-cyan-950/90 via-blue-950/85 to-slate-950/95', border: 'border-cyan-400/45' },
-      V2_PLANTE: { key: 'V2_PLANTE', name: 'Deck Florizarre', short: 'Florizarre', cards: 60, prizes: 6, star: 'Florizarre (100 PV)', desc: 'Bulbizarre → Florizarre, Rafflesia, Insécateur', img: 'https://assets.tcgdex.net/fr/base/base1/15/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/15/high.webp', grad: 'from-emerald-950/90 via-slate-900/90 to-slate-950/95', border: 'border-emerald-400/45' },
-      V2_ELECTRIK: { key: 'V2_ELECTRIK', name: 'Deck Électhor & Raichu', short: 'Électhor', cards: 60, prizes: 6, star: 'Électhor (90 PV)', desc: 'Pikachu → Raichu, Électhor, Voltali', img: 'https://assets.tcgdex.net/fr/base/base1/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/14/high.webp', grad: 'from-yellow-950/90 via-amber-950/85 to-slate-950/95', border: 'border-yellow-400/50' },
-      V2_PSY: { key: 'V2_PSY', name: 'Deck Mewtwo & Alakazam', short: 'Mewtwo', cards: 60, prizes: 6, star: 'Mewtwo (60 PV)', desc: 'Abra → Alakazam, Mewtwo, Ectoplasma', img: 'https://assets.tcgdex.net/fr/base/base1/10/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/1/high.webp', grad: 'from-fuchsia-950/90 via-purple-950/85 to-slate-950/95', border: 'border-fuchsia-400/45' },
-      V2_COMBAT: { key: 'V2_COMBAT', name: 'Deck Mackogneur', short: 'Mackogneur', cards: 60, prizes: 6, star: 'Mackogneur (100 PV)', desc: 'Machoc → Mackogneur, Grolem, Ptéra', img: 'https://assets.tcgdex.net/fr/base/base1/8/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', grad: 'from-stone-900/95 via-amber-950/85 to-slate-950/95', border: 'border-amber-500/45' },
-      COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Demi Combat', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-amber-950/90 via-stone-900/90 to-slate-950/95', border: 'border-amber-500/45' },
-      EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Demi Eau', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-sky-950/90 via-slate-900/90 to-slate-950/95', border: 'border-sky-400/45' },
-      FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Demi Feu', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-red-950/90 via-stone-900/90 to-slate-950/95', border: 'border-red-500/45' },
-      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Demi Xtra', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-purple-950/90 via-slate-900/90 to-slate-950/95', border: 'border-purple-400/45' }
+      V2_FEU: { key: 'V2_FEU', name: 'Deck Dracaufeu', short: 'Dracaufeu', cards: 60, prizes: 6, star: 'Dracaufeu (120 PV)', desc: 'Salamèche → Dracaufeu, Feunard, Arcanin', img: 'https://assets.tcgdex.net/fr/base/base1/4/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/12/high.webp', grad: 'from-white via-orange-50/85 to-red-50/90', border: 'border-orange-200/90' },
+      V2_EAU: { key: 'V2_EAU', name: 'Deck Tortank & Fossile', short: 'Tortank', cards: 60, prizes: 6, star: 'Tortank (100 PV)', desc: 'Carapuce → Tortank, Léviator, Kabutops', img: 'https://assets.tcgdex.net/fr/base/base1/2/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/9/high.webp', grad: 'from-white via-cyan-50/85 to-sky-50/90', border: 'border-cyan-200/90' },
+      V2_PLANTE: { key: 'V2_PLANTE', name: 'Deck Florizarre', short: 'Florizarre', cards: 60, prizes: 6, star: 'Florizarre (100 PV)', desc: 'Bulbizarre → Florizarre, Rafflesia, Insécateur', img: 'https://assets.tcgdex.net/fr/base/base1/15/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/15/high.webp', grad: 'from-white via-emerald-50/85 to-green-50/90', border: 'border-emerald-200/90' },
+      V2_ELECTRIK: { key: 'V2_ELECTRIK', name: 'Deck Électhor & Raichu', short: 'Électhor', cards: 60, prizes: 6, star: 'Électhor (90 PV)', desc: 'Pikachu → Raichu, Électhor, Voltali', img: 'https://assets.tcgdex.net/fr/base/base1/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/14/high.webp', grad: 'from-white via-amber-50/85 to-yellow-50/90', border: 'border-amber-200/90' },
+      V2_PSY: { key: 'V2_PSY', name: 'Deck Mewtwo & Alakazam', short: 'Mewtwo', cards: 60, prizes: 6, star: 'Mewtwo (60 PV)', desc: 'Abra → Alakazam, Mewtwo, Ectoplasma', img: 'https://assets.tcgdex.net/fr/base/base1/10/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/1/high.webp', grad: 'from-white via-fuchsia-50/85 to-purple-50/90', border: 'border-fuchsia-200/90' },
+      V2_COMBAT: { key: 'V2_COMBAT', name: 'Deck Mackogneur', short: 'Mackogneur', cards: 60, prizes: 6, star: 'Mackogneur (100 PV)', desc: 'Machoc → Mackogneur, Grolem, Ptéra', img: 'https://assets.tcgdex.net/fr/base/base1/8/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', grad: 'from-white via-stone-50/85 to-amber-50/90', border: 'border-amber-200/90' },
+      COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Demi Combat', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-white via-amber-50/85 to-stone-50/90', border: 'border-amber-200/90' },
+      EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Demi Eau', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-white via-sky-50/85 to-cyan-50/90', border: 'border-sky-200/90' },
+      FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Demi Feu', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-white via-red-50/85 to-orange-50/90', border: 'border-red-200/90' },
+      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Demi Xtra', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-white via-purple-50/85 to-indigo-50/90', border: 'border-purple-200/90' }
     };
 
     // Un deck est jouable s'il existe, contient au moins 1 Pokémon de Base et (deck perso) respecte les règles
@@ -16480,15 +16510,15 @@ const TYPE_EMOJI = {
         box.innerHTML = '🧢 Ta collection et tes pièces seront liées à ce pseudo.';
       } else if (newKey === curKey) {
         const sum = readProfileSummary(val);
-        box.innerHTML = `✅ Profil actuel : <b class="text-white">${sum ? sum.cards : 0}</b> cartes · <b class="text-yellow-300">${sum ? sum.coins : 0} 🪙</b>`;
+        box.innerHTML = `✅ Profil actuel : <b class="text-slate-900">${sum ? sum.cards : 0}</b> cartes · <b class="text-amber-600">${sum ? sum.coins : 0} 🪙</b>`;
       } else {
         const sum = readProfileSummary(val);
         if (sum) {
-          box.innerHTML = `🔑 Profil existant retrouvé : <b class="text-white">${sum.cards}</b> cartes · <b class="text-yellow-300">${sum.coins} 🪙</b> · ${sum.packs} boosters`;
+          box.innerHTML = `🔑 Profil existant retrouvé : <b class="text-slate-900">${sum.cards}</b> cartes · <b class="text-amber-600">${sum.coins} 🪙</b> · ${sum.packs} boosters`;
         } else if (!curKey) {
           const guest = readProfileSummary('');
           box.innerHTML = guest && (guest.cards || guest.coins || guest.decks)
-            ? `🆕 Nouveau profil — ta collection actuelle (<b class="text-white">${guest.cards}</b> cartes · <b class="text-yellow-300">${guest.coins} 🪙</b>) lui sera rattachée.`
+            ? `🆕 Nouveau profil — ta collection actuelle (<b class="text-slate-900">${guest.cards}</b> cartes · <b class="text-amber-600">${guest.coins} 🪙</b>) lui sera rattachée.`
             : '🆕 Nouveau profil de Dresseur (collection vide · 3 boosters gratuits).';
         } else {
           box.innerHTML = '🆕 Nouveau profil : collection vide, 0 🪙, 3 boosters gratuits.';
@@ -16901,7 +16931,7 @@ const TYPE_EMOJI = {
       if (roomHint) {
         roomHint.innerHTML = multiRoomCode === 'ARENE'
           ? 'Code public : n\'importe qui peut entrer. Appuie sur <strong>Nouveau code</strong> pour jouer seulement avec ton ami.'
-          : '<span class="text-slate-400">Donne ce code à ton ami (ou envoie-lui le lien).</span>';
+          : '<span class="text-slate-500">Donne ce code à ton ami (ou envoie-lui le lien).</span>';
       }
 
       const myMeta = DECK_META[multiPlayerDeck] || DECK_META.COMBAT;
@@ -17010,7 +17040,7 @@ const TYPE_EMOJI = {
         }
         if (deckPagePeerPill) {
           deckPagePeerPill.textContent = 'En attente d\'un ami';
-          deckPagePeerPill.className = 'text-[10.5px] font-extrabold text-amber-300';
+          deckPagePeerPill.className = 'text-[10.5px] font-extrabold text-amber-600';
         }
       }
 
@@ -17026,10 +17056,10 @@ const TYPE_EMOJI = {
       }
       if (goBtn) {
         goBtn.classList.toggle('btn-gold', !multiMyReady);
-        goBtn.classList.toggle('bg-white/10', multiMyReady);
+        goBtn.classList.toggle('bg-slate-100', multiMyReady);
         goBtn.classList.toggle('border', multiMyReady);
-        goBtn.classList.toggle('border-white/20', multiMyReady);
-        goBtn.classList.toggle('text-slate-200', multiMyReady);
+        goBtn.classList.toggle('border-slate-300', multiMyReady);
+        goBtn.classList.toggle('text-slate-700', multiMyReady);
       }
       if (statusBanner) {
         let msg;
@@ -17055,15 +17085,15 @@ const TYPE_EMOJI = {
         const sel = multiPlayerDeck === k;
         const isHalf = d.cards === 30;
         return `
-          <button onclick="selectMultiDeck('${k}')" class="p-1.5 rounded-xl bg-gradient-to-br ${d.grad} border ${sel ? 'border-cyan-300 ring-2 ring-cyan-400 shadow-lg scale-[1.02]' : d.border + ' opacity-85 hover:opacity-100'} flex flex-col items-center gap-1 transition">
-            <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow">
+          <button onclick="selectMultiDeck('${k}')" class="p-1.5 rounded-xl bg-gradient-to-br ${d.grad} border ${sel ? 'border-cyan-400 ring-2 ring-cyan-400 shadow-md scale-[1.02]' : d.border + ' opacity-90 hover:opacity-100 shadow-sm'} flex flex-col items-center gap-1 transition">
+            <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow-sm">
               <img src="${d.img}" alt="${d.name}" loading="lazy" class="w-full h-full object-cover" />
-              <span class="absolute top-0.5 left-0.5 text-[10px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-500/90 text-white'}">${isHalf ? 'Demi' : '60c'}</span>
-              <span class="absolute bottom-0.5 right-0.5 text-[10px] font-mono font-bold px-1 rounded bg-black/80 text-yellow-200">${d.prizes}🏆</span>
+              <span class="absolute top-0.5 left-0.5 text-[10px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-500/95 text-white'}">${isHalf ? 'Demi' : '60c'}</span>
+              <span class="absolute bottom-0.5 right-0.5 text-[10px] font-mono font-bold px-1 rounded bg-slate-900/85 text-yellow-200">${d.prizes}🏆</span>
               ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-cyan-400 text-slate-950 text-[10px] font-black flex items-center justify-center">✓</span>' : ''}
             </div>
-            <span class="text-[10px] font-extrabold ${sel ? 'text-cyan-300' : 'text-white'} truncate w-full text-center leading-tight">${d.short}</span>
-            <span class="text-[10px] text-slate-300 truncate w-full text-center -mt-0.5">${d.star.split(' ')[0] === d.short ? d.cards + ' cartes' : d.star.split(' ')[0]}</span>
+            <span class="text-[10px] font-extrabold ${sel ? 'text-cyan-700' : 'text-slate-800'} truncate w-full text-center leading-tight">${d.short}</span>
+            <span class="text-[10px] text-slate-500 truncate w-full text-center -mt-0.5">${d.star.split(' ')[0] === d.short ? d.cards + ' cartes' : d.star.split(' ')[0]}</span>
           </button>
         `;
       };
@@ -17192,6 +17222,7 @@ const TYPE_EMOJI = {
       };
 
       fx.handSeen.clear(); fx.aiHandSeen.clear(); fx.dealFrom.clear(); fx.prevHp.clear(); fx.prevDmg.clear();
+      setBattleMode(true);
       document.getElementById('menuScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
 
@@ -17695,6 +17726,7 @@ const TYPE_EMOJI = {
       fx.handSeen.clear(); fx.aiHandSeen.clear(); fx.dealFrom.clear(); fx.prevHp.clear(); fx.prevDmg.clear();
       setJulietteMood('happy');
       fx.placed.add(game.ai.active.uid); game.ai.bench.forEach((b) => fx.placed.add(b.uid));
+      setBattleMode(true);
       document.getElementById('menuScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
 
@@ -17721,6 +17753,7 @@ const TYPE_EMOJI = {
           reason: `${playerPseudo || 'Ton adversaire'} a quitté le duel.`
         });
       }
+      setBattleMode(false);
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('menuScreen').classList.remove('hidden');
       game = null;
@@ -21714,10 +21747,10 @@ const TYPE_EMOJI = {
     }
 
     const RARITY_META = {
-      common:   { id: 'common',   symbol: '●', label: 'Commune',     short: '● Com.',  badgeCls: 'bg-slate-700/90 text-slate-200 border-slate-400/40', glowCls: 'rarity-glow-common' },
-      uncommon: { id: 'uncommon', symbol: '◆', label: 'Peu Commune', short: '◆ Peu C.', badgeCls: 'bg-emerald-500/25 text-emerald-200 border-emerald-400/50', glowCls: 'rarity-glow-uncommon' },
-      rare:     { id: 'rare',     symbol: '★', label: 'Rare',        short: '★ Rare',   badgeCls: 'bg-amber-500/30 text-yellow-200 border-yellow-400/70', glowCls: 'rarity-glow-rare' },
-      holo:     { id: 'holo',     symbol: '✨', label: 'Rare Holo',   short: '✨ Holo',  badgeCls: 'bg-gradient-to-r from-pink-500/40 via-amber-400/40 to-cyan-400/40 text-white border-yellow-300', glowCls: 'rarity-glow-holo' }
+      common:   { id: 'common',   symbol: '●', label: 'Commune',     short: '● Com.',  badgeCls: 'bg-slate-100 text-slate-700 border-slate-300', glowCls: 'rarity-glow-common' },
+      uncommon: { id: 'uncommon', symbol: '◆', label: 'Peu Commune', short: '◆ Peu C.', badgeCls: 'bg-emerald-50 text-emerald-700 border-emerald-300', glowCls: 'rarity-glow-uncommon' },
+      rare:     { id: 'rare',     symbol: '★', label: 'Rare',        short: '★ Rare',   badgeCls: 'bg-amber-50 text-amber-800 border-amber-300', glowCls: 'rarity-glow-rare' },
+      holo:     { id: 'holo',     symbol: '✨', label: 'Rare Holo',   short: '✨ Holo',  badgeCls: 'bg-gradient-to-r from-pink-100 via-amber-100 to-cyan-100 text-slate-900 border-amber-400', glowCls: 'rarity-glow-holo' }
     };
 
     const BOOSTER_SETS = {
@@ -21729,15 +21762,15 @@ const TYPE_EMOJI = {
         subtitle: 'Dracaufeu · Tortank · Florizarre',
         total: 102,
         bgGrad: 'linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 38%, #0f172a 100%)',
-        panelBg: 'linear-gradient(165deg, rgba(237,233,254,0.96) 0%, rgba(245,243,255,0.94) 50%, rgba(255,255,255,0.96) 100%)',
-        panelBorder: 'rgba(196,181,253,0.85)',
-        badgeCls: 'bg-amber-100 border-amber-300 text-amber-900',
+        panelBg: 'linear-gradient(165deg, rgba(255,255,255,0.96) 0%, rgba(245,243,255,0.92) 55%, rgba(238,242,255,0.94) 100%)',
+        panelBorder: 'rgba(196,181,253,0.75)',
+        badgeCls: 'bg-amber-50 border-amber-200 text-amber-800',
         accent: '#facc15',
         glow: 'rgba(250, 204, 21, 0.55)',
         packArtworks: [
-          { key: 'tortank', label: 'Tortank', icon: '💧', img: 'assets/boosters/base-tortank.jpg' },
-          { key: 'dracaufeu', label: 'Dracaufeu', icon: '🔥', img: 'assets/boosters/base-dracaufeu.jpg', featured: true },
-          { key: 'florizarre', label: 'Florizarre', icon: '🌿', img: 'assets/boosters/base-florizarre.jpg' }
+          { key: 'tortank', label: 'Tortank', icon: '💧', img: 'assets/boosters/base-tortank.jpg?v=2' },
+          { key: 'dracaufeu', label: 'Dracaufeu', icon: '🔥', img: 'assets/boosters/base-dracaufeu.jpg?v=2', featured: true },
+          { key: 'florizarre', label: 'Florizarre', icon: '🌿', img: 'assets/boosters/base-florizarre.jpg?v=2' }
         ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base1/4/high.webp',
@@ -21755,15 +21788,15 @@ const TYPE_EMOJI = {
         subtitle: 'Pyroli · Insécateur · Grodoudou',
         total: 64,
         bgGrad: 'linear-gradient(155deg, #065f46 0%, #15803d 42%, #052e16 100%)',
-        panelBg: 'linear-gradient(165deg, rgba(209,250,229,0.96) 0%, rgba(236,253,245,0.94) 50%, rgba(255,255,255,0.96) 100%)',
-        panelBorder: 'rgba(110,231,183,0.9)',
-        badgeCls: 'bg-emerald-100 border-emerald-300 text-emerald-900',
+        panelBg: 'linear-gradient(165deg, rgba(255,255,255,0.96) 0%, rgba(236,253,245,0.92) 55%, rgba(209,250,229,0.94) 100%)',
+        panelBorder: 'rgba(110,231,183,0.8)',
+        badgeCls: 'bg-emerald-50 border-emerald-200 text-emerald-800',
         accent: '#4ade80',
         glow: 'rgba(74, 222, 128, 0.55)',
         packArtworks: [
-          { key: 'insecateur', label: 'Insécateur', icon: '🌿', img: 'assets/boosters/jungle-insecateur.jpg' },
-          { key: 'pyroli', label: 'Pyroli', icon: '🔥', img: 'assets/boosters/jungle-pyroli.jpg', featured: true },
-          { key: 'grodoudou', label: 'Grodoudou', icon: '🎵', img: 'assets/boosters/jungle-grodoudou.jpg' }
+          { key: 'insecateur', label: 'Insécateur', icon: '🌿', img: 'assets/boosters/jungle-insecateur.jpg?v=2' },
+          { key: 'pyroli', label: 'Pyroli', icon: '🔥', img: 'assets/boosters/jungle-pyroli.jpg?v=2', featured: true },
+          { key: 'grodoudou', label: 'Grodoudou', icon: '🎵', img: 'assets/boosters/jungle-grodoudou.jpg?v=2' }
         ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base2/10/high.webp',
@@ -21781,15 +21814,15 @@ const TYPE_EMOJI = {
         subtitle: 'Ptéra · Lokhlass · Électhor',
         total: 62,
         bgGrad: 'linear-gradient(155deg, #78350f 0%, #b45309 42%, #291509 100%)',
-        panelBg: 'linear-gradient(165deg, rgba(254,243,199,0.96) 0%, rgba(255,251,235,0.94) 50%, rgba(255,255,255,0.96) 100%)',
-        panelBorder: 'rgba(252,211,77,0.9)',
-        badgeCls: 'bg-orange-100 border-orange-300 text-orange-900',
+        panelBg: 'linear-gradient(165deg, rgba(255,255,255,0.96) 0%, rgba(255,251,235,0.92) 55%, rgba(254,243,199,0.94) 100%)',
+        panelBorder: 'rgba(252,211,77,0.8)',
+        badgeCls: 'bg-orange-50 border-orange-200 text-orange-800',
         accent: '#fbbf24',
         glow: 'rgba(251, 191, 36, 0.55)',
         packArtworks: [
-          { key: 'ptera', label: 'Ptéra', icon: '🪨', img: 'assets/boosters/fossil-ptera.jpg' },
-          { key: 'lokhlass', label: 'Lokhlass', icon: '🌊', img: 'assets/boosters/fossil-lokhlass.jpg', featured: true },
-          { key: 'electhor', label: 'Électhor', icon: '⚡', img: 'assets/boosters/fossil-electhor.jpg' }
+          { key: 'ptera', label: 'Ptéra', icon: '🪨', img: 'assets/boosters/fossil-ptera.jpg?v=2' },
+          { key: 'lokhlass', label: 'Lokhlass', icon: '🌊', img: 'assets/boosters/fossil-lokhlass.jpg?v=2', featured: true },
+          { key: 'electhor', label: 'Électhor', icon: '⚡', img: 'assets/boosters/fossil-electhor.jpg?v=2' }
         ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base3/1/high.webp',
@@ -21914,18 +21947,18 @@ const TYPE_EMOJI = {
       if (navBadge) {
         if (totalOpenableNow > 0) {
           navBadge.textContent = `${totalOpenableNow}`;
-          navBadge.className = `px-1.5 py-0.2 rounded-full ${freeCount > 0 ? 'bg-emerald-400 text-slate-950' : 'bg-yellow-400 text-slate-950'} text-[10px] font-black leading-tight`;
+          navBadge.className = `px-1.5 py-0.2 rounded-full ${freeCount > 0 ? 'bg-emerald-400 text-slate-950' : 'bg-amber-400 text-slate-950'} text-[10px] font-black leading-tight`;
         } else {
           navBadge.textContent = countdown || '0';
-          navBadge.className = 'px-1.5 py-0.2 rounded-full bg-slate-700 text-slate-300 text-[9.5px] font-bold leading-tight';
+          navBadge.className = 'px-1.5 py-0.2 rounded-full bg-slate-200 text-slate-600 text-[9.5px] font-bold leading-tight';
         }
       }
 
       const freeBadge = document.getElementById('boosterFreeCountBadge');
       if (freeBadge) {
         freeBadge.textContent = `${freeCount} / ${MAX_FREE_BOOSTERS}`;
-        freeBadge.className = `px-2.5 py-1 rounded-lg font-black text-xs whitespace-nowrap shrink-0 shadow ${
-          freeCount > 0 ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-300 border border-white/15'
+        freeBadge.className = `px-2.5 py-1 rounded-lg font-black text-xs whitespace-nowrap shrink-0 shadow-sm ${
+          freeCount > 0 ? 'bg-cyan-400 text-slate-950' : 'bg-slate-200 text-slate-600 border border-slate-300'
         }`;
       }
 
@@ -22014,12 +22047,12 @@ const TYPE_EMOJI = {
         if (!btn) return;
         const isCurrent = k === meta.key;
         const activeStyle = k === 'jungle'
-          ? 'bg-emerald-100 text-emerald-900 border-emerald-400 shadow-sm'
+          ? 'bg-emerald-50 text-emerald-800 border-emerald-400 shadow-sm'
           : k === 'fossil'
-          ? 'bg-orange-100 text-orange-900 border-orange-400 shadow-sm'
-          : 'bg-amber-100 text-amber-900 border-amber-400 shadow-sm';
+          ? 'bg-orange-50 text-orange-800 border-orange-400 shadow-sm'
+          : 'bg-amber-50 text-amber-800 border-amber-400 shadow-sm';
         btn.className = `py-1 px-2 rounded-xl text-[10.5px] font-black border transition flex items-center justify-center gap-1 active:scale-95 ${
-          isCurrent ? activeStyle : 'bg-white/90 text-slate-700 border-slate-200 hover:border-slate-400'
+          isCurrent ? activeStyle : 'bg-white/90 text-slate-600 border-slate-200 hover:border-slate-300'
         }`;
       });
 
@@ -22177,7 +22210,7 @@ const TYPE_EMOJI = {
       if (freeBadge) {
         freeBadge.textContent = freeCount >= MAX_FREE_BOOSTERS ? 'MAX.' : `${freeCount}/${MAX_FREE_BOOSTERS}`;
         freeBadge.className = `ml-1 px-2 py-0.5 rounded-lg font-black text-[10.5px] whitespace-nowrap ${
-          freeCount > 0 ? 'bg-cyan-400 text-slate-950' : 'bg-slate-700 text-slate-300'}`;
+          freeCount > 0 ? 'bg-cyan-400 text-slate-950' : 'bg-slate-200 text-slate-600'}`;
       }
       const cd = document.getElementById('hubCountdown');
       if (cd) cd.textContent = countdown || 'Plein';
@@ -22194,11 +22227,11 @@ const TYPE_EMOJI = {
         } else if (canBuyWithCoins) {
           mTitle.textContent = `Tu as ${coins} pièces : achète un booster !`;
           mBadge.textContent = `${Math.floor(coins / BOOSTER_COST_COINS)} disp.`;
-          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-yellow-400 text-slate-950 text-[10.5px] font-black';
+          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 text-[10.5px] font-black';
         } else {
           mTitle.textContent = 'Gagne un duel : +100 pièces';
           mBadge.textContent = `${countdown || '60:00'}`;
-          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-slate-700 text-slate-200 text-[10.5px] font-black font-mono';
+          mBadge.className = 'shrink-0 px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 text-[10.5px] font-black font-mono';
         }
       }
 
@@ -22215,7 +22248,7 @@ const TYPE_EMOJI = {
           show.dataset.ready = '1';
           show.innerHTML = [0, 1].map(i => best[i]
             ? `<span class="hub-mini-card"><img src="${best[i].img}" alt="${best[i].name}" loading="lazy" /></span>`
-            : '<span class="hub-mini-card grid place-items-center text-[10px] text-slate-500">?</span>').join('');
+            : '<span class="hub-mini-card grid place-items-center text-[10px] text-slate-400">?</span>').join('');
         }
       }
     }
@@ -22674,8 +22707,8 @@ const TYPE_EMOJI = {
             const active = packArt && packArt.key === a.key;
             return `<button onclick="switchActiveBoosterArt('${a.key}')" class="px-2.5 py-1 rounded-xl text-[11px] font-extrabold border transition ${
               active
-                ? 'bg-yellow-400/25 text-yellow-200 border-yellow-400/80 shadow'
-                : 'bg-slate-900/80 text-slate-300 border-white/15 hover:border-yellow-300/60'
+                ? 'bg-amber-100 text-amber-900 border-amber-400 shadow-sm'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-amber-300 shadow-sm'
             }">${a.icon} ${a.label}</button>`;
           }).join('')}
         </div>
@@ -22684,8 +22717,8 @@ const TYPE_EMOJI = {
       footer.innerHTML = `
         <div class="flex flex-col items-center gap-2 w-full">
           ${artPickerHtml}
-          <div class="px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-400/40 text-amber-200 text-[11px] sm:text-xs font-bold shadow-[0_0_20px_rgba(251,191,36,0.15)] flex items-center gap-2 max-w-full">
-            <span class="text-amber-400 animate-bounce shrink-0">✋</span>
+          <div class="px-4 py-1.5 rounded-full bg-white/95 border border-amber-300 text-amber-800 text-[11px] sm:text-xs font-bold shadow-sm flex items-center gap-2 max-w-full">
+            <span class="text-amber-500 animate-bounce shrink-0">✋</span>
             <span id="boosterTearPromptText" class="truncate">Glissez de gauche à droite sur le booster pour le déchirer !</span>
           </div>
           <button onclick="animateQuickBoosterRip()" class="btn-gold px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg active:scale-95 transition">
@@ -23080,14 +23113,14 @@ const TYPE_EMOJI = {
       stage.innerHTML = `
         <div id="boosterGodRays" class="god-rays hidden"></div>
 
-        <!-- Barre supérieure de progression & rareté (style milTCG) -->
+        <!-- Barre supérieure de progression & rareté (style TCG Pocket) -->
         <div class="flex flex-wrap items-center justify-center gap-2 mb-2.5 z-20">
           ${isGodPack ? `<div class="px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-white font-black text-[11px] tracking-wider uppercase shadow-[0_0_16px_rgba(251,191,36,0.85)] animate-bounce">👑 GOD PACK 1999 (5 HOLO !)</div>` : ''}
-          <div class="flex items-center gap-1.5 bg-slate-900/90 border border-white/15 px-3 py-1 rounded-full shadow">
+          <div class="flex items-center gap-1.5 bg-white/95 border border-slate-200 px-3 py-1 rounded-full shadow-sm">
             <div id="boosterDots" class="flex items-center gap-1.5">
               ${cards.map((_, idx) => `<span class="booster-dot" id="boosterDot-${idx}"></span>`).join('')}
             </div>
-            <span id="boosterStackCounterText" class="ml-1.5 text-[11px] font-bold text-slate-300">1/${cards.length}</span>
+            <span id="boosterStackCounterText" class="ml-1.5 text-[11px] font-bold text-slate-600">1/${cards.length}</span>
           </div>
           <span id="boosterTopRarityBadge" class="hidden px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border"></span>
         </div>
@@ -23351,16 +23384,16 @@ const TYPE_EMOJI = {
             : '✨ Carte Rare Détectée !';
           infoEl.innerHTML = `
             <div class="card-info-pop">
-              <div class="text-sm font-black text-amber-300">${slotHint}</div>
-              <div class="text-[11px] text-slate-300 mt-0.5">Touchez la carte dorée pour la retourner en 3D !</div>
+              <div class="text-sm font-black text-amber-700">${slotHint}</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Touchez la carte dorée pour la retourner en 3D !</div>
             </div>
           `;
         }
         if (footer) {
           footer.innerHTML = `
             <div class="flex flex-col items-center gap-2 w-full">
-              <div class="px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-400/45 text-[11px] sm:text-xs font-bold text-amber-200 flex items-center gap-2 shadow-lg">
-                <span class="text-amber-400 animate-pulse shrink-0">✋</span>
+              <div class="px-4 py-1.5 rounded-full bg-white/95 border border-amber-300 text-[11px] sm:text-xs font-bold text-slate-700 flex items-center gap-2 shadow-sm">
+                <span class="text-amber-500 animate-pulse shrink-0">✋</span>
                 <span class="truncate">Touchez la carte dorée pour la retourner en 3D !</span>
               </div>
               <button onclick="advanceBoosterCardStep()" class="btn-gold px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider shadow-lg active:scale-95 transition" style="touch-action:manipulation">
@@ -23389,8 +23422,8 @@ const TYPE_EMOJI = {
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-black border ${rMeta.badgeCls}">
                   ${rMeta.symbol} ${rMeta.label}
                 </span>
-                <span class="font-black text-base text-white">${card.name}</span>
-                <span class="text-[11px] font-mono text-slate-300">(×${card.ownedAfter})</span>
+                <span class="font-black text-base text-slate-900">${card.name}</span>
+                <span class="text-[11px] font-mono text-slate-500">(×${card.ownedAfter})</span>
                 ${card.isNew ? '<span class="new-pill new-pill-inline">Nouveau</span>' : ''}
               </div>
             </div>
@@ -23403,8 +23436,8 @@ const TYPE_EMOJI = {
             : 'Glissez ou touchez la carte pour découvrir la suivante !';
           footer.innerHTML = `
             <div class="flex flex-col items-center gap-2 w-full">
-              <div class="px-4 py-1.5 rounded-full bg-slate-900/85 border border-white/15 text-[11px] sm:text-xs font-bold text-amber-200 flex items-center gap-2 shadow-lg max-w-full">
-                <span class="text-amber-400 animate-pulse shrink-0">✋</span>
+              <div class="px-4 py-1.5 rounded-full bg-white/95 border border-slate-200 text-[11px] sm:text-xs font-bold text-slate-600 flex items-center gap-2 shadow-sm max-w-full">
+                <span class="text-amber-500 animate-pulse shrink-0">✋</span>
                 <span class="truncate">${gestureText}</span>
               </div>
               <button onclick="advanceBoosterCardStep(1, -0.15)" class="btn-gold px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider shadow-lg active:scale-95 transition" style="touch-action:manipulation">
@@ -23565,17 +23598,17 @@ const TYPE_EMOJI = {
         return `
           <div onclick="showStickyPreview('${c.img}')"
                style="animation-delay:${idx * 75}ms"
-               class="summary-card-in summary-holo-card cursor-pointer rounded-xl p-1 sm:p-1.5 w-[31%] sm:w-[148px] bg-slate-900/95 border ${isHolo ? 'border-yellow-300 ring-2 ring-pink-400/75 shadow-[0_0_25px_rgba(244,114,182,0.45)]' : isRare ? 'border-yellow-400/85 shadow-[0_0_20px_rgba(250,204,21,0.3)]' : c.rarity === 'uncommon' ? 'border-emerald-400/60' : 'border-white/15'} flex flex-col items-center relative group transition-transform duration-150">
-            <div class="relative w-full aspect-[63/88] rounded-lg overflow-hidden">
+               class="summary-card-in summary-holo-card cursor-pointer rounded-xl p-1 sm:p-1.5 w-[31%] sm:w-[148px] bg-white border ${isHolo ? 'border-pink-300 ring-2 ring-pink-300/75 shadow-[0_8px_22px_rgba(244,114,182,0.28)]' : isRare ? 'border-amber-300 shadow-[0_6px_18px_rgba(250,204,21,0.22)]' : c.rarity === 'uncommon' ? 'border-emerald-300 shadow-sm' : 'border-slate-200 shadow-sm'} flex flex-col items-center relative group transition-transform duration-150">
+            <div class="relative w-full aspect-[63/88] rounded-lg overflow-hidden bg-slate-100">
               <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover" draggable="false" />
               ${(isHolo || isRare) ? '<div class="absolute inset-0 pointer-events-none holo-foil-diagonal opacity-90"></div>' : ''}
               ${isHolo ? '<div class="cosmos-holo-overlay"></div><div class="absolute inset-0 pointer-events-none holo-sparkles opacity-65"></div>' : ''}
               <div class="absolute inset-0 pointer-events-none holo-specular-glare opacity-40"></div>
               ${c.isNew ? '<span class="new-pill new-pill-sm">Nouveau</span>' : ''}
-              <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/80 text-white font-mono font-bold text-[10.5px]">×${c.ownedAfter}</span>
+              <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-slate-900/85 text-white font-mono font-bold text-[10.5px]">×${c.ownedAfter}</span>
             </div>
             <div class="mt-1.5 w-full flex items-center justify-between gap-1 px-0.5">
-              <span class="text-[10px] font-extrabold text-white truncate">${c.name}</span>
+              <span class="text-[10px] font-extrabold text-slate-800 truncate">${c.name}</span>
               <span class="text-[10.5px] font-black px-1.5 py-0.5 rounded border shrink-0 ${rMeta.badgeCls}">${rMeta.symbol}</span>
             </div>
           </div>
@@ -23586,10 +23619,10 @@ const TYPE_EMOJI = {
         <div class="w-full flex flex-col items-center gap-2.5 relative">
           ${hasHolo ? '<div class="god-rays"></div>' : ''}
           <div class="text-center z-10">
-            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-yellow-300 text-[11px] font-black uppercase tracking-wider">
+            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 border border-amber-300 text-amber-800 text-[11px] font-black uppercase tracking-wider shadow-sm">
               ${isGodPack ? '🌟 GOD PACK LÉGENDAIRE ! 🌟' : hasHolo ? '✨ TIRAGE HOLOGRAPHIQUE ! ✨' : '🔥 TIRAGE TERMINÉ · 5 CARTES'}
             </div>
-            <div class="text-[11px] text-slate-300 mt-1">Touche une carte pour l'inspecter en HD</div>
+            <div class="text-[11px] text-slate-500 mt-1">Touche une carte pour l'inspecter en HD</div>
           </div>
 
           <!-- Vitrine 5 cartes style milTCG : 3 en haut + 2 en bas -->
@@ -23621,10 +23654,10 @@ const TYPE_EMOJI = {
           <button onclick="launchBoosterPack('${meta.key}')" class="btn-gold px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wide shadow-lg flex items-center gap-1.5">
             <span id="boosterSummaryReplayBtnLabel">${replayLabel}</span>
           </button>
-          <button onclick="closeBoosterOpenModal(); switchMenuTab('booster'); cycleHubBoosterSet();" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-slate-200 hover:text-white">
+          <button onclick="closeBoosterOpenModal(); switchMenuTab('booster'); cycleHubBoosterSet();" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900">
             🔄 Changer d'extension
           </button>
-          <button onclick="closeBoosterOpenModal(); openCollectionModal('${meta.key}');" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:text-emerald-200">
+          <button onclick="closeBoosterOpenModal(); openCollectionModal('${meta.key}');" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-emerald-700 hover:text-emerald-900">
             📖 Voir ma Galerie
           </button>
         </div>
@@ -23634,7 +23667,7 @@ const TYPE_EMOJI = {
     let currentColFilterSet = 'all';
     let currentColFilterRarity = 'all';
     let colBinderMode = false;
-    const RARITY_TXT = { common: 'text-slate-300', uncommon: 'text-emerald-300', rare: 'text-amber-300', holo: 'text-pink-300' };
+    const RARITY_TXT = { common: 'text-slate-400', uncommon: 'text-emerald-600', rare: 'text-amber-500', holo: 'text-pink-500' };
     function toggleColBinder(on) { colBinderMode = on; openCollectionModal(); }
 
     function openCollectionModal(filterSet = currentColFilterSet, filterRarity = currentColFilterRarity) {
@@ -23643,8 +23676,18 @@ const TYPE_EMOJI = {
       currentColFilterRarity = filterRarity;
       const box = document.getElementById('academyContent');
       const modalTitle = document.querySelector('#academyModal h3');
+      const headerSub = document.getElementById('academyHeaderSub');
+      const headerBar = document.getElementById('academyHeaderBar');
 
       const setOrder = { base: 1, jungle: 2, fossil: 3 };
+      const SET_TOTAL = { base: 102, jungle: 64, fossil: 62 };
+      const SET_LABEL = { base: 'Base', jungle: 'Jungle', fossil: 'Fossile' };
+      const SET_BADGE_CLS = {
+        base: 'bg-amber-100/90 text-amber-800 border-amber-200',
+        jungle: 'bg-emerald-100/90 text-emerald-800 border-emerald-200',
+        fossil: 'bg-orange-100/90 text-orange-800 border-orange-200'
+      };
+
       const ownedCards = ALL_UNIQUE_CARDS
         .filter(c => (boosterSave.counts[c.setId] || 0) > 0)
         .sort((a, b) => {
@@ -23655,92 +23698,171 @@ const TYPE_EMOJI = {
           return na - nb;
         });
 
+      const totalAll = ALL_UNIQUE_CARDS.length;
       const ownedTotal = ownedCards.length;
       const ownedBase = ownedCards.filter(c => c.set === 'base').length;
       const ownedJungle = ownedCards.filter(c => c.set === 'jungle').length;
       const ownedFossil = ownedCards.filter(c => c.set === 'fossil').length;
+      const totalCopies = Object.values(boosterSave.counts || {}).reduce((s, n) => s + (n || 0), 0);
+      const globalPct = Math.round((ownedTotal / Math.max(1, totalAll)) * 100);
 
-      if (modalTitle) modalTitle.textContent = `📖 Galerie 1999 (${ownedTotal}/${ALL_UNIQUE_CARDS.length} possédées)`;
+      if (modalTitle) modalTitle.textContent = `Galerie Collector 1999`;
+      if (headerSub) headerSub.textContent = `${ownedTotal} / ${totalAll} cartes débloquées (${globalPct}%) · ${totalCopies} exemplaire${totalCopies > 1 ? 's' : ''}`;
+      if (headerBar) headerBar.style.width = `${globalPct}%`;
 
       const setFilteredOwned = ownedCards.filter(c => filterSet === 'all' || c.set === filterSet);
+      const setFilteredAll = ALL_UNIQUE_CARDS.filter(c => filterSet === 'all' || c.set === filterSet);
+
       const ownedHolo = setFilteredOwned.filter(c => c.rarity === 'holo').length;
       const ownedRare = setFilteredOwned.filter(c => c.rarity === 'rare').length;
       const ownedUncommon = setFilteredOwned.filter(c => c.rarity === 'uncommon').length;
       const ownedCommon = setFilteredOwned.filter(c => c.rarity === 'common').length;
+
+      const totalHolo = setFilteredAll.filter(c => c.rarity === 'holo').length;
+      const totalRare = setFilteredAll.filter(c => c.rarity === 'rare').length;
+      const totalUncommon = setFilteredAll.filter(c => c.rarity === 'uncommon').length;
+      const totalCommon = setFilteredAll.filter(c => c.rarity === 'common').length;
 
       const filtered = setFilteredOwned.filter(c => {
         if (filterRarity !== 'all' && c.rarity !== filterRarity) return false;
         return true;
       });
       // Mode Classeur : tous les emplacements du set (manquants en silhouette)
-      const binderList = ALL_UNIQUE_CARDS
-        .filter(c => (filterSet === 'all' || c.set === filterSet) && (filterRarity === 'all' || c.rarity === filterRarity))
+      const binderList = setFilteredAll
+        .filter(c => filterRarity === 'all' || c.rarity === filterRarity)
         .sort((a, b) => {
           const sa = setOrder[a.set] || 9, sb = setOrder[b.set] || 9;
           if (sa !== sb) return sa - sb;
           return (parseInt((a.setId || '').split('-')[1], 10) || 999) - (parseInt((b.setId || '').split('-')[1], 10) || 999);
         });
-      const SET_TOTAL = { base: 102, jungle: 64, fossil: 62 };
       const shown = colBinderMode ? binderList : filtered;
 
+      const setsMeta = [
+        { key: 'all', label: 'Toutes', owned: ownedTotal, total: 228, activeCls: 'bg-slate-900 border-slate-900 text-white shadow-sm', barCls: 'bg-amber-400' },
+        { key: 'base', label: 'Base', owned: ownedBase, total: 102, activeCls: 'bg-amber-50 border-amber-400 text-amber-950 ring-1 ring-amber-400/50 shadow-sm', barCls: 'bg-amber-500' },
+        { key: 'jungle', label: 'Jungle', owned: ownedJungle, total: 64, activeCls: 'bg-emerald-50 border-emerald-400 text-emerald-950 ring-1 ring-emerald-400/50 shadow-sm', barCls: 'bg-emerald-500' },
+        { key: 'fossil', label: 'Fossile', owned: ownedFossil, total: 62, activeCls: 'bg-orange-50 border-orange-400 text-orange-950 ring-1 ring-orange-400/50 shadow-sm', barCls: 'bg-orange-500' }
+      ];
+
+      const raritiesMeta = [
+        { key: 'all', sym: '🃏', label: 'Toutes', owned: setFilteredOwned.length, total: setFilteredAll.length, activeCls: 'bg-slate-900 border-slate-900 text-white shadow-sm', idleSymCls: 'text-slate-600' },
+        { key: 'holo', sym: '✨', label: 'Holo', owned: ownedHolo, total: totalHolo, activeCls: 'bg-pink-50 border-pink-400 text-pink-950 ring-1 ring-pink-400/50 shadow-sm', idleSymCls: 'text-pink-600' },
+        { key: 'rare', sym: '★', label: 'Rare', owned: ownedRare, total: totalRare, activeCls: 'bg-amber-50 border-amber-400 text-amber-950 ring-1 ring-amber-400/50 shadow-sm', idleSymCls: 'text-amber-600' },
+        { key: 'uncommon', sym: '◆', label: 'Peu C.', owned: ownedUncommon, total: totalUncommon, activeCls: 'bg-emerald-50 border-emerald-400 text-emerald-950 ring-1 ring-emerald-400/50 shadow-sm', idleSymCls: 'text-emerald-600' },
+        { key: 'common', sym: '●', label: 'Comm.', owned: ownedCommon, total: totalCommon, activeCls: 'bg-slate-200 border-slate-400 text-slate-950 shadow-sm', idleSymCls: 'text-slate-500' }
+      ];
+
       box.innerHTML = `
-        <div class="col-sticky">
-        <div class="seg-toggle mb-2.5" role="tablist">
-          <button role="tab" onclick="toggleColBinder(false)" class="${!colBinderMode ? 'on' : ''}">Mes cartes</button>
-          <button role="tab" onclick="toggleColBinder(true)" class="${colBinderMode ? 'on' : ''}">Classeur complet</button>
-        </div>
-        <div class="chip-rail mb-2">
-          <button onclick="openCollectionModal('all', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='all'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Toutes (${ownedTotal}/228)</button>
-          <button onclick="openCollectionModal('base', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='base'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Set de Base (${ownedBase}/102)</button>
-          <button onclick="openCollectionModal('jungle', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='jungle'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Jungle (${ownedJungle}/64)</button>
-          <button onclick="openCollectionModal('fossil', '${filterRarity}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${filterSet==='fossil'?'bg-yellow-400 text-slate-950':'bg-white/10 text-white'}">Fossile (${ownedFossil}/62)</button>
-        </div>
-        <div class="chip-rail mb-3">
-          <button onclick="openCollectionModal('${filterSet}', 'all')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='all'?'bg-amber-300 text-slate-950':'bg-white/5 text-slate-300'}">Toutes raretés (${setFilteredOwned.length})</button>
-          <button onclick="openCollectionModal('${filterSet}', 'holo')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='holo'?'bg-pink-400 text-slate-950':'bg-white/5 text-pink-300'}">✨ Holo (${ownedHolo})</button>
-          <button onclick="openCollectionModal('${filterSet}', 'rare')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='rare'?'bg-yellow-400 text-slate-950':'bg-white/5 text-yellow-200'}">★ Rare (${ownedRare})</button>
-          <button onclick="openCollectionModal('${filterSet}', 'uncommon')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='uncommon'?'bg-emerald-400 text-slate-950':'bg-white/5 text-emerald-200'}">◆ Peu Com. (${ownedUncommon})</button>
-          <button onclick="openCollectionModal('${filterSet}', 'common')" class="px-2 py-0.5 rounded-md text-[10px] font-bold ${filterRarity==='common'?'bg-slate-300 text-slate-950':'bg-white/5 text-slate-300'}">● Commune (${ownedCommon})</button>
-        </div>
-        </div>
-        ${shown.length === 0 ? `
-          <div class="py-10 px-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col items-center justify-center text-center gap-3">
-            <div class="text-3xl">📦</div>
-            <div class="text-sm font-extrabold text-yellow-200">Aucune carte possédée dans cette catégorie</div>
-            <p class="text-[11px] text-slate-300 max-w-xs">
-              La galerie n'affiche que les cartes que tu as déjà débloquées. Ouvre des Boosters 1999 pour agrandir ta collection !
-            </p>
-            <button onclick="document.getElementById('academyModal').classList.add('hidden'); switchMenuTab('booster');" class="btn-gold px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-1">
-              ✨ Ouvrir des Boosters
+        <div class="col-sticky space-y-2">
+          <div class="seg-toggle" role="tablist">
+            <button role="tab" onclick="toggleColBinder(false)" class="${!colBinderMode ? 'on' : ''}">
+              <span>Mes cartes</span>
+              <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black ${!colBinderMode ? 'bg-amber-100 text-amber-900' : 'bg-slate-200/80 text-slate-600'}">${ownedTotal}</span>
+            </button>
+            <button role="tab" onclick="toggleColBinder(true)" class="${colBinderMode ? 'on' : ''}">
+              <span>Classeur complet</span>
+              <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black ${colBinderMode ? 'bg-sky-100 text-sky-900' : 'bg-slate-200/80 text-slate-600'}">${totalAll}</span>
             </button>
           </div>
+
+          <!-- Grille 4 colonnes Extensions (zéro scroll horizontal) -->
+          <div class="grid grid-cols-4 gap-1.5">
+            ${setsMeta.map(s => {
+              const isAct = filterSet === s.key;
+              const pct = Math.round((s.owned / Math.max(1, s.total)) * 100);
+              return `
+                <button onclick="openCollectionModal('${s.key}', '${filterRarity}')" class="rounded-xl px-1.5 py-1.5 border text-center transition flex flex-col items-center justify-between gap-1 active:scale-95 min-w-0 ${isAct ? s.activeCls : 'bg-slate-50/90 border-slate-200/90 text-slate-700 hover:bg-slate-100'}">
+                  <span class="text-[11px] font-black leading-none truncate w-full">${s.label}</span>
+                  <span class="text-[9.5px] font-extrabold leading-none ${isAct && s.key === 'all' ? 'text-slate-200' : 'text-slate-500'}">${s.owned}/${s.total}</span>
+                  <div class="w-full h-1 rounded-full ${isAct && s.key === 'all' ? 'bg-white/25' : 'bg-slate-200'} overflow-hidden">
+                    <div class="h-full ${s.barCls}" style="width:${pct}%"></div>
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Grille 5 colonnes Raretés (zéro scroll horizontal) -->
+          <div class="grid grid-cols-5 gap-1">
+            ${raritiesMeta.map(r => {
+              const isAct = filterRarity === r.key;
+              const countLabel = colBinderMode ? `${r.owned}/${r.total}` : `${r.owned}`;
+              return `
+                <button onclick="openCollectionModal('${filterSet}', '${r.key}')" class="rounded-xl px-1 py-1.5 border text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 min-w-0 ${isAct ? r.activeCls : 'bg-slate-50/90 border-slate-200/80 text-slate-700 hover:bg-slate-100'}">
+                  <span class="text-[10px] font-black leading-tight truncate w-full"><span class="${isAct && r.key === 'all' ? 'text-amber-300' : r.idleSymCls}">${r.sym}</span> ${r.label}</span>
+                  <span class="text-[9.5px] font-extrabold leading-none ${isAct && r.key === 'all' ? 'text-slate-200' : 'text-slate-500'}">${countLabel}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        ${shown.length === 0 ? `
+          <div class="my-2 py-8 px-4 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200/90 shadow-sm flex flex-col items-center justify-center text-center gap-2.5">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-2xl shadow-sm">📦</div>
+            <div class="text-sm font-black text-slate-800">Aucune carte débloquée dans ce filtre</div>
+            <p class="text-[11px] font-medium text-slate-500 max-w-xs leading-relaxed">
+              Ouvre des Boosters 1999 gratuits pour obtenir de nouvelles cartes, ou bascule sur le <strong class="text-slate-700">Classeur complet</strong> pour voir les 228 emplacements.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
+              <button onclick="document.getElementById('academyModal').classList.add('hidden'); switchMenuTab('booster');" class="btn-gold px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wide shadow-sm">
+                ✨ Ouvrir des Boosters
+              </button>
+              <button onclick="toggleColBinder(true)" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-extrabold text-slate-700 transition active:scale-95">
+                📖 Voir le Classeur
+              </button>
+            </div>
+          </div>
         ` : `
-          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 p-1">
+          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-0.5 pb-2">
             ${shown.map(c => {
               const count = boosterSave.counts[c.setId] || 0;
               const rMeta = RARITY_META[c.rarity] || RARITY_META.common;
               const isHolo = c.rarity === 'holo';
+              const isRare = c.rarity === 'rare';
+              const isUncommon = c.rarity === 'uncommon';
+              const num = (c.setId || '').split('-')[1] || '?';
+              const setTot = SET_TOTAL[c.set] || '?';
+              const setShort = SET_LABEL[c.set] || c.set;
+              const setBadgeCls = SET_BADGE_CLS[c.set] || 'bg-slate-100 text-slate-700 border-slate-200';
+
               if (!count) {
-                const num = (c.setId || '').split('-')[1] || '?';
                 return `
-                <div class="binder-slot rounded-lg p-1 flex flex-col items-center">
-                  <div class="w-full aspect-[63/88] rounded flex flex-col items-center justify-center gap-1">
-                    <span class="text-[12px] font-black text-slate-500">#${num}<span class="text-slate-600">/${SET_TOTAL[c.set] || '?'}</span></span>
-                    <span class="text-base ${RARITY_TXT[c.rarity] || ''} opacity-60">${rMeta.symbol}</span>
+                <div class="binder-slot rounded-xl p-1.5 flex flex-col items-center justify-between min-w-0">
+                  <div class="w-full aspect-[63/88] rounded-lg flex flex-col items-center justify-center gap-1 px-1 text-center">
+                    <span class="px-1.5 py-0.5 rounded-md border text-[8.5px] font-extrabold uppercase tracking-wider ${setBadgeCls} opacity-75">${setShort}</span>
+                    <span class="text-[13px] font-black text-slate-500 leading-none mt-0.5">#${num}<span class="text-[9.5px] font-bold text-slate-400">/${setTot}</span></span>
+                    <span class="text-sm font-black ${RARITY_TXT[c.rarity] || 'text-slate-400'} opacity-75" title="${rMeta.label}">${rMeta.symbol}</span>
                   </div>
-                  <span class="text-[10px] font-bold text-slate-500 mt-1">???</span>
+                  <div class="w-full flex items-center justify-between gap-1 mt-1.5 px-0.5 min-w-0">
+                    <span class="text-[9.5px] font-bold text-slate-400 truncate">${c.name}</span>
+                    <span class="text-[9px] font-extrabold text-slate-400 shrink-0">#${num}</span>
+                  </div>
                 </div>`;
               }
+
+              const tileCls = isHolo
+                ? 'bg-gradient-to-b from-pink-50/90 via-white to-amber-50/60 border-pink-300 ring-1 ring-pink-200/70 shadow-[0_4px_12px_-3px_rgba(236,72,153,0.22)]'
+                : isRare
+                ? 'bg-gradient-to-b from-amber-50/80 via-white to-white border-amber-300/90 shadow-sm'
+                : isUncommon
+                ? 'bg-white border-emerald-200/90 shadow-sm'
+                : 'bg-white border-slate-200/90 shadow-sm';
+
               return `
-                <div onclick="showStickyPreview('${c.img}')" class="cursor-pointer rounded-lg bg-slate-800/90 border ${isHolo ? 'border-pink-400/80' : 'border-yellow-400/50'} hover:border-yellow-400 p-1 flex flex-col items-center relative">
-                  <div class="relative w-full aspect-[63/88] rounded overflow-hidden">
+                <div onclick="showStickyPreview('${c.img}')" class="col-card-tile cursor-pointer rounded-xl border ${tileCls} p-1.5 flex flex-col items-center relative min-w-0">
+                  <div class="relative w-full aspect-[63/88] rounded-lg overflow-hidden bg-slate-100 shadow-inner">
                     <img src="${c.img}" loading="lazy" alt="${c.name}" class="w-full h-full object-contain" />
                     ${isHolo ? '<div class="cosmos-holo-overlay"></div>' : ''}
-                    <span class="absolute bottom-1 right-1 px-1.5 py-0.2 rounded bg-emerald-500 text-slate-950 font-mono font-black text-[10.5px] shadow">×${count}</span>
+                    <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-slate-900/85 backdrop-blur-sm text-white border border-white/25 font-black text-[10px] leading-none shadow">×${count}</span>
                   </div>
-                  <div class="w-full flex items-center justify-between gap-1 mt-1 px-0.5">
-                    <span class="text-[10px] font-bold text-white truncate">${c.name}</span>
-                    <span class="text-[11px] font-black ${RARITY_TXT[c.rarity] || 'text-slate-300'} shrink-0" title="${rMeta.label}">${rMeta.symbol}</span>
+                  <div class="w-full flex items-center justify-between gap-1 mt-1.5 px-0.5 min-w-0">
+                    <span class="text-[10.5px] font-extrabold text-slate-800 truncate">${c.name}</span>
+                    <span class="text-[11px] font-black ${RARITY_TXT[c.rarity] || 'text-slate-400'} shrink-0" title="${rMeta.label}">${rMeta.symbol}</span>
+                  </div>
+                  <div class="w-full flex items-center justify-between gap-1 px-0.5 min-w-0">
+                    <span class="text-[9px] font-bold text-slate-400 truncate">${setShort}</span>
+                    <span class="text-[9px] font-extrabold text-slate-400 shrink-0">#${num}/${setTot}</span>
                   </div>
                 </div>
               `;
@@ -23755,7 +23877,7 @@ const TYPE_EMOJI = {
     (function initPullToRefresh() {
       const el = document.getElementById('menuScreen');
       const ind = document.createElement('div');
-      ind.style.cssText = 'position:fixed;top:env(safe-area-inset-top);left:50%;transform:translate(-50%,-48px);z-index:70;padding:6px 12px;border-radius:999px;background:#0f172a;border:1px solid rgba(250,204,21,.5);color:#fde047;font:700 11px Inter,sans-serif;transition:transform .15s';
+      ind.style.cssText = 'position:fixed;top:env(safe-area-inset-top);left:50%;transform:translate(-50%,-48px);z-index:70;padding:6px 14px;border-radius:999px;background:#ffffff;border:1px solid #cbd5e1;color:#334155;box-shadow:0 8px 20px -4px rgba(15,23,42,0.12);font:700 11px Inter,sans-serif;transition:transform .15s';
       ind.textContent = '↓ Tirer pour rafraîchir';
       document.body.appendChild(ind);
       let y0 = null, dist = 0;
