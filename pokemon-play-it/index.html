@@ -1620,7 +1620,7 @@
             <span>🧢</span> Carte de Dresseur 1999
           </div>
           <h3 class="font-black text-base text-white">Quel est ton pseudo de joueur ?</h3>
-          <p class="text-[11px] text-slate-300 mt-0.5">Demandé à ta première connexion · utilisé pour tes duels en mode Multijoueur.</p>
+          <p class="text-[11px] text-slate-300 mt-0.5">Tes cartes obtenues, tes pièces et tes decks sont liés à ce pseudo · utilisé aussi en Multijoueur.</p>
         </div>
         <button id="pseudoModalCloseBtn" onclick="closePseudoModal()" class="x-close w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-bold flex items-center justify-center shrink-0">✕</button>
       </div>
@@ -1635,6 +1635,7 @@
           placeholder="Ex : Sacha, Ondine, Red..."
           style="font-size:16px"
           onkeydown="if(event.key==='Enter'){event.preventDefault();savePlayerPseudo();}"
+          oninput="updatePseudoProfileStatus()"
           class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-cyan-400/50 focus:border-yellow-400 focus:outline-none text-white font-extrabold placeholder:text-slate-500"
         />
         <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
@@ -1645,6 +1646,11 @@
           <button type="button" onclick="fillPseudoSuggestion('Red')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/15 text-[10px] font-bold text-slate-200">Red</button>
           <button type="button" onclick="fillPseudoSuggestion('Blue')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-white/15 text-[10px] font-bold text-slate-200">Blue</button>
         </div>
+        <div id="pseudoProfileStatus" class="text-[11px] leading-snug text-cyan-100 bg-cyan-500/10 border border-cyan-400/25 rounded-xl px-3 py-2"></div>
+        <label id="pseudoTransferWrap" class="hidden flex items-start gap-2 text-[11px] text-amber-100 bg-amber-500/10 border border-amber-400/30 rounded-xl px-3 py-2 cursor-pointer" style="touch-action:manipulation">
+          <input id="pseudoTransferChk" type="checkbox" class="mt-0.5 w-4 h-4 accent-amber-400 shrink-0" />
+          <span>Transférer ma collection, mes pièces et mes decks actuels vers ce nouveau pseudo (renommer mon profil)</span>
+        </label>
       </div>
 
       <button onclick="savePlayerPseudo()" class="w-full btn-gold py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg active:scale-95 transition">
@@ -16012,6 +16018,58 @@ const TYPE_EMOJI = {
       playerPseudo = (localStorage.getItem(PSEUDO_STORAGE_KEY) || '').trim();
     } catch (_) {}
 
+    // --- Profils liés au pseudo : collection, pièces, boosters & decks perso propres à chaque Dresseur ---
+    const PROFILE_BOOSTER_BASE = 'ppi_v2_booster_save';
+    const PROFILE_DECKS_BASE = 'ppi_v2_custom_decks';
+    function pseudoProfileKey(name) {
+      return String(name || '').trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, ' ');
+    }
+    // Sans pseudo → profil « invité » (ancienne clé) ; avec pseudo → clé dédiée au pseudo
+    function profileStorageKey(base, name = playerPseudo) {
+      const k = pseudoProfileKey(name);
+      return k ? `${base}::${k}` : base;
+    }
+    function profileHasData(name) {
+      try {
+        return localStorage.getItem(profileStorageKey(PROFILE_BOOSTER_BASE, name)) !== null
+          || localStorage.getItem(profileStorageKey(PROFILE_DECKS_BASE, name)) !== null;
+      } catch (_) { return false; }
+    }
+    function readProfileSummary(name) {
+      try {
+        const raw = localStorage.getItem(profileStorageKey(PROFILE_BOOSTER_BASE, name));
+        const decksRaw = localStorage.getItem(profileStorageKey(PROFILE_DECKS_BASE, name));
+        if (raw === null && decksRaw === null) return null;
+        const d = raw ? JSON.parse(raw) : {};
+        const decks = decksRaw ? JSON.parse(decksRaw) : [];
+        const counts = (d && d.counts) || {};
+        return {
+          cards: Object.values(counts).filter(n => n > 0).length,
+          coins: Math.max(0, Math.floor(d.coins || 0)),
+          packs: d.packsOpened || 0,
+          decks: Array.isArray(decks) ? decks.length : 0
+        };
+      } catch (_) { return null; }
+    }
+    function moveProfileData(fromName, toName, keepSource = false) {
+      try {
+        [PROFILE_BOOSTER_BASE, PROFILE_DECKS_BASE].forEach((base) => {
+          const fromK = profileStorageKey(base, fromName);
+          const toK = profileStorageKey(base, toName);
+          if (fromK === toK) return;
+          const v = localStorage.getItem(fromK);
+          if (v !== null) {
+            localStorage.setItem(toK, v);
+            if (!keepSource) localStorage.removeItem(fromK);
+          }
+        });
+      } catch (_) {}
+    }
+    // Migration : l'ancienne sauvegarde (sans pseudo) est rattachée au pseudo déjà enregistré
+    if (playerPseudo && !profileHasData(playerPseudo)) moveProfileData('', playerPseudo);
+
     function updatePseudoUi() {
       const label = playerPseudo || 'Dresseur';
       const menuLbl = document.getElementById('menuPseudoLabel');
@@ -16028,6 +16086,9 @@ const TYPE_EMOJI = {
       if (!modal || !input) return;
       input.value = playerPseudo || '';
       if (closeBtn) closeBtn.style.display = (isFirstVisit && !playerPseudo) ? 'none' : 'flex';
+      const tr = document.getElementById('pseudoTransferChk');
+      if (tr) tr.checked = false;
+      updatePseudoProfileStatus();
       modal.classList.remove('hidden');
       setTimeout(() => { try { input.focus(); input.select(); } catch (_) {} }, 60);
     }
@@ -16043,14 +16104,67 @@ const TYPE_EMOJI = {
         input.value = name;
         try { input.focus(); } catch (_) {}
       }
+      updatePseudoProfileStatus();
+    }
+
+    // Aperçu en direct du profil lié au pseudo saisi (existant / nouveau / transfert)
+    function updatePseudoProfileStatus() {
+      const input = document.getElementById('pseudoInput');
+      const box = document.getElementById('pseudoProfileStatus');
+      const trWrap = document.getElementById('pseudoTransferWrap');
+      if (!input || !box) return;
+      const val = input.value.trim().slice(0, 16);
+      const newKey = pseudoProfileKey(val);
+      const curKey = pseudoProfileKey(playerPseudo);
+      let showTransfer = false;
+      if (!newKey) {
+        box.innerHTML = '🧢 Ta collection et tes pièces seront liées à ce pseudo.';
+      } else if (newKey === curKey) {
+        const sum = readProfileSummary(val);
+        box.innerHTML = `✅ Profil actuel : <b class="text-white">${sum ? sum.cards : 0}</b> cartes · <b class="text-yellow-300">${sum ? sum.coins : 0} 🪙</b>`;
+      } else {
+        const sum = readProfileSummary(val);
+        if (sum) {
+          box.innerHTML = `🔑 Profil existant retrouvé : <b class="text-white">${sum.cards}</b> cartes · <b class="text-yellow-300">${sum.coins} 🪙</b> · ${sum.packs} boosters`;
+        } else if (!curKey) {
+          const guest = readProfileSummary('');
+          box.innerHTML = guest && (guest.cards || guest.coins || guest.decks)
+            ? `🆕 Nouveau profil — ta collection actuelle (<b class="text-white">${guest.cards}</b> cartes · <b class="text-yellow-300">${guest.coins} 🪙</b>) lui sera rattachée.`
+            : '🆕 Nouveau profil de Dresseur (collection vide · 3 boosters gratuits).';
+        } else {
+          box.innerHTML = '🆕 Nouveau profil : collection vide, 0 🪙, 3 boosters gratuits.';
+          const cur = readProfileSummary(playerPseudo);
+          showTransfer = !!(cur && (cur.cards || cur.coins || cur.decks));
+        }
+      }
+      if (trWrap) trWrap.classList.toggle('hidden', !showTransfer);
+    }
+
+    // Recharge toute la progression du profil actif (après changement de pseudo)
+    function reloadPlayerProfileData() {
+      if (typeof loadBoosterSaveFromStorage === 'function') loadBoosterSaveFromStorage();
+      if (typeof loadCustomDecksFromStorage === 'function') loadCustomDecksFromStorage();
+      if (typeof registerCustomDecks === 'function') registerCustomDecks();
+      if (typeof updateBoosterStatsUi === 'function') updateBoosterStatsUi();
+      if (typeof renderDecksView === 'function') renderDecksView();
+      if (typeof renderQuickSetup === 'function') renderQuickSetup();
     }
 
     function savePlayerPseudo() {
       const input = document.getElementById('pseudoInput');
       let val = (input ? input.value : '').trim().slice(0, 16);
       if (!val) val = playerPseudo || 'Sacha';
+      const oldPseudo = playerPseudo;
+      const switched = pseudoProfileKey(oldPseudo) !== pseudoProfileKey(val);
+      if (switched && !profileHasData(val)) {
+        const tr = document.getElementById('pseudoTransferChk');
+        const wantsTransfer = !!(tr && tr.checked && !document.getElementById('pseudoTransferWrap').classList.contains('hidden'));
+        // 1ʳᵉ connexion : la progression « invité » est rattachée au pseudo. Sinon : transfert seulement si demandé.
+        if (!pseudoProfileKey(oldPseudo) || wantsTransfer) moveProfileData(oldPseudo, val);
+      }
       playerPseudo = val;
       try { localStorage.setItem(PSEUDO_STORAGE_KEY, playerPseudo); } catch (_) {}
+      if (switched) reloadPlayerProfileData();
       updatePseudoUi();
       closePseudoModal();
       sfx('uncommon');
@@ -20815,8 +20929,10 @@ const TYPE_EMOJI = {
       freeBoosters: MAX_FREE_BOOSTERS,
       freeResetAt: 0
     };
-    try {
-      const raw = localStorage.getItem('ppi_v2_booster_save');
+    function loadBoosterSaveFromStorage() {
+      boosterSave = { counts: {}, packsOpened: 0, holosPulled: 0, coins: 0, freeBoosters: MAX_FREE_BOOSTERS, freeResetAt: 0 };
+     try {
+      const raw = localStorage.getItem(profileStorageKey(PROFILE_BOOSTER_BASE));
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object') {
@@ -20830,11 +20946,13 @@ const TYPE_EMOJI = {
           boosterSave.freeResetAt = typeof parsed.freeResetAt === 'number' ? parsed.freeResetAt : 0;
         }
       }
-    } catch (_) {}
+     } catch (_) {}
+    }
+    loadBoosterSaveFromStorage();
 
     function persistBoosterSaveRaw() {
       try {
-        localStorage.setItem('ppi_v2_booster_save', JSON.stringify(boosterSave));
+        localStorage.setItem(profileStorageKey(PROFILE_BOOSTER_BASE), JSON.stringify(boosterSave));
       } catch (_) {}
     }
 
@@ -22531,12 +22649,16 @@ const TYPE_EMOJI = {
     const DB_TRAINER_MAX = { 'bill': 4, 'professor-oak': 2, 'computer-search': 2, 'gust-of-wind': 3, 'energy-removal': 4, 'super-energy-removal': 2, 'switch': 2, 'poke-ball': 3, 'pluspower': 3, 'pokemon-breeder': 3, 'potion': 2, 'super-potion': 2 };
 
     let customDecks = [];
-    try {
-      const raw = JSON.parse(localStorage.getItem(CUSTOM_DECKS_KEY) || '[]');
-      if (Array.isArray(raw)) customDecks = raw.filter((d) => d && d.id && d.cards && d.energy);
-    } catch (_) {}
+    function loadCustomDecksFromStorage() {
+      customDecks = [];
+      try {
+        const raw = JSON.parse(localStorage.getItem(profileStorageKey(CUSTOM_DECKS_KEY)) || '[]');
+        if (Array.isArray(raw)) customDecks = raw.filter((d) => d && d.id && d.cards && d.energy);
+      } catch (_) {}
+    }
+    loadCustomDecksFromStorage();
     function persistCustomDecks() {
-      try { localStorage.setItem(CUSTOM_DECKS_KEY, JSON.stringify(customDecks)); } catch (_) {}
+      try { localStorage.setItem(profileStorageKey(CUSTOM_DECKS_KEY), JSON.stringify(customDecks)); } catch (_) {}
     }
 
     // ---------------------------------------------------------------- Outils
