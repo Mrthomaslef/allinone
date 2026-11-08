@@ -243,7 +243,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '179bdf8-1794172780';
+      var BUILD = '8bc1f5c-1794172885';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -20099,6 +20099,7 @@ const TYPE_EMOJI = {
     }
 
     function startMatch(playerDeckKey, customAiDeckKey = null, mode = 'tutorial', advTrainerId = null) {
+      try { if (soundEnabled) preloadBattleSfx(); } catch (_) {}
       const v2AiMap = {
         COMBAT: 'EAU', EAU: 'COMBAT', FEU: 'EAU', XTRA: 'COMBAT',
         V2_PLANTE: 'V2_FEU', V2_FEU: 'V2_EAU', V2_EAU: 'V2_ELECTRIK',
@@ -21370,13 +21371,47 @@ const TYPE_EMOJI = {
       return b;
     }
 
+    // Vrais bruitages enregistrés (CC0 : Kenney Casino Audio, « 150 combat sound effects », « 80 CC0 RPG SFX » — OpenGameArt)
+    const BATTLE_SFX_FILES = ['card-place-1', 'card-place-2', 'card-place-3', 'card-slide-1', 'card-slide-2', 'card-shove-1', 'card-shove-2', 'card-fan',
+      'hit-feu', 'hit-eau', 'hit-electrique', 'hit-plante', 'hit-psy', 'hit-combat', 'hit-incolore', 'hit-crit', 'ko-break', 'evolve',
+      'status-poison', 'status-paralyze', 'prize-gem', 'coins'];
+    const battleSfxBank = {};
+    let battleSfxLoading = false;
+    function preloadBattleSfx() {
+      if (battleSfxLoading) return;
+      let c = null;
+      try { c = actx || (actx = new (window.AudioContext || window.webkitAudioContext)()); } catch (_) { return; }
+      battleSfxLoading = true;
+      BATTLE_SFX_FILES.forEach((name) => {
+        fetch(`assets/sfx/${name}.m4a`).then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(r.status)))
+          .then((ab) => new Promise((res, rej) => { const pr = c.decodeAudioData(ab, res, rej); if (pr && pr.then) pr.then(res, rej); }))
+          .then((buf) => { battleSfxBank[name] = buf; })
+          .catch(() => {});
+      });
+    }
+    const HIT_SFX_BY_TYPE = { 'Feu': 'hit-feu', 'Eau': 'hit-eau', 'Électrique': 'hit-electrique', 'Plante': 'hit-plante', 'Psy': 'hit-psy', 'Combat': 'hit-combat', 'Incolore': 'hit-incolore' };
+
     function sfxBattle(kind, type = 'Incolore', amount = 0) {
       const c = getAudioCtx();
       if (!c) return;
+      preloadBattleSfx();
       try {
         const out = battleOut(c);
         const T = c.currentTime + 0.005;
         const S = Math.max(0.02, sfxVolumePct / 100);
+        // Joue un bruitage enregistré ; renvoie false s'il n'est pas (encore) chargé → repli synthétisé
+        const smp = (name, t = T, vol = 1, rate = 1) => {
+          const list = Array.isArray(name) ? name : [name];
+          const pick = list[Math.floor(Math.random() * list.length)];
+          const buf = battleSfxBank[pick];
+          if (!buf) return false;
+          const src = c.createBufferSource(); src.buffer = buf;
+          src.playbackRate.value = rate * (0.96 + Math.random() * 0.08);
+          const g = c.createGain(); g.gain.value = Math.min(1.6, vol * S);
+          src.connect(g).connect(out); src.start(t);
+          return true;
+        };
+        const PLACE = ['card-place-1', 'card-place-2', 'card-place-3'], SHOVE = ['card-shove-1', 'card-shove-2'];
         const env = (g, start, dur, vol, atk = 0.004) => {
           g.gain.setValueAtTime(0.0001, start);
           g.gain.linearRampToValueAtTime(Math.max(0.0002, vol * S), start + atk);
@@ -21450,23 +21485,23 @@ const TYPE_EMOJI = {
 
         switch (kind) {
           case 'summon': // Pokémon posé en jeu / nouveau Pokémon Actif
-            slap(T);
+            if (!smp(PLACE, T, 1.1)) slap(T);
             chime(T + 0.05, [987.77, 1479.98], { step: 0.05, dur: 0.3, vol: 0.06 });
             buzz(14);
             break;
           case 'energy': // Énergie glissée sous un Pokémon
-            slide(T, 0.9);
-            nz(T + 0.08, 0.05, 1000, 500, { q: 0.8, vol: 0.2, ft: 'lowpass' });
-            typeMotif(T + 0.09, type, 0.9);
+            if (!smp(SHOVE, T, 1)) { slide(T, 0.9); nz(T + 0.08, 0.05, 1000, 500, { q: 0.8, vol: 0.2, ft: 'lowpass' }); }
+            typeMotif(T + 0.12, type, 0.75);
             buzz(10);
             break;
           case 'trainer': // Carte Dresseur jouée
-            nz(T, 0.05, 3200, 3200, { q: 1, vol: 0.22 });
-            slap(T + 0.04, 0.7);
+            if (!smp('card-fan', T, 1)) nz(T, 0.05, 3200, 3200, { q: 1, vol: 0.22 });
+            if (!smp(PLACE, T + 0.18, 0.9)) slap(T + 0.04, 0.7);
             chime(T + 0.08, [880, 1318.5, 1760], { step: 0.055, dur: 0.32, vol: 0.08 });
             break;
           case 'evolve': // Évolution : montée lumineuse + accord final
-            slap(T, 0.8);
+            if (!smp(PLACE, T, 1)) slap(T, 0.8);
+            if (smp('evolve', T + 0.05, 0.9)) { chime(T + 0.7, [1046.5, 1318.5, 1567.98, 2093], { step: 0.03, dur: 0.9, vol: 0.05 }); buzz([20, 40, 30]); break; }
             os(T + 0.03, 0.75, 180, 1500, { vol: 0.09, wave: 'sawtooth', atk: 0.3 });
             nz(T + 0.03, 0.75, 600, 6000, { q: 1.5, vol: 0.09, atk: 0.4 });
             [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => os(T + 0.1 + i * 0.09, 0.3, f, f, { vol: 0.08, wave: 'triangle' }));
@@ -21474,15 +21509,24 @@ const TYPE_EMOJI = {
             buzz([20, 40, 30]);
             break;
           case 'retreat': // Battre en retraite
+            if (smp('card-slide-2', T, 1.1)) { os(T, 0.28, 660, 330, { vol: 0.05, wave: 'triangle' }); break; }
             nz(T, 0.32, 3000, 600, { q: 1.6, vol: 0.2, atk: 0.06 });
             os(T, 0.28, 660, 330, { vol: 0.07, wave: 'triangle' });
             break;
           case 'charge': // Déclaration d'attaque (selon le type)
-            nz(T, 0.18, 400, 2400, { q: 1, vol: 0.1, atk: 0.12 });
-            typeMotif(T + 0.04, type, 1);
+            if (!smp('card-slide-1', T, 1)) nz(T, 0.18, 400, 2400, { q: 1, vol: 0.1, atk: 0.12 });
+            typeMotif(T + 0.05, type, 0.8);
             break;
           case 'impact': { // Coup porté (selon le type), intensité selon les dégâts
             const dmg = Math.max(0, amount || 0);
+            if (dmg <= 0 && smp('hit-incolore', T, 0.45, 0.8)) break;
+            if (dmg > 0 && battleSfxBank[HIT_SFX_BY_TYPE[type] || 'hit-incolore']) {
+              const kk = 0.7 + Math.min(dmg, 120) / 120 * 0.5;
+              smp(HIT_SFX_BY_TYPE[type] || 'hit-incolore', T, 1.05 * kk);
+              if (type !== 'Combat' && type !== 'Incolore') smp('hit-combat', T, 0.55 * kk); // poids physique sous le sort
+              if (dmg >= 100) smp('hit-crit', T + 0.02, 1);
+              break;
+            }
             if (dmg <= 0) { // Attaque bloquée / sans dégâts
               os(T, 0.18, 220, 180, { vol: 0.12, wave: 'triangle' });
               nz(T, 0.08, 800, 600, { q: 2, vol: 0.12 });
@@ -21536,6 +21580,13 @@ const TYPE_EMOJI = {
             break;
           }
           case 'ko': // K.O. : la carte tombe et se brise
+            if (battleSfxBank['ko-break']) {
+              os(T, 0.55, 520, 90, { vol: 0.1, wave: 'triangle' });
+              smp('ko-break', T + 0.3, 0.9);
+              smp('hit-combat', T + 0.55, 0.9, 0.8);
+              smp(PLACE, T + 0.6, 0.8);
+              break;
+            }
             os(T, 0.65, 520, 70, { vol: 0.16, wave: 'triangle' });
             os(T, 0.65, 523, 72, { vol: 0.08, wave: 'sawtooth' });
             for (let i = 0; i < 10; i++) nz(T + 0.25 + Math.random() * 0.3, 0.05, 4500 + Math.random() * 4000, 3000, { q: 6, vol: 0.12 });
@@ -21543,10 +21594,13 @@ const TYPE_EMOJI = {
             nz(T + 0.6, 0.12, 900, 300, { q: 0.7, vol: 0.3, ft: 'lowpass' });
             break;
           case 'prize': // Carte Récompense piochée
-            slide(T);
+            if (!smp('card-slide-1', T, 1)) slide(T);
+            if (smp('prize-gem', T + 0.12, 0.9)) { chime(T + 0.18, [1975.5, 2637], { step: 0.06, dur: 0.4, vol: 0.05 }); break; }
             chime(T + 0.1, [1318.5, 1661.2, 1975.5, 2637], { step: 0.06, dur: 0.5, vol: 0.1 });
             break;
           case 'status': // État spécial (type = poison/toxic/asleep/confused/paralyzed)
+            if ((type === 'poison' || type === 'toxic') && smp('status-poison', T, 1)) break;
+            if (type === 'paralyzed' && smp('status-paralyze', T, 1)) break;
             if (type === 'poison' || type === 'toxic') {
               for (let i = 0; i < 5; i++) { const f = 180 + Math.random() * 160; os(T + i * 0.07, 0.09, f, f * 1.8, { vol: 0.16 }); }
               os(T, 0.4, 233, 220, { vol: 0.06, wave: 'sawtooth' });
@@ -21561,6 +21615,7 @@ const TYPE_EMOJI = {
             }
             break;
           case 'win':
+            smp('coins', T + 0.5, 0.8);
             [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => os(T + i * 0.12, 0.22, f, f, { vol: 0.13, wave: 'square' }));
             [1046.5, 1318.5, 1567.98].forEach((f) => os(T + 0.5, 1.1, f, f, { vol: 0.08, wave: 'triangle' }));
             chime(T + 0.5, [2093, 2637, 3136], { step: 0.07, dur: 0.6, vol: 0.05 });
