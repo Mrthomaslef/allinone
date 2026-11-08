@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '676598c-1794171282';
+      var BUILD = '2807b9b-1794171322';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -16936,6 +16936,8 @@ const TYPE_EMOJI = {
     // Lecteur caché préchargé dès l'entrée dans le Mode Aventure pour démarrer pile au clic.
     // -----------------------------------------------------------------------
     const BATTLE_START_YT_ID = 'DnY5ymkU8gc';
+    const BATTLE_START_JINGLE_MS = 6000; // durée du jingle : l'intro VS dure exactement autant
+    let advIntroCloseFn = null; // fermeture de l'intro VS, appelée à la fin du jingle
     let battleThemeActive = false;
     let battleYtPlayer = null;
     let battleYtReady = false;
@@ -16970,7 +16972,7 @@ const TYPE_EMOJI = {
               battleYtReady = true;
               if (battleYtPendingPlay) { battleYtPendingPlay = false; playBattleStartTheme(); }
             },
-            onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) stopBattleStartTheme(); },
+            onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) { if (advIntroCloseFn) advIntroCloseFn(); stopBattleStartTheme(); } },
             onError: () => stopBattleStartTheme()
           }
         });
@@ -18273,9 +18275,12 @@ const TYPE_EMOJI = {
         </div>
       `;
       let closed = false;
+      let autoTimer = null;
       const close = () => {
         if (closed) return;
         closed = true;
+        clearTimeout(autoTimer);
+        if (advIntroCloseFn === close) advIntroCloseFn = null;
         el.classList.add('out');
         setTimeout(() => {
           el.remove();
@@ -18283,7 +18288,13 @@ const TYPE_EMOJI = {
         }, 330);
       };
       el.addEventListener('click', close);
-      setTimeout(close, 3600);
+      advIntroCloseFn = close;
+      // Durée calée sur le jingle : fermeture à la fin réelle de la musique (événement ENDED),
+      // ou après la durée du jingle si le son est coupé. Garde-fou si le lecteur YouTube tarde.
+      setTimeout(() => {
+        if (closed) return;
+        autoTimer = setTimeout(close, battleThemeActive ? BATTLE_START_JINGLE_MS + 6000 : BATTLE_START_JINGLE_MS);
+      }, 0);
       document.body.appendChild(el);
       try { if (navigator.vibrate) navigator.vibrate(18); } catch (_) {}
     }
