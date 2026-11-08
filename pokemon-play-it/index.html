@@ -3,6 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <!-- Affichage tablette (iPad) : l'interface est pensée pour téléphone. Sur un grand écran tactile, on règle
+       la largeur du viewport pour que Safari agrandisse toute l'app jusqu'à remplir l'écran (sans bandes vides).
+       Mise à l'échelle native : les coordonnées tactiles et le glisser-déposer des cartes restent exacts. -->
+  <script>
+    (function () {
+      var meta = document.querySelector('meta[name="viewport"]');
+      if (!meta) return;
+      var BASE = meta.getAttribute('content');
+      var REF_W = 430, REF_H = 760, MAX_Z = 1.8;
+      function isLandscape() {
+        var t = screen.orientation && screen.orientation.type;
+        if (t) return t.indexOf('landscape') === 0;
+        if (typeof window.orientation === 'number') return Math.abs(window.orientation) === 90;
+        return window.matchMedia('(orientation: landscape)').matches;
+      }
+      function fit() {
+        var touch = (navigator.maxTouchPoints || 0) > 0 || 'ontouchstart' in window;
+        var a = Math.min(screen.width, screen.height), b = Math.max(screen.width, screen.height);
+        var next = BASE;
+        if (touch && a >= 700) {
+          var land = isLandscape(), w = land ? b : a, h = land ? a : b;
+          var z = Math.min(MAX_Z, w / REF_W, h / REF_H);
+          if (z > 1.04) {
+            z = Math.round(z * 100) / 100;
+            next = 'width=' + Math.round(w / z) + ', initial-scale=' + z + ', minimum-scale=' + z + ', maximum-scale=' + z + ', user-scalable=no, viewport-fit=cover';
+          }
+        }
+        if (meta.getAttribute('content') !== next) meta.setAttribute('content', next);
+      }
+      fit();
+      window.addEventListener('orientationchange', function () { setTimeout(fit, 60); });
+      if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener('change', fit);
+    })();
+  </script>
   <title>Pokémon : À toi de jouer ! (1999 · 228 Cartes Base + Jungle + Fossile)</title>
   <meta name="description" content="Recréation fidèle pour navigateur mobile de Pokémon Play It! (1999/2000) avec les 4 demi-decks officiels (Set de Base & Jungle FR), Juliette en IA et les vraies règles." />
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
@@ -12,7 +46,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '20c0520-1794171666';
+      var BUILD = '954d075-1794172284';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
