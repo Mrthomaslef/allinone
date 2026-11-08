@@ -117,18 +117,46 @@
     .bubble { background: rgba(2,6,23,0.82); border: 1px solid rgba(255,255,255,0.14); }
     button:disabled { opacity: .45; }
 
+    /* ===== Assets originaux (SVG maison) ===== */
+    .card-back { background: var(--card-back) center / cover no-repeat !important; border: none !important; border-radius: 5px; }
+    .juliette-avatar { display: inline-block; flex-shrink: 0; border-radius: 50%; }
+    .juliette-avatar svg { width: 100%; height: 100%; display: block; }
+    .juliette-avatar.mood-pop { animation: moodPop .45s cubic-bezier(.2,1.5,.4,1); }
+    @keyframes moodPop { 0% { transform: scale(.8) rotate(-6deg); } 100% { transform: none; } }
+
+    /* Jetons de dégâts empilés */
+    .tcg { container-type: inline-size; }
+    .dmg-tokens { position: absolute; inset: 0; pointer-events: none; z-index: 6; }
+    .dmg-token {
+      position: absolute; right: -7%; aspect-ratio: 1; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font: 900 12cqw/1 'Nunito', sans-serif; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.6);
+      border: 1.5px solid rgba(255,255,255,.85);
+      box-shadow: 0 2px 3px rgba(0,0,0,.55), inset 0 -2px 0 rgba(0,0,0,.28), inset 0 2px 0 rgba(255,255,255,.4);
+    }
+    .dmg-token::after { content: ''; position: absolute; inset: 14%; border-radius: 50%; border: 1px dashed rgba(255,255,255,.45); }
+    .dmg-token.t10  { width: 28%; background: radial-gradient(circle at 35% 30%, #ff9a8a, #d62828 58%, #7f1010); }
+    .dmg-token.t50  { width: 33%; background: radial-gradient(circle at 35% 30%, #ffd98a, #e8890c 58%, #7c3f04); font-size: 13cqw; }
+    .dmg-token.t100 { width: 37%; background: radial-gradient(circle at 35% 30%, #d4b8ff, #6d28d9 58%, #2e1065); font-size: 12cqw; }
+    .tok-in { animation: tokIn .5s cubic-bezier(.2,1.5,.4,1) both; animation-delay: var(--d, 0ms); }
+    @keyframes tokIn { 0% { transform: translateY(-160%) scale(1.5) rotate(-30deg); opacity: 0; } 70% { opacity: 1; } 100% { transform: none; } }
+
+    /* Pièce 3D */
+    .coin-stage { position: relative; height: 170px; display: flex; justify-content: center; align-items: flex-end; perspective: 700px; }
+    .coin3d { width: 104px; height: 104px; position: relative; transform-style: preserve-3d; margin-bottom: 18px; }
+    .coin-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 50%; }
+    .coin-face svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)); }
+    .coin-face.back { transform: rotateY(180deg); }
+    .coin-shadow { position: absolute; bottom: 8px; left: 50%; width: 90px; height: 14px; margin-left: -45px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(0,0,0,.55), transparent 70%); }
+    #coinResultText { transition: opacity .2s ease, transform .3s cubic-bezier(.2,1.6,.4,1); }
+    #coinResultText.hide { opacity: 0; transform: scale(.6); }
+
     /* Zones imprimées du tapis */
     .slot-empty {
       border: 1.5px solid rgba(255,255,255,.13) !important; background: rgba(0,0,0,.14) !important;
       box-shadow: inset 0 1px 4px rgba(0,0,0,.35); color: rgba(255,255,255,.28) !important;
       transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-    }
-    .card-back {
-      border: 2px solid #f1ead8 !important;
-      background:
-        radial-gradient(circle at 50% 50%, #f4c542 0 12%, #8a5a12 12.5% 15%, transparent 15.5%),
-        repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 3px, transparent 3px 7px),
-        linear-gradient(160deg, #2c5aa8, #1b3770) !important;
     }
     .side-ai, .side-player { background: none; }
     .bubble {
@@ -278,9 +306,7 @@
 
     <!-- Juliette Welcome Box -->
     <div class="w-full my-3 p-3.5 rounded-2xl bg-slate-900/85 border border-white/15 flex items-center gap-3 shadow-xl">
-      <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-amber-500 flex items-center justify-center text-2xl shrink-0 shadow-md">
-        👩‍🦰
-      </div>
+      <span class="juliette-avatar w-14 h-14 shadow-md"></span>
       <div class="text-left text-xs leading-relaxed">
         <div class="font-bold text-yellow-300">Juliette — Instructrice JCC</div>
         <p class="text-slate-300">
@@ -377,7 +403,7 @@
     <header class="shrink-0 px-2 py-1 bg-black/25 backdrop-blur-sm border-b border-white/10 flex items-center justify-between gap-2" style="padding-top:max(4px, env(safe-area-inset-top))">
       <button onclick="confirmQuitMatch()" class="w-8 h-7 rounded-lg bg-white/10 text-sm text-slate-200 shrink-0" aria-label="Menu">←</button>
       <div class="flex items-center gap-1.5 min-w-0">
-        <span class="text-xs font-bold text-pink-300 shrink-0">👩‍🦰 Juliette</span>
+        <span class="juliette-avatar w-6 h-6"></span><span class="text-xs font-bold text-pink-200 shrink-0">Juliette</span>
         <span id="aiDeckLabel" class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-300 truncate">Eau</span>
         <span class="text-[10px] font-mono text-slate-300 shrink-0" title="Cartes en main de Juliette">✋<strong id="aiHandCount">7</strong></span>
       </div>
@@ -414,7 +440,7 @@
       <!-- LIGNE MÉDIANE : JULIETTE + FIN DU TOUR -->
       <div id="midRow" class="relative z-10 flex items-center gap-2">
         <div class="bubble flex-1 min-w-0 rounded-2xl px-2.5 py-1 flex items-center gap-2">
-          <span class="text-lg leading-none shrink-0">👩‍🦰</span>
+          <span class="juliette-avatar w-9 h-9 -my-1"></span>
           <div id="julietteSpeech" class="text-[10.5px] leading-snug line-clamp-2 min-h-[28px]">
             « Choisis ton Pokémon Actif pour commencer le match ! »
           </div>
@@ -488,13 +514,17 @@
   <!-- MODAL : LANCER DE PIÈCE ANIMÉ (PILE OU FACE)                        -->
   <!-- =================================================================== -->
   <div id="coinModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl p-6 max-w-xs w-full text-center shadow-2xl">
-      <div id="coinTitle" class="text-xs font-mono uppercase tracking-wider text-yellow-300 mb-3">Lancer de Pièce</div>
-      <div id="coinVisual" class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-600 border-4 border-white shadow-xl flex items-center justify-center text-4xl font-black text-slate-950 coin-anim">
-        ⚡
+    <div class="bubble rounded-2xl p-5 max-w-xs w-full text-center shadow-2xl">
+      <div id="coinTitle" class="text-xs font-extrabold uppercase tracking-wider text-amber-800 mb-1">Lancer de Pièce</div>
+      <div class="coin-stage">
+        <div class="coin-shadow" id="coinShadow"></div>
+        <div id="coinVisual" class="coin3d">
+          <div class="coin-face front" id="coinFront"></div>
+          <div class="coin-face back" id="coinBack"></div>
+        </div>
       </div>
       <div id="coinResultText" class="text-lg font-black text-white mt-4">FACE !</div>
-      <p id="coinSubText" class="text-xs text-slate-300 mt-1"></p>
+      <p id="coinSubText" class="text-xs text-stone-600 mt-1"></p>
     </div>
   </div>
 
@@ -880,6 +910,7 @@
       });
 
       fx.handSeen.clear(); fx.prevHp.clear(); fx.prevDmg.clear();
+      setJulietteMood('happy');
       fx.placed.add(game.ai.active.uid); game.ai.bench.forEach((b) => fx.placed.add(b.uid));
       document.getElementById('menuScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
@@ -895,6 +926,134 @@
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('menuScreen').classList.remove('hidden');
       game = null;
+    }
+
+    // =======================================================================
+    // ASSETS ORIGINAUX DESSINÉS EN SVG (aucun fichier externe)
+    // =======================================================================
+    const CARD_BACK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 63 88">
+      <defs>
+        <pattern id="lat" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="6" height="6" fill="#16294a"/><path d="M0 0H6M0 0V6" stroke="#22406e" stroke-width="1.2"/>
+        </pattern>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#2d5a9a"/><stop offset="1" stop-color="#16294a" stop-opacity="0"/></radialGradient>
+        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a1"/><stop offset=".5" stop-color="#d4a443"/><stop offset="1" stop-color="#9c6c1c"/></linearGradient>
+      </defs>
+      <rect width="63" height="88" rx="4" fill="#0f1d36"/>
+      <rect x="3" y="3" width="57" height="82" rx="2.5" fill="url(#lat)"/>
+      <rect x="3" y="3" width="57" height="82" rx="2.5" fill="url(#glow)"/>
+      <rect x="3" y="3" width="57" height="82" rx="2.5" fill="none" stroke="url(#gold)" stroke-width="1.3"/>
+      <rect x="5.5" y="5.5" width="52" height="77" rx="1.5" fill="none" stroke="#d4a443" stroke-opacity=".45" stroke-width=".5"/>
+      <g fill="url(#gold)">
+        <path d="M8 8l3 1.2L8 10.4 6.8 9.2z"/><path d="M55 8l-3 1.2 3 1.2 1.2-1.2z"/>
+        <path d="M8 80l3-1.2L8 77.6 6.8 78.8z"/><path d="M55 80l-3-1.2 3-1.2 1.2 1.2z"/>
+      </g>
+      <circle cx="31.5" cy="44" r="15" fill="#0c1830" stroke="url(#gold)" stroke-width="1.4"/>
+      <circle cx="31.5" cy="44" r="12" fill="none" stroke="#d4a443" stroke-opacity=".5" stroke-width=".5" stroke-dasharray="1 1.5"/>
+      <path fill="url(#gold)" d="M31.5 32.5l2.6 8.9 8.9 2.6-8.9 2.6-2.6 8.9-2.6-8.9-8.9-2.6 8.9-2.6z"/>
+      <path fill="#f7e3a1" opacity=".7" d="M31.5 37.5l1.2 5.3 5.3 1.2-5.3 1.2-1.2 5.3-1.2-5.3-5.3-1.2 5.3-1.2z" transform="rotate(45 31.5 44)"/>
+      <circle cx="31.5" cy="44" r="2" fill="#0c1830" stroke="#f7e3a1" stroke-width=".6"/>
+      <path d="M31.5 16v8M31.5 64v8" stroke="url(#gold)" stroke-width=".8"/>
+      <circle cx="31.5" cy="14" r="1.4" fill="url(#gold)"/><circle cx="31.5" cy="74" r="1.4" fill="url(#gold)"/>
+    </svg>`;
+    document.documentElement.style.setProperty('--card-back', `url("data:image/svg+xml,${encodeURIComponent(CARD_BACK_SVG)}")`);
+
+    function coinFaceSVG(side) {
+      const id = `c${side}`;
+      const sun = `<circle cx="50" cy="46" r="11" fill="#fff1bf" stroke="#8a5a0c" stroke-width="1.5"/>` +
+        Array.from({ length: 12 }, (_, i) => `<path d="M50 26 L52.6 32 L47.4 32 Z" fill="#8a5a0c" transform="rotate(${i * 30} 50 46)"/>`).join('');
+      const moon = `<path d="M58 30a17 17 0 1 0 0 32a13 13 0 1 1 0-32z" fill="#fff1bf" stroke="#8a5a0c" stroke-width="1.5" transform="translate(-6 0)"/>
+        <path fill="#8a5a0c" d="M62 34l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/><path fill="#8a5a0c" d="M66 50l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>`;
+      return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="${id}g" cx="35%" cy="28%" r="80%">
+          <stop offset="0" stop-color="#fff6d2"/><stop offset=".42" stop-color="#f0c04c"/><stop offset="1" stop-color="#9a6210"/>
+        </radialGradient></defs>
+        <circle cx="50" cy="50" r="49" fill="#7a4c08"/>
+        <circle cx="50" cy="50" r="46" fill="url(#${id}g)"/>
+        ${Array.from({ length: 48 }, (_, i) => `<rect x="49.4" y="4" width="1.2" height="3" fill="#8a5a0c" opacity=".55" transform="rotate(${i * 7.5} 50 50)"/>`).join('')}
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#8a5a0c" stroke-width="1.2" stroke-dasharray="2.5 2.5"/>
+        ${side === 'face' ? sun : moon}
+        <text x="50" y="80" text-anchor="middle" font-family="Nunito, sans-serif" font-size="11" font-weight="900" fill="#6b4208" letter-spacing="1.5">${side === 'face' ? 'FACE' : 'PILE'}</text>
+        <ellipse cx="36" cy="26" rx="16" ry="8" fill="#fff" opacity=".25" transform="rotate(-25 36 26)"/>
+      </svg>`;
+    }
+    document.getElementById('coinFront').innerHTML = coinFaceSVG('face');
+    document.getElementById('coinBack').innerHTML = coinFaceSVG('pile');
+
+    // Portrait original de Juliette (3 expressions)
+    let julietteMood = 'happy';
+    function julietteSVG(mood) {
+      const uid = `j${Math.random().toString(36).slice(2, 7)}`;
+      const eyes = {
+        happy: `<path d="M23.5 31.5q2.5-2.6 5 0M35.5 31.5q2.5-2.6 5 0" stroke="#3b2414" stroke-width="1.6" fill="none" stroke-linecap="round"/>`,
+        focus: `<ellipse cx="26" cy="31.5" rx="2" ry="1.5" fill="#2f5d3a"/><ellipse cx="38" cy="31.5" rx="2" ry="1.5" fill="#2f5d3a"/>
+                <path d="M23.4 30.2h5.2M35.4 30.2h5.2" stroke="#3b2414" stroke-width="1.1" stroke-linecap="round"/>
+                <circle cx="26.7" cy="31.1" r=".5" fill="#fff"/><circle cx="38.7" cy="31.1" r=".5" fill="#fff"/>`,
+        surprised: `<circle cx="26" cy="31.5" r="2.7" fill="#fff" stroke="#3b2414" stroke-width=".7"/><circle cx="38" cy="31.5" r="2.7" fill="#fff" stroke="#3b2414" stroke-width=".7"/>
+                <circle cx="26" cy="31.8" r="1.5" fill="#2f5d3a"/><circle cx="38" cy="31.8" r="1.5" fill="#2f5d3a"/>
+                <circle cx="26.5" cy="31.2" r=".5" fill="#fff"/><circle cx="38.5" cy="31.2" r=".5" fill="#fff"/>`
+      }[mood];
+      const brows = {
+        happy: `<path d="M23 27.2q3-1.4 6 0M35 27.2q3-1.4 6 0" stroke="#7a3315" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
+        focus: `<path d="M23 27.6l6-.8M35 26.4q3-1.8 6 0" stroke="#7a3315" stroke-width="1.3" fill="none" stroke-linecap="round"/>`,
+        surprised: `<path d="M23 25.4q3-2.2 6 0M35 25.4q3-2.2 6 0" stroke="#7a3315" stroke-width="1.2" fill="none" stroke-linecap="round"/>`
+      }[mood];
+      const mouth = {
+        happy: `<path d="M27.5 38.5q4.5 4.2 9 0z" fill="#8c2f24"/><path d="M29 39.3q3 1.2 6 0" stroke="#fff" stroke-width=".9" fill="none"/>`,
+        focus: `<path d="M29 39.4q3 .9 6-.4" stroke="#8c2f24" stroke-width="1.4" fill="none" stroke-linecap="round"/>`,
+        surprised: `<ellipse cx="32" cy="39.6" rx="2.1" ry="2.7" fill="#8c2f24"/>`
+      }[mood];
+      return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="${uid}"><circle cx="32" cy="32" r="30"/></clipPath>
+          <radialGradient id="${uid}b" cx="50%" cy="35%" r="70%"><stop offset="0" stop-color="#fdf3dc"/><stop offset="1" stop-color="#e9c98f"/></radialGradient></defs>
+        <circle cx="32" cy="32" r="31.5" fill="#b4893f"/>
+        <g clip-path="url(#${uid})">
+          <rect width="64" height="64" fill="url(#${uid}b)"/>
+          <path d="M10 22q2-16 22-16t22 16v26q-4 6-10 6H16q-6 0-6-6z" fill="#9c3f1c"/>
+          <path d="M8 64q2-13 15-15h18q13 2 15 15z" fill="#3f7d6e"/>
+          <path d="M26 49l6 7 6-7z" fill="#fdf3dc"/>
+          <rect x="28" y="42" width="8" height="8" rx="3" fill="#efc09c"/>
+          <ellipse cx="32" cy="32" rx="12.5" ry="14" fill="#f6d1b0"/>
+          <circle cx="22.6" cy="35.5" r="2.4" fill="#f08c7a" opacity=".45"/><circle cx="41.4" cy="35.5" r="2.4" fill="#f08c7a" opacity=".45"/>
+          <g fill="#c9845a"><circle cx="24.2" cy="34" r=".45"/><circle cx="25.6" cy="35.2" r=".45"/><circle cx="38.4" cy="35.2" r=".45"/><circle cx="39.8" cy="34" r=".45"/></g>
+          <path d="M19 30q0-14 13-14t13 14q-4-7-9-7.5-3 3.5-10 4.5-4 .5-7 3z" fill="#b24a22"/>
+          <path d="M19.5 22q12.5-9 25 0" stroke="#f2c14e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <circle cx="44" cy="22.5" r="2.2" fill="#f2c14e" stroke="#b4893f" stroke-width=".5"/>
+          ${brows}${eyes}
+          <path d="M31.6 34.2q.6 1.6-.4 2" stroke="#d99a78" stroke-width=".8" fill="none" stroke-linecap="round"/>
+          ${mouth}
+        </g>
+        <circle cx="32" cy="32" r="30.5" fill="none" stroke="#fdf3dc" stroke-width="1"/>
+      </svg>`;
+    }
+    function setJulietteMood(mood) {
+      const changed = mood !== julietteMood;
+      julietteMood = mood;
+      document.querySelectorAll('.juliette-avatar').forEach((el) => {
+        el.innerHTML = julietteSVG(mood);
+        if (changed) { el.classList.remove('mood-pop'); void el.offsetWidth; el.classList.add('mood-pop'); }
+      });
+    }
+    setJulietteMood('happy');
+
+    function damageTokens(dmg) {
+      const t = [];
+      let d = dmg;
+      while (d >= 100) { t.push(100); d -= 100; }
+      if (d >= 50) { t.push(50); d -= 50; }
+      while (d >= 10) { t.push(10); d -= 10; }
+      return t;
+    }
+
+    function renderDamageTokens(pkm) {
+      if (!pkm.damage) return '';
+      const now = damageTokens(pkm.damage);
+      const prev = damageTokens(fx.prevDmg.get(pkm.uid) || 0);
+      const isPrefix = prev.every((v, i) => now[i] === v);
+      const firstNew = (fx.prevDmg.get(pkm.uid) || 0) === pkm.damage ? now.length : (isPrefix ? prev.length : 0);
+      const step = Math.min(14, 62 / Math.max(now.length, 1));
+      return `<div class="dmg-tokens">${now.map((v, i) => `
+        <div class="dmg-token t${v} ${i >= firstNew ? 'tok-in' : ''}" style="top:${10 + i * step}%; --d:${(i - firstNew) * 90}ms; z-index:${i + 1}">${v}</div>`).join('')}</div>`;
     }
 
     function sayJuliette(text) {
@@ -943,7 +1102,7 @@
           ${energies}
           <div class="tcg tilt cursor-pointer" bg-slate-900 ${isActive ? 'card-active-glow' : 'card-shadow'} ${anim}" style="z-index:20">
             <img src="${pkm.img}" alt="${pkm.name}" class="w-full h-full object-cover rounded-[6px]" draggable="false" />
-            ${pkm.damage > 0 ? `<div class="dmg-badge ${dmgChanged ? 'dmg-pop' : ''}">${pkm.damage}</div>` : ''}
+            ${renderDamageTokens(pkm)}
             <div class="absolute inset-x-1 bottom-1 h-1 bg-black/70 rounded-full overflow-hidden">
               <div class="hp-fill ${hpColor} h-full" data-to="${hpPct}" style="width:${prevPct}%"></div>
             </div>
@@ -1214,6 +1373,7 @@
         if (kind === 'swoosh') noise(t0, 0.22, 1400, 0.5, 0.22);
         if (kind === 'hit') { tone(t0, 0.22, 160, 45, 0.5); noise(t0, 0.15, 700, 0.6, 0.4); }
         if (kind === 'ko') { tone(t0, 0.6, 420, 60, 0.25, 'triangle'); }
+        if (kind === 'coin') { tone(t0, 0.5, 2637, 2600, 0.12); tone(t0, 0.35, 3951, 3900, 0.06); tone(t0 + 0.09, 0.4, 2637, 2600, 0.07); }
         if (kind === 'turn') { tone(t0, 0.12, 660, 660, 0.12, 'triangle'); tone(t0 + 0.12, 0.2, 990, 990, 0.12, 'triangle'); }
       } catch (_) {}
     }
@@ -1529,6 +1689,7 @@
       ], { duration: 820, easing: 'cubic-bezier(.35,.6,.25,1)' });
       await wait(820 * 0.58);
       impactFx(d, dmg, type);
+      if (defOwner === 'ai' && dmg >= 30) setJulietteMood('surprised');
       await anim.finished;
       if (side) side.style.zIndex = '';
     }
@@ -1970,20 +2131,36 @@
         const subText = document.getElementById('coinSubText');
 
         document.getElementById('coinTitle').textContent = label;
-        visual.classList.remove('coin-anim');
-        void visual.offsetWidth;
-        visual.classList.add('coin-anim');
-
-        visual.textContent = isHeads ? '🔴' : '⚡';
         resText.textContent = isHeads ? 'FACE !' : 'PILE !';
-        resText.className = isHeads ? 'text-lg font-black text-emerald-400 mt-4' : 'text-lg font-black text-amber-400 mt-4';
-        subText.textContent = isHeads ? 'Lancer réussi !' : 'C\'est Pile.';
-
+        resText.className = `text-xl font-black mt-1 hide ${isHeads ? 'text-emerald-700' : 'text-amber-700'}`;
+        subText.textContent = '';
         modal.classList.remove('hidden');
+
+        // Lancer : la pièce monte en tournant, retombe, rebondit et se pose sur le bon côté
+        const turns = 5 + Math.floor(Math.random() * 3);
+        const endY = turns * 360 + (isHeads ? 0 : 180);
+        const tilt = (Math.random() * 16 - 8).toFixed(1);
+        sfx('swoosh');
+        visual.animate([
+          { transform: `translateY(0) rotateX(0deg) rotateY(0deg) scale(1)` },
+          { transform: `translateY(-95px) rotateX(${tilt}deg) rotateY(${endY * 0.55}deg) scale(1.18)`, offset: 0.45, easing: 'cubic-bezier(.3,0,.7,1)' },
+          { transform: `translateY(0) rotateX(0deg) rotateY(${endY - 20}deg) scale(1)`, offset: 0.82 },
+          { transform: `translateY(-12px) rotateX(0deg) rotateY(${endY - 6}deg) scale(1)`, offset: 0.9 },
+          { transform: `translateY(0) rotateX(0deg) rotateY(${endY}deg) scale(1)` }
+        ], { duration: 1250, easing: 'cubic-bezier(.25,.6,.35,1)', fill: 'forwards' });
+        document.getElementById('coinShadow').animate([
+          { transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.45)', opacity: .35, offset: 0.45 },
+          { transform: 'scale(1)', opacity: 1, offset: 0.82 }, { transform: 'scale(.85)', opacity: .8, offset: 0.9 }, { transform: 'scale(1)', opacity: 1 }
+        ], { duration: 1250, fill: 'forwards' });
+        setTimeout(() => { sfx('coin'); buzz(15); }, 1020);
+        setTimeout(() => {
+          resText.classList.remove('hide');
+          subText.textContent = isHeads ? 'Lancer réussi !' : 'Raté, c\'est Pile.';
+        }, 1250);
         setTimeout(() => {
           modal.classList.add('hidden');
           resolve(isHeads);
-        }, 1150);
+        }, 2050);
       });
     }
 
@@ -2077,6 +2254,7 @@
       const victimSide = game[victimOwner];
       const winnerSide = game[winnerOwner];
       const koPkm = victimSide.active;
+      setJulietteMood(victimOwner === 'ai' ? 'surprised' : 'happy');
       await animateKO(victimOwner);
 
       victimSide.discard.push(koPkm, ...koPkm.energies);
@@ -2168,6 +2346,7 @@
 
     async function runJulietteTurn() {
       if (!game || game.gameOver) return;
+      setJulietteMood('focus');
 
       // 1. Pioche obligatoire de Juliette
       if (game.ai.deck.length === 0) {
@@ -2272,6 +2451,7 @@
     function startPlayerTurn() {
       game.turnNumber += 1;
       game.activePlayer = 'player';
+      setJulietteMood('happy');
       game.energyAttachedThisTurn = false;
       game.retreatedThisTurn = false;
 
@@ -2288,6 +2468,7 @@
 
     function endMatch(winner, reason) {
       game.gameOver = true;
+      setJulietteMood(winner === 'player' ? 'surprised' : 'happy');
       renderBoard();
       setTimeout(() => {
         openPickerModal(
