@@ -415,264 +415,214 @@
           <span>🎓</span> Quiz de l'Académie
         </button>
       </div>
-    </div>
 
-    <!-- Boîte de dialogue Juliette (Style Maître JCC) -->
-    <div class="w-full p-3 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/90 border border-yellow-400/30 flex items-center gap-3 shadow-2xl relative overflow-hidden">
-      <div class="absolute -left-6 -top-6 w-24 h-24 bg-yellow-400/10 rounded-full blur-xl pointer-events-none"></div>
-      <span class="juliette-avatar w-14 h-14 shadow-lg ring-2 ring-yellow-400/50 shrink-0"></span>
-      <div class="text-left text-xs leading-relaxed min-w-0">
-        <div class="flex items-center gap-1.5">
-          <span class="font-black text-yellow-300 text-xs">Juliette</span>
-          <span class="text-[9.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-yellow-400/15 text-yellow-200 border border-yellow-400/30">Instructrice JCC</span>
-        </div>
-        <p class="text-slate-200/95 text-[11.5px] mt-0.5 leading-snug">
-          « Choisis ton deck grâce à sa <strong>carte phare</strong> ! Commence avec un <strong>Demi-Deck 30 cartes</strong> (3 Récompenses) ou lance un grand duel en <strong>60 cartes</strong> ! »
-        </p>
-      </div>
-    </div>
-
-    <!-- SECTION 1 : LES 4 DEMI-DECKS OFFICIELS PLAY IT! (30 CARTES) -->
-    <div class="w-full space-y-2.5">
-      <div class="flex items-center justify-between px-1">
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
-          <h2 class="text-xs font-black tracking-wider uppercase text-amber-200">
-            Demi-Decks Officiels CD-ROM 1999
-          </h2>
-        </div>
-        <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-slate-200">30 cartes · 3 Prix</span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        <!-- Deck Combat : Carte phare Machopeur -->
-        <button onclick="startMatch('COMBAT')" class="deck-card p-3 bg-gradient-to-br from-amber-950/90 via-stone-900/90 to-slate-950/95 border border-amber-500/45 hover:border-amber-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base2/56/high.webp" alt="Miaouss" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="Machopeur" loading="lazy" class="fan-main" />
-            </div>
-          </div>
-          <div class="flex-1 min-w-0 flex flex-col justify-between">
-            <div class="flex items-center justify-between gap-1">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-200 border border-amber-400/30">Poing Karaté</span>
-              <span class="text-[10px] font-mono text-amber-300/90 font-bold">30 cartes</span>
-            </div>
-            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Combat</div>
-            <div class="text-[11px] font-semibold text-amber-200/90 truncate">Carte phare : Machopeur (80 PV)</div>
-            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
-              Machoc, Taupiqueur, Doduo, Miaouss
-            </p>
-            <div class="mt-1.5 flex items-center justify-between">
-              <span class="text-[10px] text-amber-300/90 font-semibold">Vs Juliette : Deck Eau</span>
-              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
-            </div>
-          </div>
+      <!-- Sélecteur d'onglets : TUTORIEL (Juliette) vs PARTIE RAPIDE (Duel Libre) -->
+      <div class="mt-3.5 p-1 rounded-2xl bg-slate-950/85 border border-white/15 grid grid-cols-2 gap-1.5 max-w-md mx-auto shadow-inner">
+        <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md">
+          <span>🎓</span> Tutoriel Juliette
         </button>
-
-        <!-- Deck Eau : Carte phare Poissoroy -->
-        <button onclick="startMatch('EAU')" class="deck-card p-3 bg-gradient-to-br from-sky-950/90 via-slate-900/90 to-slate-950/95 border border-sky-400/45 hover:border-sky-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base1/26/high.webp" alt="Minidraco" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="Poissoroy" loading="lazy" class="fan-main" />
-            </div>
-          </div>
-          <div class="flex-1 min-w-0 flex flex-col justify-between">
-            <div class="flex items-center justify-between gap-1">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-500/25 text-sky-200 border border-sky-400/30">Cascade</span>
-              <span class="text-[10px] font-mono text-sky-300/90 font-bold">30 cartes</span>
-            </div>
-            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Eau</div>
-            <div class="text-[11px] font-semibold text-sky-200/90 truncate">Carte phare : Poissoroy (70 PV)</div>
-            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
-              Poissirène, Stari, Otaria, Minidraco
-            </p>
-            <div class="mt-1.5 flex items-center justify-between">
-              <span class="text-[10px] text-sky-300/90 font-semibold">Vs Juliette : Deck Combat</span>
-              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
-            </div>
-          </div>
-        </button>
-
-        <!-- Deck Feu : Carte phare Reptincel -->
-        <button onclick="startMatch('FEU')" id="btnDeckFeu" class="deck-card p-3 bg-gradient-to-br from-red-950/90 via-stone-900/90 to-slate-950/95 border border-red-500/45 hover:border-red-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base1/46/high.webp" alt="Salamèche" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/24/high.webp" alt="Reptincel" loading="lazy" class="fan-main" />
-            </div>
-          </div>
-          <div class="flex-1 min-w-0 flex flex-col justify-between">
-            <div class="flex items-center justify-between gap-1">
-              <span id="badgeFeu" class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-500/25 text-red-200 border border-red-400/30">Code "FIRE" ✓</span>
-              <span class="text-[10px] font-mono text-red-300/90 font-bold">30 cartes</span>
-            </div>
-            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Feu</div>
-            <div class="text-[11px] font-semibold text-red-200/90 truncate">Carte phare : Reptincel (80 PV)</div>
-            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
-              Salamèche, Ponyta, Caninos, Léo, Potion
-            </p>
-            <div class="mt-1.5 flex items-center justify-between">
-              <span class="text-[10px] text-red-300/90 font-semibold">Vs Juliette : Deck Combat</span>
-              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
-            </div>
-          </div>
-        </button>
-
-        <!-- Deck Xtra : Carte phare Arcanin -->
-        <button onclick="startMatch('XTRA')" id="btnDeckXtra" class="deck-card p-3 bg-gradient-to-br from-purple-950/90 via-slate-900/90 to-slate-950/95 border border-purple-400/45 hover:border-purple-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base1/36/high.webp" alt="Magmar" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/23/high.webp" alt="Arcanin" loading="lazy" class="fan-main" />
-            </div>
-          </div>
-          <div class="flex-1 min-w-0 flex flex-col justify-between">
-            <div class="flex items-center justify-between gap-1">
-              <span id="badgeXtra" class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/25 text-purple-200 border border-purple-400/30">Code "FIRE" ✓</span>
-              <span class="text-[10px] font-mono text-purple-300/90 font-bold">30 cartes</span>
-            </div>
-            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Xtra Arcanin</div>
-            <div class="text-[11px] font-semibold text-purple-200/90 truncate">Carte phare : Arcanin (100 PV)</div>
-            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
-              Arcanin, Magmar, Caninos, Salamèche
-            </p>
-            <div class="mt-1.5 flex items-center justify-between">
-              <span class="text-[10px] text-purple-300/90 font-semibold">Vs Juliette : Deck Combat</span>
-              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
-            </div>
-          </div>
+        <button id="tabBtnQuick" onclick="switchMenuTab('quick')" class="py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:bg-white/5">
+          <span>⚔️</span> Partie Rapide
         </button>
       </div>
     </div>
 
-    <!-- SECTION 2 : LES 6 GRANDS DECKS THÉMATIQUES V2 (60 CARTES · HOLO) -->
-    <div class="w-full space-y-2.5 pt-1">
-      <div class="flex items-center justify-between px-1">
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
-          <h2 class="text-xs font-black tracking-wider uppercase text-emerald-200">
-            Grands Decks Thématiques v2 (Base + Jungle + Fossile)
-          </h2>
+    <!-- =============================================================== -->
+    <!-- ONGLET 1 : MODE TUTORIEL (AVEC RECOMMANDATIONS DE JULIETTE)     -->
+    <!-- =============================================================== -->
+    <div id="viewTuto" class="w-full space-y-3">
+      <!-- Boîte de dialogue Juliette (Style Maître JCC) -->
+      <div class="w-full p-3 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/90 border border-yellow-400/30 flex items-center gap-3 shadow-2xl relative overflow-hidden">
+        <div class="absolute -left-6 -top-6 w-24 h-24 bg-yellow-400/10 rounded-full blur-xl pointer-events-none"></div>
+        <span class="juliette-avatar w-14 h-14 shadow-lg ring-2 ring-yellow-400/50 shrink-0"></span>
+        <div class="text-left text-xs leading-relaxed min-w-0">
+          <div class="flex items-center gap-1.5">
+            <span class="font-black text-yellow-300 text-xs">Juliette</span>
+            <span class="text-[9.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-yellow-400/15 text-yellow-200 border border-yellow-400/30">Instructrice JCC</span>
+          </div>
+          <p class="text-slate-200/95 text-[11.5px] mt-0.5 leading-snug">
+            « Salut ! Choisis l'un des <strong>4 demi-decks officiels de 30 cartes</strong> : je te guiderai avec des recommandations pendant toute la partie ! »
+          </p>
         </div>
-        <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">60 cartes · Holo</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        <!-- V2 Plante : Florizarre -->
-        <button onclick="startMatch('V2_PLANTE')" class="deck-card p-3 bg-gradient-to-br from-emerald-950/90 via-slate-900/90 to-slate-950/95 border border-emerald-400/45 hover:border-emerald-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base2/15/high.webp" alt="Rafflesia" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/15/high.webp" alt="Florizarre" loading="lazy" class="fan-main" />
-            </div>
+      <!-- LES 4 DEMI-DECKS OFFICIELS PLAY IT! (30 CARTES) -->
+      <div class="w-full space-y-2.5">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
+            <h2 class="text-xs font-black tracking-wider uppercase text-amber-200">
+              Demi-Decks Officiels CD-ROM 1999
+            </h2>
           </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-200 border border-emerald-400/30">Forêt Holo</span>
-              <span class="text-[10px] font-mono text-emerald-300 font-bold">60 cartes</span>
-            </div>
-            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Florizarre</div>
-            <div class="text-[11px] font-semibold text-emerald-200/90 truncate">Carte phare : Florizarre (100 PV)</div>
-            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Bulbizarre → Florizarre, Rafflesia, Insécateur</div>
-          </div>
-        </button>
+          <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-slate-200">30 cartes · 3 Prix · Guidé</span>
+        </div>
 
-        <!-- V2 Feu : Dracaufeu -->
-        <button onclick="startMatch('V2_FEU')" class="deck-card p-3 bg-gradient-to-br from-orange-950/90 via-red-950/85 to-slate-950/95 border border-orange-400/50 hover:border-yellow-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base1/12/high.webp" alt="Feunard" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="Dracaufeu" loading="lazy" class="fan-main" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Deck Combat : Carte phare Machopeur -->
+          <button onclick="startMatch('COMBAT', 'EAU', 'tutorial')" class="deck-card p-3 bg-gradient-to-br from-amber-950/90 via-stone-900/90 to-slate-950/95 border border-amber-500/45 hover:border-amber-300 text-left flex items-center gap-3 group">
+            <div class="deck-fan">
+              <img src="https://assets.tcgdex.net/fr/base/base2/56/high.webp" alt="Miaouss" loading="lazy" class="fan-sub" />
+              <div class="holo-wrap">
+                <img src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="Machopeur" loading="lazy" class="fan-main" />
+              </div>
             </div>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-orange-500/25 text-orange-200 border border-orange-400/30">Brasier Holo</span>
-              <span class="text-[10px] font-mono text-orange-300 font-bold">60 cartes</span>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-200 border border-amber-400/30">Poing Karaté</span>
+                <span class="text-[10px] font-mono text-amber-300/90 font-bold">30 cartes</span>
+              </div>
+              <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Combat</div>
+              <div class="text-[11px] font-semibold text-amber-200/90 truncate">Carte phare : Machopeur (80 PV)</div>
+              <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+                Machoc, Taupiqueur, Doduo, Miaouss
+              </p>
+              <div class="mt-1.5 flex items-center justify-between">
+                <span class="text-[10px] text-amber-300/90 font-semibold">Vs Juliette : Deck Eau</span>
+                <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+              </div>
             </div>
-            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Dracaufeu</div>
-            <div class="text-[11px] font-semibold text-orange-200/90 truncate">Carte phare : Dracaufeu (120 PV)</div>
-            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Salamèche → Dracaufeu, Feunard, Arcanin</div>
-          </div>
-        </button>
+          </button>
 
-        <!-- V2 Eau : Tortank -->
-        <button onclick="startMatch('V2_EAU')" class="deck-card p-3 bg-gradient-to-br from-cyan-950/90 via-blue-950/85 to-slate-950/95 border border-cyan-400/45 hover:border-cyan-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base3/9/high.webp" alt="Kabutops" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="Tortank" loading="lazy" class="fan-main" />
+          <!-- Deck Eau : Carte phare Poissoroy -->
+          <button onclick="startMatch('EAU', 'COMBAT', 'tutorial')" class="deck-card p-3 bg-gradient-to-br from-sky-950/90 via-slate-900/90 to-slate-950/95 border border-sky-400/45 hover:border-sky-300 text-left flex items-center gap-3 group">
+            <div class="deck-fan">
+              <img src="https://assets.tcgdex.net/fr/base/base1/26/high.webp" alt="Minidraco" loading="lazy" class="fan-sub" />
+              <div class="holo-wrap">
+                <img src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="Poissoroy" loading="lazy" class="fan-main" />
+              </div>
             </div>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/25 text-cyan-200 border border-cyan-400/30">Océan Holo</span>
-              <span class="text-[10px] font-mono text-cyan-300 font-bold">60 cartes</span>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-500/25 text-sky-200 border border-sky-400/30">Cascade</span>
+                <span class="text-[10px] font-mono text-sky-300/90 font-bold">30 cartes</span>
+              </div>
+              <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Eau</div>
+              <div class="text-[11px] font-semibold text-sky-200/90 truncate">Carte phare : Poissoroy (70 PV)</div>
+              <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+                Poissirène, Stari, Otaria, Minidraco
+              </p>
+              <div class="mt-1.5 flex items-center justify-between">
+                <span class="text-[10px] text-sky-300/90 font-semibold">Vs Juliette : Deck Combat</span>
+                <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+              </div>
             </div>
-            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Tortank &amp; Fossile</div>
-            <div class="text-[11px] font-semibold text-cyan-200/90 truncate">Carte phare : Tortank (100 PV)</div>
-            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Carapuce → Tortank, Léviator, Kabutops</div>
-          </div>
-        </button>
+          </button>
 
-        <!-- V2 Electrik : Électhor & Raichu -->
-        <button onclick="startMatch('V2_ELECTRIK')" class="deck-card p-3 bg-gradient-to-br from-yellow-950/90 via-amber-950/85 to-slate-950/95 border border-yellow-400/50 hover:border-yellow-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base1/14/high.webp" alt="Raichu" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/16/high.webp" alt="Électhor" loading="lazy" class="fan-main" />
+          <!-- Deck Feu : Carte phare Reptincel -->
+          <button onclick="startMatch('FEU', 'COMBAT', 'tutorial')" id="btnDeckFeu" class="deck-card p-3 bg-gradient-to-br from-red-950/90 via-stone-900/90 to-slate-950/95 border border-red-500/45 hover:border-red-300 text-left flex items-center gap-3 group">
+            <div class="deck-fan">
+              <img src="https://assets.tcgdex.net/fr/base/base1/46/high.webp" alt="Salamèche" loading="lazy" class="fan-sub" />
+              <div class="holo-wrap">
+                <img src="https://assets.tcgdex.net/fr/base/base1/24/high.webp" alt="Reptincel" loading="lazy" class="fan-main" />
+              </div>
             </div>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-yellow-500/25 text-yellow-200 border border-yellow-400/30">Tonnerre Holo</span>
-              <span class="text-[10px] font-mono text-yellow-300 font-bold">60 cartes</span>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div class="flex items-center justify-between gap-1">
+                <span id="badgeFeu" class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-500/25 text-red-200 border border-red-400/30">Code "FIRE" ✓</span>
+                <span class="text-[10px] font-mono text-red-300/90 font-bold">30 cartes</span>
+              </div>
+              <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Feu</div>
+              <div class="text-[11px] font-semibold text-red-200/90 truncate">Carte phare : Reptincel (80 PV)</div>
+              <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+                Salamèche, Ponyta, Caninos, Léo, Potion
+              </p>
+              <div class="mt-1.5 flex items-center justify-between">
+                <span class="text-[10px] text-red-300/90 font-semibold">Vs Juliette : Deck Combat</span>
+                <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+              </div>
             </div>
-            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Électhor &amp; Raichu</div>
-            <div class="text-[11px] font-semibold text-yellow-200/90 truncate">Carte phare : Électhor (90 PV)</div>
-            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Pikachu → Raichu, Électhor, Voltali</div>
-          </div>
-        </button>
+          </button>
 
-        <!-- V2 Psy : Mewtwo & Alakazam -->
-        <button onclick="startMatch('V2_PSY')" class="deck-card p-3 bg-gradient-to-br from-fuchsia-950/90 via-purple-950/85 to-slate-950/95 border border-fuchsia-400/45 hover:border-fuchsia-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base1/1/high.webp" alt="Alakazam" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/10/high.webp" alt="Mewtwo" loading="lazy" class="fan-main" />
+          <!-- Deck Xtra : Carte phare Arcanin -->
+          <button onclick="startMatch('XTRA', 'COMBAT', 'tutorial')" id="btnDeckXtra" class="deck-card p-3 bg-gradient-to-br from-purple-950/90 via-slate-900/90 to-slate-950/95 border border-purple-400/45 hover:border-purple-300 text-left flex items-center gap-3 group">
+            <div class="deck-fan">
+              <img src="https://assets.tcgdex.net/fr/base/base1/36/high.webp" alt="Magmar" loading="lazy" class="fan-sub" />
+              <div class="holo-wrap">
+                <img src="https://assets.tcgdex.net/fr/base/base1/23/high.webp" alt="Arcanin" loading="lazy" class="fan-main" />
+              </div>
             </div>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-fuchsia-500/25 text-fuchsia-200 border border-fuchsia-400/30">Psychique Holo</span>
-              <span class="text-[10px] font-mono text-fuchsia-300 font-bold">60 cartes</span>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div class="flex items-center justify-between gap-1">
+                <span id="badgeXtra" class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/25 text-purple-200 border border-purple-400/30">Code "FIRE" ✓</span>
+                <span class="text-[10px] font-mono text-purple-300/90 font-bold">30 cartes</span>
+              </div>
+              <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Xtra Arcanin</div>
+              <div class="text-[11px] font-semibold text-purple-200/90 truncate">Carte phare : Arcanin (100 PV)</div>
+              <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+                Arcanin, Magmar, Caninos, Salamèche
+              </p>
+              <div class="mt-1.5 flex items-center justify-between">
+                <span class="text-[10px] text-purple-300/90 font-semibold">Vs Juliette : Deck Combat</span>
+                <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+              </div>
             </div>
-            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Mewtwo &amp; Alakazam</div>
-            <div class="text-[11px] font-semibold text-fuchsia-200/90 truncate">Carte phare : Mewtwo (60 PV)</div>
-            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Abra → Alakazam, Mewtwo, Ectoplasma</div>
-          </div>
-        </button>
+          </button>
+        </div>
+      </div>
+    </div>
 
-        <!-- V2 Combat : Mackogneur & Ptéra -->
-        <button onclick="startMatch('V2_COMBAT')" class="deck-card p-3 bg-gradient-to-br from-stone-900/95 via-amber-950/85 to-slate-950/95 border border-amber-500/45 hover:border-amber-300 text-left flex items-center gap-3 group">
-          <div class="deck-fan">
-            <img src="https://assets.tcgdex.net/fr/base/base3/1/high.webp" alt="Ptéra" loading="lazy" class="fan-sub" />
-            <div class="holo-wrap">
-              <img src="https://assets.tcgdex.net/fr/base/base1/8/high.webp" alt="Mackogneur" loading="lazy" class="fan-main" />
+    <!-- =============================================================== -->
+    <!-- ONGLET 2 : PARTIE RAPIDE (CHOIX DE TON DECK + DECK IA, SANS AIDE) -->
+    <!-- =============================================================== -->
+    <div id="viewQuick" class="hidden w-full space-y-3">
+      <!-- Résumé Face-à-Face & Bouton Lancer -->
+      <div class="w-full p-3 rounded-2xl bg-gradient-to-r from-slate-900/95 via-indigo-950/85 to-slate-900/95 border border-yellow-400/40 shadow-2xl flex flex-col gap-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <!-- Ton Deck choisi -->
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <img id="quickSummaryPlayerImg" src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="" class="w-10 aspect-[63/88] rounded object-cover shadow-md border border-yellow-400/60 shrink-0" />
+            <div class="min-w-0">
+              <div class="text-[9px] font-black uppercase tracking-wider text-yellow-300">Ton Deck</div>
+              <div id="quickSummaryPlayerName" class="text-xs font-black text-white truncate">Deck Dracaufeu</div>
+              <div id="quickSummaryPlayerSub" class="text-[10px] text-slate-300 truncate">60 cartes · 6 Prix</div>
             </div>
           </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-200 border border-amber-400/30">Séisme Holo</span>
-              <span class="text-[10px] font-mono text-amber-300 font-bold">60 cartes</span>
+
+          <div class="px-2 py-1 rounded-full bg-white/10 text-[10px] font-black text-amber-300 shrink-0">⚡ VS ⚡</div>
+
+          <!-- Deck IA choisi -->
+          <div class="flex items-center justify-end gap-2 min-w-0 flex-1 text-right">
+            <div class="min-w-0">
+              <div class="text-[9px] font-black uppercase tracking-wider text-rose-300">Deck de l'IA</div>
+              <div id="quickSummaryAiName" class="text-xs font-black text-white truncate">Deck Tortank &amp; Fossile</div>
+              <div id="quickSummaryAiSub" class="text-[10px] text-slate-300 truncate">60 cartes · Sans aide</div>
             </div>
-            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Mackogneur</div>
-            <div class="text-[11px] font-semibold text-amber-200/90 truncate">Carte phare : Mackogneur (100 PV)</div>
-            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Machoc → Mackogneur, Grolem, Ptéra</div>
+            <img id="quickSummaryAiImg" src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="" class="w-10 aspect-[63/88] rounded object-cover shadow-md border border-rose-400/60 shrink-0" />
           </div>
+        </div>
+
+        <button onclick="startQuickMatch()" class="btn-gold w-full py-2.5 rounded-xl text-xs sm:text-sm font-black tracking-wide uppercase flex items-center justify-center gap-2 shadow-lg">
+          <span>⚔️</span> Lancer la Partie Rapide (Sans recommandation)
         </button>
+      </div>
+
+      <!-- ÉTAPE 1 : CHOISIS TON DECK -->
+      <div class="w-full space-y-2">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></span>
+            <h2 class="text-xs font-black tracking-wider uppercase text-yellow-200">
+              1. Choisis TON Deck
+            </h2>
+          </div>
+          <span class="text-[10px] font-mono text-slate-300">Touche une carte phare</span>
+        </div>
+        <div id="quickPlayerGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+      </div>
+
+      <!-- ÉTAPE 2 : CHOISIS LE DECK DE L'IA -->
+      <div class="w-full space-y-2 pt-1">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_#fb7185]"></span>
+            <h2 class="text-xs font-black tracking-wider uppercase text-rose-200">
+              2. Choisis le Deck de l'IA
+            </h2>
+          </div>
+          <span class="text-[10px] font-mono text-slate-300">Adversaire sans coaching</span>
+        </div>
+        <div id="quickAiGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
       </div>
     </div>
 
@@ -702,9 +652,10 @@
     <header class="shrink-0 px-2.5 py-1.5 bg-slate-950/55 backdrop-blur-md border-b border-white/15 flex items-center justify-between gap-2 shadow-lg" style="padding-top:max(4px, env(safe-area-inset-top))">
       <button onclick="confirmQuitMatch()" class="w-8 h-7 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-sm text-slate-100 shrink-0 transition" aria-label="Menu">←</button>
       <div class="flex items-center gap-1.5 min-w-0">
-        <span class="juliette-avatar w-6 h-6 ring-1 ring-pink-300/50"></span><span class="text-xs font-extrabold text-pink-200 shrink-0">Juliette</span>
+        <span id="aiHeaderAvatar" class="juliette-avatar w-6 h-6 ring-1 ring-pink-300/50"></span>
+        <span id="aiHeaderName" class="text-xs font-extrabold text-pink-200 shrink-0">Juliette</span>
         <span id="aiDeckLabel" class="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 border border-white/10 text-slate-200 truncate">Eau</span>
-        <span class="text-[10px] font-mono text-slate-200 px-1.5 py-0.5 rounded-full bg-black/30 shrink-0" title="Cartes en main de Juliette">✋<strong id="aiHandCount">7</strong></span>
+        <span class="text-[10px] font-mono text-slate-200 px-1.5 py-0.5 rounded-full bg-black/30 shrink-0" title="Cartes en main de l'adversaire">✋<strong id="aiHandCount">7</strong></span>
       </div>
       <div id="turnPhaseBadge" class="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-yellow-400/15 border border-yellow-400/35 text-yellow-300 truncate text-right">Préparation</div>
       <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs shrink-0 transition">🔊</button>
@@ -714,23 +665,23 @@
     <main id="playMat" class="mat flex-1 min-h-0 flex flex-col justify-between px-2 py-1.5">
       <div id="matDropHint"><span>✨ Lâche ici pour jouer la carte</span></div>
 
-      <!-- CÔTÉ JULIETTE -->
+      <!-- CÔTÉ JULIETTE / IA -->
       <section class="side side-ai flex flex-col gap-1.5">
         <div id="aiBenchRow" class="bench-row"></div>
         <div class="flex items-center gap-2">
           <div class="side-col flex items-center justify-start gap-1">
-            <div class="pile" title="Pioche (Deck) de Juliette">
+            <div class="pile" title="Pioche (Deck) de l'adversaire">
               <div class="card-back w-full relative"></div>
               <span class="pile-chip text-sky-200">📚 <span id="aiDeckCount">20</span></span>
             </div>
-            <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="pile cursor-pointer group" title="Voir la Défausse de Juliette">
+            <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="pile cursor-pointer group" title="Voir la Défausse de l'adversaire">
               <div id="aiDiscardSlot" class="w-full"></div>
               <span class="pile-chip text-slate-300 group-hover:text-white">🗑 <span id="aiDiscardCount">0</span></span>
             </button>
           </div>
           <div id="aiActiveSlot" class="active-slot"></div>
           <div class="side-col flex items-center justify-end">
-            <div class="pile" title="Récompenses de Juliette">
+            <div class="pile" title="Récompenses de l'adversaire">
               <div id="aiPrizesZone" class="prize-stack"></div>
               <span class="pile-chip text-amber-200">🏆 <span id="aiPrizesCount">3</span></span>
             </div>
@@ -738,9 +689,9 @@
         </div>
       </section>
 
-      <!-- LIGNE MÉDIANE : JULIETTE + FIN DU TOUR -->
-      <div id="midRow" class="relative z-10 flex items-center gap-2">
-        <div class="bubble flex-1 min-w-0 rounded-2xl px-2.5 py-1 flex items-center gap-2">
+      <!-- LIGNE MÉDIANE : JULIETTE (TUTORIEL UNIQUEMENT) + FIN DU TOUR -->
+      <div id="midRow" class="relative z-10 flex items-center justify-end gap-2">
+        <div id="julietteBubble" class="bubble flex-1 min-w-0 rounded-2xl px-2.5 py-1 flex items-center gap-2">
           <span class="juliette-avatar w-9 h-9 -my-1"></span>
           <div id="julietteSpeech" class="text-[10.5px] leading-snug line-clamp-2 min-h-[28px]">
             « Choisis ton Pokémon Actif pour commencer le match ! »
@@ -898,7 +849,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon défenseur est maintenant Confus."
       }
-    ]
+    ],
+    "power": {
+      "id": "damage_swap",
+      "name": "Transfert de dégâts",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 PV) d'un de vos Pokémon vers un autre tant que cela ne met pas ce Pokémon K.O."
+    }
   },
   "base1-1": {
     "id": "alakazam",
@@ -926,7 +883,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon défenseur est maintenant Confus."
       }
-    ]
+    ],
+    "power": {
+      "id": "damage_swap",
+      "name": "Transfert de dégâts",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 PV) d'un de vos Pokémon vers un autre tant que cela ne met pas ce Pokémon K.O."
+    }
   },
   "blastoise": {
     "id": "blastoise",
@@ -954,7 +917,13 @@
         "damage": 40,
         "text": "Inflige 40 dégâts plus 10 dégâts supplémentaires pour chaque Énergie {W} attachée à Tortank en plus du coût en Énergie de cette attaque. Les Énergies {W} supplémentaires après la seconde ne comptent pas."
       }
-    ]
+    ],
+    "power": {
+      "id": "rain_dance",
+      "name": "Danse de la pluie",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez attacher 1 carte Énergie Eau de votre main à 1 de vos Pokémon Eau."
+    }
   },
   "base1-2": {
     "id": "blastoise",
@@ -982,7 +951,13 @@
         "damage": 40,
         "text": "Inflige 40 dégâts plus 10 dégâts supplémentaires pour chaque Énergie {W} attachée à Tortank en plus du coût en Énergie de cette attaque. Les Énergies {W} supplémentaires après la seconde ne comptent pas."
       }
-    ]
+    ],
+    "power": {
+      "id": "rain_dance",
+      "name": "Danse de la pluie",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez attacher 1 carte Énergie Eau de votre main à 1 de vos Pokémon Eau."
+    }
   },
   "chansey": {
     "id": "chansey",
@@ -1087,7 +1062,13 @@
         "damage": 100,
         "text": "Défaussez 2 cartes Énergie attachées à Dracaufeu pour pouvoir utiliser cette attaque."
       }
-    ]
+    ],
+    "power": {
+      "id": "energy_burn",
+      "name": "Combustion d'Énergie",
+      "passive": true,
+      "text": "Toutes les Énergies attachées à Dracaufeu comptent comme de l'Énergie Feu au lieu de leur type habituel."
+    }
   },
   "base1-4": {
     "id": "charizard",
@@ -1116,7 +1097,13 @@
         "damage": 100,
         "text": "Défaussez 2 cartes Énergie attachées à Dracaufeu pour pouvoir utiliser cette attaque."
       }
-    ]
+    ],
+    "power": {
+      "id": "energy_burn",
+      "name": "Combustion d'Énergie",
+      "passive": true,
+      "text": "Toutes les Énergies attachées à Dracaufeu comptent comme de l'Énergie Feu au lieu de leur type habituel."
+    }
   },
   "clefairy": {
     "id": "clefairy",
@@ -1367,7 +1354,13 @@
         "damage": 60,
         "text": "Inflige 60 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "strikes_back",
+      "name": "Riposte",
+      "passive": true,
+      "text": "Chaque fois que l'attaque de votre adversaire inflige des dégâts à Mackogneur (même s'il est mis K.O.), ce pouvoir inflige 10 dégâts au Pokémon Attaquant."
+    }
   },
   "base1-8": {
     "id": "machamp",
@@ -1396,7 +1389,13 @@
         "damage": 60,
         "text": "Inflige 60 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "strikes_back",
+      "name": "Riposte",
+      "passive": true,
+      "text": "Chaque fois que l'attaque de votre adversaire inflige des dégâts à Mackogneur (même s'il est mis K.O.), ce pouvoir inflige 10 dégâts au Pokémon Attaquant."
+    }
   },
   "magneton": {
     "id": "magneton",
@@ -1883,7 +1882,13 @@
         "damage": 60,
         "text": "Inflige 60 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "energy_trans",
+      "name": "Transfert d'Énergie",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 carte Énergie Plante attachée à l'un de vos Pokémon vers un autre de vos Pokémon."
+    }
   },
   "base1-15": {
     "id": "venusaur",
@@ -1912,7 +1917,13 @@
         "damage": 60,
         "text": "Inflige 60 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "energy_trans",
+      "name": "Transfert d'Énergie",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 carte Énergie Plante attachée à l'un de vos Pokémon vers un autre de vos Pokémon."
+    }
   },
   "zapdos": {
     "id": "zapdos",
@@ -2322,7 +2333,13 @@
         "damage": 50,
         "text": "Lancez une pièce. Si c'est pile, Électrode s'inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "buzzap",
+      "name": "Buzzap",
+      "passive": false,
+      "text": "Pendant votre tour (avant votre attaque), vous pouvez mettre Électrode K.O. (l'adversaire prend 1 Récompense) et l'attacher à un autre de vos Pokémon comme 2 Énergies de n'importe quel type."
+    }
   },
   "base1-21": {
     "id": "electrode",
@@ -2350,7 +2367,13 @@
         "damage": 50,
         "text": "Lancez une pièce. Si c'est pile, Électrode s'inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "buzzap",
+      "name": "Buzzap",
+      "passive": false,
+      "text": "Pendant votre tour (avant votre attaque), vous pouvez mettre Électrode K.O. (l'adversaire prend 1 Récompense) et l'attacher à un autre de vos Pokémon comme 2 Énergies de n'importe quel type."
+    }
   },
   "pidgeotto": {
     "id": "pidgeotto",
@@ -3427,7 +3450,7 @@
     "name": "Nidorino",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Nidoran",
+    "evolvesFrom": "Nidoran ♂",
     "hp": 60,
     "type": "Plante",
     "weakness": "Psy",
@@ -3466,7 +3489,7 @@
     "name": "Nidorino",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Nidoran",
+    "evolvesFrom": "Nidoran ♂",
     "hp": 60,
     "type": "Plante",
     "weakness": "Psy",
@@ -6477,7 +6500,7 @@
     "name": "M. Mime",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Mime Jr.",
+    "evolvesFrom": null,
     "hp": 40,
     "type": "Psy",
     "weakness": "Psy",
@@ -6495,7 +6518,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque marqueur de dégâts sur le Pokémon Défenseur."
       }
-    ]
+    ],
+    "power": {
+      "id": "invisible_wall",
+      "name": "Mur invisible",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque inflige 30 dégâts ou plus à M. Mime (après Faiblesse et Résistance), prévenez ces dégâts."
+    }
   },
   "base2-6": {
     "id": "mr-mime",
@@ -6504,7 +6533,7 @@
     "name": "M. Mime",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Mime Jr.",
+    "evolvesFrom": null,
     "hp": 40,
     "type": "Psy",
     "weakness": "Psy",
@@ -6522,7 +6551,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque marqueur de dégâts sur le Pokémon Défenseur."
       }
-    ]
+    ],
+    "power": {
+      "id": "invisible_wall",
+      "name": "Mur invisible",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque inflige 30 dégâts ou plus à M. Mime (après Faiblesse et Résistance), prévenez ces dégâts."
+    }
   },
   "nidoqueen": {
     "id": "nidoqueen",
@@ -6829,7 +6864,7 @@
     "name": "Ronflex",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Goinfrex",
+    "evolvesFrom": null,
     "hp": 90,
     "type": "Incolore",
     "weakness": "Combat",
@@ -6849,7 +6884,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Paralysé."
       }
-    ]
+    ],
+    "power": {
+      "id": "thick_skinned",
+      "name": "Peau épaisse",
+      "passive": true,
+      "text": "Ronflex ne peut pas devenir Endormi, Confus, Paralysé ou Empoisonné."
+    }
   },
   "base2-11": {
     "id": "snorlax",
@@ -6858,7 +6899,7 @@
     "name": "Ronflex",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Goinfrex",
+    "evolvesFrom": null,
     "hp": 90,
     "type": "Incolore",
     "weakness": "Combat",
@@ -6878,7 +6919,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Paralysé."
       }
-    ]
+    ],
+    "power": {
+      "id": "thick_skinned",
+      "name": "Peau épaisse",
+      "passive": true,
+      "text": "Ronflex ne peut pas devenir Endormi, Confus, Paralysé ou Empoisonné."
+    }
   },
   "vaporeon": {
     "id": "vaporeon",
@@ -6979,7 +7026,14 @@
         "damage": 10,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Confus et Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "shift",
+      "name": "Changement",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez changer le type d'Aéromite pour le type de n'importe quel autre Pokémon en jeu (autre qu'Incolore)."
+    }
   },
   "base2-13": {
     "id": "venomoth",
@@ -7006,7 +7060,14 @@
         "damage": 10,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Confus et Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "shift",
+      "name": "Changement",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez changer le type d'Aéromite pour le type de n'importe quel autre Pokémon en jeu (autre qu'Incolore)."
+    }
   },
   "victreebel": {
     "id": "victreebel",
@@ -7104,7 +7165,14 @@
         "damage": 40,
         "text": "Lancez 3 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces. Raflésia est maintenant Confus (après résolution des dégâts)."
       }
-    ]
+    ],
+    "power": {
+      "id": "heal",
+      "name": "Soins",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez lancer une pièce. Si c'est face, retirez 1 marqueur de dégâts (10 dégâts) d'un de vos Pokémon."
+    }
   },
   "base2-15": {
     "id": "vileplume",
@@ -7132,7 +7200,14 @@
         "damage": 40,
         "text": "Lancez 3 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces. Raflésia est maintenant Confus (après résolution des dégâts)."
       }
-    ]
+    ],
+    "power": {
+      "id": "heal",
+      "name": "Soins",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez lancer une pièce. Si c'est face, retirez 1 marqueur de dégâts (10 dégâts) d'un de vos Pokémon."
+    }
   },
   "wigglytuff": {
     "id": "wigglytuff",
@@ -7581,7 +7656,7 @@
     "name": "M. Mime",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Mime Jr.",
+    "evolvesFrom": null,
     "hp": 40,
     "type": "Psy",
     "weakness": "Psy",
@@ -7599,7 +7674,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque marqueur de dégâts sur le Pokémon Défenseur."
       }
-    ]
+    ],
+    "power": {
+      "id": "invisible_wall",
+      "name": "Mur invisible",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque inflige 30 dégâts ou plus à M. Mime (après Faiblesse et Résistance), prévenez ces dégâts."
+    }
   },
   "base2-22": {
     "id": "mr-mime-base2-22",
@@ -7608,7 +7689,7 @@
     "name": "M. Mime",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Mime Jr.",
+    "evolvesFrom": null,
     "hp": 40,
     "type": "Psy",
     "weakness": "Psy",
@@ -7626,7 +7707,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque marqueur de dégâts sur le Pokémon Défenseur."
       }
-    ]
+    ],
+    "power": {
+      "id": "invisible_wall",
+      "name": "Mur invisible",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque inflige 30 dégâts ou plus à M. Mime (après Faiblesse et Résistance), prévenez ces dégâts."
+    }
   },
   "nidoqueen-base2-23": {
     "id": "nidoqueen-base2-23",
@@ -7933,7 +8020,7 @@
     "name": "Ronflex",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Goinfrex",
+    "evolvesFrom": null,
     "hp": 90,
     "type": "Incolore",
     "weakness": "Combat",
@@ -7953,7 +8040,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Paralysé."
       }
-    ]
+    ],
+    "power": {
+      "id": "thick_skinned",
+      "name": "Peau épaisse",
+      "passive": true,
+      "text": "Ronflex ne peut pas devenir Endormi, Confus, Paralysé ou Empoisonné."
+    }
   },
   "base2-27": {
     "id": "snorlax-base2-27",
@@ -7962,7 +8055,7 @@
     "name": "Ronflex",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Goinfrex",
+    "evolvesFrom": null,
     "hp": 90,
     "type": "Incolore",
     "weakness": "Combat",
@@ -7982,7 +8075,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Paralysé."
       }
-    ]
+    ],
+    "power": {
+      "id": "thick_skinned",
+      "name": "Peau épaisse",
+      "passive": true,
+      "text": "Ronflex ne peut pas devenir Endormi, Confus, Paralysé ou Empoisonné."
+    }
   },
   "vaporeon-base2-28": {
     "id": "vaporeon-base2-28",
@@ -8083,7 +8182,14 @@
         "damage": 10,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Confus et Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "shift",
+      "name": "Changement",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez changer le type d'Aéromite pour le type de n'importe quel autre Pokémon en jeu (autre qu'Incolore)."
+    }
   },
   "base2-29": {
     "id": "venomoth-base2-29",
@@ -8110,7 +8216,14 @@
         "damage": 10,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Confus et Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "shift",
+      "name": "Changement",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez changer le type d'Aéromite pour le type de n'importe quel autre Pokémon en jeu (autre qu'Incolore)."
+    }
   },
   "victreebel-base2-30": {
     "id": "victreebel-base2-30",
@@ -8208,7 +8321,14 @@
         "damage": 40,
         "text": "Lancez 3 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces. Raflésia est maintenant Confus (après résolution des dégâts)."
       }
-    ]
+    ],
+    "power": {
+      "id": "heal",
+      "name": "Soins",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez lancer une pièce. Si c'est face, retirez 1 marqueur de dégâts (10 dégâts) d'un de vos Pokémon."
+    }
   },
   "base2-31": {
     "id": "vileplume-base2-31",
@@ -8236,7 +8356,14 @@
         "damage": 40,
         "text": "Lancez 3 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces. Raflésia est maintenant Confus (après résolution des dégâts)."
       }
-    ]
+    ],
+    "power": {
+      "id": "heal",
+      "name": "Soins",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez lancer une pièce. Si c'est face, retirez 1 marqueur de dégâts (10 dégâts) d'un de vos Pokémon."
+    }
   },
   "wigglytuff-base2-32": {
     "id": "wigglytuff-base2-32",
@@ -8412,7 +8539,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque marqueur de dégâts placé sur Dodrio."
       }
-    ]
+    ],
+    "power": {
+      "id": "retreat_aid",
+      "name": "Soutien de retraite",
+      "passive": true,
+      "text": "Tant que Dodrio est sur votre Banc, payez 1 Énergie de moins pour faire battre en retraite votre Pokémon Actif."
+    }
   },
   "base2-34": {
     "id": "dodrio",
@@ -8440,7 +8573,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque marqueur de dégâts placé sur Dodrio."
       }
-    ]
+    ],
+    "power": {
+      "id": "retreat_aid",
+      "name": "Soutien de retraite",
+      "passive": true,
+      "text": "Tant que Dodrio est sur votre Banc, payez 1 Énergie de moins pour faire battre en retraite votre Pokémon Actif."
+    }
   },
   "exeggutor": {
     "id": "exeggutor",
@@ -8449,7 +8588,7 @@
     "name": "Noadkoko",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Noeunoeuf",
+    "evolvesFrom": "Nœufnœuf",
     "hp": 80,
     "type": "Plante",
     "weakness": "Feu",
@@ -8483,7 +8622,7 @@
     "name": "Noadkoko",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Noeunoeuf",
+    "evolvesFrom": "Nœufnœuf",
     "hp": 80,
     "type": "Plante",
     "weakness": "Feu",
@@ -8809,7 +8948,7 @@
     "name": "Nidorina",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Nidoran",
+    "evolvesFrom": "Nidoran ♀",
     "hp": 70,
     "type": "Plante",
     "weakness": "Psy",
@@ -8845,7 +8984,7 @@
     "name": "Nidorina",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": "Nidoran",
+    "evolvesFrom": "Nidoran ♀",
     "hp": 70,
     "type": "Plante",
     "weakness": "Psy",
@@ -9886,7 +10025,14 @@
         "damage": 10,
         "text": "Inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "peek",
+      "name": "Espionnage",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez regarder la carte du dessus d'un deck, une carte de la main adverse ou une Récompense."
+    }
   },
   "base2-55": {
     "id": "mankey",
@@ -9912,7 +10058,14 @@
         "damage": 10,
         "text": "Inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "peek",
+      "name": "Espionnage",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez regarder la carte du dessus d'un deck, une carte de la main adverse ou une Récompense."
+    }
   },
   "meowth": {
     "id": "meowth",
@@ -10187,7 +10340,7 @@
     "name": "Pikachu",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Pichu",
+    "evolvesFrom": null,
     "hp": 50,
     "type": "Électrique",
     "weakness": "Combat",
@@ -10214,7 +10367,7 @@
     "name": "Pikachu",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Pichu",
+    "evolvesFrom": null,
     "hp": 50,
     "type": "Électrique",
     "weakness": "Combat",
@@ -10473,7 +10626,7 @@
     "name": "Ptéra",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 60,
     "type": "Combat",
     "weakness": "Plante",
@@ -10492,7 +10645,13 @@
         "damage": 30,
         "text": "Inflige 30 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "prehistoric_power",
+      "name": "Pouvoir préhistorique",
+      "passive": true,
+      "text": "Plus aucune carte Évolution ne peut être jouée tant que Ptéra est en jeu."
+    }
   },
   "base3-1": {
     "id": "aerodactyl",
@@ -10501,7 +10660,7 @@
     "name": "Ptéra",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 60,
     "type": "Combat",
     "weakness": "Plante",
@@ -10520,7 +10679,13 @@
         "damage": 30,
         "text": "Inflige 30 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "prehistoric_power",
+      "name": "Pouvoir préhistorique",
+      "passive": true,
+      "text": "Plus aucune carte Évolution ne peut être jouée tant que Ptéra est en jeu."
+    }
   },
   "articuno": {
     "id": "articuno",
@@ -10615,7 +10780,13 @@
     "retreat": 1,
     "dex": 132,
     "img": "https://assets.tcgdex.net/fr/base/base3/3/high.webp",
-    "attacks": []
+    "attacks": [],
+    "power": {
+      "id": "transform",
+      "name": "Morphing",
+      "passive": true,
+      "text": "Si Métamorph est votre Pokémon Actif, il copie les PV, le type, le coût de retraite et les attaques du Pokémon Défenseur (toute Énergie attachée à Métamorph fournit n'importe quel type)."
+    }
   },
   "base3-3": {
     "id": "ditto",
@@ -10632,7 +10803,13 @@
     "retreat": 1,
     "dex": 132,
     "img": "https://assets.tcgdex.net/fr/base/base3/3/high.webp",
-    "attacks": []
+    "attacks": [],
+    "power": {
+      "id": "transform",
+      "name": "Morphing",
+      "passive": true,
+      "text": "Si Métamorph est votre Pokémon Actif, il copie les PV, le type, le coût de retraite et les attaques du Pokémon Défenseur (toute Énergie attachée à Métamorph fournit n'importe quel type)."
+    }
   },
   "dragonite": {
     "id": "dragonite",
@@ -10661,7 +10838,14 @@
         "damage": 40,
         "text": "Lancez 2 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces."
       }
-    ]
+    ],
+    "power": {
+      "id": "step_in",
+      "name": "En avant",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), si Dracolosse est sur votre Banc, vous pouvez l'échanger gratuitement avec votre Pokémon Actif."
+    }
   },
   "base3-4": {
     "id": "dragonite",
@@ -10690,7 +10874,14 @@
         "damage": 40,
         "text": "Lancez 2 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces."
       }
-    ]
+    ],
+    "power": {
+      "id": "step_in",
+      "name": "En avant",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), si Dracolosse est sur votre Banc, vous pouvez l'échanger gratuitement avec votre Pokémon Actif."
+    }
   },
   "gengar": {
     "id": "gengar",
@@ -10718,7 +10909,14 @@
         "damage": 30,
         "text": "Si votre adversaire a des Pokémon sur son Banc, choisissez l'un d'eux et cette attaque lui inflige 10 dégâts. (Ne pas appliquer la Résistance et la Faiblesse au Pokémon du Banc.)"
       }
-    ]
+    ],
+    "power": {
+      "id": "curse",
+      "name": "Malédiction",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 dégâts) d'un des Pokémon de votre adversaire vers un autre de ses Pokémon (même si cela le met K.O.)."
+    }
   },
   "base3-5": {
     "id": "gengar",
@@ -10746,7 +10944,14 @@
         "damage": 30,
         "text": "Si votre adversaire a des Pokémon sur son Banc, choisissez l'un d'eux et cette attaque lui inflige 10 dégâts. (Ne pas appliquer la Résistance et la Faiblesse au Pokémon du Banc.)"
       }
-    ]
+    ],
+    "power": {
+      "id": "curse",
+      "name": "Malédiction",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 dégâts) d'un des Pokémon de votre adversaire vers un autre de ses Pokémon (même si cela le met K.O.)."
+    }
   },
   "haunter-base3-6": {
     "id": "haunter-base3-6",
@@ -10773,7 +10978,13 @@
         "damage": 10,
         "text": "Le Pokémon Défenseur est maintenant Endormi."
       }
-    ]
+    ],
+    "power": {
+      "id": "transparency",
+      "name": "Transparence",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque fait quoi que ce soit à Spectrum, lancez une pièce. Si c'est face, prévenez tous les effets de cette attaque, y compris les dégâts, infligés à Spectrum."
+    }
   },
   "base3-6": {
     "id": "haunter-base3-6",
@@ -10800,7 +11011,13 @@
         "damage": 10,
         "text": "Le Pokémon Défenseur est maintenant Endormi."
       }
-    ]
+    ],
+    "power": {
+      "id": "transparency",
+      "name": "Transparence",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque fait quoi que ce soit à Spectrum, lancez une pièce. Si c'est face, prévenez tous les effets de cette attaque, y compris les dégâts, infligés à Spectrum."
+    }
   },
   "hitmonlee": {
     "id": "hitmonlee",
@@ -11270,7 +11487,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "toxic_gas",
+      "name": "Gaz toxique",
+      "passive": true,
+      "text": "Ignorez tous les Pouvoirs Pokémon autres que Gaz toxique ! Ce pouvoir cesse de fonctionner si Grotadmorv est Endormi, Confus ou Paralysé."
+    }
   },
   "base3-13": {
     "id": "muk",
@@ -11298,7 +11521,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "toxic_gas",
+      "name": "Gaz toxique",
+      "passive": true,
+      "text": "Ignorez tous les Pouvoirs Pokémon autres que Gaz toxique ! Ce pouvoir cesse de fonctionner si Grotadmorv est Endormi, Confus ou Paralysé."
+    }
   },
   "raichu-base3-14": {
     "id": "raichu-base3-14",
@@ -11423,7 +11652,7 @@
     "name": "Ptéra",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 60,
     "type": "Combat",
     "weakness": "Plante",
@@ -11442,7 +11671,13 @@
         "damage": 30,
         "text": "Inflige 30 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "prehistoric_power",
+      "name": "Pouvoir préhistorique",
+      "passive": true,
+      "text": "Plus aucune carte Évolution ne peut être jouée tant que Ptéra est en jeu."
+    }
   },
   "base3-16": {
     "id": "aerodactyl-base3-16",
@@ -11451,7 +11686,7 @@
     "name": "Ptéra",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 60,
     "type": "Combat",
     "weakness": "Plante",
@@ -11470,7 +11705,13 @@
         "damage": 30,
         "text": "Inflige 30 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "prehistoric_power",
+      "name": "Pouvoir préhistorique",
+      "passive": true,
+      "text": "Plus aucune carte Évolution ne peut être jouée tant que Ptéra est en jeu."
+    }
   },
   "articuno-base3-17": {
     "id": "articuno-base3-17",
@@ -11565,7 +11806,13 @@
     "retreat": 1,
     "dex": 132,
     "img": "https://assets.tcgdex.net/fr/base/base3/18/high.webp",
-    "attacks": []
+    "attacks": [],
+    "power": {
+      "id": "transform",
+      "name": "Morphing",
+      "passive": true,
+      "text": "Si Métamorph est votre Pokémon Actif, il copie les PV, le type, le coût de retraite et les attaques du Pokémon Défenseur (toute Énergie attachée à Métamorph fournit n'importe quel type)."
+    }
   },
   "base3-18": {
     "id": "ditto-base3-18",
@@ -11582,7 +11829,13 @@
     "retreat": 1,
     "dex": 132,
     "img": "https://assets.tcgdex.net/fr/base/base3/18/high.webp",
-    "attacks": []
+    "attacks": [],
+    "power": {
+      "id": "transform",
+      "name": "Morphing",
+      "passive": true,
+      "text": "Si Métamorph est votre Pokémon Actif, il copie les PV, le type, le coût de retraite et les attaques du Pokémon Défenseur (toute Énergie attachée à Métamorph fournit n'importe quel type)."
+    }
   },
   "dragonite-base3-19": {
     "id": "dragonite-base3-19",
@@ -11611,7 +11864,14 @@
         "damage": 40,
         "text": "Lancez 2 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces."
       }
-    ]
+    ],
+    "power": {
+      "id": "step_in",
+      "name": "En avant",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), si Dracolosse est sur votre Banc, vous pouvez l'échanger gratuitement avec votre Pokémon Actif."
+    }
   },
   "base3-19": {
     "id": "dragonite-base3-19",
@@ -11640,7 +11900,14 @@
         "damage": 40,
         "text": "Lancez 2 pièces. Cette attaque inflige 40 dégâts multipliés par le nombre de faces."
       }
-    ]
+    ],
+    "power": {
+      "id": "step_in",
+      "name": "En avant",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), si Dracolosse est sur votre Banc, vous pouvez l'échanger gratuitement avec votre Pokémon Actif."
+    }
   },
   "gengar-base3-20": {
     "id": "gengar-base3-20",
@@ -11668,7 +11935,14 @@
         "damage": 30,
         "text": "Si votre adversaire a des Pokémon sur son Banc, choisissez l'un d'eux et cette attaque lui inflige 10 dégâts. (Ne pas appliquer la Résistance et la Faiblesse au Pokémon du Banc.)"
       }
-    ]
+    ],
+    "power": {
+      "id": "curse",
+      "name": "Malédiction",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 dégâts) d'un des Pokémon de votre adversaire vers un autre de ses Pokémon (même si cela le met K.O.)."
+    }
   },
   "base3-20": {
     "id": "gengar-base3-20",
@@ -11696,7 +11970,14 @@
         "damage": 30,
         "text": "Si votre adversaire a des Pokémon sur son Banc, choisissez l'un d'eux et cette attaque lui inflige 10 dégâts. (Ne pas appliquer la Résistance et la Faiblesse au Pokémon du Banc.)"
       }
-    ]
+    ],
+    "power": {
+      "id": "curse",
+      "name": "Malédiction",
+      "passive": false,
+      "oncePerTurn": true,
+      "text": "Une fois pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts (10 dégâts) d'un des Pokémon de votre adversaire vers un autre de ses Pokémon (même si cela le met K.O.)."
+    }
   },
   "haunter-base3-21": {
     "id": "haunter-base3-21",
@@ -11723,7 +12004,13 @@
         "damage": 10,
         "text": "Le Pokémon Défenseur est maintenant Endormi."
       }
-    ]
+    ],
+    "power": {
+      "id": "transparency",
+      "name": "Transparence",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque fait quoi que ce soit à Spectrum, lancez une pièce. Si c'est face, prévenez tous les effets de cette attaque, y compris les dégâts, infligés à Spectrum."
+    }
   },
   "base3-21": {
     "id": "haunter-base3-21",
@@ -11750,7 +12037,13 @@
         "damage": 10,
         "text": "Le Pokémon Défenseur est maintenant Endormi."
       }
-    ]
+    ],
+    "power": {
+      "id": "transparency",
+      "name": "Transparence",
+      "passive": true,
+      "text": "Chaque fois qu'une attaque fait quoi que ce soit à Spectrum, lancez une pièce. Si c'est face, prévenez tous les effets de cette attaque, y compris les dégâts, infligés à Spectrum."
+    }
   },
   "hitmonlee-base3-22": {
     "id": "hitmonlee-base3-22",
@@ -12220,7 +12513,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "toxic_gas",
+      "name": "Gaz toxique",
+      "passive": true,
+      "text": "Ignorez tous les Pouvoirs Pokémon autres que Gaz toxique ! Ce pouvoir cesse de fonctionner si Grotadmorv est Endormi, Confus ou Paralysé."
+    }
   },
   "base3-28": {
     "id": "muk-base3-28",
@@ -12248,7 +12547,13 @@
         "damage": 30,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Empoisonné."
       }
-    ]
+    ],
+    "power": {
+      "id": "toxic_gas",
+      "name": "Gaz toxique",
+      "passive": true,
+      "text": "Ignorez tous les Pouvoirs Pokémon autres que Gaz toxique ! Ce pouvoir cesse de fonctionner si Grotadmorv est Endormi, Confus ou Paralysé."
+    }
   },
   "raichu-base3-29": {
     "id": "raichu-base3-29",
@@ -12961,7 +13266,7 @@
     "name": "Magmar",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Magby",
+    "evolvesFrom": null,
     "hp": 70,
     "type": "Feu",
     "weakness": "Eau",
@@ -12996,7 +13301,7 @@
     "name": "Magmar",
     "category": "Pokémon",
     "stage": "Base",
-    "evolvesFrom": "Magby",
+    "evolvesFrom": null,
     "hp": 70,
     "type": "Feu",
     "weakness": "Eau",
@@ -13267,7 +13572,13 @@
         "damage": 20,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Paralysé."
       }
-    ]
+    ],
+    "power": {
+      "id": "strange_behavior",
+      "name": "Comportement étrange",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts d'un de vos Pokémon vers Flagadoss tant que cela ne met pas Flagadoss K.O."
+    }
   },
   "base3-43": {
     "id": "slowbro",
@@ -13294,7 +13605,13 @@
         "damage": 20,
         "text": "Lancez une pièce. Si c'est face, le Pokémon Défenseur est maintenant Paralysé."
       }
-    ]
+    ],
+    "power": {
+      "id": "strange_behavior",
+      "name": "Comportement étrange",
+      "passive": false,
+      "text": "Autant de fois que vous le voulez pendant votre tour (avant votre attaque), vous pouvez déplacer 1 marqueur de dégâts d'un de vos Pokémon vers Flagadoss tant que cela ne met pas Flagadoss K.O."
+    }
   },
   "tentacruel": {
     "id": "tentacruel",
@@ -13691,7 +14008,7 @@
     "name": "Kabuto",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 30,
     "type": "Combat",
     "weakness": "Plante",
@@ -13708,7 +14025,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "kabuto_armor",
+      "name": "Armure de Kabuto",
+      "passive": true,
+      "text": "Lorsqu'une attaque inflige des dégâts à Kabuto, ces dégâts sont divisés par deux (arrondis à la dizaine inférieure la plus proche, après application de la Faiblesse et de la Résistance)."
+    }
   },
   "base3-50": {
     "id": "kabuto",
@@ -13717,7 +14040,7 @@
     "name": "Kabuto",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 30,
     "type": "Combat",
     "weakness": "Plante",
@@ -13734,7 +14057,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "kabuto_armor",
+      "name": "Armure de Kabuto",
+      "passive": true,
+      "text": "Lorsqu'une attaque inflige des dégâts à Kabuto, ces dégâts sont divisés par deux (arrondis à la dizaine inférieure la plus proche, après application de la Faiblesse et de la Résistance)."
+    }
   },
   "krabby": {
     "id": "krabby",
@@ -13813,7 +14142,7 @@
     "name": "Amonita",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 40,
     "type": "Eau",
     "weakness": "Plante",
@@ -13830,7 +14159,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque Énergie  attachée à Amonita en plus du coût en Énergie de cette attaque. Vous ne pouvez pas ajouter plus de 20 dégâts de cette façon."
       }
-    ]
+    ],
+    "power": {
+      "id": "clairvoyance",
+      "name": "Clairevoyance",
+      "passive": true,
+      "text": "Votre adversaire joue avec sa main découverte."
+    }
   },
   "base3-52": {
     "id": "omanyte",
@@ -13839,7 +14174,7 @@
     "name": "Amonita",
     "category": "Pokémon",
     "stage": "Niveau 1",
-    "evolvesFrom": null,
+    "evolvesFrom": "Mystérieux Fossile",
     "hp": 40,
     "type": "Eau",
     "weakness": "Plante",
@@ -13856,7 +14191,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts plus 10 dégâts supplémentaires pour chaque Énergie  attachée à Amonita en plus du coût en Énergie de cette attaque. Vous ne pouvez pas ajouter plus de 20 dégâts de cette façon."
       }
-    ]
+    ],
+    "power": {
+      "id": "clairvoyance",
+      "name": "Clairevoyance",
+      "passive": true,
+      "text": "Votre adversaire joue avec sa main découverte."
+    }
   },
   "psyduck": {
     "id": "psyduck",
@@ -14088,7 +14429,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "cowardice",
+      "name": "Couardise",
+      "passive": false,
+      "text": "À tout moment pendant votre tour (avant votre attaque), vous pouvez reprendre Tentacool dans votre main (défaussez toutes les cartes qui lui sont attachées). Ne peut pas être utilisé le tour où Tentacool est mis en jeu."
+    }
   },
   "base3-56": {
     "id": "tentacool",
@@ -14114,7 +14461,13 @@
         "damage": 10,
         "text": "Inflige 10 dégâts."
       }
-    ]
+    ],
+    "power": {
+      "id": "cowardice",
+      "name": "Couardise",
+      "passive": false,
+      "text": "À tout moment pendant votre tour (avant votre attaque), vous pouvez reprendre Tentacool dans votre main (défaussez toutes les cartes qui lui sont attachées). Ne peut pas être utilisé le tour où Tentacool est mis en jeu."
+    }
   },
   "zubat": {
     "id": "zubat",
@@ -14412,34 +14765,153 @@ const TYPE_EMOJI = {
       return a;
     }
 
+    const DECK_META = {
+      V2_FEU: { key: 'V2_FEU', name: 'Deck Dracaufeu', short: 'Dracaufeu', cards: 60, prizes: 6, star: 'Dracaufeu (120 PV)', desc: 'Salamèche → Dracaufeu, Feunard, Arcanin', img: 'https://assets.tcgdex.net/fr/base/base1/4/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/12/high.webp', grad: 'from-orange-950/90 via-red-950/85 to-slate-950/95', border: 'border-orange-400/50' },
+      V2_EAU: { key: 'V2_EAU', name: 'Deck Tortank & Fossile', short: 'Tortank', cards: 60, prizes: 6, star: 'Tortank (100 PV)', desc: 'Carapuce → Tortank, Léviator, Kabutops', img: 'https://assets.tcgdex.net/fr/base/base1/2/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/9/high.webp', grad: 'from-cyan-950/90 via-blue-950/85 to-slate-950/95', border: 'border-cyan-400/45' },
+      V2_PLANTE: { key: 'V2_PLANTE', name: 'Deck Florizarre', short: 'Florizarre', cards: 60, prizes: 6, star: 'Florizarre (100 PV)', desc: 'Bulbizarre → Florizarre, Rafflesia, Insécateur', img: 'https://assets.tcgdex.net/fr/base/base1/15/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/15/high.webp', grad: 'from-emerald-950/90 via-slate-900/90 to-slate-950/95', border: 'border-emerald-400/45' },
+      V2_ELECTRIK: { key: 'V2_ELECTRIK', name: 'Deck Électhor & Raichu', short: 'Électhor', cards: 60, prizes: 6, star: 'Électhor (90 PV)', desc: 'Pikachu → Raichu, Électhor, Voltali', img: 'https://assets.tcgdex.net/fr/base/base1/16/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/14/high.webp', grad: 'from-yellow-950/90 via-amber-950/85 to-slate-950/95', border: 'border-yellow-400/50' },
+      V2_PSY: { key: 'V2_PSY', name: 'Deck Mewtwo & Alakazam', short: 'Mewtwo', cards: 60, prizes: 6, star: 'Mewtwo (60 PV)', desc: 'Abra → Alakazam, Mewtwo, Ectoplasma', img: 'https://assets.tcgdex.net/fr/base/base1/10/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/1/high.webp', grad: 'from-fuchsia-950/90 via-purple-950/85 to-slate-950/95', border: 'border-fuchsia-400/45' },
+      V2_COMBAT: { key: 'V2_COMBAT', name: 'Deck Mackogneur', short: 'Mackogneur', cards: 60, prizes: 6, star: 'Mackogneur (100 PV)', desc: 'Machoc → Mackogneur, Grolem, Ptéra', img: 'https://assets.tcgdex.net/fr/base/base1/8/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base3/1/high.webp', grad: 'from-stone-900/95 via-amber-950/85 to-slate-950/95', border: 'border-amber-500/45' },
+      COMBAT: { key: 'COMBAT', name: 'Demi-Deck Combat', short: 'Combat (30c)', cards: 30, prizes: 3, star: 'Machopeur (80 PV)', desc: 'Machoc, Machopeur, Taupiqueur, Miaouss', img: 'https://assets.tcgdex.net/fr/base/base1/34/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base2/56/high.webp', grad: 'from-amber-950/90 via-stone-900/90 to-slate-950/95', border: 'border-amber-500/45' },
+      EAU: { key: 'EAU', name: 'Demi-Deck Eau', short: 'Eau (30c)', cards: 30, prizes: 3, star: 'Poissoroy (70 PV)', desc: 'Poissirène, Poissoroy, Stari, Minidraco', img: 'https://assets.tcgdex.net/fr/base/base2/46/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/26/high.webp', grad: 'from-sky-950/90 via-slate-900/90 to-slate-950/95', border: 'border-sky-400/45' },
+      FEU: { key: 'FEU', name: 'Demi-Deck Feu', short: 'Feu (30c)', cards: 30, prizes: 3, star: 'Reptincel (80 PV)', desc: 'Salamèche, Reptincel, Ponyta, Caninos', img: 'https://assets.tcgdex.net/fr/base/base1/24/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/46/high.webp', grad: 'from-red-950/90 via-stone-900/90 to-slate-950/95', border: 'border-red-500/45' },
+      XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Arcanin (30c)', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-purple-950/90 via-slate-900/90 to-slate-950/95', border: 'border-purple-400/45' }
+    };
+
+    let quickPlayerDeck = 'V2_FEU';
+    let quickAiDeck = 'V2_EAU';
+
+    function switchMenuTab(tab) {
+      const isTuto = tab === 'tuto';
+      document.getElementById('viewTuto').classList.toggle('hidden', !isTuto);
+      document.getElementById('viewQuick').classList.toggle('hidden', isTuto);
+      const bTuto = document.getElementById('tabBtnTuto');
+      const bQuick = document.getElementById('tabBtnQuick');
+      bTuto.className = isTuto
+        ? 'py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md'
+        : 'py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:bg-white/5';
+      bQuick.className = !isTuto
+        ? 'py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-md'
+        : 'py-2 px-3 rounded-xl text-xs font-black tracking-wide transition flex items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:bg-white/5';
+      if (!isTuto) renderQuickSetup();
+    }
+
+    function selectQuickPlayerDeck(key) {
+      quickPlayerDeck = key;
+      renderQuickSetup();
+    }
+
+    function selectQuickAiDeck(key) {
+      quickAiDeck = key;
+      renderQuickSetup();
+    }
+
+    function renderQuickSetup() {
+      const pGrid = document.getElementById('quickPlayerGrid');
+      const aGrid = document.getElementById('quickAiGrid');
+      if (!pGrid || !aGrid) return;
+
+      const keys = Object.keys(DECK_META);
+      pGrid.innerHTML = keys.map((k) => {
+        const d = DECK_META[k];
+        const sel = quickPlayerDeck === k;
+        return `
+          <button onclick="selectQuickPlayerDeck('${k}')" class="deck-card p-2.5 bg-gradient-to-br ${d.grad} border ${sel ? 'border-yellow-300 ring-2 ring-yellow-400/90' : d.border} text-left flex items-center gap-2.5 group">
+            <div class="deck-fan" style="width:62px;height:80px">
+              <img src="${d.subImg}" alt="" loading="lazy" class="fan-sub" style="width:46px" />
+              <div class="holo-wrap">
+                <img src="${d.img}" alt="${d.name}" loading="lazy" class="fan-main" style="width:52px" />
+              </div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-200">${d.cards} cartes · ${d.prizes} Prix</span>
+                ${sel ? '<span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-yellow-400 text-slate-950">✓ TON DECK</span>' : ''}
+              </div>
+              <div class="font-black text-sm text-white mt-1 truncate">${d.name}</div>
+              <div class="text-[10.5px] font-semibold text-yellow-200/90 truncate">${d.star}</div>
+              <div class="text-[10px] text-slate-300/80 truncate">${d.desc}</div>
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      const aiOptions = [
+        { key: 'RANDOM', name: 'Deck Aléatoire', short: 'Aléatoire', cards: '30/60', img: 'https://assets.tcgdex.net/fr/base/base1/10/high.webp' },
+        ...keys.map((k) => DECK_META[k])
+      ];
+      aGrid.innerHTML = aiOptions.map((d) => {
+        const sel = quickAiDeck === d.key;
+        const isRand = d.key === 'RANDOM';
+        return `
+          <button onclick="selectQuickAiDeck('${d.key}')" class="deck-card p-2 bg-slate-900/90 border ${sel ? 'border-rose-400 ring-2 ring-rose-400/90 bg-rose-950/40' : 'border-white/15 hover:border-white/35'} text-left flex items-center gap-2">
+            ${isRand
+              ? `<div class="w-9 aspect-[63/88] rounded bg-gradient-to-br from-rose-500/30 to-purple-600/30 border border-rose-400/50 flex items-center justify-center text-base shrink-0">🎲</div>`
+              : `<img src="${d.img}" alt="${d.name}" loading="lazy" class="w-9 aspect-[63/88] rounded object-cover shadow shrink-0" />`
+            }
+            <div class="min-w-0 flex-1">
+              <div class="font-extrabold text-[11px] text-white truncate">${d.short || d.name}</div>
+              <div class="text-[9.5px] text-slate-300 truncate">${isRand ? 'Surprise IA' : `${d.cards} cartes`}</div>
+              ${sel ? '<div class="text-[8.5px] font-black text-rose-300 uppercase mt-0.5">✓ Choisi</div>' : ''}
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      const pMeta = DECK_META[quickPlayerDeck];
+      document.getElementById('quickSummaryPlayerImg').src = pMeta.img;
+      document.getElementById('quickSummaryPlayerName').textContent = pMeta.name;
+      document.getElementById('quickSummaryPlayerSub').textContent = `${pMeta.cards} cartes · ${pMeta.prizes} Prix`;
+
+      if (quickAiDeck === 'RANDOM') {
+        document.getElementById('quickSummaryAiImg').src = pMeta.subImg;
+        document.getElementById('quickSummaryAiName').textContent = '🎲 Deck Aléatoire';
+        document.getElementById('quickSummaryAiSub').textContent = 'Tiré au sort · Sans aide';
+      } else {
+        const aMeta = DECK_META[quickAiDeck];
+        document.getElementById('quickSummaryAiImg').src = aMeta.img;
+        document.getElementById('quickSummaryAiName').textContent = aMeta.name;
+        document.getElementById('quickSummaryAiSub').textContent = `${aMeta.cards} cartes · Sans aide`;
+      }
+    }
+
+    function startQuickMatch() {
+      const keys = Object.keys(DECK_META);
+      const aiKey = quickAiDeck === 'RANDOM'
+        ? keys[Math.floor(Math.random() * keys.length)]
+        : quickAiDeck;
+      startMatch(quickPlayerDeck, aiKey, 'quick');
+    }
+
     function drawStartingHandAndPrizes(deckKey) {
+      const prizeCount = DECK_META[deckKey]?.prizes || (deckKey.startsWith('V2_') ? 6 : 3);
       while (true) {
         const deck = buildDeck(deckKey);
         const hand = deck.splice(0, 7);
         const hasBasic = hand.some((c) => c.category === 'Pokémon' && c.stage === 'Base');
         if (hasBasic) {
-          const prizes = deck.splice(0, 3); // 3 Récompenses officielles pour demi-deck 30 cartes
+          const prizes = deck.splice(0, prizeCount);
           return { deck, hand, prizes };
         }
       }
     }
 
     // -----------------------------------------------------------------------
-    // 4. DÉMARRAGE D'UNE PARTIE CONTRE JULIETTE
+    // 4. DÉMARRAGE D'UNE PARTIE (TUTORIEL JULIETTE OU PARTIE RAPIDE)
     // -----------------------------------------------------------------------
-    function startMatch(playerDeckKey) {
-      // Comme indiqué sur Poképédia : Juliette joue Eau si le joueur prend Combat, et Combat sinon
+    function startMatch(playerDeckKey, customAiDeckKey = null, mode = 'tutorial') {
       const v2AiMap = {
         COMBAT: 'EAU', EAU: 'COMBAT', FEU: 'EAU', XTRA: 'COMBAT',
         V2_PLANTE: 'V2_FEU', V2_FEU: 'V2_EAU', V2_EAU: 'V2_ELECTRIK',
         V2_ELECTRIK: 'V2_COMBAT', V2_PSY: 'V2_PLANTE', V2_COMBAT: 'V2_PSY'
       };
-      const aiDeckKey = v2AiMap[playerDeckKey] || 'COMBAT';
+      const aiDeckKey = customAiDeckKey || v2AiMap[playerDeckKey] || 'COMBAT';
 
       const pInit = drawStartingHandAndPrizes(playerDeckKey);
       const aiInit = drawStartingHandAndPrizes(aiDeckKey);
 
       game = {
+        mode, // 'tutorial' | 'quick'
         turnNumber: 1,
         activePlayer: 'player', // 'player' or 'ai'
         energyAttachedThisTurn: false,
@@ -14465,7 +14937,7 @@ const TYPE_EMOJI = {
         }
       };
 
-      // Juliette place automatiquement son meilleur Pokémon de Base en Actif et les autres sur son Banc
+      // L'IA place automatiquement son meilleur Pokémon de Base en Actif et les autres sur son Banc
       const aiBasics = game.ai.hand.filter((c) => c.category === 'Pokémon' && c.stage === 'Base');
       aiBasics.sort((a, b) => (b.hp || 0) - (a.hp || 0));
       const aiStarter = aiBasics[0];
@@ -14484,11 +14956,18 @@ const TYPE_EMOJI = {
       fx.placed.add(game.ai.active.uid); game.ai.bench.forEach((b) => fx.placed.add(b.uid));
       document.getElementById('menuScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
-      document.getElementById('aiDeckLabel').textContent = `Deck ${aiDeckKey}`;
 
-      sayJuliette(
-        `J'envoie ${game.ai.active.name} ! Touche un Pokémon de Base dans ta main en bas pour le choisir comme Pokémon Actif.`
-      );
+      const isQuick = mode === 'quick';
+      document.getElementById('julietteBubble').classList.toggle('hidden', isQuick);
+      document.getElementById('aiHeaderAvatar').classList.toggle('hidden', isQuick);
+      document.getElementById('aiHeaderName').textContent = isQuick ? '⚔️ Adversaire IA' : 'Juliette';
+      document.getElementById('aiDeckLabel').textContent = DECK_META[aiDeckKey]?.short || aiDeckKey;
+
+      if (!isQuick) {
+        sayJuliette(
+          `J'envoie ${game.ai.active.name} ! Touche un Pokémon de Base dans ta main en bas pour le choisir comme Pokémon Actif.`
+        );
+      }
       renderBoard();
     }
 
@@ -14608,6 +15087,7 @@ const TYPE_EMOJI = {
     }
 
     function sayJuliette(text) {
+      if (game && game.mode === 'quick') return;
       document.getElementById('julietteSpeech').innerHTML = `« ${text} »`;
     }
 
@@ -14693,13 +15173,14 @@ const TYPE_EMOJI = {
       if (!game) return;
       const pile = game[owner].discard;
       openPickerModal(
-        owner === 'player' ? '🗑 Ta pile de défausse' : '🗑 Défausse de Juliette',
+        owner === 'player' ? '🗑 Ta pile de défausse' : '🗑 Défausse de l\'adversaire',
         pile.length ? `${pile.length} carte(s) — la plus récente en premier.` : 'Aucune carte défaussée pour le moment.',
         [...pile].reverse(), () => {}, true
       );
     }
 
     function handBadge(card) {
+      if (game && game.mode === 'quick') return { badge: '', playable: false };
       let badge = '', playable = false;
       if (card.category === 'Pokémon' && card.stage === 'Base') {
         playable = !game.player.active || game.player.bench.length < 5;
@@ -14743,7 +15224,7 @@ const TYPE_EMOJI = {
                style="left:${startX + idx * step}px; width:${cardW}px; transform: translateY(${dy}px) rotate(${rot}deg); z-index:${idx + 1}">
             <div class="relative tcg bg-slate-900 card-shadow ${playable ? 'ring-2 ring-amber-200/80' : ''} ${deal}">
               <img src="${card.img}" alt="${card.name}" class="w-full h-full object-cover rounded-[6px]" draggable="false" />
-              <div class="absolute inset-x-0 bottom-0 bg-black/75 text-[8px] font-extrabold text-center py-0.5 rounded-b-[6px] ${playable ? 'text-amber-200' : 'text-slate-400'} truncate px-0.5">${badge}</div>
+              ${badge ? `<div class="absolute inset-x-0 bottom-0 bg-black/75 text-[8px] font-extrabold text-center py-0.5 rounded-b-[6px] ${playable ? 'text-amber-200' : 'text-slate-400'} truncate px-0.5">${badge}</div>` : ''}
             </div>
           </div>
         `;
@@ -15401,7 +15882,8 @@ const TYPE_EMOJI = {
       const retBtn = document.getElementById('retreatBtn');
 
       if (!game || !game.player.active || game.activePlayer !== 'player') {
-        container.innerHTML = `<span class="text-[10px] text-white/50 font-mono text-right">${!game?.player.active ? 'Pose d\'abord un Pokémon de Base !' : 'Juliette réfléchit...'}</span>`;
+        const waitLabel = game?.mode === 'quick' ? 'Tour adverse...' : 'Juliette réfléchit...';
+        container.innerHTML = `<span class="text-[10px] text-white/50 font-mono text-right">${!game?.player.active ? (game?.mode === 'quick' ? '' : 'Pose d\'abord un Pokémon de Base !') : waitLabel}</span>`;
         endBtn.disabled = true;
         retBtn.disabled = true;
         endBtn.classList.remove('ready');
@@ -15410,7 +15892,8 @@ const TYPE_EMOJI = {
 
       endBtn.disabled = false;
       retBtn.disabled = false;
-      endBtn.classList.toggle('ready', !game.player.hand.some((c) => handBadge(c).playable)
+      endBtn.classList.toggle('ready', game.mode !== 'quick'
+        && !game.player.hand.some((c) => handBadge(c).playable)
         && !(game.player.active.attacks || []).some((a) => canPayAttackCost(game.player.active, a.cost)));
 
       const active = game.player.active;
