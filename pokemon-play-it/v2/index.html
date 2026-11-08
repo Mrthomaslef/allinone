@@ -18265,9 +18265,11 @@ const TYPE_EMOJI = {
       if (menuLbl) menuLbl.textContent = label;
       const menuCoins = document.getElementById('menuCoinsCount');
       if (menuCoins) {
-        const coins = (typeof boosterSave !== 'undefined' && boosterSave)
-          ? (boosterSave.coins || 0)
-          : ((readProfileSummary(playerPseudo) || {}).coins || 0);
+        // boosterSave est déclaré (let) plus bas : y accéder avant son initialisation lève une ReferenceError
+        // (même avec typeof) et bloquait tout le script au chargement → repli sur le résumé du profil.
+        let coins = 0;
+        try { coins = boosterSave ? (boosterSave.coins || 0) : 0; }
+        catch (_) { coins = ((readProfileSummary(playerPseudo) || {}).coins || 0); }
         menuCoins.textContent = `${coins}`;
       }
       const multiLbl = document.getElementById('multiMyPseudo');
