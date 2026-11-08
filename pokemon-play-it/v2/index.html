@@ -284,149 +284,407 @@
     @keyframes readyPulse { 50% { box-shadow: 0 2px 0 #92400e, 0 0 18px rgba(253,224,71,.7); } }
     ::-webkit-scrollbar { height: 4px; width: 4px; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 999px; }
+
+    /* ===== Vitrine des Decks avec Cartes Phares & Reflet Holographique ===== */
+    .menu-bg {
+      background:
+        radial-gradient(circle at 18% 12%, rgba(250, 204, 21, 0.14), transparent 42%),
+        radial-gradient(circle at 82% 28%, rgba(56, 189, 248, 0.12), transparent 45%),
+        radial-gradient(circle at 50% 88%, rgba(239, 68, 68, 0.12), transparent 50%);
+    }
+    .deck-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.22s ease, border-color 0.22s ease;
+      box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+    .deck-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.09) 0%, transparent 45%, rgba(255,255,255,0.03) 100%);
+      pointer-events: none;
+    }
+    .deck-card:hover {
+      transform: translateY(-3px) scale(1.015);
+      box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.8), 0 0 22px -4px rgba(250, 204, 21, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+    .deck-card:active {
+      transform: translateY(1px) scale(0.99);
+    }
+    .deck-fan {
+      position: relative;
+      width: 72px;
+      height: 92px;
+      flex-shrink: 0;
+      perspective: 500px;
+    }
+    .deck-fan .fan-sub {
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 54px;
+      aspect-ratio: 63 / 88;
+      border-radius: 5px;
+      object-fit: cover;
+      transform: rotate(-10deg) translateX(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.65);
+      opacity: 0.82;
+      filter: saturate(0.95) brightness(0.9);
+      transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.3), opacity 0.28s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .deck-fan .fan-main {
+      position: relative;
+      z-index: 2;
+      margin-left: 12px;
+      width: 60px;
+      aspect-ratio: 63 / 88;
+      border-radius: 6px;
+      object-fit: cover;
+      transform: rotate(4deg);
+      box-shadow: 0 10px 20px -4px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 241, 200, 0.35);
+      transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.3), box-shadow 0.28s ease;
+    }
+    .deck-card:hover .fan-sub {
+      transform: rotate(-16deg) translate(-6px, -2px) scale(1.04);
+      opacity: 0.95;
+    }
+    .deck-card:hover .fan-main {
+      transform: rotate(2deg) translateY(-4px) scale(1.08);
+      box-shadow: 0 14px 26px -4px rgba(0, 0, 0, 0.9), 0 0 14px rgba(253, 224, 71, 0.55);
+    }
+    .holo-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    .holo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      border-radius: 6px;
+      pointer-events: none;
+      background: linear-gradient(125deg, transparent 20%, rgba(255, 255, 255, 0.32) 45%, rgba(253, 224, 71, 0.25) 52%, transparent 75%);
+      background-size: 220% 220%;
+      animation: holoShimmer 4.5s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    @keyframes holoShimmer {
+      0%, 100% { background-position: 0% 50%; opacity: 0.45; }
+      50% { background-position: 100% 50%; opacity: 0.85; }
+    }
+    .glass-pill {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.92));
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
   </style>
 </head>
 <body id="appBody" class="playmat-night flex flex-col">
 
   <!-- =================================================================== -->
-  <!-- ÉCRAN 1 : MENU PRINCIPAL 1999 (CHOIX DU DEMI-DECK & CODE "FIRE")    -->
+  <!-- ÉCRAN 1 : MENU PRINCIPAL VITRINE 1999 + GRANDS DECKS V2             -->
   <!-- =================================================================== -->
-  <div id="menuScreen" class="flex-1 overflow-y-auto px-4 py-5 flex flex-col items-center justify-between max-w-lg mx-auto w-full">
-    <div class="w-full text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/15 border border-yellow-400/40 text-yellow-300 text-[11px] font-bold tracking-wider uppercase mb-2">
-        💿 Wizards of the Coast · Édition CD-ROM 1999
+  <div id="menuScreen" class="menu-bg flex-1 overflow-y-auto px-3.5 sm:px-5 py-4 flex flex-col items-center justify-between max-w-2xl mx-auto w-full gap-3.5">
+
+    <!-- En-tête Héroïque -->
+    <div class="w-full text-center relative pt-1">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-500/20 via-yellow-400/25 to-amber-500/20 border border-yellow-400/45 text-yellow-200 text-[10.5px] font-extrabold tracking-widest uppercase shadow-lg">
+        <span>✨</span> Wizards of the Coast · Édition Française 1999
       </div>
-      <h1 class="text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-b from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow">
+      <h1 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-b from-white via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(250,204,21,0.35)]">
         POKÉMON : À TOI DE JOUER !
       </h1>
-      <p class="text-xs text-slate-300 mt-1">
-        Pokémon Play It! v2.0 · 228 Cartes FR (Set de Base + Jungle + Fossile) · 10 Decks
+      <p class="text-[11.5px] text-slate-300/90 mt-0.5 font-medium">
+        Set de Base · Jungle · Fossile — <span class="text-yellow-300 font-bold">228 Cartes Officielles FR HD</span>
       </p>
+
+      <!-- Barre d'accès rapide : Collection 228 Cartes & Académie -->
+      <div class="mt-3 flex items-center justify-center gap-2.5">
+        <button onclick="openCollectionModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-emerald-300 hover:border-emerald-400/60 hover:text-emerald-200 transition flex items-center gap-1.5 active:scale-95">
+          <span>📖</span> Galerie des 228 Cartes FR
+        </button>
+        <button onclick="openAcademyModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-amber-300 hover:border-amber-400/60 hover:text-amber-200 transition flex items-center gap-1.5 active:scale-95">
+          <span>🎓</span> Quiz de l'Académie
+        </button>
+      </div>
     </div>
 
-    <!-- Juliette Welcome Box -->
-    <div class="w-full my-3 p-3.5 rounded-2xl bg-slate-900/85 border border-white/15 flex items-center gap-3 shadow-xl">
-      <span class="juliette-avatar w-14 h-14 shadow-md"></span>
-      <div class="text-left text-xs leading-relaxed">
-        <div class="font-bold text-yellow-300">Juliette — Instructrice JCC</div>
-        <p class="text-slate-300">
-          « Salut ! Comme mon ami <strong>Sacha Ketchum</strong>, j'adore le JCC Pokémon ! Choisis l'un des <strong>4 demi-decks officiels de 30 cartes</strong> pour m'affronter en 3 Récompenses ! »
+    <!-- Boîte de dialogue Juliette (Style Maître JCC) -->
+    <div class="w-full p-3 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/90 border border-yellow-400/30 flex items-center gap-3 shadow-2xl relative overflow-hidden">
+      <div class="absolute -left-6 -top-6 w-24 h-24 bg-yellow-400/10 rounded-full blur-xl pointer-events-none"></div>
+      <span class="juliette-avatar w-14 h-14 shadow-lg ring-2 ring-yellow-400/50 shrink-0"></span>
+      <div class="text-left text-xs leading-relaxed min-w-0">
+        <div class="flex items-center gap-1.5">
+          <span class="font-black text-yellow-300 text-xs">Juliette</span>
+          <span class="text-[9.5px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-yellow-400/15 text-yellow-200 border border-yellow-400/30">Instructrice JCC</span>
+        </div>
+        <p class="text-slate-200/95 text-[11.5px] mt-0.5 leading-snug">
+          « Choisis ton deck grâce à sa <strong>carte phare</strong> ! Commence avec un <strong>Demi-Deck 30 cartes</strong> (3 Récompenses) ou lance un grand duel en <strong>60 cartes</strong> ! »
         </p>
       </div>
     </div>
 
-    <!-- Sélection des 4 Demi-Decks Officiels (Poképédia) -->
+    <!-- SECTION 1 : LES 4 DEMI-DECKS OFFICIELS PLAY IT! (30 CARTES) -->
     <div class="w-full space-y-2.5">
-      <div class="flex items-center justify-between text-xs font-bold text-slate-300 px-1">
-        <span>1. DEMI-DECKS OFFICIELS PLAY IT! (30 CARTES · 3 PRIX) :</span>
-        <div class="flex gap-2">
-          <button onclick="openCollectionModal()" class="text-emerald-300 underline text-[11px]">📖 228 Cartes FR</button>
-          <button onclick="openAcademyModal()" class="text-yellow-300 underline text-[11px]">🎓 Quiz</button>
+      <div class="flex items-center justify-between px-1">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
+          <h2 class="text-xs font-black tracking-wider uppercase text-amber-200">
+            Demi-Decks Officiels CD-ROM 1999
+          </h2>
         </div>
+        <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-slate-200">30 cartes · 3 Prix</span>
       </div>
 
-      <div class="grid grid-cols-2 gap-2.5">
-        <!-- Deck Combat -->
-        <button onclick="startMatch('COMBAT')" class="p-3 rounded-2xl bg-gradient-to-br from-amber-900/70 to-slate-900/90 border-2 border-amber-500/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">🥊</span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">30 cartes</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Combat</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Machoc, Machopeur, Taupiqueur, Doduo, Miaouss
-          </p>
-          <div class="mt-2 text-[10px] text-amber-300 font-semibold">Juliette jouera : Deck Eau 💧</div>
-        </button>
-
-        <!-- Deck Eau -->
-        <button onclick="startMatch('EAU')" class="p-3 rounded-2xl bg-gradient-to-br from-sky-900/70 to-slate-900/90 border-2 border-sky-400/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">💧</span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300">30 cartes</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Eau</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Poissirène, Poissoroy, Stari, Otaria, Minidraco
-          </p>
-          <div class="mt-2 text-[10px] text-sky-300 font-semibold">Juliette jouera : Deck Combat 🥊</div>
-        </button>
-
-        <!-- Deck Feu (Code secret "Fire") -->
-        <button onclick="startMatch('FEU')" id="btnDeckFeu" class="p-3 rounded-2xl bg-gradient-to-br from-red-900/70 to-slate-900/90 border-2 border-red-500/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">🔥</span>
-            <span id="badgeFeu" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-500/25 text-red-200">Code "FIRE" ✓</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Feu</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Salamèche, Reptincel, Ponyta, Caninos, Léo
-          </p>
-          <div class="mt-2 text-[10px] text-red-300 font-semibold">Juliette jouera : Deck Combat 🥊</div>
-        </button>
-
-        <!-- Deck Xtra (Code secret "Fire") -->
-        <button onclick="startMatch('XTRA')" id="btnDeckXtra" class="p-3 rounded-2xl bg-gradient-to-br from-purple-900/70 to-slate-900/90 border-2 border-purple-400/50 hover:border-yellow-400 text-left transition flex flex-col justify-between group">
-          <div class="flex items-center justify-between w-full mb-1.5">
-            <span class="text-xl">⭐</span>
-            <span id="badgeXtra" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/25 text-purple-200">Code "FIRE" ✓</span>
-          </div>
-          <div class="font-extrabold text-sm text-white group-hover:text-yellow-300">Deck Xtra</div>
-          <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-            Arcanin (100 PV), Magmar, Caninos, Salamèche, Potion
-          </p>
-          <div class="mt-2 text-[10px] text-purple-300 font-semibold">Juliette jouera : Deck Combat 🥊</div>
-        </button>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <!-- Deck Combat : Carte phare Machopeur -->
+        <button onclick="startMatch('COMBAT')" class="deck-card p-3 bg-gradient-to-br from-amber-950/90 via-stone-900/90 to-slate-950/95 border border-amber-500/45 hover:border-amber-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base2/56/high.webp" alt="Miaouss" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="Machopeur" loading="lazy" class="fan-main" />
             </div>
+          </div>
+          <div class="flex-1 min-w-0 flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-200 border border-amber-400/30">Poing Karaté</span>
+              <span class="text-[10px] font-mono text-amber-300/90 font-bold">30 cartes</span>
+            </div>
+            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Combat</div>
+            <div class="text-[11px] font-semibold text-amber-200/90 truncate">Carte phare : Machopeur (80 PV)</div>
+            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+              Machoc, Taupiqueur, Doduo, Miaouss
+            </p>
+            <div class="mt-1.5 flex items-center justify-between">
+              <span class="text-[10px] text-amber-300/90 font-semibold">Vs Juliette : Deck Eau</span>
+              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+            </div>
+          </div>
+        </button>
 
-      <div class="flex items-center justify-between text-xs font-bold text-yellow-300 px-1 pt-2">
-        <span>2. GRANDS DECKS THÉMATIQUES V2 (60 CARTES · BASE + JUNGLE + FOSSILE) :</span>
+        <!-- Deck Eau : Carte phare Poissoroy -->
+        <button onclick="startMatch('EAU')" class="deck-card p-3 bg-gradient-to-br from-sky-950/90 via-slate-900/90 to-slate-950/95 border border-sky-400/45 hover:border-sky-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base1/26/high.webp" alt="Minidraco" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="Poissoroy" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0 flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-500/25 text-sky-200 border border-sky-400/30">Cascade</span>
+              <span class="text-[10px] font-mono text-sky-300/90 font-bold">30 cartes</span>
+            </div>
+            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Eau</div>
+            <div class="text-[11px] font-semibold text-sky-200/90 truncate">Carte phare : Poissoroy (70 PV)</div>
+            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+              Poissirène, Stari, Otaria, Minidraco
+            </p>
+            <div class="mt-1.5 flex items-center justify-between">
+              <span class="text-[10px] text-sky-300/90 font-semibold">Vs Juliette : Deck Combat</span>
+              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Deck Feu : Carte phare Reptincel -->
+        <button onclick="startMatch('FEU')" id="btnDeckFeu" class="deck-card p-3 bg-gradient-to-br from-red-950/90 via-stone-900/90 to-slate-950/95 border border-red-500/45 hover:border-red-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base1/46/high.webp" alt="Salamèche" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/24/high.webp" alt="Reptincel" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0 flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1">
+              <span id="badgeFeu" class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-500/25 text-red-200 border border-red-400/30">Code "FIRE" ✓</span>
+              <span class="text-[10px] font-mono text-red-300/90 font-bold">30 cartes</span>
+            </div>
+            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Feu</div>
+            <div class="text-[11px] font-semibold text-red-200/90 truncate">Carte phare : Reptincel (80 PV)</div>
+            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+              Salamèche, Ponyta, Caninos, Léo, Potion
+            </p>
+            <div class="mt-1.5 flex items-center justify-between">
+              <span class="text-[10px] text-red-300/90 font-semibold">Vs Juliette : Deck Combat</span>
+              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Deck Xtra : Carte phare Arcanin -->
+        <button onclick="startMatch('XTRA')" id="btnDeckXtra" class="deck-card p-3 bg-gradient-to-br from-purple-950/90 via-slate-900/90 to-slate-950/95 border border-purple-400/45 hover:border-purple-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base1/36/high.webp" alt="Magmar" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/23/high.webp" alt="Arcanin" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0 flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1">
+              <span id="badgeXtra" class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/25 text-purple-200 border border-purple-400/30">Code "FIRE" ✓</span>
+              <span class="text-[10px] font-mono text-purple-300/90 font-bold">30 cartes</span>
+            </div>
+            <div class="font-black text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Xtra Arcanin</div>
+            <div class="text-[11px] font-semibold text-purple-200/90 truncate">Carte phare : Arcanin (100 PV)</div>
+            <p class="text-[10.5px] text-slate-300/85 mt-0.5 line-clamp-1">
+              Arcanin, Magmar, Caninos, Salamèche
+            </p>
+            <div class="mt-1.5 flex items-center justify-between">
+              <span class="text-[10px] text-purple-300/90 font-semibold">Vs Juliette : Deck Combat</span>
+              <span class="text-[10px] font-black text-yellow-300 group-hover:translate-x-0.5 transition">JOUER ▶</span>
+            </div>
+          </div>
+        </button>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        <button onclick="startMatch('V2_PLANTE')" class="p-2.5 rounded-xl bg-gradient-to-br from-emerald-900/80 to-slate-900/90 border border-emerald-400/50 hover:border-yellow-400 text-left transition">
-          <div class="flex items-center justify-between"><span class="text-base">🌿</span><span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">60 cartes</span></div>
-          <div class="font-extrabold text-xs text-white mt-1">Deck Plante</div>
-          <div class="text-[10px] text-slate-300 truncate">Bulbizarre → Florizarre, Rafflesia</div>
+    </div>
+
+    <!-- SECTION 2 : LES 6 GRANDS DECKS THÉMATIQUES V2 (60 CARTES · HOLO) -->
+    <div class="w-full space-y-2.5 pt-1">
+      <div class="flex items-center justify-between px-1">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+          <h2 class="text-xs font-black tracking-wider uppercase text-emerald-200">
+            Grands Decks Thématiques v2 (Base + Jungle + Fossile)
+          </h2>
+        </div>
+        <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">60 cartes · Holo</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <!-- V2 Plante : Florizarre -->
+        <button onclick="startMatch('V2_PLANTE')" class="deck-card p-3 bg-gradient-to-br from-emerald-950/90 via-slate-900/90 to-slate-950/95 border border-emerald-400/45 hover:border-emerald-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base2/15/high.webp" alt="Rafflesia" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/15/high.webp" alt="Florizarre" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-200 border border-emerald-400/30">Forêt Holo</span>
+              <span class="text-[10px] font-mono text-emerald-300 font-bold">60 cartes</span>
+            </div>
+            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Florizarre</div>
+            <div class="text-[11px] font-semibold text-emerald-200/90 truncate">Carte phare : Florizarre (100 PV)</div>
+            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Bulbizarre → Florizarre, Rafflesia, Insécateur</div>
+          </div>
         </button>
-        <button onclick="startMatch('V2_FEU')" class="p-2.5 rounded-xl bg-gradient-to-br from-orange-900/80 to-slate-900/90 border border-orange-400/50 hover:border-yellow-400 text-left transition">
-          <div class="flex items-center justify-between"><span class="text-base">🔥</span><span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300">60 cartes</span></div>
-          <div class="font-extrabold text-xs text-white mt-1">Deck Dracaufeu</div>
-          <div class="text-[10px] text-slate-300 truncate">Salamèche → Dracaufeu, Feunard</div>
+
+        <!-- V2 Feu : Dracaufeu -->
+        <button onclick="startMatch('V2_FEU')" class="deck-card p-3 bg-gradient-to-br from-orange-950/90 via-red-950/85 to-slate-950/95 border border-orange-400/50 hover:border-yellow-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base1/12/high.webp" alt="Feunard" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/4/high.webp" alt="Dracaufeu" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-orange-500/25 text-orange-200 border border-orange-400/30">Brasier Holo</span>
+              <span class="text-[10px] font-mono text-orange-300 font-bold">60 cartes</span>
+            </div>
+            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Dracaufeu</div>
+            <div class="text-[11px] font-semibold text-orange-200/90 truncate">Carte phare : Dracaufeu (120 PV)</div>
+            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Salamèche → Dracaufeu, Feunard, Arcanin</div>
+          </div>
         </button>
-        <button onclick="startMatch('V2_EAU')" class="p-2.5 rounded-xl bg-gradient-to-br from-cyan-900/80 to-slate-900/90 border border-cyan-400/50 hover:border-yellow-400 text-left transition">
-          <div class="flex items-center justify-between"><span class="text-base">💧</span><span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300">60 cartes</span></div>
-          <div class="font-extrabold text-xs text-white mt-1">Deck Tortank &amp; Fossile</div>
-          <div class="text-[10px] text-slate-300 truncate">Carapuce → Tortank, Kabutops</div>
+
+        <!-- V2 Eau : Tortank -->
+        <button onclick="startMatch('V2_EAU')" class="deck-card p-3 bg-gradient-to-br from-cyan-950/90 via-blue-950/85 to-slate-950/95 border border-cyan-400/45 hover:border-cyan-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base3/9/high.webp" alt="Kabutops" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/2/high.webp" alt="Tortank" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/25 text-cyan-200 border border-cyan-400/30">Océan Holo</span>
+              <span class="text-[10px] font-mono text-cyan-300 font-bold">60 cartes</span>
+            </div>
+            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Tortank &amp; Fossile</div>
+            <div class="text-[11px] font-semibold text-cyan-200/90 truncate">Carte phare : Tortank (100 PV)</div>
+            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Carapuce → Tortank, Léviator, Kabutops</div>
+          </div>
         </button>
-        <button onclick="startMatch('V2_ELECTRIK')" class="p-2.5 rounded-xl bg-gradient-to-br from-yellow-900/80 to-slate-900/90 border border-yellow-400/50 hover:border-yellow-400 text-left transition">
-          <div class="flex items-center justify-between"><span class="text-base">⚡</span><span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-300">60 cartes</span></div>
-          <div class="font-extrabold text-xs text-white mt-1">Deck Électrik</div>
-          <div class="text-[10px] text-slate-300 truncate">Pikachu → Raichu, Électhor</div>
+
+        <!-- V2 Electrik : Électhor & Raichu -->
+        <button onclick="startMatch('V2_ELECTRIK')" class="deck-card p-3 bg-gradient-to-br from-yellow-950/90 via-amber-950/85 to-slate-950/95 border border-yellow-400/50 hover:border-yellow-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base1/14/high.webp" alt="Raichu" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/16/high.webp" alt="Électhor" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-yellow-500/25 text-yellow-200 border border-yellow-400/30">Tonnerre Holo</span>
+              <span class="text-[10px] font-mono text-yellow-300 font-bold">60 cartes</span>
+            </div>
+            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Électhor &amp; Raichu</div>
+            <div class="text-[11px] font-semibold text-yellow-200/90 truncate">Carte phare : Électhor (90 PV)</div>
+            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Pikachu → Raichu, Électhor, Voltali</div>
+          </div>
         </button>
-        <button onclick="startMatch('V2_PSY')" class="p-2.5 rounded-xl bg-gradient-to-br from-fuchsia-900/80 to-slate-900/90 border border-fuchsia-400/50 hover:border-yellow-400 text-left transition">
-          <div class="flex items-center justify-between"><span class="text-base">🔮</span><span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-300">60 cartes</span></div>
-          <div class="font-extrabold text-xs text-white mt-1">Deck Psy</div>
-          <div class="text-[10px] text-slate-300 truncate">Abra → Alakazam, Mewtwo, Ectoplasma</div>
+
+        <!-- V2 Psy : Mewtwo & Alakazam -->
+        <button onclick="startMatch('V2_PSY')" class="deck-card p-3 bg-gradient-to-br from-fuchsia-950/90 via-purple-950/85 to-slate-950/95 border border-fuchsia-400/45 hover:border-fuchsia-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base1/1/high.webp" alt="Alakazam" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/10/high.webp" alt="Mewtwo" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-fuchsia-500/25 text-fuchsia-200 border border-fuchsia-400/30">Psychique Holo</span>
+              <span class="text-[10px] font-mono text-fuchsia-300 font-bold">60 cartes</span>
+            </div>
+            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Mewtwo &amp; Alakazam</div>
+            <div class="text-[11px] font-semibold text-fuchsia-200/90 truncate">Carte phare : Mewtwo (60 PV)</div>
+            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Abra → Alakazam, Mewtwo, Ectoplasma</div>
+          </div>
         </button>
-        <button onclick="startMatch('V2_COMBAT')" class="p-2.5 rounded-xl bg-gradient-to-br from-amber-900/80 to-slate-900/90 border border-amber-400/50 hover:border-yellow-400 text-left transition">
-          <div class="flex items-center justify-between"><span class="text-base">🥊</span><span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">60 cartes</span></div>
-          <div class="font-extrabold text-xs text-white mt-1">Deck Mackogneur</div>
-          <div class="text-[10px] text-slate-300 truncate">Machoc → Mackogneur, Grolem, Ptéra</div>
-        </button></div>
+
+        <!-- V2 Combat : Mackogneur & Ptéra -->
+        <button onclick="startMatch('V2_COMBAT')" class="deck-card p-3 bg-gradient-to-br from-stone-900/95 via-amber-950/85 to-slate-950/95 border border-amber-500/45 hover:border-amber-300 text-left flex items-center gap-3 group">
+          <div class="deck-fan">
+            <img src="https://assets.tcgdex.net/fr/base/base3/1/high.webp" alt="Ptéra" loading="lazy" class="fan-sub" />
+            <div class="holo-wrap">
+              <img src="https://assets.tcgdex.net/fr/base/base1/8/high.webp" alt="Mackogneur" loading="lazy" class="fan-main" />
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-200 border border-amber-400/30">Séisme Holo</span>
+              <span class="text-[10px] font-mono text-amber-300 font-bold">60 cartes</span>
+            </div>
+            <div class="font-black text-sm sm:text-base text-white group-hover:text-yellow-300 transition mt-1 truncate">Deck Mackogneur</div>
+            <div class="text-[11px] font-semibold text-amber-200/90 truncate">Carte phare : Mackogneur (100 PV)</div>
+            <div class="text-[10.5px] text-slate-300/85 truncate mt-0.5">Machoc → Mackogneur, Grolem, Ptéra</div>
+          </div>
+        </button>
+      </div>
     </div>
 
     <!-- Barre du bas : Tapis de jeu & Audio -->
-    <div class="w-full mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-      <div class="flex items-center gap-1.5">
-        <span>Tapis :</span>
-        <select id="playmatSelect" onchange="changePlaymat(this.value)" class="bg-slate-900 border border-white/15 rounded-lg px-2 py-1 text-xs text-white">
-          <option value="playmat-night">🌙 Bleu Nuit (Pikachu/Ectoplasma)</option>
-          <option value="playmat-jungle">🌿 Jungle (Insécateur/Rafflesia)</option>
+    <div class="w-full mt-1 pt-3 border-t border-white/15 flex items-center justify-between gap-2 text-xs text-slate-300">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-400">🎨 Tapis :</span>
+        <select id="playmatSelect" onchange="changePlaymat(this.value)" class="glass-pill rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none">
+          <option value="playmat-night">🌙 Bleu Nuit (Pikachu / Ectoplasma)</option>
+          <option value="playmat-jungle">🌿 Jungle (Insécateur / Rafflesia)</option>
           <option value="playmat-fossil">🦖 Fossile (Ptéra)</option>
           <option value="playmat-mewtwo">🔮 Base Set 2 (Mewtwo Rouge)</option>
         </select>
       </div>
-      <button onclick="toggleSound()" id="soundBtnMenu" class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-200">
+      <button onclick="toggleSound()" id="soundBtnMenu" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-bold text-slate-100 hover:border-yellow-400/50 transition">
         🔊 Cris 1G : ON
       </button>
     </div>
@@ -438,15 +696,15 @@
   <div id="gameScreen" class="hidden flex-1 flex flex-col h-full max-w-lg mx-auto w-full overflow-hidden">
 
     <!-- BARRE HAUT -->
-    <header class="shrink-0 px-2 py-1 bg-black/25 backdrop-blur-sm border-b border-white/10 flex items-center justify-between gap-2" style="padding-top:max(4px, env(safe-area-inset-top))">
-      <button onclick="confirmQuitMatch()" class="w-8 h-7 rounded-lg bg-white/10 text-sm text-slate-200 shrink-0" aria-label="Menu">←</button>
+    <header class="shrink-0 px-2.5 py-1.5 bg-slate-950/55 backdrop-blur-md border-b border-white/15 flex items-center justify-between gap-2 shadow-lg" style="padding-top:max(4px, env(safe-area-inset-top))">
+      <button onclick="confirmQuitMatch()" class="w-8 h-7 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-sm text-slate-100 shrink-0 transition" aria-label="Menu">←</button>
       <div class="flex items-center gap-1.5 min-w-0">
-        <span class="juliette-avatar w-6 h-6"></span><span class="text-xs font-bold text-pink-200 shrink-0">Juliette</span>
-        <span id="aiDeckLabel" class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-slate-300 truncate">Eau</span>
-        <span class="text-[10px] font-mono text-slate-300 shrink-0" title="Cartes en main de Juliette">✋<strong id="aiHandCount">7</strong></span>
+        <span class="juliette-avatar w-6 h-6 ring-1 ring-pink-300/50"></span><span class="text-xs font-extrabold text-pink-200 shrink-0">Juliette</span>
+        <span id="aiDeckLabel" class="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 border border-white/10 text-slate-200 truncate">Eau</span>
+        <span class="text-[10px] font-mono text-slate-200 px-1.5 py-0.5 rounded-full bg-black/30 shrink-0" title="Cartes en main de Juliette">✋<strong id="aiHandCount">7</strong></span>
       </div>
-      <div id="turnPhaseBadge" class="text-[10px] font-mono font-bold text-yellow-300 truncate text-right">Préparation</div>
-      <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 text-xs shrink-0">🔊</button>
+      <div id="turnPhaseBadge" class="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-yellow-400/15 border border-yellow-400/35 text-yellow-300 truncate text-right">Préparation</div>
+      <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs shrink-0 transition">🔊</button>
     </header>
 
     <!-- TAPIS DE JEU (tailles calculées selon l'écran : voir layoutBoard) -->
