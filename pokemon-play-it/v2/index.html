@@ -46,7 +46,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '954d075-1794172284';
+      var BUILD = 'a6c77f8-1794172537';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -75,11 +75,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Pokémon Play It" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://assets.tcgdex.net" crossorigin>
+  <link rel="preconnect" href="https://assets.tcgdex.net">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: light; --playmat-url: url("assets/playmats/night.jpg"); --playmat-fallback: #1d435a; }
+    :root { color-scheme: light; --playmat-url: url("assets/playmats/night.webp"); --playmat-fallback: #1d435a; }
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
     *, *::before, *::after { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     img { -webkit-user-drag: none; -webkit-touch-callout: none; pointer-events: auto; }
@@ -125,10 +127,10 @@
       min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
     }
     /* 4 Tapis illustrés (Bleu Nuit, Jungle, Fossile, Mewtwo Rouge) — visibles au menu comme en combat */
-    .playmat-night  { --playmat-url: url("assets/playmats/night.jpg");  --playmat-fallback: #1d435a; background-color: #1d435a; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/night.jpg"); }
-    .playmat-jungle { --playmat-url: url("assets/playmats/jungle.jpg"); --playmat-fallback: #2b4f2d; background-color: #2b4f2d; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/jungle.jpg"); }
-    .playmat-fossil { --playmat-url: url("assets/playmats/fossil.jpg"); --playmat-fallback: #634630; background-color: #634630; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/fossil.jpg"); }
-    .playmat-mewtwo { --playmat-url: url("assets/playmats/mewtwo.jpg"); --playmat-fallback: #532536; background-color: #532536; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/mewtwo.jpg"); }
+    .playmat-night  { --playmat-url: url("assets/playmats/night.webp");  --playmat-fallback: #1d435a; background-color: #1d435a; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/night.webp"); }
+    .playmat-jungle { --playmat-url: url("assets/playmats/jungle.webp"); --playmat-fallback: #2b4f2d; background-color: #2b4f2d; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/jungle.webp"); }
+    .playmat-fossil { --playmat-url: url("assets/playmats/fossil.webp"); --playmat-fallback: #634630; background-color: #634630; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/fossil.webp"); }
+    .playmat-mewtwo { --playmat-url: url("assets/playmats/mewtwo.webp"); --playmat-fallback: #532536; background-color: #532536; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/mewtwo.webp"); }
     .playmat-night, .playmat-jungle, .playmat-fossil, .playmat-mewtwo {
       background-size: cover;
       background-position: center;
@@ -143,7 +145,7 @@
       pointer-events: none;
       z-index: 0;
       background-color: var(--playmat-fallback, #1d435a);
-      background-image: var(--playmat-url, url("assets/playmats/night.jpg"));
+      background-image: var(--playmat-url, url("assets/playmats/night.webp"));
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -2289,7 +2291,7 @@
           <!-- Illustration 1 : Tortank -->
           <button onclick="launchBoosterPack('base', 'tortank')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
-              <img src="assets/boosters/base-tortank.jpg?v=2" alt="Booster Tortank" class="w-full h-full object-cover" />
+              <img src="assets/boosters/base-tortank.webp" alt="Booster Tortank" class="w-full h-full object-cover" />
               <span class="pack-3d-relief"></span>
               <span class="pack-3d-glare"></span>
             </span>
@@ -2299,7 +2301,7 @@
           <!-- Illustration 2 : Dracaufeu -->
           <button onclick="launchBoosterPack('base', 'dracaufeu')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap is-Featured-Pack">
-              <img src="assets/boosters/base-dracaufeu.jpg?v=2" alt="Booster Dracaufeu" class="w-full h-full object-cover" />
+              <img src="assets/boosters/base-dracaufeu.webp" alt="Booster Dracaufeu" class="w-full h-full object-cover" />
               <span class="pack-3d-relief"></span>
               <span class="pack-3d-glare"></span>
             </span>
@@ -2309,7 +2311,7 @@
           <!-- Illustration 3 : Florizarre -->
           <button onclick="launchBoosterPack('base', 'florizarre')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
-              <img src="assets/boosters/base-florizarre.jpg?v=2" alt="Booster Florizarre" class="w-full h-full object-cover" />
+              <img src="assets/boosters/base-florizarre.webp" alt="Booster Florizarre" class="w-full h-full object-cover" />
               <span class="pack-3d-relief"></span>
               <span class="pack-3d-glare"></span>
             </span>
@@ -2367,9 +2369,9 @@
         <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <div class="flex -space-x-2 shrink-0">
-              <img src="assets/trainers/hanae.png" style="background:#e0f2fe;object-position:top" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-              <img src="assets/trainers/ryo.png" style="background:#e0f2fe;object-position:top" alt="Ryo" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-              <img src="assets/trainers/axel.png" style="background:#e0f2fe;object-position:top" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
+              <img src="assets/trainers/hanae.webp" style="background:#e0f2fe;object-position:top" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+              <img src="assets/trainers/ryo.webp" style="background:#e0f2fe;object-position:top" alt="Ryo" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+              <img src="assets/trainers/axel.webp" style="background:#e0f2fe;object-position:top" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
             </div>
             <span class="text-[12px] font-black text-slate-900 truncate">Mode Aventure</span>
           </div>
@@ -2631,28 +2633,28 @@
         </div>
         <div class="grid grid-cols-2 gap-1.5" id="playmatButtonsGrid">
           <button type="button" data-playmat="playmat-night" onclick="changePlaymat('playmat-night')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
-            <img src="assets/playmats/night.jpg" alt="Bleu Nuit" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
+            <img src="assets/playmats/night.webp" alt="Bleu Nuit" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Bleu Nuit</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Pikachu · Ectoplasma</span>
             </span>
           </button>
           <button type="button" data-playmat="playmat-jungle" onclick="changePlaymat('playmat-jungle')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
-            <img src="assets/playmats/jungle.jpg" alt="Jungle" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
+            <img src="assets/playmats/jungle.webp" alt="Jungle" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Jungle</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Insécateur · Rafflesia</span>
             </span>
           </button>
           <button type="button" data-playmat="playmat-fossil" onclick="changePlaymat('playmat-fossil')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
-            <img src="assets/playmats/fossil.jpg" alt="Fossile" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
+            <img src="assets/playmats/fossil.webp" alt="Fossile" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Fossile</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Ptéra Préhistorique</span>
             </span>
           </button>
           <button type="button" data-playmat="playmat-mewtwo" onclick="changePlaymat('playmat-mewtwo')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
-            <img src="assets/playmats/mewtwo.jpg" alt="Mewtwo Rouge" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
+            <img src="assets/playmats/mewtwo.webp" alt="Mewtwo Rouge" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Mewtwo Rouge</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Base Set 2</span>
@@ -2792,9 +2794,14 @@
     // -----------------------------------------------------------------------
     // 1. BASE DE DONNÉES EXACTE DES 21 CARTES OFFICIELLES (SET DE BASE & JUNGLE FR)
     // -----------------------------------------------------------------------
-        if ('serviceWorker' in navigator) {
+    // Cache des images (cartes HD + illustrations) : on retire les anciens SW et on garde uniquement img-sw.js.
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
       navigator.serviceWorker.getRegistrations().then(regs => {
-        for (const r of regs) r.unregister();
+        for (const r of regs) {
+          const s = (r.active || r.waiting || r.installing);
+          if (!s || !/\/img-sw\.js$/.test(new URL(s.scriptURL).pathname)) r.unregister();
+        }
+        navigator.serviceWorker.register('img-sw.js').catch(() => {});
       });
     }
 
@@ -17170,8 +17177,8 @@ const TYPE_EMOJI = {
         title: 'La Botaniste Tactique',
         badgeName: 'Badge Bourgeon 2000',
         badgeIcon: '🌿',
-        avatar: 'assets/trainers/hanae.jpg',
-        cutout: 'assets/trainers/hanae.png',
+        avatar: 'assets/trainers/hanae-bg.webp',
+        cutout: 'assets/trainers/hanae.webp',
         color: '#22c55e',
         deckKey: 'ADV_1_VENUSAUR',
         deckArchetype: 'Venusaur / Dodrio (Energy Trans)',
@@ -17207,8 +17214,8 @@ const TYPE_EMOJI = {
         title: 'L\'Éclair Écarlate',
         badgeName: 'Badge Volcan 2000',
         badgeIcon: '🔥',
-        avatar: 'assets/trainers/ryo.jpg',
-        cutout: 'assets/trainers/ryo.png',
+        avatar: 'assets/trainers/ryo-bg.webp',
+        cutout: 'assets/trainers/ryo.webp',
         color: '#f97316',
         deckKey: 'ADV_2_ARCANINE',
         deckArchetype: 'Psyduck / Arcanine / Electrode (Buzzap)',
@@ -17244,8 +17251,8 @@ const TYPE_EMOJI = {
         title: 'Le Prodige du Queen Mary',
         badgeName: 'Badge Déluge',
         badgeIcon: '🌊',
-        avatar: 'assets/trainers/kai.jpg',
-        cutout: 'assets/trainers/kai.png',
+        avatar: 'assets/trainers/kai-bg.webp',
+        cutout: 'assets/trainers/kai.webp',
         color: '#0ea5e9',
         deckKey: 'ADV_3_RAINDANCE',
         deckArchetype: 'Rain Dance (Tortank / Artikodin / Lokhlass)',
@@ -17281,8 +17288,8 @@ const TYPE_EMOJI = {
         title: 'Le Showman de Long Beach',
         badgeName: 'Badge Vague',
         badgeIcon: '🌺',
-        avatar: 'assets/trainers/takuya.jpg',
-        cutout: 'assets/trainers/takuya.png',
+        avatar: 'assets/trainers/takuya-bg.webp',
+        cutout: 'assets/trainers/takuya.webp',
         color: '#ec4899',
         deckKey: 'ADV_4_WIGGLYTUFF',
         deckArchetype: 'Do the Wave (Grodoudou / Magmar / Tygnon)',
@@ -17318,8 +17325,8 @@ const TYPE_EMOJI = {
         title: 'Le Marionnettiste Psy',
         badgeName: 'Badge Illusion 2000',
         badgeIcon: '🔮',
-        avatar: 'assets/trainers/soren.jpg',
-        cutout: 'assets/trainers/soren.png',
+        avatar: 'assets/trainers/soren-bg.webp',
+        cutout: 'assets/trainers/soren.webp',
         color: '#8b5cf6',
         deckKey: 'ADV_5_DAMAGESWAP',
         deckArchetype: 'Damage Swap Stall (Alakazam / Mr. Mime / Chansey)',
@@ -17355,8 +17362,8 @@ const TYPE_EMOJI = {
         title: 'Le Roi du Haymaker',
         badgeName: 'Badge Uppercut',
         badgeIcon: '🥊',
-        avatar: 'assets/trainers/axel.jpg',
-        cutout: 'assets/trainers/axel.png',
+        avatar: 'assets/trainers/axel-bg.webp',
+        cutout: 'assets/trainers/axel.webp',
         color: '#eab308',
         deckKey: 'ADV_6_HAYMAKER',
         deckArchetype: 'Haymaker (Tygnon / Élektek / Insécateur / Métamorph)',
@@ -17392,8 +17399,8 @@ const TYPE_EMOJI = {
         title: 'L\'Inventrice Survoltée',
         badgeName: 'Badge Circuit',
         badgeIcon: '⚡',
-        avatar: 'assets/trainers/mika.jpg',
-        cutout: 'assets/trainers/mika.png',
+        avatar: 'assets/trainers/mika-bg.webp',
+        cutout: 'assets/trainers/mika.webp',
         color: '#14b8a6',
         deckKey: 'ADV_7_TOOLBOX',
         deckArchetype: 'Élektek / M. Mime / Magmar / Métamorph',
@@ -17429,8 +17436,8 @@ const TYPE_EMOJI = {
         title: 'Le Poing de Givre',
         badgeName: 'Badge Blizzard',
         badgeIcon: '❄️',
-        avatar: 'assets/trainers/yuki.jpg',
-        cutout: 'assets/trainers/yuki.png',
+        avatar: 'assets/trainers/yuki-bg.webp',
+        cutout: 'assets/trainers/yuki.webp',
         color: '#38bdf8',
         deckKey: 'ADV_8_ARTICUNO',
         deckArchetype: 'Artikodin / Tygnon / Insécateur',
@@ -17467,8 +17474,8 @@ const TYPE_EMOJI = {
         title: 'Le Rempart',
         badgeName: 'Sceau du Rempart',
         badgeIcon: '🛡️',
-        avatar: 'assets/trainers/dorian.jpg',
-        cutout: 'assets/trainers/dorian.png',
+        avatar: 'assets/trainers/dorian-bg.webp',
+        cutout: 'assets/trainers/dorian.webp',
         color: '#ef4444',
         deckKey: 'ADV_9_KANGASKHAN',
         deckArchetype: 'Kangourex / Magmar / Tygnon / Métamorph',
@@ -17505,8 +17512,8 @@ const TYPE_EMOJI = {
         title: 'L\'Archéologue',
         badgeName: 'Sceau Fossile',
         badgeIcon: '🦴',
-        avatar: 'assets/trainers/lena.jpg',
-        cutout: 'assets/trainers/lena.png',
+        avatar: 'assets/trainers/lena-bg.webp',
+        cutout: 'assets/trainers/lena.webp',
         color: '#d97706',
         deckKey: 'ADV_10_AERODACTYL',
         deckArchetype: 'Ptéra Lock / Haymaker',
@@ -17543,8 +17550,8 @@ const TYPE_EMOJI = {
         title: 'Le Prince de la Scène',
         badgeName: 'Sceau Ovation',
         badgeIcon: '🌹',
-        avatar: 'assets/trainers/raphael.jpg',
-        cutout: 'assets/trainers/raphael.png',
+        avatar: 'assets/trainers/raphael-bg.webp',
+        cutout: 'assets/trainers/raphael.webp',
         color: '#db2777',
         deckKey: 'ADV_11_WIGGLYMAGMAR',
         deckArchetype: 'Grodoudou / Magmar / Tygnon / Insécateur',
@@ -17581,8 +17588,8 @@ const TYPE_EMOJI = {
         title: 'La Métamorphe',
         badgeName: 'Sceau Miroir',
         badgeIcon: '🪞',
-        avatar: 'assets/trainers/selene.jpg',
-        cutout: 'assets/trainers/selene.png',
+        avatar: 'assets/trainers/selene-bg.webp',
+        cutout: 'assets/trainers/selene.webp',
         color: '#8b5cf6',
         deckKey: 'ADV_12_MAGBUZZ',
         deckArchetype: 'Magmar / Élektek / 3 Métamorph',
@@ -17619,8 +17626,8 @@ const TYPE_EMOJI = {
         title: 'Le Maître de la Ligue',
         badgeName: 'Couronne du Maître',
         badgeIcon: '👑',
-        avatar: 'assets/trainers/ren.jpg',
-        cutout: 'assets/trainers/ren.png',
+        avatar: 'assets/trainers/ren-bg.webp',
+        cutout: 'assets/trainers/ren.webp',
         color: '#f59e0b',
         deckKey: 'ADV_13_CHAMPION',
         deckArchetype: 'Wiggly Haymaker (Grodoudou / Tygnon / Insécateur)',
@@ -19824,6 +19831,16 @@ const TYPE_EMOJI = {
     // -----------------------------------------------------------------------
     // 4. DÉMARRAGE D'UNE PARTIE (TUTORIEL JULIETTE, PARTIE RAPIDE OU MODE AVENTURE)
     // -----------------------------------------------------------------------
+    // Précharge (pendant l'intro VS) les illustrations HD des deux decks pour un affichage instantané en combat.
+    const warmedImgs = new Set();
+    function warmCardImages(inits) {
+      const urls = [];
+      inits.forEach((p) => ['deck', 'hand', 'prizes'].forEach((k) => (p[k] || []).forEach((c) => {
+        if (c && c.img && !warmedImgs.has(c.img)) { warmedImgs.add(c.img); urls.push(c.img); }
+      })));
+      urls.forEach((u) => { const im = new Image(); im.decoding = 'async'; im.src = u; });
+    }
+
     function startMatch(playerDeckKey, customAiDeckKey = null, mode = 'tutorial', advTrainerId = null) {
       const v2AiMap = {
         COMBAT: 'EAU', EAU: 'COMBAT', FEU: 'EAU', XTRA: 'COMBAT',
@@ -19847,6 +19864,7 @@ const TYPE_EMOJI = {
 
       const pInit = drawStartingHandAndPrizes(playerDeckKey);
       const aiInit = drawStartingHandAndPrizes(aiDeckKey);
+      warmCardImages([pInit, aiInit]);
 
       game = {
         epoch: ++matchEpoch,
@@ -19990,8 +20008,8 @@ const TYPE_EMOJI = {
 
     // Portrait de Professeur Juliette (style anime 90s détouré assorti aux autres personnages)
     let julietteMood = 'happy';
-    const JULIETTE_AVATAR = 'assets/trainers/juliette.jpg';
-    const JULIETTE_CUTOUT = 'assets/trainers/juliette.png';
+    const JULIETTE_AVATAR = 'assets/trainers/juliette-bg.webp';
+    const JULIETTE_CUTOUT = 'assets/trainers/juliette.webp';
     function julietteSVG(mood) {
       return `<img src="${JULIETTE_CUTOUT}" style="background:#fef3c7;object-position:top" alt="Professeur Juliette" class="w-full h-full object-cover object-top rounded-full" draggable="false" />`;
     }
@@ -25019,9 +25037,9 @@ const TYPE_EMOJI = {
         accent: '#facc15',
         glow: 'rgba(250, 204, 21, 0.55)',
         packArtworks: [
-          { key: 'tortank', label: 'Tortank', icon: '💧', img: 'assets/boosters/base-tortank.jpg?v=2' },
-          { key: 'dracaufeu', label: 'Dracaufeu', icon: '🔥', img: 'assets/boosters/base-dracaufeu.jpg?v=2', featured: true },
-          { key: 'florizarre', label: 'Florizarre', icon: '🌿', img: 'assets/boosters/base-florizarre.jpg?v=2' }
+          { key: 'tortank', label: 'Tortank', icon: '💧', img: 'assets/boosters/base-tortank.webp' },
+          { key: 'dracaufeu', label: 'Dracaufeu', icon: '🔥', img: 'assets/boosters/base-dracaufeu.webp', featured: true },
+          { key: 'florizarre', label: 'Florizarre', icon: '🌿', img: 'assets/boosters/base-florizarre.webp' }
         ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base1/4/high.webp',
@@ -25045,9 +25063,9 @@ const TYPE_EMOJI = {
         accent: '#4ade80',
         glow: 'rgba(74, 222, 128, 0.55)',
         packArtworks: [
-          { key: 'insecateur', label: 'Insécateur', icon: '🌿', img: 'assets/boosters/jungle-insecateur.jpg?v=2' },
-          { key: 'pyroli', label: 'Pyroli', icon: '🔥', img: 'assets/boosters/jungle-pyroli.jpg?v=2', featured: true },
-          { key: 'grodoudou', label: 'Grodoudou', icon: '🎵', img: 'assets/boosters/jungle-grodoudou.jpg?v=2' }
+          { key: 'insecateur', label: 'Insécateur', icon: '🌿', img: 'assets/boosters/jungle-insecateur.webp' },
+          { key: 'pyroli', label: 'Pyroli', icon: '🔥', img: 'assets/boosters/jungle-pyroli.webp', featured: true },
+          { key: 'grodoudou', label: 'Grodoudou', icon: '🎵', img: 'assets/boosters/jungle-grodoudou.webp' }
         ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base2/10/high.webp',
@@ -25071,9 +25089,9 @@ const TYPE_EMOJI = {
         accent: '#fbbf24',
         glow: 'rgba(251, 191, 36, 0.55)',
         packArtworks: [
-          { key: 'ptera', label: 'Ptéra', icon: '🪨', img: 'assets/boosters/fossil-ptera.jpg?v=2' },
-          { key: 'lokhlass', label: 'Lokhlass', icon: '🌊', img: 'assets/boosters/fossil-lokhlass.jpg?v=2', featured: true },
-          { key: 'electhor', label: 'Électhor', icon: '⚡', img: 'assets/boosters/fossil-electhor.jpg?v=2' }
+          { key: 'ptera', label: 'Ptéra', icon: '🪨', img: 'assets/boosters/fossil-ptera.webp' },
+          { key: 'lokhlass', label: 'Lokhlass', icon: '🌊', img: 'assets/boosters/fossil-lokhlass.webp', featured: true },
+          { key: 'electhor', label: 'Électhor', icon: '⚡', img: 'assets/boosters/fossil-electhor.webp' }
         ],
         heroImgs: [
           'https://assets.tcgdex.net/fr/base/base3/1/high.webp',
