@@ -1,0 +1,19 @@
+{
+  "name": "Pokémon Play It! Mobile",
+  "short_name": "PPI Mobile",
+  "description": "Version mobile navigateur de Pokémon Play It! (Base Set + Fossil, 164 cartes, IA complète, offline)",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
+  "background_color": "#1a1a2e",
+  "theme_color": "#3b4cca",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["games", "entertainment"],
+  "shortcuts": [
+    { "name": "Partie rapide", "url": "/?quick=1", "description": "Lancer une partie contre l'IA" },
+    { "name": "Constructeur de deck", "url": "/?deck=1", "description": "Créer vos propres decks" }
+  ]
+}
