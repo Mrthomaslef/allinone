@@ -117,7 +117,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '890ea65-1794173760';
+      var BUILD = 'af5c4dc-1794174500';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -20398,7 +20398,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Une belle éclosion ! Ton Pokémon s'épanouit.", "L'évolution, c'est la croissance naturelle… j'approuve."],
         playerTrainer: ["Intéressant, tu cultives tes options.", "Bonne gestion de tes ressources, c'est rare."],
         playerAttack: ["Une petite égratignure… mes feuilles repoussent.", "Hmm, une simple piqûre de ronce."],
-        playerBigHit: ["Aïe ! Tu viens de tailler une branche maîtresse.", "Quelle vigueur ! Mon jardin va devoir se soigner."],
+        playerBigHit: ["Aïe ! Tu viens de tailler une branche maîtresse.", "Quelle vigueur ! Mon jardin va devoir se soigner.", "Une tempête de grêle sur mes bourgeons !", "Tu as de la sève dans les veines, toi !"],
+        trainerPlay: ["Un peu d'engrais, et tout repart de plus belle.", "Je taille, je replante, je fais circuler l'Énergie.", "Chaque carte trouve sa place dans mon jardin."],
+        koPlayer: ["Fauché comme une herbe folle !", "Mon Florizarre a bien pris racine, désolée !", "Une feuille de plus dans mon herbier de Récompenses."],
+        koSelf: ["Une fleur fane… une autre éclora.", "Tu as arraché ma plus belle pousse !", "Mon jardin perd une feuille, pas ses racines."],
         playerRetreat: ["Un repli prudent, comme une plante qui se tourne vers le soleil.", "Sage rotation."],
         leading: ["Mon herbier se remplit doucement…"],
         trailing: ["Ton jardin pousse plus vite que le mien… je dois m'adapter."]
@@ -20408,7 +20411,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Ouh, il a grandi ! Il brûlera mieux !", "Évolue autant que tu veux, Arcanin va tout cramer !"],
         playerTrainer: ["Profite de tes Dresseurs tant que Psykokwak dort !", "Encore une carte Dresseur ? T'es accro ou quoi ?"],
         playerAttack: ["C'est tout ?! J'ai même pas senti la chaleur !", "Pfff, une chatouille !"],
-        playerBigHit: ["OUCH ! Ok, ok, celle-là piquait !", "Hé ! Doucement, j'avais pas fini de chauffer !"],
+        playerBigHit: ["OUCH ! Ok, ok, celle-là piquait !", "Hé ! Doucement, j'avais pas fini de chauffer !", "Wouah ! T'as mis le feu aux poudres !", "Ça brûle ! Mais moi aussi je brûle !"],
+        trainerPlay: ["Hop hop hop, je fouille, je trouve, j'explose !", "Accélération maximale !", "Une carte de plus dans la chaudière !"],
+        koPlayer: ["Carbonisé ! Au suivant !", "Haha ! Tu sens l'odeur du roussi ?", "Électrode a tout fait sauter, et c'est pas fini !"],
+        koSelf: ["Aïe aïe aïe ! Ma mèche s'est éteinte !", "Ok, celle-là, je l'avais pas vue venir !", "Grrr ! Tu viens de rallumer ma colère !"],
         playerRetreat: ["Tu fuis déjà ? Haha !", "Retraite ? Lâcheur !"],
         leading: ["Regarde le score, ça sent le roussi pour toi !"],
         trailing: ["Grrr… je vais exploser, et toi avec !"]
@@ -20418,7 +20424,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Évolution prévue. Rien ne change.", "Plus de PV… plus d'eau à verser."],
         playerTrainer: ["Prévisible.", "Une ressource de moins dans ton deck."],
         playerAttack: ["Dégâts acceptables.", "Noté."],
-        playerBigHit: ["…Pas anticipé. Recalcul.", "Gros impact. La marée se retire un instant."],
+        playerBigHit: ["…Pas anticipé. Recalcul.", "Gros impact. La marée se retire un instant.", "Courant contraire. Intéressant.", "Impact significatif. J'ajuste."],
+        trainerPlay: ["Danse de la Pluie. Le niveau monte.", "Ressource optimale. Exécution.", "Tout s'écoule selon le calcul."],
+        koPlayer: ["Submergé.", "La marée ne laisse rien derrière elle.", "Résultat conforme aux prévisions."],
+        koSelf: ["Une perte. Elle était dans mes calculs.", "La vague se brise… pour mieux revenir.", "Tu as trouvé la faille. Je la colmate."],
         playerRetreat: ["Retraite. Tu crains le courant.", "Repli logique."],
         leading: ["Le niveau monte. Tu coules."],
         trailing: ["Écart temporaire. Les statistiques sont de mon côté."]
@@ -20428,7 +20437,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Quelle entrée en scène ! Le public adore !", "Changement de costume réussi !"],
         playerTrainer: ["Bien joué, l'art des coulisses !", "Un accessoire de scène ? J'adore !"],
         playerAttack: ["Joli numéro ! Mais le spectacle continue.", "Le public applaudit poliment…"],
-        playerBigHit: ["Waouh ! Ça, c'est un final de premier acte !", "Le public est debout ! Quelle frappe !"],
+        playerBigHit: ["Waouh ! Ça, c'est un final de premier acte !", "Le public est debout ! Quelle frappe !", "Ouh là ! Quel effet spécial !", "Belle chorégraphie, je dois l'admettre !"],
+        trainerPlay: ["Entrée en scène d'un nouveau danseur !", "Plus il y a de monde sur le Banc, plus la vague est haute !", "Et maintenant, un tour de magie pour le public !"],
+        koPlayer: ["Rideau ! Merci d'être venu !", "La foule en délire ! Encore une Récompense !", "La vague déferle, et tu bois la tasse !"],
+        koSelf: ["Aïe ! Un danseur quitte la piste !", "Bravo ! Même moi j'applaudis !", "Le spectacle continue, avec un nouveau premier rôle !"],
         playerRetreat: ["Une sortie côté jardin, élégant !", "Petit changement de distribution ?"],
         leading: ["Le public scande mon nom !"],
         trailing: ["Tu voles la vedette… mais le show n'est pas fini !"]
@@ -20438,7 +20450,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Une marionnette plus grande a juste plus de fils.", "Évolue… je n'en aurai que plus à manipuler."],
         playerTrainer: ["Tes cartes Dresseur ? Des accessoires dans ma pièce.", "Tout cela était écrit dans mon script."],
         playerAttack: ["Ces dégâts ? Je vais simplement les déplacer.", "Une ombre sur mon miroir. Rien de plus."],
-        playerBigHit: ["Hmm… une réplique inattendue dans ma pièce.", "Brutal. Leveinard absorbera cela."],
+        playerBigHit: ["Hmm… une réplique inattendue dans ma pièce.", "Brutal. Leveinard absorbera cela.", "Une tirade puissante… je la réécrirai.", "Mes fils vibrent. Tu tires fort."],
+        trainerPlay: ["Les pions bougent selon ma volonté.", "Je déplace un dégât… puis un autre… et un autre.", "Le miroir de M. Mime renvoie tout."],
+        koPlayer: ["Le rideau tombe sur ta marionnette.", "Tes propres coups t'ont achevé. Délicieux.", "Exactement comme dans mon script."],
+        koSelf: ["Une marionnette tombe. J'en ai d'autres.", "Hmm… tu as coupé un fil.", "Applaudissements polis pour cette surprise."],
         playerRetreat: ["Tu changes de masque ? Je te vois quand même.", "La marionnette quitte la scène… pour l'instant."],
         leading: ["Le rideau se referme lentement sur toi."],
         trailing: ["Tu crois mener ? L'illusion est parfaite."]
@@ -20448,7 +20463,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Tu évolues ? Moi, je frappe pendant ce temps.", "Joli. Trop lent."],
         playerTrainer: ["Tu brasses des cartes, moi je gagne des tours.", "Inutile. Le tempo est à moi."],
         playerAttack: ["C'est censé me faire peur ?", "Mouais. Pas impressionné."],
-        playerBigHit: ["…Pas mal. Profite, ça n'arrivera pas deux fois.", "Coup de chance. Rien de plus."],
+        playerBigHit: ["…Pas mal. Profite, ça n'arrivera pas deux fois.", "Coup de chance. Rien de plus.", "Tch. Bonne frappe.", "OK. Là, tu m'as énervé."],
+        trainerPlay: ["PlusPower. Fin de la discussion.", "Pas le temps de réfléchir, je frappe.", "Je te prive d'Énergie, tu joues dans le vide."],
+        koPlayer: ["Trop facile.", "Suivant.", "Tu tiens combien de tours encore ?"],
+        koSelf: ["Pff. J'en ai trois autres prêts.", "Coup de bol. Je recommence.", "Tu viens juste de réveiller le Haymaker."],
         playerRetreat: ["Retraite ? Tu viens de m'offrir un tour.", "Fuir, c'est déjà perdre."],
         leading: ["Je mène. Comme toujours."],
         trailing: ["Tu mènes ? Profite. C'est temporaire."]
@@ -20458,7 +20476,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Oh, une mise à jour matérielle ! Trop cool !", "Version 2.0 ! J'adore les upgrades !"],
         playerTrainer: ["Ooh, une pièce détachée ! Je peux l'emprunter ?", "Hihi, tu bricoles aussi ?"],
         playerAttack: ["Bzzt ! Petite surtension, rien de grave.", "Mes capteurs ont à peine bougé !"],
-        playerBigHit: ["AÏE ! Ça fume ! Où est mon tournevis ?!", "Pic de puissance ! Faut que je renforce le blindage."],
+        playerBigHit: ["AÏE ! Ça fume ! Où est mon tournevis ?!", "Pic de puissance ! Faut que je renforce le blindage.", "Alerte rouge ! Surchauffe !", "Wow ! Faut que je mesure ça !"],
+        trainerPlay: ["Clic, clac, je visse une nouvelle pièce !", "Installation du module bonus… terminée !", "Hihi, regarde ce que j'ai bricolé !"],
+        koPlayer: ["Bzzzt ! Hors service !", "Expérience réussie ! Je note ça !", "Panne générale chez toi, hihi !"],
+        koSelf: ["Nooon ! Mon prototype !", "Erreur système… je redémarre !", "Pas grave, j'ai des pièces de rechange !"],
         playerRetreat: ["Tu changes de pile ? Bonne idée !", "Rotation des batteries, malin !"],
         leading: ["Mes calculs étaient justes, hihi !"],
         trailing: ["Hmm, bug dans mon algorithme… je corrige !"]
@@ -20468,7 +20489,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Plus fort. Pas plus rapide.", "L'évolution prend du temps. Le froid aussi."],
         playerTrainer: ["Une préparation. Bien.", "Tu t'organises. Moi aussi."],
         playerAttack: ["Je tiens.", "Un flocon."],
-        playerBigHit: ["…Solide. Tu as de la poigne.", "La glace craque. Elle ne cède pas."],
+        playerBigHit: ["…Solide. Tu as de la poigne.", "La glace craque. Elle ne cède pas.", "Froid mordant. Bien.", "Je vacille. Je ne tombe pas."],
+        trainerPlay: ["Silence. Préparation.", "Chaque Énergie au bon endroit.", "Le gel s'installe."],
+        koPlayer: ["Figé.", "Le blizzard t'emporte.", "Plus rien ne bouge."],
+        koSelf: ["La glace fond. Elle regèlera.", "Bien joué. Je l'admets.", "Un flocon tombe. L'hiver reste."],
         playerRetreat: ["Repli. Le froid te suit.", "Tu recules. J'avance."],
         leading: ["Le blizzard se lève."],
         trailing: ["Tu mènes. Le blizzard ne fait que commencer."]
@@ -20478,7 +20502,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Plus gros. Pas assez.", "Hm. Grand."],
         playerTrainer: ["Préparation. Utile.", "Hm."],
         playerAttack: ["Rien.", "Je tiens."],
-        playerBigHit: ["…Ça, je l'ai senti.", "Bon coup."],
+        playerBigHit: ["…Ça, je l'ai senti.", "Bon coup.", "Hm. Fort.", "Le mur tremble."],
+        trainerPlay: ["Prêt.", "Je renforce.", "Étape suivante."],
+        koPlayer: ["Tombé.", "Le mur tient.", "Pas de passage."],
+        koSelf: ["Hm. Une fissure.", "Bien frappé.", "Le suivant tiendra."],
         playerRetreat: ["Recule. Normal.", "Fuite."],
         leading: ["La porte reste fermée."],
         trailing: ["Ça ne passe pas encore."]
@@ -20488,7 +20515,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Une évolution ! Profite, avant que Ptéra se réveille !", "Oh ! Ça mérite une note dans mon carnet de fouilles !"],
         playerTrainer: ["Belle trouvaille ! Tu fouilles bien ton deck.", "Tu as un vrai flair d'archéologue !"],
         playerAttack: ["Ouille, un petit éboulement !", "Ça a juste dépoussiéré mon Pokémon !"],
-        playerBigHit: ["Woah ! Effondrement de galerie !", "Quel séisme ! Tout mon chantier tremble !"],
+        playerBigHit: ["Woah ! Effondrement de galerie !", "Quel séisme ! Tout mon chantier tremble !", "Aïe ! Ça s'écroule de partout !", "Wow, un vrai tremblement de terre !"],
+        trainerPlay: ["Coup de pioche, et hop, une trouvaille !", "Je creuse encore un peu…", "Mon carnet dit que c'est le bon moment !"],
+        koPlayer: ["Fossilisé ! Direction mon musée !", "Ptéra veille, plus rien n'évolue !", "Une pièce rare pour ma vitrine !"],
+        koSelf: ["Ma galerie s'effondre !", "Bien vu ! Tu as trouvé le point faible !", "Pas grave, j'ai d'autres fossiles en réserve !"],
         playerRetreat: ["Repli stratégique vers le camp de base !", "On change d'équipe de fouille ?"],
         leading: ["Ma collection de Récompenses s'agrandit !"],
         trailing: ["Tu me devances ! Il faut que je creuse plus profond !"]
@@ -20498,7 +20528,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Quelle transformation ! Digne d'un troisième acte.", "Un changement de costume magnifique."],
         playerTrainer: ["Un jeu de coulisses tout en finesse.", "Élégant. Très élégant."],
         playerAttack: ["Une réplique bien timide, voyons…", "Le public attend plus de passion !"],
-        playerBigHit: ["Bravo ! Voilà une tirade qui porte !", "Quelle intensité… même moi j'en frissonne."],
+        playerBigHit: ["Bravo ! Voilà une tirade qui porte !", "Quelle intensité… même moi j'en frissonne.", "Quel coup de théâtre ! Je chancelle !", "Ah ! Une réplique digne d'un premier rôle !"],
+        trainerPlay: ["Que l'on change les projecteurs !", "Entracte… et retour en grande pompe !", "Un accessoire choisi avec goût."],
+        koPlayer: ["Et tu quittes la scène, sous mes applaudissements !", "Bravo, bravo ! Moi, bien sûr.", "Le rideau tombe, la salle est debout !"],
+        koSelf: ["Un acteur s'effondre… quelle tragédie !", "Tu m'as volé ma réplique !", "La pièce n'est pas finie, mon cher !"],
         playerRetreat: ["Une sortie de scène bien chorégraphiée.", "Tu laisses la scène à un autre acteur ?"],
         leading: ["Le public est conquis… par moi."],
         trailing: ["Tu voles mes projecteurs ? Insolent !"]
@@ -20508,7 +20541,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Oh, une nouvelle forme… Je pourrais la copier.", "Joli. Je me demande ce que ça donne en miroir."],
         playerTrainer: ["Je retiens chaque geste… pour mieux t'imiter.", "Intéressant, ce tour de passe-passe."],
         playerAttack: ["Tu frappes ton reflet… ça fait mal aux deux.", "Hihi, presque."],
-        playerBigHit: ["Aïe… ton reflet frappe fort.", "Ce coup-là, je vais le copier."],
+        playerBigHit: ["Aïe… ton reflet frappe fort.", "Ce coup-là, je vais le copier.", "Oh… ton reflet a de la force.", "Aïe. Le miroir a tremblé."],
+        trainerPlay: ["Je deviens toi… presque.", "Regarde bien… et maintenant ?", "Un reflet de plus sur le terrain."],
+        koPlayer: ["Ton double t'a eu, hihi.", "Le miroir ne ment jamais.", "Tu t'es battu contre toi-même… et tu as perdu."],
+        koSelf: ["Crac… un éclat de miroir.", "Tu as brisé mon reflet ? Il en reste.", "Oh… celui-là, je ne l'avais pas vu."],
         playerRetreat: ["Tu changes de visage ? Moi aussi.", "On joue à cache-cache ?"],
         leading: ["Ton reflet gagne… étrange, non ?"],
         trailing: ["Tu mènes ? Ou est-ce le miroir qui ment ?"]
@@ -20518,7 +20554,10 @@ const TYPE_EMOJI = {
         playerEvolve: ["Bonne évolution. Au bon moment.", "Bien. Tu construis."],
         playerTrainer: ["Carte utile. Bien choisie.", "Tu gaspilles moins qu'avant."],
         playerAttack: ["Correct.", "Je m'y attendais."],
-        playerBigHit: ["Ça, c'était du niveau de la Ligue.", "Remarquable. Continue."],
+        playerBigHit: ["Ça, c'était du niveau de la Ligue.", "Remarquable. Continue.", "Belle frappe. Rare.", "Tu progresses vite."],
+        trainerPlay: ["Rien n'est laissé au hasard.", "Une carte, un rôle.", "La bonne ressource, au bon moment."],
+        koPlayer: ["Une Récompense de plus.", "C'était la seule issue.", "Tu as joué. J'avais déjà joué."],
+        koSelf: ["Intéressant. Continue.", "Tu as trouvé l'angle. Bravo.", "Voilà pourquoi j'aime la Ligue."],
         playerRetreat: ["Une retraite au bon moment est un art.", "Sage."],
         leading: ["Chaque Récompense prise est un pas de plus."],
         trailing: ["Enfin quelqu'un qui me pousse."]
@@ -20528,6 +20567,7 @@ const TYPE_EMOJI = {
     let advLastRemark = '';
     let advBubbleTimer = null;
     let advLastSpeakTurn = -99;
+    const advQuoteBags = {};
     function isAdvMatch() { return !!(game && game.mode === 'adventure' && game.advTrainer); }
     function renderAdvBubble() {
       const el = document.getElementById('julietteSpeech');
@@ -20560,8 +20600,15 @@ const TYPE_EMOJI = {
       const R = ADVENTURE_REMARKS[tr.id] || {};
       const q = tr.quotes[event];
       const pool = [...(R[event] || []), ...(Array.isArray(q) ? q : (q ? [q] : []))];
-      const choices = pool.filter((t) => t !== advLastRemark);
-      const pick = (choices.length ? choices : pool)[Math.floor(Math.random() * (choices.length || pool.length))];
+      // Sac mélangé par dresseur et par moment : toutes les répliques (4-5) passent avant qu'une se répète
+      const bagKey = `${tr.id}:${event}`;
+      let bag = (advQuoteBags[bagKey] || []).filter((t) => pool.includes(t));
+      if (!bag.length) {
+        bag = pool.slice().sort(() => Math.random() - 0.5);
+        if (bag.length > 1 && bag[0] === advLastRemark) bag.push(bag.shift());
+      }
+      const pick = bag.shift();
+      advQuoteBags[bagKey] = bag;
       if (pick) {
         advLastSpeakTurn = turn;
         advSpeak(pick);
