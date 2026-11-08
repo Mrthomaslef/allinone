@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '0fb664e-1794169731';
+      var BUILD = '93e24d7-1794169947';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -1336,6 +1336,9 @@
 
     /* Boutons d'attaque 2 lignes */
     .atk-btn { text-align: left; }
+    .atk-why { display: block; text-align: left; font: 900 9.5px/1.15 'Nunito', sans-serif; letter-spacing: .01em; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .atk-why.up { color: #b45309; }
+    .atk-why.down { color: #475569; }
     .atk-dmg.atk-dmg-up { background: linear-gradient(135deg, #f59e0b, #dc2626); box-shadow: 0 0 0 2px #fde047, 0 0 10px rgba(253,224,71,.65); }
     .atk-dmg.atk-dmg-down { background: #475569; }
     .atk-dmg.atk-dmg-pop { animation: atkDmgPop .55s cubic-bezier(.2,1.6,.4,1); }
@@ -21581,6 +21584,20 @@ const TYPE_EMOJI = {
       }
       return { printed, final, headsPlus: spec.headsPlus || 0, log };
     }
+    // Raison courte affichée sous le nom de l'attaque quand les dégâts diffèrent du chiffre imprimé
+    function attackDmgReason(owner, atk) {
+      const pv = attackDamagePreview(owner, atk);
+      if (!pv || pv.coinLabel || pv.final === pv.printed || !pv.log.length) return '';
+      const short = pv.log.map((l) => l
+        .replace(/^Faiblesse ×2$/, '×2 Faiblesse')
+        .replace(/^Résistance −30$/, '−30 Résistance')
+        .replace(/^\+(\d+) Énergies en plus$/, '+$1 Énergies')
+        .replace(/^Mur invisible de .*/, 'Mur invisible')
+        .replace(/^Armure de Kabuto .*/, 'Armure de Kabuto')
+        .replace(/^dégâts prévenus$/, 'Protégé'));
+      const up = pv.final > pv.printed;
+      return `<span class="atk-why ${up ? 'up' : 'down'}">${short.slice(0, 2).join(' · ')}</span>`;
+    }
     function attackDmgBadge(owner, atk, i, dim) {
       const pv = attackDamagePreview(owner, atk);
       if (!pv) return atk && atk.damage ? `<span class="atk-dmg ${dim ? 'opacity-60' : ''}">${atk.damage}</span>` : '';
@@ -21664,6 +21681,7 @@ const TYPE_EMOJI = {
               ${attackDmgBadge('player', atk, i, !payable)}
             </span>
             <span class="text-[11.5px] font-black leading-tight text-left line-clamp-2">${atk.name}</span>
+            ${attackDmgReason('player', atk)}
           </button>
         `;
       }).join('');
@@ -21722,7 +21740,7 @@ const TYPE_EMOJI = {
           const ok = use.ok;
           const btn = document.createElement('button');
           btn.className = `atk-btn w-full min-h-[44px] px-3 py-2 rounded-xl flex items-center justify-between gap-2 ${ok ? 'btn-token' : 'bg-slate-800 text-slate-500 border border-white/10'}`;
-          btn.innerHTML = `<span class="flex items-center gap-2 min-w-0"><span class="flex -space-x-0.5 shrink-0">${(atk.cost || []).map((c) => energyOrb(c, 16)).join('')}</span><span class="min-w-0"><span class="block text-[13px] font-black truncate">${atk.name}</span>${ok ? '' : `<span class="block text-[11px] font-semibold opacity-80 truncate">${use.reason || ''}</span>`}</span></span>${attackDmgBadge('player', atk, i, false)}`;
+          btn.innerHTML = `<span class="flex items-center gap-2 min-w-0"><span class="flex -space-x-0.5 shrink-0">${(atk.cost || []).map((c) => energyOrb(c, 16)).join('')}</span><span class="min-w-0"><span class="block text-[13px] font-black truncate">${atk.name}</span>${attackDmgReason('player', atk)}${ok ? '' : `<span class="block text-[11px] font-semibold opacity-80 truncate">${use.reason || ''}</span>`}</span></span>${attackDmgBadge('player', atk, i, false)}`;
           btn.disabled = !ok;
           btn.onclick = () => { closeCardModal(); executePlayerAttack(i); };
           actionsEl.appendChild(btn);
