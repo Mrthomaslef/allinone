@@ -794,12 +794,18 @@
         Set de Base · Jungle · Fossile — <span class="text-yellow-300 font-bold">228 Cartes Officielles FR HD</span>
       </p>
 
-      <!-- Barre d'accès rapide : Collection 228 Cartes & Académie -->
-      <div class="mt-2.5 flex flex-wrap items-center justify-center gap-2">
-        <button onclick="openCollectionModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-emerald-300 hover:border-emerald-400/60 hover:text-emerald-200 transition flex items-center gap-1.5 active:scale-95">
+      <!-- Barre d'accès rapide : Collection 228 Cartes, Pièces, Boosters Gratuits & Académie -->
+      <div class="mt-2.5 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+        <button onclick="openCollectionModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-emerald-300 hover:border-emerald-400/60 hover:text-emerald-200 transition flex items-center gap-1.5 active:scale-95">
           <span>📖</span> Galerie (<span id="menuColProgress">0/228</span>)
         </button>
-        <button onclick="openAcademyModal()" class="glass-pill px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-amber-300 hover:border-amber-400/60 hover:text-amber-200 transition flex items-center gap-1.5 active:scale-95">
+        <button onclick="switchMenuTab('booster')" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-yellow-300 border border-yellow-400/40 hover:border-yellow-300 transition flex items-center gap-1.5 active:scale-95" title="100 pièces par victoire · 1 Booster = 100 pièces">
+          <span>🪙</span> <span id="menuCoinsCount">0</span> <span class="text-[10.5px] text-amber-200/90 font-bold">pièces</span>
+        </button>
+        <button onclick="switchMenuTab('booster')" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-cyan-200 border border-cyan-400/40 hover:border-cyan-300 transition flex items-center gap-1.5 active:scale-95" title="3 Boosters gratuits toutes les heures">
+          <span>🎁</span> <span id="menuFreeBoostersBadge">3/3 gratuits</span>
+        </button>
+        <button onclick="openAcademyModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-extrabold text-amber-300 hover:border-amber-400/60 hover:text-amber-200 transition flex items-center gap-1.5 active:scale-95">
           <span>🎓</span> Quiz Académie
         </button>
       </div>
@@ -1067,6 +1073,31 @@
           </div>
         </div>
 
+        <!-- Barre Économie : 3 Boosters Gratuits / Heure & Pièces (100 🪙 / Victoire, 100 🪙 / Booster) -->
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div class="p-2.5 rounded-xl bg-cyan-950/60 border border-cyan-400/40 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40 flex items-center justify-center text-base shrink-0">🎁</span>
+              <div class="min-w-0">
+                <div class="text-[11px] font-black text-cyan-200 uppercase tracking-wide">Boosters Gratuits / Heure</div>
+                <div id="boosterFreeStatusSub" class="text-[10.5px] font-semibold text-cyan-100/85 truncate">3 gratuits disponibles chaque heure</div>
+              </div>
+            </div>
+            <span id="boosterFreeCountBadge" class="px-2.5 py-1 rounded-lg bg-cyan-400 text-slate-950 font-black text-xs whitespace-nowrap shrink-0 shadow">3 / 3</span>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-amber-950/60 border border-yellow-400/45 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-yellow-400/20 border border-yellow-400/45 flex items-center justify-center text-base shrink-0">🪙</span>
+              <div class="min-w-0">
+                <div class="text-[11px] font-black text-yellow-300 uppercase tracking-wide">Trésor du Dresseur</div>
+                <div class="text-[10.5px] font-semibold text-amber-100/85 truncate">🏆 Victoire = +100 🪙 · Booster = 100 🪙</div>
+              </div>
+            </div>
+            <span id="boosterCoinsBadge" class="px-2.5 py-1 rounded-lg bg-yellow-400 text-slate-950 font-black text-xs whitespace-nowrap shrink-0 shadow">0 🪙</span>
+          </div>
+        </div>
+
         <!-- Jauge de progression des 228 cartes -->
         <div class="w-full bg-black/40 p-2.5 rounded-xl border border-white/10 space-y-1.5">
           <div class="flex items-center justify-between text-[11px] font-bold">
@@ -1093,7 +1124,7 @@
               Choisis ton Booster de 5 Cartes à déchirer
             </h2>
           </div>
-          <span class="text-[10px] font-mono text-amber-200 font-bold">1 Holo / 3 Packs ✨</span>
+          <span class="text-[10px] font-mono text-amber-200 font-bold">🎁 3 Gratuits/h ou 🪙 100</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1114,8 +1145,8 @@
               <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">Dracaufeu · Tortank · Florizarre</div>
               <p class="text-[10px] text-slate-300/80 mt-0.5">Mewtwo, Alakazam, Léviator, Électhor</p>
             </div>
-            <span class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
-              📦 Ouvrir (5 Cartes)
+            <span id="boosterBtnCta-base" class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
+              🎁 Ouvrir GRATUIT (3/3)
             </span>
           </button>
 
@@ -1136,8 +1167,8 @@
               <div class="text-[10.5px] text-emerald-200/90 font-semibold mt-0.5">Insécateur · Pyroli · Ronflex</div>
               <p class="text-[10px] text-slate-300/80 mt-0.5">Voltali, Aquali, Kangourex, Mélodelfe</p>
             </div>
-            <span class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
-              🌿 Ouvrir (5 Cartes)
+            <span id="boosterBtnCta-jungle" class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
+              🎁 Ouvrir GRATUIT (3/3)
             </span>
           </button>
 
@@ -1158,8 +1189,8 @@
               <div class="text-[10.5px] text-amber-200/90 font-semibold mt-0.5">Ptéra · Artikodin · Dracolosse</div>
               <p class="text-[10px] text-slate-300/80 mt-0.5">Ectoplasma, Lokhlass, Sulfura, Kabutops</p>
             </div>
-            <span class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
-              🦖 Ouvrir (5 Cartes)
+            <span id="boosterBtnCta-fossil" class="btn-gold w-full py-2 rounded-xl text-xs font-black uppercase tracking-wide mt-auto group-hover:scale-[1.02] transition">
+              🎁 Ouvrir GRATUIT (3/3)
             </span>
           </button>
         </div>
@@ -1217,9 +1248,10 @@
           <span>Multi</span>
           <span id="multiNavDot" class="hidden absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-slate-950 animate-ping"></span>
         </button>
-        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
+        <button id="tabBtnBooster" onclick="switchMenuTab('booster')" class="relative py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-white/5 border border-white/10 text-amber-300 hover:text-yellow-200 hover:bg-white/10 active:scale-95">
           <span class="text-base sm:text-sm leading-none">✨</span>
           <span>Boosters</span>
+          <span id="navBoosterBadge" class="px-1.5 py-0.2 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black leading-tight">3</span>
         </button>
       </div>
     </nav>
@@ -1502,11 +1534,12 @@
   <div id="boosterOpenModal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-between p-4 overflow-y-auto overflow-x-hidden" style="overscroll-behavior:contain">
     <!-- Barre supérieure -->
     <div class="w-full max-w-xl flex items-center justify-between gap-2 z-20 shrink-0">
-      <div class="flex items-center gap-2 min-w-0">
-        <span id="boosterSetBadge" class="text-[11px] font-black uppercase tracking-wider whitespace-nowrap truncate px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Set de Base · 1999</span>
+      <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+        <span id="boosterSetBadge" class="text-[11px] font-black uppercase tracking-wider whitespace-nowrap truncate px-2.5 sm:px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Set de Base · 1999</span>
         <span id="boosterStepPill" class="text-xs font-mono font-bold text-slate-300 whitespace-nowrap">5 cartes</span>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <span id="boosterModalWalletPill" class="px-2.5 py-1 rounded-xl bg-black/50 border border-yellow-400/35 text-[11px] font-extrabold text-yellow-200 whitespace-nowrap">🎁 3/3 · 🪙 0</span>
         <button id="boosterSkipBtn" onclick="revealAllBoosterCards()" class="hidden glass-pill px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap text-amber-200 hover:text-white">
           ⏩ Tout révéler
         </button>
@@ -20091,15 +20124,24 @@ const TYPE_EMOJI = {
           targetSide: cloneSide(game.ai)
         });
       }
+      const isWin = winner === 'player';
+      let earnedCoinsNow = false;
+      if (isWin && !game.rewardGranted) {
+        game.rewardGranted = true;
+        earnedCoinsNow = true;
+        boosterSave.coins = (boosterSave.coins || 0) + WIN_REWARD_COINS;
+        saveBoosterData();
+        sfx('coin');
+      }
       game.gameOver = true;
-      setJulietteMood(winner === 'player' ? 'surprised' : 'happy');
+      setJulietteMood(isWin ? 'surprised' : 'happy');
       renderBoard();
       const oppLabel = game.mode === 'multi' ? (game.oppPseudo || 'ton adversaire') : game.mode === 'quick' ? 'l\'IA' : 'Juliette';
       const isMultiMatch = game.mode === 'multi';
       const usedDeckKey = game.player.deckKey;
       setTimeout(() => {
         openPickerModal(
-          winner === 'player' ? `🏆 VICTOIRE ! Tu as battu ${oppLabel} !` : `💫 ${oppLabel} remporte la partie !`,
+          isWin ? `🏆 VICTOIRE ! Tu as battu ${oppLabel} !` : `💫 ${oppLabel} remporte la partie !`,
           `${reason} Veux-tu rejouer une partie ?`,
           [],
           () => {},
@@ -20107,8 +20149,23 @@ const TYPE_EMOJI = {
         );
         const grid = document.getElementById('pickerGrid');
         grid.className = 'flex flex-col gap-2';
+        const winBannerHtml = isWin ? `
+          <div class="w-full p-2.5 rounded-xl bg-gradient-to-r from-amber-500/25 via-yellow-400/20 to-amber-500/25 border border-yellow-400/60 flex items-center justify-between gap-2 mb-1 shadow-lg">
+            <div class="flex items-center gap-2 text-left min-w-0">
+              <span class="text-xl leading-none shrink-0">🪙</span>
+              <div class="min-w-0">
+                <div class="text-xs font-black text-yellow-300 uppercase tracking-wide">+${WIN_REWARD_COINS} Pièces gagnées !</div>
+                <div class="text-[10.5px] font-bold text-amber-100/90 truncate">Solde : ${boosterSave.coins} 🪙 (1 Booster = ${BOOSTER_COST_COINS} 🪙)</div>
+              </div>
+            </div>
+            <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('booster');" class="px-2.5 py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-[10.5px] uppercase tracking-wide shrink-0 shadow active:scale-95 transition">
+              ✨ Boosters
+            </button>
+          </div>
+        ` : '';
         if (isMultiMatch) {
           grid.innerHTML = `
+            ${winBannerHtml}
             <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); clickMultiGo();" class="w-full py-3 rounded-xl font-extrabold text-xs bg-cyan-400 text-slate-950">
               🚀 Revanche Multijoueur (GO avec ${DECK_META[usedDeckKey]?.short || usedDeckKey})
             </button>
@@ -20118,6 +20175,7 @@ const TYPE_EMOJI = {
           `;
         } else {
           grid.innerHTML = `
+            ${winBannerHtml}
             <button onclick="closePickerModal(); startMatch('${usedDeckKey}')" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
               🔄 Rejouer avec le Deck ${usedDeckKey}
             </button>
@@ -20272,8 +20330,21 @@ const TYPE_EMOJI = {
       .filter((c, i, a) => a.findIndex(x => x.setId === c.setId) === i)
       .map(c => ({ ...c, rarity: getCardRarity(c) }));
 
-    // Sauvegarde persistante de la collection & des boosters ouverts
-    let boosterSave = { counts: {}, packsOpened: 0, holosPulled: 0 };
+    // Constantes d'économie : 3 boosters gratuits / heure, +100 pièces par victoire, 100 pièces le booster
+    const MAX_FREE_BOOSTERS = 3;
+    const FREE_BOOSTER_RESET_MS = 60 * 60 * 1000; // 1 heure
+    const BOOSTER_COST_COINS = 100;
+    const WIN_REWARD_COINS = 100;
+
+    // Sauvegarde persistante de la collection, des pièces & des boosters ouverts
+    let boosterSave = {
+      counts: {},
+      packsOpened: 0,
+      holosPulled: 0,
+      coins: 0,
+      freeBoosters: MAX_FREE_BOOSTERS,
+      freeResetAt: 0
+    };
     try {
       const raw = localStorage.getItem('ppi_v2_booster_save');
       if (raw) {
@@ -20282,23 +20353,144 @@ const TYPE_EMOJI = {
           boosterSave.counts = parsed.counts || {};
           boosterSave.packsOpened = parsed.packsOpened || 0;
           boosterSave.holosPulled = parsed.holosPulled || 0;
+          boosterSave.coins = typeof parsed.coins === 'number' ? Math.max(0, Math.floor(parsed.coins)) : 0;
+          boosterSave.freeBoosters = typeof parsed.freeBoosters === 'number'
+            ? Math.max(0, Math.min(MAX_FREE_BOOSTERS, Math.floor(parsed.freeBoosters)))
+            : MAX_FREE_BOOSTERS;
+          boosterSave.freeResetAt = typeof parsed.freeResetAt === 'number' ? parsed.freeResetAt : 0;
         }
       }
     } catch (_) {}
 
-    function saveBoosterData() {
+    function persistBoosterSaveRaw() {
       try {
         localStorage.setItem('ppi_v2_booster_save', JSON.stringify(boosterSave));
       } catch (_) {}
+    }
+
+    function syncFreeBoostersClock() {
+      const now = Date.now();
+      let changed = false;
+      if (boosterSave.freeBoosters >= MAX_FREE_BOOSTERS) {
+        if (boosterSave.freeBoosters !== MAX_FREE_BOOSTERS || boosterSave.freeResetAt !== 0) {
+          boosterSave.freeBoosters = MAX_FREE_BOOSTERS;
+          boosterSave.freeResetAt = 0;
+          changed = true;
+        }
+      } else {
+        if (!boosterSave.freeResetAt || boosterSave.freeResetAt <= 0) {
+          boosterSave.freeResetAt = now + FREE_BOOSTER_RESET_MS;
+          changed = true;
+        } else if (now >= boosterSave.freeResetAt) {
+          boosterSave.freeBoosters = MAX_FREE_BOOSTERS;
+          boosterSave.freeResetAt = 0;
+          changed = true;
+        }
+      }
+      if (changed) persistBoosterSaveRaw();
+      return changed;
+    }
+
+    function formatBoosterCountdown(ms) {
+      const totalSec = Math.max(0, Math.ceil(ms / 1000));
+      const m = Math.floor(totalSec / 60);
+      const s = totalSec % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function getBoosterNextResetLabel() {
+      syncFreeBoostersClock();
+      if (boosterSave.freeBoosters >= MAX_FREE_BOOSTERS || !boosterSave.freeResetAt) return '';
+      return formatBoosterCountdown(boosterSave.freeResetAt - Date.now());
+    }
+
+    function saveBoosterData() {
+      syncFreeBoostersClock();
+      persistBoosterSaveRaw();
       updateBoosterStatsUi();
     }
 
     function updateBoosterStatsUi() {
+      syncFreeBoostersClock();
       const ownedUnique = ALL_UNIQUE_CARDS.filter(c => (boosterSave.counts[c.setId] || 0) > 0).length;
       const pct = Math.round((ownedUnique / ALL_UNIQUE_CARDS.length) * 100);
+      const freeCount = boosterSave.freeBoosters;
+      const coins = boosterSave.coins || 0;
+      const countdown = getBoosterNextResetLabel();
+      const canBuyWithCoins = coins >= BOOSTER_COST_COINS;
+      const totalOpenableNow = freeCount + Math.floor(coins / BOOSTER_COST_COINS);
 
       const menuProg = document.getElementById('menuColProgress');
       if (menuProg) menuProg.textContent = `${ownedUnique}/${ALL_UNIQUE_CARDS.length}`;
+
+      const menuCoins = document.getElementById('menuCoinsCount');
+      if (menuCoins) menuCoins.textContent = `${coins}`;
+
+      const menuFreeBadge = document.getElementById('menuFreeBoostersBadge');
+      if (menuFreeBadge) {
+        menuFreeBadge.textContent = freeCount > 0
+          ? `${freeCount}/${MAX_FREE_BOOSTERS} gratuit${freeCount > 1 ? 's' : ''}${countdown ? ` · ⏱️${countdown}` : ''}`
+          : `0/${MAX_FREE_BOOSTERS} · ⏱️ ${countdown || '60:00'}`;
+      }
+
+      const navBadge = document.getElementById('navBoosterBadge');
+      if (navBadge) {
+        if (totalOpenableNow > 0) {
+          navBadge.textContent = `${totalOpenableNow}`;
+          navBadge.className = `px-1.5 py-0.2 rounded-full ${freeCount > 0 ? 'bg-emerald-400 text-slate-950' : 'bg-yellow-400 text-slate-950'} text-[10px] font-black leading-tight`;
+        } else {
+          navBadge.textContent = countdown || '0';
+          navBadge.className = 'px-1.5 py-0.2 rounded-full bg-slate-700 text-slate-300 text-[9.5px] font-bold leading-tight';
+        }
+      }
+
+      const freeBadge = document.getElementById('boosterFreeCountBadge');
+      if (freeBadge) {
+        freeBadge.textContent = `${freeCount} / ${MAX_FREE_BOOSTERS}`;
+        freeBadge.className = `px-2.5 py-1 rounded-lg font-black text-xs whitespace-nowrap shrink-0 shadow ${
+          freeCount > 0 ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-300 border border-white/15'
+        }`;
+      }
+
+      const freeSub = document.getElementById('boosterFreeStatusSub');
+      if (freeSub) {
+        freeSub.textContent = freeCount >= MAX_FREE_BOOSTERS
+          ? '✅ 3 boosters gratuits prêts à ouvrir !'
+          : `⏱️ Recharge (3/3) dans ${countdown}`;
+      }
+
+      const coinsBadge = document.getElementById('boosterCoinsBadge');
+      if (coinsBadge) {
+        coinsBadge.textContent = `${coins} 🪙`;
+      }
+
+      const modalWallet = document.getElementById('boosterModalWalletPill');
+      if (modalWallet) {
+        modalWallet.textContent = `🎁 ${freeCount}/${MAX_FREE_BOOSTERS}${countdown ? ` (${countdown})` : ''} · 🪙 ${coins}`;
+      }
+
+      const ctaText = freeCount > 0
+        ? `🎁 Ouvrir GRATUIT (${freeCount}/${MAX_FREE_BOOSTERS})`
+        : canBuyWithCoins
+        ? `🪙 Ouvrir (${BOOSTER_COST_COINS} pièces)`
+        : `🔒 ${BOOSTER_COST_COINS} 🪙 (ou ⏱️ ${countdown || '60:00'})`;
+
+      ['base', 'jungle', 'fossil'].forEach(s => {
+        const ctaEl = document.getElementById(`boosterBtnCta-${s}`);
+        if (ctaEl) {
+          ctaEl.textContent = ctaText;
+          ctaEl.style.opacity = (freeCount > 0 || canBuyWithCoins) ? '1' : '0.72';
+        }
+      });
+
+      const summaryReplayBtn = document.getElementById('boosterSummaryReplayBtnLabel');
+      if (summaryReplayBtn && activeBooster && activeBooster.meta) {
+        summaryReplayBtn.textContent = freeCount > 0
+          ? `🎁 Ouvrir un autre ${activeBooster.meta.short} (Gratuit · ${freeCount}/${MAX_FREE_BOOSTERS})`
+          : canBuyWithCoins
+          ? `🪙 Ouvrir un autre ${activeBooster.meta.short} (${BOOSTER_COST_COINS} pièces)`
+          : `🔒 ${BOOSTER_COST_COINS} 🪙 requis (ou ⏱️ ${countdown})`;
+      }
 
       const totalBadge = document.getElementById('boosterTotalOpenedBadge');
       if (totalBadge) totalBadge.textContent = `📦 ${boosterSave.packsOpened} pack${boosterSave.packsOpened > 1 ? 's' : ''} ouvert${boosterSave.packsOpened > 1 ? 's' : ''}`;
@@ -20321,6 +20513,12 @@ const TYPE_EMOJI = {
       });
     }
     updateBoosterStatsUi();
+    setInterval(() => {
+      const recharged = syncFreeBoostersClock();
+      if (recharged || boosterSave.freeBoosters < MAX_FREE_BOOSTERS) {
+        updateBoosterStatsUi();
+      }
+    }, 1000);
 
     function pickRandomDistinct(pool, count, excludeSetIds = new Set()) {
       const candidates = pool.filter(c => !excludeSetIds.has(c.setId));
@@ -20427,13 +20625,58 @@ const TYPE_EMOJI = {
       }
     }
 
+    function showNoBoosterAvailableModal() {
+      const countdown = getBoosterNextResetLabel() || '60:00';
+      const coins = boosterSave.coins || 0;
+      buzz([20, 40]);
+      openPickerModal(
+        '🔒 Plus de Booster disponible',
+        `Tu as déjà ouvert tes 3 boosters gratuits de l'heure (prochaine recharge de 3 boosters gratuits dans ${countdown}). Un booster supplémentaire coûte ${BOOSTER_COST_COINS} pièces (ton solde : ${coins} 🪙).`,
+        [],
+        () => {},
+        true
+      );
+      const grid = document.getElementById('pickerGrid');
+      grid.className = 'flex flex-col gap-2';
+      grid.innerHTML = `
+        <div class="w-full p-3 rounded-xl bg-amber-500/15 border border-yellow-400/45 text-left text-xs text-slate-200 space-y-1">
+          <div class="font-black text-yellow-300">💡 Comment obtenir un Booster tout de suite ?</div>
+          <div>🏆 Chaque victoire en partie te rapporte <strong>+${WIN_REWARD_COINS} pièces</strong>, soit exactement de quoi acheter <strong>1 Booster (${BOOSTER_COST_COINS} 🪙)</strong> !</div>
+        </div>
+        <button onclick="closePickerModal(); closeBoosterOpenModal(); switchMenuTab('quick');" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
+          ⚔️ Lancer un Duel IA (+${WIN_REWARD_COINS} 🪙 par victoire)
+        </button>
+        <button onclick="closePickerModal(); closeBoosterOpenModal(); switchMenuTab('tuto');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
+          🎓 Jouer en mode Guidé avec Juliette (+${WIN_REWARD_COINS} 🪙 par victoire)
+        </button>
+      `;
+    }
+
     function launchBoosterPack(setKey = 'base') {
+      syncFreeBoostersClock();
+      let paymentLabel = '';
+      if (boosterSave.freeBoosters > 0) {
+        boosterSave.freeBoosters -= 1;
+        if (!boosterSave.freeResetAt || boosterSave.freeResetAt <= Date.now()) {
+          boosterSave.freeResetAt = Date.now() + FREE_BOOSTER_RESET_MS;
+        }
+        paymentLabel = `🎁 Gratuit (${boosterSave.freeBoosters}/${MAX_FREE_BOOSTERS} restants)`;
+      } else if ((boosterSave.coins || 0) >= BOOSTER_COST_COINS) {
+        boosterSave.coins -= BOOSTER_COST_COINS;
+        sfx('coin');
+        paymentLabel = `🪙 Payé ${BOOSTER_COST_COINS} pièces`;
+      } else {
+        showNoBoosterAvailableModal();
+        return;
+      }
+
       const meta = BOOSTER_SETS[setKey] || BOOSTER_SETS.base;
       const packData = generateBoosterPack(meta.key);
       packData.cards.forEach(c => { const im = new Image(); im.src = c.img; });
       activeBooster = {
         meta,
         ...packData,
+        paymentLabel,
         phase: 'sealed', // 'sealed' | 'revealing' | 'summary'
         currentIdx: 0,
         currentFlipped: false,
@@ -20442,7 +20685,7 @@ const TYPE_EMOJI = {
 
       const modal = document.getElementById('boosterOpenModal');
       document.getElementById('boosterSetBadge').textContent = `${meta.name}`;
-      document.getElementById('boosterStepPill').textContent = `Sachet scellé · 5 Cartes`;
+      document.getElementById('boosterStepPill').textContent = `${paymentLabel} · 5 Cartes`;
       document.getElementById('boosterSkipBtn').classList.add('hidden');
       modal.classList.remove('hidden');
 
@@ -20997,10 +21240,20 @@ const TYPE_EMOJI = {
         </div>
       `;
 
+      syncFreeBoostersClock();
+      const freeLeft = boosterSave.freeBoosters;
+      const canBuy = (boosterSave.coins || 0) >= BOOSTER_COST_COINS;
+      const nextCountdown = getBoosterNextResetLabel() || '60:00';
+      const replayLabel = freeLeft > 0
+        ? `🎁 Ouvrir un autre ${meta.short} (Gratuit · ${freeLeft}/${MAX_FREE_BOOSTERS})`
+        : canBuy
+        ? `🪙 Ouvrir un autre ${meta.short} (${BOOSTER_COST_COINS} pièces)`
+        : `🔒 ${BOOSTER_COST_COINS} 🪙 requis (ou ⏱️ ${nextCountdown})`;
+
       footer.innerHTML = `
         <div class="flex flex-wrap items-center justify-center gap-2.5 w-full">
           <button onclick="launchBoosterPack('${meta.key}')" class="btn-gold px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wide shadow-lg flex items-center gap-1.5">
-            <span>📦</span> Ouvrir un autre Booster ${meta.short}
+            <span id="boosterSummaryReplayBtnLabel">${replayLabel}</span>
           </button>
           <button onclick="closeBoosterOpenModal(); switchMenuTab('booster');" class="glass-pill px-4 py-2.5 rounded-xl text-xs font-bold text-slate-200 hover:text-white">
             🔄 Changer d'extension
