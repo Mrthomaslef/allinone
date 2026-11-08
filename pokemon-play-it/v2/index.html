@@ -111,9 +111,15 @@
     }
     .hand-card {
       position: absolute; bottom: 12px; width: 66px; transform-origin: 50% 120%;
-      transition: transform .18s ease, box-shadow .18s ease;
+      transition: transform .16s cubic-bezier(.2,.9,.3,1.2), box-shadow .16s ease;
     }
-    .hand-card:active { transform: translateY(-16px) rotate(0deg) scale(1.08) !important; z-index: 60; }
+    .hand-card.hand-focus {
+      transform: translateY(-28px) rotate(0deg) scale(1.24) !important;
+      z-index: 80 !important;
+    }
+    .hand-card.hand-focus .tcg {
+      box-shadow: 0 22px 34px -10px rgba(0,0,0,.85), 0 0 0 2px rgba(253,224,71,.9);
+    }
     .bubble { background: rgba(2,6,23,0.82); border: 1px solid rgba(255,255,255,0.14); }
     button:disabled { opacity: .45; }
 
@@ -185,11 +191,8 @@
     .tilt.tilting { transition: transform .06s linear; box-shadow: 0 18px 30px -8px rgba(0,0,0,.7) !important; z-index: 30; }
     .tilt.tilting::after { opacity: 1; }
 
-    /* Main : survol (souris) */
-    @media (hover: hover) and (pointer: fine) {
-      .hand-card:hover { transform: translateY(-26px) rotate(0deg) scale(1.22) !important; z-index: 80 !important; }
-      .hand-card:hover .tcg { box-shadow: 0 22px 34px -10px rgba(0,0,0,.75); }
-    }
+    /* Main : survol fluide géré par .hand-focus (souris + tactile) */
+    #playerHandRow { touch-action: none; }
     .hand-card { touch-action: none; cursor: grab; }
     .hand-card.dragging-src { opacity: .22; }
 
@@ -14696,6 +14699,7 @@ const TYPE_EMOJI = {
     }
 
     function renderHandFan() {
+      focusedHandEl = null;
       const handContainer = document.getElementById('playerHandRow');
       const hand = game.player.hand;
       const W = handContainer.clientWidth || 360;
@@ -14924,28 +14928,62 @@ const TYPE_EMOJI = {
     const buzz = (ms) => { try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {} };
 
     // =======================================================================
-    // GLISSER-DÉPOSER DES CARTES DE LA MAIN
+    // GLISSER-DÉPOSER & SURVOL FLUIDE CARTE À CARTE DE LA MAIN
     // =======================================================================
     let drag = null;
+    let focusedHandEl = null;
+
+    function pickHandCardAt(clientX, clientY) {
+      const row = document.getElementById('playerHandRow');
+      if (!row || !game) return null;
+      const cards = [...row.querySelectorAll('.hand-card')];
+      if (!cards.length) return null;
+      const rect = row.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      if (y < -44 || y > rect.height + 28) return null;
+      const first = cards[0];
+      const last = cards[cards.length - 1];
+      if (x < first.offsetLeft - 14 || x > last.offsetLeft + last.offsetWidth + 14) return null;
+      for (let i = cards.length - 1; i >= 0; i--) {
+        if (x >= cards[i].offsetLeft) return cards[i];
+      }
+      return first;
+    }
+
+    function setHandFocus(hc) {
+      if (focusedHandEl === hc) return false;
+      if (focusedHandEl) focusedHandEl.classList.remove('hand-focus');
+      focusedHandEl = hc || null;
+      if (focusedHandEl) focusedHandEl.classList.add('hand-focus');
+      return true;
+    }
 
     function initHandDrag() {
       const row = document.getElementById('playerHandRow');
 
       row.addEventListener('pointerdown', (e) => {
-        const hc = e.target.closest('.hand-card');
+        const hc = pickHandCardAt(e.clientX, e.clientY) || e.target.closest('.hand-card');
         if (!hc || !game) return;
-        hidePreview();
         const idx = +hc.dataset.hidx;
         const card = game.player.hand[idx];
         if (!card) return;
         e.preventDefault();
-        hc.setPointerCapture(e.pointerId);
+        try { row.setPointerCapture(e.pointerId); } catch (_) {}
+        setHandFocus(hc);
+        if (e.pointerType !== 'mouse') hidePreview();
         drag = {
-          hc, idx, card, pid: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY,
-          started: false, preview: false, rot: 0, vx: 0, targets: [], hot: null,
+          hc, idx, card, pid: e.pointerId, pType: e.pointerType,
+          x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY,
+          started: false, preview: false, scrubbed: false, rot: 0, vx: 0, targets: [], hot: null,
           lp: setTimeout(() => {
-            if (drag && !drag.started) { drag.preview = true; showPreview(card, e.pointerType); buzz(8); }
-          }, 380)
+            if (drag && !drag.started) {
+              drag.preview = true;
+              setHandFocus(drag.hc);
+              showPreview(drag.card, e.pointerType);
+              buzz(8);
+            }
+          }, e.pointerType === 'mouse' ? 320 : 180)
         };
       });
 
@@ -14953,9 +14991,32 @@ const TYPE_EMOJI = {
         if (!drag || e.pointerId !== drag.pid) return;
         const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
         if (!drag.started) {
-          if (Math.hypot(dx, dy) < 8) return;
+          if (e.pointerType !== 'mouse') {
+            // Tirer vers le haut => lancer le glisser-déposer de la carte actuellement survolée
+            const pullingUp = dy < -20 && Math.abs(dy) > Math.abs(dx) * 0.72;
+            if (!pullingUp) {
+              const overHc = pickHandCardAt(e.clientX, e.clientY);
+              if (overHc && overHc !== drag.hc) {
+                clearTimeout(drag.lp);
+                drag.hc = overHc;
+                drag.idx = +overHc.dataset.hidx;
+                drag.card = game.player.hand[drag.idx];
+                drag.x0 = e.clientX;
+                drag.y0 = e.clientY;
+                drag.scrubbed = true;
+                drag.preview = true;
+                setHandFocus(overHc);
+                showPreview(drag.card, e.pointerType);
+                buzz(5);
+              }
+              return;
+            }
+          } else {
+            if (Math.hypot(dx, dy) < 8) return;
+          }
           clearTimeout(drag.lp);
           if (drag.preview) { hidePreview(); drag.preview = false; }
+          setHandFocus(null);
           if (game.activePlayer !== 'player' || game.gameOver) return;
           startDrag();
         }
@@ -14968,11 +15029,20 @@ const TYPE_EMOJI = {
         if (!drag || e.pointerId !== drag.pid) return;
         clearTimeout(drag.lp);
         const d = drag;
-        if (d.preview) { hidePreview(); drag = null; return; }
+        if (d.preview || d.scrubbed) {
+          hidePreview();
+          setHandFocus(null);
+          drag = null;
+          return;
+        }
         if (!d.started) {
           drag = null;
           if (!cancelled && Math.hypot(e.clientX - d.x0, e.clientY - d.y0) < 8 && e.pointerType !== 'mouse') {
-            showPreview(d.card, e.pointerType); previewSticky = true;
+            setHandFocus(d.hc);
+            showPreview(d.card, e.pointerType);
+            previewSticky = true;
+          } else if (e.pointerType !== 'mouse') {
+            setHandFocus(null);
           }
           return;
         }
@@ -15086,7 +15156,9 @@ const TYPE_EMOJI = {
     let tiltEl = null, hoverTimer = null;
     function showPreview(card, pointerType) {
       const pv = document.getElementById('cardPreview');
-      pv.querySelector('img').src = card.img;
+      const imgEl = pv.querySelector('img');
+      const alreadyShown = pv.classList.contains('show');
+      imgEl.src = card.img;
       const w = Math.min(innerWidth * 0.68, 280);
       const boardRect = document.getElementById('gameScreen').getBoundingClientRect();
       if (pointerType === 'mouse' && innerWidth - boardRect.right > w + 32) {
@@ -15095,18 +15167,31 @@ const TYPE_EMOJI = {
         pv.style.left = `${(innerWidth - w) / 2}px`;
       }
       pv.style.top = `${Math.max(12, (innerHeight - w * 88 / 63) / 2 - 30)}px`;
-      pv.classList.remove('show'); void pv.offsetWidth; pv.classList.add('show');
+      if (!alreadyShown) {
+        pv.classList.remove('show');
+        void pv.offsetWidth;
+        pv.classList.add('show');
+      }
     }
     let previewSticky = false;
-    function hidePreview() { previewSticky = false; document.getElementById('cardPreview').classList.remove('show'); }
+    function hidePreview() {
+      previewSticky = false;
+      document.getElementById('cardPreview').classList.remove('show');
+    }
 
     function initTouchPeek() {
       let held = null;
       // Tout appui ailleurs referme un aperçu resté ouvert
       document.addEventListener('pointerdown', (e) => {
         if (e.pointerType === 'mouse') return;
+        const inHand = e.target.closest ? e.target.closest('#playerHandRow') : null;
+        if (inHand) return;
         const el = e.target.closest ? e.target.closest('.tilt') : null;
-        if (!el) { if (previewSticky) hidePreview(); return; }
+        if (!el) {
+          if (previewSticky) { hidePreview(); setHandFocus(null); }
+          return;
+        }
+        setHandFocus(null);
         const img = el.querySelector('img');
         if (!img) return;
         showPreview({ img: img.src }, e.pointerType);
@@ -15127,8 +15212,38 @@ const TYPE_EMOJI = {
     }
 
     function initHover() {
+      const handRow = document.getElementById('playerHandRow');
       document.addEventListener('pointermove', (e) => {
         if (e.pointerType !== 'mouse' || (drag && drag.started)) return;
+        const inHand = e.target.closest ? e.target.closest('#playerHandRow') : null;
+        if (inHand) {
+          if (tiltEl) {
+            tiltEl.classList.remove('tilting');
+            tiltEl.style.transform = '';
+            tiltEl = null;
+          }
+          const hc = pickHandCardAt(e.clientX, e.clientY);
+          if (!hc || !game) {
+            clearTimeout(hoverTimer);
+            setHandFocus(null);
+            hidePreview();
+            return;
+          }
+          if (setHandFocus(hc)) {
+            const card = game.player.hand[+hc.dataset.hidx];
+            clearTimeout(hoverTimer);
+            const pvShown = document.getElementById('cardPreview').classList.contains('show');
+            if (pvShown && card) {
+              showPreview(card, 'mouse');
+            } else {
+              hoverTimer = setTimeout(() => card && !(drag && drag.started) && showPreview(card, 'mouse'), 140);
+            }
+          }
+          return;
+        }
+        if (focusedHandEl) {
+          setHandFocus(null);
+        }
         const el = e.target.closest ? e.target.closest('.tilt') : null;
         if (tiltEl && tiltEl !== el) {
           tiltEl.classList.remove('tilting'); tiltEl.style.transform = ''; tiltEl = null;
@@ -15146,16 +15261,12 @@ const TYPE_EMOJI = {
           hoverTimer = setTimeout(() => img && showPreview({ img: img.src }, 'mouse'), 260);
         }
       });
-      // Aperçu au survol des cartes de la main (souris)
-      document.getElementById('playerHandRow').addEventListener('pointerover', (e) => {
-        if (e.pointerType !== 'mouse' || (drag && drag.started)) return;
-        const hc = e.target.closest('.hand-card');
-        if (!hc || !game) return;
-        const card = game.player.hand[+hc.dataset.hidx];
+      handRow.addEventListener('pointerleave', (e) => {
+        if (e.pointerType !== 'mouse') return;
         clearTimeout(hoverTimer);
-        hoverTimer = setTimeout(() => card && !(drag && drag.started) && showPreview(card, 'mouse'), 260);
+        setHandFocus(null);
+        hidePreview();
       });
-      document.getElementById('playerHandRow').addEventListener('pointerleave', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(hoverTimer); hidePreview(); });
     }
 
     // =======================================================================
