@@ -399,10 +399,154 @@
     .hub-ball { width: 34px; height: 34px; border-radius: 50%; position: relative; background: linear-gradient(#ef4444 0 46%, #0f172a 46% 54%, #f8fafc 54%); box-shadow: inset -3px -4px 6px rgba(0,0,0,0.35); }
     .hub-ball::after { content: ''; position: absolute; left: 50%; top: 50%; width: 11px; height: 11px; transform: translate(-50%,-50%); border-radius: 50%; background: #f8fafc; border: 3px solid #0f172a; }
     .hub-pack-panel { background: linear-gradient(160deg, rgba(139,92,246,0.55) 0%, rgba(168,85,247,0.35) 38%, rgba(15,23,42,0.85) 70%); border: 1px solid rgba(196,181,253,0.35); box-shadow: 0 18px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12); }
-    .hub-pack-btn { touch-action: manipulation; min-width: 0; }
-    .hub-pack { position: relative; display: block; width: 100%; aspect-ratio: 11 / 20; border-radius: 8px; overflow: hidden; box-shadow: 0 12px 24px rgba(0,0,0,0.55); transition: transform .25s ease; }
-    .hub-pack-btn:hover .hub-pack, .hub-pack-btn:focus-visible .hub-pack { transform: translateY(-4px) scale(1.03); }
-    .hub-pack-btn:active .hub-pack { transform: scale(.97); }
+    @keyframes hubPackFloat {
+      0%, 100% { transform: translate3d(0, 0px, 0); }
+      50% { transform: translate3d(0, -3.5px, 0); }
+    }
+    .hub-pack-btn {
+      touch-action: manipulation;
+      min-width: 0;
+      perspective: 720px;
+      -webkit-tap-highlight-color: transparent;
+      animation: hubPackFloat 4.2s ease-in-out infinite;
+    }
+    .hub-pack-btn:nth-child(2) { animation-delay: -1.4s; }
+    .hub-pack-btn:nth-child(3) { animation-delay: -2.8s; }
+    .hub-pack-btn:hover, .hub-pack-btn.is-touching { animation-play-state: paused; }
+    .hub-pack {
+      --rx: 0deg;
+      --ry: 0deg;
+      --ty: 0px;
+      --sc: 1;
+      --sx: 0px;
+      --sy: 15px;
+      --gx: 50%;
+      --gy: 32%;
+      --go: 0.26;
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 11 / 19.5;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0f172a;
+      transform-style: preserve-3d;
+      will-change: transform, box-shadow;
+      transform: translate3d(0, var(--ty), 0) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--sc));
+      box-shadow:
+        var(--sx) var(--sy) 24px -4px rgba(0, 0, 0, 0.82),
+        calc(var(--sx) * 0.45) calc(var(--sy) * 0.45) 10px rgba(0, 0, 0, 0.62),
+        0 24px 28px -12px rgba(0, 0, 0, 0.65),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.42),
+        inset 0 -2px 2px rgba(0, 0, 0, 0.65),
+        inset 1.5px 0 1.5px rgba(255, 255, 255, 0.25),
+        inset -1.5px 0 1.5px rgba(0, 0, 0, 0.48);
+      transition:
+        transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hub-pack.is-Featured-Pack {
+      box-shadow:
+        var(--sx) var(--sy) 26px -3px rgba(0, 0, 0, 0.86),
+        0 0 22px rgba(250, 204, 21, 0.42),
+        inset 0 0 0 1.5px rgba(253, 224, 71, 0.72),
+        inset 0 2px 2px rgba(255, 255, 255, 0.5),
+        inset 0 -2px 2px rgba(0, 0, 0, 0.65);
+    }
+    .hub-pack-btn.is-touching .hub-pack {
+      transition: transform 0.06s linear, box-shadow 0.08s linear;
+    }
+    .hub-pack > img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.015);
+      filter: contrast(1.04) saturate(1.06);
+      pointer-events: none;
+    }
+    /* Relief 3D homogénéisé : coussin cylindrique + soudures striées haut/bas + pli de scellage */
+    .pack-3d-relief {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 3;
+      background:
+        /* Plis horizontaux de soudure thermique (haut 7.5% et bas 92.5%) */
+        linear-gradient(180deg,
+          rgba(255,255,255,0.28) 0%,
+          rgba(0,0,0,0.18) 6.8%,
+          rgba(0,0,0,0.52) 7.6%,
+          rgba(255,255,255,0.38) 8.3%,
+          transparent 11.5%,
+          transparent 88.5%,
+          rgba(0,0,0,0.42) 91.7%,
+          rgba(255,255,255,0.34) 92.4%,
+          rgba(0,0,0,0.22) 94%,
+          rgba(0,0,0,0.52) 100%
+        ),
+        /* Galbe cylindrique 3D (effet coussin gonflé aluminium) */
+        linear-gradient(90deg,
+          rgba(0,0,0,0.46) 0%,
+          rgba(0,0,0,0.14) 5%,
+          rgba(255,255,255,0.22) 13%,
+          rgba(255,255,255,0.04) 27%,
+          transparent 50%,
+          rgba(0,0,0,0.06) 73%,
+          rgba(255,255,255,0.15) 87%,
+          rgba(0,0,0,0.18) 94%,
+          rgba(0,0,0,0.50) 100%
+        );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.45),
+        inset 0 -1px 0 rgba(0,0,0,0.6),
+        inset 0 0 12px rgba(0,0,0,0.32);
+    }
+    /* Stries d'embossage métallique sur les soudures haut et bas */
+    .pack-3d-relief::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.26) 0px,
+        rgba(255,255,255,0.26) 2px,
+        rgba(0,0,0,0.28) 2px,
+        rgba(0,0,0,0.28) 4px
+      );
+      -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 7.2%, transparent 8.2%, transparent 91.8%, #000 92.8%, #000 100%);
+      mask-image: linear-gradient(180deg, #000 0%, #000 7.2%, transparent 8.2%, transparent 91.8%, #000 92.8%, #000 100%);
+      mix-blend-mode: overlay;
+      opacity: 0.75;
+    }
+    /* Reflet spéculaire aluminium qui suit le doigt */
+    .pack-3d-glare {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 4;
+      background:
+        radial-gradient(
+          circle at var(--gx) var(--gy),
+          rgba(255, 255, 255, 0.62) 0%,
+          rgba(255, 255, 255, 0.22) 26%,
+          transparent 62%
+        ),
+        linear-gradient(
+          118deg,
+          transparent 20%,
+          rgba(255, 255, 255, 0.16) 44%,
+          rgba(255, 255, 255, 0.34) 50%,
+          rgba(255, 255, 255, 0.14) 56%,
+          transparent 78%
+        );
+      mix-blend-mode: soft-light;
+      opacity: var(--go);
+      transition: opacity 0.25s ease;
+    }
     .hub-pack-css { display: flex; flex-direction: column; align-items: center; background: linear-gradient(165deg, var(--pk1) 0%, var(--pk2) 45%, var(--pk3) 100%); }
     .hub-pack-crimp { width: 100%; height: 7%; flex: none; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0 3px, rgba(0,0,0,0.15) 3px 6px); }
     .hub-pack-logo { margin-top: 7%; font-weight: 900; font-size: clamp(10px, 3.4vw, 15px); letter-spacing: .06em; color: #fff; text-shadow: 0 2px 0 var(--pk3), 0 0 10px var(--pkA); }
@@ -1233,29 +1377,35 @@
           </button>
         </div>
 
-        <div id="hubPacksGrid" class="grid grid-cols-3 gap-2 sm:gap-3 items-end">
+        <div id="hubPacksGrid" class="grid grid-cols-3 gap-2.5 sm:gap-3.5 items-end py-1">
           <!-- Illustration 1 : Tortank -->
           <button onclick="launchBoosterPack('base', 'tortank')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
               <img src="assets/boosters/base-tortank.jpg" alt="Booster Tortank" class="w-full h-full object-cover" />
+              <span class="pack-3d-relief"></span>
+              <span class="pack-3d-glare"></span>
             </span>
-            <span class="text-[11px] font-black text-white leading-tight">Tortank</span>
+            <span class="text-[11px] font-black text-white leading-tight mt-0.5">Tortank</span>
             <span class="hub-pack-cta">Gratuit</span>
           </button>
           <!-- Illustration 2 : Dracaufeu -->
           <button onclick="launchBoosterPack('base', 'dracaufeu')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
-            <span class="hub-pack holo-wrap ring-2 ring-yellow-300/75 shadow-[0_0_20px_rgba(250,204,21,0.45)]">
+            <span class="hub-pack holo-wrap is-Featured-Pack">
               <img src="assets/boosters/base-dracaufeu.jpg" alt="Booster Dracaufeu" class="w-full h-full object-cover" />
+              <span class="pack-3d-relief"></span>
+              <span class="pack-3d-glare"></span>
             </span>
-            <span class="text-[11px] font-black text-yellow-200 leading-tight">Dracaufeu</span>
+            <span class="text-[11px] font-black text-yellow-200 leading-tight mt-0.5">Dracaufeu</span>
             <span class="hub-pack-cta">Gratuit</span>
           </button>
           <!-- Illustration 3 : Florizarre -->
           <button onclick="launchBoosterPack('base', 'florizarre')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
             <span class="hub-pack holo-wrap">
               <img src="assets/boosters/base-florizarre.jpg" alt="Booster Florizarre" class="w-full h-full object-cover" />
+              <span class="pack-3d-relief"></span>
+              <span class="pack-3d-glare"></span>
             </span>
-            <span class="text-[11px] font-black text-white leading-tight">Florizarre</span>
+            <span class="text-[11px] font-black text-white leading-tight mt-0.5">Florizarre</span>
             <span class="hub-pack-cta">Gratuit</span>
           </button>
         </div>
@@ -21709,35 +21859,126 @@ const TYPE_EMOJI = {
         renderedHubSetKey = meta.key;
         const arts = meta.packArtworks || [];
         grid.innerHTML = arts.map(art => {
-          const highlightRing = art.featured
-            ? 'ring-2 ring-yellow-300/75 shadow-[0_0_20px_rgba(250,204,21,0.45)]'
-            : '';
+          const highlightCls = art.featured ? 'is-Featured-Pack' : '';
           const labelCls = art.featured ? 'text-yellow-200' : 'text-white';
           const packVisual = art.img
-            ? `<span class="hub-pack holo-wrap ${highlightRing}">
+            ? `<span class="hub-pack holo-wrap ${highlightCls}">
                 <img src="${art.img}" alt="Booster ${art.label}" class="w-full h-full object-cover" />
+                <span class="pack-3d-relief"></span>
+                <span class="pack-3d-glare"></span>
               </span>`
-            : `<span class="hub-pack hub-pack-css holo-wrap ${highlightRing}" style="${meta.cssVars}">
+            : `<span class="hub-pack hub-pack-css holo-wrap ${highlightCls}" style="${meta.cssVars}">
                 <span class="hub-pack-crimp"></span>
                 <span class="hub-pack-logo">${meta.logo}</span>
                 <img src="${art.cardImg}" alt="${art.label}" loading="lazy" class="hub-pack-art" />
                 <span class="hub-pack-sub">${meta.total} cartes · 1999</span>
                 <span class="hub-pack-crimp bottom"></span>
+                <span class="pack-3d-relief"></span>
+                <span class="pack-3d-glare"></span>
               </span>`;
           return `
             <button onclick="launchBoosterPack('${meta.key}', '${art.key}')" class="hub-pack-btn group flex flex-col items-center gap-1.5">
               ${packVisual}
-              <span class="text-[11px] font-black ${labelCls} leading-tight">${art.label}</span>
+              <span class="text-[11px] font-black ${labelCls} leading-tight mt-0.5">${art.label}</span>
               <span class="hub-pack-cta" style="opacity:${cta.opacity}">${cta.text}</span>
             </button>
           `;
         }).join('');
+        initHubPacksInteractiveTilt(grid);
       } else if (grid) {
+        initHubPacksInteractiveTilt(grid);
         grid.querySelectorAll('.hub-pack-cta').forEach(ctaEl => {
           ctaEl.textContent = cta.text;
           ctaEl.style.opacity = cta.opacity;
         });
       }
+    }
+
+    function initHubPacksInteractiveTilt(grid) {
+      if (!grid || grid.dataset.tiltBound === '1') return;
+      grid.dataset.tiltBound = '1';
+
+      const applyTiltToBtn = (btn, clientX, clientY) => {
+        const pack = btn.querySelector('.hub-pack');
+        if (!pack) return;
+        const r = pack.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        const nx = Math.max(-1, Math.min(1, ((clientX - r.left) / r.width - 0.5) * 2));
+        const ny = Math.max(-1, Math.min(1, ((clientY - r.top) / r.height - 0.5) * 2));
+        const ry = (nx * 16).toFixed(2);
+        const rx = (-ny * 13).toFixed(2);
+        const sx = (-nx * 11).toFixed(1);
+        const sy = (16 + ny * 6).toFixed(1);
+        const gx = (50 + nx * 38).toFixed(1);
+        const gy = (45 + ny * 38).toFixed(1);
+
+        btn.classList.add('is-touching');
+        pack.style.setProperty('--rx', `${rx}deg`);
+        pack.style.setProperty('--ry', `${ry}deg`);
+        pack.style.setProperty('--ty', '-6px');
+        pack.style.setProperty('--sc', '1.055');
+        pack.style.setProperty('--sx', `${sx}px`);
+        pack.style.setProperty('--sy', `${sy}px`);
+        pack.style.setProperty('--gx', `${gx}%`);
+        pack.style.setProperty('--gy', `${gy}%`);
+        pack.style.setProperty('--go', '0.58');
+      };
+
+      const resetPackBtn = (btn) => {
+        if (!btn) return;
+        btn.classList.remove('is-touching');
+        const pack = btn.querySelector('.hub-pack');
+        if (!pack) return;
+        pack.style.setProperty('--rx', '0deg');
+        pack.style.setProperty('--ry', '0deg');
+        pack.style.setProperty('--ty', '0px');
+        pack.style.setProperty('--sc', '1');
+        pack.style.setProperty('--sx', '0px');
+        pack.style.setProperty('--sy', '15px');
+        pack.style.setProperty('--gx', '50%');
+        pack.style.setProperty('--gy', '32%');
+        pack.style.setProperty('--go', '0.26');
+      };
+
+      const resetAll = () => {
+        grid.querySelectorAll('.hub-pack-btn.is-touching').forEach(resetPackBtn);
+      };
+
+      grid.addEventListener('pointerdown', (e) => {
+        const btn = e.target.closest('.hub-pack-btn');
+        if (!btn) return;
+        applyTiltToBtn(btn, e.clientX, e.clientY);
+      }, { passive: true });
+
+      grid.addEventListener('pointermove', (e) => {
+        const targetEl = document.elementFromPoint(e.clientX, e.clientY) || e.target;
+        const btn = targetEl && targetEl.closest ? targetEl.closest('.hub-pack-btn') : null;
+        grid.querySelectorAll('.hub-pack-btn.is-touching').forEach(other => {
+          if (other !== btn) resetPackBtn(other);
+        });
+        if (btn && grid.contains(btn)) {
+          applyTiltToBtn(btn, e.clientX, e.clientY);
+        }
+      }, { passive: true });
+
+      grid.addEventListener('pointerup', resetAll, { passive: true });
+      grid.addEventListener('pointercancel', resetAll, { passive: true });
+      grid.addEventListener('pointerleave', resetAll, { passive: true });
+
+      grid.addEventListener('touchmove', (e) => {
+        const t = e.touches && e.touches[0];
+        if (!t) return;
+        const el = document.elementFromPoint(t.clientX, t.clientY);
+        const btn = el && el.closest ? el.closest('.hub-pack-btn') : null;
+        grid.querySelectorAll('.hub-pack-btn.is-touching').forEach(other => {
+          if (other !== btn) resetPackBtn(other);
+        });
+        if (btn && grid.contains(btn)) {
+          applyTiltToBtn(btn, t.clientX, t.clientY);
+        }
+      }, { passive: true });
+      grid.addEventListener('touchend', resetAll, { passive: true });
+      grid.addEventListener('touchcancel', resetAll, { passive: true });
     }
 
     function selectHubBoosterSet(setKey, playSfx = true) {
@@ -22150,6 +22391,7 @@ const TYPE_EMOJI = {
                    style="clip-path: inset(0 100% 0 0); transform-origin: 5% 100%; opacity: 0; will-change: transform, clip-path; ${topStripBg}"
                    class="absolute top-0 inset-x-0 h-[68px] z-40 rounded-t-2xl overflow-hidden shadow-[0_16px_28px_rgba(0,0,0,0.68)] pointer-events-none border-t border-x border-white/40">
                 ${hasFullPackImg ? `
+                  <div class="pack-3d-relief"></div>
                   <div class="absolute inset-0 bg-gradient-to-t from-white/25 via-transparent to-white/15"></div>
                 ` : `
                   <div class="booster-crimp w-full border-b border-white/50"></div>
@@ -22166,6 +22408,7 @@ const TYPE_EMOJI = {
                    style="clip-path: inset(0 0 0 0); will-change: clip-path; ${topStripBg}"
                    class="absolute top-0 inset-x-0 h-[68px] z-30 rounded-t-2xl overflow-hidden pointer-events-none border-t-2 border-x-2 border-white/30">
                 ${hasFullPackImg ? `
+                  <div class="pack-3d-relief"></div>
                   <div class="absolute inset-0 booster-metallic-sheen opacity-50"></div>
                 ` : `
                   <div class="booster-crimp w-full border-b border-white/40"></div>
@@ -22204,6 +22447,8 @@ const TYPE_EMOJI = {
               <div id="packMainBody"
                    style="${mainBodyBg} --pack-glow: ${meta.glow}; transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease-out; will-change: transform, opacity;"
                    class="absolute top-[66px] bottom-0 inset-x-0 rounded-b-2xl overflow-hidden border-x-2 border-b-2 border-white/30 shadow-[0_26px_60px_rgba(0,0,0,0.88)] flex flex-col items-center justify-between p-4 pointer-events-none">
+                <!-- Relief cylindrique & plis de soudure aluminium -->
+                <div class="pack-3d-relief"></div>
                 <!-- Reflet spéculaire métallique dynamique -->
                 <div id="packMetallicSheen"
                      style="background-position: 50% 50%;"
@@ -22376,17 +22621,19 @@ const TYPE_EMOJI = {
         if (E.promptTxt) E.promptTxt.textContent = prompt;
       }
       if (E.packEl && tremorTime !== null) {
-        // Tremblement de tension continu (sinusoïdes) au lieu d'un bruit aléatoire saccadé
+        // Tremblement de tension continu + inclinaison 3D naturelle sous le doigt
         const amp = f > 0.05 ? (0.6 + f * 3.2) : 0;
         const sx = Math.sin(tremorTime * 0.047) * amp + Math.sin(tremorTime * 0.113) * amp * 0.35;
         const sy = Math.cos(tremorTime * 0.061) * amp * 0.7;
-        E.packEl.style.transition = (performance.now() - boosterTearAnim.dragStartT < 170) ? 'transform 150ms ease-out' : 'none';
-        E.packEl.style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0) scale(${(1 + f * 0.07).toFixed(4)})`;
+        const rx = boosterTearAnim.tiltRx || 0;
+        const ry = boosterTearAnim.tiltRy || 0;
+        E.packEl.style.transition = (performance.now() - boosterTearAnim.dragStartT < 150) ? 'transform 130ms ease-out' : 'none';
+        E.packEl.style.transform = `translate3d(${sx.toFixed(2)}px, ${(sy - 2).toFixed(2)}px, 0) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(${(1.02 + f * 0.06).toFixed(4)})`;
       }
     }
 
     // Boucle rAF unique : interpole la découpe affichée vers la cible du doigt (ressenti 60/120 Hz)
-    const boosterTearAnim = { raf: 0, target: 0, display: 0, dragging: false, lastT: 0, lastSparkT: 0, rect: null, dragStartT: 0 };
+    const boosterTearAnim = { raf: 0, target: 0, display: 0, dragging: false, lastT: 0, lastSparkT: 0, rect: null, dragStartT: 0, tiltRx: 0, tiltRy: 0 };
     function startBoosterTearLoop() {
       if (boosterTearAnim.raf) return;
       boosterTearAnim.lastT = performance.now();
@@ -22470,12 +22717,21 @@ const TYPE_EMOJI = {
       if (!wrap || !packEl) return;
       boosterTearEls = null;
       stopBoosterTearLoop();
-      Object.assign(boosterTearAnim, { target: 0, display: 0, dragging: false, rect: null, lastSparkT: 0 });
+      Object.assign(boosterTearAnim, { target: 0, display: 0, dragging: false, rect: null, lastSparkT: 0, tiltRx: 0, tiltRy: 0 });
 
       let tearing = false;
       let startX = null;
       let hoverRaf = 0;
       let hoverEvt = null;
+
+      const updateTouchTilt = (clientX, clientY, rect) => {
+        if (!rect || !rect.width || !rect.height) return;
+        const px = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+        const py = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+        boosterTearAnim.tiltRy = ((px - 50) / 50) * 14;
+        boosterTearAnim.tiltRx = -((py - 50) / 50) * 11;
+        if (sheenEl) sheenEl.style.backgroundPosition = `${(px * 2).toFixed(1)}% ${(py * 2).toFixed(1)}%`;
+      };
 
       packEl.addEventListener('pointerdown', (e) => {
         if (!activeBooster || activeBooster.phase !== 'sealed') return;
@@ -22492,8 +22748,10 @@ const TYPE_EMOJI = {
         boosterTearAnim.dragStartT = performance.now();
 
         const rect = boosterTearAnim.rect;
+        updateTouchTilt(e.clientX, e.clientY, rect);
         const relX = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-        if (relX < 0.28 && activeBooster.tearProgress < 10) {
+        const relY = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+        if (relX < 0.28 && relY < 0.35 && activeBooster.tearProgress < 10) {
           const initPct = Math.max(6, Math.round(relX * 100));
           activeBooster.tearProgress = initPct;
           boosterTearAnim.target = initPct;
@@ -22507,6 +22765,7 @@ const TYPE_EMOJI = {
         if (tearing) {
           const rect = boosterTearAnim.rect;
           if (!rect) return;
+          updateTouchTilt(e.clientX, e.clientY, rect);
           const sx = startX ?? rect.left;
           const dragDeltaPct = Math.max(0, ((e.clientX - sx) / (rect.width * 0.72)) * 100);
           const posPct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
@@ -22515,8 +22774,8 @@ const TYPE_EMOJI = {
           if (nextPct > activeBooster.tearProgress) {
             activeBooster.tearProgress = nextPct;
             boosterTearAnim.target = nextPct;
-            startBoosterTearLoop();
           }
+          startBoosterTearLoop();
           return;
         }
 
@@ -22542,6 +22801,8 @@ const TYPE_EMOJI = {
         tearing = false;
         startX = null;
         boosterTearAnim.dragging = false;
+        boosterTearAnim.tiltRx = 0;
+        boosterTearAnim.tiltRy = 0;
         if (activeBooster.tearProgress >= 82) {
           completeBoosterRip();
         } else {
