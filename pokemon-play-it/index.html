@@ -989,7 +989,14 @@
     }
     .pack-card-3d.flipped .pack-card-flipper {
       transform: rotateY(180deg);
-      animation: packCardFlipLift 0.68s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: packCardFlipLift 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .pack-card-3d.flipped.flip-left .pack-card-flipper {
+      transform: rotateY(-180deg);
+      animation: packCardFlipLiftLeft 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .pack-card-3d.dismissed-fly {
+      pointer-events: none !important;
     }
     /* Cartes communes distribuées déjà face visible : aucune animation de retournement au montage */
     .pack-card-3d.pre-flipped .pack-card-flipper { animation: none; transition: none; }
@@ -1008,6 +1015,12 @@
       45%  { transform: rotateY(105deg) translateZ(75px) scale(1.14); }
       80%  { transform: rotateY(186deg) translateZ(12px) scale(1.03); }
       100% { transform: rotateY(180deg) translateZ(0) scale(1); }
+    }
+    @keyframes packCardFlipLiftLeft {
+      0%   { transform: rotateY(0deg) translateZ(0) scale(1); }
+      45%  { transform: rotateY(-105deg) translateZ(75px) scale(1.14); }
+      80%  { transform: rotateY(-186deg) translateZ(12px) scale(1.03); }
+      100% { transform: rotateY(-180deg) translateZ(0) scale(1); }
     }
     .pack-card-3d.charging .pack-card-flipper {
       animation: packCardCharge 0.48s ease-in-out both;
@@ -25545,6 +25558,7 @@ const TYPE_EMOJI = {
         el.style.transition = 'none';
         el.style.transform = 'translateY(140px) scale(0.84)';
         setTimeout(() => {
+          if (!el || el.classList.contains('dismissed-fly') || (activeBooster && idx < activeBooster.currentIdx)) return;
           el.style.transition = '';
           el.style.opacity = '1';
           layoutBoosterStack(0, 0);
@@ -25572,18 +25586,46 @@ const TYPE_EMOJI = {
       revStage.addEventListener('pointerdown', (e) => {
         if (!activeBooster || activeBooster.phase !== 'revealing' || activeBooster.busy) return;
         const el = topCardEl();
-        if (!el) return;
+        if (!el || el.classList.contains('dismissed-fly')) return;
+        if (drag && drag.el && drag.el !== el && !drag.el.classList.contains('dismissed-fly')) {
+          drag.el.classList.remove('dragging', 'tilting');
+        }
+        el.style.opacity = '1';
         stageRect = null;
-        drag = { x: e.clientX, y: e.clientY, t: performance.now(), dx: 0, dy: 0, moved: false };
+        const now = performance.now();
+        drag = {
+          pointerId: e.pointerId,
+          cardIdx: activeBooster.currentIdx,
+          el,
+          x: e.clientX,
+          y: e.clientY,
+          lastX: e.clientX,
+          lastY: e.clientY,
+          vx: 0,
+          vy: 0,
+          t: now,
+          lastT: now,
+          dx: 0,
+          dy: 0,
+          moved: false
+        };
         try { revStage.setPointerCapture(e.pointerId); } catch (_) {}
       });
 
       revStage.addEventListener('pointermove', (e) => {
+        if (drag && e.pointerId !== undefined && drag.pointerId !== undefined && e.pointerId !== drag.pointerId) return;
         lastMove = { clientX: e.clientX, clientY: e.clientY };
         if (drag) {
+          const now = performance.now();
+          const dt = Math.max(4, now - drag.lastT);
+          drag.vx = (e.clientX - drag.lastX) / dt;
+          drag.vy = (e.clientY - drag.lastY) / dt;
+          drag.lastX = e.clientX;
+          drag.lastY = e.clientY;
+          drag.lastT = now;
           drag.dx = e.clientX - drag.x;
           drag.dy = e.clientY - drag.y;
-          if (Math.hypot(drag.dx, drag.dy) > 6) drag.moved = true;
+          if (Math.hypot(drag.dx, drag.dy) > 5) drag.moved = true;
         }
         if (moveRaf) return;
         moveRaf = requestAnimationFrame(() => {
@@ -25594,27 +25636,39 @@ const TYPE_EMOJI = {
 
       const applyStackPointer = (e) => {
         if (!activeBooster || activeBooster.phase !== 'revealing') return;
-        const el = topCardEl();
-        if (!el) return;
+        const el = (drag && drag.el) ? drag.el : topCardEl();
+        if (!el || el.classList.contains('dismissed-fly')) return;
         const r = getStageRect();
         const px = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
         const py = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
 
         if (drag && !activeBooster.busy) {
-          if (activeBooster.currentFlipped && drag.moved) {
+          if (drag.moved) {
             el.classList.add('dragging');
             el.classList.remove('tilting');
             el.style.setProperty('--hx', `${(px * 100).toFixed(1)}%`);
             el.style.setProperty('--hy', `${(py * 100).toFixed(1)}%`);
-            el.style.transform = `translate3d(${drag.dx}px, ${drag.dy}px, 0) rotate(${(drag.dx * 0.045).toFixed(2)}deg)`;
-            // Faire monter dynamiquement la carte suivante sous le doigt (milTCG)
-            layoutBoosterStack(drag.dx, drag.dy);
+            if (activeBooster.currentFlipped) {
+              const rotZ = (drag.dx * 0.065 + (drag.dx >= 0 ? 1 : -1) * Math.abs(drag.dy) * 0.015).toFixed(2);
+              const rotY = Math.max(-24, Math.min(24, drag.dx * 0.08)).toFixed(2);
+              const rotX = Math.max(-20, Math.min(20, -drag.dy * 0.07)).toFixed(2);
+              el.style.transform = `translate3d(${drag.dx}px, ${drag.dy}px, 0) rotateZ(${rotZ}deg) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
+              // Faire monter dynamiquement la carte suivante sous le doigt (milTCG)
+              layoutBoosterStack(drag.dx, drag.dy);
+            } else {
+              // Carte face cachée : suit légèrement le sens du swipe en 3D avant de se retourner
+              const pullX = (drag.dx * 0.22).toFixed(1);
+              const pullY = (drag.dy * 0.22).toFixed(1);
+              const tiltY = Math.max(-32, Math.min(32, drag.dx * 0.22)).toFixed(2);
+              const tiltX = Math.max(-22, Math.min(22, -drag.dy * 0.16)).toFixed(2);
+              el.style.transform = `translate3d(${pullX}px, ${pullY}px, 0) rotateY(${tiltY}deg) rotateX(${tiltX}deg) scale(1.03)`;
+            }
             return;
           }
         }
 
-        // Inclinaison 3D holographique au survol (souris / doigt)
-        if (activeBooster.currentFlipped && !activeBooster.busy) {
+        // Inclinaison 3D holographique au survol (souris uniquement, jamais bloquée sur tactile)
+        if (!drag && activeBooster.currentFlipped && !activeBooster.busy) {
           el.style.setProperty('--hx', `${(px * 100).toFixed(1)}%`);
           el.style.setProperty('--hy', `${(py * 100).toFixed(1)}%`);
           el.classList.add('tilting');
@@ -25626,42 +25680,56 @@ const TYPE_EMOJI = {
         if (!drag) { lastMove = null; if (moveRaf) { cancelAnimationFrame(moveRaf); moveRaf = 0; } }
         if (drag || !activeBooster || !activeBooster.currentFlipped || activeBooster.busy) return;
         const el = topCardEl();
-        if (el) { el.classList.remove('tilting'); el.style.transform = 'translate(0,0) scale(1)'; }
+        if (el && !el.classList.contains('dismissed-fly')) {
+          el.classList.remove('tilting');
+          el.style.transform = 'translate(0,0) rotate(0deg) scale(1)';
+        }
       });
 
       const endDrag = (e, cancelled) => {
+        if (e && drag && e.pointerId !== undefined && drag.pointerId !== undefined && e.pointerId !== drag.pointerId) return;
         if (moveRaf) { cancelAnimationFrame(moveRaf); moveRaf = 0; }
         lastMove = null;
         if (!drag || !activeBooster) { drag = null; return; }
         const d = drag;
         drag = null;
-        const el = topCardEl();
-        if (el) el.classList.remove('dragging');
-        if (cancelled) {
-          if (el && activeBooster.currentFlipped) el.style.transform = 'translate(0,0) scale(1)';
+        if (e && e.pointerId !== undefined) {
+          try { if (revStage.hasPointerCapture && revStage.hasPointerCapture(e.pointerId)) revStage.releasePointerCapture(e.pointerId); } catch (_) {}
+        }
+        const el = d.el || topCardEl();
+        if (el) el.classList.remove('dragging', 'tilting');
+
+        // Si la carte manipulée n'est plus la carte du dessus ou si le geste est annulé : remise en place propre
+        if (cancelled || d.cardIdx !== activeBooster.currentIdx || activeBooster.busy) {
+          if (el && !el.classList.contains('dismissed-fly')) {
+            void el.offsetWidth;
+            el.style.transform = 'translate(0, 0) rotate(0deg) scale(1)';
+          }
           layoutBoosterStack(0, 0);
           return;
         }
 
-        // 1. Si la carte est face cachée (Mystery Hit Rare/Holo), tout tap ou swipe la retourne en 3D !
+        // 1. Si la carte est face cachée (Mystery Hit Rare/Holo), le swipe la retourne dans le sens du geste !
         if (!activeBooster.currentFlipped) {
-          advanceBoosterCardStep();
+          advanceBoosterCardStep(d.dx || 1, d.dy || 0, 0, 0);
           return;
         }
 
-        // 2. Si la carte est face visible : swipe (> 30px) l'éjecte dans cette direction, tap (< 14px) l'éjecte à droite (milTCG)
+        // 2. Si la carte est face visible : tout swipe (>= 12px ou vitesse suffisante) l'éjecte dans le sens exact du swipe
         const dist = Math.hypot(d.dx, d.dy);
-        if (dist > 30) {
-          advanceBoosterCardStep(d.dx, d.dy);
-        } else if (dist < 14) {
-          advanceBoosterCardStep(1, -0.15);
+        const speed = Math.hypot(d.vx || 0, d.vy || 0);
+        if (dist >= 12 || (dist >= 6 && speed > 0.25)) {
+          const dirX = Math.hypot(d.vx, d.vy) > 0.35 ? (d.dx * 0.6 + d.vx * 120) : d.dx;
+          const dirY = Math.hypot(d.vx, d.vy) > 0.35 ? (d.dy * 0.6 + d.vy * 120) : d.dy;
+          advanceBoosterCardStep(dirX, dirY, d.dx, d.dy);
         } else {
-          if (el) el.style.transform = 'translate(0,0) scale(1)';
-          layoutBoosterStack(0, 0);
+          // Simple tap : éjection par défaut vers la droite
+          advanceBoosterCardStep(1, -0.12, d.dx, d.dy);
         }
       };
       revStage.addEventListener('pointerup', (e) => endDrag(e, false));
       revStage.addEventListener('pointercancel', (e) => endDrag(e, true));
+      revStage.addEventListener('lostpointercapture', (e) => endDrag(e, false));
 
       setTimeout(() => updateBoosterStackVisuals(), 35 + cards.length * 60);
     }
@@ -25674,18 +25742,20 @@ const TYPE_EMOJI = {
       cards.forEach((c, idx) => {
         const el = document.getElementById(`packCard3d-${idx}`);
         if (!el || idx < currentIdx || el.classList.contains('dismissed-fly')) return;
-        if (el.style.opacity !== '1') return;
         const depth = idx - currentIdx;
         if (depth === 0) {
+          el.style.opacity = '1';
           if (!el.classList.contains('dragging') && !el.classList.contains('tilting')) {
             el.style.transform = 'translate(0, 0) rotate(0deg) scale(1)';
           }
         } else if (depth === 1) {
+          if (el.style.opacity !== '1') return;
           // La carte juste en dessous grandit (0.95 -> 1.0) et monte (10px -> 0px) quand on glisse la carte du dessus !
           const sc = 0.95 + Math.min(0.05, dragDist / 1800);
           const ty = 10 - Math.min(10, dragDist / 15);
           el.style.transform = `translateY(${ty}px) scale(${sc})`;
         } else {
+          if (el.style.opacity !== '1') return;
           const rot = (depth % 2 ? -1 : 1) * (1.1 + depth * 0.5);
           el.style.transform = `translateY(${depth * 6}px) rotate(${rot}deg) scale(${1 - depth * 0.035})`;
         }
@@ -25825,14 +25895,14 @@ const TYPE_EMOJI = {
       fl.classList.add(kind === 'holo' ? 'go-holo' : 'go-rare');
     }
 
-    function advanceBoosterCardStep(dirX = 1, dirY = -0.15) {
+    function advanceBoosterCardStep(dirX = 1, dirY = -0.15, startDx = 0, startDy = 0) {
       if (!activeBooster || activeBooster.phase !== 'revealing' || activeBooster.busy) return;
       const { cards, currentIdx, currentFlipped } = activeBooster;
       const card = cards[currentIdx];
       if (!card) return;
       const topEl = document.getElementById(`packCard3d-${currentIdx}`);
 
-      // 1. Retournement 3D d'une carte Mystery Hit (Rare / Holo) face cachée
+      // 1. Retournement 3D d'une carte Mystery Hit (Rare / Holo) face cachée dans le sens du swipe
       if (!currentFlipped) {
         activeBooster.busy = true;
         activeBooster.currentFlipped = true;
@@ -25842,8 +25912,10 @@ const TYPE_EMOJI = {
         const cy = r.top + r.height / 2;
 
         if (topEl) {
-          topEl.classList.remove('charging', 'hint-holo', 'hint-rare', 'tilting');
-          topEl.style.transform = 'translate(0,0) scale(1)';
+          topEl.classList.remove('charging', 'hint-holo', 'hint-rare', 'tilting', 'dragging');
+          topEl.classList.toggle('flip-left', dirX < -8);
+          void topEl.offsetWidth;
+          topEl.style.transform = 'translate(0, 0) rotate(0deg) scale(1)';
           topEl.classList.add('flipped');
         }
         sfx('cardFlip');
@@ -25871,26 +25943,37 @@ const TYPE_EMOJI = {
             if (card.dex) playPokemonCry(card.dex);
           }
           updateBoosterStackVisuals();
+          flipBooster.busy = false;
         }, 300);
-
-        setTimeout(() => { if (activeBooster === flipBooster) flipBooster.busy = false; }, 600);
         return;
       }
 
-      // 2. Éjection fluide de la carte actuelle hors de la pile (Fling 2D style milTCG)
-      activeBooster.busy = true;
+      // 2. Éjection fluide de la carte actuelle dans la direction exacte du swipe (hors écran + masquage définitif)
       const norm = Math.hypot(dirX, dirY) || 1;
-      const targetX = (dirX / norm) * 440;
-      const targetY = (dirY / norm) * 230 - 25;
-      const rotDeg = targetX >= 0 ? 22 : -22;
+      const ux = dirX / norm;
+      const uy = dirY / norm;
+      const travel = Math.max(window.innerWidth || 400, window.innerHeight || 700) * 0.95 + 320;
+      const targetX = Math.round(startDx + ux * travel);
+      const targetY = Math.round(startDy + uy * travel);
+      const rotZ = (ux * 32 + (ux >= 0 ? 1 : -1) * Math.abs(uy) * 10).toFixed(1);
+      const rotY = (ux * 28).toFixed(1);
+      const rotX = (-uy * 24).toFixed(1);
 
       if (topEl) {
-        topEl.classList.remove('dragging', 'tilting');
+        topEl.classList.remove('dragging', 'tilting', 'is-top');
         topEl.classList.add('dismissed-fly');
-        topEl.style.transition = 'transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 230ms ease';
-        topEl.style.transform = `translate(${targetX}px, ${targetY}px) rotate(${rotDeg}deg) scale(0.88)`;
-        topEl.style.opacity = '0';
         topEl.style.pointerEvents = 'none';
+        void topEl.offsetWidth;
+        topEl.style.transition = 'transform 280ms cubic-bezier(0.18, 0.88, 0.32, 1), opacity 240ms ease-out';
+        topEl.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) rotateZ(${rotZ}deg) rotateY(${rotY}deg) rotateX(${rotX}deg) scale(0.86)`;
+        topEl.style.opacity = '0';
+        const dismissedEl = topEl;
+        setTimeout(() => {
+          if (dismissedEl) {
+            dismissedEl.style.display = 'none';
+            dismissedEl.style.visibility = 'hidden';
+          }
+        }, 290);
       }
       sfx('cardSwipe');
       buzz(10);
@@ -25898,33 +25981,36 @@ const TYPE_EMOJI = {
       const swipeBooster = activeBooster;
       const hasNext = currentIdx + 1 < cards.length;
       if (hasNext) {
-        // La carte suivante prend la place du dessus pendant que l'autre s'envole (un seul mouvement fluide)
+        // La carte suivante prend immédiatement la place du dessus pendant que l'autre s'envole
         activeBooster.currentIdx += 1;
         const nextCard0 = cards[activeBooster.currentIdx];
         activeBooster.currentFlipped = !(nextCard0 && isBigHitRarity(nextCard0.rarity));
-        if (topEl) topEl.classList.remove('is-top');
         const nextEl = document.getElementById(`packCard3d-${activeBooster.currentIdx}`);
-        if (nextEl) nextEl.classList.add('is-top');
+        if (nextEl) {
+          nextEl.classList.add('is-top');
+          nextEl.style.opacity = '1';
+        }
         layoutBoosterStack(0, 0);
         // Textes / pied de page reconstruits après la frame suivante (pas de reflow pendant le départ)
         requestAnimationFrame(() => requestAnimationFrame(() => {
           if (activeBooster === swipeBooster && swipeBooster.phase === 'revealing') updateBoosterStackVisuals();
         }));
-      }
-      setTimeout(() => {
-        if (activeBooster !== swipeBooster || swipeBooster.phase !== 'revealing') return;
-        if (hasNext) {
+        setTimeout(() => {
+          if (activeBooster !== swipeBooster || swipeBooster.phase !== 'revealing') return;
           const nextCard = cards[activeBooster.currentIdx];
           const nextIsHit = nextCard ? isBigHitRarity(nextCard.rarity) : false;
           if (nextCard && !nextIsHit) {
             sfx(nextCard.rarity === 'uncommon' ? 'uncommon' : 'common');
             if (nextCard.dex) playPokemonCry(nextCard.dex);
           }
-          activeBooster.busy = false;
-        } else {
+        }, 180);
+      } else {
+        activeBooster.busy = true;
+        setTimeout(() => {
+          if (activeBooster !== swipeBooster || swipeBooster.phase !== 'revealing') return;
           renderBoosterSummaryStage();
-        }
-      }, 250);
+        }, 240);
+      }
     }
 
     function revealAllBoosterCards() {
