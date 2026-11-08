@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '9a83f25-1794167739';
+      var BUILD = 'c3ff698-1794168319';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -243,6 +243,21 @@
     button:disabled { opacity: .45; }
 
     /* ===== Mode Aventure : chemin de progression, intro VS détourée, dresseur en duel ===== */
+    /* Badges vectoriels Ligue 2000 */
+    .adv-badge { display: inline-block; flex-shrink: 0; vertical-align: middle; filter: drop-shadow(0 2px 2px rgba(15,23,42,.35)); }
+    .adv-badge-off { filter: grayscale(1) brightness(1.15) opacity(.38); }
+    .adv-medal { position: absolute; z-index: 3; right: -10px; bottom: -6px; line-height: 0; animation: advMedalIn .5s cubic-bezier(.2,1.6,.4,1) both; }
+    @keyframes advMedalIn { from { transform: scale(.4) rotate(-25deg); opacity: 0; } }
+    .adv-chip { position: absolute; z-index: 3; right: -8px; bottom: -4px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; border: 2.5px solid #fff; box-shadow: 0 3px 8px rgba(15,23,42,.38), inset 0 1px 0 rgba(255,255,255,.35); }
+    .adv-chip.lock { background: linear-gradient(160deg, #94a3b8, #334155); }
+    .adv-chip.fight { background: linear-gradient(160deg, #7dd3fc, #2563eb); animation: advChipPulse 1.6s ease-in-out infinite; }
+    @keyframes advChipPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(56,189,248,.7), 0 3px 8px rgba(15,23,42,.38); } 50% { box-shadow: 0 0 0 7px rgba(56,189,248,0), 0 3px 8px rgba(15,23,42,.38); } }
+    .adv-crown { position: absolute; z-index: 3; left: 50%; top: -22px; transform: translateX(-50%); line-height: 0; filter: drop-shadow(0 3px 4px rgba(124,74,0,.5)); }
+    .adv-name { display: inline-flex; align-items: center; gap: 5px; }
+    .adv-sub { white-space: nowrap; margin-top: 1px; padding: 1px 8px; border-radius: 999px; font-size: 9.5px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; line-height: 1.5; box-shadow: 0 2px 5px rgba(15,23,42,.18); }
+    .adv-sub.elite { background: linear-gradient(90deg, #7c3aed, #a855f7); color: #fff; }
+    .adv-sub.champ { background: linear-gradient(90deg, #f59e0b, #fbbf24); color: #422006; }
+    .adv-hdr-badges { display: flex; gap: 2px; align-items: center; flex-wrap: nowrap; }
     .adv-gate-disc { display: grid !important; place-items: center; font-size: 38px; background: radial-gradient(circle at 50% 35%, #64748b, #0f172a) !important; border-color: #c4b5fd !important; }
     .adv-node.tier-elite .adv-disc { border-color: #c4b5fd; box-shadow: 0 0 0 3px #7c3aed, 0 8px 18px -6px rgba(15,23,42,.45); }
     .adv-node.tier-champion .adv-disc { border-color: #fde047; box-shadow: 0 0 0 4px #f59e0b, 0 0 26px 6px rgba(253,224,71,.55); }
@@ -264,7 +279,7 @@
       animation: bcDrop .7s .3s cubic-bezier(.3,1.45,.5,1) both, bcFloat 3s 1.6s ease-in-out infinite; }
     @keyframes bcDrop { 0% { transform: translateY(-115vh) rotate(-540deg) scale(.5); } 72% { transform: translateY(0) rotate(10deg) scale(1.14); } 100% { transform: none; } }
     @keyframes bcFloat { 50% { transform: translateY(-7px) rotate(-2deg); } }
-    #badgeCeleb .bc-icon { font-size: 74px; line-height: 1; filter: drop-shadow(0 3px 0 rgba(0,0,0,.35)); }
+    #badgeCeleb .bc-icon { line-height: 0; filter: drop-shadow(0 4px 0 rgba(0,0,0,.3)); }
     #badgeCeleb .bc-shine { position: absolute; inset: -30%; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.9) 50%, transparent 60%); transform: translateX(-120%); animation: bcShine 2.4s 1.2s ease-in-out infinite; }
     @keyframes bcShine { 0% { transform: translateX(-120%); } 45%, 100% { transform: translateX(120%); } }
     #badgeCeleb .bc-ring { position: absolute; inset: 15px; border-radius: 50%; border: 5px solid #fde047; opacity: 0; animation: bcRing .9s 1s ease-out both; }
@@ -17795,6 +17810,107 @@ const TYPE_EMOJI = {
       if (game && game.mode === 'adventure') playBattleStartTheme();
     }
 
+
+    // =======================================================================
+    // BADGES VECTORIELS DE LA LIGUE 2000 (remplacent les émojis génériques)
+    // Médailles métalliques à liseré doré, forme propre à chaque arène,
+    // pictogrammes repris des symboles d'Énergie du jeu (ENERGY_ORB).
+    // =======================================================================
+    function advPoly(n, ro, ri, rot = -90) {
+      const pts = [];
+      const tot = ri ? n * 2 : n;
+      for (let k = 0; k < tot; k++) {
+        const r = ri && k % 2 ? ri : ro;
+        const a = (rot + (360 / tot) * k) * Math.PI / 180;
+        pts.push(`${(24 + r * Math.cos(a)).toFixed(2)} ${(24 + r * Math.sin(a)).toFixed(2)}`);
+      }
+      return `M${pts.join(' L')} Z`;
+    }
+    function advScallop(n, r, bump) {
+      let d = '';
+      for (let k = 0; k < n; k++) {
+        const a0 = (-90 + (360 / n) * k) * Math.PI / 180;
+        const a1 = (-90 + (360 / n) * (k + 1)) * Math.PI / 180;
+        const am = (a0 + a1) / 2;
+        const p0 = `${(24 + r * Math.cos(a0)).toFixed(2)} ${(24 + r * Math.sin(a0)).toFixed(2)}`;
+        const pc = `${(24 + (r + bump) * Math.cos(am)).toFixed(2)} ${(24 + (r + bump) * Math.sin(am)).toFixed(2)}`;
+        const p1 = `${(24 + r * Math.cos(a1)).toFixed(2)} ${(24 + r * Math.sin(a1)).toFixed(2)}`;
+        d += (k ? '' : `M${p0} `) + `Q${pc} ${p1} `;
+      }
+      return d + 'Z';
+    }
+    const ADV_SHAPES = {
+      hex: advPoly(6, 22),
+      diamond: 'M24 1.5 L45 24 L24 46.5 L3 24 Z',
+      drop: 'M24 2 C24 2 42 19.5 42 30.5 A18 18 0 0 1 6 30.5 C6 19.5 24 2 24 2 Z',
+      flower: advScallop(8, 18.5, 7),
+      octa: advPoly(8, 22, 0, -67.5),
+      shield: 'M24 2 L43 8.5 V23 C43 35 34.5 42.5 24 46.5 C13.5 42.5 5 35 5 23 V8.5 Z',
+      star: advPoly(8, 23, 15.5),
+      gear: advPoly(12, 22.5, 18.5),
+      seal: advScallop(16, 20, 3.4),
+      crown: advPoly(10, 23, 16)
+    };
+    const ADV_GLYPHS = {
+      leaf: ENERGY_ORB['Plante'].g,
+      fire: ENERGY_ORB['Feu'].g,
+      water: ENERGY_ORB['Eau'].g,
+      bolt: ENERGY_ORB['Électrique'].g,
+      psy: ENERGY_ORB['Psy'].g,
+      fist: ENERGY_ORB['Combat'].g,
+      flower: '<circle cx="12" cy="6.6" r="3.6"/><circle cx="17.1" cy="10.3" r="3.6"/><circle cx="15.2" cy="16.4" r="3.6"/><circle cx="8.8" cy="16.4" r="3.6"/><circle cx="6.9" cy="10.3" r="3.6"/><circle cx="12" cy="12" r="2.6" fill="#fde047"/>',
+      snow: '<rect x="10.9" y="2.5" width="2.2" height="19" rx="1.1"/><rect x="10.9" y="2.5" width="2.2" height="19" rx="1.1" transform="rotate(60 12 12)"/><rect x="10.9" y="2.5" width="2.2" height="19" rx="1.1" transform="rotate(-60 12 12)"/><circle cx="12" cy="12" r="3"/>',
+      shield: '<path d="M12 2.5 L19.5 5.4 V11 C19.5 16 16.3 19.4 12 21.5 C7.7 19.4 4.5 16 4.5 11 V5.4 Z"/>',
+      bone: '<g transform="rotate(-40 12 12)"><rect x="5.5" y="10.3" width="13" height="3.4" rx="1.7"/><circle cx="5.4" cy="10" r="2.5"/><circle cx="5.4" cy="14" r="2.5"/><circle cx="18.6" cy="10" r="2.5"/><circle cx="18.6" cy="14" r="2.5"/></g>',
+      rose: '<path d="M12 3.5c3.6 0 6.2 2.6 6.2 5.8 0 3.3-2.8 5.5-6.2 5.5S5.8 12.6 5.8 9.3C5.8 6.1 8.4 3.5 12 3.5z"/><rect x="11" y="14.5" width="2" height="7" rx="1"/><path d="M13 18.2c1.9-2.3 4.3-2.6 5.8-2-1 1.9-3.2 3.1-5.8 2.9z"/>',
+      moon: '<path d="M15.5 3.2A9 9 0 1 0 20.8 16.4 7.4 7.4 0 1 1 15.5 3.2z"/>',
+      crown: '<path d="M3 8.2 7.6 12 12 4.8 16.4 12 21 8.2 19 18.6H5z"/><rect x="5" y="19.4" width="14" height="2.2" rx="1.1"/>'
+    };
+    const ADV_BADGE_SPEC = {
+      hanae: { shape: 'hex', glyph: 'leaf' },
+      ryo: { shape: 'diamond', glyph: 'fire' },
+      kai: { shape: 'drop', glyph: 'water' },
+      takuya: { shape: 'flower', glyph: 'flower' },
+      soren: { shape: 'octa', glyph: 'psy' },
+      axel: { shape: 'shield', glyph: 'fist' },
+      mika: { shape: 'star', glyph: 'bolt' },
+      yuki: { shape: 'gear', glyph: 'snow' },
+      dorian: { shape: 'seal', glyph: 'shield' },
+      lena: { shape: 'seal', glyph: 'bone' },
+      raphael: { shape: 'seal', glyph: 'rose' },
+      selene: { shape: 'seal', glyph: 'moon' },
+      ren: { shape: 'crown', glyph: 'crown' }
+    };
+    function advShade(hex, amt) {
+      const h = String(hex || '#64748b').replace('#', '');
+      const n = parseInt(h.length === 3 ? h.split('').map((x) => x + x).join('') : h, 16);
+      const t = amt < 0 ? 0 : 255, k = Math.abs(amt);
+      const ch = (v) => Math.round((t - v) * k + v);
+      return `rgb(${ch(n >> 16)},${ch((n >> 8) & 255)},${ch(n & 255)})`;
+    }
+    let advBadgeSeq = 0;
+    function advBadgeSvg(tr, size = 28, earned = true) {
+      const spec = ADV_BADGE_SPEC[tr.id] || { shape: 'hex', glyph: 'fist' };
+      const d = ADV_SHAPES[spec.shape];
+      const id = `abg${++advBadgeSeq}`;
+      const c = tr.color || '#64748b';
+      const inner = 'transform="translate(24 24) scale(.8) translate(-24 -24)"';
+      return `<svg class="adv-badge ${earned ? '' : 'adv-badge-off'}" viewBox="0 0 48 48" width="${size}" height="${size}" aria-hidden="true">
+        <defs>
+          <linearGradient id="${id}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7cf"/><stop offset=".45" stop-color="#f6c33b"/><stop offset="1" stop-color="#9a6100"/></linearGradient>
+          <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${advShade(c, 0.38)}"/><stop offset=".55" stop-color="${c}"/><stop offset="1" stop-color="${advShade(c, -0.4)}"/></linearGradient>
+          <linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".48" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        </defs>
+        <path d="${d}" fill="url(#${id}r)" stroke="rgba(15,23,42,.6)" stroke-width="1.3" stroke-linejoin="round"/>
+        <path d="${d}" fill="url(#${id}f)" ${inner}/>
+        <path d="${d}" fill="url(#${id}s)" ${inner}/>
+        <g transform="translate(24 25) scale(.95) translate(-12 -12)" fill="#fff" stroke="rgba(15,23,42,.45)" stroke-width=".8" stroke-linejoin="round">${ADV_GLYPHS[spec.glyph]}</g>
+      </svg>`;
+    }
+    const ADV_ICON_LOCK = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 10.5V8.2a4 4 0 0 1 8 0v2.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><rect x="5" y="10.2" width="14" height="10.3" rx="2.6" fill="#fff"/><circle cx="12" cy="15.1" r="1.7" fill="#334155"/><rect x="11.2" y="15.4" width="1.6" height="2.8" rx=".8" fill="#334155"/></svg>';
+    const ADV_ICON_FIGHT = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="#fff" stroke="rgba(15,23,42,.25)" stroke-width=".5"><g transform="rotate(45 12 12)"><path d="M12 1.8 13.5 4V13.6h-3V4z"/><rect x="7.6" y="13.4" width="8.8" height="2" rx="1"/><rect x="11" y="15.4" width="2" height="4.2" rx=".7"/><circle cx="12" cy="20.6" r="1.4"/></g><g transform="rotate(-45 12 12)"><path d="M12 1.8 13.5 4V13.6h-3V4z"/><rect x="7.6" y="13.4" width="8.8" height="2" rx="1"/><rect x="11" y="15.4" width="2" height="4.2" rx=".7"/><circle cx="12" cy="20.6" r="1.4"/></g></svg>';
+    const ADV_ICON_CROWN = '<svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><defs><linearGradient id="advCrownG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset=".5" stop-color="#f6c33b"/><stop offset="1" stop-color="#b07400"/></linearGradient></defs><path d="M3 8.2 7.6 12 12 4.8 16.4 12 21 8.2 19 18.6H5z" fill="url(#advCrownG)" stroke="#7c4a00" stroke-width="1" stroke-linejoin="round"/><rect x="5" y="19.2" width="14" height="2.4" rx="1.2" fill="url(#advCrownG)" stroke="#7c4a00" stroke-width=".8"/><circle cx="12" cy="13.6" r="1.6" fill="#e11d48"/><circle cx="3" cy="8.2" r="1.3" fill="#fde047"/><circle cx="12" cy="4.6" r="1.3" fill="#fde047"/><circle cx="21" cy="8.2" r="1.3" fill="#fde047"/></svg>';
+
     function renderAdventureView() {
       const box = document.getElementById('viewAdventure');
       if (!box) return;
@@ -17857,7 +17973,7 @@ const TYPE_EMOJI = {
           return `
             <div class="adv-row">
               <button type="button" onclick="showGameToast('🔒 Réunis les 8 Badges d\\'Arène pour ouvrir le Conseil des 4 et défier le Maître !')" class="adv-node no-accent locked" style="left:${xOf(i)}%" aria-label="Ligue verrouillée">
-                <span class="adv-disc adv-gate-disc"><img src="assets/pokemon-league.png" alt="Pokémon League" class="w-14 h-14 object-contain drop-shadow-md" /><span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span></span>
+                <span class="adv-disc adv-gate-disc"><img src="assets/pokemon-league.png" alt="Pokémon League" class="w-14 h-14 object-contain drop-shadow-md" /><span class="adv-chip lock">${ADV_ICON_LOCK}</span></span>
                 <span class="adv-name">??? · ${getAdvBadgeCount()}/8 badges</span>
                 <span class="adv-stars">Ligue verrouillée</span>
               </button>
@@ -17876,14 +17992,13 @@ const TYPE_EMOJI = {
             <button type="button" onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node no-accent ${state} tier-${tier}" style="left:${xOf(i)}%" aria-label="${tr.name}">
               <span class="adv-disc" style="background: radial-gradient(circle at 50% 35%, #fff 0%, ${tr.color} 75%); ${isBoss ? 'width:96px;height:96px;' : ''}">
                 <img class="adv-cut" src="${tr.cutout}" alt="" loading="lazy" draggable="false" />
-                ${isDefeated ? `<span class="adv-tag bg-emerald-500 text-white" style="right:-6px;bottom:-2px">${tr.badgeIcon}</span>` : ''}
-                ${!isUnlocked ? `<span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span>` : ''}
-                ${isCurrent ? `<span class="adv-tag bg-sky-500 text-white" style="right:-8px;bottom:-2px">⚔️</span>` : ''}
-                ${isBoss ? `<span class="adv-tag bg-amber-300 text-slate-900" style="left:50%;top:-14px;transform:translateX(-50%)">👑</span>` : ''}
-                ${tier === 'elite' ? `<span class="adv-tag bg-violet-600 text-white" style="left:-6px;bottom:-2px">C4</span>` : ''}
+                ${isDefeated ? `<span class="adv-medal" title="${tr.badgeName}">${advBadgeSvg(tr, 34, true)}</span>` : ''}
+                ${!isUnlocked ? `<span class="adv-chip lock">${ADV_ICON_LOCK}</span>` : ''}
+                ${isCurrent ? `<span class="adv-chip fight">${ADV_ICON_FIGHT}</span>` : ''}
+                ${isBoss ? `<span class="adv-crown">${ADV_ICON_CROWN}</span>` : ''}
               </span>
-              <span class="adv-name">${tier === 'gym' ? tr.badgeIcon + ' ' : ''}${tr.name}</span>
-              <span class="adv-stars">${tier === 'gym' ? tr.stars : tier === 'elite' ? 'Conseil des 4' : 'Maître'}</span>
+              <span class="adv-name">${advBadgeSvg(tr, 17, isDefeated)}${tr.name}</span>
+              ${tier === 'gym' ? `<span class="adv-stars">${tr.stars}</span>` : `<span class="adv-sub ${tier === 'elite' ? 'elite' : 'champ'}">${tier === 'elite' ? 'Conseil des 4' : 'Maître'}</span>`}
             </button>
           </div>
         `;
@@ -17895,10 +18010,10 @@ const TYPE_EMOJI = {
             <div class="flex items-center gap-2.5 min-w-0">
               <img src="assets/pokemon-league.png" alt="Pokémon League" class="w-10 h-11 object-contain shrink-0 drop-shadow-sm" />
               <div class="min-w-0">
-                <div class="text-sm font-black text-slate-900 leading-tight">Ligue 2000</div>
-                <div class="flex gap-0.5 mt-0.5 flex-wrap">
-                  ${ADV_GYMS().map((t) => `<span class="text-[13px] ${(adventureSave.defeated[t.id] || 0) > 0 ? '' : 'grayscale opacity-30'}">${t.badgeIcon}</span>`).join('')}
-                  ${leagueOpen ? `<span class="text-[10px] font-black text-violet-700 ml-1 self-center">· Ligue ${ADVENTURE_TRAINERS.filter((t) => advTier(t) !== 'gym' && (adventureSave.defeated[t.id] || 0) > 0).length}/5</span>` : ''}
+                <div class="text-sm font-black text-slate-900 leading-tight flex items-center gap-1.5">Ligue 2000${leagueOpen ? `<span class="adv-sub elite" style="margin:0;font-size:9px">Conseil ${ADVENTURE_TRAINERS.filter((t) => advTier(t) !== 'gym' && (adventureSave.defeated[t.id] || 0) > 0).length}/5</span>` : ''}</div>
+                <div class="adv-hdr-badges mt-0.5">
+                  ${ADV_GYMS().map((t) => advBadgeSvg(t, 17, (adventureSave.defeated[t.id] || 0) > 0)).join('')}
+                  
                 </div>
               </div>
             </div>
@@ -18000,7 +18115,7 @@ const TYPE_EMOJI = {
           <div class="bc-medal-wrap">
             <div class="bc-ring"></div><div class="bc-ring r2"></div>
             ${sparks}
-            <div class="bc-medal"><span class="bc-icon">${tr.badgeIcon}</span><span class="bc-shine"></span></div>
+            <div class="bc-medal"><span class="bc-icon">${advBadgeSvg(tr, 108, true)}</span><span class="bc-shine"></span></div>
             ${conf}
           </div>
           <div class="bc-name">${tr.badgeName}</div>
@@ -18009,7 +18124,7 @@ const TYPE_EMOJI = {
             ${packs ? `<span class="bc-chip" style="animation-delay:1.6s">🎴 +${packs} Booster${packs > 1 ? 's' : ''}</span>` : ''}
             <span class="bc-chip" style="animation-delay:1.75s">🃏 Deck 2000</span>
           </div>
-          ${tier === 'gym' ? `<div class="bc-badges">${ADV_GYMS().map((g) => `<span class="${(adventureSave.defeated[g.id] || 0) > 0 ? 'on' : ''} ${g.id === tr.id ? 'new' : ''}">${g.badgeIcon}</span>`).join('')}</div>` : ''}
+          ${tier === 'gym' ? `<div class="bc-badges">${ADV_GYMS().map((g) => `<span class="${(adventureSave.defeated[g.id] || 0) > 0 ? 'on' : ''} ${g.id === tr.id ? 'new' : ''}">${advBadgeSvg(g, 24, true)}</span>`).join('')}</div>` : ''}
           ${leagueJustOpened ? '<div class="bc-unlock">🏛️ Le Conseil des 4 est ouvert !</div>' : ''}
           ${tier === 'champion' ? '<div class="bc-unlock">👑 Tu es le nouveau Maître de la Ligue 2000 !</div>' : ''}
           <div class="bc-tap">Touche pour continuer</div>
