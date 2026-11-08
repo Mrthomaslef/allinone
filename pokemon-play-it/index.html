@@ -63,17 +63,22 @@
       height: 100vh !important;
       min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
     }
-    /* Tapis illustrés : désaturés/blancs dans les menus (style TCG Pocket), en pleine couleur quand on lance un combat */
-    .playmat-night  { --playmat-url: url("assets/playmats/night.jpg");  --playmat-fallback: #1d435a; }
-    .playmat-jungle { --playmat-url: url("assets/playmats/jungle.jpg"); --playmat-fallback: #2b4f2d; }
-    .playmat-fossil { --playmat-url: url("assets/playmats/fossil.jpg"); --playmat-fallback: #634630; }
-    .playmat-mewtwo { --playmat-url: url("assets/playmats/mewtwo.jpg"); --playmat-fallback: #532536; }
+    /* 4 Tapis illustrés (Bleu Nuit, Jungle, Fossile, Mewtwo Rouge) — visibles au menu comme en combat */
+    .playmat-night  { --playmat-url: url("assets/playmats/night.jpg");  --playmat-fallback: #1d435a; background-color: #1d435a; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/night.jpg"); }
+    .playmat-jungle { --playmat-url: url("assets/playmats/jungle.jpg"); --playmat-fallback: #2b4f2d; background-color: #2b4f2d; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/jungle.jpg"); }
+    .playmat-fossil { --playmat-url: url("assets/playmats/fossil.jpg"); --playmat-fallback: #634630; background-color: #634630; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/fossil.jpg"); }
+    .playmat-mewtwo { --playmat-url: url("assets/playmats/mewtwo.jpg"); --playmat-fallback: #532536; background-color: #532536; background-image: linear-gradient(180deg, rgba(5,10,20,.30), rgba(5,10,20,.16) 45%, rgba(5,10,20,.32)), url("assets/playmats/mewtwo.jpg"); }
+    .playmat-night, .playmat-jungle, .playmat-fossil, .playmat-mewtwo {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
 
-    /* Calque d'arrière-plan du paysage / tapis : blanc désaturé au menu -> couleur vive en combat */
+    /* Calque d'arrière-plan du paysage / tapis : en pleine couleur au menu comme en combat */
     body::before {
       content: '';
       position: fixed;
-      inset: -12px;
+      inset: 0;
       pointer-events: none;
       z-index: 0;
       background-color: var(--playmat-fallback, #1d435a);
@@ -81,17 +86,15 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      /* Menu : paysage désaturé blanc nacré très doux façon TCG Pocket */
-      filter: grayscale(1) saturate(0) brightness(1.92) contrast(0.52);
-      opacity: 0.34;
-      transform: scale(1.02);
+      filter: saturate(1.08) brightness(0.96) contrast(1.03);
+      opacity: 1;
+      transform: scale(1);
       transition:
-        filter 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: filter, opacity, transform;
+        background-image 0.35s ease,
+        filter 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    /* Voile de finition : nacré lumineux dans les menus, vignettage feutrine en plein combat */
+    /* Voile léger pour la lisibilité des panneaux et des cartes */
     body::after {
       content: '';
       position: fixed;
@@ -99,12 +102,12 @@
       pointer-events: none;
       z-index: 0;
       background:
-        radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.82) 0%, rgba(248, 250, 252, 0.68) 55%, rgba(241, 245, 249, 0.86) 100%);
-      transition: background 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+        linear-gradient(180deg, rgba(5, 10, 20, 0.24), rgba(5, 10, 20, 0.12) 45%, rgba(5, 10, 20, 0.28)),
+        radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.38) 100%);
+      transition: background 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    /* Quand on lance un combat : le tapis / paysage reprend toutes ses couleurs ! */
     body.in-battle::before {
-      filter: grayscale(0) saturate(1.12) brightness(0.96) contrast(1.04);
+      filter: saturate(1.12) brightness(0.96) contrast(1.04);
       opacity: 1;
       transform: scale(1);
     }
@@ -211,6 +214,58 @@
     }
     .bubble { background: rgba(2,6,23,0.82); border: 1px solid rgba(255,255,255,0.14); }
     button:disabled { opacity: .45; }
+
+    /* ===== Mode Aventure : chemin de progression, intro VS détourée, dresseur en duel ===== */
+    .adv-path { position: relative; }
+    .adv-path-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+    .adv-row { position: relative; height: 124px; z-index: 1; }
+    .adv-node { position: absolute; top: 4px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; padding: 0; touch-action: manipulation; }
+    .adv-disc { position: relative; width: 84px; height: 84px; border-radius: 9999px; border: 3px solid #fff; box-shadow: 0 8px 18px -6px rgba(15,23,42,.45); }
+    .adv-disc .adv-cut { position: absolute; left: 50%; bottom: 0; width: 104px; max-width: none; height: 118px; transform: translateX(-50%); object-fit: cover; object-position: top center; pointer-events: none;
+      -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 100%); clip-path: inset(-60px -20px 0 -20px round 0 0 42px 42px); filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+    .adv-node.locked .adv-disc { background: #cbd5e1 !important; }
+    .adv-node.locked .adv-cut { filter: grayscale(1) brightness(.35) contrast(1.2); opacity: .9; }
+    .adv-node.current .adv-disc { animation: advPulse 1.8s ease-in-out infinite; }
+    .adv-node.current .adv-cut { animation: advFloat 2.4s ease-in-out infinite; }
+    @keyframes advPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(56,189,248,.65), 0 8px 18px -6px rgba(15,23,42,.45); } 50% { box-shadow: 0 0 0 10px rgba(56,189,248,0), 0 8px 18px -6px rgba(15,23,42,.45); } }
+    @keyframes advFloat { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-4px); } }
+    .adv-tag { position: absolute; z-index: 3; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 9999px; display: grid; place-items: center; font-size: 11px; font-weight: 900; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+    .adv-name { margin-top: 2px; padding: 1px 9px; border-radius: 9999px; background: rgba(255,255,255,.94); font-size: 11.5px; font-weight: 900; color: #0f172a; box-shadow: 0 2px 6px rgba(15,23,42,.18); white-space: nowrap; }
+    .adv-stars { font-size: 9.5px; letter-spacing: 1px; color: #f59e0b; line-height: 1; text-shadow: 0 1px 0 #fff; }
+    /* Bulle de BD */
+    .speech { position: relative; background: #fff; color: #0f172a; border: 2.5px solid #0f172a; border-radius: 18px; padding: 9px 13px; font-weight: 800; line-height: 1.3; box-shadow: 4px 5px 0 rgba(15,23,42,.9); }
+    .speech::after { content: ''; position: absolute; width: 18px; height: 18px; background: #fff; border-right: 2.5px solid #0f172a; border-bottom: 2.5px solid #0f172a; transform: rotate(45deg); }
+    .speech.tail-down-right::after { bottom: -10.5px; right: 34%; }
+    .speech.tail-left::after { left: -10.5px; top: 50%; margin-top: -9px; transform: rotate(135deg); }
+    /* Intro VS plein écran */
+    #advIntro { position: fixed; inset: 0; z-index: 400; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; touch-action: manipulation; cursor: pointer; }
+    #advIntro .adv-intro-bg { position: absolute; inset: 0; background: radial-gradient(circle at 70% 45%, var(--adv-c) 0%, rgba(2,6,23,.96) 68%); }
+    #advIntro .adv-intro-rays { position: absolute; inset: -50%; background: repeating-conic-gradient(from 0deg, rgba(255,255,255,.07) 0 8deg, transparent 8deg 20deg); animation: advSpin 26s linear infinite; }
+    @keyframes advSpin { to { transform: rotate(360deg); } }
+    #advIntro .adv-intro-cut { position: absolute; right: -6%; bottom: 0; height: min(64dvh, 560px); max-width: 100%; object-fit: contain; object-position: bottom right; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); mask-composite: intersect; animation: advSlideIn .55s cubic-bezier(.2,1.2,.4,1) both; }
+    @keyframes advSlideIn { from { transform: translateX(70%); opacity: 0; } to { transform: none; opacity: 1; } }
+    #advIntro .adv-intro-bubble { position: absolute; left: 5%; top: max(64px, env(safe-area-inset-top)); max-width: 64%; font-size: clamp(14px, 4.2vw, 19px); animation: advPop .45s .45s cubic-bezier(.2,1.6,.4,1) both; }
+    @keyframes advPop { from { transform: scale(.3); opacity: 0; } to { transform: none; opacity: 1; } }
+    #advIntro .adv-intro-band { position: relative; z-index: 2; margin: 0 0 max(18px, env(safe-area-inset-bottom)); padding: 10px 18px; background: linear-gradient(90deg, rgba(2,6,23,.92), rgba(2,6,23,.55) 75%, transparent); animation: advBand .5s .2s cubic-bezier(.2,1.2,.4,1) both; }
+    @keyframes advBand { from { transform: translateX(-100%); } to { transform: none; } }
+    #advIntro .adv-intro-vs { position: absolute; left: 6%; bottom: 120px; z-index: 2; font: 900 64px/1 'Nunito', sans-serif; font-style: italic; color: #fde047; -webkit-text-stroke: 3px #0f172a; text-shadow: 5px 5px 0 #0f172a; animation: advPop .4s .7s cubic-bezier(.2,1.6,.4,1) both; }
+    #advIntro.out { animation: advOut .32s ease-in forwards; }
+    @keyframes advOut { to { opacity: 0; transform: scale(1.06); } }
+    /* Fiche dresseur (bottom sheet) */
+    #advSheet { position: fixed; inset: 0; z-index: 300; display: flex; align-items: flex-end; justify-content: center; background: rgba(2,6,23,.55); backdrop-filter: blur(3px); touch-action: manipulation; }
+    #advSheet .adv-sheet-card { width: 100%; max-width: 32rem; border-radius: 26px 26px 0 0; background: #fff; overflow: hidden; animation: advSheetUp .32s cubic-bezier(.2,1.1,.4,1) both; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+    @keyframes advSheetUp { from { transform: translateY(100%); } to { transform: none; } }
+    #advSheet .adv-sheet-hero { position: relative; height: 230px; background: radial-gradient(circle at 72% 60%, var(--adv-c), #0f172a 78%); overflow: hidden; }
+    #advSheet .adv-sheet-cut { position: absolute; right: -2%; bottom: 0; height: 250px; object-fit: contain; object-position: bottom; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0, #000 16%), linear-gradient(to top, transparent 0, #000 16%); mask-composite: intersect; }
+    #advSheet .adv-sheet-bubble { position: absolute; left: 12px; top: 14px; max-width: 58%; font-size: 13px; }
+    /* Dresseur détouré en grand pendant le duel */
+    .juliette-avatar.adv-duel-avatar { width: 78px !important; height: 96px !important; margin: -52px 0 -6px -4px !important; border-radius: 0 !important; overflow: visible; pointer-events: none; }
+    .juliette-avatar.adv-duel-avatar img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 4px 5px rgba(0,0,0,.55)); }
+    .juliette-avatar.adv-head-avatar { width: 30px !important; height: 30px !important; overflow: hidden; background: var(--adv-c, #334155); }
+    #julietteBubble.adv-duel { overflow: visible; padding-left: 2px; }
+    #julietteBubble.adv-duel #julietteSpeech { position: relative; background: #fff; border: 2px solid #0f172a; border-radius: 14px; padding: 4px 9px; font-weight: 700; box-shadow: 3px 3px 0 rgba(15,23,42,.85); }
+    #julietteBubble.adv-duel #julietteSpeech::before { content: ''; position: absolute; left: -7px; top: 50%; width: 11px; height: 11px; margin-top: -6px; background: #fff; border-left: 2px solid #0f172a; border-bottom: 2px solid #0f172a; transform: rotate(45deg); }
+    #julietteBubble.adv-duel.bubble { background: transparent !important; border: 0 !important; box-shadow: none !important; }
 
     /* ===== Assets originaux (SVG maison) ===== */
     .card-back { background: var(--card-back) center / cover no-repeat !important; border: none !important; border-radius: 5px; }
@@ -424,12 +479,9 @@
     ::-webkit-scrollbar { height: 4px; width: 4px; }
     ::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.28); border-radius: 999px; }
 
-    /* ===== Vitrine des Decks & Menu Blanc Épuré (Style Pokémon TCG Pocket) ===== */
+    /* ===== Vitrine des Decks & Menu (laisse apparaître les 4 tapis illustrés en arrière-plan) ===== */
     .menu-bg {
-      background:
-        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.72), transparent 46%),
-        radial-gradient(circle at 80% 24%, rgba(224, 242, 254, 0.45), transparent 48%),
-        radial-gradient(circle at 50% 90%, rgba(254, 243, 199, 0.38), transparent 52%);
+      background: transparent;
     }
     /* ===== Accueil Boosters (hub mobile TCG Pocket blanc nacré) ===== */
     .hub-pill {
@@ -1642,7 +1694,7 @@
       <button onclick="openPseudoModal(false)" id="pseudoBtnMenu" class="glass-pill shrink-0 min-h-[38px] px-3 py-1 rounded-xl text-xs font-extrabold text-slate-800 border border-slate-200 hover:border-sky-400 transition flex items-center gap-1.5 shadow-sm active:scale-95 z-20 max-w-[140px]" title="Modifier mon pseudo de Dresseur">
         <span id="menuPseudoLabel" class="text-[11px] font-bold truncate">Dresseur</span>
       </button>
-      <span class="menu-edition text-[10px] font-extrabold tracking-[.18em] uppercase text-slate-500 truncate">Édition FR · 1999</span>
+      <span class="menu-edition glass-pill px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-[.16em] uppercase text-slate-700 border border-slate-200/90 shadow-sm truncate">Édition FR · 1999</span>
       <button onclick="openAudioModal()" id="audioBtnMenu" class="glass-pill shrink-0 w-[38px] h-[38px] rounded-xl text-slate-700 border border-slate-200 hover:border-amber-400 transition grid place-items-center shadow-sm active:scale-95 z-20" title="Réglages (Son & Thème)" aria-label="Réglages">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
@@ -1665,9 +1717,9 @@
       <div onclick="switchMenuTab('adventure')" class="cursor-pointer w-full p-2.5 rounded-2xl tcg-card-panel flex items-center justify-between gap-2.5 active:scale-[0.99] transition">
         <div class="flex items-center gap-2.5 min-w-0 flex-1">
           <div class="flex -space-x-2 shrink-0">
-            <img src="assets/trainers/hanae.jpg" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-            <img src="assets/trainers/kai.jpg" alt="Kaï" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-            <img src="assets/trainers/axel.jpg" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
+            <img src="assets/trainers/hanae.png" style="background:#e0f2fe;object-position:top" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+            <img src="assets/trainers/kai.png" style="background:#e0f2fe;object-position:top" alt="Kaï" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+            <img src="assets/trainers/axel.png" style="background:#e0f2fe;object-position:top" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
           </div>
           <div class="min-w-0 flex-1 text-left">
             <div class="flex items-center gap-1.5 flex-wrap">
@@ -2084,9 +2136,9 @@
         <div onclick="switchMenuTab('adventure')" class="hub-tile cursor-pointer rounded-2xl py-2.5 px-3 flex items-center justify-between gap-2.5 active:scale-[.99] transition">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <div class="flex -space-x-2 shrink-0">
-              <img src="assets/trainers/hanae.jpg" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-              <img src="assets/trainers/ryo.jpg" alt="Ryo" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
-              <img src="assets/trainers/axel.jpg" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
+              <img src="assets/trainers/hanae.png" style="background:#e0f2fe;object-position:top" alt="Hanaé" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+              <img src="assets/trainers/ryo.png" style="background:#e0f2fe;object-position:top" alt="Ryo" class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-sm" />
+              <img src="assets/trainers/axel.png" style="background:#e0f2fe;object-position:top" alt="Axel" class="w-8 h-8 rounded-full object-cover ring-2 ring-amber-400 shadow-sm" />
             </div>
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-1.5">
@@ -2350,29 +2402,33 @@
         <div class="flex items-center justify-between gap-2">
           <div>
             <div class="text-xs font-extrabold text-slate-800">Thème / Tapis de jeu</div>
-            <div class="text-[10px] text-slate-500">Blanc nacré au menu · En couleur en combat</div>
+            <div class="text-[10px] text-slate-500">4 fonds illustrés 1999 (menu &amp; plateau)</div>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-1.5" id="playmatButtonsGrid">
-          <button type="button" data-playmat="playmat-night" onclick="changePlaymat('playmat-night')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+          <button type="button" data-playmat="playmat-night" onclick="changePlaymat('playmat-night')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+            <img src="assets/playmats/night.jpg" alt="Bleu Nuit" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Bleu Nuit</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Pikachu · Ectoplasma</span>
             </span>
           </button>
-          <button type="button" data-playmat="playmat-jungle" onclick="changePlaymat('playmat-jungle')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+          <button type="button" data-playmat="playmat-jungle" onclick="changePlaymat('playmat-jungle')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+            <img src="assets/playmats/jungle.jpg" alt="Jungle" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Jungle</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Insécateur · Rafflesia</span>
             </span>
           </button>
-          <button type="button" data-playmat="playmat-fossil" onclick="changePlaymat('playmat-fossil')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+          <button type="button" data-playmat="playmat-fossil" onclick="changePlaymat('playmat-fossil')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+            <img src="assets/playmats/fossil.jpg" alt="Fossile" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Fossile</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Ptéra Préhistorique</span>
             </span>
           </button>
-          <button type="button" data-playmat="playmat-mewtwo" onclick="changePlaymat('playmat-mewtwo')" class="playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+          <button type="button" data-playmat="playmat-mewtwo" onclick="changePlaymat('playmat-mewtwo')" class="playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 bg-white border-slate-200 text-slate-700 hover:border-amber-400 active:scale-95">
+            <img src="assets/playmats/mewtwo.jpg" alt="Mewtwo Rouge" class="w-9 h-9 rounded-lg object-cover shrink-0 border border-slate-300 shadow-sm" />
             <span class="min-w-0">
               <span class="block text-[11px] font-extrabold leading-tight truncate">Mewtwo Rouge</span>
               <span class="block text-[9px] text-slate-500 leading-tight truncate">Base Set 2</span>
@@ -16649,7 +16705,7 @@ const TYPE_EMOJI = {
     }
 
     const PLAYMATS = ['playmat-night', 'playmat-jungle', 'playmat-fossil', 'playmat-mewtwo'];
-    function changePlaymat(cls) {
+    function changePlaymat(cls, persist = true) {
       if (!PLAYMATS.includes(cls)) cls = PLAYMATS[0];
       const b = document.getElementById('appBody');
       b.classList.remove(...PLAYMATS);
@@ -16658,13 +16714,15 @@ const TYPE_EMOJI = {
       if (sel && sel.value !== cls) sel.value = cls;
       document.querySelectorAll('.playmat-opt-btn').forEach((btn) => {
         const active = btn.getAttribute('data-playmat') === cls;
-        btn.className = `playmat-opt-btn px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 active:scale-95 ${
+        btn.className = `playmat-opt-btn p-1.5 rounded-xl border text-left transition flex items-center gap-2 active:scale-95 ${
           active
             ? 'bg-amber-50 border-amber-400 text-amber-900 ring-1 ring-amber-400/60 shadow-sm'
             : 'bg-white border-slate-200 text-slate-700 hover:border-amber-400'
         }`;
       });
-      try { localStorage.setItem('ppi_playmat', cls); } catch (e) {}
+      if (persist) {
+        try { localStorage.setItem('ppi_playmat', cls); } catch (e) {}
+      }
     }
     try { changePlaymat(localStorage.getItem('ppi_playmat') || PLAYMATS[0]); } catch (e) {}
 
@@ -16739,6 +16797,8 @@ const TYPE_EMOJI = {
         badgeName: 'Badge Bourgeon 2000',
         badgeIcon: '🌿',
         avatar: 'assets/trainers/hanae.jpg',
+        cutout: 'assets/trainers/hanae.png',
+        color: '#22c55e',
         deckKey: 'ADV_1_VENUSAUR',
         deckArchetype: 'Venusaur / Dodrio (Energy Trans)',
         tourneyCitation: 'Archétype officiel Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
@@ -16774,6 +16834,8 @@ const TYPE_EMOJI = {
         badgeName: 'Badge Volcan 2000',
         badgeIcon: '🔥',
         avatar: 'assets/trainers/ryo.jpg',
+        cutout: 'assets/trainers/ryo.png',
+        color: '#f97316',
         deckKey: 'ADV_2_ARCANINE',
         deckArchetype: 'Psyduck / Arcanine / Electrode (Buzzap)',
         tourneyCitation: 'Archétype de tournoi Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
@@ -16809,6 +16871,8 @@ const TYPE_EMOJI = {
         badgeName: 'Badge Déluge 2000',
         badgeIcon: '🌊',
         avatar: 'assets/trainers/kai.jpg',
+        cutout: 'assets/trainers/kai.png',
+        color: '#0ea5e9',
         deckKey: 'ADV_3_RAINDANCE',
         deckArchetype: 'Rain Dance (Blastoise / Articuno / Lapras)',
         tourneyCitation: '1re Place Super Trainer Showdown West Coast (Juillet 2000, Queen Mary, Long Beach CA)',
@@ -16844,6 +16908,8 @@ const TYPE_EMOJI = {
         badgeName: 'Badge Vague 2000',
         badgeIcon: '🌺',
         avatar: 'assets/trainers/takuya.jpg',
+        cutout: 'assets/trainers/takuya.png',
+        color: '#ec4899',
         deckKey: 'ADV_4_WIGGLYTUFF',
         deckArchetype: 'Do the Wave (Wigglytuff / Magmar / Scyther / Muk)',
         tourneyCitation: 'Champion Tropical Mega Battle (Honolulu) & Finaliste STS West Coast (Juillet 2000)',
@@ -16879,6 +16945,8 @@ const TYPE_EMOJI = {
         badgeName: 'Badge Illusion 2000',
         badgeIcon: '🔮',
         avatar: 'assets/trainers/soren.jpg',
+        cutout: 'assets/trainers/soren.png',
+        color: '#8b5cf6',
         deckKey: 'ADV_5_DAMAGESWAP',
         deckArchetype: 'Damage Swap Stall (Alakazam / Mr. Mime / Chansey)',
         tourneyCitation: 'Archétype de contrôle Base–Fossil (1999–2000) · PTCG Archive & Jason Klaczynski',
@@ -16914,6 +16982,8 @@ const TYPE_EMOJI = {
         badgeName: 'Couronne Haymaker 2000',
         badgeIcon: '👑',
         avatar: 'assets/trainers/axel.jpg',
+        cutout: 'assets/trainers/axel.png',
+        color: '#eab308',
         deckKey: 'ADV_6_HAYMAKER',
         deckArchetype: 'Haymaker (Hitmonchan / Electabuzz / Scyther / Magmar)',
         tourneyCitation: '1re Place 15+ Super Trainer Showdown West Coast (Juillet 2000) & Archive Jason Klaczynski',
@@ -17161,7 +17231,6 @@ const TYPE_EMOJI = {
       }
       const defeatedCount = getDefeatedAdvCount();
       const totalCount = ADVENTURE_TRAINERS.length;
-      const pct = Math.round((defeatedCount / totalCount) * 100);
 
       const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
       const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
@@ -17172,190 +17241,169 @@ const TYPE_EMOJI = {
         const d = DECK_META[k];
         if (!d) return '';
         const sel = adventureSave.selectedDeck === k;
-        const isHalf = d.cards === 30;
-        const isTourney = !!d.tournament;
         return `
-          <button onclick="selectAdvPlayerDeck('${k}')" class="p-1.5 rounded-xl border ${sel ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-300 shadow-sm scale-[1.01]' : 'bg-slate-50/90 hover:bg-white border-slate-200/90'} flex flex-col items-center gap-1 transition active:scale-95">
-            <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-slate-900">
+          <button onclick="selectAdvPlayerDeck('${k}')" class="p-1 rounded-xl border ${sel ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-300' : 'bg-slate-50/90 border-slate-200/90'} flex flex-col items-center gap-0.5 transition active:scale-95">
+            <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden bg-slate-900">
               <img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
-              <span class="absolute bottom-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded ${isTourney ? 'bg-amber-400 text-slate-950' : isHalf ? 'bg-amber-300 text-slate-950' : 'bg-indigo-600 text-white'}">${isTourney ? '2000' : isHalf ? '30c' : '60c'}</span>
-              ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-sky-500 text-white text-[10px] font-black flex items-center justify-center shadow">✓</span>' : ''}
+              ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-sky-500 text-white text-[10px] font-black flex items-center justify-center">✓</span>' : ''}
             </div>
-            <span class="text-[10.5px] font-black ${sel ? 'text-sky-950' : 'text-slate-900'} w-full text-center leading-tight truncate">${d.short}</span>
+            <span class="text-[10px] font-black text-slate-900 w-full text-center leading-tight truncate">${d.short}</span>
           </button>
         `;
       };
-
       const curDeckMeta = DECK_META[adventureSave.selectedDeck] || DECK_META.V2_FEU;
+      const allDeckKeys = [...unlockedTourneyKeys, ...customKeys, ...fullKeys, ...halfKeys];
 
-      const trainerCardsHtml = ADVENTURE_TRAINERS.map((tr) => {
-        const wins = adventureSave.defeated[tr.id] || 0;
-        const isDefeated = wins > 0;
+      // Chemin en zigzag (palier 1 en haut → Grand Maître en bas)
+      const xs = [26, 70, 32, 72, 30, 50];
+      const ROW = 124;
+      const pathH = ROW * totalCount;
+      const pts = ADVENTURE_TRAINERS.map((t, i) => ({ x: xs[i % xs.length], y: i * ROW + 46 }));
+      let d = `M ${pts[0].x} ${pts[0].y}`;
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i];
+        const my = (a.y + b.y) / 2;
+        d += ` C ${a.x} ${my}, ${b.x} ${my}, ${b.x} ${b.y}`;
+      }
+      const doneIdx = defeatedCount; // segments franchis
+      let dDone = `M ${pts[0].x} ${pts[0].y}`;
+      for (let i = 1; i <= Math.min(doneIdx, pts.length - 1); i++) {
+        const a = pts[i - 1], b = pts[i];
+        const my = (a.y + b.y) / 2;
+        dDone += ` C ${a.x} ${my}, ${b.x} ${my}, ${b.x} ${b.y}`;
+      }
+
+      const nodes = ADVENTURE_TRAINERS.map((tr, i) => {
+        const isDefeated = (adventureSave.defeated[tr.id] || 0) > 0;
         const isUnlocked = tr.rank <= adventureSave.unlockedRank;
-        const isCurrentTarget = tr.rank === adventureSave.unlockedRank && !isDefeated;
-        const keyCardObjs = tr.keyCards.map((cid) => CARDS_DB[cid]).filter(Boolean);
-
+        const isCurrent = isUnlocked && !isDefeated;
+        const state = isDefeated ? 'done' : isCurrent ? 'current' : 'locked';
+        const isBoss = i === totalCount - 1;
         return `
-          <div class="rounded-2xl tcg-card-panel p-3 space-y-2.5 transition ${isCurrentTarget ? 'ring-2 ring-sky-400/80 shadow-md' : ''} ${!isUnlocked ? 'opacity-80' : ''}">
-            <div class="flex items-start gap-3">
-              <!-- Portrait Anime Manga Higgsfield -->
-              <div onclick="openAdvDeckInspector('${tr.id}')" class="cursor-pointer relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 ${isDefeated ? 'border-emerald-400' : isUnlocked ? 'border-sky-400' : 'border-slate-300'} shadow-md shrink-0 bg-slate-900 group">
-                <img src="${tr.avatar}" alt="${tr.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${!isUnlocked ? 'grayscale-[45%]' : ''}" />
-                <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-slate-950/85 text-white font-black text-[9px] tracking-wide">#${tr.rank}</span>
-                ${isDefeated ? `<span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-emerald-500 text-white font-black text-[9px] shadow">${tr.badgeIcon} Vaincu</span>` : ''}
-              </div>
-
-              <!-- Infos Dresseur & Deck Historique 2000 -->
-              <div class="min-w-0 flex-1 space-y-1">
-                <div class="flex items-center justify-between gap-1.5 flex-wrap">
-                  <span class="text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border ${tr.accentBadge}">${tr.difficultyLabel}</span>
-                  <span class="text-[11px] font-black text-amber-500 tracking-tight" title="Difficulté">${tr.stars}</span>
-                </div>
-                <div class="flex items-baseline gap-1.5 flex-wrap">
-                  <h3 class="text-sm sm:text-base font-black text-slate-900 leading-tight">${tr.name}</h3>
-                  <span class="text-[11px] font-bold text-slate-500">· « ${tr.title} »</span>
-                </div>
-                <div class="text-[11px] font-extrabold text-sky-800 leading-snug">
-                  🏆 Deck : <span class="underline decoration-sky-300">${tr.deckArchetype}</span> (60c)
-                </div>
-                <div class="text-[10px] font-semibold text-slate-500 leading-tight">
-                  📜 Source vérifiée : <strong class="text-slate-700">${tr.realPlayer}</strong> — <em>${tr.tourneyCitation}</em>
-                </div>
-              </div>
-            </div>
-
-            <!-- Personnalité & Stratégie + Cartes Clés -->
-            <div class="rounded-xl bg-slate-50/90 border border-slate-200/80 p-2.5 space-y-2">
-              <p class="text-[11px] text-slate-700 italic leading-snug">
-                « ${tr.quotes.intro} »
-              </p>
-              <div class="text-[10.5px] text-slate-600 leading-snug">
-                <strong class="text-slate-900">Tactique 2000 :</strong> ${tr.strategyNote}
-              </div>
-
-              <!-- Aperçu des 4 cartes phares + Récompenses -->
-              <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/70 flex-wrap">
-                <div class="flex items-center gap-1.5">
-                  <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-slate-400 mr-0.5">Cartes clés :</span>
-                  ${keyCardObjs.map((c) => `
-                    <button onclick="showStickyPreview('${c.img}')" class="w-8 aspect-[63/88] rounded overflow-hidden border border-slate-300 shadow-sm hover:scale-110 transition bg-slate-900" title="${c.name}">
-                      <img src="${c.img}" alt="${c.name}" loading="lazy" class="w-full h-full object-cover" />
-                    </button>
-                  `).join('')}
-                </div>
-                <div class="flex items-center gap-1 text-[10px] font-extrabold ${isDefeated ? 'text-emerald-700' : 'text-amber-700'}">
-                  ${isDefeated
-                    ? `<span>✅ Deck débloqué · ${wins} victoire${wins > 1 ? 's' : ''} (+100 🪙/revanche)</span>`
-                    : `<span>🎁 1re victoire : +${tr.rewardCoins} 🪙 + ${tr.rewardFreePacks} Booster + Deck 2000</span>`
-                  }
-                </div>
-              </div>
-            </div>
-
-            <!-- Boutons d'action -->
-            <div class="grid grid-cols-[auto_1fr] gap-2">
-              <button onclick="openAdvDeckInspector('${tr.id}')" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 border border-slate-200/90 text-[11px] font-extrabold text-slate-700 transition active:scale-95">
-                📜 Voir les 60 cartes
-              </button>
-              ${isUnlocked ? `
-                <button onclick="startAdventureMatch('${tr.id}')" class="btn-gold py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider shadow flex items-center justify-center gap-1.5 active:scale-[0.99] transition">
-                  <span>⚔️ ${isDefeated ? `Revanche contre ${tr.name}` : `Défier ${tr.name}`}</span>
-                </button>
-              ` : `
-                <button disabled class="py-2.5 px-4 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 text-xs font-extrabold uppercase tracking-wide flex items-center justify-center gap-1.5">
-                  <span>🔒 Bats d'abord ${ADVENTURE_TRAINERS[tr.rank - 2]?.name || 'le palier précédent'}</span>
-                </button>
-              `}
-            </div>
+          <div class="adv-row">
+            <button type="button" onclick="openAdvTrainerSheet('${tr.id}')" class="adv-node ${state}" style="left:${xs[i % xs.length]}%" aria-label="${tr.name}">
+              <span class="adv-disc" style="background: radial-gradient(circle at 50% 35%, #fff 0%, ${tr.color} 75%); ${isBoss ? 'width:96px;height:96px;border-color:#fde047;' : ''}">
+                <img class="adv-cut" src="${tr.cutout}" alt="" loading="lazy" draggable="false" />
+                ${isDefeated ? `<span class="adv-tag bg-emerald-500 text-white" style="right:-6px;bottom:-2px">✓</span>` : ''}
+                ${!isUnlocked ? `<span class="adv-tag bg-slate-700 text-white" style="right:-6px;bottom:-2px">🔒</span>` : ''}
+                ${isCurrent ? `<span class="adv-tag bg-sky-500 text-white" style="right:-8px;bottom:-2px">⚔️</span>` : ''}
+                ${isBoss ? `<span class="adv-tag bg-amber-300 text-slate-900" style="left:50%;top:-14px;transform:translateX(-50%)">👑</span>` : ''}
+              </span>
+              <span class="adv-name">${tr.badgeIcon} ${tr.name}</span>
+              <span class="adv-stars">${tr.stars}</span>
+            </button>
           </div>
         `;
       }).join('');
 
       box.innerHTML = `
-        <!-- En-tête Mode Aventure · Ligue Tournois 2000 -->
-        <div class="w-full p-3.5 rounded-2xl tcg-card-panel space-y-2.5">
-          <div class="flex items-start justify-between gap-2">
-            <div class="min-w-0">
-              <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-sky-100 border border-sky-300 text-sky-900 text-[10px] font-black uppercase tracking-wider">
-                🏆 Archives Officielles WOTC 1999–2000
-              </div>
-              <h2 class="text-base sm:text-lg font-black text-slate-900 leading-tight mt-1">
-                Mode Aventure · Ligue 2000
-              </h2>
-              <p class="text-[11px] text-slate-600 leading-snug mt-0.5">
-                Affronte 6 Dresseurs de plus en plus redoutables équipés des <strong>vrais decks de tournois de l'an 2000</strong> (Queen Mary STS 2000, Tropical Mega Battle Honolulu, PTCG Archive). Chaque champion battu débloque son <strong>deck de tournoi 60 cartes</strong> !
-              </p>
-            </div>
-            <div class="shrink-0 text-right">
-              <div class="text-xs font-black text-slate-900">${defeatedCount} / ${totalCount}</div>
-              <div class="text-[10px] font-bold text-slate-500">Champions</div>
+        <div class="w-full px-3 py-2 rounded-2xl tcg-card-panel flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-sm font-black text-slate-900 leading-tight">🏆 Ligue 2000</div>
+            <div class="flex gap-0.5 mt-0.5">
+              ${ADVENTURE_TRAINERS.map((t) => `<span class="text-[13px] ${(adventureSave.defeated[t.id] || 0) > 0 ? '' : 'grayscale opacity-30'}">${t.badgeIcon}</span>`).join('')}
             </div>
           </div>
-
-          <!-- Barre de progression + Badges gagnés -->
-          <div class="space-y-1.5">
-            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400 transition-all duration-500" style="width:${pct}%"></div>
-            </div>
-            <div class="grid grid-cols-6 gap-1 pt-0.5">
-              ${ADVENTURE_TRAINERS.map((t) => {
-                const won = (adventureSave.defeated[t.id] || 0) > 0;
-                return `
-                  <div onclick="openAdvDeckInspector('${t.id}')" class="cursor-pointer rounded-xl px-1 py-1 border text-center transition ${won ? 'bg-emerald-50 border-emerald-300 text-emerald-900 shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-400'}">
-                    <div class="text-xs leading-none">${won ? t.badgeIcon : '🔒'}</div>
-                    <div class="text-[9px] font-extrabold truncate mt-0.5">${t.name}</div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          </div>
+          <button onclick="document.getElementById('advDeckPicker').classList.toggle('hidden')" class="shrink-0 flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 active:scale-95 transition">
+            <img src="${curDeckMeta.img}" alt="" class="w-8 aspect-[63/88] rounded object-cover border-2 border-sky-400" />
+            <span class="text-left">
+              <span class="block text-[9px] font-extrabold uppercase tracking-wider text-sky-700">Mon deck</span>
+              <span class="block text-[11px] font-black text-slate-900 max-w-[110px] truncate">${curDeckMeta.short || curDeckMeta.name}</span>
+            </span>
+          </button>
+        </div>
+        <div id="advDeckPicker" class="hidden w-full rounded-2xl tcg-card-panel p-2">
+          <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">${allDeckKeys.map(renderDeckPill).join('')}</div>
         </div>
 
-        <!-- Sélecteur repliable du Deck du Joueur pour l'Aventure -->
-        <details class="w-full rounded-2xl tcg-card-panel group overflow-hidden">
-          <summary class="cursor-pointer list-none px-3 py-2.5 flex items-center justify-between gap-2.5 select-none">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <img src="${curDeckMeta.img}" alt="${curDeckMeta.name}" class="w-9 aspect-[63/88] rounded-md object-cover border-2 border-sky-400 shrink-0 shadow-sm" />
-              <div class="min-w-0">
-                <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-sky-700">Ton Deck pour l'Aventure</div>
-                <div class="text-xs font-black text-slate-900 truncate">${curDeckMeta.name}</div>
-                <div class="text-[10px] font-semibold text-slate-500 truncate">${curDeckMeta.cards} cartes · ${curDeckMeta.prizes} Récompenses</div>
-              </div>
-            </div>
-            <span class="shrink-0 px-2.5 py-1 rounded-xl bg-slate-100 group-hover:bg-sky-50 border border-slate-200 text-[10px] font-extrabold text-slate-700 flex items-center gap-1">
-              <span>Changer de Deck</span>
-              <span class="text-slate-400 group-open:rotate-180 inline-block transition-transform">▼</span>
-            </span>
-          </summary>
-          <div class="px-3 pb-3 pt-2 border-t border-slate-200/80 bg-slate-50/60 space-y-2.5">
-            ${unlockedTourneyKeys.length ? `
-              <div class="space-y-1">
-                <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">🏆 Decks de Tournois 2000 Débloqués (${unlockedTourneyKeys.length}/6)</div>
-                <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${unlockedTourneyKeys.map(renderDeckPill).join('')}</div>
-              </div>
-            ` : ''}
-            ${customKeys.length ? `
-              <div class="space-y-1">
-                <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">✨ Mes Decks Perso (${customKeys.length})</div>
-                <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderDeckPill).join('')}</div>
-              </div>
-            ` : ''}
-            <div class="space-y-1">
-              <div class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">Decks Complets · 60 cartes (6 Prix · Recommandé)</div>
-              <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderDeckPill).join('')}</div>
-            </div>
-            <div class="space-y-1">
-              <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">Demi-Decks Rapides · 30 cartes (3 Prix)</div>
-              <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderDeckPill).join('')}</div>
-            </div>
-          </div>
-        </details>
-
-        <!-- Liste des 6 Champions de la Ligue 2000 -->
-        <div class="space-y-2.5">
-          ${trainerCardsHtml}
+        <div class="adv-path w-full" style="height:${pathH}px; margin-bottom: 24px">
+          <svg class="adv-path-svg" viewBox="0 0 100 ${pathH}" preserveAspectRatio="none" aria-hidden="true">
+            <path d="${d}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="9" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+            <path d="${d}" fill="none" stroke="rgba(148,163,184,.9)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+            ${doneIdx > 0 ? `<path d="${dDone}" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke" />` : ''}
+          </svg>
+          ${nodes}
         </div>
       `;
+      const cur = box.querySelector('.adv-node.current');
+      if (cur) requestAnimationFrame(() => { try { cur.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {} });
+    }
+
+    // Fiche courte d'un dresseur (portrait détouré + bulle + 2 boutons)
+    function openAdvTrainerSheet(trainerId) {
+      const tr = ADVENTURE_TRAINERS.find((t) => t.id === trainerId);
+      if (!tr) return;
+      closeAdvTrainerSheet();
+      const isDefeated = (adventureSave.defeated[tr.id] || 0) > 0;
+      const isUnlocked = tr.rank <= adventureSave.unlockedRank;
+      const prev = ADVENTURE_TRAINERS.find((t) => t.rank === tr.rank - 1);
+      const el = document.createElement('div');
+      el.id = 'advSheet';
+      el.style.setProperty('--adv-c', tr.color);
+      el.onclick = (e) => { if (e.target === el) closeAdvTrainerSheet(); };
+      el.innerHTML = `
+        <div class="adv-sheet-card">
+          <div class="adv-sheet-hero">
+            <img class="adv-sheet-cut ${isUnlocked ? '' : 'grayscale brightness-50'}" src="${tr.cutout}" alt="${tr.name}" />
+            <div class="speech tail-down-right adv-sheet-bubble">${isUnlocked ? tr.quotes.intro : '…'}</div>
+            <div class="absolute left-3 bottom-3 text-white">
+              <div class="text-[11px] font-black text-amber-300">${tr.stars}</div>
+              <div class="text-2xl font-black leading-none drop-shadow">${tr.name}</div>
+              <div class="text-[11px] font-bold text-white/80">${tr.title}</div>
+            </div>
+          </div>
+          <div class="px-4 pt-3 space-y-2.5">
+            <div class="flex items-center justify-between gap-2 text-[12px] font-extrabold text-slate-700">
+              <span class="truncate">🃏 ${tr.deckArchetype}</span>
+              <span class="shrink-0 ${isDefeated ? 'text-emerald-600' : 'text-amber-600'}">${isDefeated ? '✓ Battu' : `🎁 +${tr.rewardCoins} 🪙`}</span>
+            </div>
+            <div class="grid grid-cols-[auto_1fr] gap-2">
+              <button onclick="closeAdvTrainerSheet(); openAdvDeckInspector('${tr.id}')" class="px-3.5 py-3 rounded-xl bg-slate-100 border border-slate-200 text-[12px] font-extrabold text-slate-700 active:scale-95 transition">📜 Deck</button>
+              ${isUnlocked
+                ? `<button onclick="closeAdvTrainerSheet(); startAdventureMatch('${tr.id}')" class="btn-gold py-3 rounded-xl text-sm font-black uppercase tracking-wider active:scale-[.98] transition">⚔️ ${isDefeated ? 'Revanche' : 'Combattre'}</button>`
+                : `<button disabled class="py-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 text-xs font-extrabold">🔒 Bats d'abord ${prev ? prev.name : ''}</button>`}
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(el);
+    }
+    function closeAdvTrainerSheet() {
+      const el = document.getElementById('advSheet');
+      if (el) el.remove();
+    }
+
+    // Intro VS : le dresseur détouré entre en scène avec sa bulle au lancement du combat
+    function showAdvIntro(tr) {
+      if (!tr) return;
+      const old = document.getElementById('advIntro');
+      if (old) old.remove();
+      const el = document.createElement('div');
+      el.id = 'advIntro';
+      el.style.setProperty('--adv-c', tr.color);
+      el.innerHTML = `
+        <div class="adv-intro-bg"></div>
+        <div class="adv-intro-rays"></div>
+        <img class="adv-intro-cut" src="${tr.cutout}" alt="${tr.name}" draggable="false" />
+        <div class="speech tail-down-right adv-intro-bubble">${tr.quotes.intro}</div>
+        <div class="adv-intro-vs">VS</div>
+        <div class="adv-intro-band text-white">
+          <div class="text-[11px] font-black text-amber-300 tracking-widest">${tr.stars}</div>
+          <div class="text-3xl font-black leading-none">${tr.badgeIcon} ${tr.name}</div>
+          <div class="text-[11px] font-bold text-white/70 mt-1">Touche pour combattre</div>
+        </div>
+      `;
+      let closed = false;
+      const close = () => {
+        if (closed) return;
+        closed = true;
+        el.classList.add('out');
+        setTimeout(() => el.remove(), 330);
+      };
+      el.addEventListener('click', close);
+      setTimeout(close, 5200);
+      document.body.appendChild(el);
+      try { if (navigator.vibrate) navigator.vibrate(18); } catch (_) {}
     }
 
     function selectQuickPlayerDeck(key) {
@@ -18840,7 +18888,7 @@ const TYPE_EMOJI = {
       });
 
       if (advTrainer && advTrainer.playmat) {
-        changePlaymat(advTrainer.playmat);
+        changePlaymat(advTrainer.playmat, false);
       }
 
       fx.handSeen.clear(); fx.aiHandSeen.clear(); fx.dealFrom.clear(); fx.prevHp.clear(); fx.prevDmg.clear();
@@ -18859,10 +18907,10 @@ const TYPE_EMOJI = {
         : (isQuick ? '⚔️ Adversaire IA' : 'Juliette');
       document.getElementById('aiDeckLabel').textContent = DECK_META[aiDeckKey]?.short || aiDeckKey;
 
+      document.getElementById('julietteBubble').classList.toggle('adv-duel', isAdv);
       if (isAdv) {
-        sayJuliette(
-          `<strong>${advTrainer.name} (${advTrainer.title}) :</strong> « ${advTrainer.quotes.intro} » <em>(${advTrainer.name} envoie ${game.ai.active.name} !)</em>`
-        );
+        sayJuliette(`${advTrainer.name} envoie ${game.ai.active.name} !`);
+        showAdvIntro(advTrainer);
       } else if (!isQuick) {
         sayJuliette(
           `J'envoie ${game.ai.active.name} ! Touche un Pokémon de Base dans ta main en bas pour le choisir comme Pokémon Actif.`
@@ -18882,6 +18930,7 @@ const TYPE_EMOJI = {
         });
       }
       setBattleMode(false);
+      try { changePlaymat(localStorage.getItem('ppi_playmat') || PLAYMATS[0], false); } catch (e) {}
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('menuScreen').classList.remove('hidden');
       game = null;
@@ -18975,8 +19024,14 @@ const TYPE_EMOJI = {
       const advTrainer = game && game.mode === 'adventure' ? game.advTrainer : null;
       document.querySelectorAll('.juliette-avatar').forEach((el) => {
         const isBattleAvatar = el.id === 'aiHeaderAvatar' || el.closest('#julietteBubble');
+        const inBubble = !!el.closest('#julietteBubble');
+        el.classList.toggle('adv-duel-avatar', !!(advTrainer && inBubble));
+        el.classList.toggle('adv-head-avatar', !!(advTrainer && el.id === 'aiHeaderAvatar'));
         if (advTrainer && isBattleAvatar) {
-          el.innerHTML = `<img src="${advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-full h-full object-cover object-top rounded-full" />`;
+          if (advTrainer.color) el.style.setProperty('--adv-c', advTrainer.color);
+          el.innerHTML = inBubble
+            ? `<img src="${advTrainer.cutout || advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" draggable="false" />`
+            : `<img src="${advTrainer.cutout || advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-full h-full object-cover object-top rounded-full" />`;
         } else {
           el.innerHTML = julietteSVG(mood);
         }
@@ -22378,7 +22433,7 @@ const TYPE_EMOJI = {
             }
           }
           if (n) {
-            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.trainerPlay} »` : '';
             sayJuliette(`🌧️ Danse de la pluie : ${oppLabel()} attache ${n} Énergie(s) Eau supplémentaires !${q}`);
             renderBoard();
             await wait(600);
@@ -22404,7 +22459,7 @@ const TYPE_EMOJI = {
             a.energies.push(e); fx.attached.add(e.uid); moved++;
           }
           if (moved) {
-            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.trainerPlay} »` : '';
             sayJuliette(`🌿 Transfert d'Énergie : ${oppLabel()} déplace ${moved} Énergie(s) Plante vers ${a.name} !${q}`);
             renderBoard();
             await wait(550);
@@ -22424,7 +22479,7 @@ const TYPE_EMOJI = {
             moved += 10;
           }
           if (moved > 0) {
-            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.trainerPlay} »` : '';
             sayJuliette(`🔮 Transfert de dégâts : ${oppLabel()} transfère ${moved} dégâts de ${side.active.name} vers son Banc !${q}`);
             renderBoard();
             await wait(600);
@@ -22445,7 +22500,7 @@ const TYPE_EMOJI = {
               fx.dealFrom.set(pr.uid, 'prize');
               game.player.hand.push(pr);
             }
-            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+            const q = game.advTrainer ? ` « ${game.advTrainer.quotes.trainerPlay} »` : '';
             sayJuliette(`💥 Buzzap ! ${p.name} se sacrifie et devient 2 Énergies ${eType} sur ${target.name} !${q}`);
             renderBoard();
             if (wasActive) await promoteAfterRemoval('ai');
@@ -22784,7 +22839,7 @@ const TYPE_EMOJI = {
           const [oak] = game.ai.hand.splice(oakIdx, 1);
           game.ai.discard.push(oak, ...game.ai.hand.splice(0, game.ai.hand.length));
           game.ai.hand.push(...game.ai.deck.splice(0, 7));
-          const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+          const q = game.advTrainer ? ` « ${game.advTrainer.quotes.trainerPlay} »` : '';
           sayJuliette(`🎓 ${oppLabel()} joue Professeur Chen et pioche 7 nouvelles cartes !${q}`);
           renderBoard();
           await wait(650); if (!alive()) return;
@@ -22893,7 +22948,7 @@ const TYPE_EMOJI = {
           for (let k = 0; k < 2 && game.player.active.energies.length > 0; k++) {
             game.player.discard.push(game.player.active.energies.pop());
           }
-          const q = game.advTrainer ? ` « ${game.advTrainer.quotes.power} »` : '';
+          const q = game.advTrainer ? ` « ${game.advTrainer.quotes.trainerPlay} »` : '';
           sayJuliette(`⚡ ${oppLabel()} joue Double Suppression d'Énergie et prive ${game.player.active.name} de 2 Énergies !${q}`);
           renderBoard();
           await wait(650); if (!alive()) return;
@@ -23091,9 +23146,6 @@ const TYPE_EMOJI = {
           const prevWins = adventureSave.defeated[advTrainer.id] || 0;
           firstTimeAdvWin = prevWins === 0;
           adventureSave.defeated[advTrainer.id] = prevWins + 1;
-          if (!adventureSave.unlockedDecks.includes(advTrainer.deckKey)) {
-            adventureSave.unlockedDecks.push(advTrainer.deckKey);
-          }
           if (advTrainer.rank >= (adventureSave.unlockedRank || 1) && advTrainer.rank < ADVENTURE_TRAINERS.length) {
             adventureSave.unlockedRank = advTrainer.rank + 1;
             unlockedNextTrainer = ADVENTURE_TRAINERS.find((t) => t.rank === advTrainer.rank + 1) || null;
@@ -23145,7 +23197,7 @@ const TYPE_EMOJI = {
             <img src="${advTrainer.avatar}" alt="${dbEsc(advTrainer.name)}" class="w-11 h-11 rounded-xl object-cover object-top border border-sky-400 shrink-0" />
             <div class="min-w-0 flex-1">
               <div class="text-[10.5px] font-black text-sky-700 uppercase tracking-wide">${advTrainer.badgeIcon} ${dbEsc(advTrainer.badgeName)} remporté !</div>
-              <div class="text-[11px] font-extrabold text-slate-800 truncate">Deck débloqué : ${dbEsc(advTrainer.deckName)}</div>
+              <div class="text-[11px] font-extrabold text-slate-800 truncate">Deck débloqué : ${dbEsc(DECK_META[advTrainer.deckKey]?.name || advTrainer.deckArchetype)}</div>
               <div class="text-[10px] font-semibold text-slate-600">+${earnedFreePacks} Booster(s) gratuit(s)${unlockedNextTrainer ? ` · ${dbEsc(unlockedNextTrainer.name)} débloqué(e) !` : ' · Tu es Grand Maître 2000 !'}</div>
             </div>
           </div>
@@ -25976,11 +26028,11 @@ const TYPE_EMOJI = {
               <button onclick="createEmptyDeck()" class="min-h-[56px] rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-sm font-black text-slate-800 flex flex-col items-center justify-center leading-tight active:scale-95 shadow-sm">+ Nouveau<span class="text-[10.5px] font-bold text-slate-500">à la main</span></button>
             </div>`}
         </div>
-        <div class="flex items-center justify-between px-1 pt-1">
+        <div class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-white/92 backdrop-blur-md border border-slate-200/90 shadow-sm">
           <h3 class="text-[12px] font-black tracking-wider uppercase text-amber-700">Mes decks (${customDecks.length})</h3>
           ${customDecks.length ? '<span class="text-[11px] font-semibold text-slate-600">Touchez pour modifier</span>' : ''}
         </div>
-        <div class="space-y-2">${deckRows || `<div class="rounded-xl border border-dashed border-slate-300 bg-white/80 p-4 text-center text-[12.5px] text-slate-600">Aucun deck pour l'instant.${ownedBasics ? '<br>Essaie <b class="text-amber-700">Deck auto</b> : il choisit tes meilleures cartes.' : ''}</div>`}</div>
+        <div class="space-y-2">${deckRows || `<div class="rounded-xl border border-dashed border-slate-300 bg-white/92 backdrop-blur-md p-4 text-center text-[12.5px] text-slate-600 shadow-sm">Aucun deck pour l'instant.${ownedBasics ? '<br>Essaie <b class="text-amber-700">Deck auto</b> : il choisit tes meilleures cartes.' : ''}</div>`}</div>
       `;
     }
 

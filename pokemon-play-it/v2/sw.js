@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ppi-mobile-v34';
+const CACHE_NAME = 'ppi-mobile-v36';
 const ASSETS = [
   '/', '/index.html', '/manifest.json',
   '/src/main.js', '/src/engine/GameState.js', '/src/engine/RulesEngine.js',
@@ -8,8 +8,12 @@ const ASSETS = [
   '/src/data/cards.js', '/src/data/decks.js', '/src/data/tutorial.js',
   '/src/assets/card-back.svg', '/src/assets/coin-heads.svg', '/src/assets/coin-tails.svg',
   '/src/assets/playmat.svg', '/src/assets/bgm.m4a', '../assets/bgm.m4a',
+  '../assets/playmats/night.jpg', '../assets/playmats/jungle.jpg',
+  '../assets/playmats/fossil.jpg', '../assets/playmats/mewtwo.jpg',
   '../assets/trainers/hanae.jpg', '../assets/trainers/ryo.jpg', '../assets/trainers/kai.jpg',
-  '../assets/trainers/takuya.jpg', '../assets/trainers/soren.jpg', '../assets/trainers/axel.jpg'
+  '../assets/trainers/takuya.jpg', '../assets/trainers/soren.jpg', '../assets/trainers/axel.jpg',
+  '../assets/trainers/hanae.png', '../assets/trainers/ryo.png', '../assets/trainers/kai.png',
+  '../assets/trainers/takuya.png', '../assets/trainers/soren.png', '../assets/trainers/axel.png'
 ];
 
 self.addEventListener('install', e => {
