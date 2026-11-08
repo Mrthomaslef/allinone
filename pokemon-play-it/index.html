@@ -6,7 +6,9 @@
   <title>Pokémon : À toi de jouer ! (1999 · 228 Cartes Base + Jungle + Fossile)</title>
   <meta name="description" content="Recréation fidèle pour navigateur mobile de Pokémon Play It! (1999/2000) avec les 4 demi-decks officiels (Set de Base & Jungle FR), Juliette en IA et les vraies règles." />
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
-  <meta name="theme-color" content="#0f172a" />
+  <link rel="apple-touch-icon" href="assets/icon.svg" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b1120" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -20,12 +22,37 @@
     * { -webkit-tap-highlight-color: transparent; user-select: none; }
     *, *::before, *::after { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     img { -webkit-user-drag: none; -webkit-touch-callout: none; pointer-events: auto; }
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      min-height: -webkit-fill-available;
+      background: #0b1120;
+    }
     body {
+      margin: 0;
       font-family: 'Nunito', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      height: 100dvh;
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      min-height: -webkit-fill-available;
       overflow: hidden;
       background: #0b1120;
       color: #f8fafc;
+    }
+    @media all and (display-mode: standalone), all and (display-mode: fullscreen) {
+      html, body {
+        height: 100vh !important;
+        min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
+      }
+    }
+    html.ios-standalone, html.ios-standalone body {
+      height: 100vh !important;
+      min-height: calc(100dvh + env(safe-area-inset-bottom, 0px)) !important;
     }
     .playmat-night  { background: radial-gradient(ellipse at 50% 42%, #2f6584 0%, #1d435a 55%, #0f2534 100%); }
     .playmat-jungle { background: radial-gradient(ellipse at 50% 42%, #4a7a43 0%, #2b4f2d 55%, #14291a 100%); }
@@ -41,15 +68,18 @@
       background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.45) 100%);
     }
     #menuScreen, #gameScreen { position: relative; z-index: 1; }
-    /* Mode application (PWA plein écran) : respecter encoche / barre d'état / home indicator */
+    /* Mode application (PWA plein écran) : respecter encoche / barre d'état sans bande vide en bas */
     body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
-    #menuScreen { padding-top: calc(1rem + env(safe-area-inset-top)) !important; padding-bottom: calc(6rem + env(safe-area-inset-bottom)) !important; }
-    #cardModal, #coinModal, #pickerModal, #academyModal, #boosterOpenModal, #pseudoModal {
-      padding-top: calc(1rem + env(safe-area-inset-top)) !important;
-      padding-bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
+    #menuScreen {
+      padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
+      padding-bottom: calc(4.75rem + min(12px, env(safe-area-inset-bottom, 0px))) !important;
     }
-    #gameScreen > header { padding-top: max(6px, calc(env(safe-area-inset-top) + 2px)) !important; }
-    #gameToast { top: calc(13% + env(safe-area-inset-top)) !important; }
+    #cardModal, #coinModal, #pickerModal, #academyModal, #boosterOpenModal, #pseudoModal {
+      padding-top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
+      padding-bottom: calc(0.75rem + min(12px, env(safe-area-inset-bottom, 0px))) !important;
+    }
+    #gameScreen > header { padding-top: max(6px, calc(env(safe-area-inset-top, 0px) + 2px)) !important; }
+    #gameToast { top: calc(13% + env(safe-area-inset-top, 0px)) !important; }
     .card-shadow {
       box-shadow: 0 1px 1px rgba(0,0,0,.35), 0 6px 12px -3px rgba(0,0,0,.5);
     }
@@ -123,7 +153,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.6);
     }
     .hand-card {
-      position: absolute; bottom: 12px; width: 66px; transform-origin: 50% 120%;
+      position: absolute; bottom: 6px; width: 66px; transform-origin: 50% 120%;
       transition: transform .16s cubic-bezier(.2,.9,.3,1.2), box-shadow .16s ease;
     }
     .hand-card.hand-focus {
@@ -837,7 +867,7 @@
   <!-- =================================================================== -->
   <!-- ÉCRAN 1 : MENU PRINCIPAL VITRINE 1999 + GRANDS DECKS V2             -->
   <!-- =================================================================== -->
-  <div id="menuScreen" class="menu-bg flex-1 overflow-y-auto px-3.5 sm:px-5 pt-4 pb-24 flex flex-col items-center justify-between max-w-2xl mx-auto w-full gap-3.5">
+  <div id="menuScreen" class="menu-bg flex-1 overflow-y-auto px-3.5 sm:px-5 pt-3 pb-20 flex flex-col items-center justify-start max-w-2xl mx-auto w-full gap-3.5">
 
     <!-- En-tête Héroïque -->
     <div class="w-full text-center relative pt-1">
@@ -1269,8 +1299,11 @@
       </div>
     </div>
 
+    <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
+    <div id="viewDecks" class="hidden w-full space-y-2.5"></div>
+
     <!-- Barre du bas : Tapis de jeu -->
-    <div class="w-full mt-1 pt-3 border-t border-white/15 flex items-center justify-center gap-2 text-xs text-slate-300">
+    <div class="w-full mt-auto pt-3 border-t border-white/15 flex items-center justify-center gap-2 text-xs text-slate-300">
       <div class="flex items-center gap-2">
         <span class="font-bold text-slate-400">🎨 Tapis de jeu :</span>
         <select id="playmatSelect" onchange="changePlaymat(this.value)" class="glass-pill rounded-xl px-2.5 py-1.5 text-xs font-semibold text-white focus:outline-none">
@@ -1283,11 +1316,8 @@
     </div>
 
     <!-- BARRE DE CHOIX DU MODE FIXÉE EN BAS -->
-    <!-- VUE : CRÉATION DE DECK (rendue par renderDecksView) -->
-    <div id="viewDecks" class="hidden w-full space-y-2.5"></div>
-
-    <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(8px, env(safe-area-inset-bottom))">
-      <div class="max-w-lg mx-auto px-2 pt-2 grid grid-cols-5 gap-1">
+    <nav id="bottomModeNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-yellow-400/30 shadow-[0_-10px_30px_rgba(0,0,0,0.85)]" style="padding-bottom:max(6px, min(12px, env(safe-area-inset-bottom, 0px)))">
+      <div class="max-w-lg mx-auto px-2 pt-1.5 grid grid-cols-5 gap-1">
         <button id="tabBtnTuto" onclick="switchMenuTab('tuto')" class="py-2 px-1.5 rounded-xl text-[10.5px] sm:text-xs font-black tracking-wide transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-lg ring-2 ring-yellow-300/80 active:scale-95">
           <span class="text-base sm:text-sm leading-none">🎓</span>
           <span>Tutoriel</span>
@@ -1408,7 +1438,7 @@
     </main>
 
     <!-- MAIN EN ÉVENTAIL -->
-    <footer class="shrink-0 bg-gradient-to-b from-black/30 to-black/50 px-2 pt-1" style="padding-bottom:max(4px, env(safe-area-inset-bottom))">
+    <footer class="shrink-0 bg-gradient-to-b from-black/30 to-black/50 px-2 pt-1" style="padding-bottom:max(4px, min(10px, env(safe-area-inset-bottom, 0px)))">
       <div class="flex items-center justify-between text-[10.5px] font-bold text-slate-300/80 px-1">
         <span>TA MAIN · <strong id="playerHandCount" class="text-white">0</strong></span>
         <span>Glisse pour jouer · touche pour voir 🔍</span>
@@ -21674,6 +21704,23 @@ const TYPE_EMOJI = {
       window.addEventListener('mousemove', (e) => { if (e.buttons) move(e.clientY); });
       window.addEventListener('mouseup', end);
     })();
+    (function initStandaloneViewportFix() {
+      const root = document.documentElement;
+      const isStandalone = window.navigator.standalone === true ||
+        (window.matchMedia && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches));
+      if (isStandalone) root.classList.add('ios-standalone');
+      window.addEventListener('focusout', () => {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          if (root.classList.contains('ios-standalone')) {
+            root.style.display = 'none';
+            void root.offsetHeight;
+            root.style.display = '';
+          }
+          if (typeof game !== 'undefined' && game && typeof renderBoard === 'function') renderBoard();
+        }, 90);
+      });
+    })();
     initHandDrag();
     initHover();
     initTouchPeek();
@@ -21704,7 +21751,7 @@ const TYPE_EMOJI = {
     .db-tab { flex: 1; min-height: 40px; border-radius: 12px; font: 900 12.5px/1 Nunito, sans-serif; color: #94a3b8; touch-action: manipulation; }
     .db-tab.on { background: rgba(250,204,21,.16); color: #fde047; box-shadow: inset 0 0 0 1.5px rgba(250,204,21,.55); }
     .db-sheet-bg { position: fixed; inset: 0; z-index: 70; background: rgba(2,6,23,.75); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); display: flex; align-items: flex-end; justify-content: center; }
-    .db-sheet { width: 100%; max-width: 32rem; max-height: 90dvh; overflow-y: auto; background: #0f172a; border-top: 1.5px solid rgba(250,204,21,.45); border-radius: 22px 22px 0 0; padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); animation: dbSheetIn .22s ease-out; overscroll-behavior: contain; }
+    .db-sheet { width: 100%; max-width: 32rem; max-height: 90dvh; overflow-y: auto; background: #0f172a; border-top: 1.5px solid rgba(250,204,21,.45); border-radius: 22px 22px 0 0; padding: 16px 16px calc(12px + min(12px, env(safe-area-inset-bottom, 0px))); animation: dbSheetIn .22s ease-out; overscroll-behavior: contain; }
     @keyframes dbSheetIn { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
     .db-hand-card { animation: dbDeal .35s ease-out both; }
     @keyframes dbDeal { from { transform: translateY(-24px) rotate(-6deg); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -22241,7 +22288,7 @@ const TYPE_EMOJI = {
         <div class="max-w-lg w-full mx-auto flex flex-col h-full min-h-0">
           <div id="dbHeader" class="shrink-0 px-3 pt-2.5 pb-2 space-y-2 border-b border-white/10 bg-slate-950"></div>
           <div id="dbBody" class="db-scroll flex-1 min-h-0 overflow-y-auto px-3 py-3"></div>
-          <div id="dbFooter" class="shrink-0 px-3 pt-2 border-t border-white/10 bg-slate-950" style="padding-bottom:max(10px, env(safe-area-inset-bottom))"></div>
+          <div id="dbFooter" class="shrink-0 px-3 pt-2 border-t border-white/10 bg-slate-950" style="padding-bottom:max(8px, min(12px, env(safe-area-inset-bottom, 0px)))"></div>
         </div>`;
       document.body.appendChild(el);
       // Grille « Ajouter » : tap = +1, appui long = zoom
