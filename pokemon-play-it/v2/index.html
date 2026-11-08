@@ -12,7 +12,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '2807b9b-1794171322';
+      var BUILD = '0aad817-1794171545';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -27476,14 +27476,14 @@ const TYPE_EMOJI = {
         return `
           <div class="rounded-2xl bg-gradient-to-br ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).grad} border ${(DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore).border} p-2.5 flex items-center gap-3 shadow-sm">
             <button onclick="openDeckEditor('${d.id}')" class="shrink-0 w-14 aspect-[63/88] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
-              ${cover ? `<img src="${cover.img}" alt="" loading="lazy" class="w-full h-full object-cover" />` : '<div class="w-full h-full flex items-center justify-center text-2xl">🃏</div>'}
+              ${cover ? `<img src="${cover.img}" alt="" loading="lazy" class="w-full h-full object-cover" />` : `<div class="w-full h-full flex items-center justify-center text-slate-400">${DB_ICO.deck(24)}</div>`}
             </button>
             <button onclick="openDeckEditor('${d.id}')" class="flex-1 min-w-0 text-left">
               <div class="text-sm font-black text-slate-900 truncate">${dbEsc(d.name)}</div>
-              <div class="flex items-center gap-1 mt-0.5">${types.map((t) => dbTypeIcon(t, 15)).join('')}<span class="text-[11px] font-bold text-slate-500 ml-1">${d.size} cartes · ${d.size === 30 ? 3 : 6} 🏆</span></div>
-              <div class="mt-1 text-[11px] font-extrabold ${a.valid ? 'text-emerald-600' : 'text-amber-600'}">${a.valid ? '✅ Prêt à jouer' : (a.total !== d.size ? `⚠️ ${a.total}/${d.size} cartes${a.basics === 0 && a.total ? ' · pas de Base' : ''}` : `⚠️ ${a.basics === 0 ? 'Il faut 1 Pokémon de Base' : 'Max 4 exemplaires par carte'}`)}</div>
+              <div class="flex items-center gap-1 mt-0.5">${types.map((t) => dbTypeIcon(t, 15)).join('')}<span class="text-[11px] font-bold text-slate-500 ml-1">${d.size} cartes · ${d.size === 30 ? 3 : 6} Prix</span></div>
+              <div class="mt-1 text-[11px] font-extrabold flex items-center gap-1.5 ${a.valid ? 'text-emerald-600' : 'text-amber-600'}"><span class="inline-block w-2 h-2 rounded-full ${a.valid ? 'bg-emerald-500' : 'bg-amber-500'}"></span>${a.valid ? 'Prêt à jouer' : (a.total !== d.size ? `${a.total}/${d.size} cartes${a.basics === 0 && a.total ? ' · pas de Base' : ''}` : `${a.basics === 0 ? 'Il faut 1 Pokémon de Base' : 'Max 4 exemplaires par carte'}`)}</div>
             </button>
-            <button onclick="playCustomDeck('${d.id}')" ${a.valid ? '' : 'disabled'} class="shrink-0 min-w-[56px] min-h-[48px] px-2 rounded-xl text-xs font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-slate-100 text-slate-400 border border-slate-200'}">▶<br>Jouer</button>
+            <button onclick="playCustomDeck('${d.id}')" ${a.valid ? '' : 'disabled'} class="shrink-0 min-w-[56px] min-h-[48px] px-2 rounded-xl text-xs font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-slate-100 text-slate-400 border border-slate-200'}">${DB_ICO.play(11)}<br>Jouer</button>
           </div>`;
       }).join('');
 
@@ -27500,7 +27500,7 @@ const TYPE_EMOJI = {
             <div class="rounded-xl bg-slate-50 border border-slate-200/80 py-1.5"><div class="text-base font-black text-slate-900">${ownedCopies}</div><div class="text-[10.5px] font-bold text-slate-500">exemplaires</div></div>
             <div class="rounded-xl bg-slate-50 border border-slate-200/80 py-1.5"><div class="text-base font-black text-slate-900">${ownedBasics}</div><div class="text-[10.5px] font-bold text-slate-500">Pokémon de Base</div></div>
           </div>
-          <button type="button" onclick="openCollectionModal('all')" style="touch-action:manipulation" class="w-full min-h-[44px] rounded-xl bg-white hover:bg-slate-50 border border-amber-300 text-[13px] font-black text-slate-800 flex items-center justify-center gap-2 shadow-sm active:scale-[.98] transition">📚 Voir ma collection <span class="text-[11px] font-bold text-slate-500">(${ownedUnique} cartes)</span></button>
+          <button type="button" onclick="openCollectionModal('all')" style="touch-action:manipulation" class="w-full min-h-[44px] rounded-xl bg-white hover:bg-slate-50 border border-amber-300 text-[13px] font-black text-slate-800 flex items-center justify-center gap-2 shadow-sm active:scale-[.98] transition">${DB_ICO.deck(17)} Voir ma collection <span class="text-[11px] font-bold text-slate-500">(${ownedUnique} cartes)</span></button>
           ${ownedBasics === 0 ? `
             <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-[12.5px] text-amber-900 leading-snug">
               Tu n'as encore aucun <b>Pokémon de Base</b>. Ouvre des boosters pour obtenir des cartes, puis reviens ici !
@@ -27539,7 +27539,7 @@ const TYPE_EMOJI = {
       try { localStorage.setItem('ppi_v2_quick_player_deck', quickPlayerDeck); } catch (_) {}
       switchMenuTab('quick');
       document.getElementById('menuScreen')?.scrollTo({ top: 0, behavior: 'smooth' });
-      dbToast(`✅ <b>${dbEsc(d.name)}</b> sélectionné — choisis l'adversaire puis lance !`);
+      dbToast(`<b>${dbEsc(d.name)}</b> sélectionné — choisis l'adversaire puis lance !`);
     }
 
     // ---------- Éditeur plein écran
@@ -27684,27 +27684,27 @@ const TYPE_EMOJI = {
       const barCls = over ? 'bg-rose-500' : a.total === dbEdit.size ? 'bg-emerald-500' : 'bg-amber-400';
       document.getElementById('dbHeader').innerHTML = `
         <div class="flex items-center gap-2">
-          <button onclick="closeDeckEditor()" class="db-step shrink-0" aria-label="Retour">←</button>
+          <button onclick="closeDeckEditor()" class="db-step shrink-0" aria-label="Retour">${DB_ICO.back}</button>
           <input id="dbNameInput" value="${dbEsc(dbEdit.name)}" maxlength="28" onchange="dbRename(this.value)" onkeydown="if(event.key==='Enter')this.blur()"
             class="flex-1 min-w-0 h-10 px-3 rounded-xl bg-slate-50 border border-slate-200 text-[16px] font-black text-slate-900 focus:outline-none focus:border-amber-400" style="user-select:text;-webkit-user-select:text" />
-          <button onclick="dbDeleteDeck()" class="db-step shrink-0 !text-base" aria-label="Supprimer le deck">🗑️</button>
+          <button onclick="dbDeleteDeck()" class="db-step shrink-0 text-slate-500 hover:text-rose-600" aria-label="Supprimer le deck">${DB_ICO.trash}</button>
         </div>
         <div class="flex items-center gap-2">
           <div class="flex rounded-xl bg-slate-100 border border-slate-200 p-0.5 shrink-0">
             ${[30, 60].map((n) => `<button onclick="dbSetSize(${n})" class="min-h-[34px] px-3 rounded-lg text-[12px] font-black ${dbEdit.size === n ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600'}">${n}</button>`).join('')}
           </div>
           <div class="flex-1 min-w-0">
-            <div class="flex items-baseline justify-between">
+            <div class="flex items-center justify-between">
               <span class="text-[15px] font-black ${over ? 'text-rose-600' : a.total === dbEdit.size ? 'text-emerald-600' : 'text-slate-900'}">${a.total}<span class="text-slate-400 text-[12px]"> / ${dbEdit.size}</span></span>
-              <span class="text-[11px] font-bold text-slate-500 whitespace-nowrap">🐾 ${a.pokemon} · 🎒 ${a.trainers} · ⚡ ${a.energies}</span>
+              <span class="inline-flex items-center gap-1.5 text-[11.5px] font-extrabold text-slate-600 whitespace-nowrap"><span class="inline-flex items-center gap-1" title="Pokémon">${DB_ICO.pokeball(14)} ${a.pokemon}</span><span class="text-slate-300">·</span><span class="inline-flex items-center gap-1" title="Dresseurs">${DB_ICO.trainer(14)} ${a.trainers}</span><span class="text-slate-300">·</span><span class="inline-flex items-center gap-1" title="Énergies">${DB_ICO.energy(14)} ${a.energies}</span></span>
             </div>
             <div class="h-1.5 mt-1 rounded-full bg-slate-100 overflow-hidden"><div class="h-full ${barCls} transition-all duration-300" style="width:${pct}%"></div></div>
           </div>
         </div>
         <div class="flex gap-1 rounded-xl bg-slate-100 p-1">
-          <button onclick="dbSetTab('deck')" class="db-tab whitespace-nowrap ${dbTab === 'deck' ? 'on' : ''}">🃏 Mon deck</button>
+          <button onclick="dbSetTab('deck')" class="db-tab inline-flex items-center justify-center gap-1.5 whitespace-nowrap ${dbTab === 'deck' ? 'on' : ''}">${DB_ICO.deck(15)} Mon deck</button>
           <button onclick="dbSetTab('add')" class="db-tab whitespace-nowrap ${dbTab === 'add' ? 'on' : ''}">＋ Ajouter</button>
-          <button onclick="dbSetTab('stats')" class="db-tab relative whitespace-nowrap ${dbTab === 'stats' ? 'on' : ''}">💡 Conseils${a.tips.length ? `<span class="absolute -top-1 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-slate-950 text-[10.5px] leading-[18px]">${a.tips.length}</span>` : ''}</button>
+          <button onclick="dbSetTab('stats')" class="db-tab relative whitespace-nowrap ${dbTab === 'stats' ? 'on' : ''}">Conseils${a.tips.length ? `<span class="absolute -top-1 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-400 text-slate-950 text-[10.5px] leading-[18px]">${a.tips.length}</span>` : ''}</button>
         </div>`;
     }
 
@@ -27712,15 +27712,15 @@ const TYPE_EMOJI = {
       const a = analyzeDeck(dbEdit);
       document.getElementById('dbFooter').innerHTML = `
         <div class="grid grid-cols-[1fr_1fr_1.3fr] gap-2">
-          <button onclick="openAutoDeckSheet('edit')" class="min-h-[50px] rounded-xl bg-amber-50 border border-amber-300 text-[12.5px] font-black text-amber-900 active:scale-95">✨ Auto</button>
-          <button onclick="openTestHand()" ${a.basics ? '' : 'disabled'} class="min-h-[50px] rounded-xl bg-slate-100 border border-slate-200 text-[12.5px] font-black text-slate-800 active:scale-95 disabled:opacity-40">🖐️ Main test</button>
-          <button onclick="playCustomDeck('${dbEdit.id}')" ${a.valid ? '' : 'disabled'} class="min-h-[50px] rounded-xl text-[13px] font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-slate-100 border border-slate-200 text-slate-400'}">${a.valid ? '▶ Jouer' : `${a.total}/${dbEdit.size}`}</button>
+          <button onclick="openAutoDeckSheet('edit')" class="min-h-[50px] rounded-xl bg-amber-50 border border-amber-300 text-[12.5px] font-black text-amber-900 inline-flex items-center justify-center gap-1.5 active:scale-95">${DB_ICO.auto(14)} Auto</button>
+          <button onclick="openTestHand()" ${a.basics ? '' : 'disabled'} class="min-h-[50px] rounded-xl bg-slate-100 border border-slate-200 text-[12.5px] font-black text-slate-800 inline-flex items-center justify-center gap-1.5 active:scale-95 disabled:opacity-40">${DB_ICO.hand(17)} Main test</button>
+          <button onclick="playCustomDeck('${dbEdit.id}')" ${a.valid ? '' : 'disabled'} class="min-h-[50px] rounded-xl text-[13px] font-black uppercase inline-flex items-center justify-center gap-1.5 ${a.valid ? 'btn-gold shadow-lg' : 'bg-slate-100 border border-slate-200 text-slate-400'}">${a.valid ? `${DB_ICO.play(13)} Jouer` : `${a.total}/${dbEdit.size}`}</button>
         </div>`;
     }
 
     function dbCardMeta(c) {
       if (c.category === 'Pokémon') return `${dbTypeIcon(c.type, 13)}<span>${c.stage === 'Base' ? 'Base' : c.stage.replace('Niveau ', 'Niv. ')} · ${c.hp} PV</span>`;
-      if (c.category === 'Dresseur') return '<span>🎒 Dresseur</span>';
+      if (c.category === 'Dresseur') return '<span>Dresseur</span>';
       return `${dbTypeIcon('Incolore', 13)}<span>Énergie spéciale</span>`;
     }
 
@@ -27756,7 +27756,7 @@ const TYPE_EMOJI = {
       const section = (title, count, list, extra = '') => `
         <div class="mb-3 bg-white rounded-2xl border border-slate-200/90 p-3 shadow-sm">
           <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-100">
-            <h4 class="text-[12px] font-black uppercase tracking-wider text-slate-800">${title}</h4>
+            <h4 class="text-[12px] font-black uppercase tracking-wider text-slate-800 inline-flex items-center gap-1.5">${title}</h4>
             <span class="text-[12px] font-black text-slate-500">${count}</span>
           </div>
           ${list.length ? `<div class="divide-y divide-slate-100">${list.map(row).join('')}</div>` : extra}
@@ -27781,18 +27781,18 @@ const TYPE_EMOJI = {
       body.innerHTML = `
         ${empty ? `
           <div class="rounded-2xl border border-dashed border-amber-300 bg-amber-50/70 p-4 text-center space-y-3 mb-4">
-            <div class="text-3xl">🃏</div>
+            <div class="text-slate-700 flex justify-center">${DB_ICO.deck(32)}</div>
             <div class="text-[13px] text-slate-700 leading-snug">Ton deck est vide.<br>Ajoute tes cartes une par une, ou laisse le mode auto le remplir.</div>
             <div class="grid grid-cols-2 gap-2">
               <button onclick="dbSetTab('add')" class="min-h-[46px] rounded-xl bg-white border border-slate-200 text-[12.5px] font-black text-slate-800 shadow-sm">＋ Ajouter</button>
-              <button onclick="openAutoDeckSheet('edit')" class="min-h-[46px] rounded-xl btn-gold text-[12.5px] font-black">✨ Auto</button>
+              <button onclick="openAutoDeckSheet('edit')" class="min-h-[46px] rounded-xl btn-gold text-[12.5px] font-black inline-flex items-center justify-center gap-1.5">${DB_ICO.auto(14)} Auto</button>
             </div>
           </div>` : ''}
-        ${section('🐾 Pokémon', pk.reduce((s, e) => s + e.n, 0), pk, '<p class="text-[12px] text-slate-400 py-2">Aucun Pokémon — touche « ＋ Ajouter ».</p>')}
-        ${section('🎒 Dresseurs', tr.reduce((s, e) => s + e.n, 0), tr, '<p class="text-[12px] text-slate-400 py-2">Aucun Dresseur.</p>')}
+        ${section(`${DB_ICO.pokeball(15)} Pokémon`, pk.reduce((s, e) => s + e.n, 0), pk, '<p class="text-[12px] text-slate-400 py-2">Aucun Pokémon — touche « ＋ Ajouter ».</p>')}
+        ${section(`${DB_ICO.trainer(15)} Dresseurs`, tr.reduce((s, e) => s + e.n, 0), tr, '<p class="text-[12px] text-slate-400 py-2">Aucun Dresseur.</p>')}
         <div class="mb-3 bg-white rounded-2xl border border-slate-200/90 p-3 shadow-sm">
           <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-100">
-            <h4 class="text-[12px] font-black uppercase tracking-wider text-slate-800">⚡ Énergies</h4>
+            <h4 class="text-[12px] font-black uppercase tracking-wider text-slate-800 inline-flex items-center gap-1.5">${DB_ICO.energy(15)} Énergies</h4>
             <span class="text-[12px] font-black text-slate-500">${energyTotal}</span>
           </div>
           ${en.length ? `<div class="divide-y divide-slate-100">${en.map(row).join('')}</div>` : ''}
@@ -27830,7 +27830,7 @@ const TYPE_EMOJI = {
 
     function renderAddTab() {
       const { list, owned } = dbAddPool();
-      const kinds = [['all', 'Tout'], ['pokemon', '🐾 Pokémon'], ['trainer', '🎒 Dresseurs'], ['energy', '⚡ Énergies']];
+      const kinds = [['all', 'Tout'], ['pokemon', `${DB_ICO.pokeball(14)} Pokémon`], ['trainer', `${DB_ICO.trainer(14)} Dresseurs`], ['energy', `${DB_ICO.energy(14)} Énergies`]];
       const showEnergy = dbFilter.kind === 'all' || dbFilter.kind === 'energy';
       const full = dbTotal(dbEdit) >= dbEdit.size;
       const energyTiles = showEnergy && dbFilter.type === 'all' ? DB_TYPES.map((t) => {
@@ -27905,9 +27905,9 @@ const TYPE_EMOJI = {
       return `
         <div class="space-y-3">
           <div class="rounded-2xl p-3 border ${a.valid ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'}">
-            <div class="text-[14px] font-black ${a.valid ? 'text-emerald-800' : 'text-amber-900'}">${a.valid ? '✅ Deck valide, prêt à jouer !' : '⚠️ Deck pas encore jouable'}</div>
+            <div class="text-[14px] font-black ${a.valid ? 'text-emerald-800' : 'text-amber-900'}">${a.valid ? 'Deck valide, prêt à jouer !' : 'Deck pas encore jouable'}</div>
             ${a.errors.map((e) => `<div class="text-[12.5px] text-amber-800 mt-1">• ${e}</div>`).join('')}
-            ${a.valid ? '' : `<button onclick="openAutoDeckSheet('edit', true)" class="mt-2 w-full min-h-[44px] rounded-xl btn-gold text-[12.5px] font-black">✨ Compléter automatiquement</button>`}
+            ${a.valid ? '' : `<button onclick="openAutoDeckSheet('edit', true)" class="mt-2 w-full min-h-[44px] rounded-xl btn-gold text-[12.5px] font-black inline-flex items-center justify-center gap-1.5">${DB_ICO.auto(14)} Compléter automatiquement</button>`}
           </div>
           <div class="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
             <div class="text-[12px] font-black uppercase tracking-wider text-slate-800 mb-2">Composition</div>
@@ -27935,8 +27935,8 @@ const TYPE_EMOJI = {
           </div>
           ${energyLines ? `<div class="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm"><div class="text-[12px] font-black uppercase tracking-wider text-slate-800 mb-1">Énergies vs attaques</div>${energyLines}</div>` : ''}
           <div class="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
-            <div class="text-[12px] font-black uppercase tracking-wider text-slate-800 mb-1.5">💡 Conseils du Professeur</div>
-            ${a.tips.length ? a.tips.map((t) => `<div class="flex gap-2 py-1.5 text-[12.5px] leading-snug text-slate-700"><span class="shrink-0">${t.icon}</span><span>${t.text}</span></div>`).join('') : '<div class="text-[12.5px] text-emerald-700 font-bold py-1">Rien à signaler : ton deck est bien équilibré 👌</div>'}
+            <div class="text-[12px] font-black uppercase tracking-wider text-slate-800 mb-1.5">Conseils du Professeur</div>
+            ${a.tips.length ? a.tips.map((t) => `<div class="flex items-start gap-2 py-1.5 text-[12.5px] leading-snug text-slate-700"><span class="shrink-0 mt-0.5">${t.icon}</span><span>${t.text}</span></div>`).join('') : '<div class="text-[12.5px] text-emerald-700 font-bold py-1">Rien à signaler : ton deck est bien équilibré.</div>'}
           </div>
         </div>`;
     }
@@ -27981,7 +27981,7 @@ const TYPE_EMOJI = {
       const auto = !dbAutoSheet.types.length;
       openDbSheet(`
         <div class="w-10 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
-        <h3 class="text-[17px] font-black text-slate-900">✨ ${dbAutoSheet.completeOnly ? 'Compléter mon deck' : 'Deck automatique'}</h3>
+        <h3 class="text-[17px] font-black text-slate-900">${dbAutoSheet.completeOnly ? 'Compléter mon deck' : 'Deck automatique'}</h3>
         <p class="text-[12.5px] text-slate-500 leading-snug mt-1">Le mode intelligent choisit tes meilleures lignées d'évolution, ajoute les Dresseurs utiles et calcule les Énergies selon le coût des attaques.</p>
         <div class="mt-4 text-[12px] font-black uppercase tracking-wider text-slate-600">Taille du deck</div>
         <div class="grid grid-cols-2 gap-2 mt-1.5">
@@ -27989,7 +27989,7 @@ const TYPE_EMOJI = {
         </div>
         <div class="mt-4 flex items-baseline justify-between"><span class="text-[12px] font-black uppercase tracking-wider text-slate-600">Types</span><span class="text-[11px] text-slate-400">2 max · les Incolores vont partout</span></div>
         <div class="grid grid-cols-4 gap-2 mt-1.5">
-          <button onclick="dbAutoToggleType('auto')" class="min-h-[56px] rounded-xl border text-[12px] font-black flex flex-col items-center justify-center gap-0.5 ${auto ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'}"><span class="text-lg leading-none">🤖</span>Auto</button>
+          <button onclick="dbAutoToggleType('auto')" class="min-h-[56px] rounded-xl border text-[12px] font-black flex flex-col items-center justify-center gap-1 ${auto ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'}">${DB_ICO.pokeball(20)}<span>Auto</span></button>
           ${DB_TYPES.map((t) => {
             const on = dbAutoSheet.types.includes(t);
             const n = perType[t] || 0;
@@ -27998,9 +27998,9 @@ const TYPE_EMOJI = {
         </div>
         <div class="mt-5 space-y-2">
           ${hasCards ? `
-            <button onclick="runAutoDeck('complete')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black">✨ Compléter (garde mes cartes)</button>
-            ${dbAutoSheet.completeOnly ? '' : '<button onclick="runAutoDeck(\'replace\')" class="w-full min-h-[48px] rounded-xl bg-slate-100 border border-slate-200 text-[13px] font-black text-slate-800">🔄 Tout refaire automatiquement</button>'}
-          ` : `<button onclick="runAutoDeck('${isEdit ? 'replace' : 'new'}')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black">✨ Créer mon deck</button>`}
+            <button onclick="runAutoDeck('complete')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black inline-flex items-center justify-center gap-1.5">${DB_ICO.auto(15)} Compléter (garde mes cartes)</button>
+            ${dbAutoSheet.completeOnly ? '' : `<button onclick="runAutoDeck('replace')" class="w-full min-h-[48px] rounded-xl bg-slate-100 border border-slate-200 text-[13px] font-black text-slate-800 inline-flex items-center justify-center gap-1.5">${DB_ICO.refresh(15)} Tout refaire automatiquement</button>`}
+          ` : `<button onclick="runAutoDeck('${isEdit ? 'replace' : 'new'}')" class="w-full min-h-[52px] rounded-xl btn-gold text-[14px] font-black inline-flex items-center justify-center gap-1.5">${DB_ICO.auto(15)} Créer mon deck</button>`}
           <button onclick="closeDbSheet()" class="w-full min-h-[44px] rounded-xl text-[13px] font-bold text-slate-500">Annuler</button>
         </div>`);
     }
@@ -28028,7 +28028,7 @@ const TYPE_EMOJI = {
       }
       const a = analyzeDeck(dbEdit);
       dbBuzz([12, 30, 12]);
-      dbToast(a.valid ? `✨ Deck prêt : ${a.pokemon} Pokémon · ${a.trainers} Dresseurs · ${a.energies} Énergies` : `✨ Deck rempli au maximum (${a.total}/${dbEdit.size})`);
+      dbToast(a.valid ? `Deck prêt : ${a.pokemon} Pokémon · ${a.trainers} Dresseurs · ${a.energies} Énergies` : `Deck rempli au maximum (${a.total}/${dbEdit.size})`);
     }
 
     // ---------- Main de départ test
@@ -28044,15 +28044,15 @@ const TYPE_EMOJI = {
       openDbSheet(`
         <div class="w-10 h-1.5 rounded-full bg-slate-200 mx-auto mb-3"></div>
         <div class="flex items-center justify-between">
-          <h3 class="text-[17px] font-black text-slate-900">🖐️ Main de départ</h3>
-          <span class="text-[12px] font-black px-2 py-1 rounded-lg ${hasBasic ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${hasBasic ? '✅ Jouable' : '❌ Mulligan'}</span>
+          <h3 class="text-[17px] font-black text-slate-900 inline-flex items-center gap-2">${DB_ICO.hand(19)} Main de départ</h3>
+          <span class="text-[12px] font-black px-2.5 py-1 rounded-lg ${hasBasic ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${hasBasic ? 'Jouable' : 'Mulligan'}</span>
         </div>
         <div class="grid grid-cols-4 gap-1.5 mt-3">
           ${hand.map((c, i) => `<button onclick="showStickyPreview('${c.img}')" class="db-hand-card rounded-md overflow-hidden border ${c.category === 'Pokémon' && c.stage === 'Base' ? 'border-emerald-400 ring-1 ring-emerald-400/60' : 'border-slate-200'}" style="animation-delay:${i * 60}ms"><img src="${c.img}" alt="${dbEsc(c.name)}" class="w-full aspect-[63/88] object-cover" /></button>`).join('')}
         </div>
         <p class="text-[12px] text-slate-500 mt-3 text-center">Sur 100 mains, environ <b class="text-slate-900">${Math.round(a.pBasic * 100)}</b> contiennent un Pokémon de Base.</p>
         <div class="grid grid-cols-2 gap-2 mt-3">
-          <button onclick="openTestHand()" class="min-h-[50px] rounded-xl btn-gold text-[13px] font-black">🔄 Repiocher</button>
+          <button onclick="openTestHand()" class="min-h-[50px] rounded-xl btn-gold text-[13px] font-black inline-flex items-center justify-center gap-1.5">${DB_ICO.refresh(15)} Repiocher</button>
           <button onclick="closeDbSheet()" class="min-h-[50px] rounded-xl bg-slate-100 border border-slate-200 text-[13px] font-black text-slate-800">Fermer</button>
         </div>`);
     }
