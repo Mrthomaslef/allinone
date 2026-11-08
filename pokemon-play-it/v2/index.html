@@ -1679,7 +1679,7 @@
     <div class="w-full max-w-xl flex items-center justify-between gap-2 z-20 shrink-0">
       <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
         <span id="boosterSetBadge" class="text-[11px] font-black uppercase tracking-wider whitespace-nowrap truncate px-2.5 sm:px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Set de Base · 1999</span>
-        <span id="boosterStepPill" class="text-xs font-mono font-bold text-slate-300 whitespace-nowrap">5 cartes</span>
+        <span id="boosterStepPill" class="text-xs font-mono font-bold text-slate-300 whitespace-nowrap truncate min-w-0">5 cartes</span>
       </div>
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
         <span id="boosterModalWalletPill" class="px-2.5 py-1 rounded-xl bg-black/50 border border-yellow-400/35 text-[11px] font-extrabold text-yellow-200 whitespace-nowrap">🎁 3/3 · 🪙 0</span>
@@ -15642,8 +15642,13 @@ const TYPE_EMOJI = {
     let sfxVolumePct = Math.max(0, Math.min(100, parseInt(localStorage.getItem('ppi_v2_sfx_vol') || '80', 10)));
     let game = null;
     let uidCounter = 1;
+    let matchEpoch = 0;
+    // Jeton de partie : invalide les tours IA / attaques / timers en cours si on quitte ou relance une partie
+    function matchAlive(ep) { return !!(game && game.epoch === ep && !game.gameOver); }
+    // Le joueur ne peut plus agir pendant la résolution d'une attaque ou du Pokémon Checkup de fin de tour
+    function playerBusy() { return !game || game.gameOver || !!game.attackedThisTurn || !!game.endingTurn; }
 
-    const bgmAudio = new Audio('assets/bgm.m4a');
+    const bgmAudio = new Audio('../assets/bgm.m4a');
     bgmAudio.loop = true;
     bgmAudio.volume = (bgmVolumePct / 100) * 0.8;
     bgmAudio.preload = 'auto';
@@ -15863,6 +15868,14 @@ const TYPE_EMOJI = {
       XTRA: { key: 'XTRA', name: 'Demi-Deck Xtra Arcanin', short: 'Demi Xtra', cards: 30, prizes: 3, star: 'Arcanin (100 PV)', desc: 'Arcanin, Magmar, Caninos, Salamèche', img: 'https://assets.tcgdex.net/fr/base/base1/23/high.webp', subImg: 'https://assets.tcgdex.net/fr/base/base1/36/high.webp', grad: 'from-purple-950/90 via-slate-900/90 to-slate-950/95', border: 'border-purple-400/45' }
     };
 
+    // Un deck est jouable s'il existe, contient au moins 1 Pokémon de Base et (deck perso) respecte les règles
+    function deckKeyPlayable(k) {
+      const recipe = HALF_DECKS[k];
+      if (!recipe || !DECK_META[k]) return false;
+      if (DECK_META[k].custom && !DECK_META[k].valid) return false;
+      return recipe.some(([id, n]) => n > 0 && CARDS_DB[id] && CARDS_DB[id].category === 'Pokémon' && CARDS_DB[id].stage === 'Base');
+    }
+
     let quickPlayerDeck = 'COMBAT';
     let quickAiDeck = 'EAU';
 
@@ -15945,7 +15958,7 @@ const TYPE_EMOJI = {
       };
 
       const customKeys = typeof getCustomDeckKeys === 'function' ? getCustomDeckKeys(true) : [];
-      if (!DECK_META[quickPlayerDeck]) quickPlayerDeck = 'COMBAT';
+      if (!deckKeyPlayable(quickPlayerDeck)) quickPlayerDeck = 'COMBAT';
       pGrid.innerHTML = `
         <div class="flex items-center justify-between px-1">
           <h2 class="text-[11px] font-black tracking-wider uppercase text-yellow-300">1. Ton Deck (Partie Rapide)</h2>
@@ -16723,6 +16736,7 @@ const TYPE_EMOJI = {
       const iStartFirst = p.firstPlayerId === mpClientId;
 
       game = {
+        epoch: ++matchEpoch,
         mode: 'multi',
         matchId: p.matchId,
         isHost,
@@ -16810,7 +16824,145 @@ const TYPE_EMOJI = {
       }
     }
 
-    async function handleIncomingMultiRaw(raw) {
+    function applyRemotePlayerSide(incomingPlayerSide) {
+      if (!incomingPlayerSide) return;
+      // Si un paquet MP_STATE_SYNC en transit arrive avec active=null alors que le joueur local
+      // vient déjà de promouvoir un Pokémon de son Banc en Actif, on préserve la promotion locale.
+      if (
+        !incomingPlayerSide.active &&
+        game &&
+        game.player &&
+        game.player.active &&
+        !game.setupPhase &&
+        Array.isArray(incomingPlayerSide.bench) &&
+        incomingPlayerSide.bench.some((b) => b && b.uid === game.player.active.uid)
+      ) {
+        const promotedUid = game.player.active.uid;
+        const promotedCard = incomingPlayerSide.bench.find((b) => b && b.uid === promotedUid) || game.player.active;
+        game.player = {
+          ...incomingPlayerSide,
+          active: promotedCard,
+          bench: incomingPlayerSide.bench.filter((b) => b && b.uid !== promotedUid)
+        };
+        return;
+      }
+      game.player = incomingPlayerSide;
+      if (game.player.active && mpPromoPickerOpen) {
+        mpPromoPickerOpen = false;
+        closePickerModal();
+        if (mpLocalPromoResolve) {
+          const r = mpLocalPromoResolve;
+          mpLocalPromoResolve = null;
+          r(0);
+        }
+      }
+    }
+
+    function promotePlayerBenchToActive(chosenIdx = 0) {
+      if (!game || game.gameOver || !game.player) return false;
+      if (game.player.active || !game.player.bench.length) return false;
+      const idx = (typeof chosenIdx === 'number' && chosenIdx >= 0 && chosenIdx < game.player.bench.length) ? chosenIdx : 0;
+      const [promoted] = game.player.bench.splice(idx, 1);
+      if (!promoted) return false;
+      clearConditions(promoted);
+      game.player.active = promoted;
+      fx.placed.add(promoted.uid);
+      playPokemonCry(promoted.dex);
+      sfx('place');
+      buzz(16);
+      mpPromoPickerOpen = false;
+      hidePreview();
+      closeCardModal();
+      closePickerModal();
+
+      if (game.mode === 'multi') {
+        const prev = mpApplyingRemote;
+        mpApplyingRemote = true;
+        try {
+          renderBoard();
+        } finally {
+          mpApplyingRemote = prev;
+        }
+        sendMultiPacket('MP_PROMOTE_CHOICE', {
+          matchId: game.matchId,
+          chosenIdx: idx,
+          chosenUid: promoted.uid,
+          side: cloneSide(game.player)
+        });
+        if (game.activePlayer === 'player' && !game.setupPhase) {
+          broadcastMultiBoardSync();
+        }
+      } else {
+        renderBoard();
+      }
+
+      sayJuliette(`⚔️ <strong>${promoted.name}</strong> monte au combat en Pokémon Actif !`, game.mode === 'multi');
+
+      if (mpLocalPromoResolve) {
+        const r = mpLocalPromoResolve;
+        mpLocalPromoResolve = null;
+        r(idx);
+      }
+      return true;
+    }
+
+    function openBenchPromoModal(title = '💥 Ton Pokémon Actif est K.O. !', subtitle = 'Choisis quel Pokémon de ton Banc monte au combat :') {
+      if (!game || game.gameOver || game.player.active || !game.player.bench.length) {
+        return Promise.resolve(null);
+      }
+      hidePreview();
+      closeCardModal();
+      return new Promise((resolve) => {
+        mpLocalPromoResolve = resolve;
+        mpPromoPickerOpen = true;
+        openPickerModal(
+          title,
+          subtitle,
+          game.player.bench,
+          (chosenIdx) => {
+            promotePlayerBenchToActive(chosenIdx);
+          },
+          false
+        );
+      });
+    }
+
+    async function requestRemoteBenchPromo() {
+      if (!game || game.mode !== 'multi' || game.gameOver || game.ai.active || !game.ai.bench.length) return false;
+      showGameToast(`⏳ En attente du choix de Pokémon Actif de <strong>${game.oppPseudo || 'l\'adversaire'}</strong>…`);
+      sendMultiPacket('MP_REQUEST_PROMO', {
+        matchId: game.matchId,
+        actorSide: cloneSide(game.player),
+        targetSide: cloneSide(game.ai)
+      });
+      const promoReply = await new Promise((resolve) => {
+        mpPendingPromoResolve = resolve;
+        setTimeout(() => {
+          if (mpPendingPromoResolve === resolve) {
+            mpPendingPromoResolve = null;
+            resolve(null);
+          }
+        }, 22000);
+      });
+      if (promoReply && promoReply.side && promoReply.side.active) {
+        const prev = mpApplyingRemote;
+        mpApplyingRemote = true;
+        try {
+          game.ai = promoReply.side;
+          fx.placed.add(game.ai.active.uid);
+          playPokemonCry(game.ai.active.dex);
+          showGameToast(`⚔️ <strong>${game.oppPseudo || 'Adversaire'}</strong> envoie <strong>${game.ai.active.name}</strong> au combat !`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = prev;
+        }
+        return true;
+      }
+      if (game.ai.active) return true;
+      return false;
+    }
+
+    function handleIncomingMultiRaw(raw) {
       let msg;
       try {
         msg = typeof raw === 'string' ? JSON.parse(raw) : raw;
@@ -16858,9 +17010,47 @@ const TYPE_EMOJI = {
         return;
       }
 
+      // Résolution immédiate hors file d'attente pour débloquer l'attaquant en attente du choix de Banc
+      if (msg.type === 'MP_PROMOTE_CHOICE') {
+        if (mpPendingPromoResolve) {
+          const r = mpPendingPromoResolve;
+          mpPendingPromoResolve = null;
+          r(msg);
+          return;
+        }
+        if (game && game.mode === 'multi' && msg.side) {
+          const prev = mpApplyingRemote;
+          mpApplyingRemote = true;
+          try {
+            const hadActive = !!game.ai.active;
+            game.ai = msg.side;
+            if (!hadActive && game.ai.active) {
+              fx.placed.add(game.ai.active.uid);
+              playPokemonCry(game.ai.active.dex);
+            }
+            renderBoard();
+          } finally {
+            mpApplyingRemote = prev;
+          }
+        }
+        return;
+      }
+
+      mpIncomingChain = mpIncomingChain
+        .then(() => processIncomingMultiPacket(msg))
+        .catch((err) => {
+          console.error('Multi packet error:', err);
+          mpApplyingRemote = false;
+        });
+    }
+
+    async function processIncomingMultiPacket(msg) {
       if (msg.type === 'MP_MATCH_START') {
         if (multiLastMatchId === msg.matchId) return;
         multiLastMatchId = msg.matchId;
+        mpPendingPromoResolve = null;
+        mpLocalPromoResolve = null;
+        mpPromoPickerOpen = false;
         startMultiMatchFromPayload(msg);
         return;
       }
@@ -16869,115 +17059,117 @@ const TYPE_EMOJI = {
 
       if (msg.type === 'MP_SETUP_UPDATE') {
         mpApplyingRemote = true;
-        const hadActive = !!game.ai.active;
-        game.ai = msg.side;
-        if (!hadActive && game.ai.active) {
-          fx.placed.add(game.ai.active.uid);
-          playPokemonCry(game.ai.active.dex);
+        try {
+          const hadActive = !!game.ai.active;
+          game.ai = msg.side;
+          if (!hadActive && game.ai.active) {
+            fx.placed.add(game.ai.active.uid);
+            playPokemonCry(game.ai.active.dex);
+          }
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
         }
-        renderBoard();
-        mpApplyingRemote = false;
         checkMultiSetupComplete();
         return;
       }
 
       if (msg.type === 'MP_STATE_SYNC') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        if (msg.toast) showGameToast(`🌐 ${game.oppPseudo} : ${msg.toast}`);
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          if (msg.toast) showGameToast(`🌐 ${game.oppPseudo} : ${msg.toast}`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_COIN_FLIP') {
-        flipCoinAnimated(`${game.oppPseudo} · ${msg.label}`, msg.isHeads);
+        await flipCoinAnimated(`${game.oppPseudo} · ${msg.label}`, msg.isHeads);
         return;
       }
 
       if (msg.type === 'MP_ATTACK_ANIM') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
-        await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
-        showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          if (game.ai.active && game.ai.active.dex) playPokemonCry(game.ai.active.dex);
+          await animateAttack('ai', 'player', msg.finalDamage, msg.atkType);
+          showGameToast(`⚔️ ${msg.attackerName} utilise <strong>${msg.atkName}</strong> : ${msg.finalDamage} dégâts sur ${msg.defenderName}${msg.extraLog || ''} !`);
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_KO_ANIM') {
         mpApplyingRemote = true;
-        const localVictim = msg.victimIsActor ? 'ai' : 'player';
-        await animateKO(localVictim);
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        renderBoard();
-        mpApplyingRemote = false;
+        try {
+          const localVictim = msg.victimIsActor ? 'ai' : 'player';
+          await animateKO(localVictim);
+          game.ai = msg.actorSide;
+          game.player = msg.targetSide;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
         return;
       }
 
       if (msg.type === 'MP_REQUEST_PROMO') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        renderBoard();
-        mpApplyingRemote = false;
-        if (game.player.bench.length > 0) {
-          openPickerModal(
-            '💥 Ton Pokémon Actif est K.O. !',
-            'Choisis quel Pokémon de ton Banc monte au combat :',
-            game.player.bench,
-            (chosenIdx) => {
-              mpApplyingRemote = true;
-              game.player.active = game.player.bench.splice(chosenIdx, 1)[0];
-              fx.placed.add(game.player.active.uid);
-              playPokemonCry(game.player.active.dex);
-              renderBoard();
-              mpApplyingRemote = false;
-              sendMultiPacket('MP_PROMOTE_CHOICE', {
-                matchId: game.matchId,
-                chosenIdx,
-                side: cloneSide(game.player)
-              });
-            },
-            false
-          );
+        try {
+          game.ai = msg.actorSide;
+          game.player = msg.targetSide;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
         }
-        return;
-      }
-
-      if (msg.type === 'MP_PROMOTE_CHOICE') {
-        if (mpPendingPromoResolve) {
-          const r = mpPendingPromoResolve;
-          mpPendingPromoResolve = null;
-          r(msg);
+        if (!game.player.active && game.player.bench.length > 0 && !game.gameOver) {
+          openBenchPromoModal(
+            '💥 Ton Pokémon Actif est K.O. !',
+            'Choisis quel Pokémon de ton Banc monte au combat :'
+          );
         }
         return;
       }
 
       if (msg.type === 'MP_END_TURN') {
         mpApplyingRemote = true;
-        game.ai = msg.actorSide;
-        game.player = msg.targetSide;
-        game.halfTurn = (game.halfTurn || 0) + 1;
-        renderBoard();
-        mpApplyingRemote = false;
-        startPlayerTurn();
+        try {
+          game.ai = msg.actorSide;
+          applyRemotePlayerSide(msg.targetSide);
+          game.halfTurn = (game.halfTurn || 0) + 1;
+          renderBoard();
+        } finally {
+          mpApplyingRemote = false;
+        }
+        if (!game.player.active && game.player.bench.length > 0 && !game.gameOver) {
+          await openBenchPromoModal();
+        }
+        if (game && !game.gameOver) {
+          startPlayerTurn();
+        }
         return;
       }
 
       if (msg.type === 'MP_GAME_OVER') {
         if (game.gameOver) return;
         mpApplyingRemote = true;
-        if (msg.actorSide && msg.targetSide) {
-          game.ai = msg.actorSide;
-          game.player = msg.targetSide;
+        try {
+          if (msg.actorSide && msg.targetSide) {
+            game.ai = msg.actorSide;
+            game.player = msg.targetSide;
+          }
+          endMatch(msg.winnerIsActor ? 'ai' : 'player', msg.reason);
+        } finally {
+          mpApplyingRemote = false;
         }
-        endMatch(msg.winnerIsActor ? 'ai' : 'player', msg.reason);
-        mpApplyingRemote = false;
         return;
       }
     }
@@ -16997,10 +17189,17 @@ const TYPE_EMOJI = {
 
     function drawStartingHandAndPrizes(deckKey) {
       const prizeCount = DECK_META[deckKey]?.prizes || (deckKey.startsWith('V2_') ? 6 : 3);
-      while (true) {
+      for (let attempt = 0; ; attempt++) {
         const deck = buildDeck(deckKey);
         const hand = deck.splice(0, 7);
         const hasBasic = hand.some((c) => c.category === 'Pokémon' && c.stage === 'Base');
+        // Garde-fou : après 300 mulligans on force un Pokémon de Base du deck dans la main
+        if (!hasBasic && attempt > 300) {
+          const bi = deck.findIndex((c) => c.category === 'Pokémon' && c.stage === 'Base');
+          if (bi === -1) throw new Error(`Deck ${deckKey} sans Pokémon de Base`);
+          const [b] = deck.splice(bi, 1); deck.push(hand.pop()); hand.push(b);
+          return { deck, hand, prizes: deck.splice(0, prizeCount) };
+        }
         if (hasBasic) {
           const prizes = deck.splice(0, prizeCount);
           return { deck, hand, prizes };
@@ -17017,12 +17216,18 @@ const TYPE_EMOJI = {
         V2_PLANTE: 'V2_FEU', V2_FEU: 'V2_EAU', V2_EAU: 'V2_ELECTRIK',
         V2_ELECTRIK: 'V2_COMBAT', V2_PSY: 'V2_PLANTE', V2_COMBAT: 'V2_PSY'
       };
-      const aiDeckKey = customAiDeckKey || v2AiMap[playerDeckKey] || 'COMBAT';
+      if (!deckKeyPlayable(playerDeckKey)) {
+        showGameToast('⚠️ Ce deck n\'est pas jouable (il faut un deck valide avec au moins 1 Pokémon de Base).');
+        return;
+      }
+      let aiDeckKey = customAiDeckKey || v2AiMap[playerDeckKey] || 'COMBAT';
+      if (!deckKeyPlayable(aiDeckKey)) aiDeckKey = 'COMBAT';
 
       const pInit = drawStartingHandAndPrizes(playerDeckKey);
       const aiInit = drawStartingHandAndPrizes(aiDeckKey);
 
       game = {
+        epoch: ++matchEpoch,
         mode, // 'tutorial' | 'quick'
         turnNumber: 1,
         activePlayer: 'player', // 'player' or 'ai'
@@ -17648,8 +17853,18 @@ const TYPE_EMOJI = {
       fx.dealFrom.clear();
     }
 
+    // Buzzap : une « Énergie » Électrode défaussée redevient la carte Pokémon Électrode d'origine
+    function normalizeDiscards() {
+      ['player', 'ai'].forEach((o) => {
+        const d = game[o] && game[o].discard;
+        if (!d) return;
+        for (let i = 0; i < d.length; i++) if (d[i] && d[i].buzzap && d[i].fromCard) d[i] = d[i].fromCard;
+      });
+    }
+
     function renderBoard() {
       if (!game) return;
+      normalizeDiscards();
       if (drag && drag.started) return; // ne pas détruire la carte en cours de glisser-déposer
       layoutBoard();
 
@@ -17758,6 +17973,7 @@ const TYPE_EMOJI = {
       const i = game.player.hand.indexOf(card);
       if (i < 0) return;
       game.player.hand.splice(i, 1);
+      freshInPlay(card);
       if (target === 'active') {
         game.player.active = card;
         sayJuliette(`Super, ${card.name} est ton Pokémon Actif ! Glisse d'autres Pokémon sur ton Banc ou une Énergie sur un Pokémon.`);
@@ -18126,7 +18342,7 @@ const TYPE_EMOJI = {
           if (drag.preview) { hidePreview(); drag.preview = false; }
           setHandFocus(null);
           const canDragNow = game.activePlayer === 'player' || (game.mode === 'multi' && game.setupPhase);
-          if (!canDragNow || game.gameOver) return;
+          if (!canDragNow || game.gameOver || (!(game.mode === 'multi' && game.setupPhase) && playerBusy())) return;
           startDrag();
         }
         drag.vx = e.clientX - drag.x;
@@ -18507,16 +18723,17 @@ const TYPE_EMOJI = {
         return;
       }
 
-      endBtn.disabled = false;
-      retBtn.disabled = false;
-      endBtn.classList.toggle('ready', game.mode !== 'quick'
+      const busyNow = playerBusy();
+      endBtn.disabled = busyNow;
+      retBtn.disabled = busyNow;
+      endBtn.classList.toggle('ready', !busyNow && game.mode !== 'quick'
         && !game.player.hand.some((c) => handBadge(c).playable)
         && !effAttacks(game.player.active).some((a, i) => attackUsable('player', i).ok));
 
       const active = game.player.active;
       container.innerHTML = effAttacks(active).map((atk, i) => {
         const use = attackUsable('player', i);
-        const payable = use.ok;
+        const payable = use.ok && !busyNow;
         const costIcons = atk.cost.map((c) => energyOrb(c, 14)).join('');
         return `
           <button
@@ -18601,6 +18818,7 @@ const TYPE_EMOJI = {
       if (!game) return;
       const isMultiSetup = game.mode === 'multi' && game.setupPhase;
       if (game.activePlayer !== 'player' && !isMultiSetup) return;
+      if (!isMultiSetup && playerBusy()) return;
       const card = game.player.hand[handIndex];
       if (!card) return;
 
@@ -18646,15 +18864,11 @@ const TYPE_EMOJI = {
       // CAS 2 : Pokémon Niveau 1 (Évolution)
       if (card.category === 'Pokémon' && (card.stage === 'Niveau 1' || card.stage === 'Niveau 2') && game.player.active) {
         const targets = [];
-        if (
-          game.player.active.name === card.evolvesFrom &&
-          game.player.active.turnsInPlay >= 1 &&
-          !game.player.active.evolvedThisTurn
-        ) {
+        if (evoReady(game.player.active, card)) {
           targets.push({ label: `Actif : ${game.player.active.name}`, zone: 'active', idx: 0 });
         }
         game.player.bench.forEach((b, bIdx) => {
-          if (b.name === card.evolvesFrom && b.turnsInPlay >= 1 && !b.evolvedThisTurn) {
+          if (evoReady(b, card)) {
             targets.push({ label: `Banc : ${b.name}`, zone: 'bench', idx: bIdx });
           }
         });
@@ -18662,7 +18876,9 @@ const TYPE_EMOJI = {
         if (targets.length === 0) {
           const info = document.createElement('div');
           info.className = 'text-amber-300 text-xs text-center py-1';
-          info.textContent = `Il faut un ${card.evolvesFrom} en jeu depuis au moins 1 tour pour évoluer en ${card.name}.`;
+          info.textContent = prehistoricLock()
+            ? 'Pouvoir préhistorique de Ptéra : aucune Évolution possible !'
+            : `Il faut un ${card.evolvesFrom} en jeu depuis au moins 1 tour pour évoluer en ${card.name}.`;
           actionsEl.appendChild(info);
         } else {
           targets.forEach((t) => {
@@ -18677,14 +18893,16 @@ const TYPE_EMOJI = {
 
       // CAS 3 : Carte Énergie (1 par tour)
       if (card.category === 'Énergie' && game.player.active) {
-        if (game.energyAttachedThisTurn) {
+        const rainTargets = [game.player.active, ...game.player.bench].filter((p) => rainDanceFor(card, p));
+        if (game.energyAttachedThisTurn && !rainTargets.length) {
           const info = document.createElement('div');
           info.className = 'text-amber-300 text-xs text-center py-1';
           info.textContent = 'Tu as déjà attaché 1 carte Énergie ce tour-ci (règle officielle : 1 par tour).';
           actionsEl.appendChild(info);
         } else {
-          const targets = [{ label: `Actif : ${game.player.active.name}`, ref: game.player.active }];
+          let targets = [{ label: `Actif : ${game.player.active.name}`, ref: game.player.active }];
           game.player.bench.forEach((b) => targets.push({ label: `Banc : ${b.name}`, ref: b }));
+          if (game.energyAttachedThisTurn) targets = targets.filter((t) => rainTargets.includes(t.ref));
 
           targets.forEach((t) => {
             const btn = document.createElement('button');
@@ -18697,7 +18915,14 @@ const TYPE_EMOJI = {
       }
 
       // CAS 4 : Carte Dresseur
-      if (card.category === 'Dresseur' && game.player.active) {
+      if (card.category === 'Dresseur' && game.player.active && !canPlayTrainerCard(card)) {
+        const info = document.createElement('div');
+        info.className = 'text-amber-300 text-xs text-center py-1';
+        info.textContent = game.player.noTrainersTurns
+          ? 'Migraine : aucune carte Dresseur ce tour-ci !'
+          : 'Cette carte Dresseur n\'a aucun effet possible pour le moment.';
+        actionsEl.appendChild(info);
+      } else if (card.category === 'Dresseur' && game.player.active) {
         const btn = document.createElement('button');
         btn.className = 'w-full py-2.5 rounded-xl text-xs font-extrabold bg-purple-500 text-white';
         btn.textContent = `✨ Utiliser la carte Dresseur ${card.name}`;
@@ -18752,7 +18977,8 @@ const TYPE_EMOJI = {
     }
 
     async function playTrainerCard(handIndex) {
-      if (!game || game.activePlayer !== 'player' || game.gameOver) return;
+      if (!game || game.activePlayer !== 'player' || playerBusy()) return;
+      if (game.player.noTrainersTurns) { sayJuliette('Migraine : aucune carte Dresseur ce tour-ci !', true); return; }
       const card = game.player.hand[handIndex];
       if (!card) return;
       if (!game.player.active) {
@@ -19452,7 +19678,7 @@ const TYPE_EMOJI = {
     // 8. RETRAITE, COMBAT, PILE OU FACE & RÉCOMPENSES
     // -----------------------------------------------------------------------
     function openRetreatModal() {
-      if (!game || game.activePlayer !== 'player' || !game.player.active || game.gameOver) return;
+      if (!game || game.activePlayer !== 'player' || !game.player.active || playerBusy()) return;
       const act = game.player.active;
       if (game.retreatedThisTurn) { sayJuliette('Tu as déjà battu en retraite une fois ce tour-ci.', true); return; }
       if (game.player.bench.length === 0) { sayJuliette('Tu n\'as aucun Pokémon sur ton Banc pour battre en retraite !', true); return; }
@@ -19551,6 +19777,17 @@ const TYPE_EMOJI = {
     function bothInPlay() { return [...allInPlay('player'), ...allInPlay('ai')]; }
     function ownerOf(p) { return allInPlay('player').includes(p) ? 'player' : 'ai'; }
     function isToken(p) { return !!p && (p.id === 'clefairy-doll' || p.id === 'mysterious-fossil'); }
+    // Carte qui quitte le jeu : un jeton (Peluche / Fossile) redevient une carte Dresseur, un Pokémon perd son état de jeu
+    function discardForm(p) {
+      if (isToken(p)) return { ...p, category: 'Dresseur', stage: undefined, hp: undefined, attacks: [], damage: 0, energies: [] };
+      return p;
+    }
+    // Remet à zéro l'état « en jeu » d'une carte qui (re)entre en jeu (Recyclage, Ouragan, Récupération…)
+    function freshInPlay(card) {
+      Object.assign(card, { damage: 0, turnsInPlay: 0, evolvedThisTurn: false, usedOnce: undefined, plusPower: 0, evoStack: undefined, energies: [] });
+      clearConditions(card);
+      return card;
+    }
     function cardBackImg() { return 'data:image/svg+xml;utf8,' + encodeURIComponent(CARD_BACK_SVG); }
     function typeOption(t) { const tpl = CARDS_DB[ENERGY_TPL_ID[t]]; return { name: t, img: tpl ? tpl.img : cardBackImg(), _type: t }; }
     function textOption(name, img) { return { name, img: img || cardBackImg() }; }
@@ -19884,7 +20121,7 @@ const TYPE_EMOJI = {
     async function knockOutBenched(owner, idx) {
       const side = game[owner], win = oppOf(owner);
       const [p] = side.bench.splice(idx, 1);
-      side.discard.push(...(p.evoStack || []), p, ...p.energies);
+      side.discard.push(...(p.evoStack || []), discardForm(p), ...p.energies);
       p.energies = [];
       let msg = `💥 ${p.name} (Banc) est K.O. !`;
       if (!isToken(p) && game[win].prizes.length) {
@@ -20289,7 +20526,7 @@ const TYPE_EMOJI = {
       const owner = 'player';
       const side = game.player, opp = game.ai;
       const p = zone === 'active' ? side.active : side.bench[index];
-      if (!p || !powerUsableNow(owner, p)) return;
+      if (!p || game.endingTurn || !powerUsableNow(owner, p)) return;
       closeCardModal();
       const mine = allInPlay(owner);
       const say = (t) => sayJuliette(`✨ ${p.power ? p.power.name : p.name} : ${t}`, true);
@@ -20356,7 +20593,9 @@ const TYPE_EMOJI = {
           const wasActive = side.active === p;
           if (wasActive) side.active = null; else side.bench.splice(side.bench.indexOf(p), 1);
           side.discard.push(...p.energies, ...(p.evoStack || []));
-          dsts[di].energies.push({ uid: uidCounter++, id: 'buzzap-' + p.uid, name: `${p.name} (Buzzap ${type})`, category: 'Énergie', energyType: type, buzzap: true, img: p.img });
+          p.energies = []; p.evoStack = undefined; p.damage = 0; clearConditions(p);
+          // La carte Électrode elle-même devient l'Énergie : elle retournera dans la défausse en tant que Pokémon
+          dsts[di].energies.push({ uid: uidCounter++, id: 'buzzap-' + p.uid, name: `${p.name} (Buzzap ${type})`, category: 'Énergie', energyType: type, buzzap: true, img: p.img, fromCard: p });
           if (opp.prizes.length) { const pr = opp.prizes.pop(); fx.dealFrom.set(pr.uid, 'prize'); opp.hand.push(pr); }
           say(`${p.name} est K.O. et fournit 2 Énergies ${type} à ${dsts[di].name} (${oppLabel()} prend 1 Récompense).`);
           renderBoard();
@@ -20469,9 +20708,11 @@ const TYPE_EMOJI = {
       const winnerSide = game[winnerOwner];
       const koPkm = victimSide.active;
       setJulietteMood(victimOwner === 'ai' ? 'surprised' : 'happy');
+      const koEp = game.epoch;
       await animateKO(victimOwner);
+      if (!matchAlive(koEp) || !victimSide.active) return;
 
-      victimSide.discard.push(...(koPkm.evoStack || []), koPkm, ...koPkm.energies);
+      victimSide.discard.push(...(koPkm.evoStack || []), discardForm(koPkm), ...koPkm.energies);
       koPkm.energies = [];
       clearConditions(koPkm);
       victimSide.active = null;
@@ -20484,7 +20725,7 @@ const TYPE_EMOJI = {
         fx.dealFrom.set(prize.uid, 'prize');
         winnerSide.hand.push(prize);
         sayJuliette(
-          `${koPkm.name} est K.O. ! ${winnerOwner === 'player' ? `Tu récupères 1 carte Récompense (${prize.name}) !` : `${game.mode === 'multi' ? (game.oppPseudo || 'L\'adversaire') : 'Juliette'} récupère 1 carte Récompense !`}`,
+          `${koPkm.name} est K.O. ! ${winnerOwner === 'player' ? `Tu récupères 1 carte Récompense (${prize.name}) !` : `${oppLabel()} récupère 1 carte Récompense !`}`,
           game.mode === 'multi'
         );
       }
@@ -20506,7 +20747,7 @@ const TYPE_EMOJI = {
         return;
       }
       if (victimSide.bench.length === 0) {
-        const oppName = game.mode === 'multi' ? (game.oppPseudo || 'Ton adversaire') : 'Juliette';
+        const oppName = oppLabel();
         endMatch(winnerOwner, `${victimOwner === 'player' ? 'Tu n\'as' : `${oppName} n'a`} plus aucun Pokémon sur le Banc !`);
         return;
       }
@@ -20567,29 +20808,35 @@ const TYPE_EMOJI = {
     }
 
     async function executePlayerAttack(attackIndex) {
-      if (!game || game.activePlayer !== 'player' || !game.player.active || game.attackedThisTurn || game.endingTurn) return;
+      if (!game || game.activePlayer !== 'player' || !game.player.active || playerBusy()) return;
       const use = attackUsable('player', attackIndex);
       if (!use.ok) { sayJuliette(`Attaque impossible : ${use.reason}.`, true); return; }
-      await executeAttack('player', attackIndex);
-      if (!game.gameOver) {
-        endPlayerTurn();
+      const ep = game.epoch;
+      const attackRun = executeAttack('player', attackIndex);
+      renderAttackStrip(); // grise immédiatement « Fin du tour », « Retraite » et les attaques
+      await attackRun;
+      if (matchAlive(ep)) {
+        endPlayerTurn(true);
       }
     }
 
     // -----------------------------------------------------------------------
     // 9. GESTION DES TOURS & IA DE JULIETTE
     // -----------------------------------------------------------------------
-    async function endPlayerTurn() {
+    async function endPlayerTurn(fromAttack = false) {
       if (!game || game.gameOver || game.endingTurn) return;
+      if (game.attackedThisTurn && fromAttack !== true) return; // attaque en cours de résolution
       if (!game.player.active) {
         sayJuliette('Tu dois d\'abord choisir ton Pokémon Actif dans ta main !', true);
         return;
       }
       if (game.activePlayer !== 'player') return;
       game.endingTurn = true;
+      renderAttackStrip();
+      const ep = game.epoch;
       // Pokémon Checkup entre les tours (Poison, Sommeil, Paralysie, fin des effets)
       await pokemonCheckup('player');
-      if (!game || game.gameOver) return;
+      if (!matchAlive(ep)) return;
       game.endingTurn = false;
       if (!game.player.active) return;
 
@@ -20618,36 +20865,30 @@ const TYPE_EMOJI = {
       }
 
       showBanner(game.mode === 'quick' ? 'TOUR DE L\'IA' : 'TOUR DE JULIETTE');
-      setTimeout(runJulietteTurn, 1300);
+      // (ep : jeton de partie capturé plus haut)
+      setTimeout(() => { if (matchAlive(ep)) runJulietteTurn(); }, 1300);
     }
 
     async function runJulietteTurn() {
-      if (!game || game.gameOver || game.mode === 'multi') return;
+      if (!game || game.gameOver || game.mode === 'multi' || game.activePlayer !== 'ai' || game.aiTurnRunning) return;
+      const ep = game.epoch;
+      const alive = () => matchAlive(ep);
+      game.aiTurnRunning = true;
+      try {
       setJulietteMood('focus');
 
       // 1. Pioche obligatoire de Juliette
       if (game.ai.deck.length === 0) {
-        endMatch('player', 'Juliette n\'a plus de cartes à piocher dans son deck !');
+        endMatch('player', `${oppLabel()} n'a plus de cartes à piocher dans son deck !`);
         return;
       }
       game.ai.hand.push(game.ai.deck.shift());
       renderBoard();
-      await wait(420);
-      if (!game || game.gameOver) return;
-
-      // Incrémenter l'ancienneté des Pokémon de Juliette
-      if (game.ai.active) {
-        game.ai.active.turnsInPlay += 1;
-        game.ai.active.evolvedThisTurn = false;
-      }
-      game.ai.bench.forEach((b) => {
-        b.turnsInPlay += 1;
-        b.evolvedThisTurn = false;
-      });
+      await wait(420); if (!alive()) return;
 
       game.attackedThisTurn = false;
       if (!game.ai.active) await promoteAfterRemoval('ai');
-      if (!game || game.gameOver) return;
+      if (!alive()) return;
       const aiTrainersOk = !game.ai.noTrainersTurns;
 
       // 2. Poser des Pokémon de Base sur le Banc
@@ -20655,11 +20896,11 @@ const TYPE_EMOJI = {
       for (const b of basics) {
         if (game.ai.bench.length < 5) {
           game.ai.hand = game.ai.hand.filter((c) => c.uid !== b.uid);
-          game.ai.bench.push(b);
+          game.ai.bench.push(freshInPlay(b));
           fx.placed.add(b.uid); sfx('place');
-          sayJuliette(`Juliette pose ${b.name} sur son Banc.`);
+          sayJuliette(`${oppLabel()} pose ${b.name} sur son Banc.`);
           renderBoard();
-          await new Promise((r) => setTimeout(r, 550));
+          await wait(550); if (!alive()) return;
         }
       }
 
@@ -20671,14 +20912,14 @@ const TYPE_EMOJI = {
           game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
           evolvePokemon('ai', 'active', 0, evo);
           renderBoard();
-          await new Promise((r) => setTimeout(r, 600));
+          await wait(600); if (!alive()) return;
         } else {
           const bIdx = game.ai.bench.findIndex((b) => b.name === evo.evolvesFrom && b.turnsInPlay >= 1 && !b.evolvedThisTurn);
           if (bIdx !== -1) {
             game.ai.hand = game.ai.hand.filter((c) => c.uid !== evo.uid);
             evolvePokemon('ai', 'bench', bIdx, evo);
             renderBoard();
-            await new Promise((r) => setTimeout(r, 600));
+            await wait(600); if (!alive()) return;
           }
         }
       }
@@ -20689,9 +20930,9 @@ const TYPE_EMOJI = {
         const [leo] = game.ai.hand.splice(leoIdx, 1);
         game.ai.discard.push(leo);
         game.ai.hand.push(...game.ai.deck.splice(0, 2));
-        sayJuliette('Juliette utilise la carte Dresseur Léo et pioche 2 cartes !');
+        sayJuliette(`${oppLabel()} utilise la carte Dresseur Léo et pioche 2 cartes !`);
         renderBoard();
-        await new Promise((r) => setTimeout(r, 600));
+        await wait(600); if (!alive()) return;
       }
 
       const potIdx = game.ai.hand.findIndex((c) => c.id === 'potion' || c.setId === 'base1-94');
@@ -20699,9 +20940,9 @@ const TYPE_EMOJI = {
         const [pot] = game.ai.hand.splice(potIdx, 1);
         game.ai.discard.push(pot);
         game.ai.active.damage = Math.max(0, game.ai.active.damage - 20);
-        sayJuliette(`Juliette utilise Potion et soigne ${game.ai.active.name} de 20 PV !`);
+        sayJuliette(`${oppLabel()} utilise Potion et soigne ${game.ai.active.name} de 20 PV !`);
         renderBoard();
-        await new Promise((r) => setTimeout(r, 600));
+        await wait(600); if (!alive()) return;
       }
 
       const erIdx = game.ai.hand.findIndex((c) => c.id === 'energy-removal' || c.setId === 'base1-92');
@@ -20710,9 +20951,9 @@ const TYPE_EMOJI = {
         game.ai.discard.push(er);
         const removed = game.player.active.energies.pop();
         if (removed) game.player.discard.push(removed);
-        sayJuliette(`Juliette utilise Suppression d'Énergie sur ton ${game.player.active.name} !`);
+        sayJuliette(`${oppLabel()} utilise Suppression d'Énergie sur ton ${game.player.active.name} !`);
         renderBoard();
-        await new Promise((r) => setTimeout(r, 600));
+        await wait(600); if (!alive()) return;
       }
 
       const fhIdx = game.ai.hand.findIndex((c) => c.id === 'full-heal');
@@ -20722,7 +20963,7 @@ const TYPE_EMOJI = {
         game.ai.active.special = null; game.ai.active.poison = 0;
         sayJuliette(`${oppLabel()} utilise Guérison Totale sur ${game.ai.active.name} !`);
         renderBoard();
-        await wait(600);
+        await wait(600); if (!alive()) return;
       }
 
       // 5. Attacher 1 Énergie
@@ -20733,30 +20974,32 @@ const TYPE_EMOJI = {
         if (game.ai.active.energies.length < maxNeeded || game.ai.bench.length === 0) {
           game.ai.active.energies.push(eCard);
           fx.attached.add(eCard.uid); sfx('place');
-          sayJuliette(`Juliette attache ${eCard.name} à ${game.ai.active.name}.`);
+          sayJuliette(`${oppLabel()} attache ${eCard.name} à ${game.ai.active.name}.`);
         } else {
           game.ai.bench[0].energies.push(eCard);
           fx.attached.add(eCard.uid); sfx('place');
-          sayJuliette(`Juliette attache ${eCard.name} à ${game.ai.bench[0].name} sur son Banc.`);
+          sayJuliette(`${oppLabel()} attache ${eCard.name} à ${game.ai.bench[0].name} sur son Banc.`);
         }
         renderBoard();
-        await new Promise((r) => setTimeout(r, 600));
+        await wait(600); if (!alive()) return;
       }
 
       // 5b. Pouvoirs Pokémon de l'IA
-      await aiUsePowers();
+      await aiUsePowers(); if (!alive()) return;
 
       // 5c. Retraite si l'Actif est Endormi/Paralysé n'est pas possible ; si Confus et une retraite est payable, l'IA change de Pokémon
       const aiAct = game.ai.active;
       if (aiAct && aiAct.special === 'confused' && game.ai.bench.length && !hasFx(aiAct, 'cantRetreat') && !isToken(aiAct) && energyUnits(aiAct).length >= effRetreat(aiAct) && effRetreat(aiAct) <= 1) {
         const cost = effRetreat(aiAct);
         for (let k = 0; k < cost; k++) game.ai.discard.push(aiAct.energies.pop());
-        if (await flipCoinAnimated(`💫 ${aiAct.name} (Confus) tente une retraite`)) {
+        const retreatOk = await flipCoinAnimated(`💫 ${aiAct.name} (Confus) tente une retraite`);
+        if (!alive()) return;
+        if (retreatOk) {
           swapActive('ai', pickStrongest(game.ai.bench));
           sayJuliette(`${oppLabel()} fait battre en retraite ${aiAct.name} !`);
         }
         renderBoard();
-        await wait(500);
+        await wait(500); if (!alive()) return;
       }
 
       // 6. Choisir la meilleure attaque utilisable (états spéciaux, Amnésie, conditions…)
@@ -20771,17 +21014,21 @@ const TYPE_EMOJI = {
         }
         if (bestIdx !== -1) {
           await executeAttack('ai', bestIdx);
+          if (!alive()) return;
         } else {
           const why = game.ai.active.special ? `est ${SPECIAL_META[game.ai.active.special].label}` : 'ne peut pas attaquer';
           sayJuliette(`Mon ${game.ai.active.name} ${why} ce tour-ci. À toi de jouer !`);
         }
       }
 
-      if (game && !game.gameOver) {
-        await pokemonCheckup('ai');
-      }
-      if (game && !game.gameOver) {
-        startPlayerTurn();
+      await pokemonCheckup('ai');
+      if (!alive()) return;
+      // Ancienneté des Pokémon de l'IA : incrémentée en FIN de tour (comme pour le joueur),
+      // sinon un Pokémon posé à la mise en place pourrait évoluer dès le 1er tour de l'IA.
+      [game.ai.active, ...game.ai.bench].forEach((b) => { if (b) { b.turnsInPlay += 1; b.evolvedThisTurn = false; } });
+      startPlayerTurn();
+      } finally {
+        if (game && game.epoch === ep) game.aiTurnRunning = false;
       }
     }
 
@@ -20831,6 +21078,9 @@ const TYPE_EMOJI = {
       const oppLabel = game.mode === 'multi' ? (game.oppPseudo || 'ton adversaire') : game.mode === 'quick' ? 'l\'IA' : 'Juliette';
       const isMultiMatch = game.mode === 'multi';
       const usedDeckKey = game.player.deckKey;
+      const usedAiDeckKey = game.ai.deckKey;
+      const usedMode = game.mode;
+      const usedDeckLabel = DECK_META[usedDeckKey]?.short || usedDeckKey;
       setTimeout(() => {
         openPickerModal(
           isWin ? `🏆 VICTOIRE ! Tu as battu ${oppLabel} !` : `💫 ${oppLabel} remporte la partie !`,
@@ -20868,8 +21118,8 @@ const TYPE_EMOJI = {
         } else {
           grid.innerHTML = `
             ${winBannerHtml}
-            <button onclick="closePickerModal(); startMatch('${usedDeckKey}')" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
-              🔄 Rejouer avec le Deck ${usedDeckKey}
+            <button onclick="closePickerModal(); startMatch('${usedDeckKey}', '${usedAiDeckKey}', '${usedMode}')" class="w-full py-3 rounded-xl font-extrabold text-xs bg-yellow-400 text-slate-950">
+              🔄 Rejouer avec le Deck ${dbEsc(usedDeckLabel)}
             </button>
             <button onclick="closePickerModal(); confirmQuitMatch()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-white/10 text-white">
               🏠 Choisir un autre Deck
@@ -21229,6 +21479,11 @@ const TYPE_EMOJI = {
       } else {
         // Cartes 1, 2, 3 : 100 % Communes (sans doublon)
         const c123 = pickRandomDistinct(commonsPool, 3, used);
+        // 8 % : la 3e commune est une Énergie de base (sinon elles seraient introuvables → collection 100 % impossible)
+        const energyCommons = allCommons.filter(c => c.category === 'Énergie' && !used.has(c.setId));
+        if (energyCommons.length && c123.length === 3 && Math.random() < 0.08) {
+          c123[2] = energyCommons[Math.floor(Math.random() * energyCommons.length)];
+        }
 
         // Carte 4 (Slot Surprise) : 85 % Peu Commune, 12 % Rare, 3 % Rare Holo
         const r4 = Math.random();
@@ -21393,7 +21648,11 @@ const TYPE_EMOJI = {
       `;
     }
 
+    let lastBoosterLaunchAt = 0;
     function launchBoosterPack(setKey = 'base') {
+      // Anti double-tap : « Ouvrir un autre » est remplacé sur place par le booster suivant
+      if (Date.now() - lastBoosterLaunchAt < 450) return;
+      lastBoosterLaunchAt = Date.now();
       syncFreeBoostersClock();
       let paymentLabel = '';
       if (boosterSave.freeBoosters > 0) {
@@ -21921,8 +22180,9 @@ const TYPE_EMOJI = {
       const rect = cachedRect || (packEl ? packEl.getBoundingClientRect() : { left: innerWidth / 2 - 100, top: innerHeight / 2 - 150, width: 200, height: 300 });
       spawnBoosterSparks(rect.left + rect.width / 2, rect.top + 66, 32, activeBooster.isGodPack || hasBigHit);
 
+      const ripBooster = activeBooster;
       setTimeout(() => {
-        if (!activeBooster) return;
+        if (!activeBooster || activeBooster !== ripBooster || ripBooster.phase !== 'ripping') return;
         activeBooster.phase = 'revealing';
         activeBooster.currentIdx = 0;
         const firstCard = activeBooster.cards[0];
@@ -22315,8 +22575,9 @@ const TYPE_EMOJI = {
         sfx('cardFlip');
         triggerBoosterScreenFlash(getRarityGlowHex(card.rarity));
 
+        const flipBooster = activeBooster;
         setTimeout(() => {
-          if (!activeBooster) return;
+          if (activeBooster !== flipBooster || flipBooster.phase !== 'revealing') return;
           if (card.rarity === 'holo') {
             sfx('holo');
             buzz([35, 50, 45, 70]);
@@ -22338,7 +22599,7 @@ const TYPE_EMOJI = {
           updateBoosterStackVisuals();
         }, 220);
 
-        setTimeout(() => { if (activeBooster) activeBooster.busy = false; }, 520);
+        setTimeout(() => { if (activeBooster === flipBooster) flipBooster.busy = false; }, 520);
         return;
       }
 
@@ -22360,8 +22621,9 @@ const TYPE_EMOJI = {
       sfx('cardSwipe');
       buzz(10);
 
+      const swipeBooster = activeBooster;
       setTimeout(() => {
-        if (!activeBooster) return;
+        if (activeBooster !== swipeBooster || swipeBooster.phase !== 'revealing') return;
         if (currentIdx + 1 < cards.length) {
           activeBooster.currentIdx += 1;
           const nextCard = cards[activeBooster.currentIdx];
@@ -22381,7 +22643,7 @@ const TYPE_EMOJI = {
     }
 
     function revealAllBoosterCards() {
-      if (!activeBooster) return;
+      if (!activeBooster || activeBooster.phase === 'summary') return;
       const hasHolo = activeBooster.cards.some(c => c.rarity === 'holo');
       if (hasHolo) {
         sfx('holo');
@@ -22909,8 +23171,16 @@ const TYPE_EMOJI = {
       const owned = dbOwnedMap();
       const deck = { size, cards: {}, energy: {} };
       if (opts.seed) {
-        Object.entries(opts.seed.cards).forEach(([id, n]) => { const k = Math.min(n, owned[id] || 0); if (k > 0) deck.cards[id] = k; });
-        Object.entries(opts.seed.energy).forEach(([t, n]) => { if (n > 0) deck.energy[t] = n; });
+        // On garde les cartes existantes dans la limite de la taille visée, des cartes possédées et de 4 par nom
+        Object.entries(opts.seed.cards).forEach(([id, n]) => {
+          if (!DB_CARD[id]) return;
+          const k = Math.min(n, dbMaxAddable(deck, id, owned));
+          if (k > 0) deck.cards[id] = (deck.cards[id] || 0) + k;
+        });
+        Object.entries(opts.seed.energy).forEach(([t, n]) => {
+          const k = Math.min(n, size - dbTotal(deck));
+          if (k > 0) deck.energy[t] = k;
+        });
       }
       const room = () => size - dbTotal(deck);
       const addName = (name, n) => {
@@ -23099,8 +23369,9 @@ const TYPE_EMOJI = {
         HALF_DECKS[key] = recipe;
         const cover = dbCoverCard(d);
         const st = DB_TYPE_STYLE[dbMainType(d)] || DB_TYPE_STYLE.Incolore;
+        const safeName = dbCleanName(d.name);
         DECK_META[key] = {
-          key, custom: true, name: d.name, short: d.name, cards: d.size, prizes: d.size === 30 ? 3 : 6,
+          key, custom: true, valid: analyzeDeck(d).valid, name: safeName, short: safeName, cards: d.size, prizes: d.size === 30 ? 3 : 6,
           star: cover ? `${cover.name} (${cover.hp} PV)` : 'Deck perso',
           desc: 'Deck créé avec ta collection',
           img: cover ? cover.img : 'https://assets.tcgdex.net/fr/base/base1/97/high.webp',
@@ -23108,7 +23379,7 @@ const TYPE_EMOJI = {
           grad: st.grad, border: st.border
         };
       });
-      if (typeof quickPlayerDeck !== 'undefined' && String(quickPlayerDeck).startsWith('CUSTOM_') && !DECK_META[quickPlayerDeck]) quickPlayerDeck = 'COMBAT';
+      if (typeof quickPlayerDeck !== 'undefined' && String(quickPlayerDeck).startsWith('CUSTOM_') && !deckKeyPlayable(quickPlayerDeck)) quickPlayerDeck = 'COMBAT';
     }
     function saveCustomDeck(deck) {
       deck.updatedAt = Date.now();
@@ -23159,7 +23430,7 @@ const TYPE_EMOJI = {
             <button onclick="openDeckEditor('${d.id}')" class="flex-1 min-w-0 text-left">
               <div class="text-sm font-black text-white truncate">${dbEsc(d.name)}</div>
               <div class="flex items-center gap-1 mt-0.5">${types.map((t) => dbTypeIcon(t, 15)).join('')}<span class="text-[11px] font-bold text-slate-300 ml-1">${d.size} cartes · ${d.size === 30 ? 3 : 6} 🏆</span></div>
-              <div class="mt-1 text-[11px] font-extrabold ${a.valid ? 'text-emerald-300' : 'text-amber-300'}">${a.valid ? '✅ Prêt à jouer' : `⚠️ ${a.total}/${d.size} cartes${a.basics === 0 && a.total ? ' · pas de Base' : ''}`}</div>
+              <div class="mt-1 text-[11px] font-extrabold ${a.valid ? 'text-emerald-300' : 'text-amber-300'}">${a.valid ? '✅ Prêt à jouer' : (a.total !== d.size ? `⚠️ ${a.total}/${d.size} cartes${a.basics === 0 && a.total ? ' · pas de Base' : ''}` : `⚠️ ${a.basics === 0 ? 'Il faut 1 Pokémon de Base' : 'Max 4 exemplaires par carte'}`)}</div>
             </button>
             <button onclick="playCustomDeck('${d.id}')" ${a.valid ? '' : 'disabled'} class="shrink-0 min-w-[56px] min-h-[48px] px-2 rounded-xl text-xs font-black uppercase ${a.valid ? 'btn-gold shadow-lg' : 'bg-white/5 text-slate-500 border border-white/10'}">▶<br>Jouer</button>
           </div>`;
@@ -23297,7 +23568,8 @@ const TYPE_EMOJI = {
 
     function dbSetTab(t) { dbTab = t; renderDeckEditor(); document.getElementById('dbBody').scrollTop = 0; }
     function dbSetSize(n) { if (!dbEdit || dbEdit.size === n) return; dbEdit.size = n; dbCommit(); renderDeckEditor(); }
-    function dbRename(v) { if (!dbEdit) return; dbEdit.name = (v || '').trim().slice(0, 28) || 'Mon deck'; dbCommit(); }
+    function dbCleanName(v) { return String(v || '').replace(/[<>"'`\\]/g, '').trim().slice(0, 28) || 'Mon deck'; }
+    function dbRename(v) { if (!dbEdit) return; dbEdit.name = dbCleanName(v); dbCommit(); }
     function dbDeleteDeck() {
       if (!dbEdit) return;
       if (!confirm(`Supprimer « ${dbEdit.name} » ?`)) return;
@@ -23734,11 +24006,19 @@ const TYPE_EMOJI = {
         </div>`);
     }
 
+    // Plusieurs onglets ouverts : on recharge la collection / les decks modifiés ailleurs (évite d'écraser la sauvegarde)
+    window.addEventListener('storage', (e) => {
+      if (!e.key || !/^ppi_v2_(booster_save|custom_decks)/.test(e.key)) return;
+      if (typeof activeBooster !== 'undefined' && activeBooster) return;
+      if (dbEdit) return;
+      reloadPlayerProfileData();
+    });
+
     // Démarrage : enregistre les decks perso pour le Duel IA
     registerCustomDecks();
     try {
       const lastQuick = localStorage.getItem('ppi_v2_quick_player_deck');
-      if (lastQuick && DECK_META[lastQuick]) quickPlayerDeck = lastQuick;
+      if (lastQuick && deckKeyPlayable(lastQuick)) quickPlayerDeck = lastQuick;
     } catch (_) {}
     if (typeof renderQuickSetup === 'function') renderQuickSetup();
     renderDecksView();
