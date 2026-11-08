@@ -718,17 +718,19 @@
       <section class="side side-ai flex flex-col gap-1.5">
         <div id="aiBenchRow" class="bench-row"></div>
         <div class="flex items-center gap-2">
-          <div class="side-col flex items-center justify-start gap-1.5">
-            <div class="pile">
-              <div class="card-back w-full relative">
-                <span class="pile-count" id="aiDeckCount">20</span>
-              </div>
-              <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="pile-chip">🗑 0</button>
+          <div class="side-col flex items-center justify-start gap-1">
+            <div class="pile" title="Pioche (Deck) de Juliette">
+              <div class="card-back w-full relative"></div>
+              <span class="pile-chip text-sky-200">📚 <span id="aiDeckCount">20</span></span>
             </div>
+            <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="pile cursor-pointer group" title="Voir la Défausse de Juliette">
+              <div id="aiDiscardSlot" class="w-full"></div>
+              <span class="pile-chip text-slate-300 group-hover:text-white">🗑 <span id="aiDiscardCount">0</span></span>
+            </button>
           </div>
           <div id="aiActiveSlot" class="active-slot"></div>
           <div class="side-col flex items-center justify-end">
-            <div class="pile">
+            <div class="pile" title="Récompenses de Juliette">
               <div id="aiPrizesZone" class="prize-stack"></div>
               <span class="pile-chip text-amber-200">🏆 <span id="aiPrizesCount">3</span></span>
             </div>
@@ -751,17 +753,19 @@
       <section class="side side-player flex flex-col gap-1.5">
         <div class="flex items-center gap-2">
           <div class="side-col flex flex-col items-start justify-center gap-1.5">
-            <div class="flex items-start gap-1.5">
-              <div class="pile">
+            <div class="flex items-start gap-1">
+              <div class="pile" title="Tes cartes Récompenses">
                 <div id="playerPrizesZone" class="prize-stack"></div>
                 <span class="pile-chip text-emerald-300">🏆 <span id="playerPrizesCount">3</span></span>
               </div>
-              <div class="pile">
-                <div class="card-back w-full relative">
-                  <span class="pile-count" id="playerDeckCount">20</span>
-                </div>
-                <button id="playerDiscardBtn" onclick="openDiscardViewer('player')" class="pile-chip">🗑 0</button>
+              <div class="pile" title="Ta Pioche (Deck)">
+                <div class="card-back w-full relative"></div>
+                <span class="pile-chip text-sky-200">📚 <span id="playerDeckCount">20</span></span>
               </div>
+              <button id="playerDiscardBtn" onclick="openDiscardViewer('player')" class="pile cursor-pointer group" title="Voir ta Défausse">
+                <div id="playerDiscardSlot" class="w-full"></div>
+                <span class="pile-chip text-slate-300 group-hover:text-white">🗑 <span id="playerDiscardCount">0</span></span>
+              </button>
             </div>
             <div class="flex items-center gap-1.5">
               <button id="retreatBtn" onclick="openRetreatModal()" class="btn-token w-8 h-8 rounded-full text-xs font-bold shrink-0" title="Retraite">🔄</button>
@@ -14659,12 +14663,25 @@ const TYPE_EMOJI = {
     }
 
     function renderPrizeStack(count) {
-      const step = 6;
+      const slots = Math.max(3, count);
+      const step = Math.min(6, Math.floor(12 / Math.max(1, slots - 1)));
       let html = '';
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < slots; i++) {
         html += `<div class="${i < count ? 'card-back' : 'slot-empty'}" style="top:${i * step}px"></div>`;
       }
       return html;
+    }
+
+    function renderDiscardSlot(pile) {
+      if (!pile || !pile.length) {
+        return `<div class="slot-empty w-full" style="font-size:6.5px">Vide</div>`;
+      }
+      const top = pile[pile.length - 1];
+      return `
+        <div class="tcg w-full overflow-hidden card-shadow bg-slate-900">
+          <img src="${top.img}" alt="${top.name}" class="w-full h-full object-cover rounded-[5px]" draggable="false" />
+        </div>
+      `;
     }
 
     function sizePrizeStack(el) {
@@ -14747,8 +14764,10 @@ const TYPE_EMOJI = {
       document.getElementById('playerPrizesCount').textContent = game.player.prizes.length;
       document.getElementById('playerDeckCount').textContent = game.player.deck.length;
       document.getElementById('playerHandCount').textContent = game.player.hand.length;
-      document.getElementById('aiDiscardBtn').textContent = `🗑 ${game.ai.discard.length}`;
-      document.getElementById('playerDiscardBtn').textContent = `🗑 ${game.player.discard.length}`;
+      document.getElementById('aiDiscardCount').textContent = game.ai.discard.length;
+      document.getElementById('playerDiscardCount').textContent = game.player.discard.length;
+      document.getElementById('aiDiscardSlot').innerHTML = renderDiscardSlot(game.ai.discard);
+      document.getElementById('playerDiscardSlot').innerHTML = renderDiscardSlot(game.player.discard);
 
       const aiPz = document.getElementById('aiPrizesZone');
       const pPz = document.getElementById('playerPrizesZone');
@@ -14816,7 +14835,7 @@ const TYPE_EMOJI = {
       let aw = Math.min((avail - 2 * KB * bw) / (2 * KB), W - 2 * 96, bw * 2.4);
       bw = Math.min(bwMax, (avail - 2 * KB * aw) / (2 * KB));
       const side = (W - aw) / 2 - 8;
-      const pw = Math.max(28, Math.min(bw * 0.82, (side - 6) / 2, 62));
+      const pw = Math.max(26, Math.min(bw * 0.78, (side - 8) / 3, 52));
       gs.style.setProperty('--bw', `${Math.floor(bw)}px`);
       gs.style.setProperty('--aw', `${Math.floor(aw)}px`);
       gs.style.setProperty('--pw', `${Math.floor(pw)}px`);
