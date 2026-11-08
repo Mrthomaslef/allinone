@@ -90,13 +90,13 @@
         repeating-linear-gradient(45deg, #1d4ed8 0 4px, #1e3a8a 4px 8px);
       box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
-    .active-slot { width: clamp(52px, 9.6dvh, 104px); }
-    .bench-row { max-width: calc(33dvh + 16px); margin: 0 auto; }
-    @media (max-height: 620px) {
-      .active-slot { width: clamp(48px, 8.4dvh, 80px); }
-      .bench-row { max-width: calc(29dvh + 16px); }
-      .zone-label { display: none; }
-    }
+    .active-slot { width: var(--aw, 76px); flex-shrink: 0; }
+    .bench-row { display: grid; grid-template-columns: repeat(5, var(--bw, 52px)); gap: 6px; justify-content: center; }
+    .side-col { flex: 1 1 0; min-width: 0; }
+    .pile { width: var(--pw, 40px); display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0; }
+    .pile-count { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 0 4px; border-radius: 4px;
+      background: rgba(2,6,23,.88); color: #fff; font: 900 10px/1.4 'JetBrains Mono', monospace; }
+    .pile-chip { font: 700 9px/1.5 'JetBrains Mono', monospace; padding: 0 5px; border-radius: 5px; background: rgba(0,0,0,.35); color: #e2e8f0; white-space: nowrap; }
     .pile-col { width: clamp(30px, 5.2dvh, 46px); flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
     .prize-stack { position: relative; width: 100%; }
     .prize-stack .card-back, .prize-stack .slot-empty { position: absolute; left: 0; width: 100%; }
@@ -385,79 +385,70 @@
       <button onclick="toggleSound()" id="soundBtnGame" class="w-8 h-7 rounded-lg bg-white/10 text-xs shrink-0">🔊</button>
     </header>
 
-    <!-- TAPIS DE JEU -->
-    <main id="playMat" class="mat flex-1 min-h-0 flex flex-col justify-between px-2 py-1.5 gap-1">
+    <!-- TAPIS DE JEU (tailles calculées selon l'écran : voir layoutBoard) -->
+    <main id="playMat" class="mat flex-1 min-h-0 flex flex-col justify-between px-2 py-1.5">
       <div id="matDropHint"><span>✨ Lâche ici pour jouer la carte</span></div>
 
-      <!-- CÔTÉ JULIETTE (miroir) -->
+      <!-- CÔTÉ JULIETTE -->
       <section class="side side-ai flex flex-col gap-1.5">
-        <div class="flex items-center gap-1.5">
-          <div class="pile-col">
-            <div class="card-back w-full relative">
-              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 rounded bg-slate-950/90 text-[10px] font-black font-mono text-white" id="aiDeckCount">20</span>
+        <div id="aiBenchRow" class="bench-row"></div>
+        <div class="flex items-center gap-2">
+          <div class="side-col flex items-center justify-start gap-1.5">
+            <div class="pile">
+              <div class="card-back w-full relative">
+                <span class="pile-count" id="aiDeckCount">20</span>
+              </div>
+              <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="pile-chip">🗑 0</button>
             </div>
-            <button id="aiDiscardBtn" onclick="openDiscardViewer('ai')" class="text-[9px] font-mono px-1 rounded bg-black/40 text-slate-300">🗑 0</button>
           </div>
-          <div class="flex-1 min-w-0">
-            <div id="aiBenchRow" class="bench-row grid grid-cols-5 gap-1"></div>
-            <div class="zone-label text-center mt-0.5">Banc de Juliette</div>
-          </div>
-          <div class="pile-col">
-            <div id="aiPrizesZone" class="prize-stack"></div>
-            <span class="text-[10px] font-mono font-bold text-yellow-300">🏆<span id="aiPrizesCount">3</span></span>
-          </div>
-        </div>
-        <div class="flex justify-center items-center gap-2">
-          <div class="w-20"></div>
           <div id="aiActiveSlot" class="active-slot"></div>
-          <div id="aiActiveInfo" class="w-20 text-[10px] leading-tight"></div>
+          <div class="side-col flex items-center justify-end">
+            <div class="pile">
+              <div id="aiPrizesZone" class="prize-stack"></div>
+              <span class="pile-chip text-amber-200">🏆 <span id="aiPrizesCount">3</span></span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- LIGNE MÉDIANE : COMMENTAIRE DE JULIETTE -->
-      <div class="relative z-10 flex justify-center px-1">
-        <div class="bubble w-full rounded-2xl px-2.5 py-1 flex items-center gap-2 shadow-lg">
+      <!-- LIGNE MÉDIANE : JULIETTE + FIN DU TOUR -->
+      <div id="midRow" class="relative z-10 flex items-center gap-2">
+        <div class="bubble flex-1 min-w-0 rounded-2xl px-2.5 py-1 flex items-center gap-2">
           <span class="text-lg leading-none shrink-0">👩‍🦰</span>
-          <div id="julietteSpeech" class="text-[10.5px] leading-snug text-slate-100 line-clamp-2 min-h-[28px]">
+          <div id="julietteSpeech" class="text-[10.5px] leading-snug line-clamp-2 min-h-[28px]">
             « Choisis ton Pokémon Actif pour commencer le match ! »
           </div>
         </div>
+        <button id="endTurnBtn" onclick="endPlayerTurn()" class="btn-gold shrink-0 px-3 h-9 rounded-full text-[11.5px] font-black leading-none">Fin du<br>tour</button>
       </div>
 
       <!-- TON CÔTÉ -->
       <section class="side side-player flex flex-col gap-1.5">
-        <div class="flex justify-center items-end gap-2">
-          <div id="playerActiveInfo" class="w-20 text-[10px] leading-tight text-right pb-4"></div>
-          <div id="playerActiveSlot" class="active-slot"></div>
-          <div class="w-20 text-[9px] font-mono text-sky-300 leading-tight pb-4" id="energyStatusText">⚡ 0/1</div>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <div class="pile-col">
-            <div id="playerPrizesZone" class="prize-stack"></div>
-            <span class="text-[10px] font-mono font-bold text-emerald-300">🏆<span id="playerPrizesCount">3</span></span>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="zone-label text-center mb-0.5">Ton Banc</div>
-            <div id="playerBenchRow" class="bench-row grid grid-cols-5 gap-1"></div>
-          </div>
-          <div class="pile-col">
-            <div class="card-back w-full relative">
-              <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-1 rounded bg-slate-950/90 text-[10px] font-black font-mono text-white" id="playerDeckCount">20</span>
+        <div class="flex items-center gap-2">
+          <div class="side-col flex flex-col items-start justify-center gap-1.5">
+            <div class="flex items-start gap-1.5">
+              <div class="pile">
+                <div id="playerPrizesZone" class="prize-stack"></div>
+                <span class="pile-chip text-emerald-300">🏆 <span id="playerPrizesCount">3</span></span>
+              </div>
+              <div class="pile">
+                <div class="card-back w-full relative">
+                  <span class="pile-count" id="playerDeckCount">20</span>
+                </div>
+                <button id="playerDiscardBtn" onclick="openDiscardViewer('player')" class="pile-chip">🗑 0</button>
+              </div>
             </div>
-            <button id="playerDiscardBtn" onclick="openDiscardViewer('player')" class="text-[9px] font-mono px-1 rounded bg-black/40 text-slate-300">🗑 0</button>
+            <div class="flex items-center gap-1.5">
+              <button id="retreatBtn" onclick="openRetreatModal()" class="btn-token w-8 h-8 rounded-full text-xs font-bold shrink-0" title="Retraite">🔄</button>
+              <div id="energyStatusText" class="text-[9px] font-mono text-sky-200 leading-tight">⚡ 0/1</div>
+            </div>
           </div>
+          <div id="playerActiveSlot" class="active-slot"></div>
+          <div id="attackButtonsContainer" class="side-col flex flex-col items-stretch justify-center gap-1.5"></div>
         </div>
+        <div id="playerBenchRow" class="bench-row"></div>
       </section>
     </main>
-
-    <!-- BARRE D'ACTION -->
-    <section id="actionStrip" class="shrink-0 px-2 py-1.5 bg-black/30 backdrop-blur-sm border-t border-white/10 flex items-center justify-between gap-1.5">
-      <div id="attackButtonsContainer" class="flex items-center gap-1.5 overflow-x-auto min-w-0"></div>
-      <div class="flex items-center gap-1.5 shrink-0">
-        <button id="retreatBtn" onclick="openRetreatModal()" class="btn-token w-9 h-9 rounded-full text-sm font-bold" title="Retraite">🔄</button>
-        <button id="endTurnBtn" onclick="endPlayerTurn()" class="btn-gold px-3.5 h-9 rounded-full text-[12px] font-black">Fin du tour</button>
-      </div>
-    </section>
 
     <!-- MAIN EN ÉVENTAIL -->
     <footer class="shrink-0 bg-gradient-to-b from-black/30 to-black/50 px-2 pt-1" style="padding-bottom:max(4px, env(safe-area-inset-bottom))">
@@ -465,7 +456,7 @@
         <span>TA MAIN · <strong id="playerHandCount" class="text-white">0</strong></span>
         <span>Glisse pour jouer · touche pour voir 🔍</span>
       </div>
-      <div id="playerHandRow" class="relative w-full" style="height: clamp(80px, 13dvh, 124px)"></div>
+      <div id="playerHandRow" class="relative w-full" style="height: clamp(82px, 14dvh, 132px)"></div>
     </footer>
   </div>
 
@@ -972,7 +963,7 @@
 
     function sizePrizeStack(el) {
       const w = el.clientWidth || 40;
-      el.style.height = `${Math.round(w * 88 / 63) + 12}px`;
+      el.style.height = `${Math.round(w * 88 / 63) + 12}px`; el.style.width = '100%';
     }
 
     function openDiscardViewer(owner) {
@@ -1041,6 +1032,7 @@
     function renderBoard() {
       if (!game) return;
       if (drag && drag.started) return; // ne pas détruire la carte en cours de glisser-déposer
+      layoutBoard();
 
       document.getElementById('aiPrizesCount').textContent = game.ai.prizes.length;
       document.getElementById('aiDeckCount').textContent = game.ai.deck.length;
@@ -1073,8 +1065,6 @@
       const activeInfo = (pkm) => pkm
         ? `<div class="font-extrabold text-white">${pkm.name}</div><div class="font-mono text-amber-200">${Math.max(0, pkm.hp - pkm.damage)}/${pkm.hp} PV</div><div class="text-white/50 text-[9px]">${TYPE_EMOJI[pkm.type] || ''} ${pkm.type || ''}</div>`
         : '';
-      document.getElementById('aiActiveInfo').innerHTML = activeInfo(game.ai.active);
-      document.getElementById('playerActiveInfo').innerHTML = activeInfo(game.player.active);
 
       const benchHtml = (owner) => Array.from({ length: 5 }, (_, i) =>
         `<div data-slot="${i}">${renderPokemonSlot(game[owner].bench[i] || null, owner, 'bench', i)}</div>`).join('');
@@ -1100,6 +1090,30 @@
     }
 
     window.addEventListener('resize', () => { if (game) renderBoard(); });
+
+    // Taille des cartes calculée selon la place réellement disponible :
+    // bancs pleine largeur, Pokémon Actifs le plus grand possible, piles sur les côtés.
+    function layoutBoard() {
+      const gs = document.getElementById('gameScreen');
+      const main = document.getElementById('playMat');
+      const H = main.clientHeight, W = main.clientWidth - 16;
+      if (!H || !W) return;
+      const K = 88 / 63 * 1.2 + 0.0;        // hauteur carte + réserve énergies (padding 28 % largeur)
+      const KB = 88 / 63 + 0.28;
+      const gap = 6;
+      const fixed = document.getElementById('midRow').offsetHeight + 12 + 4 * gap + 8;
+      const avail = H - fixed;
+      const bwMax = (W - 4 * gap) / 5;
+      // Actif ≈ 1,45 × carte de Banc, puis on redistribue s'il reste de la place
+      let bw = Math.min(bwMax, avail / (2 * KB * 2.45));
+      let aw = Math.min((avail - 2 * KB * bw) / (2 * KB), W - 2 * 96, bw * 2.4);
+      bw = Math.min(bwMax, (avail - 2 * KB * aw) / (2 * KB));
+      const side = (W - aw) / 2 - 8;
+      const pw = Math.max(28, Math.min(bw * 0.82, (side - 6) / 2, 62));
+      gs.style.setProperty('--bw', `${Math.floor(bw)}px`);
+      gs.style.setProperty('--aw', `${Math.floor(aw)}px`);
+      gs.style.setProperty('--pw', `${Math.floor(pw)}px`);
+    }
 
     // =======================================================================
     // ACTIONS PARTAGÉES (modal ET glisser-déposer)
@@ -1299,7 +1313,7 @@
     }
 
     function hitTarget(x, y) {
-      const strip = document.getElementById('actionStrip').getBoundingClientRect();
+      const strip = document.getElementById('playerHandRow').closest('footer').getBoundingClientRect();
       let wide = null;
       for (const t of drag.targets) {
         const r = t.el.getBoundingClientRect();
@@ -1552,7 +1566,7 @@
       const retBtn = document.getElementById('retreatBtn');
 
       if (!game || !game.player.active || game.activePlayer !== 'player') {
-        container.innerHTML = `<span class="text-[11px] text-slate-400 font-mono px-1">${!game?.player.active ? 'Pose d\'abord un Pokémon de Base !' : 'Juliette réfléchit...'}</span>`;
+        container.innerHTML = `<span class="text-[10px] text-white/50 font-mono text-right">${!game?.player.active ? 'Pose d\'abord un Pokémon de Base !' : 'Juliette réfléchit...'}</span>`;
         endBtn.disabled = true;
         retBtn.disabled = true;
         endBtn.classList.remove('ready');
@@ -1572,14 +1586,14 @@
           <button
             onclick="executePlayerAttack(${i})"
             ${payable ? '' : 'disabled'}
-            class="px-2.5 h-9 rounded-full text-[11px] font-extrabold flex items-center gap-1 shrink-0 ${
+            class="w-full max-w-[150px] ml-auto px-2 h-8 rounded-full text-[10.5px] font-extrabold flex items-center gap-1 ${
               payable
                 ? 'btn-token'
                 : 'bg-black/25 text-white/40 border border-white/10 cursor-not-allowed'
             }"
           >
             <span>${costIcons}</span>
-            <span>${atk.name}</span>
+            <span class="truncate flex-1 text-left">${atk.name}</span>
             <span class="font-black ${payable ? 'text-red-700' : ''}">${atk.damage}</span>
           </button>
         `;
