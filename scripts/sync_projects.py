@@ -156,7 +156,7 @@ KNOWN_METADATA = {
     },
     "guide-interne-cochin-os": {
         "title": "COCHIN·OS — Guide Internes",
-        "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
+        "subtitle": "Portail des Internes Radio B : Planning, Annuaire, BiblioOstéo, Quiz Cours & Anatomie, Infiltrations, Anticoagulants, Archives",
         "category": "medical-imaging",
         "emoji": "🦴",
         "logoUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/assets/icon.svg?v=5",
