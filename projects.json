@@ -387,13 +387,13 @@
   {
     "id": "voyages-voyages",
     "title": "Voyages • Voyages — Hub & Cartes",
-    "subtitle": "Cartes Avantage SNCF & Air France Week-End+, Vacances (Valloire, Corse) & Guichet Express",
+    "subtitle": "Cartes Avantage SNCF & Air France Week-End+, Vacances (Valloire, Corse réservée) & Guichet Express",
     "category": "daily-tools",
     "emoji": "✈️",
     "logoUrl": "https://mrthomaslef.github.io/voyages-voyages/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/voyages-voyages/",
     "githubUrl": "https://github.com/Mrthomaslef/voyages-voyages",
-    "pushedAt": "2026-11-06T06:30:58Z"
+    "pushedAt": "2026-11-09T20:42:39Z"
   },
   {
     "id": "biblio-marie",
