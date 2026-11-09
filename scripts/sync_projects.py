@@ -275,12 +275,12 @@ KNOWN_METADATA = {
         "logoUrl": "https://mrthomaslef.github.io/Holidamn/image/logo7.png",
     },
     "forestia-mobile": {
-        "title": "Forestia (1998) — Édition Web Universelle (REA)",
-        "subtitle": "Abandonware LaserMedia recodé en HTML5/Canvas/WebAudio autonome (61 binaires Director 6, 9 424 scripts Lingo décompilés, 640 scènes Forêt, Tour 360° VR, 80 Animaux & Herbier)",
+        "title": "Forestia (1998) — Moteur ScummVM Director (Mac)",
+        "subtitle": "CD-ROM français original Daddy Oak / LaserMedia exécuté par le vrai moteur ScummVM Director 6.0 WebAssembly hébergé sur le Mac (Wi-Fi 8791 + Tunnel HTTPS, sauvegardes synchronisées)",
         "category": "games-family",
         "emoji": "🌲",
         "prodUrl": "https://mrthomaslef.github.io/forestia-mobile/",
-        "logoUrl": "https://mrthomaslef.github.io/forestia-mobile/assets/icon.svg",
+        "logoUrl": "assets/forestia-icon.svg",
     },
     "m4-gaming": {
         "title": "M4 Gaming",
