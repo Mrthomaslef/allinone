@@ -8,7 +8,7 @@
     "logoUrl": "pokemon-play-it/assets/icon.svg?v=10",
     "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/pokemon-play-it",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "uncensored",
@@ -19,7 +19,7 @@
     "logoUrl": "uncensored/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/uncensored",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "gestion-anticoagulant",
@@ -30,7 +30,7 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "recomp-check",
@@ -41,7 +41,7 @@
     "logoUrl": "assets/recomp-check-icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/ayn-thor/recomp/",
     "githubUrl": "https://github.com/Mrthomaslef/ayn-thor/tree/main/recomp",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "film-et-serie",
@@ -52,7 +52,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "torrent",
@@ -63,18 +63,18 @@
     "logoUrl": "torrent/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/torrent",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "patrimoine-os",
     "title": "PatrimoineOS — Banque, Crypto & Pokémon",
-    "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",
+    "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (accès sécurisé)",
     "category": "daily-tools",
     "emoji": "💎",
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "gemini-ultra",
@@ -85,7 +85,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "second-brain-voice",
@@ -96,7 +96,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "stats-youtube",
@@ -107,18 +107,29 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "mon-drive-tunnel",
     "title": "Mon Drive Privé — 774 Documents (Tunnel)",
-    "subtitle": "Barre de recherche instantanée, aperçu PDF/Photo intégré & téléchargement via Tunnel Mac (PIN 1818)",
+    "subtitle": "Barre de recherche instantanée, aperçu PDF/Photo intégré & téléchargement via Tunnel Mac sécurisé (phrase de passe)",
     "category": "daily-tools",
     "emoji": "🗂️",
-    "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
+    "logoUrl": "assets/drive-icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/assurance/drive.html",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:35:21Z"
+  },
+  {
+    "id": "assurance",
+    "title": "AssurImpôts & Contrats",
+    "subtitle": "Coffre chiffré : assurances, impôts & contrats — accès par phrase de passe",
+    "category": "daily-tools",
+    "emoji": "🛡️",
+    "logoUrl": "assets/assurance-icon.svg?v=2",
+    "prodUrl": "https://mrthomaslef.github.io/assurance/",
+    "githubUrl": "https://github.com/Mrthomaslef/assurance",
+    "pushedAt": "2026-11-09T22:35:21Z"
   },
   {
     "id": "ayn-thor",
@@ -129,7 +140,7 @@
     "logoUrl": "assets/ayn-thor-icon.svg?v=3",
     "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=13",
     "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
-    "pushedAt": "2026-11-09T21:56:36Z"
+    "pushedAt": "2026-11-09T22:09:11Z"
   },
   {
     "id": "voyages-voyages",
@@ -152,17 +163,6 @@
     "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
     "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
     "pushedAt": "2026-11-09T20:56:37Z"
-  },
-  {
-    "id": "assurance",
-    "title": "AssurImpôts & Contrats — Famille Lefèvre-Parizot",
-    "subtitle": "Synthèse Assurances (Habitation, Auto CL-330-JQ, RCP MACSF, Mutuelle ACTIL, Fiido), Impôts/URSSAF & 317 Documents accessibles",
-    "category": "daily-tools",
-    "emoji": "🛡️",
-    "logoUrl": "assets/assurance-icon.svg?v=2",
-    "prodUrl": "https://mrthomaslef.github.io/assurance/",
-    "githubUrl": "https://github.com/Mrthomaslef/assurance",
-    "pushedAt": "2026-11-09T19:59:48Z"
   },
   {
     "id": "forestia-mobile",
@@ -251,17 +251,6 @@
     "prodUrl": "https://mrthomaslef.github.io/m4-gaming/",
     "githubUrl": "https://github.com/Mrthomaslef/m4-gaming",
     "pushedAt": "2026-11-08T08:41:16Z"
-  },
-  {
-    "id": "annuaire-prive",
-    "title": "Annuaire Privé — Pro & Perso",
-    "subtitle": "276 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
-    "category": "daily-tools",
-    "emoji": "📇",
-    "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/",
-    "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-07T22:25:58Z"
   },
   {
     "id": "carte-et-abonnement",

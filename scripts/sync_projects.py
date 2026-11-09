@@ -62,8 +62,8 @@ KNOWN_METADATA = {
         "logoUrl": "assets/infiltration-sous-echo-icon.svg?v=1",
     },
     "assurance": {
-        "title": "AssurImpôts & Contrats — Famille Lefèvre-Parizot",
-        "subtitle": "Synthèse Assurances (Habitation, Auto CL-330-JQ, RCP MACSF, Mutuelle ACTIL, Fiido), Impôts/URSSAF & 317 Documents accessibles",
+        "title": "AssurImpôts & Contrats",
+        "subtitle": "Coffre chiffré : assurances, impôts & contrats — accès par phrase de passe",
         "category": "daily-tools",
         "emoji": "🛡️",
         "prodUrl": "https://mrthomaslef.github.io/assurance/",
@@ -119,7 +119,7 @@ KNOWN_METADATA = {
     },
     "patrimoine-os": {
         "title": "PatrimoineOS — Banque, Crypto & Pokémon",
-        "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",
+        "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (accès sécurisé)",
         "category": "daily-tools",
         "emoji": "💎",
         "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
@@ -214,10 +214,10 @@ KNOWN_METADATA = {
     },
     "annuaire-prive": {
         "title": "Annuaire Privé — Pro & Perso",
-        "subtitle": "276 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (Coffre PIN)",
+        "subtitle": "276 contacts (AP-HP Cochin, Pitié, Famille), Postes DECT & 774 docs (accès sécurisé)",
         "category": "daily-tools",
         "emoji": "📇",
-        "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/icon.svg",
+        "logoUrl": "assets/annuaire-prive-icon.svg",
     },
     "colistrack": {
         "title": "ColisTrack",
@@ -483,11 +483,11 @@ def main():
             {
                 "id": "mon-drive-tunnel",
                 "title": "Mon Drive Privé — 774 Documents (Tunnel)",
-                "subtitle": "Barre de recherche instantanée, aperçu PDF/Photo intégré & téléchargement via Tunnel Mac (PIN 1818)",
+                "subtitle": "Barre de recherche instantanée, aperçu PDF/Photo intégré & téléchargement via Tunnel Mac sécurisé (phrase de passe)",
                 "category": "daily-tools",
                 "emoji": "🗂️",
-                "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
-                "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
+                "logoUrl": "assets/drive-icon.svg",
+                "prodUrl": "https://mrthomaslef.github.io/assurance/drive.html",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/annuaire-prive",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
@@ -547,7 +547,7 @@ def main():
             {
                 "id": "patrimoine-os",
                 "title": "PatrimoineOS — Banque, Crypto & Pokémon",
-                "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (Coffre PIN)",
+                "subtitle": "Suivi Capital Net EUR : Crédit Mutuel, Ledger BTC, MetaMask Aave V3 & Collectr (accès sécurisé)",
                 "category": "daily-tools",
                 "emoji": "💎",
                 "logoUrl": "patrimoine-os/icon.svg",
