@@ -196,6 +196,14 @@ export class Playmat {
       return;
     }
 
+    // Consulter toute la pile de défausse (joueur ou adversaire) et lire chaque carte
+    if (zone === 'player-discard' || zone === 'opponent-discard') {
+      const isPlayer = zone === 'player-discard';
+      const pile = [...(isPlayer ? this.state.player.discard : this.state.opponent.discard)].reverse();
+      this.openDiscardModal(pile, isPlayer ? 'Votre pile de défausse' : 'Défausse de l\'adversaire');
+      return;
+    }
+
     // Sinon, inspecter la carte présente dans ce slot
     const cardEl = slot.querySelector('.zone-card');
     if (cardEl && cardEl.dataset.instanceId) {
@@ -204,6 +212,37 @@ export class Playmat {
         this.openCardActionModal(card, zone, slotIndex);
       }
     }
+  }
+
+  openDiscardModal(pile, title) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-content" style="max-width:420px;max-height:85vh;display:flex;flex-direction:column;text-align:center">
+        <h3 style="color:#ffcb05;margin-bottom:4px">${title}</h3>
+        <p style="font-size:12px;color:#aab;margin-bottom:10px">
+          ${pile.length ? `${pile.length} carte(s) — touchez une carte pour la lire en grand.` : 'Aucune carte défaussée pour le moment.'}
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;overflow-y:auto;padding:4px">
+          ${pile.map((c, idx) => `
+            <div data-discard-idx="${idx}" style="cursor:pointer;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:6px;display:flex;flex-direction:column;align-items:center">
+              <img src="${c.image || c.img}" alt="${c.name}" style="width:100%;border-radius:6px;object-fit:contain">
+              <span style="font-size:11px;font-weight:700;color:#fff;margin-top:4px">${c.name}</span>
+            </div>
+          `).join('')}
+        </div>
+        <button class="btn" style="width:100%;margin-top:12px;background:#334;color:#ccc" id="close-discard-modal">Fermer</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    modal.querySelector('#close-discard-modal').onclick = () => modal.remove();
+    modal.onclick = e => { if (e.target === modal) modal.remove(); };
+    modal.querySelectorAll('[data-discard-idx]').forEach(el => {
+      el.onclick = () => {
+        const card = pile[parseInt(el.dataset.discardIdx, 10)];
+        if (card) this.openCardActionModal(card, 'discard', 0);
+      };
+    });
   }
 
   handleDrop(dragged, targetZone, slot, slotIndex = 0) {

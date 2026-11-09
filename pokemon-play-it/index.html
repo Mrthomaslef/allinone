@@ -117,7 +117,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '4a7bb22-1794175432';
+      var BUILD = '5951b1e-1794205162';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -2714,7 +2714,7 @@
   <div id="cardPreview"><div class="pv-card"><img alt="" /><div class="pv-foil"></div><div class="pv-glitter"></div><div class="pv-glare"></div></div></div>
   <div id="turnBanner"><span class="ribbon">À TOI !</span></div>
 
-  <div id="cardModal" onclick="if(event.target===this){event.stopPropagation();closeCardModal();}" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+  <div id="cardModal" onclick="if(event.target===this){event.stopPropagation();closeCardModal();}" class="fixed inset-0 z-[80] hidden bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-white/20 rounded-2xl p-4 max-w-sm w-full flex flex-col items-center gap-3 shadow-2xl max-h-[92dvh] overflow-y-auto">
       <div class="w-full flex items-center justify-between">
         <span id="modalCardTitle" class="text-sm font-extrabold text-yellow-300">Carte</span>
@@ -20747,13 +20747,58 @@ const TYPE_EMOJI = {
       el.style.height = `${Math.round(w * 88 / 63) + 12}px`; el.style.width = '100%';
     }
 
+    function inspectReadOnlyCard(card) {
+      if (!card) return;
+      hidePreview();
+      const modal = document.getElementById('cardModal');
+      document.getElementById('modalCardTitle').textContent = card.name;
+      document.getElementById('modalCardImg').src = card.img;
+
+      if (card.category === 'Pokémon') {
+        const pw = card.power ? `<div class="mt-1.5 pt-1.5 border-t border-white/10">✨ <strong>Pouvoir Pokémon : ${card.power.name}</strong> — ${card.power.text}</div>` : '';
+        const atkDesc = (card.attacks || []).map((a) => {
+          const costOrbs = (a.cost || []).map((c) => energyOrb(c, 13)).join('');
+          return `<div class="mt-1"><span class="inline-flex items-center gap-0.5 align-middle mr-1">${costOrbs}</span><strong>${a.name}${a.damage ? ` (${a.damage})` : ''}</strong>${a.text ? ` : ${a.text}` : ''}</div>`;
+        }).join('');
+        const w = card.weakness, r = card.resistance;
+        const ret = card.retreat ? Array(card.retreat).fill(energyOrb('Incolore', 13)).join('') : 'Gratuite';
+        document.getElementById('modalCardDetails').innerHTML = `
+          <div><strong>${card.stage || 'Base'}</strong> · ${card.hp} PV · Type ${energyOrb(card.type, 13)} ${card.type}${card.evolvesFrom ? ` · Évolue de <strong>${card.evolvesFrom}</strong>` : ''}</div>
+          <div class="mt-1 text-[11px] text-slate-300"><strong>Faiblesse :</strong> ${w ? energyOrb(w, 13) + ' ×2' : 'Aucune'} · <strong>Résistance :</strong> ${r ? energyOrb(r, 13) + ' -30' : 'Aucune'} · <strong>Retraite :</strong> ${ret}</div>
+          ${pw}
+          ${atkDesc ? `<div class="mt-1.5 pt-1.5 border-t border-white/10">${atkDesc}</div>` : ''}
+        `;
+      } else {
+        document.getElementById('modalCardDetails').innerHTML = `
+          <div class="text-[11px] font-bold text-amber-300 mb-1">${card.category || 'Carte'}</div>
+          <div>${card.text || 'Carte Énergie de base.'}</div>
+        `;
+      }
+
+      const actionsEl = document.getElementById('modalCardActions');
+      actionsEl.innerHTML = '';
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'w-full min-h-[42px] py-2 rounded-xl text-xs font-extrabold bg-white/10 hover:bg-white/20 border border-white/15 text-white transition active:scale-95';
+      closeBtn.textContent = '← Retour à la liste';
+      closeBtn.onclick = () => closeCardModal();
+      actionsEl.appendChild(closeBtn);
+
+      modal.classList.remove('hidden');
+    }
+
     function openDiscardViewer(owner) {
       if (!game) return;
       const pile = game[owner].discard;
+      const reversed = [...pile].reverse();
       openPickerModal(
         owner === 'player' ? '🗑 Ta pile de défausse' : '🗑 Défausse de l\'adversaire',
-        pile.length ? `${pile.length} carte(s) — la plus récente en premier.` : 'Aucune carte défaussée pour le moment.',
-        [...pile].reverse(), () => {}, true
+        pile.length ? `${pile.length} carte(s) — touche une carte pour la lire en grand.` : 'Aucune carte défaussée pour le moment.',
+        reversed,
+        (idx) => {
+          if (reversed[idx]) inspectReadOnlyCard(reversed[idx]);
+        },
+        true,
+        { keepOpenOnPick: true }
       );
     }
 
@@ -25391,26 +25436,39 @@ const TYPE_EMOJI = {
     // -----------------------------------------------------------------------
     // 10. MODAL DE SÉLECTION (POKÉ BALL / POKÉDEX / REMPLACEMENT K.O.)
     // -----------------------------------------------------------------------
-    function openPickerModal(title, subtitle, cardsList, onPick, allowClose = true) {
+    function openPickerModal(title, subtitle, cardsList, onPick, allowClose = true, opts = {}) {
       document.getElementById('pickerTitle').textContent = title;
       document.getElementById('pickerSubtitle').textContent = subtitle;
       document.getElementById('pickerCloseBtn').style.display = allowClose ? 'block' : 'none';
 
+      const keepOpen = !!opts.keepOpenOnPick;
+      window._pickerCardsList = cardsList;
       const grid = document.getElementById('pickerGrid');
       grid.className = 'grid grid-cols-2 sm:grid-cols-3 gap-2.5 overflow-y-auto p-1';
       grid.innerHTML = cardsList.map((c, idx) => `
         <div
           onclick="window._pickerCallback(${idx})"
-          class="cursor-pointer rounded-xl overflow-hidden bg-slate-800 border border-white/15 hover:border-yellow-400 transition p-1.5 flex flex-col items-center"
+          class="relative cursor-pointer rounded-xl overflow-hidden bg-slate-800 border border-white/15 hover:border-yellow-400 transition p-1.5 flex flex-col items-center group"
         >
+          ${!keepOpen ? `
+            <button
+              type="button"
+              onclick="event.stopPropagation(); if(window._pickerCardsList && window._pickerCardsList[${idx}]) inspectReadOnlyCard(window._pickerCardsList[${idx}]);"
+              class="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-slate-950/85 hover:bg-amber-400 hover:text-slate-950 text-white border border-white/25 flex items-center justify-center text-[11px] font-black shadow transition"
+              title="Lire la carte"
+              aria-label="Lire la carte ${c.name}"
+            >
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            </button>
+          ` : ''}
           <img src="${c.img}" alt="${c.name}" class="w-28 rounded-lg object-contain" />
-          <span class="text-xs font-bold text-white mt-1">${c.name}</span>
+          <span class="text-xs font-bold text-white mt-1 text-center leading-tight">${c.name}</span>
           ${c.hp ? `<span class="text-[10px] font-mono text-yellow-300">${c.hp - (c.damage || 0)}/${c.hp} PV</span>` : ''}
         </div>
       `).join('');
 
       window._pickerCallback = (idx) => {
-        closePickerModal();
+        if (!keepOpen) closePickerModal();
         onPick(idx);
       };
 
