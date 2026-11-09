@@ -146,6 +146,14 @@ KNOWN_METADATA = {
         "emoji": "🩺",
         "logoUrl": "https://mrthomaslef.github.io/agenda-internes/icon.svg?v=8",
     },
+    "guide-externe": {
+        "title": "Externes Radio B — Cochin",
+        "subtitle": "Vacations du matin (Interne & Senior) · Cours & Présentation du mardi",
+        "category": "medical-imaging",
+        "emoji": "🌅",
+        "prodUrl": "https://mrthomaslef.github.io/guide-externe/",
+        "logoUrl": "assets/guide-externe-icon.svg?v=2",
+    },
     "guide-interne-cochin-os": {
         "title": "COCHIN·OS — Guide Internes",
         "subtitle": "Portail & Annuaire des Internes de Radiologie B (Ostéo & RI Cochin)",
