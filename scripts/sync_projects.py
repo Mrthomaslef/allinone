@@ -77,6 +77,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
         "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     },
+    "recomp-check": {
+        "title": "Recomp Check — AYN Thor & Mac mini M4",
+        "subtitle": "Quels Recomp / portages natifs tournent sur ton AYN Thor et ton Mac mini M4 : 132 jeux (Switch nxnative/nx2android, Zelda, Mario 64, BotW, Skate 3…) · filtres Les deux / AYN / Mac",
+        "category": "games-family",
+        "emoji": "⚡",
+        "prodUrl": "https://mrthomaslef.github.io/ayn-thor/recomp/",
+        "logoUrl": "assets/recomp-check-icon.svg?v=1",
+    },
     "ayn-thor": {
         "title": "Rom et Émulation — Switch & 20 Consoles",
         "subtitle": "55 791 ROMs (Switch + 20 Consoles : 3DS, NDS, GC, Wii, Wii U, PS2, PS1, PSP, GBA, N64, SNES, Xbox 360…) · Auto-Install Mac M4 & AYN Thor",
@@ -577,6 +585,22 @@ def main():
                 "logoUrl": "film-et-serie/assets/icon.svg?v=2",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/film-et-serie",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "recomp-check" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "recomp-check",
+                "title": "Recomp Check — AYN Thor & Mac mini M4",
+                "subtitle": "Quels Recomp / portages natifs tournent sur ton AYN Thor et ton Mac mini M4 : 132 jeux (Switch nxnative/nx2android, Zelda, Mario 64, BotW, Skate 3…) · filtres Les deux / AYN / Mac",
+                "category": "games-family",
+                "emoji": "⚡",
+                "logoUrl": "assets/recomp-check-icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/ayn-thor/recomp/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/ayn-thor/tree/main/recomp",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )

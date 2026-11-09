@@ -8,7 +8,7 @@
     "logoUrl": "pokemon-play-it/assets/icon.svg?v=10",
     "prodUrl": "https://mrthomaslef.github.io/allinone/pokemon-play-it/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/pokemon-play-it",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "uncensored",
@@ -19,7 +19,7 @@
     "logoUrl": "uncensored/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/uncensored",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "gestion-anticoagulant",
@@ -30,7 +30,18 @@
     "logoUrl": "gestion-anticoagulant/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/guide-interne-cochin-os/anticoagulants/",
     "githubUrl": "https://github.com/Mrthomaslef/guide-interne-cochin-os/tree/main/anticoagulants",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
+  },
+  {
+    "id": "recomp-check",
+    "title": "Recomp Check — AYN Thor & Mac mini M4",
+    "subtitle": "Quels Recomp / portages natifs tournent sur ton AYN Thor et ton Mac mini M4 : 132 jeux (Switch nxnative/nx2android, Zelda, Mario 64, BotW, Skate 3…) · filtres Les deux / AYN / Mac",
+    "category": "games-family",
+    "emoji": "⚡",
+    "logoUrl": "assets/recomp-check-icon.svg?v=1",
+    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/recomp/",
+    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor/tree/main/recomp",
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "film-et-serie",
@@ -41,7 +52,7 @@
     "logoUrl": "film-et-serie/assets/icon.svg?v=2",
     "prodUrl": "https://mrthomaslef.github.io/allinone/film-et-serie/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/film-et-serie",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "torrent",
@@ -52,7 +63,7 @@
     "logoUrl": "torrent/assets/icon.svg?v=1",
     "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/torrent",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "patrimoine-os",
@@ -63,7 +74,7 @@
     "logoUrl": "patrimoine-os/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/patrimoine-os/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/patrimoine-os",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "gemini-ultra",
@@ -74,7 +85,7 @@
     "logoUrl": "gemini-ultra/assets/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/gemini-ultra/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/gemini-ultra",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "second-brain-voice",
@@ -85,7 +96,7 @@
     "logoUrl": "second-brain-voice/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/second-brain-voice/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/second-brain-voice",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "stats-youtube",
@@ -96,7 +107,7 @@
     "logoUrl": "stats-youtube/icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/allinone/stats-youtube/",
     "githubUrl": "https://github.com/Mrthomaslef/allinone/tree/main/stats-youtube",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
   },
   {
     "id": "mon-drive-tunnel",
@@ -107,7 +118,51 @@
     "logoUrl": "https://mrthomaslef.github.io/annuaire-prive/drive-icon.svg",
     "prodUrl": "https://mrthomaslef.github.io/annuaire-prive/?mode=drive",
     "githubUrl": "https://github.com/Mrthomaslef/annuaire-prive",
-    "pushedAt": "2026-11-09T19:15:36Z"
+    "pushedAt": "2026-11-09T21:54:58Z"
+  },
+  {
+    "id": "ayn-thor",
+    "title": "Rom et Émulation — Switch & 20 Consoles",
+    "subtitle": "55 791 ROMs (Switch + 20 Consoles : 3DS, NDS, GC, Wii, Wii U, PS2, PS1, PSP, GBA, N64, SNES, Xbox 360…) · Auto-Install Mac M4 & AYN Thor",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "assets/ayn-thor-icon.svg?v=3",
+    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=11",
+    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
+    "pushedAt": "2026-11-09T21:54:58Z"
+  },
+  {
+    "id": "voyages-voyages",
+    "title": "Voyages • Voyages — Hub & Cartes",
+    "subtitle": "Cartes Avantage SNCF & Air France Week-End+, Vacances (Valloire, Corse) & Guichet Express",
+    "category": "daily-tools",
+    "emoji": "✈️",
+    "logoUrl": "https://mrthomaslef.github.io/voyages-voyages/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/voyages-voyages/",
+    "githubUrl": "https://github.com/Mrthomaslef/voyages-voyages",
+    "pushedAt": "2026-11-09T21:05:53Z"
+  },
+  {
+    "id": "mapp-store",
+    "title": "Mapp Store 💖 • Le Store d'Apps de Marie",
+    "subtitle": "Mapp Store • Le Store d'Apps de Marie (Pédiatrie, Famille & Jeux)",
+    "category": "games-family",
+    "emoji": "🎮",
+    "logoUrl": "https://mrthomaslef.github.io/mapp-store/apple-touch-icon.png?v=mapp1",
+    "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
+    "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
+    "pushedAt": "2026-11-09T20:56:37Z"
+  },
+  {
+    "id": "assurance",
+    "title": "AssurImpôts & Contrats — Famille Lefèvre-Parizot",
+    "subtitle": "Synthèse Assurances (Habitation, Auto CL-330-JQ, RCP MACSF, Mutuelle ACTIL, Fiido), Impôts/URSSAF & 317 Documents accessibles",
+    "category": "daily-tools",
+    "emoji": "🛡️",
+    "logoUrl": "assets/assurance-icon.svg?v=2",
+    "prodUrl": "https://mrthomaslef.github.io/assurance/",
+    "githubUrl": "https://github.com/Mrthomaslef/assurance",
+    "pushedAt": "2026-11-09T19:59:48Z"
   },
   {
     "id": "forestia-mobile",
@@ -176,17 +231,6 @@
     "pushedAt": "2026-11-09T16:22:05Z"
   },
   {
-    "id": "mapp-store",
-    "title": "Mapp Store 💖 • Le Store d'Apps de Marie",
-    "subtitle": "Mapp Store • Le Store d'Apps de Marie (Pédiatrie, Famille & Jeux)",
-    "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "https://mrthomaslef.github.io/mapp-store/apple-touch-icon.png?v=mapp1",
-    "prodUrl": "https://mrthomaslef.github.io/mapp-store/",
-    "githubUrl": "https://github.com/Mrthomaslef/mapp-store",
-    "pushedAt": "2026-11-09T06:30:28Z"
-  },
-  {
     "id": "biblioosteo",
     "title": "BiblioOstéo Cochin",
     "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
@@ -196,17 +240,6 @@
     "prodUrl": "https://mrthomaslef.github.io/biblioosteo/",
     "githubUrl": "https://github.com/Mrthomaslef/biblioosteo",
     "pushedAt": "2026-11-09T06:04:40Z"
-  },
-  {
-    "id": "ayn-thor",
-    "title": "Rom et Émulation — Switch & 20 Consoles",
-    "subtitle": "55 791 ROMs (Switch + 20 Consoles : 3DS, NDS, GC, Wii, Wii U, PS2, PS1, PSP, GBA, N64, SNES, Xbox 360…) · Auto-Install Mac M4 & AYN Thor",
-    "category": "games-family",
-    "emoji": "🎮",
-    "logoUrl": "assets/ayn-thor-icon.svg?v=3",
-    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/?v=11",
-    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor",
-    "pushedAt": "2026-11-09T02:00:33Z"
   },
   {
     "id": "m4-gaming",
@@ -284,17 +317,6 @@
     "prodUrl": "https://mrthomaslef.github.io/quiz-imagerie/",
     "githubUrl": "https://github.com/Mrthomaslef/quiz-imagerie",
     "pushedAt": "2026-11-06T20:37:00Z"
-  },
-  {
-    "id": "assurance",
-    "title": "AssurImpôts & Contrats — Famille Lefèvre-Parizot",
-    "subtitle": "Synthèse Assurances (Habitation, Auto CL-330-JQ, RCP MACSF, Mutuelle ACTIL, Fiido), Impôts/URSSAF & 317 Documents accessibles",
-    "category": "daily-tools",
-    "emoji": "🛡️",
-    "logoUrl": "assets/assurance-icon.svg?v=2",
-    "prodUrl": "https://mrthomaslef.github.io/assurance/",
-    "githubUrl": "https://github.com/Mrthomaslef/assurance",
-    "pushedAt": "2026-11-06T07:57:04Z"
   },
   {
     "id": "agenda-famille",
@@ -383,17 +405,6 @@
     "prodUrl": "https://mrthomaslef.github.io/assistante-maternelle/",
     "githubUrl": "https://github.com/Mrthomaslef/assistante-maternelle",
     "pushedAt": "2026-11-06T06:31:00Z"
-  },
-  {
-    "id": "voyages-voyages",
-    "title": "Voyages • Voyages — Hub & Cartes",
-    "subtitle": "Cartes Avantage SNCF & Air France Week-End+, Vacances (Valloire, Corse réservée) & Guichet Express",
-    "category": "daily-tools",
-    "emoji": "✈️",
-    "logoUrl": "https://mrthomaslef.github.io/voyages-voyages/assets/icon.svg",
-    "prodUrl": "https://mrthomaslef.github.io/voyages-voyages/",
-    "githubUrl": "https://github.com/Mrthomaslef/voyages-voyages",
-    "pushedAt": "2026-11-09T20:56:34Z"
   },
   {
     "id": "biblio-marie",
