@@ -1,5 +1,16 @@
 [
   {
+    "id": "babyphone",
+    "title": "BabyPhone — AYN Thor ↔ iPhone",
+    "subtitle": "Babyphone pour Émile : l'AYN Thor écoute la chambre, l'iPhone (Thomas & Marie) entend en direct · alerte pleurs, parler à bébé, veilleuse, mode nuit écran noir · Wi-Fi ou 4G",
+    "category": "games-family",
+    "emoji": "👶",
+    "logoUrl": "assets/babyphone-icon.svg?v=1",
+    "prodUrl": "https://mrthomaslef.github.io/ayn-thor/babyphone/",
+    "githubUrl": "https://github.com/Mrthomaslef/ayn-thor/tree/main/babyphone",
+    "pushedAt": "2026-11-10T19:25:00Z"
+  },
+  {
     "id": "pokemon-play-it",
     "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
     "subtitle": "JCC Pokémon 1999 sur mobile · 228 cartes FR, Boosters, Création de Deck (mode auto 30/60 cartes, Énergies illimitées), Duel IA, Multijoueur & Tutoriel Juliette",

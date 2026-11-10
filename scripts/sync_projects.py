@@ -573,6 +573,22 @@ def main():
             },
         )
 
+    if not any(item["id"].lower() == "babyphone" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "babyphone",
+                "title": "BabyPhone — AYN Thor ↔ iPhone",
+                "subtitle": "Babyphone pour Émile : l'AYN Thor écoute la chambre, l'iPhone (Thomas & Marie) entend en direct · alerte pleurs, parler à bébé, veilleuse, mode nuit écran noir · Wi-Fi ou 4G",
+                "category": "games-family",
+                "emoji": "👶",
+                "logoUrl": "assets/babyphone-icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/ayn-thor/babyphone/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/ayn-thor/tree/main/babyphone",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
     if not any(item["id"].lower() == "film-et-serie" for item in output):
         output.insert(
             0,
