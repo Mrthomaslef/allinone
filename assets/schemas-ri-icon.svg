@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a2230"/>
+      <stop offset="1" stop-color="#0b0e13"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb347" stop-opacity=".15"/>
+      <stop offset="1" stop-color="#ffb347" stop-opacity=".75"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- plateau isométrique -->
+  <path d="M256 360 L420 300 L256 240 L92 300 Z" fill="#2a3342" stroke="#5b6a80" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M92 300 L92 318 L256 378 L420 318 L420 300 L256 360 Z" fill="#1d2532" stroke="#5b6a80" stroke-width="5" stroke-linejoin="round"/>
+  <!-- arceau en C -->
+  <path d="M176 290 A96 120 0 1 1 352 250" fill="none" stroke="#e9edf3" stroke-width="30" stroke-linecap="round"/>
+  <path d="M176 290 A96 120 0 1 1 352 250" fill="none" stroke="#9aa6b8" stroke-width="30" stroke-linecap="round" stroke-dasharray="2 20" opacity=".35"/>
+  <!-- faisceau -->
+  <path d="M232 132 L292 132 L276 268 L248 268 Z" fill="url(#beam)"/>
+  <!-- détecteur -->
+  <rect x="214" y="104" width="96" height="30" rx="7" fill="#f6f8fb" stroke="#0b0e13" stroke-width="4"/>
+  <!-- aiguille / trocart -->
+  <path d="M330 170 L268 262" stroke="#ffd166" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="334" cy="164" r="13" fill="#ffd166" stroke="#0b0e13" stroke-width="4"/>
+  <!-- cible -->
+  <circle cx="262" cy="272" r="18" fill="#ff7a45" stroke="#fff" stroke-width="5"/>
+</svg>

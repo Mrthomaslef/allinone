@@ -53,6 +53,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/allinone/anatomie-quiz/",
         "logoUrl": "anatomie-quiz/assets/icon.svg",
     },
+    "schemas-ri": {
+        "title": "Schémas de RI — Atelier interactif",
+        "subtitle": "9 schémas isométriques animés : scopie, biopsie, cimentoplastie, RF, cryoablation, infiltration écho, vissage, sclérothérapie KOA, électrochimiothérapie",
+        "category": "medical-imaging",
+        "emoji": "🩻",
+        "prodUrl": "https://mrthomaslef.github.io/schemas-ri/",
+        "logoUrl": "assets/schemas-ri-icon.svg?v=1",
+    },
     "infiltration-sous-echo": {
         "title": "Infiltrations sous Échographie — Guide SIMS",
         "subtitle": "37 gestes écho-guidés · 295 Planches · Intégrale des 33 Gel Contact & Vidéos SIMS",
