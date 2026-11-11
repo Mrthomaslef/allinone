@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>DOI Hub — Trouver le PDF d'un article</title>
+<title>DOI Hub — Agrégateur d'articles scientifiques (récents & anciens)</title>
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icon.svg">
 <link rel="manifest" href="manifest.json">
@@ -16,7 +16,7 @@
   html,body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow-x:hidden;overscroll-behavior-y:contain}
   button,a,input{touch-action:manipulation;font:inherit}
   a{color:var(--blue)}
-  .wrap{max-width:760px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) 14px 60px}
+  .wrap{max-width:780px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) 14px 60px}
   header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
   header img{width:44px;height:44px}
   h1{font-size:1.3rem;margin:0}
@@ -24,16 +24,22 @@
   form{display:flex;gap:8px;flex-wrap:wrap}
   #q{flex:1 1 260px;min-width:0;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:#0d1527;color:var(--txt);font-size:16px}
   #q:focus{outline:2px solid var(--acc);border-color:transparent}
-  .btn{border:0;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;background:var(--line);color:var(--txt)}
+  .btn{border:0;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;background:var(--line);color:var(--txt);transition:transform .1s,opacity .15s}
+  .btn:active{transform:scale(.98)}
   .btn.pri{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff}
+  .btn.sm{padding:6px 10px;font-size:.76rem;border-radius:8px;background:#16223b;color:var(--mut);border:1px solid var(--line)}
+  .btn.sm:hover,.btn.sm.active{color:var(--txt);border-color:var(--blue)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+  .chips span{font-size:.75rem;color:var(--mut)}
   .hint{color:var(--mut);font-size:.8rem;margin:8px 2px 0}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px}
   .card h2{font-size:1.05rem;margin:0 0 6px;line-height:1.35}
-  .meta{color:var(--mut);font-size:.85rem;word-break:break-word}
+  .meta{color:var(--mut);font-size:.85rem;word-break:break-word;margin-top:2px}
   .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .badge{font-size:.72rem;padding:3px 8px;border-radius:99px;background:#1b2540;color:var(--mut)}
   .badge.ok{background:rgba(52,211,153,.15);color:var(--ok)}
   .badge.no{background:rgba(248,113,113,.15);color:var(--red)}
+  .badge.info{background:rgba(56,189,248,.15);color:var(--blue)}
   .big{display:block;text-align:center;text-decoration:none;margin-top:12px;padding:15px;border-radius:14px;font-weight:700;font-size:1.05rem;background:linear-gradient(135deg,#10b981,#0ea5e9);color:#fff}
   .big.off{background:#1b2540;color:var(--mut)}
   .list{list-style:none;margin:0;padding:0}
@@ -42,23 +48,23 @@
   .list .src{flex:1;min-width:0}
   .list .src b{display:block;font-size:.9rem}
   .list .src span{display:block;color:var(--mut);font-size:.75rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .list a.go{flex:none;text-decoration:none;padding:8px 12px;border-radius:10px;background:#1b2540;color:var(--txt);font-size:.85rem;font-weight:600}
-  .list a.go.pdf{background:rgba(52,211,153,.18);color:var(--ok)}
-  .sec{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:0 0 6px}
-  .status{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
-  .st{font-size:.78rem;padding:6px 8px;border-radius:8px;background:#0d1527;color:var(--mut);display:flex;justify-content:space-between;gap:6px}
+  .list a.go,.list button.go{flex:none;text-decoration:none;padding:8px 12px;border-radius:10px;background:#1b2540;color:var(--txt);font-size:.85rem;font-weight:600;border:0;cursor:pointer}
+  .list a.go.pdf,.list button.go.pdf{background:rgba(52,211,153,.18);color:var(--ok)}
+  .sec{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:0 0 8px;display:flex;justify-content:space-between;align-items:center}
+  .status{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:6px}
+  .st{font-size:.78rem;padding:6px 8px;border-radius:8px;background:#0d1527;color:var(--mut);display:flex;justify-content:space-between;gap:6px;align-items:center}
   .st i{font-style:normal}
   .hist{display:flex;flex-direction:column;gap:6px}
   .hist button{text-align:left;background:#0d1527;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 11px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .row .btn{flex:1 1 auto;font-size:.85rem;padding:10px}
-  details summary{cursor:pointer;color:var(--mut);font-size:.85rem}
+  .row .btn{flex:1 1 auto;font-size:.82rem;padding:9px 10px}
+  details summary{cursor:pointer;color:var(--mut);font-size:.85rem;margin-top:6px}
   details input{width:100%;margin-top:8px;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0d1527;color:var(--txt);font-size:16px}
-  .abs{font-size:.85rem;color:#c3cbe0;margin-top:10px;max-height:9em;overflow:auto}
+  .abs{font-size:.85rem;color:#c3cbe0;margin-top:10px;max-height:11em;overflow:auto;line-height:1.5}
   #ptr{position:fixed;top:0;left:0;right:0;height:0;display:flex;align-items:flex-end;justify-content:center;color:var(--acc);font-size:.8rem;overflow:hidden;z-index:9;transition:height .2s}
-  .toast{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 18px);left:50%;transform:translateX(-50%);background:#1e293b;padding:10px 16px;border-radius:12px;font-size:.85rem;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 18px);left:50%;transform:translateX(-50%);background:#1e293b;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-size:.85rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
   .toast.on{opacity:1}
-  .spin{display:inline-block;width:12px;height:12px;border:2px solid var(--mut);border-top-color:transparent;border-radius:50%;animation:s 1s linear infinite}
+  .spin{display:inline-block;width:12px;height:12px;border:2px solid var(--mut);border-top-color:transparent;border-radius:50%;animation:s 1s linear infinite;vertical-align:middle}
   @keyframes s{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -67,28 +73,46 @@
 <div class="wrap">
   <header>
     <img src="assets/icon.svg" alt="">
-    <div><h1>DOI Hub</h1><p>Colle un DOI → toutes les sources légales du PDF en une recherche</p></div>
+    <div>
+      <h1>DOI Hub</h1>
+      <p>Colle un DOI, PMID, arXiv ou titre → agrège toutes les plateformes d'articles récents & anciens</p>
+    </div>
   </header>
 
   <form id="f">
-    <input id="q" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="10.1148/radiol.2020200642, URL, PMID ou arXiv">
+    <input id="q" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="DOI (10.xxxx/…), URL, PMID, PMCID, arXiv ou titre d'article…">
     <button type="button" class="btn" id="paste">📋 Coller</button>
     <button class="btn pri">Chercher</button>
   </form>
-  <p class="hint">Interroge en parallèle : Unpaywall · OpenAlex · Europe PMC / PubMed Central · Semantic Scholar · HAL · arXiv · Crossref.</p>
+
+  <div class="chips">
+    <span>Exemples :</span>
+    <button type="button" class="btn sm ex" data-q="10.1148/radiol.2020200642">Radiology 2020</button>
+    <button type="button" class="btn sm ex" data-q="10.1056/NEJMoa2034577">NEJM (OA)</button>
+    <button type="button" class="btn sm ex" data-q="10.1038/171737a0">Archive 1953 (ADN)</button>
+    <button type="button" class="btn sm ex" data-q="arXiv:1706.03762">arXiv</button>
+  </div>
+
+  <p class="hint">9 bases interrogées en parallèle : Unpaywall · OpenAlex · Europe PMC / PubMed Central · Semantic Scholar · HAL · OpenAIRE · DOAJ · Zenodo/CERN · Crossref + archives historiques (Internet Archive Scholar, Gallica, CORE, Proxy).</p>
 
   <div id="out"></div>
 
   <div class="card" id="histCard" hidden>
-    <p class="sec">Récents</p>
+    <div class="sec"><span>Récents</span><button type="button" class="btn sm" id="clearHist">Effacer</button></div>
     <div class="hist" id="hist"></div>
   </div>
 
   <div class="card">
-    <details>
-      <summary>⚙️ Accès institutionnel (proxy bibliothèque)</summary>
-      <p class="hint">Préfixe EZproxy de ta bibliothèque (Université Paris Cité, BIU Santé, AP-HP…). L'URL de l'éditeur est ajoutée à la fin. Exemple : <code>https://ezproxy.u-paris.fr/login?url=</code></p>
-      <input id="proxy" placeholder="https://…/login?url=">
+    <details id="proxyDetails">
+      <summary>⚙️ Accès institutionnel & passerelles (EZproxy université / AP-HP)</summary>
+      <p class="hint">Sélectionne un préfixe EZproxy en 1 clic ou indique le tien. L'URL de l'article est automatiquement relayée via ton établissement :</p>
+      <div class="chips" style="margin-top:8px">
+        <button type="button" class="btn sm px-preset" data-px="https://ezproxy.u-paris.fr/login?url=">Univ. Paris Cité / BIU Santé</button>
+        <button type="button" class="btn sm px-preset" data-px="https://accesdistant.sorbonne-universite.fr/login?url=">Sorbonne Université</button>
+        <button type="button" class="btn sm px-preset" data-px="https://biblioinserm.inserm.fr/login?url=">BiblioInserm</button>
+        <button type="button" class="btn sm px-preset" data-px="">Aucun</button>
+      </div>
+      <input id="proxy" placeholder="https://ezproxy.u-paris.fr/login?url=">
     </details>
   </div>
 </div>
@@ -98,28 +122,49 @@
 const UA_EMAIL = 'doihub.app@gmail.com';
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); };
+const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1900); };
 const haptic = () => navigator.vibrate && navigator.vibrate(12);
 
 $('#proxy').value = localStorage.getItem('doihub_proxy') || '';
-$('#proxy').addEventListener('change', e => { localStorage.setItem('doihub_proxy', e.target.value.trim()); toast('Proxy enregistré'); });
+const saveProxy = val => {
+  localStorage.setItem('doihub_proxy', val.trim());
+  $('#proxy').value = val.trim();
+  toast(val.trim() ? 'Proxy enregistré' : 'Proxy désactivé');
+  if (current) render(current);
+};
+$('#proxy').addEventListener('change', e => saveProxy(e.target.value));
+document.querySelectorAll('.px-preset').forEach(b => b.onclick = () => saveProxy(b.dataset.px));
+document.querySelectorAll('.ex').forEach(b => b.onclick = () => { $('#q').value = b.dataset.q; search(b.dataset.q); });
 
 // ---- Parsing --------------------------------------------------------------
 function parse(raw) {
-  let s = decodeURIComponent((raw||'').trim());
+  let s = (raw||'').trim();
+  try { s = decodeURIComponent(s); } catch {}
   const doi = s.match(/10\.\d{4,9}\/[^\s"<>]+/i);
-  if (doi) return { type:'doi', id: doi[0].replace(/[.,;)\]]+$/, '').replace(/\/(full|pdf|abstract|epdf)$/i,'') };
-  const ax = s.match(/(?:arxiv[:\/\s]*(?:abs\/|pdf\/)?)?(\d{4}\.\d{4,5})(v\d+)?/i);
+  if (doi) return { type:'doi', id: doi[0].replace(/[.,;)\]]+$/, '').replace(/\/(full|pdf|abstract|epdf|meta)$/i,'') };
+  const ax = s.match(/(?:arxiv[:/\s]*(?:abs\/|pdf\/)?)?(\d{4}\.\d{4,5})(v\d+)?/i);
   if (ax && /arxiv|^\d{4}\.\d{4,5}/i.test(s)) return { type:'arxiv', id: ax[1] };
   const pmc = s.match(/PMC\d+/i); if (pmc) return { type:'pmcid', id: pmc[0].toUpperCase() };
-  const pm = s.match(/(?:pmid[:\s]*|pubmed\.ncbi\.nlm\.nih\.gov\/)?(\d{6,9})\b/i); if (pm) return { type:'pmid', id: pm[1] };
+  const pm = s.match(/(?:pmid[:\s]*|pubmed\.ncbi\.nlm\.nih\.gov\/)(\d{5,9})\b/i) || (/^\d{6,9}$/.test(s) ? [null, s] : null);
+  if (pm) return { type:'pmid', id: pm[1] };
+  if (s.length >= 4) return { type:'query', id: s };
   return null;
 }
 
 async function j(url, opt={}) {
-  const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), opt.timeout||15000);
+  const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), opt.timeout||14000);
   try { const r = await fetch(url, {signal: ctl.signal}); if (!r.ok) throw new Error(r.status); return await r.json(); }
   finally { clearTimeout(to); }
+}
+
+// Reconstruct abstract from OpenAlex inverted index when needed
+function invertAbs(idx) {
+  if (!idx || typeof idx !== 'object') return '';
+  const words = [];
+  for (const [w, posList] of Object.entries(idx)) {
+    if (Array.isArray(posList)) posList.forEach(p => { words[p] = w; });
+  }
+  return words.filter(Boolean).join(' ');
 }
 
 // Resolve PMID / PMCID / arXiv to a DOI when possible
@@ -133,40 +178,102 @@ async function toDoi(p) {
   return { doi: r.doi };
 }
 
-// ---- Sources ---------------------------------------------------------------
+// Search by article title / keywords across OpenAlex & Crossref
+async function searchByTitle(query) {
+  $('#out').innerHTML = `<div class="card"><span class="spin"></span> Recherche d'articles pour « ${esc(query)} »…</div>`;
+  try {
+    const [oaRes, crRes] = await Promise.allSettled([
+      j(`https://api.openalex.org/works?search=${encodeURIComponent(query)}&per-page=8&mailto=${UA_EMAIL}`),
+      j(`https://api.crossref.org/works?query.bibliographic=${encodeURIComponent(query)}&rows=6&mailto=${UA_EMAIL}`)
+    ]);
+    const seen = new Set(), items = [];
+    if (oaRes.status === 'fulfilled') {
+      for (const w of (oaRes.value.results || [])) {
+        const doi = (w.doi || '').replace(/^https?:\/\/doi\.org\//i, '');
+        if (!doi || seen.has(doi.toLowerCase())) continue;
+        seen.add(doi.toLowerCase());
+        items.push({
+          doi,
+          title: w.title || doi,
+          year: w.publication_year,
+          journal: w.primary_location?.source?.display_name || '',
+          authors: (w.authorships || []).slice(0, 4).map(a => a.author?.display_name).filter(Boolean).join(', '),
+          oa: !!w.open_access?.is_oa,
+          pdf: w.open_access?.oa_url || ''
+        });
+      }
+    }
+    if (crRes.status === 'fulfilled') {
+      for (const m of (crRes.value.message?.items || [])) {
+        const doi = m.DOI;
+        if (!doi || seen.has(doi.toLowerCase())) continue;
+        seen.add(doi.toLowerCase());
+        items.push({
+          doi,
+          title: m.title?.[0] || doi,
+          year: (m.issued?.['date-parts']?.[0] || [])[0],
+          journal: m['container-title']?.[0] || m.publisher || '',
+          authors: (m.author || []).slice(0, 4).map(a => [a.family, a.given?.[0]].filter(Boolean).join(' ')).join(', '),
+          oa: false,
+          pdf: ''
+        });
+      }
+    }
+    if (!items.length) {
+      $('#out').innerHTML = `<div class="card">❌ Aucun article trouvé pour « ${esc(query)} ». Essaie avec un DOI exact.</div>`;
+      return;
+    }
+    $('#out').innerHTML = `
+      <div class="card">
+        <p class="sec"><span>Articles correspondants (${items.length})</span><span>Clique pour résoudre le PDF</span></p>
+        <ul class="list">
+          ${items.slice(0, 10).map(it => `
+            <li>
+              <div class="src">
+                <b>${it.oa ? '🟢 ' : ''}${esc(it.title)}</b>
+                <span>${esc([it.authors, it.journal, it.year, 'DOI: ' + it.doi].filter(Boolean).join(' · '))}</span>
+              </div>
+              <button type="button" class="go ${it.oa ? 'pdf' : ''} pick-doi" data-doi="${esc(it.doi)}">Obtenir</button>
+            </li>
+          `).join('')}
+        </ul>
+      </div>`;
+    $('#out').querySelectorAll('.pick-doi').forEach(b => b.onclick = () => {
+      $('#q').value = b.dataset.doi;
+      search(b.dataset.doi);
+    });
+  } catch (e) {
+    $('#out').innerHTML = `<div class="card">❌ Erreur lors de la recherche : ${esc(e.message)}</div>`;
+  }
+}
+
+// ---- Sources (9 APIs interrogated in parallel) -----------------------------
 const SOURCES = {
-  crossref: async doi => {
-    const m = (await j(`https://api.crossref.org/works/${encodeURIComponent(doi)}?mailto=${UA_EMAIL}`)).message;
-    const links = (m.link||[]).filter(l => /pdf/i.test(l['content-type']) && l['intended-application'] !== 'similarity-checking')
-      .map(l => ({ url:l.URL, pdf:true, label:'Lien PDF déclaré par l\'éditeur (Crossref)', note:'Accès libre seulement si l\'article est OA ou via ton institution' , weak:true }));
-    return { meta: {
-      title: m.title?.[0]?.replace(/\s+/g,' '), journal: m['container-title']?.[0], publisher: m.publisher,
-      year: (m.issued?.['date-parts']?.[0]||[])[0], authors: (m.author||[]).map(a => [a.family, a.given?.[0]].filter(Boolean).join(' ')),
-      volume: m.volume, issue: m.issue, page: m.page, abstract: m.abstract?.replace(/<[^>]+>/g,' '), type: m.type,
-      license: m.license?.[0]?.URL }, links };
-  },
   unpaywall: async doi => {
     const d = await j(`https://api.unpaywall.org/v2/${encodeURIComponent(doi)}?email=${UA_EMAIL}`);
     const links = (d.oa_locations||[]).map(l => ({
       url: l.url_for_pdf || l.url_for_landing_page || l.url, pdf: !!l.url_for_pdf,
-      label: `${l.host_type === 'publisher' ? 'Éditeur (OA)' : (l.repository_institution || 'Dépôt')} ${l.version ? '· '+ver(l.version) : ''}`,
+      label: `${l.host_type === 'publisher' ? 'Éditeur (OA)' : (l.repository_institution || 'Dépôt OA')} ${l.version ? '· '+ver(l.version) : ''}`,
       note: l.license ? 'Licence ' + l.license : '' }));
     return { oa: d.is_oa, oaStatus: d.oa_status, links };
   },
   openalex: async doi => {
     const d = await j(`https://api.openalex.org/works/doi:${encodeURIComponent(doi)}?mailto=${UA_EMAIL}`);
-    const links = (d.locations||[]).filter(l => l.is_oa).map(l => ({
+    const links = (d.locations||[]).filter(l => l.is_oa && (l.pdf_url || l.landing_page_url)).map(l => ({
       url: l.pdf_url || l.landing_page_url, pdf: !!l.pdf_url,
-      label: `${l.source?.display_name || 'Source'} ${l.version ? '· '+ver(l.version) : ''}`, note: l.license || '' }));
-    return { oa: d.open_access?.is_oa, links, cited: d.cited_by_count };
+      label: `${l.source?.display_name || 'OpenAlex OA'} ${l.version ? '· '+ver(l.version) : ''}`, note: l.license || '' }));
+    if (d.open_access?.oa_url && !links.some(x => x.url === d.open_access.oa_url)) {
+      links.unshift({ url: d.open_access.oa_url, pdf: /\.pdf($|\?)/i.test(d.open_access.oa_url), label: 'Meilleure source OpenAlex', note: d.open_access.oa_status || '' });
+    }
+    return { oa: d.open_access?.is_oa, links, cited: d.cited_by_count, abstract: invertAbs(d.abstract_inverted_index) };
   },
   europepmc: async doi => {
     const d = await j(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent('DOI:"'+doi+'"')}&format=json&resultType=core`);
     const r = d.resultList?.result?.[0]; if (!r) return { links: [] };
     const links = [];
     if (r.pmcid) {
-      links.push({ url:`https://europepmc.org/articles/${r.pmcid}/pdf/render`, pdf:true, label:`Europe PMC · ${r.pmcid}`, note:'Texte intégral PubMed Central' });
-      links.push({ url:`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, pdf:false, label:`PubMed Central · ${r.pmcid}`, note:'Version HTML' });
+      links.push({ url:`https://europepmc.org/articles/${r.pmcid}/pdf/render`, pdf:true, label:`Europe PMC · ${r.pmcid}`, note:'Texte intégral PubMed Central (PDF)' });
+      links.push({ url:`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, pdf:false, label:`PubMed Central · ${r.pmcid}`, note:'Version intégrale HTML' });
     }
     (r.fullTextUrlList?.fullTextUrl||[]).filter(u => u.availabilityCode === 'OA' || u.availabilityCode === 'F')
       .forEach(u => links.push({ url:u.url, pdf: u.documentStyle === 'pdf', label:`${u.site} (${u.documentStyle})`, note:'Europe PMC' }));
@@ -175,24 +282,82 @@ const SOURCES = {
   semantic: async doi => {
     const d = await j(`https://api.semanticscholar.org/graph/v1/paper/DOI:${encodeURIComponent(doi)}?fields=openAccessPdf,externalIds,tldr`);
     const links = [];
-    if (d.openAccessPdf?.url) links.push({ url:d.openAccessPdf.url, pdf:true, label:'Semantic Scholar', note: d.openAccessPdf.status || '' });
-    if (d.externalIds?.ArXiv) links.push({ url:`https://arxiv.org/pdf/${d.externalIds.ArXiv}`, pdf:true, label:`arXiv · ${d.externalIds.ArXiv}`, note:'Préprint' });
+    if (d.openAccessPdf?.url) links.push({ url:d.openAccessPdf.url, pdf:true, label:'Semantic Scholar PDF', note: d.openAccessPdf.status || '' });
+    if (d.externalIds?.ArXiv) links.push({ url:`https://arxiv.org/pdf/${d.externalIds.ArXiv}.pdf`, pdf:true, label:`arXiv · ${d.externalIds.ArXiv}`, note:'Préprint arXiv' });
     return { links, tldr: d.tldr?.text };
   },
   hal: async doi => {
     const d = await j(`https://api.archives-ouvertes.fr/search/?q=doiId_s:${encodeURIComponent('"'+doi+'"')}&fl=uri_s,fileMain_s,halId_s&wt=json`);
-    return { links: (d.response?.docs||[]).map(x => ({ url: x.fileMain_s || x.uri_s, pdf: !!x.fileMain_s, label:`HAL · ${x.halId_s}`, note:'Archive ouverte française' })) };
+    return { links: (d.response?.docs||[]).map(x => ({ url: x.fileMain_s || x.uri_s, pdf: !!x.fileMain_s, label:`HAL · ${x.halId_s}`, note:'Archive ouverte nationale' })) };
+  },
+  openaire: async doi => {
+    const d = await j(`https://api.openaire.eu/search/publications?doi=${encodeURIComponent(doi)}&format=json`);
+    const res = d.response?.results?.result?.[0]?.metadata?.['oaf:entity']?.['oaf:result'];
+    if (!res) return { links: [] };
+    let inst = res.children?.instance || [];
+    if (!Array.isArray(inst)) inst = [inst];
+    const links = [];
+    for (const c of inst) {
+      const isOa = c.accessright?.['@classid'] === 'OPEN';
+      let wr = c.webresource || [];
+      if (!Array.isArray(wr)) wr = [wr];
+      for (const w of wr) {
+        const u = w.url?.['$'];
+        if (u && isOa && !/doi\.org\//i.test(u)) {
+          links.push({ url: u, pdf: /\.pdf($|\?)/i.test(u), label: c.hostedby?.['@name'] || 'Dépôt OpenAIRE', note: 'Réseau européen OpenAIRE' });
+        }
+      }
+    }
+    return { links };
+  },
+  doaj: async doi => {
+    const d = await j(`https://doaj.org/api/search/articles/doi%3A${encodeURIComponent(doi)}`);
+    const r = d.results?.[0]?.bibjson;
+    if (!r) return { links: [] };
+    const links = (r.link || []).filter(l => l.url).map(l => ({
+      url: l.url, pdf: /pdf/i.test(l.content_type || l.url),
+      label: `DOAJ · ${r.journal?.title || 'Revue Open Access'}`, note: 'Directory of Open Access Journals'
+    }));
+    return { links };
+  },
+  zenodo: async doi => {
+    const d = await j(`https://zenodo.org/api/records?q=doi:%22${encodeURIComponent(doi)}%22&size=1`);
+    const h = d.hits?.hits?.[0];
+    if (!h) return { links: [] };
+    const links = [];
+    const f = (h.files || [])[0];
+    if (f?.links?.self) links.push({ url: f.links.self, pdf: /\.pdf$/i.test(f.key || ''), label: 'Zenodo (CERN) · Fichier direct', note: h.metadata?.access_right || 'Open Access' });
+    else if (h.links?.html) links.push({ url: h.links.html, pdf: false, label: 'Zenodo (CERN)', note: 'Dépôt de recherche' });
+    return { links };
+  },
+  crossref: async doi => {
+    const m = (await j(`https://api.crossref.org/works/${encodeURIComponent(doi)}?mailto=${UA_EMAIL}`)).message;
+    const links = (m.link||[]).filter(l => /pdf/i.test(l['content-type']) && l['intended-application'] !== 'similarity-checking')
+      .map(l => ({ url:l.URL, pdf:true, label:'Lien PDF éditeur (Crossref)', note:'Accessible si article libre ou depuis réseau abonné', weak:true }));
+    return { meta: {
+      title: m.title?.[0]?.replace(/\s+/g,' '), journal: m['container-title']?.[0], publisher: m.publisher,
+      year: (m.issued?.['date-parts']?.[0]||[])[0], authors: (m.author||[]).map(a => [a.family, a.given?.[0]].filter(Boolean).join(' ')),
+      volume: m.volume, issue: m.issue, page: m.page, abstract: m.abstract?.replace(/<[^>]+>/g,' '), type: m.type,
+      license: m.license?.[0]?.URL }, links };
   },
 };
-const LABELS = { crossref:'Crossref', unpaywall:'Unpaywall', openalex:'OpenAlex', europepmc:'Europe PMC', semantic:'Semantic Scholar', hal:'HAL' };
+const LABELS = {
+  unpaywall:'Unpaywall', openalex:'OpenAlex', europepmc:'Europe PMC',
+  semantic:'Semantic Scholar', hal:'HAL', openaire:'OpenAIRE',
+  doaj:'DOAJ', zenodo:'Zenodo / CERN', crossref:'Crossref'
+};
 const ver = v => ({ publishedVersion:'version publiée', acceptedVersion:'manuscrit accepté', submittedVersion:'préprint' }[v] || v);
 
 // ---- Search ----------------------------------------------------------------
 let current = null;
 async function search(raw, push=true) {
   const p = parse(raw);
-  if (!p) { toast('DOI / PMID / arXiv non reconnu'); return; }
+  if (!p) { toast('Entre un DOI, PMID, arXiv ou titre d\'article'); return; }
   haptic();
+  if (p.type === 'query') {
+    if (push) history.replaceState(null, '', '?q=' + encodeURIComponent(p.id));
+    return searchByTitle(p.id);
+  }
   $('#out').innerHTML = `<div class="card"><span class="spin"></span> Résolution de l'identifiant…</div>`;
   let ids;
   try { ids = await toDoi(p); } catch (e) { $('#out').innerHTML = `<div class="card">❌ ${esc(e.message)}</div>`; return; }
@@ -213,15 +378,14 @@ async function search(raw, push=true) {
 
 function collect(state) {
   const seen = new Set(), out = [];
-  const order = ['unpaywall','europepmc','openalex','semantic','hal','crossref'];
+  const order = ['unpaywall','europepmc','openalex','semantic','hal','openaire','doaj','zenodo','crossref'];
   for (const k of order) for (const l of (state.res[k]?.links||[])) {
     if (!l.url) continue;
     const key = l.url.replace(/^https?:\/\//,'').replace(/\/$/,'').toLowerCase();
     if (seen.has(key)) continue; seen.add(key);
     out.push({ ...l, src: LABELS[k] });
   }
-  // Best-first: real PDFs, then landing pages, publisher-declared (may be paywalled) last
-  return out.sort((a,b) => (a.weak - b.weak) || (b.pdf - a.pdf));
+  return out.sort((a,b) => (Boolean(a.weak) - Boolean(b.weak)) || (b.pdf - a.pdf));
 }
 
 function render(state) {
@@ -231,66 +395,77 @@ function render(state) {
   const free = links.filter(l => !l.weak);
   const best = free.find(l => l.pdf) || free[0];
   const pending = Object.values(status).includes('pending');
-  const oa = res.unpaywall?.oa ?? res.openalex?.oa;
+  const oa = res.unpaywall?.oa ?? res.openalex?.oa ?? (free.length > 0 ? true : undefined);
   const authors = m.authors?.length ? (m.authors.length > 6 ? m.authors.slice(0,6).join(', ') + ' et al.' : m.authors.join(', ')) : '';
   const proxy = localStorage.getItem('doihub_proxy');
   const pubUrl = `https://doi.org/${doi}`;
   const t = encodeURIComponent(m.title || doi);
-  const abs = res.europepmc?.abstract || m.abstract;
+  const abs = res.europepmc?.abstract || m.abstract || res.openalex?.abstract;
+  const isHistorical = m.year && m.year < 1995;
 
   $('#out').innerHTML = `
   <div class="card">
     <h2>${esc(m.title || doi)}</h2>
     <div class="meta">${esc(authors)}</div>
     <div class="meta">${esc([m.journal, m.year, m.volume && `${m.volume}${m.issue?'('+m.issue+')':''}`, m.page].filter(Boolean).join(' · '))}</div>
-    <div class="meta">DOI : ${esc(doi)}${res.europepmc?.pmid ? ' · PMID ' + esc(res.europepmc.pmid) : ''}</div>
+    <div class="meta">DOI : ${esc(doi)}${res.europepmc?.pmid ? ' · PMID ' + esc(res.europepmc.pmid) : ''}${res.europepmc?.pmcid ? ' · ' + esc(res.europepmc.pmcid) : ''}</div>
     <div class="badges">
-      ${oa === true ? `<span class="badge ok">Accès libre${res.unpaywall?.oaStatus ? ' · '+esc(res.unpaywall.oaStatus) : ''}</span>` : oa === false ? '<span class="badge no">Pas de version libre connue</span>' : ''}
+      ${oa === true ? `<span class="badge ok">Accès libre${res.unpaywall?.oaStatus ? ' · '+esc(res.unpaywall.oaStatus) : ''}</span>` : oa === false ? '<span class="badge no">Sous abonnement éditeur</span>' : ''}
+      ${isHistorical ? `<span class="badge info">📜 Archive historique (${esc(m.year)})</span>` : ''}
       ${res.openalex?.cited != null ? `<span class="badge">${res.openalex.cited} citations</span>` : ''}
-      ${free.length ? `<span class="badge ok">${free.length} source(s) libre(s)</span>` : ''}
+      ${free.length ? `<span class="badge ok">${free.length} version(s) directe(s)</span>` : ''}
     </div>
-    ${best ? `<a class="big" href="${esc(best.url)}" target="_blank" rel="noopener">${best.pdf ? '📄 Ouvrir le PDF' : '🔗 Ouvrir le texte intégral'} — ${esc(best.src)}</a>`
-           : `<a class="big off" href="${esc(pubUrl)}" target="_blank" rel="noopener">${pending ? '<span class="spin"></span> Recherche en cours…' : 'Aucune version libre trouvée — voir l\'éditeur / ton accès institutionnel'}</a>`}
+    ${best ? `<a class="big" href="${esc(best.url)}" target="_blank" rel="noopener">${best.pdf ? '📄 Ouvrir le PDF direct' : '🔗 Ouvrir le texte intégral'} — ${esc(best.src)}</a>`
+           : proxy && !pending ? `<a class="big" href="${esc(proxy + encodeURIComponent(pubUrl))}" target="_blank" rel="noopener">🔐 Ouvrir via mon Proxy Institutionnel</a>`
+           : `<a class="big off" href="${esc(pubUrl)}" target="_blank" rel="noopener">${pending ? '<span class="spin"></span> Interrogation des 9 bases en cours…' : 'Aucune version OA directe — ouvrir chez l\'éditeur / proxy'}</a>`}
     ${res.semantic?.tldr ? `<div class="abs"><b>TL;DR :</b> ${esc(res.semantic.tldr)}</div>` : ''}
-    ${abs ? `<details><summary>Résumé</summary><div class="abs">${esc(abs)}</div></details>` : ''}
+    ${abs ? `<details><summary>Résumé (${abs.split(/\s+/).length} mots)</summary><div class="abs">${esc(abs)}</div></details>` : ''}
     <div class="row">
-      <button class="btn" id="cite">📑 Copier la référence</button>
+      <button class="btn" id="cite">📑 Vancouver</button>
+      <button class="btn" id="bibtex">📚 BibTeX / Zotero</button>
       <button class="btn" id="share">🔗 Partager</button>
     </div>
   </div>
 
   <div class="card">
-    <p class="sec">Sources interrogées</p>
+    <p class="sec"><span>9 Bases interrogées en temps réel</span><span>${Object.values(status).filter(s=>s==='hit').length} source(s) avec texte</span></p>
     <div class="status">${Object.keys(SOURCES).map(k => `<div class="st"><span>${LABELS[k]}</span><i>${{pending:'<span class="spin"></span>',hit:'✅',none:'—',err:'⚠️'}[status[k]]}</i></div>`).join('')}</div>
   </div>
 
-  ${links.length ? `<div class="card"><p class="sec">Versions trouvées</p><ul class="list">${links.map(l => `
+  ${links.length ? `<div class="card"><p class="sec"><span>Versions trouvées (${links.length})</span><span>PDF en priorité</span></p><ul class="list">${links.map(l => `
     <li><div class="src"><b>${l.pdf ? '📄' : '🔗'} ${esc(l.label)}</b><span>${esc(l.src)}${l.note ? ' · ' + esc(l.note) : ''} — ${esc(l.url)}</span></div>
     <a class="go ${l.pdf && !l.weak ? 'pdf':''}" href="${esc(l.url)}" target="_blank" rel="noopener">${l.pdf ? 'PDF' : 'Ouvrir'}</a></li>`).join('')}</ul></div>` : ''}
 
   <div class="card">
-    <p class="sec">Autres accès</p>
+    <p class="sec"><span>Passerelles complémentaires (articles récents & anciens)</span></p>
     <ul class="list">
-      <li><div class="src"><b>🏛️ Page éditeur</b><span>doi.org — souvent accessible depuis le réseau AP-HP / université</span></div><a class="go" href="${esc(pubUrl)}" target="_blank" rel="noopener">Ouvrir</a></li>
       ${proxy ? `<li><div class="src"><b>🔐 Via mon proxy bibliothèque</b><span>${esc(proxy)}</span></div><a class="go pdf" href="${esc(proxy + encodeURIComponent(pubUrl))}" target="_blank" rel="noopener">Ouvrir</a></li>`
-              : `<li><div class="src"><b>🔐 Accès institutionnel</b><span>Configure ton proxy EZproxy en bas de page</span></div><a class="go" href="#proxy" onclick="document.querySelector('details').open=true">Régler</a></li>`}
-      <li><div class="src"><b>🎓 Google Scholar · toutes les versions</b><span>Trouve souvent un PDF d'auteur ou de dépôt</span></div><a class="go" href="https://scholar.google.com/scholar?q=${encodeURIComponent(doi)}" target="_blank" rel="noopener">Ouvrir</a></li>
-      <li><div class="src"><b>🧪 ResearchGate</b><span>Demander le texte intégral aux auteurs</span></div><a class="go" href="https://www.researchgate.net/search/publication?q=${t}" target="_blank" rel="noopener">Ouvrir</a></li>
-      <li><div class="src"><b>📚 CORE</b><span>Agrégateur mondial des dépôts institutionnels</span></div><a class="go" href="https://core.ac.uk/search?q=doi:%22${encodeURIComponent(doi)}%22" target="_blank" rel="noopener">Ouvrir</a></li>
-      ${res.europepmc?.pmid ? `<li><div class="src"><b>🩺 PubMed</b><span>PMID ${esc(res.europepmc.pmid)} · liens texte intégral</span></div><a class="go" href="https://pubmed.ncbi.nlm.nih.gov/${esc(res.europepmc.pmid)}/" target="_blank" rel="noopener">Ouvrir</a></li>` : ''}
-      ${authors ? `<li><div class="src"><b>✉️ Écrire à l'auteur</b><span>Les auteurs envoient presque toujours leur PDF sur demande</span></div><a class="go" href="mailto:?subject=${encodeURIComponent('Demande de tiré-à-part : ' + (m.title||doi))}&body=${encodeURIComponent(`Bonjour,\n\nPourriez-vous m'adresser une copie de votre article « ${m.title||''} » (DOI ${doi}) ?\n\nBien cordialement,\nDr Thomas Lefèvre — Radiologie B, Hôpital Cochin`)}">Mail</a></li>` : ''}
+              : `<li><div class="src"><b>🔐 Accès institutionnel (Univ. Paris Cité / BIU Santé / AP-HP)</b><span>Active un proxy en 1 clic en bas de page</span></div><a class="go" href="#proxyDetails" onclick="document.getElementById('proxyDetails').open=true">Régler</a></li>`}
+      <li><div class="src"><b>🏛️ Internet Archive Scholar (Fatcat)</b><span>Idéal pour les articles anciens / historiques numérisés (1800–2024)</span></div><a class="go" href="https://scholar.archive.org/search?q=${encodeURIComponent('doi:' + doi)}" target="_blank" rel="noopener">Ouvrir</a></li>
+      <li><div class="src"><b>🎓 Google Scholar · « Toutes les versions »</b><span>Trouve les PDF hébergés sur les pages personnelles d'auteurs / universités</span></div><a class="go" href="https://scholar.google.com/scholar?q=${encodeURIComponent(doi)}" target="_blank" rel="noopener">Ouvrir</a></li>
+      <li><div class="src"><b>📚 CORE (300M+ articles d'archives mondiales)</b><span>Agrégateur mondial des dépôts institutionnels</span></div><a class="go" href="https://core.ac.uk/search?q=doi:%22${encodeURIComponent(doi)}%22" target="_blank" rel="noopener">Ouvrir</a></li>
+      <li><div class="src"><b>🧬 BASE (Bielefeld Academic Search Engine)</b><span>Moteur académique indexant 340M+ documents scientifiques</span></div><a class="go" href="https://www.base-search.net/Search/Results?lookfor=doi:${encodeURIComponent(doi)}" target="_blank" rel="noopener">Ouvrir</a></li>
+      <li><div class="src"><b>🧪 ResearchGate</b><span>Version auteur déposée ou demande en 1 clic</span></div><a class="go" href="https://www.researchgate.net/search/publication?q=${t}" target="_blank" rel="noopener">Ouvrir</a></li>
+      ${res.europepmc?.pmid ? `<li><div class="src"><b>🩺 PubMed (${esc(res.europepmc.pmid)})</b><span>Notice NCBI et liens Full Text</span></div><a class="go" href="https://pubmed.ncbi.nlm.nih.gov/${esc(res.europepmc.pmid)}/" target="_blank" rel="noopener">Ouvrir</a></li>` : ''}
+      <li><div class="src"><b>🏛️ Page éditeur officielle (doi.org)</b><span>Accès direct sur le réseau hospitalier AP-HP / universitaire</span></div><a class="go" href="${esc(pubUrl)}" target="_blank" rel="noopener">Ouvrir</a></li>
+      ${authors ? `<li><div class="src"><b>✉️ Demander le PDF à l'auteur</b><span>Email pré-rempli de demande de tiré-à-part</span></div><a class="go" href="mailto:?subject=${encodeURIComponent('Demande de tiré-à-part : ' + (m.title||doi))}&body=${encodeURIComponent(`Bonjour,\n\nPourriez-vous m'adresser une copie PDF de votre article « ${m.title||''} » (DOI : ${doi}) ?\n\nBien cordialement,\nDr Thomas Lefèvre — Radiologie B, Hôpital Cochin`)}">Mail</a></li>` : ''}
     </ul>
   </div>`;
 
   $('#cite').onclick = () => {
     const a = (m.authors||[]).slice(0,6).join(', ') + ((m.authors||[]).length > 6 ? ', et al' : '');
     const ref = `${a}. ${m.title||''}. ${m.journal||''}. ${m.year||''}${m.volume?';'+m.volume:''}${m.issue?'('+m.issue+')':''}${m.page?':'+m.page:''}. doi:${doi}`;
-    navigator.clipboard.writeText(ref.replace(/\s+\./g,'.')).then(()=>toast('Référence copiée (Vancouver)'));
+    navigator.clipboard.writeText(ref.replace(/\s+\./g,'.')).then(()=>toast('Citation Vancouver copiée'));
+  };
+  $('#bibtex').onclick = () => {
+    const key = ((m.authors?.[0]||'article').split(' ')[0].replace(/[^a-zA-Z]/g,'') || 'ref') + (m.year || '');
+    const bib = `@article{${key},\n  title = {${m.title || doi}},\n  author = {${(m.authors||[]).join(' and ')}},\n  journal = {${m.journal || ''}},\n  year = {${m.year || ''}},\n  volume = {${m.volume || ''}},\n  number = {${m.issue || ''}},\n  pages = {${m.page || ''}},\n  doi = {${doi}}\n}`;
+    navigator.clipboard.writeText(bib).then(()=>toast('BibTeX copié (prêt pour Zotero)'));
   };
   $('#share').onclick = () => {
     const url = location.origin + location.pathname + '?doi=' + encodeURIComponent(doi);
     if (navigator.share) navigator.share({ title: m.title || doi, url }).catch(()=>{});
-    else navigator.clipboard.writeText(url).then(()=>toast('Lien copié'));
+    else navigator.clipboard.writeText(url).then(()=>toast('Lien de partage copié'));
   };
 }
 
@@ -303,9 +478,10 @@ function saveHist(doi, title) {
 function showHist() {
   const h = JSON.parse(localStorage.getItem('doihub_hist') || '[]');
   $('#histCard').hidden = !h.length;
-  $('#hist').innerHTML = h.map(x => `<button data-doi="${esc(x.doi)}">${esc(x.title)}</button>`).join('');
+  $('#hist').innerHTML = h.map(x => `<button data-doi="${esc(x.doi)}">${esc(x.title)} <span style="color:var(--mut);font-size:.75rem">(${esc(x.doi)})</span></button>`).join('');
   $('#hist').querySelectorAll('button').forEach(b => b.onclick = () => { $('#q').value = b.dataset.doi; search(b.dataset.doi); scrollTo({top:0,behavior:'smooth'}); });
 }
+$('#clearHist').onclick = () => { localStorage.removeItem('doihub_hist'); showHist(); toast('Historique effacé'); };
 
 // ---- Wiring ----------------------------------------------------------------
 $('#f').onsubmit = e => { e.preventDefault(); $('#q').blur(); search($('#q').value); };
@@ -313,7 +489,11 @@ $('#paste').onclick = async () => {
   try { const t = await navigator.clipboard.readText(); $('#q').value = t; search(t); }
   catch { $('#q').focus(); toast('Colle manuellement (⌘V)'); }
 };
-$('#q').addEventListener('paste', e => setTimeout(() => { if (parse($('#q').value)) search($('#q').value); }, 0));
+$('#q').addEventListener('paste', () => setTimeout(() => {
+  const v = $('#q').value;
+  const p = parse(v);
+  if (p && p.type !== 'query') search(v);
+}, 0));
 
 // Pull-to-refresh (touch + mouse)
 (() => {
@@ -331,7 +511,8 @@ $('#q').addEventListener('paste', e => setTimeout(() => { if (parse($('#q').valu
 })();
 
 showHist();
-const qs = new URLSearchParams(location.search).get('doi') || new URLSearchParams(location.search).get('q');
+const params = new URLSearchParams(location.search);
+const qs = params.get('doi') || params.get('q');
 if (qs) { $('#q').value = qs; search(qs, false); }
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
