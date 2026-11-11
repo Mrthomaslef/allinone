@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>SciAggregator · Accès Universel DOI / PMID / Sci-Hub & Open Access</title>
+  <title>SciAggregator · Accès Universel DOI / PMID / Sci-Hub &amp; Open Access</title>
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg?v=3" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +55,7 @@
             <h1 class="font-bold text-base sm:text-lg tracking-tight text-white">SCI·HUB &amp; OA AGGREGATOR</h1>
             <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30">Uncensored Edition</span>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Colle un DOI, PMID, lien PubMed/éditeur ou titre d'article → accès direct PDF tous miroirs (anciens &amp; 2022–2026)</p>
+          <p class="text-xs text-slate-400 hidden sm:block">Colle un DOI, PMID, lien PubMed/éditeur ou titre d'article → accès direct PDF tous miroirs (non bloqués FAI France) + proxy AP-HP/UPCité</p>
         </div>
       </div>
 
@@ -79,7 +79,7 @@
           <input
             id="queryInput"
             type="text"
-            placeholder="Ex: 10.1056/NEJMoa2034577, https://doi.org/10.1038/s41586-021-03819-2, PMID 38412345 ou titre..."
+            placeholder="Ex: https://doi.org/10.1080/17581869.2026.2758351, PMID 42977533 ou titre..."
             class="w-full rounded-xl bg-black/50 border border-white/15 focus:border-pink-500 focus:outline-none px-4 py-3.5 text-sm sm:text-base text-white placeholder-slate-500 mono"
             onkeydown="if(event.key==='Enter') resolvePaper()"
           />
@@ -105,17 +105,16 @@
       <!-- EXEMPLES RAPIDES -->
       <div class="mt-3 flex flex-wrap items-center gap-1.5 text-xs">
         <span class="text-slate-400 mr-1">Exemples rapides :</span>
-        <button onclick="loadSample('10.1038/s41586-021-03819-2')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">10.1038/s41586-021-03819-2 (AlphaFold)</button>
+        <button onclick="loadSample('https://doi.org/10.1080/17581869.2026.2758351')" class="px-2.5 py-1 rounded-lg bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/30 text-pink-200 mono">10.1080/17581869.2026.2758351 (CRFA Genou · Nov 2026)</button>
         <button onclick="loadSample('10.1148/radiol.2020200642')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">10.1148/radiol.2020200642 (Radiology)</button>
-        <button onclick="loadSample('10.1056/NEJMoa2307563')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">10.1056/NEJMoa2307563 (NEJM récent)</button>
-        <button onclick="loadSample('10.1016/S0140-6736(23)02725-3')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">Lancet 2024</button>
+        <button onclick="loadSample('10.1038/s41586-021-03819-2')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">10.1038/s41586-021-03819-2 (AlphaFold OA)</button>
       </div>
     </section>
 
     <!-- STATUS / LOADING -->
     <div id="statusBanner" class="hidden glass rounded-xl p-4 text-sm text-slate-300 flex items-center gap-3">
       <div class="w-4 h-4 rounded-full border-2 border-pink-500 border-t-transparent animate-spin shrink-0"></div>
-      <span id="statusText">Interrogation simultanée de Crossref, OpenAlex, Semantic Scholar, Europe PMC &amp; miroirs Sci-Hub...</span>
+      <span id="statusText">Interrogation simultanée de Crossref, OpenAlex, Europe PMC, Unpaywall &amp; miroirs Sci-Hub...</span>
     </div>
 
     <!-- TITLE SEARCH CANDIDATES (IF USER TYPED A TITLE INSTEAD OF A DOI) -->
@@ -139,6 +138,7 @@
             </div>
             <h2 id="metaTitle" class="text-lg sm:text-xl font-bold text-white leading-snug pt-1">—</h2>
             <p id="metaAuthors" class="text-xs sm:text-sm text-slate-300">—</p>
+            <p id="metaInstitution" class="text-xs text-slate-400 hidden"></p>
           </div>
 
           <!-- DIRECT BEST PDF CTA -->
@@ -149,6 +149,9 @@
             </a>
           </div>
         </div>
+
+        <!-- ALERTE DIAGNOSTIC INTELLIGENTE (EX: ARTICLE TRÈS RÉCENT 2025-2026 SOUS PAYWALL) -->
+        <div id="diagnosticAlert" class="hidden rounded-xl p-3.5 bg-amber-500/10 border border-amber-500/30 text-xs sm:text-sm text-amber-200 leading-relaxed"></div>
 
         <!-- IDENTIFIANTS COPIABLES -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10 text-xs mono">
@@ -166,27 +169,27 @@
           </span>
         </div>
 
-        <!-- ABSTRACT -->
-        <details id="abstractDetails" class="hidden group pt-1">
-          <summary class="cursor-pointer text-xs font-semibold text-slate-400 hover:text-white select-none">
-            📖 Afficher / masquer l'abstract complet
+        <!-- ABSTRACT STRUCTURÉ TOUJOURS OUVERT PAR DÉFAUT -->
+        <details id="abstractDetails" open class="hidden group pt-1">
+          <summary class="cursor-pointer text-xs font-semibold text-pink-300 hover:text-white select-none">
+            📖 Résumé / Abstract Complet (extrait automatiquement de PubMed / Europe PMC / OpenAlex)
           </summary>
-          <p id="metaAbstract" class="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed bg-black/30 p-3.5 rounded-xl border border-white/5"></p>
+          <div id="metaAbstract" class="mt-2.5 text-xs sm:text-sm text-slate-200 leading-relaxed bg-black/40 p-4 rounded-xl border border-white/10 space-y-2"></div>
         </details>
       </section>
 
-      <!-- 2. GRILLE COMPLÈTE DES PLATEFORMES D'ACCÈS (SHADOW LIBRARIES + OPEN ACCESS) -->
+      <!-- 2. GRILLE COMPLÈTE DES PLATEFORMES D'ACCÈS (SHADOW LIBRARIES + OPEN ACCESS + ACCÈS HOSPITALO-UNIVERSITAIRE) -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
-        <!-- COLONNE A : SHADOW LIBRARIES & ARCHIVES COMPLÈTES (SCI-HUB, ANNA'S ARCHIVE, LIBGEN, NEXUS) -->
+        <!-- COLONNE A : SHADOW LIBRARIES & MIROIRS NON BLOQUÉS PAR FAI FRANÇAIS -->
         <section class="glass rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-sm font-bold uppercase tracking-wider text-pink-400 flex items-center gap-2">
-                🏴‍☠️ 1. Shadow Libraries &amp; Miroirs Sci-Hub
+                🏴‍☠️ 1. Shadow Libraries (Miroirs actifs en France)
               </h3>
               <p class="text-xs text-slate-400 mt-0.5">
-                Articles jusqu'à 2021 sur Sci-Hub · Articles récents (2022–2026) sur Anna's Archive SciDB, LibGen &amp; Nexus
+                Miroirs non bloqués DNS (`sci-hub.st` → `.fr`, `libgen.li`, Nexus Bot)
               </p>
             </div>
           </div>
@@ -194,14 +197,14 @@
           <div id="shadowLinksGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
         </section>
 
-        <!-- COLONNE B : AGRÉGATEURS OPEN ACCESS, PREPRINTS & RECHERCHE DIRECTE PDF -->
+        <!-- COLONNE B : ACCÈS RÉCENT (2022–2026), PROXY UNIVERSITÉ PARIS CITÉ / AP-HP & OPEN ACCESS -->
         <section class="glass rounded-2xl p-5 space-y-4">
           <div>
             <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-              🔓 2. Open Access, PubMed Central &amp; Manuscrits Auteurs
+              🔓 2. Articles Récents (2022–2026), Proxy UPCité/AP-HP &amp; OA
             </h3>
             <p class="text-xs text-slate-400 mt-0.5">
-              Idéal pour les articles très récents (2023–2026) : versions acceptées, preprints, dépôts institutionnels &amp; PMC
+              Pour les articles qui viennent de sortir (absents de Sci-Hub) : Proxy BIU Santé / UPCité, Preprints &amp; demande 1-clic à l'auteur
             </p>
           </div>
 
@@ -218,26 +221,25 @@
               🖥️ 3. Lecteur &amp; Fenêtre Sci-Hub / PDF Intégrée
             </h3>
             <p class="text-xs text-slate-400">
-              Change de miroir en 1 clic si ton opérateur bloque un domaine ou ouvre dans un nouvel onglet.
+              Utilise `sci-hub.st` (redirigé vers `sci-hub.fr`, non bloqué DNS en France) ou ouvre dans un nouvel onglet.
             </p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <select id="iframeMirrorSelect" onchange="updateIframeSource()" class="rounded-xl bg-black/60 border border-white/15 px-3 py-1.5 text-xs text-white">
-              <option value="scihub_se">Sci-Hub .se (Miroir principal)</option>
-              <option value="scihub_st">Sci-Hub .st</option>
+              <option value="scihub_st" selected>Sci-Hub .st / .fr (Non bloqué FAI France)</option>
               <option value="scihub_ru">Sci-Hub .ru</option>
-              <option value="scihub_red">Sci-Hub .red</option>
               <option value="scihub_box">Sci-Hub .box</option>
-              <option value="annas">Anna's Archive SciDB (Articles récents &amp; anciens)</option>
+              <option value="scihub_wf">Sci-Hub .wf</option>
+              <option value="libgen_li">LibGen .li (Scimag)</option>
               <option value="oa_pdf">PDF Open Access direct (si disponible)</option>
             </select>
             <a id="iframeExternalBtn" href="#" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-xs font-semibold text-white transition">
-              ↗ Ouvrir en plein écran
+              ↗ Ouvrir dans un nouvel onglet
             </a>
           </div>
         </div>
 
-        <div class="w-full h-[620px] rounded-xl overflow-hidden border border-white/10 bg-black/70">
+        <div class="w-full h-[600px] rounded-xl overflow-hidden border border-white/10 bg-black/70">
           <iframe id="paperIframe" src="about:blank" class="w-full h-full border-0" referrerpolicy="no-referrer"></iframe>
         </div>
       </section>
@@ -262,20 +264,17 @@
       pmcid: '',
       title: '',
       authors: '',
+      correspondingAuthor: '',
+      institution: '',
       journal: '',
+      publisher: '',
       year: '',
+      pubDate: '',
       oaPdfUrl: '',
-      abstract: ''
+      oaStatus: '',
+      citations: null,
+      abstractHtml: ''
     };
-
-    const SCIHUB_MIRRORS = [
-      { id: 'scihub_se', name: 'Sci-Hub .se', badge: 'Populaire', base: 'https://sci-hub.se/' },
-      { id: 'scihub_st', name: 'Sci-Hub .st', badge: 'Miroir 2', base: 'https://sci-hub.st/' },
-      { id: 'scihub_ru', name: 'Sci-Hub .ru', badge: 'Miroir 3', base: 'https://sci-hub.ru/' },
-      { id: 'scihub_red', name: 'Sci-Hub .red', badge: 'Miroir 4', base: 'https://sci-hub.red/' },
-      { id: 'scihub_box', name: 'Sci-Hub .box', badge: 'Miroir 5', base: 'https://sci-hub.box/' },
-      { id: 'scihub_al', name: 'Sci-Hub .al', badge: 'Miroir 6', base: 'https://sci-hub.al/' }
-    ];
 
     function setStatus(msg, show = true) {
       const banner = document.getElementById('statusBanner');
@@ -301,20 +300,16 @@
       resolvePaper();
     }
 
-    // Extraction intelligente d'un DOI, PMID, PMCID ou Titre
     function parseInput(raw) {
       const s = raw.trim();
-      // 1. Chercher un DOI dans n'importe quelle URL ou citation (10.xxxx/...)
       const doiMatch = s.match(/\b(10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+)\b/);
       if (doiMatch) {
         return { type: 'doi', value: doiMatch[1].replace(/[.,;)\]]+$/, '') };
       }
-      // 2. PMCID
       const pmcMatch = s.match(/\b(PMC\d{5,10})\b/i);
       if (pmcMatch) {
         return { type: 'pmcid', value: pmcMatch[1].toUpperCase() };
       }
-      // 3. PMID (ex: PMID: 38412345 ou URL pubmed.ncbi.nlm.nih.gov/38412345 ou 7-8 chiffres)
       const pubmedUrl = s.match(/pubmed\.ncbi\.nlm\.nih\.gov\/(\d{6,9})/i);
       if (pubmedUrl) {
         return { type: 'pmid', value: pubmedUrl[1] };
@@ -344,7 +339,7 @@
       if (!raw) return;
 
       document.getElementById('candidatesBox').classList.add('hidden');
-      setStatus("Analyse de l'identifiant et recherche sur OpenAlex, Crossref, Europe PMC et Semantic Scholar...", true);
+      setStatus("Analyse du DOI/PMID et interrogation simultanée d'OpenAlex, Europe PMC, Crossref & Semantic Scholar...", true);
 
       const parsed = parseInput(raw);
       let doi = '';
@@ -365,7 +360,6 @@
             pmcid = hit.pmcid || (parsed.type === 'pmcid' ? parsed.value : '');
           }
         } else {
-          // Recherche par titre via OpenAlex
           const oaSearch = await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(parsed.value)}&per-page=5`);
           const oaSearchData = await oaSearch.json();
           const results = oaSearchData?.results || [];
@@ -421,18 +415,22 @@
         pmcid: pmcid || '',
         title: fallbackQuery,
         authors: 'Auteurs non spécifiés',
+        correspondingAuthor: '',
+        institution: '',
         journal: 'Publication scientifique',
+        publisher: '',
         year: '—',
+        pubDate: '',
         oaPdfUrl: '',
-         oaStatus: 'Paywall / Non-OA (Utiliser Sci-Hub ou Anna\'s Archive)',
+        oaStatus: 'Paywall Éditeur (Fermé)',
         citations: null,
-        abstract: ''
+        abstractHtml: ''
       };
 
-      // Requêtes parallèles vers OpenAlex, Crossref, Europe PMC et Semantic Scholar
       const tasks = [];
 
       if (doi) {
+        // 1. OpenAlex
         tasks.push(
           fetch(`https://api.openalex.org/works/https://doi.org/${encodeURIComponent(doi)}`)
             .then(r => r.ok ? r.json() : null)
@@ -440,9 +438,19 @@
               if (!oa) return;
               currentPaper.title = oa.display_name || oa.title || currentPaper.title;
               currentPaper.year = oa.publication_year || currentPaper.year;
+              currentPaper.pubDate = oa.publication_date || currentPaper.pubDate;
               currentPaper.journal = oa.primary_location?.source?.display_name || currentPaper.journal;
+              currentPaper.publisher = oa.primary_location?.source?.host_organization_name || currentPaper.publisher;
               if (Array.isArray(oa.authorships) && oa.authorships.length) {
-                currentPaper.authors = oa.authorships.slice(0, 8).map(a => a.author?.display_name).filter(Boolean).join(', ') + (oa.authorships.length > 8 ? ' et al.' : '');
+                currentPaper.authors = oa.authorships.slice(0, 10).map(a => a.author?.display_name).filter(Boolean).join(', ') + (oa.authorships.length > 10 ? ' et al.' : '');
+                const corr = oa.authorships.find(a => a.is_corresponding) || oa.authorships[oa.authorships.length - 1];
+                if (corr?.author?.display_name) {
+                  currentPaper.correspondingAuthor = corr.author.display_name;
+                }
+                const inst = oa.authorships[0]?.institutions?.[0]?.display_name;
+                if (inst) {
+                  currentPaper.institution = inst;
+                }
               }
               if (typeof oa.cited_by_count === 'number') {
                 currentPaper.citations = oa.cited_by_count;
@@ -461,11 +469,34 @@
                 currentPaper.pmcid = oa.ids.pmcid.replace('https://www.ncbi.nlm.nih.gov/pmc/articles/', '').replace('/', '');
               }
               const abs = reconstructOpenAlexAbstract(oa.abstract_inverted_index);
-              if (abs) currentPaper.abstract = abs;
+              if (abs && !currentPaper.abstractHtml) {
+                currentPaper.abstractHtml = escapeHtml(abs);
+              }
             })
             .catch(() => {})
         );
 
+        // 2. Europe PMC (crucial pour récupérer le PMID et l'abstract structuré Objective/Methods/Results/Conclusion des articles médicaux très récents !)
+        tasks.push(
+          fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent('DOI:"' + doi + '"')}&format=json&resultType=core`)
+            .then(r => r.ok ? r.json() : null)
+            .then(epmc => {
+              const hit = epmc?.resultList?.result?.[0];
+              if (!hit) return;
+              if (hit.pmid && !currentPaper.pmid) currentPaper.pmid = String(hit.pmid);
+              if (hit.pmcid && !currentPaper.pmcid) currentPaper.pmcid = String(hit.pmcid);
+              if (hit.title && currentPaper.title === fallbackQuery) currentPaper.title = hit.title;
+              if (hit.journalTitle && currentPaper.journal === 'Publication scientifique') currentPaper.journal = hit.journalTitle;
+              if (hit.pubYear && currentPaper.year === '—') currentPaper.year = hit.pubYear;
+              if (hit.authorString && currentPaper.authors === 'Auteurs non spécifiés') currentPaper.authors = hit.authorString;
+              if (hit.abstractText) {
+                currentPaper.abstractHtml = formatStructuredAbstract(hit.abstractText);
+              }
+            })
+            .catch(() => {})
+        );
+
+        // 3. Crossref
         tasks.push(
           fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`)
             .then(r => r.ok ? r.json() : null)
@@ -483,32 +514,10 @@
                 currentPaper.year = yr;
               }
               if (currentPaper.authors === 'Auteurs non spécifiés' && Array.isArray(m.author)) {
-                currentPaper.authors = m.author.slice(0, 8).map(a => [a.given, a.family].filter(Boolean).join(' ')).join(', ');
+                currentPaper.authors = m.author.slice(0, 10).map(a => [a.given, a.family].filter(Boolean).join(' ')).join(', ');
               }
-              if (!currentPaper.abstract && m.abstract) {
-                currentPaper.abstract = m.abstract.replace(/<[^>]+>/g, '');
-              }
-            })
-            .catch(() => {})
-        );
-
-        tasks.push(
-          fetch(`https://api.semanticscholar.org/graph/v1/paper/DOI:${encodeURIComponent(doi)}?fields=title,year,venue,openAccessPdf,externalIds,abstract,citationCount`)
-            .then(r => r.ok ? r.json() : null)
-            .then(s2 => {
-              if (!s2) return;
-              if (!currentPaper.oaPdfUrl && s2.openAccessPdf?.url) {
-                currentPaper.oaPdfUrl = s2.openAccessPdf.url;
-                currentPaper.oaStatus = 'Open Access (Semantic Scholar PDF)';
-              }
-              if (!currentPaper.pmid && s2.externalIds?.PubMed) {
-                currentPaper.pmid = String(s2.externalIds.PubMed);
-              }
-              if (!currentPaper.pmcid && s2.externalIds?.PubMedCentral) {
-                currentPaper.pmcid = String(s2.externalIds.PubMedCentral);
-              }
-              if (!currentPaper.abstract && s2.abstract) {
-                currentPaper.abstract = s2.abstract;
+              if (!currentPaper.abstractHtml && m.abstract) {
+                currentPaper.abstractHtml = formatStructuredAbstract(m.abstract);
               }
             })
             .catch(() => {})
@@ -520,13 +529,31 @@
       saveToHistory(currentPaper);
     }
 
+    function formatStructuredAbstract(rawHtml) {
+      let clean = String(rawHtml || '')
+        .replace(/<\/?jats:[^>]+>/gi, '')
+        .replace(/<h4>(.*?)<\/h4>/gi, '<strong class="block text-pink-300 uppercase tracking-wider text-xs mt-2.5 mb-0.5">$1</strong>');
+      return clean;
+    }
+
     function renderPaperUI() {
       document.getElementById('resultsContainer').classList.remove('hidden');
-      document.getElementById('metaYear').textContent = currentPaper.year || '—';
+      document.getElementById('metaYear').textContent = currentPaper.pubDate || currentPaper.year || '—';
       document.getElementById('metaJournal').textContent = currentPaper.journal || 'Article scientifique';
       document.getElementById('metaTitle').textContent = currentPaper.title || currentPaper.doi;
       document.getElementById('metaAuthors').textContent = currentPaper.authors;
       document.getElementById('metaDoi').textContent = currentPaper.doi || 'Non résolu';
+
+      const instEl = document.getElementById('metaInstitution');
+      if (currentPaper.institution || currentPaper.correspondingAuthor) {
+        instEl.classList.remove('hidden');
+        const parts = [];
+        if (currentPaper.institution) parts.push(`🏛️ Affiliation : ${currentPaper.institution}`);
+        if (currentPaper.correspondingAuthor) parts.push(`✉️ Auteur correspondant : ${currentPaper.correspondingAuthor}`);
+        instEl.textContent = parts.join(' · ');
+      } else {
+        instEl.classList.add('hidden');
+      }
 
       const oaBadge = document.getElementById('metaOaBadge');
       oaBadge.textContent = currentPaper.oaStatus;
@@ -537,6 +564,19 @@
       } else {
         oaBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30';
         document.getElementById('directPdfBox').classList.add('hidden');
+      }
+
+      // Alerte intelligente si l'article est post-2022 et non-OA
+      const diagAlert = document.getElementById('diagnosticAlert');
+      const yrNum = parseInt(currentPaper.year, 10);
+      if (!currentPaper.oaPdfUrl && yrNum >= 2022) {
+        diagAlert.classList.remove('hidden');
+        diagAlert.innerHTML = `
+          <strong>💡 Diagnostic d'accès (${yrNum}) :</strong> Cet article a été publié en <strong>${escapeHtml(currentPaper.pubDate || String(yrNum))}</strong> sous paywall éditeur (<em>${escapeHtml(currentPaper.journal)}</em>) et n'a aucune copie Open Access publique enregistrée dans Unpaywall/OpenAlex.
+          Comme la base historique de Sci-Hub est gelée depuis 2021, utilise en priorité la colonne <strong>2. Accès Récents (Proxy Université Paris Cité / BIU Santé, Nexus Telegram Bot ou Recherche PDF directe)</strong> ci-dessous, et retrouve déjà <strong>l'intégralité des résultats chiffrés dans l'Abstract structuré</strong>.
+        `;
+      } else {
+        diagAlert.classList.add('hidden');
       }
 
       document.getElementById('metaCitations').textContent =
@@ -559,9 +599,10 @@
       }
 
       const absDetails = document.getElementById('abstractDetails');
-      if (currentPaper.abstract) {
+      if (currentPaper.abstractHtml) {
         absDetails.classList.remove('hidden');
-        document.getElementById('metaAbstract').textContent = currentPaper.abstract;
+        absDetails.open = true;
+        document.getElementById('metaAbstract').innerHTML = currentPaper.abstractHtml;
       } else {
         absDetails.classList.add('hidden');
       }
@@ -569,65 +610,53 @@
       const d = encodeURIComponent(currentPaper.doi || currentPaper.title);
       const rawDoi = currentPaper.doi || currentPaper.title;
 
-      // 1. Boutons Shadow Libraries (Sci-Hub miroirs + Anna's Archive SciDB + LibGen + Z-Library + Nexus)
+      // 1. Boutons Shadow Libraries (Uniquement les domaines qui résolvent sur FAI français + contournement DNS)
       const shadowItems = [
         {
-          name: "Anna's Archive · SciDB",
-          desc: "Recommandé pour articles récents (2021–2026) & anciens",
-          url: `https://annas-archive.org/scidb/${rawDoi}`,
+          name: "Sci-Hub .st (→ sci-hub.fr)",
+          desc: "✅ Non bloqué DNS en France (Miroir principal actif)",
+          url: `https://sci-hub.st/${rawDoi}`,
           accent: "border-pink-500/40 bg-pink-500/15 hover:bg-pink-500/25 text-pink-200"
         },
         {
-          name: "Sci-Hub .se",
-          desc: "Miroir principal historique (~88M articles)",
-          url: `https://sci-hub.se/${rawDoi}`,
+          name: "Sci-Hub .ru",
+          desc: "✅ Non bloqué DNS en France (Miroir 2)",
+          url: `https://sci-hub.ru/${rawDoi}`,
           accent: "border-violet-500/40 bg-violet-500/15 hover:bg-violet-500/25 text-violet-200"
         },
         {
-          name: "Sci-Hub .st",
-          desc: "Miroir secondaire rapide",
-          url: `https://sci-hub.st/${rawDoi}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
-          name: "Sci-Hub .ru",
-          desc: "Miroir alternatif .ru",
-          url: `https://sci-hub.ru/${rawDoi}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
-          name: "Sci-Hub .red",
-          desc: "Miroir alternatif .red",
-          url: `https://sci-hub.red/${rawDoi}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
           name: "Sci-Hub .box",
-          desc: "Miroir alternatif .box",
+          desc: "✅ Non bloqué DNS en France (Miroir 3)",
           url: `https://sci-hub.box/${rawDoi}`,
           accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
         },
         {
-          name: "Library Genesis (Scimag)",
-          desc: "Archive scientifique LibGen (.li / .rs)",
+          name: "Sci-Hub .wf",
+          desc: "✅ Non bloqué DNS en France (Miroir 4)",
+          url: `https://sci-hub.wf/${rawDoi}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Library Genesis (.li Scimag)",
+          desc: "✅ Non bloqué DNS en France (Archive scientifique LibGen)",
           url: `https://libgen.li/index.php?req=${d}&columns%5B%5D=t&columns%5B%5D=a&columns%5B%5D=s&columns%5B%5D=y&columns%5B%5D=p&columns%5B%5D=i&objects%5B%5D=f&objects%5B%5D=e&objects%5B%5D=s&objects%5B%5D=a&objects%5B%5D=p&objects%5B%5D=w&topics%5B%5D=a`,
           accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
         },
         {
-          name: "Anna's Archive · Recherche Globale",
-          desc: "Recherche DOI + Titre dans Z-Lib, LibGen & DuXiu",
-          url: `https://annas-archive.org/search?q=${d}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
-          name: "Sci-Hub / Nexus Telegram Bots",
-          desc: "Coller le DOI dans @scihubot sur Telegram",
+          name: "Nexus / Sci-Hub Telegram Bots",
+          desc: "Coller le DOI dans @scihubot (contourne tout blocage FAI)",
           url: `https://t.me/scihubot`,
-          accent: "border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-200"
+          accent: "border-cyan-500/40 bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200"
         },
         {
-          name: "PaperPanda / Sci-Hub Eva",
-          desc: "Résolveur DOI officiel (doi.org)",
+          name: "Anna's Archive SciDB (.se / .org)",
+          desc: "⚠️ Nécessite DNS Cloudflare (1.1.1.1) en France",
+          url: `https://annas-archive.se/scidb/${rawDoi}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-300"
+        },
+        {
+          name: "Page Éditeur Officielle (doi.org)",
+          desc: "Ouvrir l'article sur le site de la revue",
           url: `https://doi.org/${rawDoi}`,
           accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
         }
@@ -645,66 +674,69 @@
         </a>
       `).join('');
 
-      // 2. Boutons Open Access & Preprints (Idéal pour articles récents 2022–2026 hors Sci-Hub)
+      // 2. Boutons Articles Récents 2022–2026 (Proxy UPCité/AP-HP, Preprints, ResearchGate, Demande 1-clic auteur)
+      const mailSubject = encodeURIComponent(`PDF Request: "${currentPaper.title}" (${currentPaper.year})`);
+      const mailBody = encodeURIComponent(
+        `Dear Dr. ${currentPaper.correspondingAuthor || 'Author'},\n\n` +
+        `I am an interventional musculoskeletal radiologist at Cochin Hospital (AP-HP, Université Paris Cité). ` +
+        `I read with great interest your recent study "${currentPaper.title}" published in ${currentPaper.journal} (DOI: ${currentPaper.doi}).\n\n` +
+        `Would you kindly share an author copy / PDF of your article for our clinical & academic bibliography?\n\n` +
+        `Best regards,\nDr. Thomas Lefèvre\nRadiologie B — Hôpital Cochin, AP-HP, Paris`
+      );
+
       const oaItems = [
         ...(currentPaper.oaPdfUrl ? [{
           name: "PDF Open Access Direct",
-          desc: "Lien PDF gratuit détecté via OpenAlex / Semantic Scholar",
+          desc: "Lien PDF gratuit détecté via OpenAlex / Unpaywall",
           url: currentPaper.oaPdfUrl,
           accent: "border-emerald-500/50 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200"
         }] : []),
-        ...(currentPaper.pmcid ? [{
-          name: `PubMed Central (${currentPaper.pmcid})`,
-          desc: "Texte intégral gratuit NIH PMC",
-          url: `https://pmc.ncbi.nlm.nih.gov/articles/${currentPaper.pmcid}/`,
-          accent: "border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200"
+        {
+          name: "🎓 Proxy BIU Santé / Univ. Paris Cité",
+          desc: "Accès abonné complet via tes identifiants UPCité / Cochin",
+          url: `https://login.ezproxy.u-paris.fr/login?url=https://doi.org/${rawDoi}`,
+          accent: "border-emerald-500/50 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200"
+        },
+        ...(currentPaper.pmid ? [{
+          name: `PubMed (${currentPaper.pmid})`,
+          desc: "Fiche officielle NCBI PubMed + articles similaires",
+          url: `https://pubmed.ncbi.nlm.nih.gov/${currentPaper.pmid}/`,
+          accent: "border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-200"
         }] : []),
         {
           name: "Google Scholar (Bouton [PDF])",
-          desc: "Trouve les PDF ResearchGate, HAL & universités",
+          desc: "Détecte les preprints, dépôts universitaires & ResearchGate",
           url: `https://scholar.google.com/scholar?q=${d}`,
-          accent: "border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-200"
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
         },
         {
-          name: "Europe PMC (Full Text)",
+          name: "ResearchGate Full-Text Search",
+          desc: "Chercher le PDF déposé par les auteurs sur ResearchGate",
+          url: `https://www.google.com/search?q=site%3Aresearchgate.net+${encodeURIComponent('"' + (currentPaper.title || currentPaper.doi) + '"')}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Chasse Directe filetype:pdf",
+          desc: "Cherche un PDF sur les dépôts institutionnels (ex: Kanazawa / HAL)",
+          url: `https://www.google.com/search?q=${encodeURIComponent('"' + (currentPaper.title || currentPaper.doi) + '" filetype:pdf')}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Europe PMC (Texte & Figures)",
           desc: "Archive biomédicale européenne & preprints",
           url: `https://europepmc.org/search?query=${d}`,
           accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
         },
         {
-          name: "Semantic Scholar",
-          desc: "PDF auteur, citations & figures extraites",
-          url: `https://www.semanticscholar.org/search?q=${d}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+          name: `✉️ Demander le PDF à ${currentPaper.correspondingAuthor || "l'auteur"} (1-Clic)`,
+          desc: "Pré-remplit un mail académique Cochin AP-HP pour l'auteur",
+          url: `mailto:?subject=${mailSubject}&body=${mailBody}`,
+          accent: "border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-200"
         },
         {
-          name: "OpenAlex Work JSON / OA",
-          desc: "Toutes les localisations Open Access connues",
-          url: `https://openalex.org/works?page=1&filter=doi:${d}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
-          name: "CORE.ac.uk (Dépôts Universitaires)",
-          desc: "250M+ manuscrits auteurs & thèses en accès libre",
-          url: `https://core.ac.uk/search?q=${d}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
-          name: "BASE (Bielefeld Academic Search)",
-          desc: "Moteur académique profond (PDF institutionnels)",
-          url: `https://www.base-search.net/Search/Results?lookfor=${d}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
-          name: "ResearchGate Direct Search",
-          desc: "Versions auteurs partagées par les chercheurs",
-          url: `https://www.google.com/search?q=site%3Aresearchgate.net+${encodeURIComponent('"' + (currentPaper.title || currentPaper.doi) + '"')}`,
-          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
-        },
-        {
-          name: "Recherche Directe filetype:pdf",
-          desc: "Chasse le fichier PDF brut sur les serveurs universitaires",
-          url: `https://www.google.com/search?q=${encodeURIComponent('"' + (currentPaper.title || currentPaper.doi) + '" filetype:pdf')}`,
+          name: "Reddit r/Scholar Request",
+          desc: "Communauté d'échange instantané d'articles récents sous paywall",
+          url: `https://www.reddit.com/r/Scholar/search/?q=${d}&restrict_sr=1`,
           accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
         }
       ];
@@ -729,12 +761,11 @@
       const rawDoi = currentPaper.doi || currentPaper.title;
       if (!rawDoi) return;
 
-      let targetUrl = `https://sci-hub.se/${rawDoi}`;
-      if (sel === 'scihub_st') targetUrl = `https://sci-hub.st/${rawDoi}`;
-      else if (sel === 'scihub_ru') targetUrl = `https://sci-hub.ru/${rawDoi}`;
-      else if (sel === 'scihub_red') targetUrl = `https://sci-hub.red/${rawDoi}`;
+      let targetUrl = `https://sci-hub.st/${rawDoi}`;
+      if (sel === 'scihub_ru') targetUrl = `https://sci-hub.ru/${rawDoi}`;
       else if (sel === 'scihub_box') targetUrl = `https://sci-hub.box/${rawDoi}`;
-      else if (sel === 'annas') targetUrl = `https://annas-archive.org/scidb/${rawDoi}`;
+      else if (sel === 'scihub_wf') targetUrl = `https://sci-hub.wf/${rawDoi}`;
+      else if (sel === 'libgen_li') targetUrl = `https://libgen.li/index.php?req=${encodeURIComponent(rawDoi)}`;
       else if (sel === 'oa_pdf' && currentPaper.oaPdfUrl) targetUrl = currentPaper.oaPdfUrl;
 
       document.getElementById('paperIframe').src = targetUrl;
@@ -793,7 +824,6 @@
         .replace(/'/g, '&#39;');
     }
 
-    // Auto-run if ?doi= is passed in URL
     window.addEventListener('DOMContentLoaded', () => {
       renderHistory();
       const params = new URLSearchParams(window.location.search);
@@ -802,7 +832,7 @@
         document.getElementById('queryInput').value = q;
         resolvePaper();
       } else {
-        loadSample('10.1148/radiol.2020200642');
+        loadSample('https://doi.org/10.1080/17581869.2026.2758351');
       }
     });
   </script>
