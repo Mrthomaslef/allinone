@@ -117,7 +117,7 @@
        Placé avant le moteur du jeu pour fonctionner même si une ancienne version en cache plante. -->
   <script>
     (function () {
-      var BUILD = '5951b1e-1794205162';
+      var BUILD = '873d951-1794417577';
       if (BUILD.indexOf('__') === 0 || location.protocol === 'file:') return;
       function check() {
         try {
@@ -2267,183 +2267,74 @@
     </div>
 
     <!-- =============================================================== -->
-    <!-- ONGLET MULTI : 2 PAGES SÉPARÉES (1. SALON · 2. DECK & PRÊT)     -->
+    <!-- ONGLET MULTI : DUEL ENTRE AMIS (1 ÉCRAN COMPACT)                -->
     <!-- =============================================================== -->
     <div id="viewMulti" class="hidden w-full space-y-2.5">
-      <!-- En-tête + Barre de navigation entre les 2 pages -->
-      <div class="w-full p-3 rounded-2xl tcg-card-panel space-y-2.5">
-        <div class="flex items-start justify-between gap-2">
-          <div class="min-w-0">
-            <h2 class="text-sm font-black text-slate-900 leading-tight">Jouer contre un ami</h2>
-            <p class="text-[11px] text-slate-600 mt-0.5 leading-snug">Étape 1 : rejoins le salon avec ton ami · Étape 2 : choisis ton deck et clique sur Prêt.</p>
-          </div>
+      <!-- 1. SALON + FACE-À-FACE + PRÊT -->
+      <div class="w-full p-2.5 rounded-2xl tcg-card-panel space-y-2">
+        <div class="flex items-center justify-between gap-2 pb-1 border-b border-slate-200/80">
+          <span class="font-black text-slate-900 text-xs truncate">⚔️ Duel Multijoueur</span>
           <span id="multiNetPill" class="shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700">
             <span id="multiNetDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
             <span id="multiNetLabel">Connexion…</span>
           </span>
         </div>
 
-        <!-- Sélecteur des 2 pages -->
-        <div class="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200">
-          <button id="multiTabBtnLobby" onclick="switchMultiSubPage('lobby')" class="py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-sm border border-slate-200">
-            <span id="multiStep1Badge" class="w-4 h-4 rounded-full bg-sky-100 text-sky-700 text-[10px] font-black inline-flex items-center justify-center">1</span>
-            <span>1. Rejoindre le salon</span>
+        <!-- Code du salon (copiable d'un appui) + Nouveau / Inviter -->
+        <div class="flex items-center justify-between gap-1.5 p-1.5 rounded-xl bg-slate-50 border border-slate-200">
+          <button type="button" onclick="copyMultiRoomCode(this)" class="inline-flex items-center gap-1.5 min-w-0 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-sky-400 active:scale-95 transition shadow-sm" style="touch-action: manipulation" aria-label="Copier le code de la partie">
+            <span class="text-[9.5px] font-extrabold uppercase tracking-wider text-slate-500">Code</span>
+            <span id="multiRoomBadge" class="text-base sm:text-lg font-mono font-black text-slate-900 tracking-[0.18em] select-all" style="-webkit-user-select: all; user-select: all;">ARENE</span>
+            <span data-copy-label class="shrink-0 px-1.5 py-0.5 rounded bg-sky-100 border border-sky-300 text-sky-900 text-[10px] font-black">📋</span>
           </button>
-          <button id="multiTabBtnDeck" onclick="switchMultiSubPage('deck')" class="py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60">
-            <span id="multiStep2Badge" class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 text-[10px] font-black inline-flex items-center justify-center">2</span>
-            <span>2. Deck &amp; Prêt</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- ============================================================= -->
-      <!-- PAGE 1 : REJOINDRE LE SALON (PSEUDO + CODE DE LA PARTIE)      -->
-      <!-- ============================================================= -->
-      <div id="multiPageLobby" class="w-full space-y-2.5">
-        <!-- ÉTAPE 1 : PSEUDO -->
-        <div class="w-full p-3 rounded-2xl tcg-card-panel flex items-center gap-2.5">
-          <span id="multiStep1Num" class="mp-step-num">1</span>
-          <div class="min-w-0 flex-1">
-            <div class="text-[10.5px] font-black uppercase tracking-wider text-sky-700">Ton nom de dresseur</div>
-            <div class="text-[11px] text-slate-500 leading-snug">C'est le nom que ton ami verra.</div>
-            <div id="multiMyPseudo" class="text-sm font-black text-slate-900 truncate mt-0.5">Dresseur</div>
+          <div class="flex items-center gap-1 shrink-0">
+            <button onclick="createPrivateMultiRoom()" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-[10.5px] font-extrabold text-slate-800 shadow-sm transition active:scale-95" style="touch-action: manipulation">Nouveau</button>
+            <button onclick="shareMultiRoomLink()" id="multiShareBtn" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-[10.5px] font-extrabold text-white shadow-sm transition active:scale-95" style="touch-action: manipulation">Inviter</button>
           </div>
-          <button onclick="openPseudoModal(false)" class="shrink-0 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-bold text-slate-800 transition active:scale-95">Modifier</button>
         </div>
 
-        <!-- ÉTAPE 2 : RETROUVER SON AMI AVEC UN CODE -->
-        <div class="w-full p-3 rounded-2xl tcg-card-panel space-y-2.5">
-          <div class="flex items-start gap-2.5">
-            <span id="multiStep2Num" class="mp-step-num">2</span>
-            <div class="min-w-0 flex-1">
-              <div class="text-[10.5px] font-black uppercase tracking-wider text-sky-700">Retrouve ton ami</div>
-              <div class="text-[11px] text-slate-600 leading-snug">Vous devez avoir <strong class="text-slate-900">le même code</strong> tous les deux. Un seul joueur crée le code, l'autre le rejoint.</div>
-            </div>
-          </div>
-
-          <!-- Code actuel bien visible -->
-          <div class="rounded-xl bg-slate-50 border border-slate-200 p-2.5 text-center">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Code de la partie</div>
-            <button type="button" onclick="copyMultiRoomCode(this)" class="group inline-flex items-center gap-2 my-0.5 px-3 py-1 rounded-xl hover:bg-white active:scale-95 transition" style="touch-action: manipulation" aria-label="Copier le code de la partie">
-              <span id="multiRoomBadge" class="text-2xl font-mono font-black text-slate-900 tracking-[0.25em] select-all" style="-webkit-user-select: all; user-select: all;">ARENE</span>
-              <span data-copy-label class="shrink-0 px-2 py-1 rounded-lg bg-sky-100 border border-sky-300 text-sky-900 text-[10.5px] font-black">📋 Copier</span>
-            </button>
-            <div id="multiRoomHint" class="text-[10.5px] text-amber-700 leading-snug"></div>
-          </div>
-
-          <!-- Deux choix clairs (repliés une fois l'ami connecté) -->
-          <button id="multiChangeCodeBtn" onclick="multiShowRoomChoices = true; renderMultiSetup();" class="hidden w-full py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[10.5px] font-bold text-slate-700 transition active:scale-95">Changer de code / inviter quelqu'un d'autre</button>
-          <div id="multiRoomChoices" class="grid grid-cols-2 gap-2">
-            <div class="rounded-xl bg-emerald-50/60 border border-emerald-200 p-2 space-y-1.5 flex flex-col">
-              <div class="text-[10.5px] font-black text-emerald-800">Je crée la partie</div>
-              <button onclick="createPrivateMultiRoom()" class="w-full py-2 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-[11px] font-bold text-slate-800 shadow-sm transition active:scale-95">Nouveau code</button>
-              <button onclick="shareMultiRoomLink()" id="multiShareBtn" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-[11px] font-extrabold text-white shadow-sm transition active:scale-95">Envoyer à mon ami</button>
-            </div>
-            <div class="rounded-xl bg-sky-50/60 border border-sky-200 p-2 space-y-1.5 flex flex-col">
-              <div class="text-[10.5px] font-black text-sky-800">J'ai reçu un code</div>
-              <input id="multiJoinInput" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" maxlength="8" placeholder="EX : PIKA42" onkeydown="if(event.key==='Enter'){joinMultiRoomFromInput();}" class="w-full px-2 py-2 rounded-lg bg-white border border-slate-300 text-center font-mono font-black tracking-widest text-slate-900 text-[16px] uppercase placeholder:text-slate-400 placeholder:text-[11px] focus:outline-none focus:border-sky-500" />
-              <button onclick="joinMultiRoomFromInput()" class="w-full py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-[11px] font-extrabold text-white shadow-sm transition active:scale-95">Rejoindre</button>
-            </div>
-          </div>
-
-          <!-- Où en est l'ami ? -->
-          <div id="multiOppBox" class="rounded-xl p-2.5 flex items-center gap-2.5 bg-slate-50 border border-slate-200">
-            <img id="multiOppDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-rose-300 shrink-0 shadow-sm opacity-40 grayscale" />
-            <div class="min-w-0 flex-1">
-              <div id="multiOppPseudo" class="text-xs font-black text-amber-700 truncate">En attente de ton ami…</div>
-              <div id="multiOppStatusSub" class="text-[10.5px] text-slate-500 leading-snug">Ton ami doit ouvrir le jeu, aller dans l'onglet Multi et entrer le même code.</div>
-            </div>
-          </div>
-
-          <!-- Bouton pour passer à la Page 2 (Choix du deck & Prêt) -->
-          <button id="multiLobbyNextBtn" onclick="switchMultiSubPage('deck')" class="w-full btn-gold py-3 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:scale-98 transition">
-            <span id="multiLobbyNextLabel">Continuer → Choisir mon Deck</span>
-          </button>
+        <!-- Rejoindre le code d'un ami (replié automatiquement dès que l'ami est connecté) -->
+        <button id="multiChangeCodeBtn" onclick="multiShowRoomChoices = true; renderMultiSetup();" class="hidden w-full py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[10px] font-bold text-slate-600 transition active:scale-95">Changer de code</button>
+        <div id="multiRoomChoices" class="flex items-center gap-1.5">
+          <input id="multiJoinInput" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" maxlength="8" placeholder="Code ami (ex : PIKA42)" onkeydown="if(event.key==='Enter'){joinMultiRoomFromInput();}" class="min-w-0 flex-1 px-2.5 py-1.5 rounded-xl bg-white border border-slate-300 text-center font-mono font-black tracking-widest text-slate-900 text-[16px] uppercase placeholder:text-slate-400 placeholder:text-[11px] placeholder:font-sans placeholder:tracking-normal focus:outline-none focus:border-sky-500" />
+          <button onclick="joinMultiRoomFromInput()" class="shrink-0 px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-[11px] font-extrabold text-white shadow-sm transition active:scale-95" style="touch-action: manipulation">Rejoindre</button>
         </div>
 
-        <!-- AIDE DÉBUTANT -->
-        <details class="w-full rounded-2xl tcg-card-panel p-3 text-[11px] text-slate-600 group">
-          <summary class="cursor-pointer font-black text-slate-800 list-none flex items-center justify-between">
-            <span>Comment ça marche ? (aide)</span><span class="text-slate-400 group-open:rotate-180 transition">▼</span>
-          </summary>
-          <ol class="mt-2 space-y-1.5 list-decimal pl-4 leading-snug">
-            <li><strong>Joueur A</strong> appuie sur <em>Nouveau code</em> puis <em>Envoyer à mon ami</em> (SMS, WhatsApp…).</li>
-            <li><strong>Joueur B</strong> ouvre le lien reçu (le code se remplit tout seul) ou tape le code dans <em>J'ai reçu un code</em>.</li>
-            <li>Passe ensuite à la page <strong>2. Deck &amp; Prêt</strong> pour choisir ton deck et appuyer sur <em>Je suis prêt</em>.</li>
-            <li>Pendant la partie, chacun joue <strong>à son tour</strong> : le bandeau indique à qui c'est de jouer.</li>
-          </ol>
-          <p class="mt-2 text-slate-500 leading-snug">Ton ami n'apparaît pas ? Vérifiez que le code est <strong>identique</strong>, que vous avez Internet, et gardez l'onglet Multi ouvert sur les deux appareils.</p>
-        </details>
-      </div>
-
-      <!-- ============================================================= -->
-      <!-- PAGE 2 : CHOIX DU DECK + BOUTON PRÊT                          -->
-      <!-- ============================================================= -->
-      <div id="multiPageDeck" class="hidden w-full space-y-2.5">
-        <!-- Barre de rappel du salon + bouton retour Page 1 -->
-        <div class="w-full px-3 py-2 rounded-2xl tcg-card-panel flex items-center justify-between gap-2">
-          <button onclick="switchMultiSubPage('lobby')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-bold text-slate-800 transition active:scale-95 flex items-center gap-1 shrink-0">
-            <span>← Salon</span>
-          </button>
+        <!-- Face-à-Face : Toi VS Ton ami -->
+        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 pt-0.5">
+          <!-- Toi -->
           <div class="flex items-center gap-2 min-w-0">
-            <span class="text-[10px] font-bold uppercase text-slate-500">Code :</span>
-            <button type="button" onclick="copyMultiRoomCode(this)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 border border-slate-200 active:scale-95 transition" style="touch-action: manipulation" aria-label="Copier le code de la partie">
-              <span id="multiDeckPageRoomBadge" class="font-mono font-black text-xs text-slate-900 tracking-widest" style="-webkit-user-select: all; user-select: all;">ARENE</span>
-              <span data-copy-label class="text-[10px]">📋</span>
-            </button>
+            <img id="multiMyDeckImg" src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="" class="w-9 aspect-[63/88] rounded-md object-cover border-2 border-amber-400 shrink-0 shadow-sm" />
+            <div class="min-w-0">
+              <div id="multiMyDeckPseudo" class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-700 truncate">Toi</div>
+              <div id="multiMyDeckName" class="text-xs font-black text-slate-900 leading-tight truncate">Demi Combat</div>
+              <div id="multiMyReadyBadge" class="text-[10px] font-semibold text-slate-500 leading-tight truncate">30c · 3 Prix</div>
+            </div>
           </div>
-          <span id="multiDeckPagePeerPill" class="text-[10.5px] font-extrabold text-amber-700 truncate">En attente d'un ami</span>
+
+          <!-- Badge VS -->
+          <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-100 via-white to-rose-100 border border-slate-200/90 flex items-center justify-center text-[10px] font-black text-slate-700 shadow-sm shrink-0">
+            VS
+          </div>
+
+          <!-- Ton ami -->
+          <div class="flex items-center gap-2 min-w-0 justify-end text-right">
+            <div class="min-w-0">
+              <div id="multiOppPseudo" class="text-[9.5px] font-extrabold uppercase tracking-wider text-rose-600 truncate">En attente…</div>
+              <div id="multiOppDeckName" class="text-xs font-black text-slate-900 leading-tight truncate">—</div>
+              <div id="multiOppReadyBadge" class="text-[10px] font-semibold text-slate-500 leading-tight truncate">Même code requis</div>
+            </div>
+            <img id="multiOppRecapDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded-md object-cover border-2 border-rose-400 shrink-0 shadow-sm opacity-40 grayscale" />
+          </div>
         </div>
 
-        <!-- CHOIX DU DECK -->
-        <div class="w-full p-3 rounded-2xl tcg-card-panel space-y-2">
-          <div class="flex items-start gap-2.5">
-            <span id="multiStep3Num" class="mp-step-num">1</span>
-            <div class="min-w-0 flex-1">
-              <div class="text-[10.5px] font-black uppercase tracking-wider text-sky-700">Choisis ton deck</div>
-              <div class="text-[11px] text-slate-600 leading-snug">Touche une carte pour la choisir. Débutant ? Prends un <strong class="text-amber-700">Demi-Deck</strong> : parties plus courtes (3 cartes Récompense à gagner).</div>
-            </div>
-          </div>
-          <div class="w-full space-y-2" id="multiDeckGrid"></div>
-        </div>
-
-        <!-- BOUTON PRÊT + RÉCAP TOI VS AMI -->
-        <div class="w-full p-3 rounded-2xl tcg-card-panel space-y-2.5">
-          <div class="flex items-start gap-2.5">
-            <span id="multiStep4Num" class="mp-step-num">2</span>
-            <div class="min-w-0 flex-1">
-              <div class="text-[10.5px] font-black uppercase tracking-wider text-amber-700">C'est parti !</div>
-              <div class="text-[11px] text-slate-600 leading-snug">Appuie sur <strong class="text-slate-900">« Je suis prêt »</strong>. Le duel démarre <strong class="text-slate-900">tout seul</strong> quand vous êtes prêts tous les deux.</div>
-            </div>
-          </div>
-
-          <!-- Récap Toi VS Ami -->
-          <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200">
-            <div class="flex items-center gap-2 min-w-0">
-              <img id="multiMyDeckImg" src="https://assets.tcgdex.net/fr/base/base1/34/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-sky-400 shrink-0 shadow-sm" />
-              <div class="min-w-0">
-                <div id="multiMyDeckPseudo" class="text-[10px] font-bold uppercase text-sky-700 truncate">Toi</div>
-                <div id="multiMyDeckName" class="text-[11px] font-bold text-slate-900 truncate">Demi Combat</div>
-                <div id="multiMyReadyBadge" class="text-[10.5px] font-black text-slate-500">Pas encore prêt</div>
-              </div>
-            </div>
-            <span class="text-[10px] font-black text-slate-600 px-1.5 py-0.5 rounded bg-white border border-slate-200">VS</span>
-            <div class="flex items-center gap-2 min-w-0 justify-end text-right">
-              <div class="min-w-0">
-                <div class="text-[10px] font-bold uppercase text-slate-500">Ton ami</div>
-                <div id="multiOppDeckName" class="text-[11px] font-bold text-slate-700 truncate">—</div>
-                <div id="multiOppReadyBadge" class="text-[10.5px] font-black text-slate-400">Pas encore là</div>
-              </div>
-              <img id="multiOppRecapDeckImg" src="https://assets.tcgdex.net/fr/base/base2/46/high.webp" alt="" class="w-9 aspect-[63/88] rounded object-cover border border-rose-300 shrink-0 shadow-sm opacity-40 grayscale" />
-            </div>
-          </div>
-
-          <button id="multiGoBtn" onclick="clickMultiGo()" class="w-full btn-gold py-3.5 rounded-xl text-sm font-black uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:scale-98 transition">
-            <span id="multiGoBtnLabel">Je suis prêt !</span>
-          </button>
-          <div id="multiStatusBanner" class="text-[11px] text-center font-semibold text-slate-600 leading-snug"></div>
-        </div>
+        <button id="multiGoBtn" onclick="clickMultiGo()" class="w-full btn-gold py-2.5 px-4 rounded-xl text-xs sm:text-[13px] font-black uppercase tracking-wider shadow-md flex items-center justify-center gap-2 active:scale-[0.99] transition" style="touch-action: manipulation">
+          <span id="multiGoBtnLabel">Je suis prêt !</span>
+        </button>
       </div>
+
+      <!-- 2. TON DECK (replié par défaut, tap pour dérouler) -->
+      <div class="w-full p-3 rounded-2xl tcg-card-panel space-y-2.5" id="multiDeckGrid"></div>
     </div>
 
     <!-- =============================================================== -->
@@ -18931,7 +18822,8 @@ const TYPE_EMOJI = {
       if (savedDeck && DECK_META[savedDeck]) multiPlayerDeck = savedDeck;
     } catch (_) {}
 
-    let multiSubPage = 'lobby'; // 'lobby' (Page 1 : Rejoindre salon) | 'deck' (Page 2 : Choix du deck & Prêt)
+    let multiSubPage = 'lobby';
+    let multiDeckOpen = false;
     let multiMyReady = false;
     let multiShowRoomChoices = false;
     let multiPeer = null; // { clientId, pseudo, deckKey, ready, lastSeen }
@@ -18944,18 +18836,17 @@ const TYPE_EMOJI = {
     let mpPromoPickerOpen = false;
     let mpIncomingChain = Promise.resolve();
 
-    function switchMultiSubPage(page) {
-      multiSubPage = page === 'deck' ? 'deck' : 'lobby';
-      if (multiSubPage === 'lobby' && multiMyReady) {
-        multiMyReady = false;
-        sendMultiPresence(false);
-      }
+    function toggleMultiDeckPicker() {
+      multiDeckOpen = !multiDeckOpen;
       sfx('pick');
       renderMultiSetup();
-      const menuEl = document.getElementById('menuScreen');
-      if (menuEl) {
-        try { menuEl.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { menuEl.scrollTop = 0; }
-      }
+    }
+
+    function switchMultiSubPage(page) {
+      multiSubPage = page === 'deck' ? 'deck' : 'lobby';
+      multiDeckOpen = page === 'deck';
+      sfx('pick');
+      renderMultiSetup();
     }
 
     const MP_BROKERS = [
@@ -19184,6 +19075,7 @@ const TYPE_EMOJI = {
     function selectMultiDeck(key) {
       if (!DECK_META[key]) return;
       multiPlayerDeck = key;
+      multiDeckOpen = false;
       try { localStorage.setItem('ppi_v2_multi_deck', key); } catch (_) {}
       sfx('pick');
       renderMultiSetup();
@@ -19201,6 +19093,7 @@ const TYPE_EMOJI = {
       try { localStorage.setItem('ppi_v2_multi_room', multiRoomCode); } catch (_) {}
       multiPeer = null;
       multiMyReady = false;
+      multiShowRoomChoices = false;
       if (goDeckPage) multiSubPage = 'deck';
       ensureMultiRealtimeConnected();
       subscribeCurrentMultiRoom();
@@ -19287,7 +19180,7 @@ const TYPE_EMOJI = {
           const btn = document.getElementById('multiShareBtn');
           if (btn) {
             const old = btn.innerHTML;
-            btn.innerHTML = '✅ Lien copié !';
+            btn.innerHTML = '✅ Copié';
             setTimeout(() => { btn.innerHTML = old; }, 2000);
           }
         }).catch(() => {});
@@ -19298,30 +19191,8 @@ const TYPE_EMOJI = {
       updatePseudoUi();
       if (!deckKeyPlayable(multiPlayerDeck)) multiPlayerDeck = 'COMBAT';
 
-      // Bascule entre Page 1 (Salon) et Page 2 (Deck & Prêt)
-      const isDeckPage = multiSubPage === 'deck';
-      const pageLobby = document.getElementById('multiPageLobby');
-      const pageDeck = document.getElementById('multiPageDeck');
-      if (pageLobby) pageLobby.classList.toggle('hidden', isDeckPage);
-      if (pageDeck) pageDeck.classList.toggle('hidden', !isDeckPage);
-
-      const tabLobby = document.getElementById('multiTabBtnLobby');
-      const tabDeck = document.getElementById('multiTabBtnDeck');
-      const activeSubTabCls = 'py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-cyan-400 to-sky-400 text-slate-950 shadow';
-      const idleSubTabCls = 'py-2 px-2.5 rounded-lg text-[11px] font-black transition flex items-center justify-center gap-1.5 text-slate-700 hover:text-slate-900 hover:bg-white/70';
-      if (tabLobby) tabLobby.className = !isDeckPage ? activeSubTabCls : idleSubTabCls;
-      if (tabDeck) tabDeck.className = isDeckPage ? activeSubTabCls : idleSubTabCls;
-
       const roomEl = document.getElementById('multiRoomBadge');
       if (roomEl) roomEl.textContent = multiRoomCode;
-      const deckPageRoomEl = document.getElementById('multiDeckPageRoomBadge');
-      if (deckPageRoomEl) deckPageRoomEl.textContent = multiRoomCode;
-      const roomHint = document.getElementById('multiRoomHint');
-      if (roomHint) {
-        roomHint.innerHTML = multiRoomCode === 'ARENE'
-          ? 'Code public : n\'importe qui peut entrer. Appuie sur <strong>Nouveau code</strong> pour jouer seulement avec ton ami.'
-          : '<span class="text-slate-500">Donne ce code à ton ami (ou envoie-lui le lien).</span>';
-      }
 
       const myMeta = DECK_META[multiPlayerDeck] || DECK_META.COMBAT;
       const hasPeer = !!(multiPeer && (Date.now() - multiPeer.lastSeen < 15000));
@@ -19334,113 +19205,56 @@ const TYPE_EMOJI = {
       if (choicesEl) choicesEl.classList.toggle('hidden', collapse);
       if (changeBtn) changeBtn.classList.toggle('hidden', !collapse);
 
-      // Badges de progression sur les 2 onglets
-      const s1Badge = document.getElementById('multiStep1Badge');
-      const s2Badge = document.getElementById('multiStep2Badge');
-      if (s1Badge) {
-        s1Badge.textContent = hasPeer ? '✓' : '1';
-        s1Badge.className = 'w-4 h-4 rounded-full text-[10px] font-black inline-flex items-center justify-center '
-          + (hasPeer ? 'bg-emerald-400 text-slate-950' : (!isDeckPage ? 'bg-slate-950/25 text-slate-950' : 'bg-slate-200 text-slate-700'));
-      }
-      if (s2Badge) {
-        s2Badge.textContent = multiMyReady ? '✓' : '2';
-        s2Badge.className = 'w-4 h-4 rounded-full text-[10px] font-black inline-flex items-center justify-center '
-          + (multiMyReady ? 'bg-emerald-400 text-slate-950' : (isDeckPage ? 'bg-slate-950/25 text-slate-950' : 'bg-slate-200 text-slate-700'));
-      }
-
-      // Étapes internes : numéro → ✓ quand faite, halo sur l'étape en cours
-      const stepDone = [!!playerPseudo, hasPeer, true, multiMyReady];
-      const current = stepDone.findIndex((d) => !d);
-      const stepLabels = ['1', '2', '1', '2'];
-      [1, 2, 3, 4].forEach((n, i) => {
-        const el = document.getElementById('multiStep' + n + 'Num');
-        if (!el) return;
-        const done = stepDone[i];
-        el.textContent = done ? '✓' : stepLabels[i];
-        el.classList.toggle('mp-done', done);
-        el.classList.toggle('mp-current', i === current);
-      });
-
-      // Bouton d'action sur la Page 1 (Continuer vers Choix du Deck)
-      const lobbyNextLbl = document.getElementById('multiLobbyNextLabel');
-      if (lobbyNextLbl) {
-        lobbyNextLbl.textContent = hasPeer
-          ? `Choisir mon Deck contre ${peerName} →`
-          : 'Continuer → Choisir mon Deck';
-      }
-
-      // Récap Toi (Page 2)
+      // Récap Toi
       const myImg = document.getElementById('multiMyDeckImg');
       const myName = document.getElementById('multiMyDeckName');
       const myReadyBadge = document.getElementById('multiMyReadyBadge');
       if (myImg) myImg.src = myMeta.img;
-      if (myName) myName.textContent = `${myMeta.short} (${myMeta.cards}c)`;
+      if (myName) myName.textContent = myMeta.short;
       if (myReadyBadge) {
-        myReadyBadge.textContent = multiMyReady ? 'Prêt' : 'Pas encore prêt';
-        myReadyBadge.className = 'text-[10.5px] font-black ' + (multiMyReady ? 'text-emerald-700' : 'text-slate-600');
+        myReadyBadge.textContent = multiMyReady ? '✓ Prêt' : `${myMeta.cards}c · ${myMeta.prizes} Prix`;
+        myReadyBadge.className = 'text-[10px] font-black leading-tight truncate ' + (multiMyReady ? 'text-emerald-700' : 'text-slate-500');
       }
 
-      // Ami : boîte de la Page 1 + bandeau & récap de la Page 2
-      const oppBox = document.getElementById('multiOppBox');
+      // Récap Ami
       const oppPseudoEl = document.getElementById('multiOppPseudo');
-      const oppSubEl = document.getElementById('multiOppStatusSub');
-      const oppDeckImgEl = document.getElementById('multiOppDeckImg');
       const oppRecapImgEl = document.getElementById('multiOppRecapDeckImg');
       const oppDeckNameEl = document.getElementById('multiOppDeckName');
       const oppReadyBadge = document.getElementById('multiOppReadyBadge');
-      const deckPagePeerPill = document.getElementById('multiDeckPagePeerPill');
       if (hasPeer) {
-        if (oppBox) oppBox.className = 'rounded-xl p-2.5 flex items-center gap-2.5 bg-emerald-50 border border-emerald-300';
         if (oppPseudoEl) {
-          oppPseudoEl.textContent = `${peerName} est dans le salon !`;
-          oppPseudoEl.className = 'text-xs font-black text-emerald-700 truncate';
-        }
-        if (oppSubEl) oppSubEl.textContent = multiPeer.ready ? `Prêt à jouer avec ${oppMeta.short}` : `Choisit son deck… (${oppMeta.short} pour l'instant)`;
-        if (oppDeckImgEl) {
-          oppDeckImgEl.src = oppMeta.img;
-          oppDeckImgEl.classList.remove('opacity-40', 'grayscale');
+          oppPseudoEl.textContent = peerName;
+          oppPseudoEl.className = 'text-[9.5px] font-extrabold uppercase tracking-wider truncate ' + (multiPeer.ready ? 'text-emerald-700' : 'text-rose-600');
         }
         if (oppRecapImgEl) {
           oppRecapImgEl.src = oppMeta.img;
           oppRecapImgEl.classList.remove('opacity-40', 'grayscale');
         }
-        if (oppDeckNameEl) oppDeckNameEl.textContent = `${peerName} · ${oppMeta.short}`;
+        if (oppDeckNameEl) oppDeckNameEl.textContent = oppMeta.short;
         if (oppReadyBadge) {
-          oppReadyBadge.textContent = multiPeer.ready ? 'Prêt' : 'Choisit…';
-          oppReadyBadge.className = 'text-[10.5px] font-black ' + (multiPeer.ready ? 'text-emerald-700' : 'text-amber-700');
-        }
-        if (deckPagePeerPill) {
-          deckPagePeerPill.textContent = multiPeer.ready ? `${peerName} est prêt !` : `${peerName} connecté`;
-          deckPagePeerPill.className = 'text-[10.5px] font-extrabold ' + (multiPeer.ready ? 'text-emerald-700' : 'text-sky-700');
+          oppReadyBadge.textContent = multiPeer.ready ? '✓ Prêt' : `${oppMeta.cards}c · Choisit…`;
+          oppReadyBadge.className = 'text-[10px] font-black leading-tight truncate ' + (multiPeer.ready ? 'text-emerald-700' : 'text-amber-700');
         }
       } else {
-        if (oppBox) oppBox.className = 'rounded-xl p-2.5 flex items-center gap-2.5 bg-slate-50 border border-slate-200';
         if (oppPseudoEl) {
-          oppPseudoEl.textContent = 'En attente de ton ami…';
-          oppPseudoEl.className = 'text-xs font-black text-amber-700 truncate';
+          oppPseudoEl.textContent = 'En attente…';
+          oppPseudoEl.className = 'text-[9.5px] font-extrabold uppercase tracking-wider text-rose-600 truncate';
         }
-        if (oppSubEl) oppSubEl.innerHTML = `Ton ami doit ouvrir le jeu, aller dans l'onglet <strong>Multi</strong> et entrer le code <strong class="font-mono text-slate-900">${multiRoomCode}</strong>.`;
-        if (oppDeckImgEl) oppDeckImgEl.classList.add('opacity-40', 'grayscale');
         if (oppRecapImgEl) oppRecapImgEl.classList.add('opacity-40', 'grayscale');
-        if (oppDeckNameEl) oppDeckNameEl.textContent = '—';
+        if (oppDeckNameEl) oppDeckNameEl.textContent = 'Ton ami';
         if (oppReadyBadge) {
-          oppReadyBadge.textContent = 'Pas encore là';
-          oppReadyBadge.className = 'text-[10.5px] font-black text-slate-500';
-        }
-        if (deckPagePeerPill) {
-          deckPagePeerPill.textContent = 'En attente d\'un ami';
-          deckPagePeerPill.className = 'text-[10.5px] font-extrabold text-amber-600';
+          oppReadyBadge.textContent = `Code : ${multiRoomCode}`;
+          oppReadyBadge.className = 'text-[10px] font-semibold text-slate-500 leading-tight truncate';
         }
       }
 
-      // Bouton Prêt + phrase d'explication (Page 2)
+      // Bouton Prêt
       const goBtnLabel = document.getElementById('multiGoBtnLabel');
       const goBtn = document.getElementById('multiGoBtn');
-      const statusBanner = document.getElementById('multiStatusBanner');
       if (goBtnLabel) {
         if (multiMyReady && hasPeer && multiPeer.ready) goBtnLabel.textContent = 'Lancement du duel…';
-        else if (multiMyReady) goBtnLabel.textContent = 'Annuler (je ne suis plus prêt)';
-        else if (hasPeer && multiPeer.ready) goBtnLabel.textContent = `Je suis prêt — affronter ${peerName} !`;
+        else if (multiMyReady) goBtnLabel.textContent = '✓ Prêt · Annuler';
+        else if (hasPeer && multiPeer.ready) goBtnLabel.textContent = `Prêt — affronter ${peerName} !`;
         else goBtnLabel.textContent = 'Je suis prêt !';
       }
       if (goBtn) {
@@ -19450,22 +19264,12 @@ const TYPE_EMOJI = {
         goBtn.classList.toggle('border-slate-300', multiMyReady);
         goBtn.classList.toggle('text-slate-700', multiMyReady);
       }
-      if (statusBanner) {
-        let msg;
-        if (!playerPseudo) msg = 'Commence par choisir ton nom de dresseur dans le Salon.';
-        else if (multiMyReady && !hasPeer) msg = `Tu es prêt ! En attente que ton ami rejoigne le salon <strong class="font-mono">${multiRoomCode}</strong>…`;
-        else if (multiMyReady && !multiPeer.ready) msg = `Tu es prêt ! On attend que <strong>${peerName}</strong> appuie sur « Je suis prêt »…`;
-        else if (multiMyReady) msg = 'Vous êtes prêts tous les deux, le duel démarre !';
-        else if (hasPeer && multiPeer.ready) msg = `<strong>${peerName}</strong> t'attend ! Appuie sur « Je suis prêt » pour lancer le duel.`;
-        else if (hasPeer) msg = `Connecté avec <strong>${peerName}</strong>. Choisissez vos decks puis appuyez sur « Je suis prêt ».`;
-        else msg = 'Tu peux déjà choisir ton deck et appuyer sur « Je suis prêt » : le duel démarrera dès que ton ami sera prêt.';
-        statusBanner.innerHTML = msg;
-      }
 
       const grid = document.getElementById('multiDeckGrid');
       if (!grid) return;
       const halfKeys = ['COMBAT', 'EAU', 'FEU', 'XTRA'];
       const fullKeys = ['V2_FEU', 'V2_EAU', 'V2_PLANTE', 'V2_ELECTRIK', 'V2_PSY', 'V2_COMBAT'];
+      const unlockedTourneyKeys = typeof getUnlockedTournamentDeckKeys === 'function' ? getUnlockedTournamentDeckKeys() : [];
       const customKeys = typeof getCustomDeckKeys === 'function' ? getCustomDeckKeys(true) : [];
 
       const renderMultiCard = (k) => {
@@ -19473,39 +19277,67 @@ const TYPE_EMOJI = {
         if (!d) return '';
         const sel = multiPlayerDeck === k;
         const isHalf = d.cards === 30;
+        const isTourney = !!d.tournament;
+        const starLabel = (d.star || '').split(' (')[0];
         return `
-          <button onclick="selectMultiDeck('${k}')" class="p-1.5 rounded-xl bg-gradient-to-br ${d.grad} border ${sel ? 'border-cyan-400 ring-2 ring-cyan-400 shadow-md scale-[1.02]' : d.border + ' opacity-90 hover:opacity-100 shadow-sm'} flex flex-col items-center gap-1 transition">
-            <div class="relative w-full aspect-[63/88] rounded-md overflow-hidden shadow-sm">
-              <img src="${d.img}" alt="${d.name}" loading="lazy" class="w-full h-full object-cover" />
-              <span class="absolute top-0.5 left-0.5 text-[10px] font-black uppercase px-1 rounded ${isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-500/95 text-white'}">${isHalf ? 'Demi' : '60c'}</span>
-              <span class="absolute bottom-0.5 right-0.5 text-[10px] font-mono font-bold px-1 rounded bg-slate-900/85 text-yellow-200">${d.prizes}🏆</span>
-              ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-cyan-400 text-slate-950 text-[10px] font-black flex items-center justify-center">✓</span>' : ''}
+          <button onclick="selectMultiDeck('${k}')" class="p-1.5 rounded-xl border ${sel ? 'bg-amber-50/95 border-amber-400 ring-2 ring-amber-400 shadow-md scale-[1.01]' : isTourney ? 'bg-amber-50/40 hover:bg-amber-50/80 border-amber-300/90 hover:border-amber-400' : 'bg-slate-50/90 hover:bg-white border-slate-200/90 hover:border-slate-300'} flex flex-col items-center gap-1 transition active:scale-95">
+            <div class="relative w-full aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-slate-900">
+              <img src="${d.img}" alt="${d.name}" loading="lazy" class="deck-art w-full h-full object-cover" />
+              ${isTourney ? '<span class="absolute top-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded bg-amber-400 text-slate-950 shadow">🏆</span>' : ''}
+              <span class="absolute bottom-0.5 left-0.5 text-[9px] font-black uppercase px-1 rounded ${isTourney || isHalf ? 'bg-amber-400 text-slate-950' : 'bg-indigo-600 text-white'}">${isHalf ? '30c' : '60c'}</span>
+              ${sel ? '<span class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black flex items-center justify-center shadow">✓</span>' : ''}
             </div>
-            <span class="text-[10px] font-extrabold ${sel ? 'text-cyan-700' : 'text-slate-800'} truncate w-full text-center leading-tight">${d.short}</span>
-            <span class="text-[10px] text-slate-500 truncate w-full text-center -mt-0.5">${d.star.split(' ')[0] === d.short ? d.cards + ' cartes' : d.star.split(' ')[0]}</span>
+            <span class="text-[11px] font-black ${sel ? 'text-amber-900' : 'text-slate-900'} w-full text-center leading-tight truncate">${d.short}</span>
+            <span class="text-[9.5px] font-semibold ${sel ? 'text-amber-700' : 'text-slate-500'} w-full text-center leading-none truncate -mt-0.5">${starLabel && starLabel !== d.short ? `${starLabel} · ${d.cards}c` : `${d.cards}c · ${d.prizes} Prix`}</span>
           </button>
         `;
       };
 
+      const myStar = (myMeta.star || '').split(' (')[0];
+      const mySub = myStar && myStar !== myMeta.short ? `${myStar} · ${myMeta.cards} cartes · ${myMeta.prizes} Prix` : `${myMeta.cards} cartes · ${myMeta.prizes} Prix`;
+      const isHalfSel = myMeta.cards === 30;
+
       grid.innerHTML = `
+        <button onclick="toggleMultiDeckPicker()" aria-expanded="${multiDeckOpen}" class="w-full flex items-center gap-3 text-left active:scale-[0.99] transition" style="touch-action:manipulation">
+          <div class="relative w-24 sm:w-28 aspect-[4/3] rounded-lg overflow-hidden shadow-sm bg-slate-900 border-2 border-amber-400 shrink-0 flex items-center justify-center">
+            <img src="${myMeta.img}" alt="" class="deck-art w-full h-full object-cover" />
+            <span class="absolute bottom-0.5 left-0.5 text-[8.5px] font-black uppercase px-1 rounded ${isHalfSel ? 'bg-amber-400 text-slate-950' : 'bg-indigo-600 text-white'}">${isHalfSel ? '30c' : '60c'}</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-[9.5px] font-extrabold uppercase tracking-wider text-amber-700">Ton Deck</div>
+            <div class="text-sm font-black text-slate-900 leading-tight truncate">${myMeta.short}</div>
+            <div class="text-[10px] font-semibold text-slate-500 leading-tight truncate">${mySub}</div>
+          </div>
+          <span class="shrink-0 w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 text-xs font-black transition-transform ${multiDeckOpen ? 'rotate-180' : ''}">▾</span>
+        </button>
+      ` + (!multiDeckOpen ? '' : `
+        <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/80">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">Choisir un deck (30c ou 60c)</span>
+          <button onclick="switchMenuTab('decks')" class="shrink-0 px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-[10px] font-extrabold text-emerald-800 transition active:scale-95">
+            ${customKeys.length ? 'Mes Decks (' + customKeys.length + ')' : '+ Créer un deck'}
+          </button>
+        </div>
+        ${unlockedTourneyKeys.length ? `
+        <div class="p-2 rounded-xl bg-gradient-to-br from-amber-50/90 via-yellow-50/60 to-white border border-amber-300/90 space-y-1.5 shadow-sm">
+          <div class="flex items-center justify-between gap-1 px-0.5">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">🏆 Decks des Champions · 60c (${unlockedTourneyKeys.length}/${ADVENTURE_TRAINERS.length})</span>
+          </div>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${unlockedTourneyKeys.map(renderMultiCard).join('')}</div>
+        </div>` : ''}
         ${customKeys.length ? `
         <div class="space-y-1">
-          <div class="flex items-center justify-between px-1">
-            <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-emerald-700">Mes Decks perso</span>
-            <button onclick="switchMenuTab('decks')" class="text-[10px] font-bold text-emerald-700 underline underline-offset-2">Modifier</button>
-          </div>
-          <div class="grid grid-cols-4 gap-1.5">${customKeys.map(renderMultiCard).join('')}</div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 px-0.5 block">Mes Decks perso</span>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${customKeys.map(renderMultiCard).join('')}</div>
         </div>` : ''}
         <div class="space-y-1">
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-amber-700 px-1 block">Conseillé pour débuter · Demi-Decks (30 cartes, parties courtes)</span>
-          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderMultiCard).join('')}</div>
-        </div>
-        <div class="space-y-1 pt-0.5">
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-sky-700 px-1 block">Decks complets (60 cartes, parties longues)</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 px-0.5 block">Decks Complets · 60c (6 Prix)</span>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">${fullKeys.map(renderMultiCard).join('')}</div>
         </div>
-        <div class="text-[10.5px] text-slate-600 px-1">Ton choix : <strong class="text-slate-900">${myMeta.name}</strong> — ${myMeta.desc}</div>
-      `;
+        <div class="space-y-1 pt-0.5">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700 px-0.5 block">Demi-Decks · 30c (3 Prix · Rapide)</span>
+          <div class="grid grid-cols-4 gap-1.5">${halfKeys.map(renderMultiCard).join('')}</div>
+        </div>
+      `);
     }
 
     function clickMultiGo() {
@@ -25400,7 +25232,7 @@ const TYPE_EMOJI = {
               🚀 Revanche Multijoueur (GO avec ${DECK_META[usedDeckKey]?.short || usedDeckKey})
             </button>
             <button onclick="closePickerModal(); confirmQuitMatch(); switchMenuTab('multi'); switchMultiSubPage('deck');" class="w-full py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 border border-slate-300">
-              🃏 Changer de Deck (Page Deck &amp; Prêt)
+              🃏 Changer de Deck
             </button>
           `;
         } else if (advTrainer) {
