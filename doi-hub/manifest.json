@@ -1,0 +1,9 @@
+{
+  "name": "DOI Hub — Trouver le PDF d'un article",
+  "short_name": "DOI Hub",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#0f172a",
+  "icons": [{ "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

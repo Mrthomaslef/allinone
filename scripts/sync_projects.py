@@ -661,6 +661,22 @@ def main():
             },
         )
 
+    if not any(item["id"].lower() == "doi-hub" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "doi-hub",
+                "title": "DOI Hub — Trouver le PDF d'un article",
+                "subtitle": "Colle un DOI, PMID ou arXiv → PDF légal en 1 clic : Unpaywall, OpenAlex, Europe PMC/PMC, Semantic Scholar, HAL, arXiv · proxy bibliothèque, Scholar, mail à l'auteur",
+                "category": "medical-imaging",
+                "emoji": "📄",
+                "logoUrl": "doi-hub/assets/icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/doi-hub/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/doi-hub",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
     if not any(item["id"].lower() == "uncensored" for item in output):
         output.insert(
             0,
