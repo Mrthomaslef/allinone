@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>SciAggregator · Accès Universel DOI / PMID / Sci-Hub & Open Access</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg?v=3" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 15% 0%, #1a1025 0%, #09090f 55%, #050508 100%);
+      color: #f1f5f9;
+      min-height: 100dvh;
+      margin: 0;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass {
+      background: rgba(18, 18, 28, 0.78);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+    .btn-hub {
+      transition: all 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-hub:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px -6px rgba(236, 72, 153, 0.35);
+    }
+  </style>
+</head>
+<body class="pb-16">
+
+  <!-- TOP BAR -->
+  <header class="sticky top-0 z-30 border-b border-white/10 bg-[#0b0b12]/90 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-500 to-violet-600 flex items-center justify-center font-bold text-white shadow-lg shadow-pink-500/20">
+          📄
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-base sm:text-lg tracking-tight text-white">SCI·HUB &amp; OA AGGREGATOR</h1>
+            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30">Uncensored Edition</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Colle un DOI, PMID, lien PubMed/éditeur ou titre d'article → accès direct PDF tous miroirs (anciens &amp; 2022–2026)</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 transition">
+          ← Retour Chat IA
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pt-6 space-y-6">
+
+    <!-- SEARCH / DOI INPUT BOX -->
+    <section class="glass rounded-2xl p-4 sm:p-6 shadow-2xl">
+      <label for="queryInput" class="block text-xs font-semibold uppercase tracking-wider text-pink-400 mb-2">
+        Coller un DOI, PMID, PMCID, URL d'article ou Titre
+      </label>
+      <div class="flex flex-col sm:flex-row gap-2.5">
+        <div class="relative flex-1">
+          <input
+            id="queryInput"
+            type="text"
+            placeholder="Ex: 10.1056/NEJMoa2034577, https://doi.org/10.1038/s41586-021-03819-2, PMID 38412345 ou titre..."
+            class="w-full rounded-xl bg-black/50 border border-white/15 focus:border-pink-500 focus:outline-none px-4 py-3.5 text-sm sm:text-base text-white placeholder-slate-500 mono"
+            onkeydown="if(event.key==='Enter') resolvePaper()"
+          />
+          <button
+            type="button"
+            onclick="pasteClipboard()"
+            title="Coller depuis le presse-papiers"
+            class="absolute right-2.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-slate-300 transition"
+          >
+            📋 Coller
+          </button>
+        </div>
+        <button
+          type="button"
+          id="searchBtn"
+          onclick="resolvePaper()"
+          class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-pink-600 to-violet-600 hover:from-pink-500 hover:to-violet-500 text-white font-semibold text-sm sm:text-base shadow-lg shadow-pink-600/25 transition shrink-0 flex items-center justify-center gap-2"
+        >
+          <span>⚡ Obtenir le Papier</span>
+        </button>
+      </div>
+
+      <!-- EXEMPLES RAPIDES -->
+      <div class="mt-3 flex flex-wrap items-center gap-1.5 text-xs">
+        <span class="text-slate-400 mr-1">Exemples rapides :</span>
+        <button onclick="loadSample('10.1038/s41586-021-03819-2')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">10.1038/s41586-021-03819-2 (AlphaFold)</button>
+        <button onclick="loadSample('10.1148/radiol.2020200642')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">10.1148/radiol.2020200642 (Radiology)</button>
+        <button onclick="loadSample('10.1056/NEJMoa2307563')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">10.1056/NEJMoa2307563 (NEJM récent)</button>
+        <button onclick="loadSample('10.1016/S0140-6736(23)02725-3')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 mono">Lancet 2024</button>
+      </div>
+    </section>
+
+    <!-- STATUS / LOADING -->
+    <div id="statusBanner" class="hidden glass rounded-xl p-4 text-sm text-slate-300 flex items-center gap-3">
+      <div class="w-4 h-4 rounded-full border-2 border-pink-500 border-t-transparent animate-spin shrink-0"></div>
+      <span id="statusText">Interrogation simultanée de Crossref, OpenAlex, Semantic Scholar, Europe PMC &amp; miroirs Sci-Hub...</span>
+    </div>
+
+    <!-- TITLE SEARCH CANDIDATES (IF USER TYPED A TITLE INSTEAD OF A DOI) -->
+    <section id="candidatesBox" class="hidden glass rounded-2xl p-4 sm:p-5 space-y-2.5">
+      <div class="text-xs font-semibold uppercase tracking-wider text-violet-300">Résultats trouvés par titre — clique sur un article pour charger son DOI :</div>
+      <div id="candidatesList" class="space-y-2"></div>
+    </section>
+
+    <!-- MAIN RESULTS CONTAINER -->
+    <div id="resultsContainer" class="hidden space-y-6">
+
+      <!-- 1. CARTE MÉTADONNÉES DE L'ARTICLE -->
+      <section class="glass rounded-2xl p-5 sm:p-6 space-y-4 border-l-4 border-l-pink-500">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="space-y-1 flex-1 min-w-[240px]">
+            <div class="flex flex-wrap items-center gap-2">
+              <span id="metaYear" class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-pink-500/20 text-pink-300 border border-pink-500/30">Année</span>
+              <span id="metaJournal" class="text-xs font-semibold text-violet-300 uppercase tracking-wide">Journal</span>
+              <span id="metaOaBadge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Statut OA</span>
+              <span id="metaCitations" class="text-xs text-slate-400"></span>
+            </div>
+            <h2 id="metaTitle" class="text-lg sm:text-xl font-bold text-white leading-snug pt-1">—</h2>
+            <p id="metaAuthors" class="text-xs sm:text-sm text-slate-300">—</p>
+          </div>
+
+          <!-- DIRECT BEST PDF CTA -->
+          <div id="directPdfBox" class="hidden">
+            <a id="directPdfLink" href="#" target="_blank" rel="noopener"
+              class="btn-hub inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/25">
+              <span>🟢 PDF Direct Détecté (1-Clic)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- IDENTIFIANTS COPIABLES -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10 text-xs mono">
+          <span class="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-slate-200">
+            DOI: <strong id="metaDoi" class="text-pink-400 select-all">—</strong>
+          </span>
+          <button onclick="copyCurrentDoi()" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300">
+            📋 Copier DOI
+          </button>
+          <span id="metaPmidWrap" class="hidden px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-slate-200">
+            PMID: <strong id="metaPmid" class="text-cyan-300 select-all">—</strong>
+          </span>
+          <span id="metaPmcidWrap" class="hidden px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-slate-200">
+            PMCID: <strong id="metaPmcid" class="text-emerald-300 select-all">—</strong>
+          </span>
+        </div>
+
+        <!-- ABSTRACT -->
+        <details id="abstractDetails" class="hidden group pt-1">
+          <summary class="cursor-pointer text-xs font-semibold text-slate-400 hover:text-white select-none">
+            📖 Afficher / masquer l'abstract complet
+          </summary>
+          <p id="metaAbstract" class="mt-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed bg-black/30 p-3.5 rounded-xl border border-white/5"></p>
+        </details>
+      </section>
+
+      <!-- 2. GRILLE COMPLÈTE DES PLATEFORMES D'ACCÈS (SHADOW LIBRARIES + OPEN ACCESS) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+        <!-- COLONNE A : SHADOW LIBRARIES & ARCHIVES COMPLÈTES (SCI-HUB, ANNA'S ARCHIVE, LIBGEN, NEXUS) -->
+        <section class="glass rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold uppercase tracking-wider text-pink-400 flex items-center gap-2">
+                🏴‍☠️ 1. Shadow Libraries &amp; Miroirs Sci-Hub
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">
+                Articles jusqu'à 2021 sur Sci-Hub · Articles récents (2022–2026) sur Anna's Archive SciDB, LibGen &amp; Nexus
+              </p>
+            </div>
+          </div>
+
+          <div id="shadowLinksGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+        </section>
+
+        <!-- COLONNE B : AGRÉGATEURS OPEN ACCESS, PREPRINTS & RECHERCHE DIRECTE PDF -->
+        <section class="glass rounded-2xl p-5 space-y-4">
+          <div>
+            <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
+              🔓 2. Open Access, PubMed Central &amp; Manuscrits Auteurs
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Idéal pour les articles très récents (2023–2026) : versions acceptées, preprints, dépôts institutionnels &amp; PMC
+            </p>
+          </div>
+
+          <div id="oaLinksGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+        </section>
+
+      </div>
+
+      <!-- 3. LECTEUR / PRÉVISUALISATION INTÉGRÉE (SCI-HUB / PDF EMBED) -->
+      <section class="glass rounded-2xl p-5 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="text-sm font-bold uppercase tracking-wider text-violet-300">
+              🖥️ 3. Lecteur &amp; Fenêtre Sci-Hub / PDF Intégrée
+            </h3>
+            <p class="text-xs text-slate-400">
+              Change de miroir en 1 clic si ton opérateur bloque un domaine ou ouvre dans un nouvel onglet.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="iframeMirrorSelect" onchange="updateIframeSource()" class="rounded-xl bg-black/60 border border-white/15 px-3 py-1.5 text-xs text-white">
+              <option value="scihub_se">Sci-Hub .se (Miroir principal)</option>
+              <option value="scihub_st">Sci-Hub .st</option>
+              <option value="scihub_ru">Sci-Hub .ru</option>
+              <option value="scihub_red">Sci-Hub .red</option>
+              <option value="scihub_box">Sci-Hub .box</option>
+              <option value="annas">Anna's Archive SciDB (Articles récents &amp; anciens)</option>
+              <option value="oa_pdf">PDF Open Access direct (si disponible)</option>
+            </select>
+            <a id="iframeExternalBtn" href="#" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-xs font-semibold text-white transition">
+              ↗ Ouvrir en plein écran
+            </a>
+          </div>
+        </div>
+
+        <div class="w-full h-[620px] rounded-xl overflow-hidden border border-white/10 bg-black/70">
+          <iframe id="paperIframe" src="about:blank" class="w-full h-full border-0" referrerpolicy="no-referrer"></iframe>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- HISTORIQUE LOCAL DES ARTICLES CONSULTÉS -->
+    <section class="glass rounded-2xl p-5 space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">🕘 Historique récent (stocké localement)</h3>
+        <button onclick="clearHistory()" class="text-xs text-slate-500 hover:text-slate-300">Effacer</button>
+      </div>
+      <div id="historyList" class="flex flex-wrap gap-2 text-xs"></div>
+    </section>
+
+  </main>
+
+  <script>
+    let currentPaper = {
+      doi: '',
+      pmid: '',
+      pmcid: '',
+      title: '',
+      authors: '',
+      journal: '',
+      year: '',
+      oaPdfUrl: '',
+      abstract: ''
+    };
+
+    const SCIHUB_MIRRORS = [
+      { id: 'scihub_se', name: 'Sci-Hub .se', badge: 'Populaire', base: 'https://sci-hub.se/' },
+      { id: 'scihub_st', name: 'Sci-Hub .st', badge: 'Miroir 2', base: 'https://sci-hub.st/' },
+      { id: 'scihub_ru', name: 'Sci-Hub .ru', badge: 'Miroir 3', base: 'https://sci-hub.ru/' },
+      { id: 'scihub_red', name: 'Sci-Hub .red', badge: 'Miroir 4', base: 'https://sci-hub.red/' },
+      { id: 'scihub_box', name: 'Sci-Hub .box', badge: 'Miroir 5', base: 'https://sci-hub.box/' },
+      { id: 'scihub_al', name: 'Sci-Hub .al', badge: 'Miroir 6', base: 'https://sci-hub.al/' }
+    ];
+
+    function setStatus(msg, show = true) {
+      const banner = document.getElementById('statusBanner');
+      const txt = document.getElementById('statusText');
+      txt.textContent = msg;
+      banner.classList.toggle('hidden', !show);
+    }
+
+    async function pasteClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('queryInput').value = text.trim();
+          resolvePaper();
+        }
+      } catch (e) {
+        document.getElementById('queryInput').focus();
+      }
+    }
+
+    function loadSample(sample) {
+      document.getElementById('queryInput').value = sample;
+      resolvePaper();
+    }
+
+    // Extraction intelligente d'un DOI, PMID, PMCID ou Titre
+    function parseInput(raw) {
+      const s = raw.trim();
+      // 1. Chercher un DOI dans n'importe quelle URL ou citation (10.xxxx/...)
+      const doiMatch = s.match(/\b(10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+)\b/);
+      if (doiMatch) {
+        return { type: 'doi', value: doiMatch[1].replace(/[.,;)\]]+$/, '') };
+      }
+      // 2. PMCID
+      const pmcMatch = s.match(/\b(PMC\d{5,10})\b/i);
+      if (pmcMatch) {
+        return { type: 'pmcid', value: pmcMatch[1].toUpperCase() };
+      }
+      // 3. PMID (ex: PMID: 38412345 ou URL pubmed.ncbi.nlm.nih.gov/38412345 ou 7-8 chiffres)
+      const pubmedUrl = s.match(/pubmed\.ncbi\.nlm\.nih\.gov\/(\d{6,9})/i);
+      if (pubmedUrl) {
+        return { type: 'pmid', value: pubmedUrl[1] };
+      }
+      const pmidMatch = s.match(/^(?:PMID\s*:?\s*)?(\d{7,9})$/i);
+      if (pmidMatch) {
+        return { type: 'pmid', value: pmidMatch[1] };
+      }
+      return { type: 'title', value: s };
+    }
+
+    function reconstructOpenAlexAbstract(invertedIndex) {
+      if (!invertedIndex || typeof invertedIndex !== 'object') return '';
+      const words = [];
+      for (const [word, positions] of Object.entries(invertedIndex)) {
+        if (Array.isArray(positions)) {
+          for (const pos of positions) {
+            words[pos] = word;
+          }
+        }
+      }
+      return words.filter(Boolean).join(' ');
+    }
+
+    async function resolvePaper() {
+      const raw = document.getElementById('queryInput').value.trim();
+      if (!raw) return;
+
+      document.getElementById('candidatesBox').classList.add('hidden');
+      setStatus("Analyse de l'identifiant et recherche sur OpenAlex, Crossref, Europe PMC et Semantic Scholar...", true);
+
+      const parsed = parseInput(raw);
+      let doi = '';
+      let pmid = '';
+      let pmcid = '';
+
+      try {
+        if (parsed.type === 'doi') {
+          doi = parsed.value;
+        } else if (parsed.type === 'pmid' || parsed.type === 'pmcid') {
+          const q = parsed.type === 'pmid' ? `EXT_ID:${parsed.value}` : `PMCID:${parsed.value}`;
+          const epmcResp = await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(q)}&format=json&resultType=core`);
+          const epmcData = await epmcResp.json();
+          const hit = epmcData?.resultList?.result?.[0];
+          if (hit) {
+            doi = hit.doi || '';
+            pmid = hit.pmid || (parsed.type === 'pmid' ? parsed.value : '');
+            pmcid = hit.pmcid || (parsed.type === 'pmcid' ? parsed.value : '');
+          }
+        } else {
+          // Recherche par titre via OpenAlex
+          const oaSearch = await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(parsed.value)}&per-page=5`);
+          const oaSearchData = await oaSearch.json();
+          const results = oaSearchData?.results || [];
+          if (results.length > 0) {
+            renderTitleCandidates(results);
+            const first = results[0];
+            doi = (first.doi || '').replace('https://doi.org/', '');
+          }
+        }
+
+        await hydrateAndRender(doi, pmid, pmcid, raw);
+      } catch (err) {
+        console.error(err);
+        await hydrateAndRender(doi || raw, pmid, pmcid, raw);
+      } finally {
+        setStatus('', false);
+      }
+    }
+
+    function renderTitleCandidates(results) {
+      const box = document.getElementById('candidatesBox');
+      const list = document.getElementById('candidatesList');
+      list.innerHTML = '';
+      results.forEach(item => {
+        const cleanDoi = (item.doi || '').replace('https://doi.org/', '');
+        if (!cleanDoi) return;
+        const year = item.publication_year || '—';
+        const venue = item.primary_location?.source?.display_name || 'Article';
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition flex items-center justify-between gap-3';
+        btn.onclick = () => {
+          document.getElementById('queryInput').value = cleanDoi;
+          resolvePaper();
+        };
+        btn.innerHTML = `
+          <div class="min-w-0">
+            <div class="text-xs sm:text-sm font-semibold text-white truncate">${escapeHtml(item.display_name || 'Sans titre')}</div>
+            <div class="text-[11px] text-slate-400">${escapeHtml(venue)} (${year}) · <span class="text-pink-400 mono">${escapeHtml(cleanDoi)}</span></div>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-300 text-xs font-semibold shrink-0">Charger</span>
+        `;
+        list.appendChild(btn);
+      });
+      if (list.children.length > 1) {
+        box.classList.remove('hidden');
+      }
+    }
+
+    async function hydrateAndRender(doi, pmid, pmcid, fallbackQuery) {
+      currentPaper = {
+        doi: doi || '',
+        pmid: pmid || '',
+        pmcid: pmcid || '',
+        title: fallbackQuery,
+        authors: 'Auteurs non spécifiés',
+        journal: 'Publication scientifique',
+        year: '—',
+        oaPdfUrl: '',
+         oaStatus: 'Paywall / Non-OA (Utiliser Sci-Hub ou Anna\'s Archive)',
+        citations: null,
+        abstract: ''
+      };
+
+      // Requêtes parallèles vers OpenAlex, Crossref, Europe PMC et Semantic Scholar
+      const tasks = [];
+
+      if (doi) {
+        tasks.push(
+          fetch(`https://api.openalex.org/works/https://doi.org/${encodeURIComponent(doi)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(oa => {
+              if (!oa) return;
+              currentPaper.title = oa.display_name || oa.title || currentPaper.title;
+              currentPaper.year = oa.publication_year || currentPaper.year;
+              currentPaper.journal = oa.primary_location?.source?.display_name || currentPaper.journal;
+              if (Array.isArray(oa.authorships) && oa.authorships.length) {
+                currentPaper.authors = oa.authorships.slice(0, 8).map(a => a.author?.display_name).filter(Boolean).join(', ') + (oa.authorships.length > 8 ? ' et al.' : '');
+              }
+              if (typeof oa.cited_by_count === 'number') {
+                currentPaper.citations = oa.cited_by_count;
+              }
+              const bestPdf = oa.best_oa_location?.pdf_url || oa.open_access?.oa_url || oa.primary_location?.pdf_url;
+              if (bestPdf) {
+                currentPaper.oaPdfUrl = bestPdf;
+              }
+              if (oa.open_access?.is_oa) {
+                currentPaper.oaStatus = `Open Access (${(oa.open_access.oa_status || 'OA').toUpperCase()})`;
+              }
+              if (oa.ids?.pmid) {
+                currentPaper.pmid = oa.ids.pmid.replace('https://pubmed.ncbi.nlm.nih.gov/', '');
+              }
+              if (oa.ids?.pmcid) {
+                currentPaper.pmcid = oa.ids.pmcid.replace('https://www.ncbi.nlm.nih.gov/pmc/articles/', '').replace('/', '');
+              }
+              const abs = reconstructOpenAlexAbstract(oa.abstract_inverted_index);
+              if (abs) currentPaper.abstract = abs;
+            })
+            .catch(() => {})
+        );
+
+        tasks.push(
+          fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(cr => {
+              const m = cr?.message;
+              if (!m) return;
+              if (currentPaper.title === fallbackQuery && m.title?.[0]) {
+                currentPaper.title = m.title[0];
+              }
+              if (currentPaper.journal === 'Publication scientifique' && m['container-title']?.[0]) {
+                currentPaper.journal = m['container-title'][0];
+              }
+              const yr = m.published?.['date-parts']?.[0]?.[0] || m.created?.['date-parts']?.[0]?.[0];
+              if (currentPaper.year === '—' && yr) {
+                currentPaper.year = yr;
+              }
+              if (currentPaper.authors === 'Auteurs non spécifiés' && Array.isArray(m.author)) {
+                currentPaper.authors = m.author.slice(0, 8).map(a => [a.given, a.family].filter(Boolean).join(' ')).join(', ');
+              }
+              if (!currentPaper.abstract && m.abstract) {
+                currentPaper.abstract = m.abstract.replace(/<[^>]+>/g, '');
+              }
+            })
+            .catch(() => {})
+        );
+
+        tasks.push(
+          fetch(`https://api.semanticscholar.org/graph/v1/paper/DOI:${encodeURIComponent(doi)}?fields=title,year,venue,openAccessPdf,externalIds,abstract,citationCount`)
+            .then(r => r.ok ? r.json() : null)
+            .then(s2 => {
+              if (!s2) return;
+              if (!currentPaper.oaPdfUrl && s2.openAccessPdf?.url) {
+                currentPaper.oaPdfUrl = s2.openAccessPdf.url;
+                currentPaper.oaStatus = 'Open Access (Semantic Scholar PDF)';
+              }
+              if (!currentPaper.pmid && s2.externalIds?.PubMed) {
+                currentPaper.pmid = String(s2.externalIds.PubMed);
+              }
+              if (!currentPaper.pmcid && s2.externalIds?.PubMedCentral) {
+                currentPaper.pmcid = String(s2.externalIds.PubMedCentral);
+              }
+              if (!currentPaper.abstract && s2.abstract) {
+                currentPaper.abstract = s2.abstract;
+              }
+            })
+            .catch(() => {})
+        );
+      }
+
+      await Promise.allSettled(tasks);
+      renderPaperUI();
+      saveToHistory(currentPaper);
+    }
+
+    function renderPaperUI() {
+      document.getElementById('resultsContainer').classList.remove('hidden');
+      document.getElementById('metaYear').textContent = currentPaper.year || '—';
+      document.getElementById('metaJournal').textContent = currentPaper.journal || 'Article scientifique';
+      document.getElementById('metaTitle').textContent = currentPaper.title || currentPaper.doi;
+      document.getElementById('metaAuthors').textContent = currentPaper.authors;
+      document.getElementById('metaDoi').textContent = currentPaper.doi || 'Non résolu';
+
+      const oaBadge = document.getElementById('metaOaBadge');
+      oaBadge.textContent = currentPaper.oaStatus;
+      if (currentPaper.oaPdfUrl) {
+        oaBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        document.getElementById('directPdfBox').classList.remove('hidden');
+        document.getElementById('directPdfLink').href = currentPaper.oaPdfUrl;
+      } else {
+        oaBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        document.getElementById('directPdfBox').classList.add('hidden');
+      }
+
+      document.getElementById('metaCitations').textContent =
+        typeof currentPaper.citations === 'number' ? `· ${currentPaper.citations} citations` : '';
+
+      const pmidWrap = document.getElementById('metaPmidWrap');
+      if (currentPaper.pmid) {
+        pmidWrap.classList.remove('hidden');
+        document.getElementById('metaPmid').textContent = currentPaper.pmid;
+      } else {
+        pmidWrap.classList.add('hidden');
+      }
+
+      const pmcidWrap = document.getElementById('metaPmcidWrap');
+      if (currentPaper.pmcid) {
+        pmcidWrap.classList.remove('hidden');
+        document.getElementById('metaPmcid').textContent = currentPaper.pmcid;
+      } else {
+        pmcidWrap.classList.add('hidden');
+      }
+
+      const absDetails = document.getElementById('abstractDetails');
+      if (currentPaper.abstract) {
+        absDetails.classList.remove('hidden');
+        document.getElementById('metaAbstract').textContent = currentPaper.abstract;
+      } else {
+        absDetails.classList.add('hidden');
+      }
+
+      const d = encodeURIComponent(currentPaper.doi || currentPaper.title);
+      const rawDoi = currentPaper.doi || currentPaper.title;
+
+      // 1. Boutons Shadow Libraries (Sci-Hub miroirs + Anna's Archive SciDB + LibGen + Z-Library + Nexus)
+      const shadowItems = [
+        {
+          name: "Anna's Archive · SciDB",
+          desc: "Recommandé pour articles récents (2021–2026) & anciens",
+          url: `https://annas-archive.org/scidb/${rawDoi}`,
+          accent: "border-pink-500/40 bg-pink-500/15 hover:bg-pink-500/25 text-pink-200"
+        },
+        {
+          name: "Sci-Hub .se",
+          desc: "Miroir principal historique (~88M articles)",
+          url: `https://sci-hub.se/${rawDoi}`,
+          accent: "border-violet-500/40 bg-violet-500/15 hover:bg-violet-500/25 text-violet-200"
+        },
+        {
+          name: "Sci-Hub .st",
+          desc: "Miroir secondaire rapide",
+          url: `https://sci-hub.st/${rawDoi}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Sci-Hub .ru",
+          desc: "Miroir alternatif .ru",
+          url: `https://sci-hub.ru/${rawDoi}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Sci-Hub .red",
+          desc: "Miroir alternatif .red",
+          url: `https://sci-hub.red/${rawDoi}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Sci-Hub .box",
+          desc: "Miroir alternatif .box",
+          url: `https://sci-hub.box/${rawDoi}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Library Genesis (Scimag)",
+          desc: "Archive scientifique LibGen (.li / .rs)",
+          url: `https://libgen.li/index.php?req=${d}&columns%5B%5D=t&columns%5B%5D=a&columns%5B%5D=s&columns%5B%5D=y&columns%5B%5D=p&columns%5B%5D=i&objects%5B%5D=f&objects%5B%5D=e&objects%5B%5D=s&objects%5B%5D=a&objects%5B%5D=p&objects%5B%5D=w&topics%5B%5D=a`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Anna's Archive · Recherche Globale",
+          desc: "Recherche DOI + Titre dans Z-Lib, LibGen & DuXiu",
+          url: `https://annas-archive.org/search?q=${d}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Sci-Hub / Nexus Telegram Bots",
+          desc: "Coller le DOI dans @scihubot sur Telegram",
+          url: `https://t.me/scihubot`,
+          accent: "border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-200"
+        },
+        {
+          name: "PaperPanda / Sci-Hub Eva",
+          desc: "Résolveur DOI officiel (doi.org)",
+          url: `https://doi.org/${rawDoi}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        }
+      ];
+
+      const shadowGrid = document.getElementById('shadowLinksGrid');
+      shadowGrid.innerHTML = shadowItems.map(item => `
+        <a href="${item.url}" target="_blank" rel="noopener"
+          class="btn-hub p-3 rounded-xl border ${item.accent} flex flex-col justify-between gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold text-xs sm:text-sm">${escapeHtml(item.name)}</span>
+            <span class="text-xs opacity-75">↗</span>
+          </div>
+          <span class="text-[11px] opacity-80 leading-tight">${escapeHtml(item.desc)}</span>
+        </a>
+      `).join('');
+
+      // 2. Boutons Open Access & Preprints (Idéal pour articles récents 2022–2026 hors Sci-Hub)
+      const oaItems = [
+        ...(currentPaper.oaPdfUrl ? [{
+          name: "PDF Open Access Direct",
+          desc: "Lien PDF gratuit détecté via OpenAlex / Semantic Scholar",
+          url: currentPaper.oaPdfUrl,
+          accent: "border-emerald-500/50 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200"
+        }] : []),
+        ...(currentPaper.pmcid ? [{
+          name: `PubMed Central (${currentPaper.pmcid})`,
+          desc: "Texte intégral gratuit NIH PMC",
+          url: `https://pmc.ncbi.nlm.nih.gov/articles/${currentPaper.pmcid}/`,
+          accent: "border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200"
+        }] : []),
+        {
+          name: "Google Scholar (Bouton [PDF])",
+          desc: "Trouve les PDF ResearchGate, HAL & universités",
+          url: `https://scholar.google.com/scholar?q=${d}`,
+          accent: "border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-200"
+        },
+        {
+          name: "Europe PMC (Full Text)",
+          desc: "Archive biomédicale européenne & preprints",
+          url: `https://europepmc.org/search?query=${d}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Semantic Scholar",
+          desc: "PDF auteur, citations & figures extraites",
+          url: `https://www.semanticscholar.org/search?q=${d}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "OpenAlex Work JSON / OA",
+          desc: "Toutes les localisations Open Access connues",
+          url: `https://openalex.org/works?page=1&filter=doi:${d}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "CORE.ac.uk (Dépôts Universitaires)",
+          desc: "250M+ manuscrits auteurs & thèses en accès libre",
+          url: `https://core.ac.uk/search?q=${d}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "BASE (Bielefeld Academic Search)",
+          desc: "Moteur académique profond (PDF institutionnels)",
+          url: `https://www.base-search.net/Search/Results?lookfor=${d}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "ResearchGate Direct Search",
+          desc: "Versions auteurs partagées par les chercheurs",
+          url: `https://www.google.com/search?q=site%3Aresearchgate.net+${encodeURIComponent('"' + (currentPaper.title || currentPaper.doi) + '"')}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        },
+        {
+          name: "Recherche Directe filetype:pdf",
+          desc: "Chasse le fichier PDF brut sur les serveurs universitaires",
+          url: `https://www.google.com/search?q=${encodeURIComponent('"' + (currentPaper.title || currentPaper.doi) + '" filetype:pdf')}`,
+          accent: "border-white/10 bg-white/5 hover:bg-white/10 text-slate-200"
+        }
+      ];
+
+      const oaGrid = document.getElementById('oaLinksGrid');
+      oaGrid.innerHTML = oaItems.map(item => `
+        <a href="${item.url}" target="_blank" rel="noopener"
+          class="btn-hub p-3 rounded-xl border ${item.accent} flex flex-col justify-between gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold text-xs sm:text-sm">${escapeHtml(item.name)}</span>
+            <span class="text-xs opacity-75">↗</span>
+          </div>
+          <span class="text-[11px] opacity-80 leading-tight">${escapeHtml(item.desc)}</span>
+        </a>
+      `).join('');
+
+      updateIframeSource();
+    }
+
+    function updateIframeSource() {
+      const sel = document.getElementById('iframeMirrorSelect').value;
+      const rawDoi = currentPaper.doi || currentPaper.title;
+      if (!rawDoi) return;
+
+      let targetUrl = `https://sci-hub.se/${rawDoi}`;
+      if (sel === 'scihub_st') targetUrl = `https://sci-hub.st/${rawDoi}`;
+      else if (sel === 'scihub_ru') targetUrl = `https://sci-hub.ru/${rawDoi}`;
+      else if (sel === 'scihub_red') targetUrl = `https://sci-hub.red/${rawDoi}`;
+      else if (sel === 'scihub_box') targetUrl = `https://sci-hub.box/${rawDoi}`;
+      else if (sel === 'annas') targetUrl = `https://annas-archive.org/scidb/${rawDoi}`;
+      else if (sel === 'oa_pdf' && currentPaper.oaPdfUrl) targetUrl = currentPaper.oaPdfUrl;
+
+      document.getElementById('paperIframe').src = targetUrl;
+      document.getElementById('iframeExternalBtn').href = targetUrl;
+    }
+
+    function copyCurrentDoi() {
+      if (!currentPaper.doi) return;
+      navigator.clipboard.writeText(currentPaper.doi);
+    }
+
+    function saveToHistory(paper) {
+      if (!paper.doi) return;
+      try {
+        const list = JSON.parse(localStorage.getItem('sci_aggregator_history') || '[]');
+        const filtered = list.filter(x => x.doi !== paper.doi);
+        filtered.unshift({
+          doi: paper.doi,
+          title: (paper.title || paper.doi).slice(0, 70),
+          year: paper.year || ''
+        });
+        localStorage.setItem('sci_aggregator_history', JSON.stringify(filtered.slice(0, 10)));
+        renderHistory();
+      } catch (e) {}
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('historyList');
+      try {
+        const list = JSON.parse(localStorage.getItem('sci_aggregator_history') || '[]');
+        if (!list.length) {
+          container.innerHTML = '<span class="text-slate-500">Aucun article consulté récemment.</span>';
+          return;
+        }
+        container.innerHTML = list.map(item => `
+          <button onclick="loadSample('${escapeHtml(item.doi)}')"
+            class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-left transition max-w-xs truncate">
+            <span class="text-pink-400 mono font-semibold">${escapeHtml(item.doi)}</span>
+            <span class="text-slate-400 ml-1">· ${escapeHtml(item.title)}</span>
+          </button>
+        `).join('');
+      } catch (e) {}
+    }
+
+    function clearHistory() {
+      localStorage.removeItem('sci_aggregator_history');
+      renderHistory();
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Auto-run if ?doi= is passed in URL
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHistory();
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('doi') || params.get('q');
+      if (q) {
+        document.getElementById('queryInput').value = q;
+        resolvePaper();
+      } else {
+        loadSample('10.1148/radiol.2020200642');
+      }
+    });
+  </script>
+</body>
+</html>
