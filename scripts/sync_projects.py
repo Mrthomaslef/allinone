@@ -95,7 +95,7 @@ KNOWN_METADATA = {
     },
     "recomp-check": {
         "title": "Recomp Check — AYN Thor & Mac mini M4",
-        "subtitle": "Quels Recomp / portages natifs tournent sur ton AYN Thor et ton Mac mini M4 : 132 jeux (Switch nxnative/nx2android, Zelda, Mario 64, BotW, Skate 3…) · filtres Les deux / AYN / Mac · page Mises à jour de tes émulateurs & recomps (notes officielles)",
+        "subtitle": "Quels Recomp / portages natifs tournent sur ton AYN Thor et ton Mac mini M4 : 132 jeux (Switch nxnative/nx2android, Zelda, Mario 64, BotW, Skate 3…) · filtres Les deux / AYN / Mac · page Mises à jour de tes émulateurs & recomps (notes officielles) · actualisé automatiquement tous les 3 jours (date affichée)",
         "category": "games-family",
         "emoji": "⚡",
         "prodUrl": "https://mrthomaslef.github.io/ayn-thor/recomp/",
@@ -627,7 +627,7 @@ def main():
             {
                 "id": "recomp-check",
                 "title": "Recomp Check — AYN Thor & Mac mini M4",
-                "subtitle": "Quels Recomp / portages natifs tournent sur ton AYN Thor et ton Mac mini M4 : 132 jeux (Switch nxnative/nx2android, Zelda, Mario 64, BotW, Skate 3…) · filtres Les deux / AYN / Mac · page Mises à jour de tes émulateurs & recomps (notes officielles)",
+                "subtitle": "Quels Recomp / portages natifs tournent sur ton AYN Thor et ton Mac mini M4 : 132 jeux (Switch nxnative/nx2android, Zelda, Mario 64, BotW, Skate 3…) · filtres Les deux / AYN / Mac · page Mises à jour de tes émulateurs & recomps (notes officielles) · actualisé automatiquement tous les 3 jours (date affichée)",
                 "category": "games-family",
                 "emoji": "⚡",
                 "logoUrl": "assets/recomp-check-icon.svg?v=1",
