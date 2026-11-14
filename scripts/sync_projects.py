@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "scan-doc": {
+        "title": "ScanDoc AI — Scanner iPhone vers Mon Drive",
+        "subtitle": "Scanner de documents papier iPhone sans filigrane · Filtre Couleur Magique, OCR Apple Vision, renommage IA en 3 formats & rangement automatique dans Mon Drive",
+        "category": "daily-tools",
+        "emoji": "📸",
+        "prodUrl": "https://mrthomaslef.github.io/scan-doc/",
+        "logoUrl": "assets/scan-doc.svg?v=1",
+    },
     "pokemon-play-it": {
         "title": "Pokémon : À toi de jouer ! (Play It! 1999)",
         "subtitle": "JCC Pokémon 1999 sur mobile · 228 cartes FR, Boosters, Création de Deck (mode auto 30/60 cartes, Énergies illimitées), Duel IA, Multijoueur & Tutoriel Juliette",
