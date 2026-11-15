@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14b8a6"/><stop offset="1" stop-color="#0f766e"/></linearGradient>
+    <linearGradient id="bld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#f1e7d3"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#sky)"/>
+  <circle cx="400" cy="112" r="38" fill="#fde68a" opacity=".9"/>
+  <!-- arbres du bois -->
+  <g fill="#065f46"><circle cx="86" cy="330" r="62"/><circle cx="140" cy="290" r="58"/><circle cx="430" cy="320" r="60"/><circle cx="390" cy="285" r="48"/></g>
+  <g fill="#10b981"><circle cx="110" cy="312" r="44"/><circle cx="414" cy="300" r="40"/></g>
+  <!-- immeuble haussmannien -->
+  <path d="M166 176 L256 118 L346 176 Z" fill="#475569"/>
+  <rect x="172" y="174" width="168" height="250" fill="url(#bld)"/>
+  <g fill="#0f766e" opacity=".85">
+    <rect x="194" y="200" width="30" height="40" rx="4"/><rect x="241" y="200" width="30" height="40" rx="4"/><rect x="288" y="200" width="30" height="40" rx="4"/>
+    <rect x="194" y="262" width="30" height="40" rx="4"/><rect x="241" y="262" width="30" height="40" rx="4"/><rect x="288" y="262" width="30" height="40" rx="4"/>
+    <rect x="194" y="324" width="30" height="40" rx="4"/><rect x="288" y="324" width="30" height="40" rx="4"/>
+  </g>
+  <rect x="236" y="340" width="40" height="84" rx="20" fill="#7c2d12"/>
+  <g stroke="#334155" stroke-width="5"><line x1="186" y1="246" x2="326" y2="246"/><line x1="186" y1="308" x2="326" y2="308"/></g>
+  <rect x="40" y="420" width="432" height="22" rx="11" fill="#064e3b" opacity=".5"/>
+  <!-- repère carte -->
+  <g transform="translate(330 120)">
+    <path d="M60 0c33 0 60 27 60 60 0 45-60 104-60 104S0 105 0 60C0 27 27 0 60 0z" fill="#ef4444" stroke="#fff" stroke-width="10"/>
+    <circle cx="60" cy="58" r="22" fill="#fff"/>
+  </g>
+</svg>

@@ -37,6 +37,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/allinone/uncensored/",
         "logoUrl": "uncensored/assets/icon.svg?v=1",
     },
+    "recherche-d-appartement": {
+        "title": "Appart côté Bois — Recherche de location",
+        "subtitle": "Annonces SeLoger/Logic-Immo, Bien'ici & PAP collectées 2×/jour · Paris 12e côté bois, Saint-Mandé, Vincennes côté château, Charenton · Carte datée & candidature médecin en 1 bouton",
+        "category": "daily-tools",
+        "emoji": "🏡",
+        "prodUrl": "https://mrthomaslef.github.io/recherche-d-appartement/",
+        "logoUrl": "assets/recherche-d-appartement-icon.svg?v=1",
+    },
     "carte-et-abonnement": {
         "title": "Pass Zoo de Vincennes & MNHN — Billets & Abonnements",
         "subtitle": "Portefeuille mobile hors-ligne des 2 Pass Annuels SOLO (Parc Zoologique de Paris, Jardin des Plantes, Grande Galerie, Musée de l'Homme) · QR Codes & PDF",
