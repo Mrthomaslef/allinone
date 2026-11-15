@@ -70,7 +70,7 @@
               Mac Mini M4
             </span>
           </div>
-          <p class="text-xs text-slate-400">Recherche 1337x Multi-Indexers · Cache Instantané TorBox & P2P</p>
+          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.0 · TPB</span> Recherche 1337x + The Pirate Bay · Cache Instantané TorBox & P2P</p>
         </div>
       </div>
 
@@ -210,7 +210,7 @@
               <option value="all">🌐 1337x + Tous Indexeurs</option>
               <option value="1337x">🟠 1337x Exclusivement</option>
               <option value="rarbg">🟣 TheRARBG</option>
-              <option value="apibay">🏴‍☠️ ThePirateBay</option>
+              <option value="tpb">🏴‍☠️ The Pirate Bay</option>
               <option value="nyaa">🐱 Nyaa.si</option>
             </select>
 
@@ -223,9 +223,12 @@
 
         <!-- 1-Click Quick Searches (1337x Specialties) -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-          <span class="text-slate-500 shrink-0">Raccourcis 1337x :</span>
+          <span class="text-slate-500 shrink-0">Raccourcis :</span>
           <button onclick="quickQuery('', 'all', '1337x')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
             🏆 Top 100 1337x
+          </button>
+          <button onclick="quickQuery('', 'all', 'tpb')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🏴‍☠️ Top 100 TPB
           </button>
           <button onclick="quickQuery('FitGirl', 'games', 'all')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
             🥄 FitGirl Repacks
@@ -794,8 +797,12 @@
 
       container.innerHTML = items.map((it, idx) => {
         const is1337 = (it.tracker || "").toLowerCase().includes("1337");
+        const isTpb = it.tracker === "ThePirateBay";
+        const tpbTrust = it.uploaderStatus === "vip" ? " 💀VIP" : (it.uploaderStatus === "trusted" ? " ✔︎" : "");
         const trackerBadge = is1337
           ? `<span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold text-[10px]">1337x</span>`
+          : isTpb
+          ? `<span class="px-2 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold text-[10px]">🏴‍☠️ TPB${tpbTrust}</span>`
           : `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-white/10 font-medium text-[10px]">${escapeHtml(it.tracker || 'Torrent')}</span>`;
 
         const cacheBadge = it.torboxCached
