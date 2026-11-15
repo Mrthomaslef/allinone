@@ -13,7 +13,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Auto-mise à jour : si une version plus récente est publiée, recharge la page sans cache.
-    const APP_VERSION = "2.2";
+    const APP_VERSION = "2.3";
     async function checkAppUpdate() {
       try {
         const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
@@ -89,7 +89,7 @@
               Mac Mini M4
             </span>
           </div>
-          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.2 · TPB + VF</span> Recherche 1337x + The Pirate Bay + OxTorrent · Cache Instantané TorBox & P2P</p>
+          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.3 · TPB + RARBG + VF</span> Recherche 1337x + The Pirate Bay + OxTorrent · Cache Instantané TorBox & P2P</p>
         </div>
       </div>
 
@@ -228,7 +228,7 @@
             <select id="sourceSelect" onchange="runSearch()" class="bg-slate-900 text-slate-300 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs">
               <option value="all">🌐 1337x + Tous Indexeurs</option>
               <option value="1337x">🟠 1337x Exclusivement</option>
-              <option value="rarbg">🟣 TheRARBG</option>
+              <option value="rarbg">🟣 RARBG (TheRARBG)</option>
               <option value="tpb">🏴‍☠️ The Pirate Bay</option>
               <option value="oxtorrent">🇫🇷 OxTorrent (VF)</option>
               <option value="nyaa">🐱 Nyaa.si</option>
@@ -249,6 +249,9 @@
           </button>
           <button onclick="quickQuery('TRUEFRENCH', 'all', 'oxtorrent')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
             🇫🇷 Films VF (OxTorrent)
+          </button>
+          <button onclick="quickQuery('', 'all', 'rarbg')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🟣 Top RARBG
           </button>
           <button onclick="quickQuery('', 'all', 'tpb')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
             🏴‍☠️ Top 100 TPB
