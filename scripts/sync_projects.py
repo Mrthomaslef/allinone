@@ -119,7 +119,7 @@ KNOWN_METADATA = {
     },
     "torrent": {
         "title": "1337·Mac — Station Torrent & TorBox (Mac mini)",
-        "subtitle": "Recherche 1337x, The Pirate Bay, OxTorrent (VF), RARBG & Nyaa · Vérification Cache Instantané TorBox & téléchargement direct sur le Mac Mini (SSD / Movies / P2P)",
+        "subtitle": "Recherche unifiée 1337x, The Pirate Bay, RARBG, OxTorrent (VF), Nyaa & YTS · Vérification Cache Instantané TorBox & téléchargement direct sur le Mac Mini (SSD / Movies / P2P)",
         "category": "daily-tools",
         "emoji": "🧲",
         "prodUrl": "https://mrthomaslef.github.io/allinone/torrent/",
@@ -587,7 +587,7 @@ def main():
             {
                 "id": "torrent",
                 "title": "1337·Mac — Station Torrent & TorBox (Mac mini)",
-                "subtitle": "Recherche 1337x, The Pirate Bay, OxTorrent (VF), RARBG & Nyaa · Vérification Cache Instantané TorBox & téléchargement direct sur le Mac Mini (SSD / Movies / P2P)",
+                "subtitle": "Recherche unifiée 1337x, The Pirate Bay, RARBG, OxTorrent (VF), Nyaa & YTS · Vérification Cache Instantané TorBox & téléchargement direct sur le Mac Mini (SSD / Movies / P2P)",
                 "category": "daily-tools",
                 "emoji": "🧲",
                 "logoUrl": "torrent/assets/icon.svg?v=1",

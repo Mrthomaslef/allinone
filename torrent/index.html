@@ -13,7 +13,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Auto-mise à jour : si une version plus récente est publiée, recharge la page sans cache.
-    const APP_VERSION = "2.3";
+    const APP_VERSION = "2.4";
     async function checkAppUpdate() {
       try {
         const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
@@ -89,7 +89,7 @@
               Mac Mini M4
             </span>
           </div>
-          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.3 · TPB + RARBG + VF</span> Recherche 1337x + The Pirate Bay + OxTorrent · Cache Instantané TorBox & P2P</p>
+          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.4 · Toutes sources</span> Recherche 1337x + The Pirate Bay + OxTorrent · Cache Instantané TorBox & P2P</p>
         </div>
       </div>
 
@@ -225,14 +225,7 @@
 
           <!-- Source & Cache Filter -->
           <div class="flex flex-wrap items-center gap-2">
-            <select id="sourceSelect" onchange="runSearch()" class="bg-slate-900 text-slate-300 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs">
-              <option value="all">🌐 1337x + Tous Indexeurs</option>
-              <option value="1337x">🟠 1337x Exclusivement</option>
-              <option value="rarbg">🟣 RARBG (TheRARBG)</option>
-              <option value="tpb">🏴‍☠️ The Pirate Bay</option>
-              <option value="oxtorrent">🇫🇷 OxTorrent (VF)</option>
-              <option value="nyaa">🐱 Nyaa.si</option>
-            </select>
+            
 
             <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs cursor-pointer select-none">
               <input type="checkbox" id="onlyCachedCheckbox" onchange="renderSearchResults()" class="accent-emerald-500 rounded" />
@@ -287,6 +280,9 @@
           </select>
         </div>
       </div>
+
+      <!-- Filtre par source (toutes les sources au même endroit) -->
+      <div id="sourceChips" class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs"></div>
 
       <!-- Search Results List -->
       <div id="searchResultsContainer" class="space-y-2.5"></div>
@@ -395,6 +391,39 @@
     let currentTab = "search";
     let currentCategory = "all";
     let lastSearchResults = [];
+    let lastSourceCounts = {};
+    let currentTracker = "all";
+    const SOURCE_META = {
+      "1337x": { label: "1337x", icon: "🟠" },
+      "ThePirateBay": { label: "The Pirate Bay", icon: "🏴‍☠️" },
+      "TheRARBG": { label: "RARBG", icon: "🟣" },
+      "OxTorrent": { label: "OxTorrent", icon: "🇫🇷" },
+      "Nyaa.si": { label: "Nyaa", icon: "🐱" },
+      "YTS": { label: "YTS", icon: "🎬" },
+    };
+    const SRC_TO_TRACKER = { "1337x": "1337x", tpb: "ThePirateBay", apibay: "ThePirateBay", rarbg: "TheRARBG", oxtorrent: "OxTorrent", nyaa: "Nyaa.si", all: "all" };
+
+    function setTracker(t) {
+      currentTracker = t;
+      renderSearchResults();
+    }
+
+    function renderSourceChips() {
+      const el = document.getElementById("sourceChips");
+      if (!el) return;
+      const counts = {};
+      lastSearchResults.forEach(it => { const t = it.tracker || "Autre"; counts[t] = (counts[t] || 0) + 1; });
+      const order = Object.keys(SOURCE_META).concat(Object.keys(counts).filter(t => !SOURCE_META[t]));
+      const chip = (key, label, n) => {
+        const active = currentTracker === key;
+        const empty = n === 0;
+        return `<button onclick="setTracker('${key}')" class="shrink-0 px-2.5 py-1 rounded-lg border font-medium ${
+          active ? "bg-orange-500/20 text-orange-200 border-orange-500/50" : "bg-slate-900 text-slate-300 border-white/10 hover:text-white"
+        } ${empty ? "opacity-40" : ""}">${label} <span class="text-slate-500">${n}</span></button>`;
+      };
+      el.innerHTML = chip("all", "🌐 Toutes", lastSearchResults.length) +
+        order.map(t => chip(t, `${(SOURCE_META[t] || {}).icon || "🧲"} ${(SOURCE_META[t] || {}).label || t}`, counts[t] || 0)).join("");
+    }
     let liveStatus = { destinations: [], jobs: [] };
 
     function showToast(msg, isError = false) {
@@ -740,7 +769,7 @@
 
     function quickQuery(q, cat, src) {
       document.getElementById("searchInput").value = q;
-      if (src) document.getElementById("sourceSelect").value = src;
+      currentTracker = SRC_TO_TRACKER[src] || "all";
       setCategory(cat || "all");
     }
 
@@ -756,11 +785,11 @@
 
     async function runSearch() {
       const q = document.getElementById("searchInput").value.trim();
-      const src = document.getElementById("sourceSelect").value;
+      const src = "all";
       const container = document.getElementById("searchResultsContainer");
       const summary = document.getElementById("searchSummaryText");
 
-      summary.innerHTML = `<span class="text-orange-400 animate-pulse">⚡ Interrogation de 1337x & vérification du Cache Instantané TorBox...</span>`;
+      summary.innerHTML = `<span class="text-orange-400 animate-pulse">⚡ Interrogation de 1337x, TPB, RARBG, OxTorrent, Nyaa & YTS + cache TorBox...</span>`;
       container.innerHTML = `
         <div class="glass rounded-2xl p-10 text-center space-y-2">
           <div class="inline-block w-7 h-7 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
@@ -790,7 +819,11 @@
       const onlyCached = document.getElementById("onlyCachedCheckbox").checked;
       const sortMode = document.getElementById("sortSelect").value;
 
+      renderSourceChips();
       let items = [...lastSearchResults];
+      if (currentTracker !== "all") {
+        items = items.filter(it => (it.tracker || "Autre") === currentTracker);
+      }
       if (onlyCached) {
         items = items.filter(it => it.torboxCached);
       }
