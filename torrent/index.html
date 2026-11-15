@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr" class="dark">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>1337·Mac — Station Torrent & TorBox Mac Mini</title>
@@ -9,6 +11,23 @@
   <meta name="theme-color" content="#0b0f17" />
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Auto-mise à jour : si une version plus récente est publiée, recharge la page sans cache.
+    const APP_VERSION = "2.1";
+    async function checkAppUpdate() {
+      try {
+        const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
+        if (!r.ok) return;
+        const v = (await r.json()).version;
+        if (v && v !== APP_VERSION && sessionStorage.getItem("app_reloaded_for") !== v) {
+          sessionStorage.setItem("app_reloaded_for", v);
+          location.replace(`${location.pathname}?v=${encodeURIComponent(v)}&t=${Date.now()}${location.hash}`);
+        }
+      } catch (e) {}
+    }
+    checkAppUpdate();
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") checkAppUpdate(); });
+  </script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -70,7 +89,7 @@
               Mac Mini M4
             </span>
           </div>
-          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.0 · TPB</span> Recherche 1337x + The Pirate Bay · Cache Instantané TorBox & P2P</p>
+          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.1 · TPB</span> Recherche 1337x + The Pirate Bay · Cache Instantané TorBox & P2P</p>
         </div>
       </div>
 
