@@ -42,7 +42,7 @@ KNOWN_METADATA = {
         "subtitle": "Annonces SeLoger/Logic-Immo, Bien'ici & PAP collectées 2×/jour · Paris 12e côté bois, Saint-Mandé, Vincennes côté château, Charenton · Carte datée & candidature médecin en 1 bouton",
         "category": "daily-tools",
         "emoji": "🏡",
-        "prodUrl": "https://mrthomaslef.github.io/recherche-d-appartement/",
+        "prodUrl": "https://mrthomaslef.github.io/recherche-d-appartement/?v=3",
         "logoUrl": "assets/recherche-d-appartement-icon.svg?v=1",
     },
     "carte-et-abonnement": {
