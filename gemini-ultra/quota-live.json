@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-15T17:52:08Z",
+  "checkedAt": "2026-11-15T17:52:16Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://streams-straight-mature-properties.trycloudflare.com",
   "subscription": {
@@ -190,8 +190,8 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z",
-      "startedAt": "2026-11-15T17:52:09Z",
+      "resetsAt": "2026-11-15T22:52:17Z",
+      "startedAt": "2026-11-15T17:52:17Z",
       "durationMins": 300,
       "remainingSeconds": 18000,
       "elapsedPercent": 0.0,
@@ -284,7 +284,7 @@
       "resetsAt": "2026-11-21T01:30:07Z",
       "startedAt": "2026-11-14T01:30:07Z",
       "durationMins": 10080,
-      "remainingSeconds": 459478,
+      "remainingSeconds": 459470,
       "elapsedPercent": 24.03,
       "paceDeltaPercent": -19.7,
       "burnRatePerHour": 0.11,
@@ -399,7 +399,7 @@
       "durationMins": 43200,
       "resetsAt": "2026-12-14T01:30:07Z",
       "startedAt": "2026-11-14T01:30:07Z",
-      "remainingSeconds": 2446678,
+      "remainingSeconds": 2446670,
       "elapsedPercent": 5.61,
       "usedPercent": 1.01,
       "remainingPercent": 98.99,
@@ -584,8 +584,8 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z",
-      "startedAt": "2026-11-15T17:52:09Z",
+      "resetsAt": "2026-11-15T22:52:17Z",
+      "startedAt": "2026-11-15T17:52:17Z",
       "durationMins": 300,
       "remainingSeconds": 18000,
       "elapsedPercent": 0.0,
@@ -602,7 +602,7 @@
       "resetsAt": "2026-11-22T06:31:49Z",
       "startedAt": "2026-11-15T06:31:49Z",
       "durationMins": 10080,
-      "remainingSeconds": 563980,
+      "remainingSeconds": 563972,
       "elapsedPercent": 6.75,
       "paceDeltaPercent": -6.75,
       "burnRatePerHour": 0.0,
@@ -671,7 +671,7 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "claude-sonnet-5-5-high",
@@ -680,7 +680,7 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-2.5-pro",
@@ -689,7 +689,7 @@
       "description": "Contexte long 1M tokens",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-3-flash",
@@ -698,7 +698,7 @@
       "description": "Génération ultra-rapide",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-3.1-flash-image",
@@ -707,7 +707,7 @@
       "description": "Génération & édition d'images",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-3.8-flash-high",
@@ -716,7 +716,7 @@
       "description": "Flash haute précision",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-3.8-flash-medium",
@@ -725,7 +725,7 @@
       "description": "Flash standard",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-4-argon-high",
@@ -734,7 +734,7 @@
       "description": "Modèle principal Agent & Raisonnement",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-4-argon-low",
@@ -743,7 +743,7 @@
       "description": "Réponses rapides",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gemini-4-argon-medium",
@@ -752,7 +752,7 @@
       "description": "Raisonnement équilibré",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     },
     {
       "id": "gpt-oss-120b-medium",
@@ -761,7 +761,7 @@
       "description": "OpenAI OSS • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-15T22:52:09Z"
+      "resetsAt": "2026-11-15T22:52:17Z"
     }
   ],
   "ecosystem": {
