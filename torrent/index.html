@@ -13,7 +13,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Auto-mise à jour : si une version plus récente est publiée, recharge la page sans cache.
-    const APP_VERSION = "2.1";
+    const APP_VERSION = "2.2";
     async function checkAppUpdate() {
       try {
         const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
@@ -89,7 +89,7 @@
               Mac Mini M4
             </span>
           </div>
-          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.1 · TPB</span> Recherche 1337x + The Pirate Bay · Cache Instantané TorBox & P2P</p>
+          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.2 · TPB + VF</span> Recherche 1337x + The Pirate Bay + OxTorrent · Cache Instantané TorBox & P2P</p>
         </div>
       </div>
 
@@ -179,7 +179,7 @@
             <input
               id="searchInput"
               type="text"
-              placeholder="Rechercher sur 1337x, RARBG, TPB, Nyaa (ex: Dune 2160p, FitGirl, Zelda NSP, macOS...)"
+              placeholder="Rechercher sur 1337x, TPB, OxTorrent, RARBG, Nyaa (ex: Dune 2160p, FitGirl, Zelda NSP, macOS...)"
               class="w-full pl-10 pr-24 py-3 rounded-xl bg-slate-950/90 border border-white/15 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition"
             />
             <button
@@ -230,6 +230,7 @@
               <option value="1337x">🟠 1337x Exclusivement</option>
               <option value="rarbg">🟣 TheRARBG</option>
               <option value="tpb">🏴‍☠️ The Pirate Bay</option>
+              <option value="oxtorrent">🇫🇷 OxTorrent (VF)</option>
               <option value="nyaa">🐱 Nyaa.si</option>
             </select>
 
@@ -245,6 +246,9 @@
           <span class="text-slate-500 shrink-0">Raccourcis :</span>
           <button onclick="quickQuery('', 'all', '1337x')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
             🏆 Top 100 1337x
+          </button>
+          <button onclick="quickQuery('TRUEFRENCH', 'all', 'oxtorrent')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
+            🇫🇷 Films VF (OxTorrent)
           </button>
           <button onclick="quickQuery('', 'all', 'tpb')" class="shrink-0 px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">
             🏴‍☠️ Top 100 TPB
@@ -820,6 +824,8 @@
         const tpbTrust = it.uploaderStatus === "vip" ? " 💀VIP" : (it.uploaderStatus === "trusted" ? " ✔︎" : "");
         const trackerBadge = is1337
           ? `<span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold text-[10px]">1337x</span>`
+          : it.tracker === "OxTorrent"
+          ? `<span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-200 border border-blue-400/40 font-bold text-[10px]">🇫🇷 OxTorrent</span>`
           : isTpb
           ? `<span class="px-2 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold text-[10px]">🏴‍☠️ TPB${tpbTrust}</span>`
           : `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-white/10 font-medium text-[10px]">${escapeHtml(it.tracker || 'Torrent')}</span>`;
