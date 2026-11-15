@@ -13,7 +13,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Auto-mise à jour : si une version plus récente est publiée, recharge la page sans cache.
-    const APP_VERSION = "2.4";
+    const APP_VERSION = "2.5";
     async function checkAppUpdate() {
       try {
         const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
@@ -89,7 +89,7 @@
               Mac Mini M4
             </span>
           </div>
-          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.4 · Toutes sources</span> Recherche 1337x + The Pirate Bay + OxTorrent · Cache Instantané TorBox & P2P</p>
+          <p class="text-xs text-slate-400"><span class="px-1.5 py-0.5 rounded bg-amber-900/40 text-amber-200 border border-amber-600/40 font-bold">v2.5 · Toutes sources + RuTracker</span> Recherche 1337x + The Pirate Bay + OxTorrent · Cache Instantané TorBox & P2P</p>
         </div>
       </div>
 
@@ -403,6 +403,11 @@
     };
     const SRC_TO_TRACKER = { "1337x": "1337x", tpb: "ThePirateBay", apibay: "ThePirateBay", rarbg: "TheRARBG", oxtorrent: "OxTorrent", nyaa: "Nyaa.si", all: "all" };
 
+    function rutrackerSearchUrl() {
+      const q = (document.getElementById("searchInput").value || "").trim();
+      return q ? `https://rutracker.org/forum/tracker.php?nm=${encodeURIComponent(q)}` : "https://rutracker.org/forum/tracker.php";
+    }
+
     function setTracker(t) {
       currentTracker = t;
       renderSearchResults();
@@ -422,7 +427,8 @@
         } ${empty ? "opacity-40" : ""}">${label} <span class="text-slate-500">${n}</span></button>`;
       };
       el.innerHTML = chip("all", "🌐 Toutes", lastSearchResults.length) +
-        order.map(t => chip(t, `${(SOURCE_META[t] || {}).icon || "🧲"} ${(SOURCE_META[t] || {}).label || t}`, counts[t] || 0)).join("");
+        order.map(t => chip(t, `${(SOURCE_META[t] || {}).icon || "🧲"} ${(SOURCE_META[t] || {}).label || t}`, counts[t] || 0)).join("") +
+        `<a href="${rutrackerSearchUrl()}" target="_blank" rel="noopener" title="Ouvre la même recherche sur RuTracker (connecté dans ton navigateur)" class="shrink-0 px-2.5 py-1 rounded-lg border font-medium bg-sky-500/10 text-sky-200 border-sky-500/40 hover:text-white">🇷🇺 RuTracker ↗</a>`;
     }
     let liveStatus = { destinations: [], jobs: [] };
 
