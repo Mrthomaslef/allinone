@@ -581,6 +581,22 @@ def main():
             },
         )
 
+    if not any(item["id"].lower() == "miniprive" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "miniprive",
+                "title": "MiniPrivé — Navigateur Isolé VPN (Mac mini)",
+                "subtitle": "Navigateur privé isolé sur Mac mini · VPN multi-pays (Belgique par défaut), AdBlock, son temps réel & plein écran sur iPhone (PIN : 2580)",
+                "category": "daily-tools",
+                "emoji": "🛡️",
+                "logoUrl": "miniprive/assets/icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/miniprive/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/miniprive",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
     if not any(item["id"].lower() == "torrent" for item in output):
         output.insert(
             0,
