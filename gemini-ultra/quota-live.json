@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-16T06:29:38Z",
+  "checkedAt": "2026-11-16T06:43:51Z",
   "liveEndpoint": "http://127.0.0.1:8787/api/quota",
   "tunnelUrl": "https://streams-straight-mature-properties.trycloudflare.com",
   "subscription": {
@@ -39,87 +39,87 @@
       "uncachedValueEur": 8711.08
     },
     "claude": {
-      "prompts": 852,
-      "steps": 9113,
-      "inputTokens": 36187255,
-      "outputTokens": 6697286,
-      "cachedTokens": 1485869122,
-      "activeTokens": 42884541,
-      "totalTokensWithCache": 1528753663,
-      "apiCostUsd": 1127.61,
-      "uncachedValueUsd": 7769.17,
-      "apiCostEur": 1037.4,
-      "uncachedValueEur": 7147.64
+      "prompts": 854,
+      "steps": 9180,
+      "inputTokens": 36671627,
+      "outputTokens": 6724420,
+      "cachedTokens": 1491228576,
+      "activeTokens": 43396047,
+      "totalTokensWithCache": 1534624623,
+      "apiCostUsd": 1134.0,
+      "uncachedValueUsd": 7799.07,
+      "apiCostEur": 1043.28,
+      "uncachedValueEur": 7175.14
     },
     "fiveHour": {
-      "prompts": 10,
-      "steps": 82,
-      "inputTokens": 1727353,
-      "outputTokens": 37371,
-      "cachedTokens": 6871838,
-      "activeTokens": 1764724,
-      "totalTokensWithCache": 8636562,
-      "apiCostUsd": 9.78,
-      "uncachedValueUsd": 28.05,
-      "apiCostEur": 9.0,
-      "uncachedValueEur": 25.81,
-      "sessionsCount": 7
+      "prompts": 1,
+      "steps": 67,
+      "inputTokens": 484372,
+      "outputTokens": 27134,
+      "cachedTokens": 5359454,
+      "activeTokens": 511506,
+      "totalTokensWithCache": 5870960,
+      "apiCostUsd": 6.39,
+      "uncachedValueUsd": 29.9,
+      "apiCostEur": 5.88,
+      "uncachedValueEur": 27.51,
+      "sessionsCount": 8
     },
     "today": {
-      "prompts": 10,
-      "steps": 82,
-      "inputTokens": 1727353,
-      "outputTokens": 37371,
-      "cachedTokens": 6871838,
-      "activeTokens": 1764724,
-      "totalTokensWithCache": 8636562,
-      "apiCostUsd": 9.78,
-      "uncachedValueUsd": 28.05,
-      "apiCostEur": 9.0,
-      "uncachedValueEur": 25.81,
-      "sessionsCount": 7
+      "prompts": 12,
+      "steps": 149,
+      "inputTokens": 2211725,
+      "outputTokens": 64505,
+      "cachedTokens": 12231292,
+      "activeTokens": 2276230,
+      "totalTokensWithCache": 14507522,
+      "apiCostUsd": 16.16,
+      "uncachedValueUsd": 57.95,
+      "apiCostEur": 14.87,
+      "uncachedValueEur": 53.31,
+      "sessionsCount": 9
     },
     "sevenDays": {
-      "prompts": 655,
-      "steps": 11394,
-      "inputTokens": 53538716,
-      "outputTokens": 5804282,
-      "cachedTokens": 1109325892,
-      "activeTokens": 59342998,
-      "totalTokensWithCache": 1168668890,
-      "apiCostUsd": 712.75,
-      "uncachedValueUsd": 4542.17,
-      "apiCostEur": 655.73,
-      "uncachedValueEur": 4178.8,
-      "sessionsCount": 140
+      "prompts": 656,
+      "steps": 11447,
+      "inputTokens": 53580747,
+      "outputTokens": 5830414,
+      "cachedTokens": 1113527734,
+      "activeTokens": 59411161,
+      "totalTokensWithCache": 1172938895,
+      "apiCostUsd": 718.01,
+      "uncachedValueUsd": 4568.86,
+      "apiCostEur": 660.57,
+      "uncachedValueEur": 4203.35,
+      "sessionsCount": 141
     },
     "thirtyDays": {
-      "prompts": 2647,
-      "steps": 84915,
-      "inputTokens": 319134824,
-      "outputTokens": 36989665,
-      "cachedTokens": 5755449477,
-      "activeTokens": 356124489,
-      "totalTokensWithCache": 6111573966,
-      "apiCostUsd": 2910.93,
-      "uncachedValueUsd": 17237.74,
-      "apiCostEur": 2678.06,
-      "uncachedValueEur": 15858.72,
-      "sessionsCount": 588,
+      "prompts": 2649,
+      "steps": 84982,
+      "inputTokens": 319619196,
+      "outputTokens": 37016799,
+      "cachedTokens": 5760808931,
+      "activeTokens": 356635995,
+      "totalTokensWithCache": 6117444926,
+      "apiCostUsd": 2917.32,
+      "uncachedValueUsd": 17267.63,
+      "apiCostEur": 2683.93,
+      "uncachedValueEur": 15886.22,
+      "sessionsCount": 589,
       "activeDays": 30
     },
     "allTime": {
-      "prompts": 2647,
-      "steps": 84915,
-      "inputTokens": 319134824,
-      "outputTokens": 36989665,
-      "cachedTokens": 5755449477,
-      "activeTokens": 356124489,
-      "totalTokensWithCache": 6111573966,
-      "apiCostUsd": 2910.93,
-      "uncachedValueUsd": 17237.74,
-      "apiCostEur": 2678.06,
-      "uncachedValueEur": 15858.72
+      "prompts": 2649,
+      "steps": 84982,
+      "inputTokens": 319619196,
+      "outputTokens": 37016799,
+      "cachedTokens": 5760808931,
+      "activeTokens": 356635995,
+      "totalTokensWithCache": 6117444926,
+      "apiCostUsd": 2917.32,
+      "uncachedValueUsd": 17267.63,
+      "apiCostEur": 2683.93,
+      "uncachedValueEur": 15886.22
     },
     "byModel": [
       {
@@ -140,17 +140,17 @@
       {
         "id": "claude-opus",
         "label": "Claude Opus 5.5",
-        "prompts": 852,
-        "steps": 8990,
-        "inputTokens": 35178616,
-        "outputTokens": 6675244,
-        "cachedTokens": 1483415608,
-        "activeTokens": 41853860,
-        "totalTokensWithCache": 1525269468,
-        "apiCostUsd": 1123.18,
-        "uncachedValueUsd": 7759.85,
-        "apiCostEur": 1033.33,
-        "uncachedValueEur": 7139.06
+        "prompts": 854,
+        "steps": 9057,
+        "inputTokens": 35662988,
+        "outputTokens": 6702378,
+        "cachedTokens": 1488775062,
+        "activeTokens": 42365366,
+        "totalTokensWithCache": 1531140428,
+        "apiCostUsd": 1129.57,
+        "uncachedValueUsd": 7789.75,
+        "apiCostEur": 1039.2,
+        "uncachedValueEur": 7166.57
       },
       {
         "id": "claude-sonnet",
@@ -187,47 +187,47 @@
   "windows": {
     "fiveHour": {
       "id": "gemini-5h",
-      "remainingFraction": 0.9875358,
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z",
-      "startedAt": "2026-11-16T01:30:05Z",
+      "remainingFraction": 1.0,
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z",
+      "startedAt": "2026-11-16T06:30:05Z",
       "durationMins": 300,
-      "remainingSeconds": 26,
-      "elapsedPercent": 99.85,
-      "paceDeltaPercent": -98.6,
-      "burnRatePerHour": 0.25,
+      "remainingSeconds": 17173,
+      "elapsedPercent": 4.59,
+      "paceDeltaPercent": -4.59,
+      "burnRatePerHour": 0.0,
       "disabled": false,
-      "description": "You have used some of your 5-hour limit, it will fully refresh in less than a minute.",
-      "promptsWindow": 10,
-      "stepsWindow": 82,
-      "tokensWindow": 1764724,
-      "inputTokensWindow": 1727353,
-      "outputTokensWindow": 37371,
-      "cachedTokensWindow": 6871838,
-      "totalTokensWithCacheWindow": 8636562,
-      "apiCostUsdWindow": 9.78,
-      "apiCostEurWindow": 9.0,
-      "uncachedValueUsdWindow": 28.05,
-      "promptsRolling": 10,
-      "stepsRolling": 82,
-      "tokensRolling": 1764724,
-      "cachedTokensRolling": 6871838,
-      "totalTokensWithCacheRolling": 8636562,
-      "apiCostUsdRolling": 9.78,
-      "apiCostEurRolling": 9.0,
-      "uncachedValueUsdRolling": 28.05,
-      "sessionsCount": 7,
+      "description": "",
+      "promptsWindow": 1,
+      "stepsWindow": 67,
+      "tokensWindow": 511506,
+      "inputTokensWindow": 484372,
+      "outputTokensWindow": 27134,
+      "cachedTokensWindow": 5359454,
+      "totalTokensWithCacheWindow": 5870960,
+      "apiCostUsdWindow": 6.39,
+      "apiCostEurWindow": 5.88,
+      "uncachedValueUsdWindow": 29.9,
+      "promptsRolling": 11,
+      "stepsRolling": 127,
+      "tokensRolling": 1951404,
+      "cachedTokensRolling": 11821495,
+      "totalTokensWithCacheRolling": 13772899,
+      "apiCostUsdRolling": 15.4,
+      "apiCostEurRolling": 14.17,
+      "uncachedValueUsdRolling": 56.45,
+      "sessionsCount": 8,
       "estimatedCapacitySteps": 7500,
       "hourlyBreakdown": [
         {
           "label": "02h",
-          "steps": 22,
-          "prompts": 1,
-          "tokens": 324826,
-          "cachedTokens": 409797,
-          "totalTokensWithCache": 734623,
-          "apiCostUsd": 0.78
+          "steps": 0,
+          "prompts": 0,
+          "tokens": 0,
+          "cachedTokens": 0,
+          "totalTokensWithCache": 0,
+          "apiCostUsd": 0.0
         },
         {
           "label": "03h",
@@ -267,12 +267,12 @@
         },
         {
           "label": "07h",
-          "steps": 40,
-          "prompts": 3,
-          "tokens": 1084744,
-          "cachedTokens": 5439765,
-          "totalTokensWithCache": 6524509,
-          "apiCostUsd": 7.85
+          "steps": 107,
+          "prompts": 5,
+          "tokens": 1596250,
+          "cachedTokens": 10799219,
+          "totalTokensWithCache": 12395469,
+          "apiCostUsd": 14.24
         }
       ]
     },
@@ -284,35 +284,35 @@
       "resetsAt": "2026-11-21T01:30:07Z",
       "startedAt": "2026-11-14T01:30:07Z",
       "durationMins": 10080,
-      "remainingSeconds": 414028,
-      "elapsedPercent": 31.54,
-      "paceDeltaPercent": -26.9,
+      "remainingSeconds": 413175,
+      "elapsedPercent": 31.68,
+      "paceDeltaPercent": -27.04,
       "burnRatePerHour": 0.09,
       "disabled": false,
-      "description": "You have used some of your weekly limit, it will fully refresh in 4 days, 19 hours.",
-      "dailyBudgetRemainingPercent": 19.9,
+      "description": "You have used some of your weekly limit, it will fully refresh in 4 days, 18 hours.",
+      "dailyBudgetRemainingPercent": 19.94,
       "burnRatePerDay": 2.2,
-      "promptsWindow": 292,
-      "stepsWindow": 3330,
-      "tokensWindow": 16805839,
-      "inputTokensWindow": 14922458,
-      "outputTokensWindow": 1883381,
-      "cachedTokensWindow": 456237037,
-      "totalTokensWithCacheWindow": 473042876,
-      "apiCostUsdWindow": 291.67,
-      "apiCostEurWindow": 268.34,
-      "uncachedValueUsdWindow": 2050.62,
-      "promptsRolling": 655,
-      "stepsRolling": 11394,
-      "tokensRolling": 59342998,
-      "inputTokensRolling": 53538716,
-      "outputTokensRolling": 5804282,
-      "cachedTokensRolling": 1109325892,
-      "totalTokensWithCacheRolling": 1168668890,
-      "apiCostUsdRolling": 712.75,
-      "apiCostEurRolling": 655.73,
-      "uncachedValueUsdRolling": 4542.17,
-      "sessionsCount": 140,
+      "promptsWindow": 294,
+      "stepsWindow": 3397,
+      "tokensWindow": 17317345,
+      "inputTokensWindow": 15406830,
+      "outputTokensWindow": 1910515,
+      "cachedTokensWindow": 461596491,
+      "totalTokensWithCacheWindow": 478913836,
+      "apiCostUsdWindow": 298.06,
+      "apiCostEurWindow": 274.22,
+      "uncachedValueUsdWindow": 2080.52,
+      "promptsRolling": 656,
+      "stepsRolling": 11447,
+      "tokensRolling": 59411161,
+      "inputTokensRolling": 53580747,
+      "outputTokensRolling": 5830414,
+      "cachedTokensRolling": 1113527734,
+      "totalTokensWithCacheRolling": 1172938895,
+      "apiCostUsdRolling": 718.01,
+      "apiCostEurRolling": 660.57,
+      "uncachedValueUsdRolling": 4568.86,
+      "sessionsCount": 141,
       "estimatedCapacitySteps": 25000,
       "dailyBreakdown": [
         {
@@ -385,12 +385,12 @@
           "date": "2026-11-16",
           "label": "Lun 16/11",
           "shortLabel": "Lun",
-          "steps": 82,
-          "prompts": 10,
-          "tokens": 1764724,
-          "cachedTokens": 6871838,
-          "totalTokensWithCache": 8636562,
-          "apiCostUsd": 9.8
+          "steps": 149,
+          "prompts": 12,
+          "tokens": 2276230,
+          "cachedTokens": 12231292,
+          "totalTokensWithCache": 14507522,
+          "apiCostUsd": 16.19
         }
       ]
     },
@@ -399,25 +399,25 @@
       "durationMins": 43200,
       "resetsAt": "2026-12-14T01:30:07Z",
       "startedAt": "2026-11-14T01:30:07Z",
-      "remainingSeconds": 2401228,
-      "elapsedPercent": 7.36,
+      "remainingSeconds": 2400375,
+      "elapsedPercent": 7.39,
       "usedPercent": 1.08,
       "remainingPercent": 98.92,
-      "promptsCount": 292,
-      "stepsCount": 3330,
-      "tokensCount": 16805839,
-      "promptsRolling30d": 2647,
-      "stepsRolling30d": 84915,
-      "tokensRolling30d": 356124489,
-      "inputTokensCount": 319134824,
-      "outputTokensCount": 36989665,
-      "cachedTokensCount": 5755449477,
-      "totalTokensWithCache30d": 6111573966,
-      "apiCostUsd30d": 2910.93,
-      "apiCostEur30d": 2678.06,
-      "uncachedValueUsd30d": 17237.74,
-      "uncachedValueEur30d": 15858.72,
-      "sessionsCount": 588,
+      "promptsCount": 294,
+      "stepsCount": 3397,
+      "tokensCount": 17317345,
+      "promptsRolling30d": 2649,
+      "stepsRolling30d": 84982,
+      "tokensRolling30d": 356635995,
+      "inputTokensCount": 319619196,
+      "outputTokensCount": 37016799,
+      "cachedTokensCount": 5760808931,
+      "totalTokensWithCache30d": 6117444926,
+      "apiCostUsd30d": 2917.32,
+      "apiCostEur30d": 2683.93,
+      "uncachedValueUsd30d": 17267.63,
+      "uncachedValueEur30d": 15886.22,
+      "sessionsCount": 589,
       "activeDays": 30,
       "estimatedCapacitySteps": 107143,
       "weeklyCyclesUsed": 0.05,
@@ -570,12 +570,12 @@
           "date": "2026-11-16",
           "label": "Lun 16/11",
           "shortLabel": "Lun",
-          "steps": 82,
-          "prompts": 10,
-          "tokens": 1764724,
-          "cachedTokens": 6871838,
-          "totalTokensWithCache": 8636562,
-          "apiCostUsd": 9.8
+          "steps": 149,
+          "prompts": 12,
+          "tokens": 2276230,
+          "cachedTokens": 12231292,
+          "totalTokensWithCache": 14507522,
+          "apiCostUsd": 16.19
         }
       ]
     },
@@ -584,10 +584,10 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-16T11:29:39Z",
-      "startedAt": "2026-11-16T06:29:39Z",
+      "resetsAt": "2026-11-16T11:43:51Z",
+      "startedAt": "2026-11-16T06:43:51Z",
       "durationMins": 300,
-      "remainingSeconds": 18000,
+      "remainingSeconds": 17999,
       "elapsedPercent": 0.0,
       "paceDeltaPercent": 0.0,
       "burnRatePerHour": 0.0,
@@ -599,10 +599,10 @@
       "remainingFraction": 1.0,
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-23T06:29:39Z",
-      "startedAt": "2026-11-16T06:29:39Z",
+      "resetsAt": "2026-11-23T06:43:51Z",
+      "startedAt": "2026-11-16T06:43:51Z",
       "durationMins": 10080,
-      "remainingSeconds": 604800,
+      "remainingSeconds": 604799,
       "elapsedPercent": 0.0,
       "paceDeltaPercent": 0.0,
       "burnRatePerHour": 0.0,
@@ -612,10 +612,10 @@
     "claudeFiveHour": {
       "id": "claude-5h",
       "durationMins": 300,
-      "usedPercent": 10.0,
-      "remainingPercent": 90.0,
-      "resetsAt": "2026-11-16T08:39:59Z",
-      "remainingSeconds": 7821,
+      "usedPercent": 15.0,
+      "remainingPercent": 85.0,
+      "resetsAt": "2026-11-16T08:40:00Z",
+      "remainingSeconds": 7033,
       "status": "active"
     },
     "claudeWeekly": {
@@ -623,8 +623,8 @@
       "durationMins": 10080,
       "usedPercent": 30.0,
       "remainingPercent": 70.0,
-      "resetsAt": "2026-11-19T00:59:59Z",
-      "remainingSeconds": 239421
+      "resetsAt": "2026-11-19T01:00:00Z",
+      "remainingSeconds": 238633
     }
   },
   "models": [
@@ -635,7 +635,7 @@
       "description": "Claude Max (5x) Direct • Raisonnement Low → Ultrathink + Fast Mode",
       "remainingPercent": 70.0,
       "usedPercent": 30.0,
-      "resetsAt": "2026-11-16T08:39:59Z"
+      "resetsAt": "2026-11-16T08:40:00Z"
     },
     {
       "id": "claude-sonnet-5-5",
@@ -644,7 +644,7 @@
       "description": "Claude Max (5x) Direct • Raisonnement rapide & efficace",
       "remainingPercent": 70.0,
       "usedPercent": 30.0,
-      "resetsAt": "2026-11-16T08:39:59Z"
+      "resetsAt": "2026-11-16T08:40:00Z"
     },
     {
       "id": "claude-fable-5-1",
@@ -653,7 +653,7 @@
       "description": "Claude Max (5x) Direct • Défis complexes & Ultracode",
       "remainingPercent": 70.0,
       "usedPercent": 30.0,
-      "resetsAt": "2026-11-16T08:39:59Z"
+      "resetsAt": "2026-11-16T08:40:00Z"
     },
     {
       "id": "claude-haiku-5-5",
@@ -662,7 +662,7 @@
       "description": "Claude Max (5x) Direct • Réponses instantanées",
       "remainingPercent": 70.0,
       "usedPercent": 30.0,
-      "resetsAt": "2026-11-16T08:39:59Z"
+      "resetsAt": "2026-11-16T08:40:00Z"
     },
     {
       "id": "claude-opus-5-5-high",
@@ -671,7 +671,7 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-16T11:29:39Z"
+      "resetsAt": "2026-11-16T11:43:51Z"
     },
     {
       "id": "claude-sonnet-5-5-high",
@@ -680,79 +680,79 @@
       "description": "Anthropic Vertex • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-16T11:29:39Z"
+      "resetsAt": "2026-11-16T11:43:51Z"
     },
     {
       "id": "gemini-2.5-pro",
       "label": "Gemini 2.5 Pro",
       "family": "gemini",
       "description": "Contexte long 1M tokens",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gemini-3-flash",
       "label": "Gemini 3 Flash",
       "family": "gemini",
       "description": "Génération ultra-rapide",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gemini-3.1-flash-image",
       "label": "Gemini 3.1 Flash Image",
       "family": "gemini",
       "description": "Génération & édition d'images",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gemini-3.8-flash-high",
       "label": "Gemini 3.8 Flash (High)",
       "family": "gemini",
       "description": "Flash haute précision",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gemini-3.8-flash-medium",
       "label": "Gemini 3.8 Flash (Medium)",
       "family": "gemini",
       "description": "Flash standard",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gemini-4-argon-high",
       "label": "Gemini 4 Argon (High)",
       "family": "gemini",
       "description": "Modèle principal Agent & Raisonnement",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gemini-4-argon-low",
       "label": "Gemini 4 Argon (Low)",
       "family": "gemini",
       "description": "Réponses rapides",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gemini-4-argon-medium",
       "label": "Gemini 4 Argon (Medium)",
       "family": "gemini",
       "description": "Raisonnement équilibré",
-      "remainingPercent": 98.75,
-      "usedPercent": 1.25,
-      "resetsAt": "2026-11-16T06:30:05Z"
+      "remainingPercent": 100.0,
+      "usedPercent": 0.0,
+      "resetsAt": "2026-11-16T11:30:05Z"
     },
     {
       "id": "gpt-oss-120b-medium",
@@ -761,11 +761,11 @@
       "description": "OpenAI OSS • Partagé 3P",
       "remainingPercent": 100.0,
       "usedPercent": 0.0,
-      "resetsAt": "2026-11-16T11:29:39Z"
+      "resetsAt": "2026-11-16T11:43:51Z"
     }
   ],
   "ecosystem": {
-    "checkedAt": "2026-11-16T06:26:24Z",
+    "checkedAt": "2026-11-16T06:43:51Z",
     "github": {
       "username": "Mrthomaslef",
       "profileUrl": "https://github.com/Mrthomaslef",
@@ -788,9 +788,9 @@
         "sizeMb": 116.9,
         "limitMb": 1024,
         "usedPercent": 11.42,
-        "commitsCount": 1067,
+        "commitsCount": 1068,
         "appsCount": 51,
-        "pushedAt": "2026-11-16T01:33:24Z"
+        "pushedAt": "2026-11-16T06:30:16Z"
       },
       "topRepos": [
         {
@@ -808,7 +808,7 @@
           "usedPercentOf1Gb": 11.4,
           "hasPages": true,
           "private": false,
-          "pushedAt": "2026-11-16T01:33:24Z",
+          "pushedAt": "2026-11-16T06:30:16Z",
           "htmlUrl": "https://github.com/Mrthomaslef/allinone"
         },
         {
@@ -868,10 +868,10 @@
       ],
       "apiRateLimit": {
         "limit": 5000,
-        "used": 1,
-        "remaining": 4999,
-        "usedPercent": 0.02,
-        "remainingPercent": 99.98,
+        "used": 17,
+        "remaining": 4983,
+        "usedPercent": 0.34,
+        "remainingPercent": 99.66,
         "resetsAt": "2026-11-16T07:26:29Z"
       },
       "limits": {
@@ -940,8 +940,8 @@
       "prodUrl": "https://quizcotten.fr",
       "vercelUrl": "https://radio-thomas-ten.vercel.app",
       "status": "online",
-      "statusLabel": "En ligne (133 ms • Edge STALE)",
-      "latencyMs": 133,
+      "statusLabel": "En ligne (58 ms • Edge STALE)",
+      "latencyMs": 58,
       "edgeCacheStatus": "STALE (s-maxage=300)",
       "deploymentsCount": 29,
       "lastDeployStatus": "success",
@@ -1004,13 +1004,12 @@
   },
   "favorites": {
     "ids": [
-      "anatomie-quiz",
       "agenda-cochin",
       "agenda-famille",
       "biblioosteo",
       "guide-interne-cochin-os",
       "recherche-d-appartement"
     ],
-    "updatedAt": 1794765144319
+    "updatedAt": 1794811442979
   }
 }
