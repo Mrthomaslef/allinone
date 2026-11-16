@@ -2,6 +2,9 @@
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -290,6 +293,13 @@
       filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.65));
     }
 
+    .target-callout-pill.wrong-reveal {
+      fill: #450a0a;
+      stroke: #f87171;
+      stroke-width: 2.8;
+      filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.55));
+    }
+
     @keyframes scoreBounce {
       0% { transform: scale(1); }
       35% { transform: scale(1.28); background: #10b981; color: #ffffff; box-shadow: 0 0 16px rgba(16, 185, 129, 0.6); }
@@ -427,12 +437,36 @@
        3. COMPACT ONE-BY-ONE QUESTION DOCK (BOTTOM)
        ========================================== */
     .question-dock {
+      position: relative;
       padding-bottom: var(--safe-bottom);
       background: var(--bg-panel);
       border-top: 1px solid var(--border);
       z-index: 30;
       flex-shrink: 0;
       box-shadow: 0 -4px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .dock-timer-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3.5px;
+      background: transparent;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .dock-timer-bar {
+      height: 100%;
+      width: 100%;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background: linear-gradient(90deg, #10b981, #38bdf8);
+    }
+
+    .dock-timer-bar.wrong {
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
     }
 
     .dock-inner {
@@ -457,6 +491,23 @@
       color: var(--text-main);
       line-height: 1.25;
       flex: 1;
+      min-width: 0;
+    }
+
+    .dock-prompt-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .dock-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .dock-skip-btn {
@@ -471,6 +522,63 @@
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+    }
+
+    .dock-pace-chip {
+      border: 1px solid var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 5px 9px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .dock-pause-btn {
+      border: 1px solid var(--border);
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .dock-pause-btn.paused {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.15);
+      color: #d97706;
+    }
+    [data-theme="dark"] .dock-pause-btn.paused {
+      color: #fbbf24;
+    }
+
+    .dock-next-btn {
+      border: none;
+      background: var(--primary);
+      color: #ffffff;
+      padding: 6px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.32);
+    }
+
+    .dock-next-btn.success {
+      background: #10b981;
+      box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);
     }
 
     /* QCM 2x2 COMPACT GRID */
@@ -863,6 +971,7 @@
 
   <!-- 3. ONE-QUESTION-AT-A-TIME BOTTOM DOCK -->
   <footer class="question-dock" id="question-dock">
+    <div class="dock-timer-track"><div class="dock-timer-bar" id="dock-timer-bar"></div></div>
     <div class="dock-inner" id="dock-inner"></div>
   </footer>
 
@@ -899,6 +1008,16 @@
           <button class="mode-card" data-mode="flashcard">🙈 Flashcard (Deviner)</button>
           <button class="mode-card" data-mode="pin">🎯 Quiz Épingle (Localiser)</button>
           <button class="mode-card" data-mode="study">📖 Mode Exploration</button>
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <span class="drawer-label">Rythme après validation d'une réponse</span>
+        <div class="mode-grid" id="pace-grid">
+          <button class="mode-card active" data-pace="confort">⏱️ Confort (5s / 6,5s)</button>
+          <button class="mode-card" data-pace="long">🐢 Lent (8s / 10s)</button>
+          <button class="mode-card" data-pace="manuel">✋ Manuel (au clic)</button>
+          <button class="mode-card" data-pace="rapide">⚡ Rapide (2s / 3s)</button>
         </div>
       </div>
 
@@ -948,19 +1067,30 @@
         P: { label: "Régions", color: "#CBD5E1", icon: "🗺️" }
       };
 
+      let savedPace = "confort";
+      try {
+        const p = localStorage.getItem("anat_advance_pace");
+        if (p && ["confort", "long", "manuel", "rapide"].includes(p)) savedPace = p;
+      } catch (_) {}
+
       const state = {
         currentModuleKey: "ms",
         currentSeriesId: 243,
         currentSliceId: 8019,
         activeCategories: new Set(["N", "A", "V"]),
         mode: "qcm",
+        advancePace: savedPace,
         pointStatus: {},
         quizQueue: [],
         currentTargetPointId: null,
         flashcardRevealed: false,
+        fcAnswered: false,
+        pinAnswered: false,
         qcmOptions: [],
         qcmAnswered: false,
         lastAnswerCorrect: false,
+        lastAnswerWrong: false,
+        advancePaused: false,
         userCalloutPos: null,
         scoreOk: 0,
         scoreTotal: 0,
@@ -1032,6 +1162,7 @@
         if (!toast) return;
         const praises = ["✨ Exact !", "🎯 Bien joué !", "⚡ Nickel !", "👏 Parfait !"];
         const base = praises[Math.floor(Math.random() * praises.length)];
+        const shortLabel = labelFr && labelFr.length <= 28 ? ` • ${labelFr}` : "";
         if (streakCount >= 10) {
           toast.textContent = `👑 Série x${streakCount} — Légendaire !`;
         } else if (streakCount >= 5) {
@@ -1039,13 +1170,13 @@
         } else if (streakCount >= 2) {
           toast.textContent = `🔥 Série x${streakCount} • ${base}`;
         } else {
-          toast.textContent = `${base} +1`;
+          toast.textContent = `${base}${shortLabel}`;
         }
         toast.classList.add("show");
         if (praiseTimer) clearTimeout(praiseTimer);
         praiseTimer = setTimeout(() => {
           toast.classList.remove("show");
-        }, 1050);
+        }, 2400);
       }
 
       function spawnSvgSuccessBurst(pt) {
@@ -1110,6 +1241,7 @@
         state.scoreOk++;
         state.streak++;
         state.lastAnswerCorrect = true;
+        state.lastAnswerWrong = false;
         if (navigator.vibrate) navigator.vibrate([18, 35, 30]);
         playSuccessChime(state.streak);
         showPraiseToast(state.streak, targetPt ? targetPt.labelFr : "");
@@ -1123,8 +1255,164 @@
       function registerWrongAnswer() {
         state.streak = 0;
         state.lastAnswerCorrect = false;
+        state.lastAnswerWrong = true;
         if (navigator.vibrate) navigator.vibrate(40);
         playErrorThud();
+      }
+
+      // ==========================================
+      // POST-VALIDATION TIMER & AUTO-PAUSE CONTROL
+      // ==========================================
+      let advanceTimer = null;
+      let advanceCountdownInterval = null;
+      let timerBarAnim = null;
+      const elTimerBar = document.getElementById("dock-timer-bar");
+
+      const PACE_LABELS = {
+        confort: "⏱️ Délai: 5s",
+        long: "🐢 Délai: 8s",
+        manuel: "✋ Manuel",
+        rapide: "⚡ Délai: 2s"
+      };
+      const PACE_ORDER = ["confort", "manuel", "long", "rapide"];
+
+      function getPaceShortLabel() {
+        return PACE_LABELS[state.advancePace] || PACE_LABELS.confort;
+      }
+
+      function syncPaceButtonsUI() {
+        document.querySelectorAll("#pace-grid [data-pace]").forEach(b => {
+          b.classList.toggle("active", b.getAttribute("data-pace") === state.advancePace);
+        });
+        const chip = document.getElementById("btn-cycle-pace");
+        if (chip) chip.textContent = getPaceShortLabel();
+      }
+
+      function cycleAdvancePace() {
+        const idx = PACE_ORDER.indexOf(state.advancePace);
+        state.advancePace = PACE_ORDER[(idx + 1) % PACE_ORDER.length];
+        try {
+          localStorage.setItem("anat_advance_pace", state.advancePace);
+        } catch (_) {}
+        syncPaceButtonsUI();
+        if (isQuestionValidated()) {
+          scheduleAdvance(state.lastAnswerCorrect);
+        }
+      }
+
+      function isQuestionValidated() {
+        return Boolean(state.qcmAnswered || state.pinAnswered || state.fcAnswered);
+      }
+
+      function clearAdvanceTimer() {
+        if (advanceTimer) {
+          clearTimeout(advanceTimer);
+          advanceTimer = null;
+        }
+        if (advanceCountdownInterval) {
+          clearInterval(advanceCountdownInterval);
+          advanceCountdownInterval = null;
+        }
+        if (timerBarAnim) {
+          timerBarAnim.cancel();
+          timerBarAnim = null;
+        }
+        if (elTimerBar) {
+          elTimerBar.style.transform = "scaleX(0)";
+          elTimerBar.classList.remove("wrong");
+        }
+        state.advancePaused = false;
+      }
+
+      function pauseAdvanceTimer() {
+        if (!isQuestionValidated()) return;
+        if (advanceTimer) {
+          clearTimeout(advanceTimer);
+          advanceTimer = null;
+        }
+        if (advanceCountdownInterval) {
+          clearInterval(advanceCountdownInterval);
+          advanceCountdownInterval = null;
+        }
+        if (timerBarAnim) {
+          timerBarAnim.cancel();
+          timerBarAnim = null;
+        }
+        if (elTimerBar) {
+          elTimerBar.style.transform = "scaleX(0)";
+        }
+        state.advancePaused = true;
+        const btnPause = document.getElementById("btn-pause-advance");
+        if (btnPause) {
+          btnPause.textContent = "⏸ Figé";
+          btnPause.classList.add("paused");
+        }
+        const btnNext = document.getElementById("btn-next-q");
+        if (btnNext) {
+          btnNext.textContent = "Suivant →";
+        }
+      }
+
+      function getAdvanceDelayMs(isCorrect) {
+        switch (state.advancePace) {
+          case "manuel":
+            return 0;
+          case "long":
+            return isCorrect ? 8000 : 10000;
+          case "rapide":
+            return isCorrect ? 2000 : 3000;
+          case "confort":
+          default:
+            return isCorrect ? 5000 : 6500;
+        }
+      }
+
+      function scheduleAdvance(isCorrect) {
+        clearAdvanceTimer();
+        const delayMs = getAdvanceDelayMs(isCorrect);
+        const btnNext = document.getElementById("btn-next-q");
+        const btnPause = document.getElementById("btn-pause-advance");
+
+        if (delayMs <= 0) {
+          state.advancePaused = true;
+          if (btnPause) {
+            btnPause.textContent = "✋ Manuel";
+            btnPause.classList.add("paused");
+          }
+          if (btnNext) {
+            btnNext.textContent = "Question suivante →";
+          }
+          return;
+        }
+
+        const deadline = Date.now() + delayMs;
+        const updateBtnCountdown = () => {
+          const b = document.getElementById("btn-next-q");
+          if (!b || state.advancePaused) return;
+          const remSec = Math.max(1, Math.ceil((deadline - Date.now()) / 1000));
+          b.textContent = `Suivant (${remSec}s) →`;
+        };
+        updateBtnCountdown();
+        advanceCountdownInterval = setInterval(updateBtnCountdown, 250);
+
+        if (elTimerBar) {
+          elTimerBar.classList.toggle("wrong", !isCorrect);
+          if (elTimerBar.animate) {
+            timerBarAnim = elTimerBar.animate(
+              [{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }],
+              { duration: delayMs, easing: "linear", fill: "forwards" }
+            );
+          }
+        }
+
+        advanceTimer = setTimeout(() => {
+          advanceTimer = null;
+          if (advanceCountdownInterval) {
+            clearInterval(advanceCountdownInterval);
+            advanceCountdownInterval = null;
+          }
+          advanceQuestion();
+        }, delayMs);
       }
 
       function getActiveModule() {
@@ -1223,12 +1511,16 @@
       });
 
       function initSliceQuizState() {
+        clearAdvanceTimer();
         const slice = getCurrentSlice();
         ensureNonEmptyCategoriesForSlice(slice);
         const pts = getFilteredPoints(slice);
         state.pointStatus = {};
         state.userCalloutPos = null;
         state.lastAnswerCorrect = false;
+        state.lastAnswerWrong = false;
+        state.pinAnswered = false;
+        state.fcAnswered = false;
         pts.forEach(p => { state.pointStatus[p.id] = "pending"; });
 
         // Order questions shuffled
@@ -1243,7 +1535,10 @@
         const slice = getCurrentSlice();
         const targetPt = slice.points.find(p => p.id === state.currentTargetPointId);
         state.qcmAnswered = false;
+        state.pinAnswered = false;
+        state.fcAnswered = false;
         state.lastAnswerCorrect = false;
+        state.lastAnswerWrong = false;
         if (!targetPt) {
           state.qcmOptions = [];
           return;
@@ -1275,10 +1570,14 @@
       }
 
       function advanceQuestion() {
+        clearAdvanceTimer();
         state.quizQueue = state.quizQueue.filter(id => state.pointStatus[id] === "pending");
         state.currentTargetPointId = state.quizQueue[0] || null;
         state.flashcardRevealed = false;
+        state.fcAnswered = false;
+        state.pinAnswered = false;
         state.lastAnswerCorrect = false;
+        state.lastAnswerWrong = false;
         prepareQcmOptions();
         renderAll();
       }
@@ -1313,11 +1612,12 @@
           let groupClass = "anat-point-group";
           if (status === "ok") groupClass += " done-ok";
           else if (status === "ko") groupClass += " done-ko";
-          else if (state.mode !== "pin" && !isTarget) groupClass += " faded";
+          else if ((state.mode !== "pin" || state.pinAnswered) && !isTarget) groupClass += " faded";
 
-          const rOuter = (isTarget && state.mode !== "pin") ? 8.5 : 6;
-          const strokeColor = (isTarget && state.mode !== "pin") ? "#2563eb" : "#0f172a";
-          const strokeW = (isTarget && state.mode !== "pin") ? 3 : 1.8;
+          const highlightTarget = isTarget && (state.mode !== "pin" || state.pinAnswered);
+          const rOuter = highlightTarget ? 8.5 : 6;
+          const strokeColor = highlightTarget ? "#2563eb" : "#0f172a";
+          const strokeW = highlightTarget ? 3 : 1.8;
 
           svgHtml += `
             <g class="${groupClass}" data-pt-id="${pt.id}" filter="url(#pt-shadow)">
@@ -1330,7 +1630,7 @@
 
         // 2. Draw ONLY the leader line and draggable full-text legend for the single active point!
         let calloutBounds = null;
-        if (targetPt && state.mode !== "pin") {
+        if (targetPt && (state.mode !== "pin" || state.pinAnswered)) {
           const tx = targetPt.x;
           const ty = targetPt.y;
           const catMeta = CATEGORY_META[targetPt.category] || { label: "Structure" };
@@ -1338,9 +1638,22 @@
           const showAnswerOnPlate =
             state.mode === "study" ||
             (state.mode === "flashcard" && state.flashcardRevealed) ||
-            (state.mode === "qcm" && state.qcmAnswered);
+            (state.mode === "qcm" && state.qcmAnswered) ||
+            (state.mode === "pin" && state.pinAnswered);
 
-          const prefix = state.lastAnswerCorrect ? "✓ " : "";
+          if (!showAnswerOnPlate) {
+            // Question non résolue : simple point d'interrogation discret près de la structure (pas d'encadré)
+            const qx = Math.min(sliceW - 12, tx + 15);
+            const qy = Math.max(12, ty - 15);
+            svgHtml += `
+              <circle class="target-pulse-ring" style="stroke:#2563eb" cx="${tx}" cy="${ty}" r="14" />
+              <g class="target-qmark" pointer-events="none">
+                <circle cx="${qx}" cy="${qy}" r="9" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+                <text x="${qx}" y="${qy}" text-anchor="middle" dominant-baseline="central" fill="#ffffff" font-size="12" font-weight="800" font-family="system-ui, sans-serif">?</text>
+              </g>
+            `;
+          } else {
+          const prefix = state.lastAnswerCorrect ? "✓ " : (state.lastAnswerWrong ? "✗ " : "");
           const mainText = showAnswerOnPlate
             ? `${prefix}${targetPt.labelFr}`
             : `❓ À identifier (${catMeta.label}) — glisser pour déplacer`;
@@ -1394,8 +1707,15 @@
             });
           }
 
-          const pillClass = state.lastAnswerCorrect ? "target-callout-pill success" : "target-callout-pill";
-          const leaderColor = state.lastAnswerCorrect ? "#10b981" : "#2563eb";
+          let pillClass = "target-callout-pill";
+          let leaderColor = "#2563eb";
+          if (state.lastAnswerCorrect) {
+            pillClass = "target-callout-pill success";
+            leaderColor = "#10b981";
+          } else if (state.lastAnswerWrong) {
+            pillClass = "target-callout-pill wrong-reveal";
+            leaderColor = "#ef4444";
+          }
 
           svgHtml += `
             <line id="target-leader-line" class="target-leader-line" style="stroke:${leaderColor}" x1="${tx}" y1="${ty}" x2="${calloutX}" y2="${calloutY}" />
@@ -1406,6 +1726,7 @@
               ${tspansHtml}
             </g>
           `;
+          }
         }
 
         elSvg.innerHTML = svgHtml;
@@ -1423,6 +1744,7 @@
 
             const startDrag = (clientX, clientY) => {
               isDraggingCallout = true;
+              pauseAdvanceTimer();
               elCallout.classList.add("dragging");
               const svgPt = clientToSvgCoords(clientX, clientY);
               dragOffsetX = curX - svgPt.x;
@@ -1506,12 +1828,15 @@
         const slice = getCurrentSlice();
         if (state.mode === "pin") {
           if (!state.currentTargetPointId) return;
+          if (state.pinAnswered) return;
           state.scoreTotal++;
           if (ptId === state.currentTargetPointId) {
+            state.pinAnswered = true;
             state.pointStatus[ptId] = "ok";
             const targetPt = slice.points.find(p => p.id === ptId);
             celebrateCorrectAnswer(targetPt);
-            setTimeout(() => advanceQuestion(), 650);
+            renderBottomDock();
+            scheduleAdvance(true);
           } else {
             registerWrongAnswer();
             state.pointStatus[ptId] = "ko";
@@ -1519,6 +1844,7 @@
           }
         } else {
           // Allow user to tap any point on the plate to immediately question/inspect that point!
+          clearAdvanceTimer();
           state.currentTargetPointId = ptId;
           state.flashcardRevealed = state.mode === "study";
           prepareQcmOptions();
@@ -1529,6 +1855,30 @@
       // ==========================================
       // RENDER BOTTOM DOCK (1 QUESTION AT A TIME)
       // ==========================================
+      function bindPostValidationButtons() {
+        const btnPause = document.getElementById("btn-pause-advance");
+        const btnNext = document.getElementById("btn-next-q");
+        if (btnPause) {
+          btnPause.addEventListener("click", () => {
+            pauseAdvanceTimer();
+          });
+        }
+        if (btnNext) {
+          btnNext.addEventListener("click", () => {
+            advanceQuestion();
+          });
+        }
+      }
+
+      function bindPaceChipButton() {
+        const btnPace = document.getElementById("btn-cycle-pace");
+        if (btnPace) {
+          btnPace.addEventListener("click", () => {
+            cycleAdvancePace();
+          });
+        }
+      }
+
       function renderBottomDock() {
         const slice = getCurrentSlice();
         const points = getFilteredPoints(slice);
@@ -1566,12 +1916,16 @@
 
         if (state.mode === "qcm") {
           elDockInner.innerHTML = `
-            <div class="dock-prompt-row">
-              <div class="dock-prompt-text">${catMeta.icon} Quelle est la structure pointée sur la planche ?</div>
-              <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+            <div class="dock-prompt-row" id="qcm-prompt-row">
+              <div class="dock-prompt-text" id="qcm-prompt-text">${catMeta.icon} Quelle est la structure pointée ?</div>
+              <div class="dock-actions-group" id="qcm-actions-group">
+                <button class="dock-pace-chip" id="btn-cycle-pace" title="Changer le délai après validation">${getPaceShortLabel()}</button>
+                <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+              </div>
             </div>
             <div class="qcm-grid" id="qcm-grid"></div>
           `;
+          bindPaceChipButton();
           const grid = document.getElementById("qcm-grid");
           state.qcmOptions.forEach(optLabel => {
             const btn = document.createElement("button");
@@ -1603,28 +1957,52 @@
                 elScoreBadge.textContent = `✓ ${state.scoreOk}/${state.scoreTotal}`;
                 renderSvgStage();
               }
-              setTimeout(() => advanceQuestion(), 950);
+
+              const elPromptText = document.getElementById("qcm-prompt-text");
+              const elActionsGroup = document.getElementById("qcm-actions-group");
+              if (elPromptText) {
+                const statusPrefix = isCorrect
+                  ? `<span style="color:var(--success)">✓ Exact :</span>`
+                  : `<span style="color:var(--danger)">✗ Réponse :</span>`;
+                const laSub = targetPt.labelLa ? `<span class="dock-prompt-sub">${escapeHtml(targetPt.labelLa)}</span>` : "";
+                elPromptText.innerHTML = `${statusPrefix} ${escapeHtml(targetPt.labelFr)}${laSub}`;
+              }
+              if (elActionsGroup) {
+                const isManual = state.advancePace === "manuel";
+                elActionsGroup.innerHTML = `
+                  <button class="dock-pause-btn ${isManual ? "paused" : ""}" id="btn-pause-advance" title="Figer la réponse pour étudier la coupe">${isManual ? "✋ Manuel" : "⏸ Figer"}</button>
+                  <button class="dock-next-btn ${isCorrect ? "success" : ""}" id="btn-next-q">Suivant →</button>
+                `;
+                bindPostValidationButtons();
+              }
+
+              scheduleAdvance(isCorrect);
             });
             grid.appendChild(btn);
           });
-          document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
+          const btnSkip = document.getElementById("btn-skip-q");
+          if (btnSkip) btnSkip.addEventListener("click", skipCurrentQuestion);
         } else if (state.mode === "flashcard") {
           if (!state.flashcardRevealed) {
             elDockInner.innerHTML = `
               <div class="dock-prompt-row">
                 <div class="dock-prompt-text">${catMeta.icon} Devinez la structure pointée (${catMeta.label})</div>
-                <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+                <div class="dock-actions-group">
+                  <button class="dock-pace-chip" id="btn-cycle-pace" title="Changer le délai après validation">${getPaceShortLabel()}</button>
+                  <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+                </div>
               </div>
               <div class="flashcard-box" style="padding:6px;">
                 <button class="fc-btn reveal" id="btn-fc-reveal">👁️ Voir la réponse</button>
               </div>
             `;
+            bindPaceChipButton();
             document.getElementById("btn-fc-reveal").addEventListener("click", () => {
               state.flashcardRevealed = true;
               renderAll();
             });
             document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
-          } else {
+          } else if (!state.fcAnswered) {
             elDockInner.innerHTML = `
               <div class="flashcard-box">
                 <div class="flashcard-answer">
@@ -1638,29 +2016,70 @@
               </div>
             `;
             document.getElementById("btn-fc-ok").addEventListener("click", () => {
+              state.fcAnswered = true;
               state.scoreTotal++;
               state.pointStatus[targetPt.id] = "ok";
               celebrateCorrectAnswer(targetPt);
-              setTimeout(() => advanceQuestion(), 620);
+              renderBottomDock();
+              scheduleAdvance(true);
             });
             document.getElementById("btn-fc-ko").addEventListener("click", () => {
+              state.fcAnswered = true;
               registerWrongAnswer();
               state.scoreTotal++;
               state.pointStatus[targetPt.id] = "ko";
-              advanceQuestion();
+              renderSvgStage();
+              renderBottomDock();
+              scheduleAdvance(false);
             });
+          } else {
+            const isManual = state.advancePace === "manuel";
+            elDockInner.innerHTML = `
+              <div class="flashcard-box">
+                <div class="flashcard-answer">
+                  <div class="flashcard-fr" style="color:${state.lastAnswerCorrect ? "var(--success)" : "var(--danger)"}">${state.lastAnswerCorrect ? "✓" : "✗"} ${escapeHtml(targetPt.labelFr)}</div>
+                  ${targetPt.labelLa ? `<div class="flashcard-la">${escapeHtml(targetPt.labelLa)}</div>` : ""}
+                </div>
+                <div class="dock-actions-group">
+                  <button class="dock-pause-btn ${isManual || state.advancePaused ? "paused" : ""}" id="btn-pause-advance">${isManual ? "✋ Manuel" : (state.advancePaused ? "⏸ Figé" : "⏸ Figer")}</button>
+                  <button class="dock-next-btn ${state.lastAnswerCorrect ? "success" : ""}" id="btn-next-q">Suivant →</button>
+                </div>
+              </div>
+            `;
+            bindPostValidationButtons();
           }
         } else if (state.mode === "pin") {
-          elDockInner.innerHTML = `
-            <div class="flashcard-box">
-              <div class="flashcard-answer">
-                <div class="flashcard-la">🎯 Touchez ce point directement sur la planche :</div>
-                <div class="flashcard-fr" style="color:var(--primary)">${catMeta.icon} ${escapeHtml(targetPt.labelFr)}</div>
+          if (!state.pinAnswered) {
+            elDockInner.innerHTML = `
+              <div class="flashcard-box">
+                <div class="flashcard-answer">
+                  <div class="flashcard-la">🎯 Touchez ce point directement sur la planche :</div>
+                  <div class="flashcard-fr" style="color:var(--primary)">${catMeta.icon} ${escapeHtml(targetPt.labelFr)}</div>
+                </div>
+                <div class="dock-actions-group">
+                  <button class="dock-pace-chip" id="btn-cycle-pace" title="Changer le délai après validation">${getPaceShortLabel()}</button>
+                  <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
+                </div>
               </div>
-              <button class="dock-skip-btn" id="btn-skip-q">Passer →</button>
-            </div>
-          `;
-          document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
+            `;
+            bindPaceChipButton();
+            document.getElementById("btn-skip-q").addEventListener("click", skipCurrentQuestion);
+          } else {
+            const isManual = state.advancePace === "manuel";
+            elDockInner.innerHTML = `
+              <div class="flashcard-box">
+                <div class="flashcard-answer">
+                  <div class="flashcard-fr" style="color:var(--success)">✓ ${escapeHtml(targetPt.labelFr)}</div>
+                  ${targetPt.labelLa ? `<div class="flashcard-la">${escapeHtml(targetPt.labelLa)}</div>` : ""}
+                </div>
+                <div class="dock-actions-group">
+                  <button class="dock-pause-btn ${isManual || state.advancePaused ? "paused" : ""}" id="btn-pause-advance">${isManual ? "✋ Manuel" : (state.advancePaused ? "⏸ Figé" : "⏸ Figer")}</button>
+                  <button class="dock-next-btn success" id="btn-next-q">Suivant →</button>
+                </div>
+              </div>
+            `;
+            bindPostValidationButtons();
+          }
         } else if (state.mode === "study") {
           elDockInner.innerHTML = `
             <div class="flashcard-box">
@@ -1676,11 +2095,14 @@
       }
 
       function skipCurrentQuestion() {
+        clearAdvanceTimer();
         if (state.quizQueue.length > 1) {
           const first = state.quizQueue.shift();
           state.quizQueue.push(first);
           state.currentTargetPointId = state.quizQueue[0];
           state.flashcardRevealed = false;
+          state.fcAnswered = false;
+          state.pinAnswered = false;
           prepareQcmOptions();
           renderAll();
         }
@@ -1810,6 +2232,27 @@
         });
       });
 
+      // Advance Pace Switching
+      document.querySelectorAll("#pace-grid [data-pace]").forEach(btn => {
+        if (btn.getAttribute("data-pace") === state.advancePace) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#pace-grid [data-pace]").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          state.advancePace = btn.getAttribute("data-pace");
+          try {
+            localStorage.setItem("anat_advance_pace", state.advancePace);
+          } catch (_) {}
+          syncPaceButtonsUI();
+          if (isQuestionValidated()) {
+            scheduleAdvance(state.lastAnswerCorrect);
+          }
+        });
+      });
+
       function setPresetCategories(cats) {
         state.activeCategories = new Set(cats);
         initSliceQuizState();
@@ -1867,6 +2310,7 @@
       }
 
       function zoomAboutPoint(newScale, clientX, clientY) {
+        pauseAdvanceTimer();
         const clamped = Math.min(6, Math.max(1, newScale));
         if (clamped === zoomScale) return;
         const rect = elStage.getBoundingClientRect();
@@ -1966,6 +2410,7 @@
           const dy = e.touches[0].clientY - startTouchY;
           if (Math.hypot(dx, dy) > 6) {
             state.didPan = true;
+            pauseAdvanceTimer();
             e.preventDefault();
             panX = startPanX + dx;
             panY = startPanY + dy;
@@ -2005,6 +2450,7 @@
         const dy = e.clientY - startTouchY;
         if (Math.hypot(dx, dy) > 5) {
           state.didPan = true;
+          pauseAdvanceTimer();
           panX = startPanX + dx;
           panY = startPanY + dy;
           applyZoomTransform();
