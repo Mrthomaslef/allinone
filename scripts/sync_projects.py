@@ -69,6 +69,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/allinone/anatomie-quiz/",
         "logoUrl": "anatomie-quiz/assets/icon.svg",
     },
+    "resume-sims-interventionnel-2025": {
+        "title": "SIMS Interventionnel 2025 — Fiches résumés",
+        "subtitle": "39 fiches illustrées (153 diapos) de la journée SIMS du 13/12/2025 : écho re-live, battles géniculés, Lisfranc, rachis, bassin, embolisations",
+        "category": "medical-imaging",
+        "emoji": "🩻",
+        "prodUrl": "https://mrthomaslef.github.io/resume-sims-interventionnel-2025/",
+        "logoUrl": "assets/resume-sims-interventionnel-2025-icon.svg?v=1",
+    },
     "schemas-ri": {
         "title": "Schémas de RI — Atelier interactif",
         "subtitle": "9 schémas isométriques animés : scopie, biopsie, cimentoplastie, RF, cryoablation, infiltration écho, vissage, sclérothérapie KOA, électrochimiothérapie",
