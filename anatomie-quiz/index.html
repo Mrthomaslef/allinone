@@ -355,6 +355,13 @@
       pointer-events: none;
     }
 
+    .target-callout-text.target-callout-qmark {
+      font-size: 24px;
+      font-weight: 900;
+      fill: #38bdf8;
+      dominant-baseline: central;
+    }
+
     .target-callout-grip {
       font-family: 'Inter', -apple-system, sans-serif;
       font-size: 12px;
@@ -1641,22 +1648,11 @@
             (state.mode === "qcm" && state.qcmAnswered) ||
             (state.mode === "pin" && state.pinAnswered);
 
-          if (!showAnswerOnPlate) {
-            // Question non résolue : simple point d'interrogation discret près de la structure (pas d'encadré)
-            const qx = Math.min(sliceW - 12, tx + 15);
-            const qy = Math.max(12, ty - 15);
-            svgHtml += `
-              <circle class="target-pulse-ring" style="stroke:#2563eb" cx="${tx}" cy="${ty}" r="14" />
-              <g class="target-qmark" pointer-events="none">
-                <circle cx="${qx}" cy="${qy}" r="9" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
-                <text x="${qx}" y="${qy}" text-anchor="middle" dominant-baseline="central" fill="#ffffff" font-size="12" font-weight="800" font-family="system-ui, sans-serif">?</text>
-              </g>
-            `;
-          } else {
           const prefix = state.lastAnswerCorrect ? "✓ " : (state.lastAnswerWrong ? "✗ " : "");
           const mainText = showAnswerOnPlate
             ? `${prefix}${targetPt.labelFr}`
-            : `❓ À identifier (${catMeta.label}) — glisser pour déplacer`;
+            : "?";
+          const isQmark = !showAnswerOnPlate;
           const subText = (showAnswerOnPlate && targetPt.labelLa) ? targetPt.labelLa : "";
 
           const mainLines = wrapTextLines(mainText, 34);
@@ -1665,12 +1661,12 @@
           const maxMainChars = mainLines.reduce((m, l) => Math.max(m, l.length), 0);
           const maxSubChars = subLines.reduce((m, l) => Math.max(m, l.length), 0);
           const contentW = Math.max(maxMainChars * 7.2, maxSubChars * 5.8);
-          const boxW = Math.min(sliceW - 20, Math.max(170, Math.ceil(contentW + 44)));
+          const boxW = isQmark ? 46 : Math.min(sliceW - 20, Math.max(170, Math.ceil(contentW + 44)));
 
           const mainLineH = 16;
           const subLineH = 14;
           const totalTextH = mainLines.length * mainLineH + (subLines.length > 0 ? subLines.length * subLineH + 4 : 0);
-          const boxH = Math.max(34, totalTextH + 16);
+          const boxH = isQmark ? 38 : Math.max(34, totalTextH + 16);
 
           // Determine position: use user-dragged position if available, else smart default offset in margin
           let calloutX, calloutY;
@@ -1696,7 +1692,9 @@
           let curY = -totalTextH / 2 + mainLineH * 0.78;
           let tspansHtml = "";
           mainLines.forEach(line => {
-            tspansHtml += `<text class="target-callout-text" x="6" y="${curY.toFixed(1)}">${escapeHtml(line)}</text>`;
+            tspansHtml += isQmark
+              ? `<text class="target-callout-text target-callout-qmark" x="0" y="0">?</text>`
+              : `<text class="target-callout-text" x="6" y="${curY.toFixed(1)}">${escapeHtml(line)}</text>`;
             curY += mainLineH;
           });
           if (subLines.length > 0) {
@@ -1722,11 +1720,10 @@
             <circle class="target-pulse-ring" style="stroke:${leaderColor}" cx="${tx}" cy="${ty}" r="14" />
             <g id="target-callout-group" class="target-callout-group" transform="translate(${calloutX}, ${calloutY})">
               <rect class="${pillClass}" x="${-boxW / 2}" y="${-boxH / 2}" width="${boxW}" height="${boxH}" />
-              <text class="target-callout-grip" x="${-boxW / 2 + 12}" y="0">⠿</text>
+              ${isQmark ? "" : `<text class="target-callout-grip" x="${-boxW / 2 + 12}" y="0">⠿</text>`}
               ${tspansHtml}
             </g>
           `;
-          }
         }
 
         elSvg.innerHTML = svgHtml;
