@@ -226,10 +226,10 @@ KNOWN_METADATA = {
     },
     "radio-thomas": {
         "title": "QUIZ Cochin MSK",
-        "subtitle": "Quiz interactif d’imagerie musculosquelettique",
+        "subtitle": "Quiz MSK + parcours du semestre Cochin–HEGP",
         "category": "medical-imaging",
         "emoji": "🧠",
-        "prodUrl": "https://radio-thomas-ten.vercel.app",
+        "prodUrl": "https://quizcotten.fr",
         "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
     },
     "dicomviewer": {

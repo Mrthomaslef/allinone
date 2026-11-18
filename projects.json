@@ -178,13 +178,13 @@
   {
     "id": "radio-thomas",
     "title": "QUIZ Cochin MSK",
-    "subtitle": "Quiz interactif d’imagerie musculosquelettique",
+    "subtitle": "Quiz MSK + parcours du semestre Cochin–HEGP",
     "category": "medical-imaging",
     "emoji": "🧠",
     "logoUrl": "https://radio-thomas-ten.vercel.app/apple-touch-icon.png",
-    "prodUrl": "https://radio-thomas-ten.vercel.app",
+    "prodUrl": "https://quizcotten.fr",
     "githubUrl": "https://github.com/Mrthomaslef/radio-thomas",
-    "pushedAt": "2026-11-18T05:56:20Z"
+    "pushedAt": "2026-11-18T08:28:52Z"
   },
   {
     "id": "msk-tcg",
