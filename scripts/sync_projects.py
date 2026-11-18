@@ -69,6 +69,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/allinone/anatomie-quiz/",
         "logoUrl": "anatomie-quiz/assets/icon.svg",
     },
+    "archive-sims": {
+        "title": "Archive SIMS — Congrès 2017-2024",
+        "subtitle": "157 fiches résumé des congrès SIMS : 2017 Genou, 2019 Hanche, 2022 Main & poignet, 2024 Pied & cheville · recherche, favoris, liens vidéos",
+        "category": "medical-imaging",
+        "emoji": "🦴",
+        "prodUrl": "https://mrthomaslef.github.io/archive-sims/",
+        "logoUrl": "assets/archive-sims-icon.svg?v=1",
+    },
     "resume-sims-interventionnel-2025": {
         "title": "SIMS Interventionnel 2025 — Fiches résumés",
         "subtitle": "39 fiches illustrées (153 diapos) de la journée SIMS du 13/12/2025 : écho re-live, battles géniculés, Lisfranc, rachis, bassin, embolisations",
