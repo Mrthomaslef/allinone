@@ -71,11 +71,11 @@ KNOWN_METADATA = {
     },
     "archive-sims": {
         "title": "Archive SIMS — Congrès 2017-2024",
-        "subtitle": "157 fiches résumé des congrès SIMS : 2017 Genou, 2019 Hanche, 2022 Main & poignet, 2024 Pied & cheville · recherche, favoris, liens vidéos",
+        "subtitle": "157 fiches illustrées (419 images clés) des congrès SIMS 2017 Genou, 2019 Hanche, 2022 Main & poignet, 2024 Pied & cheville · orateurs, L'essentiel + À retenir, recherche, favoris",
         "category": "medical-imaging",
         "emoji": "🦴",
         "prodUrl": "https://mrthomaslef.github.io/archive-sims/",
-        "logoUrl": "assets/archive-sims-icon.svg?v=1",
+        "logoUrl": "assets/archive-sims-icon.svg?v=2",
     },
     "resume-sims-interventionnel-2025": {
         "title": "SIMS Interventionnel 2025 — Fiches résumés",
