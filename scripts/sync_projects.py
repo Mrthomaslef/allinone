@@ -175,7 +175,7 @@ KNOWN_METADATA = {
     },
     "biblioosteo": {
         "title": "BiblioOstéo Cochin",
-        "subtitle": "Portail bibliographique & résumés cliniques (RI & Ostéo)",
+        "subtitle": "Portail bibliographique, résumés cliniques & sélection 🎓 Internes (RI & Ostéo)",
         "category": "medical-imaging",
         "emoji": "🦴",
         "logoUrl": "https://mrthomaslef.github.io/biblioosteo/assets/icon.svg",
