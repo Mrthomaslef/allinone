@@ -226,7 +226,7 @@ KNOWN_METADATA = {
     },
     "radio-thomas": {
         "title": "QUIZ Cochin MSK",
-        "subtitle": "Quiz MSK + parcours du semestre Cochin–HEGP",
+        "subtitle": "Quiz MSK · accueil parcours semestre Cochin–HEGP",
         "category": "medical-imaging",
         "emoji": "🧠",
         "prodUrl": "https://quizcotten.fr",
