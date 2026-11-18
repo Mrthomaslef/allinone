@@ -117,6 +117,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/gammes-et-arpeges/",
         "logoUrl": "assets/gammes-et-arpeges-icon.svg?v=1",
     },
+    "la-boite-a-outils": {
+        "title": "La Boîte à Outils MSK — Mesures ostéo-articulaires",
+        "subtitle": "402 mesures radio/TDM/IRM/écho/EOS par articulation d'après le Cotten · technique, normes, seuils, pièges · prothèses (Gruen, Lewinnek, PTG, PTE inversée) & EOS (paramètres pelviens, HKA, torsions) · copier pour le CR",
+        "category": "medical-imaging",
+        "emoji": "📐",
+        "prodUrl": "https://mrthomaslef.github.io/la-boite-a-outils/",
+        "logoUrl": "assets/la-boite-a-outils-icon.svg?v=1",
+    },
     "gestion-anticoagulant": {
         "title": "Anticoagulants & AAP — Protocole Cochin RI",
         "subtitle": "Gestion des anticoagulants et antiplaquettaires (22 gestes RI, règles d'arrêt/adaptation/reprise RFE GIHP/SFAR/FRI/SFR 2026)",
@@ -705,6 +713,22 @@ def main():
                 "logoUrl": "assets/gammes-et-arpeges-icon.svg?v=1",
                 "prodUrl": "https://mrthomaslef.github.io/gammes-et-arpeges/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/gammes-et-arpeges",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "la-boite-a-outils" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "la-boite-a-outils",
+                "title": "La Boîte à Outils MSK — Mesures ostéo-articulaires",
+                "subtitle": "402 mesures radio/TDM/IRM/écho/EOS par articulation d'après le Cotten · technique, normes, seuils, pièges · prothèses (Gruen, Lewinnek, PTG, PTE inversée) & EOS (paramètres pelviens, HKA, torsions) · copier pour le CR",
+                "category": "medical-imaging",
+                "emoji": "📐",
+                "logoUrl": "assets/la-boite-a-outils-icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/la-boite-a-outils/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/la-boite-a-outils",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
