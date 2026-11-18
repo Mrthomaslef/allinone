@@ -187,6 +187,17 @@
     "pushedAt": "2026-11-18T05:56:20Z"
   },
   {
+    "id": "msk-tcg",
+    "title": "MSK TCG — Cochin",
+    "subtitle": "Boosters d’imagerie MSK : 198 cartes, touchez pour révéler le diagnostic",
+    "category": "medical-imaging",
+    "emoji": "🃏",
+    "logoUrl": "https://mrthomaslef.github.io/msk-tcg/assets/icon.svg",
+    "prodUrl": "https://mrthomaslef.github.io/msk-tcg/",
+    "githubUrl": "https://github.com/Mrthomaslef/msk-tcg",
+    "pushedAt": "2026-11-18T09:00:00Z"
+  },
+  {
     "id": "archive-sims",
     "title": "Archive SIMS — Congrès 2017-2024",
     "subtitle": "157 fiches résumé des congrès SIMS : 2017 Genou, 2019 Hanche, 2022 Main & poignet, 2024 Pied & cheville · recherche, favoris, liens vidéos",

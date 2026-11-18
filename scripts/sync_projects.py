@@ -216,6 +216,14 @@ KNOWN_METADATA = {
         "emoji": "🩻",
         "logoUrl": "https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png",
     },
+    "msk-tcg": {
+        "title": "MSK TCG — Cochin",
+        "subtitle": "Boosters d’imagerie MSK : 198 cartes, touchez pour révéler le diagnostic",
+        "category": "medical-imaging",
+        "emoji": "🃏",
+        "logoUrl": "https://mrthomaslef.github.io/msk-tcg/assets/icon.svg",
+        "prodUrl": "https://mrthomaslef.github.io/msk-tcg/",
+    },
     "radio-thomas": {
         "title": "QUIZ Cochin MSK",
         "subtitle": "Quiz interactif d’imagerie musculosquelettique",
