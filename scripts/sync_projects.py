@@ -218,7 +218,7 @@ KNOWN_METADATA = {
     },
     "msk-tcg": {
         "title": "MSK TCG — Cochin",
-        "subtitle": "Boosters d’imagerie MSK : 355 cartes, tap pour révéler, éditeur intégré",
+        "subtitle": "Boosters d’imagerie MSK : 428 cartes (Cotten + cas Cochin), éditeur intégré",
         "category": "medical-imaging",
         "emoji": "🃏",
         "logoUrl": "https://mrthomaslef.github.io/msk-tcg/assets/icon.svg",
