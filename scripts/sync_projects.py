@@ -83,7 +83,7 @@ KNOWN_METADATA = {
         "category": "medical-imaging",
         "emoji": "🩻",
         "prodUrl": "https://mrthomaslef.github.io/resume-sims-interventionnel-2025/",
-        "logoUrl": "assets/resume-sims-interventionnel-2025-icon.svg?v=1",
+        "logoUrl": "assets/resume-sims-interventionnel-2025-icon.svg?v=2",
     },
     "schemas-ri": {
         "title": "Schémas de RI — Atelier interactif",
