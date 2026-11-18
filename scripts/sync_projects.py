@@ -109,6 +109,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/assurance/",
         "logoUrl": "assets/assurance-icon.svg?v=2",
     },
+    "gammes-et-arpeges": {
+        "title": "Gammes & Arpèges — Imagerie MSK",
+        "subtitle": "Les gammes diagnostiques ostéo-articulaires pour les internes : 162 gammes, démarche guidée, croiseur, 81 diagnostics indexés, révision flashcards",
+        "category": "medical-imaging",
+        "emoji": "🎼",
+        "prodUrl": "https://mrthomaslef.github.io/gammes-et-arpeges/",
+        "logoUrl": "assets/gammes-et-arpeges-icon.svg?v=1",
+    },
     "gestion-anticoagulant": {
         "title": "Anticoagulants & AAP — Protocole Cochin RI",
         "subtitle": "Gestion des anticoagulants et antiplaquettaires (22 gestes RI, règles d'arrêt/adaptation/reprise RFE GIHP/SFAR/FRI/SFR 2026)",
@@ -681,6 +689,22 @@ def main():
                 "logoUrl": "assets/recomp-check-icon.svg?v=1",
                 "prodUrl": "https://mrthomaslef.github.io/ayn-thor/recomp/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/ayn-thor/tree/main/recomp",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
+    if not any(item["id"].lower() == "gammes-et-arpeges" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "gammes-et-arpeges",
+                "title": "Gammes & Arpèges — Imagerie MSK",
+                "subtitle": "Les gammes diagnostiques ostéo-articulaires pour les internes : 162 gammes, démarche guidée, croiseur, 81 diagnostics indexés, révision flashcards",
+                "category": "medical-imaging",
+                "emoji": "🎼",
+                "logoUrl": "assets/gammes-et-arpeges-icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/gammes-et-arpeges/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/gammes-et-arpeges",
                 "pushedAt": output[0]["pushedAt"] if output else None,
             },
         )
