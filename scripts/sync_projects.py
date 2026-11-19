@@ -111,7 +111,7 @@ KNOWN_METADATA = {
     },
     "gammes-et-arpeges": {
         "title": "Gammes & Arpèges — Imagerie MSK",
-        "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : 63 gammes par signe (logique Laredo) en 5 groupes illustrés, 29 fiches maladies résumées d'après le Cotten et classifications à part, 81 diagnostics décrits par mots-clés, favoris",
+        "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : accueil décisionnel (os / parties molles → critères successifs), 68 gammes par signe (logique Laredo) dont tendons & enthèses, 81 diagnostics résumés d'après le Cotten, favoris",
         "category": "medical-imaging",
         "emoji": "🎼",
         "prodUrl": "https://mrthomaslef.github.io/gammes-et-arpeges/",
@@ -707,7 +707,7 @@ def main():
             {
                 "id": "gammes-et-arpeges",
                 "title": "Gammes & Arpèges — Imagerie MSK",
-                "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : 63 gammes par signe (logique Laredo) en 5 groupes illustrés, 29 fiches maladies résumées d'après le Cotten et classifications à part, 81 diagnostics décrits par mots-clés, favoris",
+                "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : accueil décisionnel (os / parties molles → critères successifs), 68 gammes par signe (logique Laredo) dont tendons & enthèses, 81 diagnostics résumés d'après le Cotten, favoris",
                 "category": "medical-imaging",
                 "emoji": "🎼",
                 "logoUrl": "assets/gammes-et-arpeges-icon.svg?v=1",
