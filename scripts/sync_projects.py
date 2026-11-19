@@ -119,7 +119,7 @@ KNOWN_METADATA = {
     },
     "la-boite-a-outils": {
         "title": "La Boîte à Outils MSK — Mesures ostéo-articulaires",
-        "subtitle": "402 mesures radio/TDM/IRM/écho/EOS par articulation d'après le Cotten · technique, normes, seuils, pièges · prothèses (Gruen, Lewinnek, PTG, PTE inversée) & EOS (paramètres pelviens, HKA, torsions) · copier pour le CR",
+        "subtitle": "402 mesures illustrées par schémas, rangées par articulation (radio/TDM/IRM/écho) · fiches courtes Tracé / Normal / Pathologique · prothèses & EOS · d'après le Cotten",
         "category": "medical-imaging",
         "emoji": "📐",
         "prodUrl": "https://mrthomaslef.github.io/la-boite-a-outils/",
@@ -723,7 +723,7 @@ def main():
             {
                 "id": "la-boite-a-outils",
                 "title": "La Boîte à Outils MSK — Mesures ostéo-articulaires",
-                "subtitle": "402 mesures radio/TDM/IRM/écho/EOS par articulation d'après le Cotten · technique, normes, seuils, pièges · prothèses (Gruen, Lewinnek, PTG, PTE inversée) & EOS (paramètres pelviens, HKA, torsions) · copier pour le CR",
+                "subtitle": "402 mesures illustrées par schémas, rangées par articulation (radio/TDM/IRM/écho) · fiches courtes Tracé / Normal / Pathologique · prothèses & EOS · d'après le Cotten",
                 "category": "medical-imaging",
                 "emoji": "📐",
                 "logoUrl": "assets/la-boite-a-outils-icon.svg?v=1",
