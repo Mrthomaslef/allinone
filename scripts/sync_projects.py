@@ -119,7 +119,7 @@ KNOWN_METADATA = {
     },
     "la-boite-a-outils": {
         "title": "La Boîte à Outils MSK — Mesures ostéo-articulaires",
-        "subtitle": "402 mesures illustrées par schémas, rangées par articulation (radio/TDM/IRM/écho) · fiches courtes Tracé / Normal / Pathologique · prothèses & EOS · d'après le Cotten",
+        "subtitle": "402 mesures illustrées par les vraies figures annotées du Cotten (radio/TDM/IRM/écho), rangées par articulation · fiches courtes Tracé / Normal / Pathologique · prothèses & EOS",
         "category": "medical-imaging",
         "emoji": "📐",
         "prodUrl": "https://mrthomaslef.github.io/la-boite-a-outils/",
@@ -723,7 +723,7 @@ def main():
             {
                 "id": "la-boite-a-outils",
                 "title": "La Boîte à Outils MSK — Mesures ostéo-articulaires",
-                "subtitle": "402 mesures illustrées par schémas, rangées par articulation (radio/TDM/IRM/écho) · fiches courtes Tracé / Normal / Pathologique · prothèses & EOS · d'après le Cotten",
+                "subtitle": "402 mesures illustrées par les vraies figures annotées du Cotten (radio/TDM/IRM/écho), rangées par articulation · fiches courtes Tracé / Normal / Pathologique · prothèses & EOS",
                 "category": "medical-imaging",
                 "emoji": "📐",
                 "logoUrl": "assets/la-boite-a-outils-icon.svg?v=1",
