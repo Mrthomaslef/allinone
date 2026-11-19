@@ -111,7 +111,7 @@ KNOWN_METADATA = {
     },
     "gammes-et-arpeges": {
         "title": "Gammes & Arpèges — Imagerie MSK",
-        "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : 154 gammes, schémas, démarche guidée, 81 diagnostics, révision",
+        "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : 154 gammes en 6 groupes illustrés, référentiel des classifications, 81 diagnostics, révision",
         "category": "medical-imaging",
         "emoji": "🎼",
         "prodUrl": "https://mrthomaslef.github.io/gammes-et-arpeges/",
@@ -707,7 +707,7 @@ def main():
             {
                 "id": "gammes-et-arpeges",
                 "title": "Gammes & Arpèges — Imagerie MSK",
-                "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : 154 gammes, schémas, démarche guidée, 81 diagnostics, révision",
+                "subtitle": "Gammes diagnostiques ostéo-articulaires pour les internes : 154 gammes en 6 groupes illustrés, référentiel des classifications, 81 diagnostics, révision",
                 "category": "medical-imaging",
                 "emoji": "🎼",
                 "logoUrl": "assets/gammes-et-arpeges-icon.svg?v=1",
