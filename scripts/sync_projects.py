@@ -304,6 +304,13 @@ KNOWN_METADATA = {
         "emoji": "🏡",
         "logoUrl": "https://mrthomaslef.github.io/agenda-famille/icon.svg",
     },
+    "achats-recurrents": {
+        "title": "Achats récurrents Amazon",
+        "subtitle": "Couches, lait, Kérastase… commandés automatiquement (compte Marie) — décocher pour annuler",
+        "category": "daily-tools",
+        "emoji": "🛒",
+        "logoUrl": "https://mrthomaslef.github.io/achats-recurrents/assets/icon.svg",
+    },
     "restaurant": {
         "title": "Resto en Amoureux — Marie & Thomas",
         "subtitle": "Créneaux libres M&T + Émile chez les grands-parents & Réservation auto",
