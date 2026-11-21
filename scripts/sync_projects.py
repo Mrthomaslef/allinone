@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "bestrepo": {
+        "title": "BestRepo — Meilleurs dépôts GitHub",
+        "subtitle": "122 dépôts GitHub les plus étoilés classés en 12 centres d'intérêt (IA locale, DICOM, Second Brain, PWA, auto-hébergement, jeux…) · À quoi ça sert, comment t'en servir & commande à copier",
+        "category": "daily-tools",
+        "emoji": "⭐",
+        "prodUrl": "https://mrthomaslef.github.io/bestrepo/",
+        "logoUrl": "assets/bestrepo-icon.svg?v=1",
+    },
     "scan-doc": {
         "title": "ScanDoc AI — Scanner iPhone vers Mon Drive",
         "subtitle": "Scanner de documents papier iPhone sans filigrane · Filtre Couleur Magique, OCR Apple Vision, renommage IA en 3 formats & rangement automatique dans Mon Drive",

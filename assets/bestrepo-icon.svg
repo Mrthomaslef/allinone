@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e1b4b"/><stop offset="1" stop-color="#4c1d95"/>
+    </linearGradient>
+    <linearGradient id="st" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fde68a"/><stop offset=".55" stop-color="#f59e0b"/><stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".35"/></filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="400" cy="110" r="5" fill="#fff" opacity=".7"/><circle cx="96" cy="150" r="4" fill="#fff" opacity=".5"/>
+  <circle cx="440" cy="260" r="3" fill="#fff" opacity=".5"/><circle cx="70" cy="300" r="3" fill="#fff" opacity=".4"/>
+  <!-- pile de dépôts (dossiers) -->
+  <g filter="url(#sh)">
+    <rect x="96" y="318" width="320" height="104" rx="22" fill="#312e81"/>
+    <rect x="96" y="300" width="320" height="104" rx="22" fill="#4338ca"/>
+    <path d="M118 300h92l20 -20h-90a22 22 0 0 0-22 20z" fill="#4338ca"/>
+    <rect x="96" y="282" width="320" height="104" rx="22" fill="#6366f1"/>
+    <rect x="128" y="318" width="120" height="14" rx="7" fill="#c7d2fe" opacity=".85"/>
+    <rect x="128" y="344" width="80" height="14" rx="7" fill="#c7d2fe" opacity=".55"/>
+    <rect x="310" y="318" width="76" height="40" rx="10" fill="#22c55e"/>
+    <path d="M330 338l10 10 18-20" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- étoile -->
+  <g filter="url(#sh)">
+    <path d="M256 70l40 82 90 13-65 63 15 89-80-42-80 42 15-89-65-63 90-13z" fill="url(#st)" stroke="#fff7d6" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M256 104l26 54 58 8" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+  </g>
+</svg>
