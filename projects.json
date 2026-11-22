@@ -200,11 +200,11 @@
   {
     "id": "recherche-d-appartement",
     "title": "Appart côté Bois — Recherche de location",
-    "subtitle": "Annonces SeLoger/Logic-Immo, Bien'ici & PAP collectées 2×/jour · Paris 12e côté bois, Saint-Mandé, Vincennes côté château, Charenton · Carte datée & candidature médecin en 1 bouton",
+    "subtitle": "Annonces SeLoger/Logic-Immo, Bien'ici & PAP collectées 2×/jour · Paris 12e côté bois, Saint-Mandé, Vincennes côté château, Charenton · Carte datée, galerie de toutes les photos & candidature médecin en 1 bouton",
     "category": "daily-tools",
     "emoji": "🏡",
     "logoUrl": "assets/recherche-d-appartement-icon.svg?v=1",
-    "prodUrl": "https://mrthomaslef.github.io/recherche-d-appartement/?v=3",
+    "prodUrl": "https://mrthomaslef.github.io/recherche-d-appartement/?v=4",
     "githubUrl": "https://github.com/Mrthomaslef/recherche-d-appartement",
     "pushedAt": "2026-11-21T18:00:28Z"
   },
