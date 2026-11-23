@@ -37,7 +37,7 @@ Vous êtes connecté à l'**Écosystème Global & Second Brain** de Thomas Lefè
 ### ⚡ 4. Instincts Atomiques Appris des Inputs de Thomas (`t3-instincts` — Ne jamais répéter ces erreurs) :
 Ces règles sont extraites chaque nuit des inputs et corrections de Thomas. **Appliquez-les systématiquement sans qu'il ait besoin de le redemander** :
 ```text
-# Active Instincts (12/65 | project=allinone)
+# Active Instincts (12/69 | project=allinone)
 - [0.98][GLOBAL][ui-pwa] fullscreen-launch-and-controller-verify: WHEN Lors de la création ou configuration d'un lanceur de jeu (Recomp, Pegasus, Moonlight), d'un lecteur vidéo (Stremio/Film) ou d'un bouton 'Jouer direct' -> Toujours forcer l'ouverture en plein écran d'emblée (sans modale ni pop-up bloquante), vérifier le mapping manette (8BitDo) et la présence des sauvegardes avant d'annoncer que c'est terminé.
 - [0.98][GLOBAL][workflow] mobile-first-no-overflow-no-zoom: WHEN Lors de la création d'interfaces web, de tableaux cliniques ou de boutons interactifs consultés sur iPhone / mobile -> Empêcher le zoom au double-clic UI (touch-action: manipulation), garantir zéro débordement horizontal, protéger le bas de l'écran iOS (env(safe-area-inset-bottom) + marge de garde) pour que les contrôles/cartes en bas ne déclenchent jamais le swipe Home Indicator d'iOS, adapter l'échelle aux écrans iPad et permettre le zoom/déplacement sur les planches d'imagerie/anatomie/PDF.
 - [0.98][GLOBAL][workflow] pull-to-refresh-systematic: WHEN Lors de la création ou modification d'une application web ou PWA mobile/desktop -> Implanter le Pull-to-Refresh avec pour SEUL indicateur une petite flèche circulaire tournante (icône ↻ SVG, sans aucun texte, opacity 0 au repos) ET encadrer strictement overscroll-behavior(-y): contain dans @media (hover: none) and (pointer: coarse) (jamais sur html/body desktop, ni overflow-y: auto sur body) pour que le scroll trackpad 2 doigts sur Mac fonctionne toujours sur tous les sites.
@@ -56,6 +56,7 @@ Ces règles sont extraites chaque nuit des inputs et corrections de Thomas. **Ap
 ### 📦 5. Conseiller BestRepo — proposer des dépôts GitHub en phase de conception :
 - Dès que Thomas **conçoit ou démarre un projet**, une app/PWA, un script, une automatisation ou une fonctionnalité notable, utilisez le skill `bestrepo-advisor` : lisez la section utile de `/Users/thomaslefevre/.t3/projects/bestrepo/CATALOG.md` (122 dépôts très étoilés, classés par intérêt, avec usage concret) et proposez **2 à 5 dépôts pertinents** (nom, ★, niveau, apport ici) **en tête de plan, avant de coder**. Une seule fois par projet, jamais pour un petit correctif. Site : https://mrthomaslef.github.io/bestrepo/
 <!-- SUPER_AGENT_ROUTER_END -->
+
 
 
 
