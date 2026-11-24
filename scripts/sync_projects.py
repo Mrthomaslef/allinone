@@ -206,7 +206,7 @@ KNOWN_METADATA = {
     },
     "agenda-cochin": {
         "title": "Cochin RI — Agenda",
-        "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B)",
+        "subtitle": "Planning de Radiologie Interventionnelle (Cochin Radio B) + check-list matériel de bloc par patient",
         "category": "medical-imaging",
         "emoji": "📅",
         "logoUrl": "https://mrthomaslef.github.io/agenda-cochin/icon.svg?v=3",
