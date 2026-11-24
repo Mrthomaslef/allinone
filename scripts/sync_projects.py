@@ -220,7 +220,7 @@ KNOWN_METADATA = {
     },
     "guide-externe": {
         "title": "Externes Radio B — Cochin",
-        "subtitle": "Vacations du matin (Interne & Senior) · Cours & Présentation du mardi",
+        "subtitle": "Vacations du matin (Interne & Senior) · Cours externes · Cours & Présentation du mardi",
         "category": "medical-imaging",
         "emoji": "🌅",
         "prodUrl": "https://mrthomaslef.github.io/guide-externe/",
