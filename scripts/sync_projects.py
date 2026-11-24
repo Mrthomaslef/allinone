@@ -240,6 +240,14 @@ KNOWN_METADATA = {
         "emoji": "🩻",
         "logoUrl": "https://mrthomaslef.github.io/quiz-imagerie/apple-touch-icon.png",
     },
+    "peintretcg": {
+        "title": "Peintre TCG — Histoire de l’art",
+        "subtitle": "Boosters de 112 chefs-d’œuvre : devinez le tableau, révélez peintre et anecdote",
+        "category": "games-family",
+        "emoji": "🎨",
+        "logoUrl": "https://mrthomaslef.github.io/peintretcg/assets/icon.svg",
+        "prodUrl": "https://mrthomaslef.github.io/peintretcg/",
+    },
     "msk-tcg": {
         "title": "MSK TCG — Cochin",
         "subtitle": "Boosters d’imagerie MSK : 428 cartes (Cotten + cas Cochin), éditeur intégré",
