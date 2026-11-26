@@ -13,6 +13,14 @@ import urllib.request
 GITHUB_USERNAME = "Mrthomaslef"
 
 KNOWN_METADATA = {
+    "materiel-bloc": {
+        "title": "Matériel Bloc RI — Abaques Cryo · RF · ECT",
+        "subtitle": "Abaques de tous les constructeurs (Boston Scientific, Siemens, IceCure, Medtronic Cool-tip & OsteoCool, LeVeen, RITA, Celon, STAR…) à l'échelle avec sources · planificateur sonde/marge · ECT : minuteur bléomycine 8–40 min, dose, tension VGD · matériel de la semaine suivante (Agenda RI anonymisé, stock & commande)",
+        "category": "medical-imaging",
+        "emoji": "🧊",
+        "prodUrl": "https://mrthomaslef.github.io/materiel-bloc/",
+        "logoUrl": "assets/materiel-bloc-icon.svg?v=1",
+    },
     "bestrepo": {
         "title": "BestRepo — Meilleurs dépôts GitHub",
         "subtitle": "122 dépôts GitHub les plus étoilés classés en 12 centres d'intérêt (IA locale, DICOM, Second Brain, PWA, auto-hébergement, jeux…) · À quoi ça sert, comment t'en servir & commande à copier",
