@@ -30,8 +30,8 @@ KNOWN_METADATA = {
         "logoUrl": "assets/bestrepo-icon.svg?v=1",
     },
     "microbio": {
-        "title": "Microbio — Infectio pédiatrique",
-        "subtitle": "Aide-mémoire hors-ligne de Marie · antibiothérapie probabiliste de l'enfant, fiches bactéries & résistances naturelles, lecture de l'antibiogramme, prélèvements, calculateur de doses mg/kg & DFG Schwartz",
+        "title": "Microbio — Pancarte microbiologique",
+        "subtitle": "Coller le bilan Orbis → pancarte claire jour par jour (biologie, hémocultures, ECBU, dépistages) · portage BMR/BHRe, comparateur d'antibiogrammes, charges virales & synthèse CRH · 100 % local",
         "category": "clinical-calc",
         "emoji": "🧫",
         "prodUrl": "https://mrthomaslef.github.io/microbio/",
