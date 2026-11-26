@@ -37,6 +37,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/microbio/",
         "logoUrl": "assets/microbio-icon.svg?v=1",
     },
+    "lecteur-bd": {
+        "title": "Lecteur BD — Mes BD du Drive sur iPhone",
+        "subtitle": "Liseuse de BD (PDF/CBZ) branchée sur Mon Drive · 183 albums classés par séries avec vraies couvertures · glisser/taper pour tourner, zoom pincé ou double-tap, paysage plein largeur · reprise de lecture & albums hors-ligne",
+        "category": "daily-tools",
+        "emoji": "📚",
+        "prodUrl": "https://mrthomaslef.github.io/lecteur-bd/",
+        "logoUrl": "assets/lecteur-bd-icon.svg?v=1",
+    },
     "scan-doc": {
         "title": "ScanDoc AI — Scanner iPhone vers Mon Drive",
         "subtitle": "Scanner de documents papier iPhone sans filigrane · Filtre Couleur Magique, OCR Apple Vision, renommage IA en 3 formats & rangement automatique dans Mon Drive",

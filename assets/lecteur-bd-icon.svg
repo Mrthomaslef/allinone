@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1f3d"/><stop offset="1" stop-color="#111015"/></linearGradient>
+    <linearGradient id="bk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a4d"/></linearGradient>
+    <radialGradient id="burst" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#ffd25c"/></radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g opacity=".18" fill="#ffb547">
+    <circle cx="70" cy="70" r="6"/><circle cx="110" cy="70" r="6"/><circle cx="90" cy="105" r="6"/><circle cx="130" cy="105" r="6"/><circle cx="70" cy="140" r="6"/><circle cx="110" cy="140" r="6"/>
+    <circle cx="400" cy="420" r="6"/><circle cx="440" cy="420" r="6"/><circle cx="420" cy="455" r="6"/><circle cx="380" cy="455" r="6"/>
+  </g>
+  <!-- livre ouvert -->
+  <path d="M256 168 C210 140 150 132 96 140 V384 C150 376 210 384 256 412 Z" fill="#f6efe0"/>
+  <path d="M256 168 C302 140 362 132 416 140 V384 C362 376 302 384 256 412 Z" fill="#fffaf0"/>
+  <path d="M96 384 C150 376 210 384 256 412 C302 384 362 376 416 384 V400 C362 392 302 400 256 428 C210 400 150 392 96 400 Z" fill="url(#bk)"/>
+  <!-- cases BD -->
+  <g fill="none" stroke="#2a1f3d" stroke-width="8" stroke-linejoin="round">
+    <path d="M118 166 L234 176 L234 262 L118 256 Z" fill="#7ad3f7"/>
+    <path d="M118 276 L170 278 L170 360 L118 360 Z" fill="#ffd25c"/>
+    <path d="M186 279 L234 282 L234 372 L186 364 Z" fill="#ff8f6b"/>
+    <path d="M278 176 L394 166 L394 236 L278 244 Z" fill="#b59cf0"/>
+    <path d="M278 262 L394 254 L394 360 L278 372 Z" fill="#8be0a4"/>
+  </g>
+  <!-- bulle -->
+  <path d="M300 64 h150 a26 26 0 0 1 26 26 v52 a26 26 0 0 1 -26 26 h-84 l-34 34 v-34 h-32 a26 26 0 0 1 -26 -26 v-52 a26 26 0 0 1 26 -26 Z" fill="#fff" stroke="#2a1f3d" stroke-width="8" stroke-linejoin="round"/>
+  <text x="375" y="134" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="58" fill="#ff6a4d">BD!</text>
+</svg>
