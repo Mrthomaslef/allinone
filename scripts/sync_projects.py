@@ -788,6 +788,22 @@ def main():
             },
         )
 
+    if not any(item["id"].lower() == "masterclass-osteocool" for item in output):
+        output.insert(
+            0,
+            {
+                "id": "masterclass-osteocool",
+                "title": "Masterclass OsteoCool — Fiche résumé",
+                "subtitle": "RF bipolaire refroidie des métastases vertébrales (Medtronic, 26/11/2026) · prédiction des marges, lecture des courbes, réglages, ciment, thermocouples & hydrodissection, valorisation PMSI · auto-quiz",
+                "category": "medical-imaging",
+                "emoji": "🔥",
+                "logoUrl": "masterclass-osteocool/assets/icon.svg?v=1",
+                "prodUrl": "https://mrthomaslef.github.io/allinone/masterclass-osteocool/",
+                "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/masterclass-osteocool",
+                "pushedAt": output[0]["pushedAt"] if output else None,
+            },
+        )
+
     if not any(item["id"].lower() == "doi-hub" for item in output):
         output.insert(
             0,
