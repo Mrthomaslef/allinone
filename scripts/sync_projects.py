@@ -794,10 +794,10 @@ def main():
             {
                 "id": "masterclass-osteocool",
                 "title": "Masterclass OsteoCool — Fiche résumé",
-                "subtitle": "RF bipolaire refroidie des métastases vertébrales (Medtronic, 26/11/2026) · prédiction des marges, lecture des courbes, réglages, ciment, thermocouples & hydrodissection, valorisation PMSI · auto-quiz",
+                "subtitle": "Cours 1 : RF bipolaire refroidie OsteoCool (marges, courbes, réglages, ciment, thermocouples, PMSI) · Cours 2 : stratégie RCP des métastases rachidiennes (détruire avant de consolider, pression intra-osseuse, préventif) · 17 questions de quiz",
                 "category": "medical-imaging",
                 "emoji": "🔥",
-                "logoUrl": "masterclass-osteocool/assets/icon.svg?v=1",
+                "logoUrl": "masterclass-osteocool/assets/icon.svg?v=2",
                 "prodUrl": "https://mrthomaslef.github.io/allinone/masterclass-osteocool/",
                 "githubUrl": f"https://github.com/{GITHUB_USERNAME}/allinone/tree/main/masterclass-osteocool",
                 "pushedAt": output[0]["pushedAt"] if output else None,
