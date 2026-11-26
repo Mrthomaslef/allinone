@@ -29,6 +29,14 @@ KNOWN_METADATA = {
         "prodUrl": "https://mrthomaslef.github.io/bestrepo/",
         "logoUrl": "assets/bestrepo-icon.svg?v=1",
     },
+    "microbio": {
+        "title": "Microbio — Infectio pédiatrique",
+        "subtitle": "Aide-mémoire hors-ligne de Marie · antibiothérapie probabiliste de l'enfant, fiches bactéries & résistances naturelles, lecture de l'antibiogramme, prélèvements, calculateur de doses mg/kg & DFG Schwartz",
+        "category": "clinical-calc",
+        "emoji": "🧫",
+        "prodUrl": "https://mrthomaslef.github.io/microbio/",
+        "logoUrl": "assets/microbio-icon.svg?v=1",
+    },
     "scan-doc": {
         "title": "ScanDoc AI — Scanner iPhone vers Mon Drive",
         "subtitle": "Scanner de documents papier iPhone sans filigrane · Filtre Couleur Magique, OCR Apple Vision, renommage IA en 3 formats & rangement automatique dans Mon Drive",
